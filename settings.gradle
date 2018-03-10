@@ -1,0 +1,9 @@
+include "core"
+include "thymeleaf"
+include "sample"
+
+rootProject.name = 'spring-security-webauthn'
+
+rootProject.children.each { p ->
+    p.name = "spring-security-webauthn-${p.name}"
+}

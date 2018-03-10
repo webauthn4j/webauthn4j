@@ -1,0 +1,4 @@
+V	21170829025738Z		0D187EA99B292C3E80AA5580D49C888A	unknown	/C=JP/O=SharpLab./CN=spring-security-webauthn test root CA
+V	21170829031829Z		0D187EA99B292C3E80AA5580D49C888B	unknown	/O=SharpLab./CN=spring-security-webauthn test root CA
+V	21170829031911Z		0D187EA99B292C3E80AA5580D49C888C	unknown	/O=SharpLab./CN=spring-security-webauthn test intermediate CA
+V	21170829033016Z		0D187EA99B292C3E80AA5580D49C888D	unknown	/ST=Tokyo/O=SharpLab./CN=spring-security-webauthn test authenticator

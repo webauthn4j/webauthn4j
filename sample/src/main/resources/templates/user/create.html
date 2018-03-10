@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template/template :: head">
+    <meta charset="utf-8" />
+    <title th:text="#{v.template.title}">Spring Security WebAuthn Demo</title>
+    <!-- for responsive -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <!-- font awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- ionicons -->
+    <link href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="skin-blue" id="user-create-view">
+
+<!-- begin wrapper -->
+<div class="wrapper">
+
+    <!-- begin header -->
+    <header class="main-header" th:replace="template/template :: main-header">
+    </header>
+    <!-- end header -->
+
+    <!-- begin sidebar -->
+    <aside class="main-sidebar" th:replace="template/template :: main-sidebar">
+    </aside>
+    <!-- end sidebar -->
+
+    <!-- content wrapper -->
+    <div class="content-wrapper">
+
+        <!-- content header -->
+        <section class="content-header">
+            <h1 th:text="#{v.users.createUser}">User Registration</h1>
+        </section>
+
+        <!-- content -->
+        <section class="content">
+
+            <div class="box">
+                <div class="box-body">
+                    <div class="message-panel" th:replace="template/template :: message-panel"></div>
+                    <form th:object="${userForm}" th:action="@{'/admin/users/create'}" class="form-horizontal" method="post">
+                        <input type="hidden" id="userHandle" name="userHandle" th:value="*{userHandle}" />
+                        <div class="form-group">
+                            <label for="firstName" class="col-sm-2 control-label" th:text="#{v.users.firstName}">First Name</label>
+                            <div class="input-group col-sm-9">
+                                <input class="form-control input" placeholder="First Name" id="firstName" name="firstName" th:value="*{firstName}" />
+                                <div class="has-error" th:if="${#fields.hasErrors('firstName')}">
+                                    <span class="help-block" th:errors="*{firstName}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="col-sm-2 control-label" th:text="#{v.users.lastName}">Last Name</label>
+                            <div class="input-group col-sm-9">
+                                <input class="form-control input" placeholder="Last Name" id="lastName" name="lastName" th:value="*{lastName}" />
+                                <div class="has-error" th:if="${#fields.hasErrors('lastName')}">
+                                    <span class="help-block" th:errors="*{lastName}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="emailAddress" class="col-sm-2 control-label" th:text="#{v.users.emailAddress}">E-Mail Address</label>
+                            <div class="input-group col-sm-9">
+                                <input class="form-control input"  placeholder="E-mail address" id="emailAddress" name="emailAddress" th:value="*{emailAddress}" />
+                                <div class="has-error" th:if="${#fields.hasErrors('emailAddress')}">
+                                    <span class="help-block" th:errors="*{emailAddress}" >Validation error message</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rawPassword" class="col-sm-2 control-label" th:text="#{v.users.rawPassword}">Password</label>
+                            <div class="input-group col-sm-9">
+                                <input type="password" class="form-control input" placeholder="Password" id="rawPassword" name="rawPassword" th:value="*{rawPassword}"  />
+                                <div class="has-error" th:if="${#fields.hasErrors('rawPassword')}">
+                                    <span class="help-block" th:errors="*{rawPassword}" >Validation error message</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rawPasswordRetyped" class="col-sm-2 control-label" th:text="#{v.users.rawPasswordRetyped}">Password (confirm)</label>
+                            <div class="input-group col-sm-9">
+                                <input type="password" class="form-control input" placeholder="Password (confirm)" id="rawPasswordRetyped" name="rawPasswordRetyped" th:value="*{rawPasswordRetyped}"  />
+                                <div class="has-error" th:if="${#fields.hasErrors('rawPasswordRetyped')}">
+                                    <span class="help-block" th:errors="*{rawPasswordRetyped}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" th:text="#{v.users.authenticators}">Authenticators</label>
+                            <div class="input-group col-sm-9">
+                                <div>
+                                    <div>
+                                        <div class="box">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Authenticators</h3>
+                                                <div class="box-tools">
+                                                    <button type="button" class="btn btn-sm btn-default" id="add-credential-button"><i class="fa fa-add"></i><span>Add</span></button>
+                                                </div>
+                                            </div>
+                                            <div class="box-body no-padding">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th class="col-sm-1"></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody id="authenticator-list">
+                                                    <tr th:each="authenticator, stat : *{authenticators}" class="authenticator-item">
+                                                        <td>
+                                                            <span th:text="${authenticator.name}">ThinkPad X1 Carbon</span>
+                                                            <input type="hidden" th:name="|authenticators[${stat.index}].id|" th:value="${authenticator.id}" />
+                                                            <input type="hidden" th:name="|authenticators[${stat.index}].name|" th:value="${authenticator.name}" />
+                                                            <input type="hidden" th:name="|authenticators[${stat.index}].attestationObject|" th:value="${@attestationObjectFormToBase64StringConverter.convert(authenticator.attestationObject)}" /> <!--TODO-->
+                                                        </td>
+
+                                                        <td><button type="button" class="btn btn-box-tool remove-button"><i class="fa fa-remove"></i></button></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="has-error" th:if="${#fields.hasErrors('authenticators')}">
+                                    <span class="help-block" th:errors="*{authenticators}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="locked" class="col-sm-2 control-label" th:text="#{v.users.locked}">Locked</label>
+                            <div class="input-group col-sm-9">
+                                <input type="checkbox" id="locked" name="locked" th:checked="*{locked}" />
+                                <div class="has-error" th:if="${#fields.hasErrors('locked')}">
+                                    <span class="help-block" th:errors="*{locked}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group col-sm-11">
+                                <input type="submit" name="submit" class="btn btn-info pull-right" th:value="#{v.users.ok}" value="OK" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="box-footer clearfix">
+                </div>
+            </div>
+
+        </section>
+
+    </div><!-- end content wrapper -->
+
+
+    <!-- begin footer -->
+    <footer class="main-footer"  th:replace="template/template :: main-footer">
+    </footer>
+    <!-- end footer -->
+
+</div>
+<!-- end wrapper -->
+<div th:replace="template/template :: gesture-request-modal" />
+
+<!-- JS -->
+<script src="../../../../../build/resources/main/static/js/bundle.js" th:src="@{/js/bundle.js}"></script>
+</body>
+</html>

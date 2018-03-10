@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
+    }
+}
+
+plugins{
+    id "org.sonarqube" version "2.2"
+    id 'nebula.provided-base' version '3.0.3'
+    id 'org.asciidoctor.convert' version "1.5.2"
+}
+
+asciidoctorj {
+    version = asciidoctorVersion
+}
+
+asciidoctor {
+    sourceDir = file("docs/src/reference/asciidoc")
+//    backends = ['docbook5']
+    options eruby: 'erubis'
+    attributes  docinfo: '',
+                copycss : '',
+                icons : 'font',
+                'source-highlighter': 'prettify',
+                sectanchors : '',
+                toc2: '',
+                idprefix: '',
+                idseparator: '-',
+                doctype: 'book',
+                numbered: '',
+                revnumber : "${springSecurityWebAuthnVersion}"
+}
+
+allprojects{
+    apply plugin: 'java'
+    group 'net.sharplab.springframework.security.extensions'
+    version springSecurityWebAuthnVersion
+    sourceCompatibility = 1.8
+
+    def defaultEncoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects{
+    apply plugin: 'jacoco'
+}

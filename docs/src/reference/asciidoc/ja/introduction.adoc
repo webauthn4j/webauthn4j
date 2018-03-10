@@ -1,0 +1,43 @@
+[introduction]
+== 導入
+
+=== Web Authenticationとは
+
+Web Authenticationは、W3Cで仕様策定が進められている、Webアプリケーションの新しいセキュアな認証方式仕様です。
+ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、
+フィッシングなど認証プロセスに対する攻撃に対して堅固な認証が実現出来ます。
+主要ブラウザでの実装が進みつつあり、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。
+当初はFIDO AllianceでFIDO2.0として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
+
+=== Spring Security WebAuthnとは
+
+Spring Securityで保護されたWebアプリケーションに対して、Web Authentication仕様に基づく認証機能を提供するための
+Spring Security拡張です。
+
+==== サポートする証言ステートメントフォーマット
+
+Spring Security WebAuthnが現在サポートする証言ステートメントフォーマットは以下の通りです。
+
+- FIDO U2F Attestation Statement Format
+- None Attestation Statement Format
+
+それ以外の証言ステートメントフォーマットのサポートも順次行う予定です。
+
+=== 用語集
+
+=== 要件
+
+- Java8
+
+=== ソースコード
+
+ソースコードは https://github.com/sharplab/spring-security-webauthn[Github] で管理されています。
+----
+git clone git@github.com:sharplab/spring-security-webauthn.git
+----
+
+=== ライセンス
+
+Spring Security WebAuthnは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの
+オープンソースソフトウェアです。
+

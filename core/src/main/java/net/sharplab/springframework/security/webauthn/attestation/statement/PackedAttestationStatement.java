@@ -1,0 +1,86 @@
+package net.sharplab.springframework.security.webauthn.attestation.statement;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
+
+import java.security.Principal;
+import java.security.cert.CertPath;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+
+@JsonIgnoreProperties(value = "format")
+public class PackedAttestationStatement implements WebAuthnAttestationStatement {
+
+    private static final String FORMAT = "packed";
+
+    @JsonProperty
+    private String alg;
+    @JsonProperty
+    private byte[] sig;
+    @JsonProperty
+    private CertPath x5c;
+    @JsonProperty
+    private byte[] ecdaaKeyId;
+
+    public String getAlg() {
+        return alg;
+    }
+
+    public byte[] getSig() {
+        return sig;
+    }
+
+    public CertPath getX5c() {
+        return x5c;
+    }
+
+    public byte[] getEcdaaKeyId() {
+        return ecdaaKeyId;
+    }
+
+    @Override
+    public String getFormat() {
+        return FORMAT;
+    }
+
+    @Override
+    public boolean isSelfAttested() {
+        if(x5c.getCertificates().size()>1){
+            return false;
+        }
+        X509Certificate attestationCertificate = getEndEntityCertificate();
+        return CertificateUtil.isSelfSigned(attestationCertificate);
+    }
+
+    @Override
+    public X509Certificate getEndEntityCertificate() {
+        if(x5c.getCertificates().isEmpty()){
+            throw new IllegalStateException();
+        }
+        return (X509Certificate) x5c.getCertificates().get(0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PackedAttestationStatement)) return false;
+
+        PackedAttestationStatement that = (PackedAttestationStatement) o;
+
+        if (alg != null ? !alg.equals(that.alg) : that.alg != null) return false;
+        if (!Arrays.equals(sig, that.sig)) return false;
+        if (x5c != null ? !x5c.equals(that.x5c) : that.x5c != null) return false;
+        return Arrays.equals(ecdaaKeyId, that.ecdaaKeyId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = alg != null ? alg.hashCode() : 0;
+        result = 31 * result + Arrays.hashCode(sig);
+        result = 31 * result + (x5c != null ? x5c.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(ecdaaKeyId);
+        return result;
+    }
+
+}

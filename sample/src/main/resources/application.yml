@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: local
+  messages:
+    basename: i18n/domain-messages,i18n/application-messages
+    encoding: UTF-8
+  datasource:
+    url: jdbc:log4jdbc:h2:mem:webauthn;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;MODE=PostgreSQL
+    driverClassName: net.sf.log4jdbc.DriverSpy
+    username: sa
+    rawPassword:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.H2Dialect
+  redis:
+    host: localhost
+    port: 6379
+
+flyway:
+  locations: db/migration/{vendor}
+
+management:
+  cloudfoundry:
+    skip-ssl-validation: true
