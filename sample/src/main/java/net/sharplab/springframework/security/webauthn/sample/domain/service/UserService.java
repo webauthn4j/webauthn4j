@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * ユーザーサービス
+ * User service
  */
 public interface UserService {
 

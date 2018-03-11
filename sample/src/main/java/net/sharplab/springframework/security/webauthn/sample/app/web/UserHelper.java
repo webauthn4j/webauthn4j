@@ -28,8 +28,13 @@ public class UserHelper {
         this.registrationContextValidator = registrationContextValidator;
     }
 
-    /**
+     /**
      * returns true if validation success
+     * @param model model
+     * @param request request
+     * @param response reponse
+     * @param authenticatorForms authenticator form list
+     * @return true if validation success
      */
     public boolean validateAuthenticators(Model model, HttpServletRequest request, HttpServletResponse response, List<AuthenticatorForm> authenticatorForms) {
         if (authenticatorForms == null) {

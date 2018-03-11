@@ -47,7 +47,10 @@ allprojects{
     version springSecurityWebAuthnVersion
     sourceCompatibility = 1.8
 
-    def defaultEncoding = 'UTF-8'
+    javadoc {
+        options.charSet = 'UTF-8'
+        options.encoding = 'UTF-8'
+    }
 
     repositories {
         mavenCentral()

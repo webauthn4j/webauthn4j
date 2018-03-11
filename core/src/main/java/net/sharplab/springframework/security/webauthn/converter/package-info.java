@@ -1,4 +1,4 @@
 /**
- * Converter classes for WebAuthn classes
+ * Spring Converter classes
  */
 package net.sharplab.springframework.security.webauthn.converter;
