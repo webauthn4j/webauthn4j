@@ -45,6 +45,7 @@ public class UserToUserFormConverter implements Converter<User, UserForm> {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorFormList)));
         }
         destination.setLocked(source.isLocked());
+        destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
         return destination;
     }
 }

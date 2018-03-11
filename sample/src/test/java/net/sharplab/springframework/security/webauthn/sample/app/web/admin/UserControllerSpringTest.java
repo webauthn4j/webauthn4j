@@ -103,6 +103,7 @@ public class UserControllerSpringTest {
                 .param("rawPassword", "password")
                 .param("rawPasswordRetyped", "password")
                 .param("locked", "on")
+                .param("passwordAuthenticationAllowed", "on")
         )
         //Then
                 .andExpect(status().is3xxRedirection())
@@ -148,6 +149,7 @@ public class UserControllerSpringTest {
                 .param("rawPassword", "password")
                 .param("rawPasswordRetyped", "password")
                 .param("locked", "on")
+                .param("passwordAuthenticationAllowed", "on")
         )
         //Then
                 .andExpect(status().isOk())
@@ -159,20 +161,23 @@ public class UserControllerSpringTest {
     public void read_test() throws Exception{
         int userId = 1;
 
-        User retreivedUser = new User();
-        retreivedUser.setId(userId);
-        retreivedUser.setFirstName("John");
-        retreivedUser.setLastName("Doe");
-        retreivedUser.setEmailAddress("john.doe@example.com");
-        retreivedUser.setLocked(true);
+        User retrievedUser = new User();
+        retrievedUser.setId(userId);
+        retrievedUser.setFirstName("John");
+        retrievedUser.setLastName("Doe");
+        retrievedUser.setEmailAddress("john.doe@example.com");
+        retrievedUser.setLocked(true);
+        retrievedUser.setPasswordAuthenticationAllowed(true);
+
         UserForm userForm = new UserForm();
         userForm.setFirstName("John");
         userForm.setLastName("Doe");
         userForm.setEmailAddress("john.doe@example.com");
         userForm.setLocked(true);
+        userForm.setPasswordAuthenticationAllowed(true);
 
         //Given
-        when(userService.findOne(userId)).thenReturn(retreivedUser);
+        when(userService.findOne(userId)).thenReturn(retrievedUser);
 
         //When
         mvc
@@ -192,6 +197,7 @@ public class UserControllerSpringTest {
         retrievedUser.setLastName("Doe");
         retrievedUser.setEmailAddress("john.doe@example.com");
         retrievedUser.setLocked(true);
+        retrievedUser.setPasswordAuthenticationAllowed(true);
 
         //Given
         when(userService.findOne(userId)).thenThrow(new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND)));
@@ -229,6 +235,7 @@ public class UserControllerSpringTest {
                         .param("lastName", "new last name")
                         .param("emailAddress", "new.email.address@example.com")
                         .param("locked", "on")
+                        .param("passwordAuthenticationAllowed", "on")
                 )
                 //Then
                 .andExpect(status().is3xxRedirection())
@@ -241,7 +248,8 @@ public class UserControllerSpringTest {
         assertThat(captor.getValue().getLastName()).isEqualTo("new last name");
         assertThat(captor.getValue().getEmailAddress()).isEqualTo("new.email.address@example.com");
         assertThat(captor.getValue().getPassword()).isEqualTo(exsistingUser.getPassword());
-        assertThat(captor.getValue().isLocked()).isEqualTo(true);
+        assertThat(captor.getValue().isLocked()).isTrue();
+        assertThat(captor.getValue().isPasswordAuthenticationAllowed()).isTrue();
     }
 
     @Test
@@ -288,13 +296,15 @@ public class UserControllerSpringTest {
                         .param("lastName", "new last name")
                         .param("emailAddress", "new.email.address@example.com")
                         .param("locked", "on")
+                        .param("passwordAuthenticationAllowed", "on")
                 )
         //Then
         .andExpect(status().isOk())
         .andExpect(model().attribute("userForm", hasProperty("firstName", is("new first name"))))
         .andExpect(model().attribute("userForm", hasProperty("lastName", is("new last name"))))
         .andExpect(model().attribute("userForm", hasProperty("emailAddress", is("new.email.address@example.com"))))
-        .andExpect(model().attribute("userForm", hasProperty("locked", is(true))));
+        .andExpect(model().attribute("userForm", hasProperty("locked", is(true))))
+        .andExpect(model().attribute("userForm", hasProperty("passwordAuthenticationAllowed", is(true))));
     }
 
     @Test

@@ -34,6 +34,7 @@ public class UserToProfileUpdateFormConverterTest {
         original.setEmailAddress("john.doe@example.com");
         original.setPassword("$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq");
         original.setLocked(true);
+        original.setPasswordAuthenticationAllowed(true);
 
         //When
         ProfileUpdateForm result = new ProfileUpdateForm();
@@ -43,5 +44,6 @@ public class UserToProfileUpdateFormConverterTest {
         assertThat(result.getFirstName()).isEqualTo("John");
         assertThat(result.getLastName()).isEqualTo("Doe");
         assertThat(result.getEmailAddress()).isEqualTo("john.doe@example.com");
+        assertThat(result.isPasswordAuthenticationAllowed()).isTrue();
     }
 }

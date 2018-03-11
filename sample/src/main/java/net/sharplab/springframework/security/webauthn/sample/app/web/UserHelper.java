@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * Created by ynojima on 2017/09/13.
+ * Helper class for user management
  */
 public class UserHelper {
 

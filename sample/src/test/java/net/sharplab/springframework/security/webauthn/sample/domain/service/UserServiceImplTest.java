@@ -54,16 +54,16 @@ public class UserServiceImplTest {
     @Test
     public void findOne_test1(){
 
-        User retreivedUser = new User();
+        User retrievedUser = new User();
 
         //Given
-        when(userManager.findById(1)).thenReturn(retreivedUser);
+        when(userManager.findById(1)).thenReturn(retrievedUser);
 
         //When
         User result = target.findOne(1);
 
         //Then
-        assertThat(result).isSameAs(retreivedUser);
+        assertThat(result).isSameAs(retrievedUser);
     }
 
     @Test

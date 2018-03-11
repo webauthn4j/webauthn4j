@@ -48,6 +48,7 @@ public class ProfileUpdateFormToUserConverter implements Converter<ProfileUpdate
         else {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorList)));
         }
+        destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
 
         return destination;
     }

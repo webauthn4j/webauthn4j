@@ -40,6 +40,7 @@ public class UserUpdateFormToUserConverter implements Converter<UserUpdateForm, 
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorList)));
         }
         destination.setLocked(source.isLocked());
+        destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
         return destination;
 
     }

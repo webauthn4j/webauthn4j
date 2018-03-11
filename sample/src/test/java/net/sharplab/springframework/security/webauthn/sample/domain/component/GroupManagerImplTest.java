@@ -255,12 +255,12 @@ public class GroupManagerImplTest {
     public void removeUserFromGroup_test1(){
         int userId = 1;
         int groupId = 1;
-        GroupEntity retreivedGroup = mock(GroupEntity.class);
+        GroupEntity retrievedGroup = mock(GroupEntity.class);
         List<UserEntity> userList = mock(List.class);
 
         //Given
-        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroup));
-        when(retreivedGroup.getUsers()).thenReturn(userList);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
+        when(retrievedGroup.getUsers()).thenReturn(userList);
 
         //When
         target.removeUserFromGroup(userId, groupId);

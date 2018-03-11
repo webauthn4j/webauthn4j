@@ -46,7 +46,8 @@ public class WithMockUserSecurityContextFactory implements WithSecurityContextFa
                         authorities,
                         groups,
                         authenticators,
-                        user.locked()
+                        user.locked(),
+                        user.passwordAuthenticationAllowed()
                 );
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(principal, "password", principal.getAuthorities());

@@ -12,4 +12,8 @@ public interface WebAuthnUserDetails extends UserDetails {
 
     Collection<? extends WebAuthnAuthenticator> getAuthenticators();
 
+    boolean isPasswordAuthenticationAllowed();
+
+    void setPasswordAuthenticationAllowed(boolean passwordAuthenticationAllowed);
+
 }

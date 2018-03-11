@@ -44,6 +44,7 @@ public class UserFormToUserConverterSpringTest {
         original.setRawPassword("rawPassword");
         original.setRawPasswordRetyped("rawPasswordRetyped");
         original.setLocked(true);
+        original.setPasswordAuthenticationAllowed(true);
 
         //When
         User result = new User();
@@ -55,6 +56,7 @@ public class UserFormToUserConverterSpringTest {
         assertThat(result.getEmailAddress()).isEqualTo("john.doe@example.com");
         assertThat(passwordEncoder.matches("rawPassword", result.getPassword())).isTrue();
         assertThat(result.isLocked()).isTrue();
+        assertThat(result.isPasswordAuthenticationAllowed()).isTrue();
     }
 
 }

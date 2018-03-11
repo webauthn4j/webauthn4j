@@ -36,6 +36,7 @@ public class ProfileUpdateFormToUserConverterSpringTest {
         original.setFirstName("John");
         original.setLastName("Doe");
         original.setEmailAddress("john.doe@example.com");
+        original.setPasswordAuthenticationAllowed(true);
 
         //When
         User result = new User();
@@ -45,6 +46,7 @@ public class ProfileUpdateFormToUserConverterSpringTest {
         assertThat(result.getFirstName()).isEqualTo("John");
         assertThat(result.getLastName()).isEqualTo("Doe");
         assertThat(result.getEmailAddress()).isEqualTo("john.doe@example.com");
+        assertThat(result.isPasswordAuthenticationAllowed()).isTrue();
     }
 
 

@@ -35,6 +35,7 @@ public class UserToUserFormConverterTest {
         original.setEmailAddress("john.doe@example.com");
         original.setPassword("$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq");
         original.setLocked(true);
+        original.setPasswordAuthenticationAllowed(true);
 
         UserForm result = new UserForm();
 
@@ -48,6 +49,7 @@ public class UserToUserFormConverterTest {
         assertThat(result.getRawPassword()).isNull();
         assertThat(result.getRawPasswordRetyped()).isNull();
         assertThat(result.isLocked()).isTrue();
+        assertThat(result.isPasswordAuthenticationAllowed()).isTrue();
     }
 
 }

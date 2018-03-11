@@ -115,6 +115,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
                             AbstractAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
+
     /**
      * Defines whether only HTTP POST requests will be allowed by this filter. If set to
      * true, and an authentication request is received which is not a POST request, an

@@ -38,4 +38,6 @@ public class ProfileUpdateForm {
     @Valid
     private List<AuthenticatorForm> authenticators;
 
+    private boolean passwordAuthenticationAllowed;
+
 }

@@ -27,5 +27,7 @@ public class UserUpdateForm {
     @Valid
     private List<AuthenticatorForm> authenticators;
 
+    private boolean passwordAuthenticationAllowed;
+
     private boolean locked;
 }

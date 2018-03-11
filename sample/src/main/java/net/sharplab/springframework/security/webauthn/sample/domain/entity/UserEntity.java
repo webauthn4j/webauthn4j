@@ -47,6 +47,9 @@ public class UserEntity implements Serializable {
 
     private boolean locked;
 
+    @Column(name = "pwauth_allowed")
+    private boolean passwordAuthenticationAllowed;
+
     /**
      * アカウントの文字列表現。E-Mailアドレス
      * @return アカウントのE-Mailアドレス

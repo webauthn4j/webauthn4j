@@ -39,5 +39,7 @@ public class UserForm {
     @Valid
     private List<AuthenticatorForm> authenticators;
 
+    private boolean passwordAuthenticationAllowed;
+
     private boolean locked;
 }

@@ -23,5 +23,6 @@ public @interface WithMockUser {
     String[] authenticators() default {};
 
     boolean locked() default false;
+    boolean passwordAuthenticationAllowed() default false;
 
 }

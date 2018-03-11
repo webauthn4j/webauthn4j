@@ -5,6 +5,7 @@ CREATE TABLE m_user (
   last_name         VARCHAR(32)    NOT NULL,
   email_address     VARCHAR(64)    NOT NULL  UNIQUE,
   password          VARCHAR(64)    NOT NULL,
+  pwauth_allowed    BOOLEAN         NOT NULL,
   locked            BOOLEAN         NOT NULL,
   primary key(id)
 );

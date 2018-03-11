@@ -16,6 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn;
 
+import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,7 @@ public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider implemen
     // ================================================================================================
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     private AbstractUserDetailsAuthenticationProvider authenticationProvider;
+    private boolean passwordAuthenticationAllowed = true;
 
 
     public WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider(AbstractUserDetailsAuthenticationProvider authenticationProvider){
@@ -57,10 +59,23 @@ public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider implemen
 
         Authentication result =  authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
 
+        if(passwordAuthenticationAllowed && result.isAuthenticated() && result.getPrincipal() instanceof WebAuthnUserDetails){
+            WebAuthnUserDetails userDetails = (WebAuthnUserDetails) result.getPrincipal();
+            if(userDetails.isPasswordAuthenticationAllowed()){
+                return result;
+            }
+        }
+
         return new FirstOfMultiFactorAuthenticationToken(result.getPrincipal(), result.getCredentials(), authentication.getAuthorities());
     }
 
+    public boolean isPasswordAuthenticationAllowed() {
+        return passwordAuthenticationAllowed;
+    }
 
+    public void setPasswordAuthenticationAllowed(boolean passwordAuthenticationAllowed) {
+        this.passwordAuthenticationAllowed = passwordAuthenticationAllowed;
+    }
 
     @Override
     public boolean supports(Class<?> authentication) {

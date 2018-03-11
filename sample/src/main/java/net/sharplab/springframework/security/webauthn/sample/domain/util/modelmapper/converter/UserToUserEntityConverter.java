@@ -65,6 +65,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
             convertAuthenticators(context);
         }
 
+        destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
         destination.setLocked(source.isLocked());
 
         return destination;

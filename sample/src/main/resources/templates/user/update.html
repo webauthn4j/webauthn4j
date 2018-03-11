@@ -121,6 +121,15 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="passwordAuthenticationAllowed" class="col-sm-2 control-label" th:text="#{v.users.passwordAuthenticationAllowed}">Allow password authentication</label>
+                            <div class="input-group col-sm-9">
+                                <input type="checkbox" id="passwordAuthenticationAllowed" name="passwordAuthenticationAllowed" th:checked="*{passwordAuthenticationAllowed}" />
+                                <div class="has-error" th:if="${#fields.hasErrors('passwordAuthenticationAllowed')}">
+                                    <span class="help-block" th:errors="*{passwordAuthenticationAllowed}" >Validation error message</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <div class="input-group col-sm-11">
                                 <input type="submit" name="submit" class="btn btn-info pull-right" th:value="#{v.users.ok}" value="OK" />
                             </div>

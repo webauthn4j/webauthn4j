@@ -25,12 +25,16 @@ public class UserTest {
         user.setLastName(lastName);
         user.setEmailAddress(emailAddress);
         user.setAuthorities(Collections.singletonList(authority));
+        user.setLocked(true);
+        user.setPasswordAuthenticationAllowed(true);
 
         assertThat(user.getId()).isEqualTo(userId);
         assertThat(user.getFirstName()).isEqualTo(firstName);
         assertThat(user.getLastName()).isEqualTo(lastName);
         assertThat(user.getEmailAddress()).isEqualTo(emailAddress);
         assertThat(user.getAuthorities()).containsExactly(authority);
+        assertThat(user.isLocked()).isTrue();
+        assertThat(user.isPasswordAuthenticationAllowed()).isTrue();
 
         assertThat(user.getFullname()).isEqualTo("John Doe");
         assertThat(user.getUsername()).isEqualTo(emailAddress);

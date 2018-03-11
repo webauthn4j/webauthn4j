@@ -51,6 +51,7 @@ public class ProfileControllerSpringTest {
         user.setLastName("Doe");
         user.setEmailAddress("john.doe@example.com");
         user.setAuthenticators(Collections.emptyList());
+        user.setPasswordAuthenticationAllowed(true);
 
         when(profileService.findOne(userId)).thenReturn(user);
 
@@ -59,6 +60,7 @@ public class ProfileControllerSpringTest {
         profileUpdateForm.setLastName("Doe");
         profileUpdateForm.setEmailAddress("john.doe@example.com");
         profileUpdateForm.setAuthenticators(Collections.emptyList());
+        profileUpdateForm.setPasswordAuthenticationAllowed(true);
 
         //When
         mvc

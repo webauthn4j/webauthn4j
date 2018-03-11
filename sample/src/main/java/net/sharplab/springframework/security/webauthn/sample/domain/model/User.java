@@ -29,6 +29,8 @@ public class User implements WebAuthnUserDetails {
 
     private boolean locked;
 
+    private boolean passwordAuthenticationAllowed = false;
+
     public User(){
         //NOP
     }
@@ -37,7 +39,7 @@ public class User implements WebAuthnUserDetails {
         this.id = id;
     }
 
-    public User(Integer id, byte[] userHandle, String firstName, String lastName, String emailAddress, List<Authority> authorities, List<Group> groups, List<Authenticator> authenticators, boolean locked){
+    public User(Integer id, byte[] userHandle, String firstName, String lastName, String emailAddress, List<Authority> authorities, List<Group> groups, List<Authenticator> authenticators, boolean locked, boolean passwordAuthenticationAllowed){
         this.id = id;
         this.userHandle = userHandle;
         this.firstName = firstName;
@@ -47,6 +49,7 @@ public class User implements WebAuthnUserDetails {
         this.groups = groups;
         this.authenticators = authenticators;
         this.locked = locked;
+        this.passwordAuthenticationAllowed = passwordAuthenticationAllowed;
     }
 
     /**
@@ -69,6 +72,16 @@ public class User implements WebAuthnUserDetails {
 
     @Override
     public List<Authenticator> getAuthenticators() { return this.authenticators; }
+
+    @Override
+    public boolean isPasswordAuthenticationAllowed() {
+        return this.passwordAuthenticationAllowed;
+    }
+
+    @Override
+    public void setPasswordAuthenticationAllowed(boolean passwordAuthenticationAllowed) {
+        this.passwordAuthenticationAllowed = passwordAuthenticationAllowed;
+    }
 
     /**
      * アカウントが有効期限内か

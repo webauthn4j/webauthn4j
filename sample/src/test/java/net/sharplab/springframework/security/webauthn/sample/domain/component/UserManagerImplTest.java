@@ -212,19 +212,19 @@ public class UserManagerImplTest {
     public void delete_test3(){
         String username = "dummy@example.com";
         int userId = 1;
-        UserEntity retreivedUser = new UserEntity();
-        retreivedUser.setId(userId);
+        UserEntity retrievedUser = new UserEntity();
+        retrievedUser.setId(userId);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.of(retreivedUser));
-        doNothing().when(userEntityRepository).delete(retreivedUser);
+        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.of(retrievedUser));
+        doNothing().when(userEntityRepository).delete(retrievedUser);
 
         //When
         target.deleteUser(username);
 
         //Then
         verify(userEntityRepository).findOneByEmailAddress(username);
-        verify(userEntityRepository).delete(retreivedUser);
+        verify(userEntityRepository).delete(retrievedUser);
     }
 
     @Test(expected = UsernameNotFoundException.class)
