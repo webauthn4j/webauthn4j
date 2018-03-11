@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -56,11 +57,11 @@ public class GroupManagerImplTest {
     public void findGroup_test1(){
         //Input
         int groupId = 1;
-        GroupEntity retreivedGroup = new GroupEntity();
-        retreivedGroup.setId(1);
+        GroupEntity retrievedGroup = new GroupEntity();
+        retrievedGroup.setId(1);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroup);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
 
         //When
         Group result = target.findGroup(groupId);
@@ -93,7 +94,7 @@ public class GroupManagerImplTest {
         retreivedGroupEntity.setUsers(users);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroupEntity);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroupEntity));
 
         //When
         List<User> result = target.findUsersInGroup(groupId);
@@ -111,7 +112,7 @@ public class GroupManagerImplTest {
         retreivedGroup.setUsers(users);
 
         //Given
-        when(groupEntityRepository.findOneByGroupName(groupName)).thenReturn(retreivedGroup);
+        when(groupEntityRepository.findOneByGroupName(groupName)).thenReturn(Optional.of(retreivedGroup));
 
         //When
         List<User> result = target.findUsersInGroup(groupName);
@@ -126,7 +127,7 @@ public class GroupManagerImplTest {
         int groupId = 1;
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.findUsersInGroup(groupId);
@@ -138,7 +139,7 @@ public class GroupManagerImplTest {
         String groupName = "groupA";
 
         //Given
-        when(groupEntityRepository.findOneByGroupName(groupName)).thenReturn(null);
+        when(groupEntityRepository.findOneByGroupName(groupName)).thenReturn(Optional.empty());
 
         //When
         target.findUsersInGroup(groupName);
@@ -165,7 +166,7 @@ public class GroupManagerImplTest {
         int groupId = 1;
 
         //Given
-        doNothing().when(groupEntityRepository).delete(groupId);
+        doNothing().when(groupEntityRepository).deleteById(groupId);
 
         //When
         target.deleteGroup(groupId);
@@ -177,7 +178,7 @@ public class GroupManagerImplTest {
         GroupEntity retreivedGroupEntity = mock(GroupEntity.class);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroupEntity);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroupEntity));
 
         //When
         target.renameGroup(groupId, "newName");
@@ -191,7 +192,7 @@ public class GroupManagerImplTest {
         int groupId = 1;
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.renameGroup(groupId, "newName");
@@ -208,8 +209,8 @@ public class GroupManagerImplTest {
         List<UserEntity> userList = mock(List.class);
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(retreivedUser);
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroup);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.of(retreivedUser));
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroup));
         when(retreivedGroup.getUsers()).thenReturn(userList);
 
         //When
@@ -228,8 +229,8 @@ public class GroupManagerImplTest {
         GroupEntity retreivedGroup = mock(GroupEntity.class);
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(null);
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroup);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.empty());
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroup));
 
         //When
         target.addUserToGroup(userId, groupId);
@@ -243,8 +244,8 @@ public class GroupManagerImplTest {
         UserEntity retreivedUser = new UserEntity();
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(retreivedUser);
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.of(retreivedUser));
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.addUserToGroup(userId, groupId);
@@ -258,7 +259,7 @@ public class GroupManagerImplTest {
         List<UserEntity> userList = mock(List.class);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroup);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retreivedGroup));
         when(retreivedGroup.getUsers()).thenReturn(userList);
 
         //When
@@ -274,7 +275,7 @@ public class GroupManagerImplTest {
         int groupId = 1;
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.removeUserFromGroup(userId, groupId);
@@ -290,7 +291,7 @@ public class GroupManagerImplTest {
         retrievedGroup.setAuthorities(retrievedGroupAuthorities);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retrievedGroup);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
 
         //When
         List<Authority> result = target.findGroupAuthorities(groupId);
@@ -304,7 +305,7 @@ public class GroupManagerImplTest {
         int groupId = 1;
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.findGroupAuthorities(groupId);
@@ -320,7 +321,7 @@ public class GroupManagerImplTest {
         Authority groupAuthority = new Authority();
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retrievedGroup);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
         when(retrievedGroup.getAuthorities()).thenReturn(retrievedGroupAuthorities);
         when(retrievedGroupAuthorities.add(retrievedGroupAuthority)).thenReturn(true);
 
@@ -338,7 +339,7 @@ public class GroupManagerImplTest {
         Authority groupAuthority = new Authority();
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
 
         //When
         target.addGroupAuthority(groupId, groupAuthority);
@@ -361,8 +362,8 @@ public class GroupManagerImplTest {
         groupAuthority.setId(authorityId);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retrievedGroup);
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(retrievedAuthorityEntity);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.of(retrievedAuthorityEntity));
 
         //When
         target.removeGroupAuthority(groupId, groupAuthority);
@@ -378,8 +379,8 @@ public class GroupManagerImplTest {
         Authority groupAuthority = new Authority();
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(null);
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.empty());
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.empty());
 
         //When
         target.removeGroupAuthority(groupId, groupAuthority);
@@ -400,8 +401,8 @@ public class GroupManagerImplTest {
         groupAuthority.setId(1);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retrievedGroup);
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(null);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroup));
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.empty());
 
         //When
         target.removeGroupAuthority(groupId, groupAuthority);

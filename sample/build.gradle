@@ -9,6 +9,7 @@ jar {
 }
 
 apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
 
 bootRun {
     if (project.hasProperty('args')) {    // "args" というプロパティが渡されていたら
@@ -40,8 +41,8 @@ repositories {
 
 dependencies {
     // Custom Spring Security
-    compile('org.springframework.security:spring-security-core:4.2.5.BUILD-SNAPSHOT')
-    compile('org.springframework.security:spring-security-web:4.2.5.BUILD-SNAPSHOT')
+    compile('org.springframework.security:spring-security-core:5.0.2.BUILD-SNAPSHOT')
+    compile('org.springframework.security:spring-security-web:5.0.2.BUILD-SNAPSHOT')
 
     compile project(':spring-security-webauthn-core')
     compile project(':spring-security-webauthn-thymeleaf')
@@ -53,19 +54,18 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
 
     //Terasoluna
-    compile('org.terasoluna.gfw:terasoluna-gfw-common:5.3.0.RELEASE')
-    compile('org.terasoluna.gfw:terasoluna-gfw-web:5.3.0.RELEASE')
+    compile("org.terasoluna.gfw:terasoluna-gfw-common:${terasolunaVersion}")
+    compile("org.terasoluna.gfw:terasoluna-gfw-web:${terasolunaVersion}")
 
     //Web
 
     //Others
     compile('ch.qos.logback:logback-classic')
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
-    compile("org.modelmapper:modelmapper:0.7.5")
+    compile("org.modelmapper:modelmapper:${modelMapperVersion}")
     compile('org.flywaydb:flyway-core')
     runtime('com.h2database:h2')
     runtime('mysql:mysql-connector-java')
-    compile('org.lazyluke:log4jdbc-remix:0.2.6')
+    compile("org.lazyluke:log4jdbc-remix:${log4jdbcVersion}")
     compileOnly('org.projectlombok:lombok')
 
     //Test
@@ -82,6 +82,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR2'
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
     }
 }

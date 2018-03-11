@@ -24,15 +24,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 /**
- * AuthorityServiceのテスト
+ * Test for AuthorityService
  */
 public class AuthorityServiceImplTest {
 
@@ -74,7 +74,7 @@ public class AuthorityServiceImplTest {
         retreivedAuthorityEntity.setId(authorityId);
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(retreivedAuthorityEntity);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.of(retreivedAuthorityEntity));
 
         //When
         Authority result = target.findOne(authorityId);
@@ -90,7 +90,6 @@ public class AuthorityServiceImplTest {
      * 非実在idを指定
      * [期待結果]
      * EntityNotFoundExceptionの発生
-     * @throws Exception
      */
     @Test(expected = WebAuthnSampleEntityNotFoundException.class)
     public void findOne_test2(){
@@ -98,7 +97,7 @@ public class AuthorityServiceImplTest {
         int authorityId = 1;
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(null);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.empty());
 
         //When
         Authority result = target.findOne(authorityId);
@@ -114,7 +113,6 @@ public class AuthorityServiceImplTest {
      * なし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAll_test1(){
@@ -144,7 +142,6 @@ public class AuthorityServiceImplTest {
      * なし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAll_test2(){
@@ -174,7 +171,6 @@ public class AuthorityServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllByKeyword_test1(){
@@ -203,7 +199,6 @@ public class AuthorityServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllByKeyword_test2(){
@@ -231,7 +226,6 @@ public class AuthorityServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void update_test1(){
@@ -249,7 +243,7 @@ public class AuthorityServiceImplTest {
         AuthorityEntity retrievedAuthorityEntity = new AuthorityEntity();
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(retrievedAuthorityEntity);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.of(retrievedAuthorityEntity));
 
         //When
         target.update(inputAuthority);
@@ -268,7 +262,6 @@ public class AuthorityServiceImplTest {
      * 非実在idを指定
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test(expected = WebAuthnSampleEntityNotFoundException.class)
     public void update_test2(){
@@ -284,7 +277,7 @@ public class AuthorityServiceImplTest {
         inputAuthority.setGroups(Collections.singletonList(associatedGroup));
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(null);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.empty());
 
         //When
         target.update(inputAuthority);
@@ -299,15 +292,14 @@ public class AuthorityServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void update_test3(){
         int authorityId = 1;
         AuthorityUpdateDto inputAuthorityUpdateDto = new AuthorityUpdateDto();
         inputAuthorityUpdateDto.setId(authorityId);
-        inputAuthorityUpdateDto.setUsers(new int[]{2});
-        inputAuthorityUpdateDto.setGroups(new int[]{3});
+        inputAuthorityUpdateDto.setUsers(Collections.singletonList(2));
+        inputAuthorityUpdateDto.setGroups(Collections.singletonList(3));
 
         UserEntity retrievedUserEntity = new UserEntity();
         retrievedUserEntity.setId(2);
@@ -318,9 +310,9 @@ public class AuthorityServiceImplTest {
         retrievedAuthorityEntity.setAuthority("authorityA");
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(retrievedAuthorityEntity);
-        when(userEntityRepository.findOne(2)).thenReturn(retrievedUserEntity);
-        when(groupEntityRepository.findOne(3)).thenReturn(retrievedGroupEntity);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.of(retrievedAuthorityEntity));
+        when(userEntityRepository.findAllById(any())).thenReturn(Collections.singletonList(retrievedUserEntity));
+        when(groupEntityRepository.findAllById(any())).thenReturn(Collections.singletonList(retrievedGroupEntity));
 
         //When
         target.update(inputAuthorityUpdateDto);
@@ -339,18 +331,17 @@ public class AuthorityServiceImplTest {
      * 非実在idを指定
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test(expected = WebAuthnSampleEntityNotFoundException.class)
     public void update_test4(){
         int authorityId = 1;
         AuthorityUpdateDto inputAuthorityUpdateDto = new AuthorityUpdateDto();
         inputAuthorityUpdateDto.setId(authorityId);
-        inputAuthorityUpdateDto.setUsers(new int[]{2});
-        inputAuthorityUpdateDto.setGroups(new int[]{3});
+        inputAuthorityUpdateDto.setUsers(Collections.singletonList(2));
+        inputAuthorityUpdateDto.setGroups(Collections.singletonList(3));
 
         //Given
-        when(authorityEntityRepository.findOne(authorityId)).thenReturn(null);
+        when(authorityEntityRepository.findById(authorityId)).thenReturn(Optional.empty());
 
         //When
         target.update(inputAuthorityUpdateDto);
@@ -365,7 +356,6 @@ public class AuthorityServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllCandidateUsersByKeyword_test1(){
@@ -394,7 +384,6 @@ public class AuthorityServiceImplTest {
      * keywordなし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllCandidateUsersByKeyword_test2(){
@@ -423,7 +412,6 @@ public class AuthorityServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllCandidateGroupsByKeyword_test1(){
@@ -452,7 +440,6 @@ public class AuthorityServiceImplTest {
      * keywordなし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllCandidateGroupsByKeyword_test2(){

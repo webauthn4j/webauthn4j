@@ -57,7 +57,7 @@ public class UserServiceImplTest {
         User retreivedUser = new User();
 
         //Given
-        when(userManager.findOne(1)).thenReturn(retreivedUser);
+        when(userManager.findById(1)).thenReturn(retreivedUser);
 
         //When
         User result = target.findOne(1);

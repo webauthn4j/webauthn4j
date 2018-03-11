@@ -7,6 +7,10 @@ import org.modelmapper.Converter;
 import org.modelmapper.MappingException;
 import org.modelmapper.spi.MappingContext;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Converter which converts from {@link AuthenticatorForm} to {@link AuthorityUpdateDto}
  */
@@ -26,10 +30,10 @@ public class AuthorityFormToAuthorityUpdateDtoConverter implements Converter<Aut
         if(destination == null){
             destination = new AuthorityUpdateDto();
         }
-        int[] users  = source.getUsers();
-        int[] groups = source.getGroups();
-        destination.setUsers(users   == null ? new int[0] : users);
-        destination.setGroups(groups == null ? new int[0] : groups);
+        List<Integer> users  = source.getUsers();
+        List<Integer> groups = source.getGroups();
+        destination.setUsers(users   == null ? Collections.emptyList() : users);
+        destination.setGroups(groups == null ? Collections.emptyList() : groups);
         return destination;
     }
 }

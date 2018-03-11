@@ -74,7 +74,7 @@ public class GroupControllerSpringTest {
         Page<Group> page = new PageImpl<>(groups);
 
         //Given
-        when(groupService.findAllByKeyword(any(), anyString())).thenReturn(page);
+        when(groupService.findAllByKeyword(any(), any())).thenReturn(page);
 
         //When
         mvc

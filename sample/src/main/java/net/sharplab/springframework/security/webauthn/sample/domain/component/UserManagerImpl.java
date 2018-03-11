@@ -38,11 +38,9 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      * {@inheritDoc}
      */
     @Override
-    public User findOne(int id) {
-        UserEntity userEntity = userEntityRepository.findOne(id);
-        if(userEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND));
-        }
+    public User findById(int id) {
+        UserEntity userEntity = userEntityRepository.findById(id)
+            .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND)));
         return modelMapper.map(userEntity, User.class);
     }
 
@@ -51,10 +49,8 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      */
     @Override
     public WebAuthnUserDetails loadUserByUsername(String username) {
-        UserEntity userEntity = userEntityRepository.findOneByEmailAddress(username);
-        if(userEntity == null){
-            throw new UsernameNotFoundException(String.format("User with username'%s' is not found.",username));
-        }
+        UserEntity userEntity = userEntityRepository.findOneByEmailAddress(username)
+                .orElseThrow(()-> new UsernameNotFoundException(String.format("User with username'%s' is not found.",username)));
         return modelMapper.map(userEntity, User.class);
     }
 
@@ -63,10 +59,9 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      */
     @Override
     public User createUser(User user) {
-        UserEntity retrievedUserEntity = userEntityRepository.findOneByEmailAddress(user.getEmailAddress());
-        if(retrievedUserEntity != null){
+        userEntityRepository.findOneByEmailAddress(user.getEmailAddress()).ifPresent((retrievedUserEntity)->{
             throw new WebAuthnSampleBusinessException(ResultMessages.error().add(MessageCodes.Error.User.EMAIL_ADDRESS_IS_ALREADY_USED));
-        }
+        });
 
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         UserEntity createdUserEntity = userEntityRepository.save(userEntity);
@@ -79,10 +74,8 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
     @Override
     public void updateUser(User user) {
 
-        UserEntity userEntity = userEntityRepository.findOne(user.getId());
-        if(userEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND));
-        }
+        UserEntity userEntity = userEntityRepository.findById(user.getId())
+                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND)));
         modelMapper.map(user, userEntity);
     }
 
@@ -91,10 +84,8 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      */
     @Override
     public void deleteUser(String username) {
-        UserEntity userEntity = userEntityRepository.findOneByEmailAddress(username);
-        if(userEntity == null){
-            throw new UsernameNotFoundException(String.format("User with username'%s' is not found.", username));
-        }
+        UserEntity userEntity = userEntityRepository.findOneByEmailAddress(username)
+                .orElseThrow(()-> new UsernameNotFoundException(String.format("User with username'%s' is not found.", username)));
         userEntityRepository.delete(userEntity);
     }
 
@@ -103,11 +94,9 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      */
     @Override
     public void deleteUser(int id){
-        UserEntity userEntity = userEntityRepository.findOne(id);
-        if(userEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND));
-        }
-        userEntityRepository.delete(id);
+        UserEntity userEntity = userEntityRepository.findById(id)
+                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND)));
+        userEntityRepository.deleteById(id);
     }
 
     /**
@@ -132,8 +121,7 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
      */
     @Override
     public boolean userExists(String username) {
-        UserEntity userEntity = userEntityRepository.findOneByEmailAddress(username);
-        return userEntity != null;
+        return userEntityRepository.findOneByEmailAddress(username).isPresent();
     }
 
     /**

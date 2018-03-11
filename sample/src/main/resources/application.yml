@@ -17,8 +17,8 @@ spring:
     host: localhost
     port: 6379
 
-flyway:
-  locations: db/migration/{vendor}
+  flyway:
+    locations: classpath:db/migration/{vendor}
 
 management:
   cloudfoundry:

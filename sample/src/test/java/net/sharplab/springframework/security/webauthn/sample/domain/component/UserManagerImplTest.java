@@ -19,6 +19,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -43,14 +45,14 @@ public class UserManagerImplTest {
     @Test
     public void findOne_test1(){
         int userId = 1;
-        UserEntity retreivedUser = new UserEntity();
-        retreivedUser.setId(userId);
+        UserEntity retrievedUser = new UserEntity();
+        retrievedUser.setId(userId);
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(retreivedUser);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.of(retrievedUser));
 
         //When
-        User result = target.findOne(userId);
+        User result = target.findById(userId);
 
         //Then
         assertThat(result.getId()).isEqualTo(1);
@@ -62,10 +64,10 @@ public class UserManagerImplTest {
         int userId = 1;
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(null);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.empty());
 
         //When
-        User result = target.findOne(userId);
+        User result = target.findById(userId);
     }
 
     @Test
@@ -76,7 +78,7 @@ public class UserManagerImplTest {
         retrievedUser.setEmailAddress(emailAddress);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(retrievedUser);
+        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(Optional.of(retrievedUser));
 
         //When
         User user = (User)target.loadUserByUsername(emailAddress);
@@ -89,10 +91,9 @@ public class UserManagerImplTest {
     public void loadUserByUsername_test2(){
 
         String emailAddress = "dummy@example.com";
-        UserEntity expectedUser = null;
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(expectedUser);
+        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(Optional.empty());
 
         //When
         User user = (User)target.loadUserByUsername(emailAddress);
@@ -109,7 +110,7 @@ public class UserManagerImplTest {
         sampleUserEntity.setEmailAddress(emailAddress);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(null);
+        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(Optional.empty());
         when(userEntityRepository.save(any(UserEntity.class))).thenReturn(sampleUserEntity);
 
         //When
@@ -129,7 +130,7 @@ public class UserManagerImplTest {
         sampleUserEntity.setEmailAddress(emailAddress);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(sampleUserEntity);
+        when(userEntityRepository.findOneByEmailAddress(emailAddress)).thenReturn(Optional.of(sampleUserEntity));
 
         //When
         target.createUser(sampleUser);
@@ -150,7 +151,7 @@ public class UserManagerImplTest {
 
         //Given
         target.modelMapper = new ModelMapper();
-        when(userEntityRepository.findOne(userId)).thenReturn(retrievedUserEntity);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.of(retrievedUserEntity));
 
         //When
         target.updateUser(inputUser);
@@ -170,7 +171,7 @@ public class UserManagerImplTest {
 
         //Given
         target.modelMapper = new ModelMapper();
-        when(userEntityRepository.findOne(userId)).thenReturn(null);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.empty());
 
         //When
         target.updateUser(inputUser);
@@ -183,15 +184,15 @@ public class UserManagerImplTest {
         int userId = 1;
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(new UserEntity());
-        doNothing().when(userEntityRepository).delete(userId);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.of(new UserEntity()));
+        doNothing().when(userEntityRepository).deleteById(userId);
 
         //When
         target.deleteUser(userId);
 
         //Then
-        verify(userEntityRepository).findOne(userId);
-        verify(userEntityRepository).delete(userId);
+        verify(userEntityRepository).findById(userId);
+        verify(userEntityRepository).deleteById(userId);
     }
 
     @Test(expected = WebAuthnSampleEntityNotFoundException.class)
@@ -199,7 +200,7 @@ public class UserManagerImplTest {
         int userId = 1;
 
         //Given
-        when(userEntityRepository.findOne(userId)).thenReturn(null);
+        when(userEntityRepository.findById(userId)).thenReturn(Optional.empty());
 
         //When
         target.deleteUser(userId);
@@ -215,7 +216,7 @@ public class UserManagerImplTest {
         retreivedUser.setId(userId);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(retreivedUser);
+        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.of(retreivedUser));
         doNothing().when(userEntityRepository).delete(retreivedUser);
 
         //When
@@ -234,7 +235,7 @@ public class UserManagerImplTest {
         retreivedUser.setId(userId);
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(null);
+        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.empty());
 
         //When
         target.deleteUser(username);
@@ -249,7 +250,7 @@ public class UserManagerImplTest {
         UserEntity retreivedUser = new UserEntity();
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(retreivedUser);
+        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.of(retreivedUser));
 
         //When
         boolean result = target.userExists(username);
@@ -264,7 +265,7 @@ public class UserManagerImplTest {
         String username = "dummy@example.com";
 
         //Given
-        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(null);
+        when(userEntityRepository.findOneByEmailAddress(username)).thenReturn(Optional.empty());
 
         //When
         boolean result = target.userExists(username);
@@ -278,17 +279,17 @@ public class UserManagerImplTest {
     public void changePassword_test1(){
         String oldPassword = "oldPassword";
         String newPassword = "newPassword";
-        User retrivedUser = mock(User.class);
+        User retrievedUser = mock(User.class);
 
 
         //Given
-        SecurityContextHolder.setContext(createMockSecurityContext(retrivedUser));
+        SecurityContextHolder.setContext(createMockSecurityContext(retrievedUser));
 
         //When
         target.changePassword(oldPassword, newPassword);
 
         //Then
-        verify(retrivedUser).setPassword(newPassword);
+        verify(retrievedUser).setPassword(newPassword);
     }
 
     @Test(expected = org.springframework.security.access.AccessDeniedException.class)

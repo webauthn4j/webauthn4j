@@ -81,17 +81,12 @@
             <ul class="sidebar-menu">
 
                 <li><a href="/" th:text="#{v.template.dashboard}">ダッシュボード</a></li>
-
-                <li sec:authorize="hasRole('ROLE_ADMIN')">
-                    <!-- メニューヘッダ -->
-                    <li class="header" th:text="#{v.template.administration}">管理</li>
-
-                    <!-- メニュー項目 -->
-                    <li><a href="/admin/users/" th:text="#{v.template.users}">ユーザー</a></li>
-                    <li><a href="/admin/groups/" th:text="#{v.template.groups}">グループ</a></li>
-                    <li><a href="/admin/authorities/" th:text="#{v.template.authorities}">権限</a></li>
-                </li>
-
+                <!-- メニューヘッダ -->
+                <li sec:authorize="${hasRole('ADMIN')}" class="header" th:text="#{v.template.administration}">管理</li>
+                <!-- メニュー項目 -->
+                <li sec:authorize="${hasRole('ADMIN')}"><a href="/admin/users/" th:text="#{v.template.users}">ユーザー</a></li>
+                <li sec:authorize="${hasRole('ADMIN')}"><a href="/admin/groups/" th:text="#{v.template.groups}">グループ</a></li>
+                <li sec:authorize="${hasRole('ADMIN')}"><a href="/admin/authorities/" th:text="#{v.template.authorities}">権限</a></li>
             </ul>
         </section>
     </aside>

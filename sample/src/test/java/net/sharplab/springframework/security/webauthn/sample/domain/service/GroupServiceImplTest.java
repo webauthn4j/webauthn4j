@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -60,16 +61,15 @@ public class GroupServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findOne_test1(){
         int groupId = 1;
-        GroupEntity retreivedGroupEntity = new GroupEntity();
-        retreivedGroupEntity.setId(groupId);
+        GroupEntity retrievedGroupEntity =new GroupEntity();
+        retrievedGroupEntity.setId(groupId);
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retreivedGroupEntity);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroupEntity));
 
         //When
         Group result = target.findOne(groupId);
@@ -85,7 +85,6 @@ public class GroupServiceImplTest {
      * なし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAll_test1(){
@@ -115,7 +114,6 @@ public class GroupServiceImplTest {
      * なし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAll_test2(){
@@ -145,7 +143,6 @@ public class GroupServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllByKeyword_test1(){
@@ -173,7 +170,6 @@ public class GroupServiceImplTest {
      * keywordあり
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findAllByKeyword_test2(){
@@ -201,7 +197,6 @@ public class GroupServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void create_test1(){
@@ -227,7 +222,6 @@ public class GroupServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void update_test1(){
@@ -245,7 +239,7 @@ public class GroupServiceImplTest {
         GroupEntity retrievedGroupEntity = new GroupEntity();
 
         //Given
-        when(groupEntityRepository.findOne(groupId)).thenReturn(retrievedGroupEntity);
+        when(groupEntityRepository.findById(groupId)).thenReturn(Optional.of(retrievedGroupEntity));
 
         //When
         target.update(inputGroup);
@@ -264,20 +258,19 @@ public class GroupServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void delete_test1(){
         int groupId = 1;
 
         //Given
-        doNothing().when(groupEntityRepository).delete(groupId);
+        doNothing().when(groupEntityRepository).deleteById(groupId);
 
         //When
         target.delete(groupId);
 
         //Then
-        verify(groupEntityRepository).delete(groupId);
+        verify(groupEntityRepository).deleteById(groupId);
     }
 
 

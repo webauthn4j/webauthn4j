@@ -8,6 +8,8 @@ import org.modelmapper.Converter;
 import org.modelmapper.MappingException;
 import org.modelmapper.spi.MappingContext;
 
+import java.util.stream.Collectors;
+
 /**
  * Converter which converts from {@link Authority} to {@link AuthorityForm}
  */
@@ -27,8 +29,8 @@ public class AuthorityToAuthorityFormConverter implements Converter<Authority, A
         if(destination == null){
             destination = new AuthorityForm();
         }
-        destination.setUsers(source.getUsers().stream().mapToInt(User::getId).toArray());
-        destination.setGroups(source.getGroups().stream().mapToInt(Group::getId).toArray());
+        destination.setUsers(source.getUsers().stream().map(User::getId).collect(Collectors.toList()));
+        destination.setGroups(source.getGroups().stream().map(Group::getId).collect(Collectors.toList()));
         return destination;
     }
 }

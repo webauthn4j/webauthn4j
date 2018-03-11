@@ -26,13 +26,15 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * UserRepositoryのテスト
+ * Test for UserEntityRepository
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
 @Import({InfrastructureConfig.class, DbUnitConfig.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
@@ -45,14 +47,12 @@ public class UserEntityRepositorySpringTest {
     @Autowired
     private UserEntityRepository target;
 
-    @Mock
-    private Pageable pageable;
 
     @Test
     @Transactional
     @DatabaseSetup(value = "/DBFixtures/repository/UserEntityRepository/setup.xml")
     public void findByEmailAddress_test1(){
-        UserEntity userEntity = target.findOneByEmailAddress("john.doe@example.com");
+        UserEntity userEntity = target.findOneByEmailAddress("john.doe@example.com").get();
         assertThat(userEntity).isNotNull();
         assertThat(userEntity.getId()).isEqualTo(1);
         assertThat(userEntity.getFirstName()).isEqualTo("John");
@@ -67,8 +67,8 @@ public class UserEntityRepositorySpringTest {
     @Transactional
     @DatabaseSetup("/DBFixtures/repository/UserEntityRepository/setup.xml")
     public void findByEmailAddress_test2(){
-        UserEntity userEntity = target.findOneByEmailAddress("non-exist@example.com");
-        assertThat(userEntity).isNull();
+        Optional<UserEntity> retrievedUserEntity = target.findOneByEmailAddress("non-exist@example.com");
+        assertThat(retrievedUserEntity).isNotPresent();
     }
 
     @Test
@@ -79,7 +79,7 @@ public class UserEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<UserEntity> userEntities = target.findAllByKeyword(pageable, "john.doe@example.com");
+        Page<UserEntity> userEntities = target.findAllByKeyword(Pageable.unpaged(), "john.doe@example.com");
 
         //Then
         assertThat(userEntities).extracting("emailAddress").containsExactly("john.doe@example.com");
@@ -93,7 +93,7 @@ public class UserEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<UserEntity> userEntities = target.findAllByKeyword(pageable, "doe@example.com");
+        Page<UserEntity> userEntities = target.findAllByKeyword(Pageable.unpaged(), "doe@example.com");
 
         //Then
         assertThat(userEntities).extracting("emailAddress").containsExactly("john.doe@example.com");
@@ -107,7 +107,7 @@ public class UserEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<UserEntity> userEntities = target.findAllByKeyword(pageable, "John");
+        Page<UserEntity> userEntities = target.findAllByKeyword(Pageable.unpaged(), "John");
 
         //Then
         assertThat(userEntities).extracting("emailAddress").containsExactly("john.doe@example.com");
@@ -121,7 +121,7 @@ public class UserEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<UserEntity> userEntities = target.findAllByKeyword(pageable, "Doe");
+        Page<UserEntity> userEntities = target.findAllByKeyword(Pageable.unpaged(), "Doe");
 
         //Then
         assertThat(userEntities).extracting("emailAddress").containsExactly("john.doe@example.com");
@@ -135,7 +135,7 @@ public class UserEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<UserEntity> userEntities = target.findAllByKeyword(pageable, "example.com");
+        Page<UserEntity> userEntities = target.findAllByKeyword(Pageable.unpaged(), "example.com");
 
         //Then
         assertThat(userEntities).extracting("emailAddress").containsExactly("john.doe@example.com", "dummy@example.com");

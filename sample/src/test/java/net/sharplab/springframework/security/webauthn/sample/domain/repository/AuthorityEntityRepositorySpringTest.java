@@ -21,13 +21,15 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * AuthorityEntityRepositoryのテスト
+ * Test for AuthorityEntityRepository
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
 @Import({InfrastructureConfig.class, DbUnitConfig.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
@@ -49,7 +51,7 @@ public class AuthorityEntityRepositorySpringTest {
         //Given
 
         //When
-        AuthorityEntity authorityEntity = target.findOneByAuthority("ROLE_DUMMY");
+        AuthorityEntity authorityEntity = target.findOneByAuthority("ROLE_DUMMY").get();
 
         //Then
         assertThat(authorityEntity).extracting("authority").containsExactly("ROLE_DUMMY");
@@ -63,7 +65,7 @@ public class AuthorityEntityRepositorySpringTest {
         //Given
 
         //When
-        AuthorityEntity authorityEntity = target.findOneByAuthority(null);
+        AuthorityEntity authorityEntity = target.findOneByAuthority(null).orElse(null);
 
         //Then
         assertThat(authorityEntity).isNull();

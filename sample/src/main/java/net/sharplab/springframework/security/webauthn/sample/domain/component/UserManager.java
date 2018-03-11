@@ -53,6 +53,6 @@ public interface UserManager extends UserDetailsService {
      * @param id ユーザーID
      * @return ユーザー
      */
-    User findOne(int id);
+    User findById(int id);
 
 }

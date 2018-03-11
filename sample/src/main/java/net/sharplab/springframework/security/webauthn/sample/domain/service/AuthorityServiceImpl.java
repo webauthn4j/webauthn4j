@@ -21,8 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.message.ResultMessages;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,10 +47,8 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Authority findOne(Integer authorityId) {
-        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findOne(authorityId);
-        if(retrievedAuthorityEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND));
-        }
+        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authorityId)
+                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
         return modelMapper.map(retrievedAuthorityEntity, Authority.class);
     }
 
@@ -80,21 +77,17 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public void update(Authority authority) {
-        AuthorityEntity retreivedAuthorityEntity = authorityEntityRepository.findOne(authority.getId());
-        if(retreivedAuthorityEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND));
-        }
-        modelMapper.map(authority, retreivedAuthorityEntity);
+        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authority.getId()).orElseThrow(()->
+                new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
+        modelMapper.map(authority, retrievedAuthorityEntity);
     }
 
     @Override
     public void update(AuthorityUpdateDto authorityUpdateDto) {
-        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findOne(authorityUpdateDto.getId());
-        if(retrievedAuthorityEntity == null){
-            throw new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND));
-        }
-        List<UserEntity> userEntityList = Arrays.stream(authorityUpdateDto.getUsers()).mapToObj(userEntityRepository::findOne).collect(Collectors.toList());
-        List<GroupEntity> groupEntityList = Arrays.stream(authorityUpdateDto.getGroups()).mapToObj(groupEntityRepository::findOne).collect(Collectors.toList());
+        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authorityUpdateDto.getId())
+                .orElseThrow(() -> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
+        List<UserEntity> userEntityList = userEntityRepository.findAllById(authorityUpdateDto.getUsers());
+        List<GroupEntity> groupEntityList = groupEntityRepository.findAllById(authorityUpdateDto.getGroups());
         retrievedAuthorityEntity.setUsers(userEntityList);
         retrievedAuthorityEntity.setGroups(groupEntityList);
     }

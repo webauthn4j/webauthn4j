@@ -1,6 +1,5 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import net.sharplab.springframework.security.webauthn.converter.WebAuthnAttestationObjectToBase64StringConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.converter.AttestationObjectFormToBase64StringConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.converter.Base64StringToAttestationObjectFormConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.converter.Base64StringToClientDataFormConverter;

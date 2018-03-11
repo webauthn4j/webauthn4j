@@ -11,16 +11,16 @@ public class WebAuthnDialectTest {
     public void initialize_with_prefix(){
         WebAuthnDialect target = new WebAuthnDialect("prefix");
         assertThat(target.getPrefix()).isEqualTo("prefix");
-        assertThat(target.getProcessors()).hasSize(1);
-        assertThat(target.getProcessors()).first().isInstanceOf(ChallengeAttrProcessor.class);
+        assertThat(target.getProcessors("prefix")).hasSize(1);
+        assertThat(target.getProcessors("prefix")).first().isInstanceOf(ChallengeAttrProcessor.class);
     }
 
     @Test
     public void initialize_without_prefix(){
         WebAuthnDialect target = new WebAuthnDialect();
         assertThat(target.getPrefix()).isEqualTo("webauthn");
-        assertThat(target.getProcessors()).hasSize(1);
-        assertThat(target.getProcessors()).first().isInstanceOf(ChallengeAttrProcessor.class);
+        assertThat(target.getProcessors("prefix")).hasSize(1);
+        assertThat(target.getProcessors("prefix")).first().isInstanceOf(ChallengeAttrProcessor.class);
     }
 
 }

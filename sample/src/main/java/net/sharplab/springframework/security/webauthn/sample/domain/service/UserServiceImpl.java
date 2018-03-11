@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public User findOne(int id){
-        return userManager.findOne(id);
+        return userManager.findById(id);
     }
 
     /**

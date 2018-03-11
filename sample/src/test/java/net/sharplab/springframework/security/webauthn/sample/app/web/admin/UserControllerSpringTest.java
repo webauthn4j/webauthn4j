@@ -65,7 +65,7 @@ public class UserControllerSpringTest {
         Page<User> page = new PageImpl<>(users);
 
         //Given
-        when(userService.findAllByKeyword(any(), anyString())).thenReturn(page);
+        when(userService.findAllByKeyword(any(), any())).thenReturn(page);
 
         //When
         mvc

@@ -34,7 +34,7 @@ public class ProfileServiceImplTest {
         retreivedUser.setId(userId);
 
         //Given
-        when(userManager.findOne(userId)).thenReturn(retreivedUser);
+        when(userManager.findById(userId)).thenReturn(retreivedUser);
 
         //When
         User result = target.findOne(userId);

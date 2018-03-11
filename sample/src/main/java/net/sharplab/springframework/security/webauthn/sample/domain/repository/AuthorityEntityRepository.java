@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 /**
  * 権限レポジトリ
  */
 public interface AuthorityEntityRepository extends JpaRepository<AuthorityEntity, Integer> {
 
-    AuthorityEntity findOneByAuthority(String authority);
+    Optional<AuthorityEntity> findOneByAuthority(String authority);
 
     @Query("SELECT a FROM AuthorityEntity a WHERE a.authority LIKE %:keyword% ORDER BY a.id")
     Page<AuthorityEntity> findAllByKeyword(Pageable pageable, @Param("keyword") String keyword);

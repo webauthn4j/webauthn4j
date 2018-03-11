@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * GroupRepositoryのテスト
  */
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
 @Import({InfrastructureConfig.class, DbUnitConfig.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
@@ -43,9 +44,6 @@ public class GroupEntityRepositorySpringTest {
     @Autowired
     private GroupEntityRepository target;
 
-    @Mock
-    private Pageable pageable;
-
     @Test
     @Transactional
     @DatabaseSetup("/DBFixtures/repository/GroupEntityRepository/setup.xml")
@@ -54,7 +52,7 @@ public class GroupEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<GroupEntity> groupEntities = target.findAllByKeyword(pageable, "red");
+        Page<GroupEntity> groupEntities = target.findAllByKeyword(Pageable.unpaged(), "red");
 
         //Then
         assertThat(groupEntities).extracting("groupName").containsExactly("red");
@@ -68,7 +66,7 @@ public class GroupEntityRepositorySpringTest {
         //Given
 
         //When
-        Page<GroupEntity> groupEntities = target.findAllByKeyword(pageable, null);
+        Page<GroupEntity> groupEntities = target.findAllByKeyword(Pageable.unpaged(), null);
 
         //Then
         assertThat(groupEntities.getSize()).isZero();

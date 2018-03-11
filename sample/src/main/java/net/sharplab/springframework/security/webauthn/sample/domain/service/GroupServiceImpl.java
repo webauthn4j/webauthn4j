@@ -1,7 +1,9 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.service;
 
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens;
+import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.GroupEntity;
+import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleEntityNotFoundException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.Group;
 import net.sharplab.springframework.security.webauthn.sample.domain.repository.GroupEntityRepository;
 import org.modelmapper.ModelMapper;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.terasoluna.gfw.common.message.ResultMessages;
 
 import java.util.List;
 
@@ -33,7 +36,10 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional(readOnly = true)
     public Group findOne(int id) {
-        return modelMapper.map(groupEntityRepository.findOne(id), Group.class);
+        GroupEntity retrievedGroupEntity = groupEntityRepository.findById(id)
+                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
+
+        return modelMapper.map(retrievedGroupEntity, Group.class);
     }
 
     @Override
@@ -68,12 +74,13 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void update(Group group) {
-        GroupEntity retrievedGroupEntity = groupEntityRepository.findOne(group.getId());
+        GroupEntity retrievedGroupEntity = groupEntityRepository.findById(group.getId())
+            .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
         modelMapper.map(group, retrievedGroupEntity);
     }
 
     @Override
     public void delete(int id) {
-        groupEntityRepository.delete(id);
+        groupEntityRepository.deleteById(id);
     }
 }
