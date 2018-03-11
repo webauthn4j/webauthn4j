@@ -4,6 +4,7 @@ spring:
   messages:
     basename: i18n/domain-messages,i18n/application-messages
     encoding: UTF-8
+    fallback-to-system-locale: false
   datasource:
     url: jdbc:log4jdbc:h2:mem:webauthn;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;MODE=PostgreSQL
     driverClassName: net.sf.log4jdbc.DriverSpy

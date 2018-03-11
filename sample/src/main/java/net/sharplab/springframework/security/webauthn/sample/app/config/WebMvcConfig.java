@@ -9,14 +9,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.web.server.i18n.AcceptHeaderLocaleContextResolver;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+
+import java.util.Locale;
 
 /**
  * WebMVC Configuration
  */
 @Import(ConverterConfig.class)
 @Configuration
-public class WebMvcConfig extends WebMvcConfigurerAdapter {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private Base64StringToAttestationObjectFormConverter base64StringToAttestationObjectFormConverter;
@@ -26,6 +32,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private AttestationObjectFormToBase64StringConverter attestationObjectFormToBase64StringConverter;
+
+    @Bean
+    public LocaleResolver localeResolver(){
+        AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.US);
+        return localeResolver;
+    }
 
     @Bean
     public WebAuthnDialect webAuthnDialect(){

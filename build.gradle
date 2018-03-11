@@ -22,6 +22,11 @@ asciidoctorj {
 asciidoctor {
     sourceDir = file("docs/src/reference/asciidoc")
 //    backends = ['docbook5']
+    resources {
+        from(sourceDir){
+            include '*/images/**'
+        }
+    }
     options eruby: 'erubis'
     attributes  docinfo: '',
                 copycss : '',

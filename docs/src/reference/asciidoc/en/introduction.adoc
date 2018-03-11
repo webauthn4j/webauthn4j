@@ -1,0 +1,42 @@
+[introduction]
+== Introduction
+
+=== Web Authentication
+
+Web Authentication is a new, secure web application authentication specification standardizing under W3C.
+By combining local authentication, public-key authentication, per-origin key management,
+it provides strong authentication to web sites against authentication process attacks like fishing.
+Implementation is in progress in major browsers, the specification offers excellent choices for users who place importance on security and convenience.
+Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but it has been transferred to W3C.
+
+=== Spring Security WebAuthn
+
+Spring Security WebAuthn is a Spring Security extension module to provide Web Authentication specification support for your Spring web application.
+
+==== Supported Attestation Statement Formats
+
+List of supported attestation statement formats is below:
+
+- FIDO U2F Attestation Statement Format
+- None Attestation Statement Format
+
+Other attestation statement formats are also planed to support.
+
+=== Requirements
+
+- Java8 or later
+- Spring Framework 5.0 or later
+- Spring Security 5.0 or later
+
+
+=== Source code
+
+Source code for this project is hosted on https://github.com/sharplab/spring-security-webauthn[Github].
+----
+git clone git@github.com:sharplab/spring-security-webauthn.git
+----
+
+=== License
+
+Spring Security WebAuthn is an open source software licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
+

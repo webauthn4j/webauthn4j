@@ -15,7 +15,9 @@ self-contained bootstrap mechanism for the build.
 
 ### Prerequisites
 
-- Java8
+- Java8 or later
+- Spring Framework 5.0 or later
+- Spring Security 5.0 or later
 
 ### Checkout sources
 
@@ -23,13 +25,13 @@ self-contained bootstrap mechanism for the build.
 git clone <source repository>
 ```
 
-### Compile and test; build all jars; distribution zips; and docs
+### Build all jars
 
 ```
 ./gradlew build
 ```
 
-## Sample
+## Execute sample application
 
 ```
 ./gradlew spring-security-webauthn-sample:bootRun
