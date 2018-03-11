@@ -31,7 +31,7 @@ git clone <source repository>
 ./gradlew build
 ```
 
-## Execute sample application
+### Execute sample application
 
 ```
 ./gradlew spring-security-webauthn-sample:bootRun

@@ -1,6 +1,12 @@
 [quick-start]
 == クイックスタート
 
+=== サポートするブラウザ
+
+2018年3月現在、Firefox Nightlyがサポートされる唯一のブラウザです。
+Firefox Nightlyでは、設定エディタ（ `about:config` ページ）で `security.webauthn.webauthn` と `security.webauthn.webauthn_enable_usbtoken` フラグを
+有効化することでFIDO-U2Fの認証デバイスを使用することが出来ます。
+
 === サンプルアプリケーションの実行
 
 サンプルアプリケーションは以下のコマンドで実行することが出来ます。
