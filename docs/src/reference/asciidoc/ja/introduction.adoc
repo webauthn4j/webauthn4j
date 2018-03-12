@@ -24,10 +24,15 @@ Spring Security WebAuthnが現在サポートする証言ステートメント�
 
 === 要件
 
+==== 言語・フレームワーク
+
 - Java8以降
 - Spring Framework 5.0以降
 - Spring Security 5.0以降
 
+==== 動作環境
+
+- SecureContext（サイトがHTTPS接続か、localhost）
 
 === ソースコード
 
