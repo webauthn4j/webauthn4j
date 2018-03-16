@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 
 /**
- * GroupServiceのテスト
+ * Test for GroupService
  */
 public class GroupServiceImplTest {
 

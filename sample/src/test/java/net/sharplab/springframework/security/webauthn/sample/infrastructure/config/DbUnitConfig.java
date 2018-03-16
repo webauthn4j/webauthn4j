@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 /**
- * DbUnit設定
+ * DbUnitConfig for testing
  */
 
 @Configuration

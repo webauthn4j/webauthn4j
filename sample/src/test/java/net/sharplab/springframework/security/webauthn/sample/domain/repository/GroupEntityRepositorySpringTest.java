@@ -29,7 +29,7 @@ import javax.transaction.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * GroupRepositoryのテスト
+ * Test for GroupRepository
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest

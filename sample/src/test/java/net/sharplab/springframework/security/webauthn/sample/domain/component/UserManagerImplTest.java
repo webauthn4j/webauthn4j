@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * UserDetailsServiceImplのテスト
+ * Test for UserDetailsServiceImpl
  */
 @SuppressWarnings("unchecked")
 public class UserManagerImplTest {

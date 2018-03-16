@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * ModelMapper設定
+ * Test for ModelMapper
  */
 @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
 @Configuration

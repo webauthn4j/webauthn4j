@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * WithMockUserのためのSecurityContextFactory
+ * SecurityContextFactory for WithMockUser
  */
 public class WithMockUserSecurityContextFactory implements WithSecurityContextFactory<WithMockUser> {
 

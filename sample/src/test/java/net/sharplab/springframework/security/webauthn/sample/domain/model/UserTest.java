@@ -7,7 +7,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Userのテスト
+ * Test for User
  */
 public class UserTest {
     @Test

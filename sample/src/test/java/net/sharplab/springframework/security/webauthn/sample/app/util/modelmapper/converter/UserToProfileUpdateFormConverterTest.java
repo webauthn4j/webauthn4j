@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
- * UserToProfileFormConverterのテスト
+ * Test for UserToProfileFormConverter
  */
 @SpringBootTest(classes = {DomainConfig.class, InfrastructureMockConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -8,7 +8,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Authorityのテスト
+ * Test for Authority
  */
 public class AuthorityTest {
 

@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Userのモックの使用を指示するアノテーション
+ * Annotation for instructing to use User's Mock
  */
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockUserSecurityContextFactory.class)

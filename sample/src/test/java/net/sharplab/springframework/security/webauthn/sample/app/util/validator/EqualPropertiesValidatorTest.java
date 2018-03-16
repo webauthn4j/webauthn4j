@@ -20,7 +20,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * EqualPropertiesValidatorのテスト
+ * Test for EqualPropertiesValidator
  */
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)

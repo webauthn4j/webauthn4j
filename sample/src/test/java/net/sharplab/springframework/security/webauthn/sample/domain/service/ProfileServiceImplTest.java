@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * ProfileServiceのテスト
+ * Test for ProfileService
  */
 @SuppressWarnings("WeakerAccess")
 public class ProfileServiceImplTest {

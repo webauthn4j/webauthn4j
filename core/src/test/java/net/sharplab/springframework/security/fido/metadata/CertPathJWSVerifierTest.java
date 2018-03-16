@@ -1,6 +1,5 @@
 package net.sharplab.springframework.security.fido.metadata;
 
-import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
 import org.junit.Before;
@@ -11,7 +10,7 @@ import org.springframework.core.io.ResourceLoader;
 import java.text.ParseException;
 
 /**
- * Created by ynojima on 2017/09/20.
+ * Test for CertPathJWSVerifier
  */
 public class CertPathJWSVerifierTest {
 

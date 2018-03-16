@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
- * GroupManagerImplのテスト
+ * Test for GroupManagerImpl
  */
 @SuppressWarnings("unchecked")
 public class GroupManagerImplTest {

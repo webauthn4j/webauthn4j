@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * ProfileFormToUserConveterのテスト
+ * Test for ProfileFormToUserConverter
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
