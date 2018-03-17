@@ -2,6 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.app.web;
 
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
+import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleEntityNotFoundException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import net.sharplab.springframework.security.webauthn.sample.domain.service.ProfileService;
 import org.modelmapper.ModelMapper;
@@ -42,8 +43,8 @@ public class ProfileController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String show(@AuthenticationPrincipal User loginUser, Model model) {
         User user = profileService.findOne(loginUser.getId());
-        ProfileUpdateForm profileUpdateForm = modelMapper.map(user, ProfileUpdateForm.class);
-        model.addAttribute("profileForm", profileUpdateForm);
+        ProfileForm profileForm = modelMapper.map(user, ProfileForm.class);
+        model.addAttribute("profileForm", profileForm);
 
         return ViewNames.VIEW_PROFILE_UPDATE;
     }
@@ -68,17 +69,32 @@ public class ProfileController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String update(@AuthenticationPrincipal User loginUser, @Valid @ModelAttribute("profileForm") ProfileUpdateForm profileUpdateForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes){
+        User user = null;
+        try{
+            int userId = loginUser.getId();
+            user = profileService.findOne(userId);
+            ProfileForm profileForm = modelMapper.map(user, ProfileForm.class);
+            modelMapper.map(profileUpdateForm, profileForm);
+            model.addAttribute(profileForm);
+        }
+        catch (WebAuthnSampleBusinessException ex){
+            model.addAttribute(ex.getResultMessages());
+            return ViewNames.VIEW_PROFILE_UPDATE;
+        }
+
         if(result.hasErrors()){
             return ViewNames.VIEW_PROFILE_UPDATE;
         }
 
-        int userId = loginUser.getId();
         try{
-            User user = profileService.findOne(userId);
             modelMapper.map(profileUpdateForm, user);
             profileService.update(user);
         }
-        catch(BusinessException ex){
+        catch(WebAuthnSampleEntityNotFoundException ex) {
+            model.addAttribute(ex.getResultMessages());
+            return ViewNames.REDIRECT_DASHBOARD;
+        }
+        catch (WebAuthnSampleBusinessException ex){
             model.addAttribute(ex.getResultMessages());
             return ViewNames.VIEW_PROFILE_UPDATE;
         }

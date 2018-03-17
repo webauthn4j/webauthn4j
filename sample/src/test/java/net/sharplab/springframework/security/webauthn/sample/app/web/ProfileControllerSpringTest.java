@@ -42,10 +42,11 @@ public class ProfileControllerSpringTest {
 
     @Test
     @WithMockUser(id=1, firstName = "John", lastName = "Doe", emailAddress = "john.doe@example.com", authorities = {"ROLE_USER"}, authenticators = {})
-    public void read_test1() throws Exception{
+    public void show_test() throws Exception{
         int userId = 1;
 
         User user = new User();
+        user.setUserHandle(new byte[0]);
         user.setId(userId);
         user.setFirstName("John");
         user.setLastName("Doe");
@@ -55,19 +56,20 @@ public class ProfileControllerSpringTest {
 
         when(profileService.findOne(userId)).thenReturn(user);
 
-        ProfileUpdateForm profileUpdateForm = new ProfileUpdateForm();
-        profileUpdateForm.setFirstName("John");
-        profileUpdateForm.setLastName("Doe");
-        profileUpdateForm.setEmailAddress("john.doe@example.com");
-        profileUpdateForm.setAuthenticators(Collections.emptyList());
-        profileUpdateForm.setPasswordAuthenticationAllowed(true);
+        ProfileForm profileForm = new ProfileForm();
+        profileForm.setUserHandle("");
+        profileForm.setFirstName("John");
+        profileForm.setLastName("Doe");
+        profileForm.setEmailAddress("john.doe@example.com");
+        profileForm.setAuthenticators(Collections.emptyList());
+        profileForm.setPasswordAuthenticationAllowed(true);
 
         //When
         mvc
                 .perform(get("/profile/"))
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("profileForm", samePropertyValuesAs(profileUpdateForm)));
+                .andExpect(model().attribute("profileForm", samePropertyValuesAs(profileForm)));
     }
 
 

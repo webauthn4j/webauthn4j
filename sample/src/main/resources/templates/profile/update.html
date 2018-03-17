@@ -40,6 +40,7 @@
                 <div class="box-body">
                     <div class="message-panel" th:replace="template/template :: message-panel"></div>
                     <form th:object="${profileForm}" th:action="@{/profile/}" class="form-horizontal" method="post">
+                        <input type="hidden" id="userHandle" name="userHandle" th:value="*{userHandle}" />
                         <div class="form-group">
                             <label for="firstName" class="col-sm-2 control-label" th:text="#{v.users.firstName}">First Name</label>
                             <div class="input-group col-sm-9">

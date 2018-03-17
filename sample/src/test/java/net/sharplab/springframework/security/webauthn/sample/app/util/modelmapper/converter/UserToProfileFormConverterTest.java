@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(classes = {DomainConfig.class, InfrastructureMockConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserToProfileUpdateFormConverterTest {
+public class UserToProfileFormConverterTest {
 
     @Autowired
     private ModelMapper modelMapper;

@@ -22,27 +22,34 @@ UserUpdateViewModel.prototype.addCredential = function (){
     let _this = this;
     let challengeBase64 = $("meta[name='_challenge']").attr("content");
     let challenge = base64url.toBuffer(challengeBase64);
-    let makeCredentialOptions = {
+    let userHandle = base64url.toBuffer($('#userHandle').val());
+    let makePublicKeyCredentialOptions = {
         // Relying Party:
         rp: {
             name: "spring-security-webauthn sample"
         },
         // User:
         user: {
+            id: userHandle,
             name: $('#emailAddress').val(),
             displayName: $('#firstName').val() + " " + $('#lastName').val(),
             icon: null
         },
         challenge: challenge,
-        parameters: [
+        pubKeyCredParams: [
             {
+                alg: -7,
                 type: "public-key",
-                algorithm: "ES256"
             }
-        ]
+        ],
+        //timeout
+        //excludeCredentials = []
+        //authenticatorSelection
+        attestation: "direct",
+        //extensions
     };
     let credentialCreationOptions = {
-        publicKey: makeCredentialOptions
+        publicKey: makePublicKeyCredentialOptions
     };
     $("#gesture-request-modal").modal('show');
     navigator.credentials.create(credentialCreationOptions).then(function(credential){
