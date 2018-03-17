@@ -5,4 +5,14 @@ jdk:
   - openjdk8
 
 script:
-  ./gradlew bootJar test javadoc
+  ./gradlew bootJar test javadoc asciidoc
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  keep-history: true
+  local-dir: build/asciidoc/html5
+  target-branch: gh-pages
+  on:
+    branch: master
