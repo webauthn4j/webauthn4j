@@ -20,7 +20,7 @@ import net.sharplab.springframework.security.webauthn.WebAuthnAssertionAuthentic
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnAuthenticationContext;
 import net.sharplab.springframework.security.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
@@ -70,24 +70,24 @@ public class WebAuthnAuthenticationContextValidator {
         String username = webAuthnAuthenticator.getUser().getUsername();
 
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
-        ClientData clientData = webAuthnAuthenticationContext.getClientData();
+        CollectedClientData collectedClientData = webAuthnAuthenticationContext.getCollectedClientData();
         WebAuthnAuthenticatorData authenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
 
         verifyUserVerified(webAuthnAuthenticationContext, username);
 
         // Verify that the challenge member of C matches the challenge that was sent to the authenticator
         // in the PublicKeyCredentialRequestOptions passed to the get() call.
-        challengeValidator.validate(clientData, relyingParty);
+        challengeValidator.validate(collectedClientData, relyingParty);
 
-        // Verify that the origin member of the clientData matches the Relying Party's origin.
-        originValidator.validate(clientData, relyingParty);
+        // Verify that the origin member of the collectedClientData matches the Relying Party's origin.
+        originValidator.validate(collectedClientData, relyingParty);
 
-        // Verify that the tokenBindingId member of the clientData (if present) matches the Token Binding ID for
+        // Verify that the tokenBindingId member of the collectedClientData (if present) matches the Token Binding ID for
         // the TLS connection over which the signature was obtained.
         //TODO: not yet implemented
 
-        // Verify that the clientExtensions member of the clientData is a proper subset of the extensions
-        // requested by the Relying Party and that the authenticatorExtensions in the clientData is also
+        // Verify that the clientExtensions member of the collectedClientData is a proper subset of the extensions
+        // requested by the Relying Party and that the authenticatorExtensions in the collectedClientData is also
         // a proper subset of the extensions requested by the Relying Party.
         // TODO: not yet implemented
 
@@ -96,7 +96,7 @@ public class WebAuthnAuthenticationContextValidator {
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
 
         // Using the credential public key, validate that sig is a valid signature over
-        // the binary concatenation of the authenticatorData and the hash of the clientData.
+        // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
         verifyAssertionSignature(webAuthnAuthenticator, webAuthnAuthenticationContext, credentialPublicKey);
     }
 

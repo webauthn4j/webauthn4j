@@ -20,7 +20,7 @@ public class AuthenticatorForm {
 
     @NotNull
     @Valid
-    private ClientDataForm clientData;
+    private CollectedClientDataForm clientData;
 
     @NotNull
     @Valid

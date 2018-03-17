@@ -43,7 +43,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
     // ~ Static fields/initializers
     // =====================================================================================
     public static final String SPRING_SECURITY_FORM_CREDENTIAL_ID_KEY = "credentialId";
-    public static final String SPRING_SECURITY_FORM_CLIENTDATA_KEY = "clientData";
+    public static final String SPRING_SECURITY_FORM_CLIENTDATA_KEY = "collectedClientData";
     public static final String SPRING_SECURITY_FORM_AUTHENTICATOR_DATA_KEY = "authenticatorData";
     public static final String SPRING_SECURITY_FORM_SIGNATURE_KEY = "signature";
 

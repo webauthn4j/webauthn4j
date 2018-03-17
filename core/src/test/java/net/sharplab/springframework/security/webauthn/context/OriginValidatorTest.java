@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.context;
 
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.Origin;
 import net.sharplab.springframework.security.webauthn.context.validator.OriginValidator;
 import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
@@ -35,10 +35,10 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
-        ClientData clientData = CoreTestUtil.createClientData();
-        clientData.setOrigin(originA);
+        CollectedClientData collectedClientData = CoreTestUtil.createClientData();
+        collectedClientData.setOrigin(originA);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", CoreTestUtil.createChallenge());
-        target.validate(clientData, relyingParty);
+        target.validate(collectedClientData, relyingParty);
     }
 
     @Test(expected = BadOriginException.class)
@@ -46,10 +46,10 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
-        ClientData clientData = CoreTestUtil.createClientData();
-        clientData.setOrigin(originA);
+        CollectedClientData collectedClientData = CoreTestUtil.createClientData();
+        collectedClientData.setOrigin(originA);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", CoreTestUtil.createChallenge());
-        target.validate(clientData, relyingParty);
+        target.validate(collectedClientData, relyingParty);
     }
 
 }

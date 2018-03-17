@@ -18,8 +18,7 @@ package net.sharplab.springframework.security.webauthn.context.provider;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
-import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnAuthenticationContext;
 import net.sharplab.springframework.security.webauthn.util.jackson.WebAuthnModule;
@@ -66,7 +65,7 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
         byte[] signatureBytes = Base64Utils.decodeFromUrlSafeString(signature);
 
         String clientDataJson = deriveClientDataJson(rawClientData);
-        ClientData clientDataObject = deriveClientData(clientDataJson);
+        CollectedClientData collectedClientDataObject = deriveClientData(clientDataJson);
         WebAuthnAuthenticatorData authenticatorDataObject = deriveAuthenticatorData(rawAuthenticatorData);
         RelyingParty relyingParty = relyingPartyProvider.provide(request, response);
 
@@ -75,7 +74,7 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
                 rawClientData,
                 rawAuthenticatorData,
                 clientDataJson,
-                clientDataObject,
+                collectedClientDataObject,
                 authenticatorDataObject,
                 signatureBytes,
                 relyingParty,
@@ -94,10 +93,10 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
         return new String(rawClientData, StandardCharsets.UTF_8); //TODO: UTF-8?
     }
 
-    ClientData deriveClientData(String clientDataJson) {
+    CollectedClientData deriveClientData(String clientDataJson) {
         try {
             String trimmedClientDataJson = clientDataJson.replace("\0", "").trim();
-            return objectMapper.readValue(trimmedClientDataJson, ClientData.class);
+            return objectMapper.readValue(trimmedClientDataJson, CollectedClientData.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

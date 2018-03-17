@@ -17,7 +17,7 @@
 package net.sharplab.springframework.security.webauthn.utils.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.test.CoreTestUtil;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ public class ChallengeDeserializerTest {
         String input = "{ \"challenge\" : \"\" }";
 
         //When
-        ClientData result = objectMapper.readValue(input, ClientData.class);
+        CollectedClientData result = objectMapper.readValue(input, CollectedClientData.class);
 
         //Then
         assertThat(result).extracting("challenge").isNotNull();

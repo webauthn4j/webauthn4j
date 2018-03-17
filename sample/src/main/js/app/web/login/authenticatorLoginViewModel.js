@@ -103,7 +103,7 @@ AuthenticatorLoginViewModel.prototype.loginByFormSubmission = function (username
     loginForm.find("input[name='username']").val(username);
     loginForm.find("input[name='rawPassword']").val(password);
     loginForm.find("input[name='credentialId']").val(credentialId);
-    loginForm.find("input[name='clientData']").val(base64url.encode(clientData));
+    loginForm.find("input[name='collectedClientData']").val(base64url.encode(clientData));
     loginForm.find("input[name='authenticatorData']").val(base64url.encode(authenticatorData));
     loginForm.find("input[name='signature']").val(base64url.encode(signature));
     loginForm.submit();

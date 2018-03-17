@@ -95,7 +95,7 @@ public class WebAuthnProcessingFilterTest {
         mockHttpServletRequest.setMethod("POST");
         mockHttpServletRequest.setServerName("example.com");
         mockHttpServletRequest.setParameter("credentialId", credentialId);
-        mockHttpServletRequest.setParameter("clientData", clientData);
+        mockHttpServletRequest.setParameter("collectedClientData", clientData);
         mockHttpServletRequest.setParameter("authenticatorData", authenticatorData);
         mockHttpServletRequest.setParameter("signature", signature);
 
@@ -129,7 +129,7 @@ public class WebAuthnProcessingFilterTest {
         mockHttpServletRequest.setMethod("GET");
         mockHttpServletRequest.setServerName("example.com");
         mockHttpServletRequest.setParameter("credentialId", credentialId);
-        mockHttpServletRequest.setParameter("clientData", clientData);
+        mockHttpServletRequest.setParameter("collectedClientData", clientData);
         mockHttpServletRequest.setParameter("authenticatorData", authenticatorData);
         mockHttpServletRequest.setParameter("signature", signature);
 

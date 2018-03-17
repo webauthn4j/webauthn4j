@@ -1,11 +1,10 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import net.sharplab.springframework.security.webauthn.converter.Base64StringToClientDataConverter;
-import net.sharplab.springframework.security.webauthn.converter.WebAuthnAttestationObjectToBase64StringConverter;
+import net.sharplab.springframework.security.webauthn.converter.Base64StringToCollectedClientDataConverter;
 import net.sharplab.springframework.security.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.converter.AttestationObjectFormToBase64StringConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.converter.Base64StringToAttestationObjectFormConverter;
-import net.sharplab.springframework.security.webauthn.sample.app.converter.Base64StringToClientDataFormConverter;
+import net.sharplab.springframework.security.webauthn.sample.app.converter.Base64StringToCollectedClientDataFormConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,8 +20,8 @@ public class ConverterConfig {
     }
 
     @Bean
-    public Base64StringToClientDataConverter stringToClientDataConverter(){
-        return new Base64StringToClientDataConverter();
+    public Base64StringToCollectedClientDataConverter stringToCollectedClientDataConverter(){
+        return new Base64StringToCollectedClientDataConverter();
     }
 
     @Bean
@@ -31,8 +30,8 @@ public class ConverterConfig {
     }
 
     @Bean
-    public Base64StringToClientDataFormConverter stringToClientDataFormConverter(Base64StringToClientDataConverter base64StringToClientDataConverter){
-        return new Base64StringToClientDataFormConverter(base64StringToClientDataConverter);
+    public Base64StringToCollectedClientDataFormConverter stringToCollectedClientDataFormConverter(Base64StringToCollectedClientDataConverter base64StringToCollectedClientDataConverter){
+        return new Base64StringToCollectedClientDataFormConverter(base64StringToCollectedClientDataConverter);
     }
 
     @Bean

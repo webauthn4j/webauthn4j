@@ -33,7 +33,7 @@ public class WebAuthnAssertionSignatureValidator extends AbstractAssertionSignat
     }
 
     protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext){
-        String hashAlgorithm = webAuthnAuthenticationContext.getClientData().getHashAlgorithm();
+        String hashAlgorithm = webAuthnAuthenticationContext.getCollectedClientData().getHashAlgorithm();
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest(hashAlgorithm);
         byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getRawClientData());
         byte[] rawAuthenticatorData= webAuthnAuthenticationContext.getRawAuthenticatorData();

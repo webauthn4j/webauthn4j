@@ -23,9 +23,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 /**
- * ClientData
+ * CollectedClientData
  */
-public class ClientData implements Serializable {
+public class CollectedClientData implements Serializable {
 
     //~ Instance fields ================================================================================================
     private String type;

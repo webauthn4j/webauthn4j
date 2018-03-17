@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import net.sharplab.springframework.security.webauthn.attestation.WebAuthnAttestationObject;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.*;
 import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.Origin;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.DefaultChallenge;
@@ -143,15 +143,15 @@ public class CoreTestUtil {
         return objectMapper;
     }
 
-    public static ClientData createClientData() {
-        ClientData clientData = new ClientData();
-        clientData.setChallenge(createChallenge());
-        clientData.setOrigin(createOrigin());
-        clientData.setHashAlgorithm("SHA-256");
-        clientData.setTokenBinding(null);
-        clientData.setClientExtensions(null);
-        clientData.setAuthenticatorExtensions(null);
-        return clientData;
+    public static CollectedClientData createClientData() {
+        CollectedClientData collectedClientData = new CollectedClientData();
+        collectedClientData.setChallenge(createChallenge());
+        collectedClientData.setOrigin(createOrigin());
+        collectedClientData.setHashAlgorithm("SHA-256");
+        collectedClientData.setTokenBinding(null);
+        collectedClientData.setClientExtensions(null);
+        collectedClientData.setAuthenticatorExtensions(null);
+        return collectedClientData;
     }
 
     public static Challenge createChallenge(){

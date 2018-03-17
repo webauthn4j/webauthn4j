@@ -16,9 +16,9 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.Origin;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.DefaultChallenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;
@@ -31,8 +31,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Base64Utils;
-
-import java.net.MalformedURLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -68,7 +66,7 @@ public class WebAuthnAuthenticationContextProviderImplTest {
         assertThat(context.getCredentialId()).isEqualTo(credentialId);
         assertThat(context.getRawClientData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(clientData));
         assertThat(context.getClientDataJson()).isEqualTo("{\"challenge\":\"xWj3Edq2S6aYrwQLXrmGrA\",\"hashAlg\":\"SHA-256\",\"origin\":\"http://localhost:8080\"}");
-        assertThat(context.getClientData()).isInstanceOf(ClientData.class);
+        assertThat(context.getCollectedClientData()).isInstanceOf(CollectedClientData.class);
         assertThat(context.getRawAuthenticatorData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(authenticatorData));
         assertThat(context.getAuthenticatorData()).isInstanceOf(WebAuthnAuthenticatorData.class);
         assertThat(context.getSignature()).isEqualTo(Base64Utils.decodeFromUrlSafeString(signature));

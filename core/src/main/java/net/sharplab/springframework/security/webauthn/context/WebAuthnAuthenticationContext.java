@@ -17,7 +17,7 @@
 package net.sharplab.springframework.security.webauthn.context;
 
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import org.springframework.security.core.Authentication;
 
 import java.io.Serializable;
@@ -33,7 +33,7 @@ public class WebAuthnAuthenticationContext implements Serializable {
     private byte[] rawClientData;
     private byte[] rawAuthenticatorData;
     private String clientDataJson;
-    private ClientData clientData;
+    private CollectedClientData collectedClientData;
     private WebAuthnAuthenticatorData authenticatorData;
     private byte[] signature;
     private RelyingParty relyingParty;
@@ -44,7 +44,7 @@ public class WebAuthnAuthenticationContext implements Serializable {
                                          byte[] rawClientData,
                                          byte[] rawAuthenticatorData,
                                          String clientDataJson,
-                                         ClientData clientData,
+                                         CollectedClientData collectedClientData,
                                          WebAuthnAuthenticatorData authenticatorData,
                                          byte[] signature,
                                          RelyingParty relyingParty,
@@ -53,7 +53,7 @@ public class WebAuthnAuthenticationContext implements Serializable {
         this.rawClientData = rawClientData;
         this.rawAuthenticatorData = rawAuthenticatorData;
         this.clientDataJson = clientDataJson;
-        this.clientData = clientData;
+        this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
         this.signature = signature;
         this.relyingParty = relyingParty;
@@ -70,8 +70,8 @@ public class WebAuthnAuthenticationContext implements Serializable {
         return clientDataJson;
     }
 
-    public ClientData getClientData() {
-        return clientData;
+    public CollectedClientData getCollectedClientData() {
+        return collectedClientData;
     }
 
     public byte[] getRawAuthenticatorData() {

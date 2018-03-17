@@ -17,7 +17,7 @@
 package net.sharplab.springframework.security.webauthn.context.validator.assertion.signature;
 
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnAuthenticationContext;
 import net.sharplab.springframework.security.webauthn.util.MessageDigestUtil;
 import net.sharplab.springframework.security.webauthn.util.UnsignedNumberUtil;
@@ -37,9 +37,9 @@ public class FIDOU2FAssertionSignatureValidator extends AbstractAssertionSignatu
 
     protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
         WebAuthnAuthenticatorData authenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
-        ClientData clientData = webAuthnAuthenticationContext.getClientData();
+        CollectedClientData collectedClientData = webAuthnAuthenticationContext.getCollectedClientData();
         String clientDataJson = webAuthnAuthenticationContext.getClientDataJson();
-        String appId = clientData.getOrigin().getServerName();
+        String appId = collectedClientData.getOrigin().getServerName();
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
 
 

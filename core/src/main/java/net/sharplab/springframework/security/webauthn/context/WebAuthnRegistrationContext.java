@@ -17,34 +17,34 @@
 package net.sharplab.springframework.security.webauthn.context;
 
 import net.sharplab.springframework.security.webauthn.attestation.WebAuthnAttestationObject;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 
 /**
  * WebAuthnRegistrationContext
  */
 public class WebAuthnRegistrationContext {
 
-    private ClientData clientData;
+    private CollectedClientData collectedClientData;
     private byte[] clientDataBytes;
     private WebAuthnAttestationObject attestationObject;
     private byte[] attestationObjectBytes;
     private RelyingParty relyingParty;
 
-    public WebAuthnRegistrationContext(ClientData clientData,
+    public WebAuthnRegistrationContext(CollectedClientData collectedClientData,
                                 byte[] clientDataBytes,
                                 WebAuthnAttestationObject attestationObject,
                                 byte[] attestationObjectBytes,
                                 RelyingParty relyingParty){
 
-        this.clientData = clientData;
+        this.collectedClientData = collectedClientData;
         this.clientDataBytes = clientDataBytes;
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.relyingParty = relyingParty;
     }
 
-    public ClientData getClientData() {
-        return clientData;
+    public CollectedClientData getCollectedClientData() {
+        return collectedClientData;
     }
 
     public byte[] getClientDataBytes() {

@@ -19,7 +19,7 @@ package net.sharplab.springframework.security.webauthn.context.validator;
 import net.sharplab.springframework.security.webauthn.exception.BadChallengeException;
 import net.sharplab.springframework.security.webauthn.exception.MissingChallengeException;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.DefaultChallenge;
 import org.junit.Test;
@@ -37,12 +37,12 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
-        ClientData clientData = new ClientData();
-        clientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData();
+        collectedClientData.setChallenge(challengeA);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When
-        target.validate(clientData, relyingParty);
+        target.validate(collectedClientData, relyingParty);
     }
 
     @Test(expected = BadChallengeException.class)
@@ -51,12 +51,12 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
-        ClientData clientData = new ClientData();
-        clientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData();
+        collectedClientData.setChallenge(challengeA);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When
-        target.validate(clientData, relyingParty);
+        target.validate(collectedClientData, relyingParty);
     }
 
     @Test(expected = MissingChallengeException.class)
@@ -65,11 +65,11 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
-        ClientData clientData = new ClientData();
-        clientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData();
+        collectedClientData.setChallenge(challengeA);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When
-        target.validate(clientData, relyingParty);
+        target.validate(collectedClientData, relyingParty);
     }
 }

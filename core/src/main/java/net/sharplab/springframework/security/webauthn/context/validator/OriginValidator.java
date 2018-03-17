@@ -19,7 +19,7 @@ package net.sharplab.springframework.security.webauthn.context.validator;
 import net.sharplab.springframework.security.webauthn.client.Origin;
 import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -35,8 +35,8 @@ public class OriginValidator {
     protected final Log logger = LogFactory.getLog(getClass());
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
-    public void validate(ClientData clientData, RelyingParty relyingParty) {
-        if (!Objects.equals(clientData.getOrigin(), relyingParty.getOrigin())) {
+    public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
+        if (!Objects.equals(collectedClientData.getOrigin(), relyingParty.getOrigin())) {
             logger.debug("Authentication failed: bad origin is specified");
             throw new BadOriginException(messages.getMessage("OriginValidator.badOrigin", "Bad origin"));
         }

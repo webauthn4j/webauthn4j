@@ -20,7 +20,7 @@ package net.sharplab.springframework.security.webauthn.context.validator;
 import net.sharplab.springframework.security.webauthn.attestation.WebAuthnAttestationObject;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
-import net.sharplab.springframework.security.webauthn.client.ClientData;
+import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnRegistrationContext;
 import net.sharplab.springframework.security.webauthn.context.validator.attestation.signature.AttestationStatementSignatureValidator;
@@ -62,25 +62,25 @@ public class WebAuthnRegistrationContextValidator {
 
     public void validate(WebAuthnRegistrationContext registrationContext){
 
-        ClientData clientData = registrationContext.getClientData();
+        CollectedClientData collectedClientData = registrationContext.getCollectedClientData();
         WebAuthnAttestationObject attestationObject = registrationContext.getAttestationObject();
         WebAuthnAuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         WebAuthnAttestationStatement attestationStatement = attestationObject.getAttestationStatement();
         RelyingParty relyingParty = registrationContext.getRelyingParty();
 
-        // Verify that the challenge in the clientData matches the challenge that was sent to the authenticator
+        // Verify that the challenge in the collectedClientData matches the challenge that was sent to the authenticator
         // in the create() call.
-        challengeValidator.validate(clientData, relyingParty);
+        challengeValidator.validate(collectedClientData, relyingParty);
 
-        // Verify that the origin in the clientData matches the Relying Party's origin.
-        originValidator.validate(clientData, relyingParty);
+        // Verify that the origin in the collectedClientData matches the Relying Party's origin.
+        originValidator.validate(collectedClientData, relyingParty);
 
-        // Verify that the tokenBindingId in the clientData matches the Token Binding ID for the TLS connection
+        // Verify that the tokenBindingId in the collectedClientData matches the Token Binding ID for the TLS connection
         // over which the attestation was obtained.
         // TODO
 
-        // Verify that the clientExtensions in the clientData is a proper subset of the extensions requested by the RP
-        // and that the authenticatorExtensions in the clientData is also a proper subset of the extensions requested by the RP.
+        // Verify that the clientExtensions in the collectedClientData is a proper subset of the extensions requested by the RP
+        // and that the authenticatorExtensions in the collectedClientData is also a proper subset of the extensions requested by the RP.
         // TODO
 
         // Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
