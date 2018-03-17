@@ -32,7 +32,8 @@ public class CollectedClientData implements Serializable {
     private Challenge challenge;
     private Origin origin;
     private String hashAlgorithm;
-    private String tokenBinding;
+    private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17,
+                                 // made it Object type
     private HashMap<String, Extension> clientExtensions;
     private HashMap<String, Extension> authenticatorExtensions;
 
@@ -69,11 +70,11 @@ public class CollectedClientData implements Serializable {
         this.hashAlgorithm = hashAlgorithm;
     }
 
-    public String getTokenBinding() {
+    public Object getTokenBinding() {
         return tokenBinding;
     }
 
-    public void setTokenBinding(String tokenBinding) {
+    public void setTokenBinding(Object tokenBinding) {
         this.tokenBinding = tokenBinding;
     }
 
