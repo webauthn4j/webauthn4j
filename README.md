@@ -1,5 +1,7 @@
 # Spring Security WebAuthn
 
+[![Build Status](https://travis-ci.org/ynojima/spring-security-webauthn.svg?branch=master)](https://travis-ci.org/ynojima/spring-security-webauthn)
+
 Spring Security WebAuthn provides Web Authentication specification support for your Spring application.
 Users can login with WebAuthn compliant authenticator.
 
