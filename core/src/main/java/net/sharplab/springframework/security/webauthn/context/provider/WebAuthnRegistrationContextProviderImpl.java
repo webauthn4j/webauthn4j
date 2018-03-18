@@ -36,7 +36,7 @@ public class WebAuthnRegistrationContextProviderImpl implements WebAuthnRegistra
     private Base64StringToWebAuthnAttestationObjectConverter base64StringToWebAuthnAttestationObjectConverter;
     private RelyingPartyProvider relyingPartyProvider;
 
-    public WebAuthnRegistrationContextProviderImpl(RelyingPartyProvider relyingPartyProvider){
+    public WebAuthnRegistrationContextProviderImpl(RelyingPartyProvider relyingPartyProvider) {
         base64StringToCollectedClientDataConverter = new Base64StringToCollectedClientDataConverter();
         base64StringToWebAuthnAttestationObjectConverter = new Base64StringToWebAuthnAttestationObjectConverter();
         this.relyingPartyProvider = relyingPartyProvider;
@@ -44,7 +44,7 @@ public class WebAuthnRegistrationContextProviderImpl implements WebAuthnRegistra
 
     public WebAuthnRegistrationContext provide(HttpServletRequest request, HttpServletResponse response,
                                                String clientDataBase64,
-                                               String attestationObjectBase64){
+                                               String attestationObjectBase64) {
 
         CollectedClientData collectedClientData = base64StringToCollectedClientDataConverter.convert(clientDataBase64);
         byte[] clientDataBytes = Base64Utils.decodeFromUrlSafeString(clientDataBase64);

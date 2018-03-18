@@ -52,7 +52,7 @@ public class WebAuthnUserDetailsImpl extends User implements WebAuthnUserDetails
     }
 
     @Override
-    public boolean isPasswordAuthenticationAllowed(){
+    public boolean isPasswordAuthenticationAllowed() {
         return passwordAuthenticationAllowed;
     }
 

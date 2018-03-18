@@ -37,7 +37,7 @@ public class CertPathSerializer extends StdSerializer<CertPath> {
     public void serialize(CertPath value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         try {
             gen.writeStartArray();
-            for(Certificate certificate : value.getCertificates()){
+            for (Certificate certificate : value.getCertificates()) {
                 gen.writeBinary(certificate.getEncoded());
             }
             gen.writeEndArray();

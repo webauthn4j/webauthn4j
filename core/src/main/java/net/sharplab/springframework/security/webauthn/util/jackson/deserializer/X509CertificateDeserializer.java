@@ -37,7 +37,7 @@ public class X509CertificateDeserializer extends StdDeserializer<X509Certificate
     @Override
     public X509Certificate deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
-        if(value.length == 0){
+        if (value.length == 0) {
             return null;
         }
         return CertificateUtil.generateX509Certificate(value);

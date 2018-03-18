@@ -23,7 +23,7 @@ public class CoseAlgorithmConst {
     public static final int RS512 = -259;
     public static final int ED256 = -260;
     public static final int ED512 = -261;
-    public static final int RS1   = -262;
+    public static final int RS1 = -262;
 
     public static final int ES256 = -7;
     public static final int ES384 = -35;

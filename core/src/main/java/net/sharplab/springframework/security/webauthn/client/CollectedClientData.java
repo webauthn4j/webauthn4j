@@ -33,7 +33,7 @@ public class CollectedClientData implements Serializable {
     private Origin origin;
     private String hashAlgorithm;
     private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17,
-                                 // made it Object type
+    // made it Object type
     private HashMap<String, Extension> clientExtensions;
     private HashMap<String, Extension> authenticatorExtensions;
 

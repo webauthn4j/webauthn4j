@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnAuthenticatorDataTest {
 
     @Test
-    public void flag_operation_test(){
+    public void flag_operation_test() {
         WebAuthnAuthenticatorData target = new WebAuthnAuthenticatorData();
         target.setFlagUP(true);
         assertThat(target.isFlagUP()).isTrue();
@@ -49,14 +49,14 @@ public class WebAuthnAuthenticatorDataTest {
     }
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         WebAuthnAuthenticatorData instanceA = CoreTestUtil.createWebAuthnAuthenticatorData();
         WebAuthnAuthenticatorData instanceB = CoreTestUtil.createWebAuthnAuthenticatorData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
-    public void equals_test_with_not_equal_data(){
+    public void equals_test_with_not_equal_data() {
         WebAuthnAuthenticatorData instanceA = CoreTestUtil.createWebAuthnAuthenticatorData();
         WebAuthnAuthenticatorData instanceB = CoreTestUtil.createWebAuthnAuthenticatorData();
         instanceA.setFlagUP(false);
@@ -65,14 +65,14 @@ public class WebAuthnAuthenticatorDataTest {
     }
 
     @Test
-    public void hashCode_test(){
+    public void hashCode_test() {
         WebAuthnAuthenticatorData instanceA = CoreTestUtil.createWebAuthnAuthenticatorData();
         WebAuthnAuthenticatorData instanceB = CoreTestUtil.createWebAuthnAuthenticatorData();
         assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
     }
 
     @Test
-    public void hashCode_test_with_not_equal_data(){
+    public void hashCode_test_with_not_equal_data() {
         WebAuthnAuthenticatorData instanceA = CoreTestUtil.createWebAuthnAuthenticatorData();
         WebAuthnAuthenticatorData instanceB = CoreTestUtil.createWebAuthnAuthenticatorData();
         instanceA.setCounter(1);

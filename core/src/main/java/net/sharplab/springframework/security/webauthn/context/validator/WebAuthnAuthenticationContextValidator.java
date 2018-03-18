@@ -51,11 +51,11 @@ public class WebAuthnAuthenticationContextValidator {
 
     private List<AssertionSignatureValidator> assertionSignatureValidators;
 
-    public WebAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators){
+    public WebAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators) {
         this.assertionSignatureValidators = assertionSignatureValidators;
     }
 
-    public void validate(WebAuthnAuthenticator webAuthnAuthenticator, WebAuthnAssertionAuthenticationToken authenticationToken){
+    public void validate(WebAuthnAuthenticator webAuthnAuthenticator, WebAuthnAssertionAuthenticationToken authenticationToken) {
 
         if (authenticationToken.getCredentials() == null) {
             logger.debug("Authentication failed: no credentials provided");
@@ -102,7 +102,7 @@ public class WebAuthnAuthenticationContextValidator {
 
     void verifyAssertionSignature(WebAuthnAuthenticator webAuthnAuthenticator, WebAuthnAuthenticationContext webAuthnAuthenticationContext, AbstractCredentialPublicKey credentialPublicKey) {
         for (AssertionSignatureValidator assertionSignatureValidator : assertionSignatureValidators) {
-            if( assertionSignatureValidator.supports(webAuthnAuthenticator.getFormat())){
+            if (assertionSignatureValidator.supports(webAuthnAuthenticator.getFormat())) {
                 assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
                 return;
             }
@@ -114,7 +114,7 @@ public class WebAuthnAuthenticationContextValidator {
                 "Bad credentials"));
     }
 
-    void verifyUserVerified(WebAuthnAuthenticationContext webAuthnAuthenticationContext, String username){
+    void verifyUserVerified(WebAuthnAuthenticationContext webAuthnAuthenticationContext, String username) {
         if (webAuthnAuthenticationContext.getAuthenticatorData().isFlagUV()) {
             return;
         }
@@ -127,7 +127,7 @@ public class WebAuthnAuthenticationContextValidator {
                 "User not verified"));
     }
 
-    boolean isFirstOfMFAPassedUser(Authentication authentication, String username){
+    boolean isFirstOfMFAPassedUser(Authentication authentication, String username) {
         return authentication instanceof FirstOfMultiFactorAuthenticationToken
                 && username.equals(authentication.getName());
     }

@@ -25,6 +25,7 @@ public interface JWSVerifier {
 
     /**
      * Verify {@link JWSObject}
+     *
      * @param jws verification target
      */
     void verify(JWSObject jws);

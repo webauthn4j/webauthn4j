@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MetadataEndpointFilter extends GenericFilterBean{
+public class MetadataEndpointFilter extends GenericFilterBean {
 
     /**
      * Default name of path suffix which will invoke this filter.
@@ -85,7 +85,7 @@ public class MetadataEndpointFilter extends GenericFilterBean{
         String responseText;
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if(trustResolver.isFullyAnonymous(authentication)){
+            if (trustResolver.isFullyAnonymous(authentication)) {
                 throw new InsufficientAuthenticationException(messages.getMessage(
                         "MetadataEndpointFilter.insufficientAuthentication",
                         "Anonymous user is not allowed"));
@@ -96,11 +96,10 @@ public class MetadataEndpointFilter extends GenericFilterBean{
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("errorMessage", e.getMessage());
             String errorResponseText;
-            if(e.getClass().isAssignableFrom(InsufficientAuthenticationException.class)){
+            if (e.getClass().isAssignableFrom(InsufficientAuthenticationException.class)) {
                 errorResponseText = objectMapper.writeValueAsString(errorResponse);
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-            }
-            else {
+            } else {
                 errorResponseText = objectMapper.writeValueAsString(errorResponse);
                 response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             }

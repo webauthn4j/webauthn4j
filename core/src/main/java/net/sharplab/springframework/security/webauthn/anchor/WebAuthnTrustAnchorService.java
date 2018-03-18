@@ -26,6 +26,7 @@ public interface WebAuthnTrustAnchorService {
 
     /**
      * Provides {@link TrustAnchor} set.
+     *
      * @return {@link TrustAnchor} set.
      */
     Set<TrustAnchor> getTrustAnchors();

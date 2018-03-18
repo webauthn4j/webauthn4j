@@ -31,9 +31,10 @@ public class CertificateUtil {
 
     private static CertificateFactory certificateFactory;
 
-    private CertificateUtil(){}
+    private CertificateUtil() {
+    }
 
-    static{
+    static {
         try {
             certificateFactory = CertificateFactory.getInstance("X.509");
         } catch (CertificateException e) {
@@ -41,7 +42,7 @@ public class CertificateUtil {
         }
     }
 
-    public static CertPathValidator generateCertPathValidator(){
+    public static CertPathValidator generateCertPathValidator() {
         try {
             return CertPathValidator.getInstance("PKIX");
         } catch (NoSuchAlgorithmException e) {
@@ -49,7 +50,7 @@ public class CertificateUtil {
         }
     }
 
-    public static PKIXParameters generatePKIXParameters(Set<TrustAnchor> trustAnchors){
+    public static PKIXParameters generatePKIXParameters(Set<TrustAnchor> trustAnchors) {
         try {
             return new PKIXParameters(trustAnchors);
         } catch (InvalidAlgorithmParameterException e) {
@@ -57,7 +58,7 @@ public class CertificateUtil {
         }
     }
 
-    public static KeyStore generateKeyStore(){
+    public static KeyStore generateKeyStore() {
         try {
             return KeyStore.getInstance(KeyStore.getDefaultType());
         } catch (KeyStoreException e) {
@@ -65,7 +66,7 @@ public class CertificateUtil {
         }
     }
 
-    public static CertPath generateCertPath(List<Certificate> certificates){
+    public static CertPath generateCertPath(List<Certificate> certificates) {
         try {
             return certificateFactory.generateCertPath(certificates);
         } catch (CertificateException e) {
@@ -73,11 +74,11 @@ public class CertificateUtil {
         }
     }
 
-    public static X509Certificate generateX509Certificate(byte[] bytes){
+    public static X509Certificate generateX509Certificate(byte[] bytes) {
         return generateX509Certificate(new ByteArrayInputStream(bytes));
     }
 
-    public static X509Certificate generateX509Certificate(InputStream inputStream){
+    public static X509Certificate generateX509Certificate(InputStream inputStream) {
         try {
             return (X509Certificate) certificateFactory.generateCertificate(inputStream);
         } catch (CertificateException e) {
@@ -85,7 +86,7 @@ public class CertificateUtil {
         }
     }
 
-    public static boolean isSelfSigned(X509Certificate certificate){
+    public static boolean isSelfSigned(X509Certificate certificate) {
         Signature signature = SignatureUtil.createSignature(certificate.getSigAlgName());
         try {
             signature.initVerify(certificate.getPublicKey());

@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FIDOU2FAttestationStatementTest {
 
     @Test
-    public void gettter_setter_test(){
+    public void gettter_setter_test() {
         CertPath certPath = CertificateUtil.generateCertPath(Collections.emptyList());
         byte[] signature = new byte[32];
         FIDOU2FAttestationStatement target = new FIDOU2FAttestationStatement();
@@ -43,32 +43,32 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void isSelfAttested_test(){
+    public void isSelfAttested_test() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         assertThat(target.isSelfAttested()).isTrue();
     }
 
     @Test
-    public void isSelfAttested_test_with_multiple_certificates(){
+    public void isSelfAttested_test_with_multiple_certificates() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         target.setX5c(CertificateUtil.generateCertPath(Lists.newArrayList(CoreTestUtil.createFirefoxSWTokenAttestationCertificate(), CoreTestUtil.createFirefoxSWTokenAttestationCertificate())));
         assertThat(target.isSelfAttested()).isFalse();
     }
 
     @Test
-    public void getFormat_test(){
+    public void getFormat_test() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         assertThat(target.getFormat()).isEqualTo("fido-u2f");
     }
 
     @Test
-    public void getEndEntityCertificate_test(){
+    public void getEndEntityCertificate_test() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         assertThat(target.getEndEntityCertificate()).isEqualTo(target.getX5c().getCertificates().get(0));
     }
 
     @Test(expected = IllegalStateException.class)
-    public void getEndEntityCertificate_test_with_no_certificates(){
+    public void getEndEntityCertificate_test_with_no_certificates() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         target.setX5c(CertificateUtil.generateCertPath(Collections.emptyList()));
         target.getEndEntityCertificate();
@@ -76,7 +76,7 @@ public class FIDOU2FAttestationStatementTest {
 
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         FIDOU2FAttestationStatement instanceA = CoreTestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = CoreTestUtil.createFIDOU2FAttestationStatement();
 
@@ -84,7 +84,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void equals_test_with_not_equal_certificates(){
+    public void equals_test_with_not_equal_certificates() {
         FIDOU2FAttestationStatement instanceA = CoreTestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = CoreTestUtil.createFIDOU2FAttestationStatement();
         instanceB.setX5c(CertificateUtil.generateCertPath(Collections.singletonList(CoreTestUtil.createFeitianU2FTokenAttestationCertificate())));
@@ -93,7 +93,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void hashCode_test(){
+    public void hashCode_test() {
         FIDOU2FAttestationStatement instanceA = CoreTestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = CoreTestUtil.createFIDOU2FAttestationStatement();
 
@@ -101,7 +101,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void hashCode_test_with_not_equal_certificates(){
+    public void hashCode_test_with_not_equal_certificates() {
         FIDOU2FAttestationStatement instanceA = CoreTestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = CoreTestUtil.createFIDOU2FAttestationStatement();
         instanceB.setX5c(CertificateUtil.generateCertPath(Collections.singletonList(CoreTestUtil.createFeitianU2FTokenAttestationCertificate())));

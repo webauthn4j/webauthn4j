@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class MetadataProviderImpl implements MetadataProvider{
+public class MetadataProviderImpl implements MetadataProvider {
 
     private WebAuthnUserDetailsService userDetailsService;
 
@@ -40,15 +40,14 @@ public class MetadataProviderImpl implements MetadataProvider{
         try {
             Collection<? extends WebAuthnAuthenticator> authenticators = userDetailsService.loadUserByUsername(username).getAuthenticators();
             List<Metadata> metadataList = new ArrayList<>();
-            for(WebAuthnAuthenticator authenticator : authenticators){
+            for (WebAuthnAuthenticator authenticator : authenticators) {
                 String credentialIdStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(authenticator.getAttestationData().getCredentialId());
                 Metadata metadata = new Metadata();
                 metadata.setCredentialId(credentialIdStr);
                 metadataList.add(metadata);
             }
             return objectMapper.writeValueAsString(metadataList);
-        }
-        catch (IOException | RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             throw new MetadataException(e);
         }
     }

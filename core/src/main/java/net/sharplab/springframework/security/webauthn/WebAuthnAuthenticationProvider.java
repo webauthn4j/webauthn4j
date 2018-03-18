@@ -54,7 +54,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
 
     public WebAuthnAuthenticationProvider(
             WebAuthnAuthenticatorService authenticatorService,
-            WebAuthnAuthenticationContextValidator authenticationContextValidator){
+            WebAuthnAuthenticationContextValidator authenticationContextValidator) {
         this.authenticatorService = authenticatorService;
         this.authenticationContextValidator = authenticationContextValidator;
     }
@@ -90,7 +90,6 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
 
         return result;
     }
-
 
 
     @Override
@@ -136,8 +135,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
 
         try {
             loadedWebAuthnAuthenticator = this.getAuthenticatorService().loadWebAuthnAuthenticatorByCredentialId(credentialId);
-        }
-        catch (CredentialIdNotFoundException notFound) {
+        } catch (CredentialIdNotFoundException notFound) {
             if (hideCredentialIdNotFoundExceptions) {
                 throw new BadCredentialsException(messages.getMessage(
                         "WebAuthnAuthenticationProvider.badCredentials",
@@ -145,8 +143,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
             } else {
                 throw notFound;
             }
-        }
-        catch (Exception repositoryProblem) {
+        } catch (Exception repositoryProblem) {
             throw new InternalAuthenticationServiceException(repositoryProblem.getMessage(), repositoryProblem);
         }
 

@@ -51,16 +51,17 @@ public class CertPathJWSVerifier implements JWSVerifier {
 
     /**
      * constructor
+     *
      * @param resourceLoader resource loader
      */
-    public CertPathJWSVerifier(ResourceLoader resourceLoader){
+    public CertPathJWSVerifier(ResourceLoader resourceLoader) {
         this.rootCertificate = resourceLoader.getResource(DEFAULT_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void verify(JWSObject jws){
+    public void verify(JWSObject jws) {
         //trust anchor
         X509Certificate rootCertificate = getX5c();
         Set<TrustAnchor> trustAnchor = new HashSet<>();
@@ -75,7 +76,7 @@ public class CertPathJWSVerifier implements JWSVerifier {
 
         //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.
         //Ref. http://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html#AppB
-        PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker)validator.getRevocationChecker();
+        PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) validator.getRevocationChecker();
         pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
         certPathParameters.addCertPathChecker(pkixRevocationChecker);
 
@@ -91,6 +92,7 @@ public class CertPathJWSVerifier implements JWSVerifier {
 
     /**
      * Provides root metadata.certs {@link Resource}.
+     *
      * @return root metadata.certs {@link Resource}
      */
     public Resource getRootCertificate() {
@@ -99,13 +101,14 @@ public class CertPathJWSVerifier implements JWSVerifier {
 
     /**
      * Sets root metadata.certs {@link Resource}.
+     *
      * @param rootCertificate root metadata.certs {@link Resource}
      */
     public void setRootCertificate(Resource rootCertificate) {
         this.rootCertificate = rootCertificate;
     }
 
-    private X509Certificate getX5c(){
+    private X509Certificate getX5c() {
         try {
             Resource certificateResource = getRootCertificate();
             InputStream inputStream = certificateResource.getInputStream();
@@ -115,8 +118,8 @@ public class CertPathJWSVerifier implements JWSVerifier {
         }
     }
 
-    private List<Certificate> getCertificatesFromJWSHeader(JWSHeader header){
-        List<Base64> base64List =  header.getX509CertChain();
+    private List<Certificate> getCertificatesFromJWSHeader(JWSHeader header) {
+        List<Base64> base64List = header.getX509CertChain();
         return base64List.stream().map(base64 -> CertificateUtil.generateX509Certificate(base64.decode())).collect(Collectors.toList());
     }
 }

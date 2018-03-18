@@ -27,9 +27,9 @@ public class VerificationMethodDescriptor {
     @JsonProperty
     private BigInteger userVerification;
     @JsonProperty
-    private CodeAccuracyDescriptor      caDesc;
+    private CodeAccuracyDescriptor caDesc;
     @JsonProperty
     private BiometricAccuracyDescriptor baDesc;
     @JsonProperty
-    private PatternAccuracyDescriptor   paDesc;
+    private PatternAccuracyDescriptor paDesc;
 }

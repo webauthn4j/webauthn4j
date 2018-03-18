@@ -44,8 +44,9 @@ public class KeyStoreTrustAnchorProvider {
 
     /**
      * Provides {@link TrustAnchor}'{@link Set} backed by Java KeyStore file.
+     *
      * @param keyStoreResource KeyStore file resource
-     * @param password KeyStore file password
+     * @param password         KeyStore file password
      * @return {@link TrustAnchor}'{@link Set}
      */
     public Set<TrustAnchor> provide(Resource keyStoreResource, String password) {
@@ -53,7 +54,7 @@ public class KeyStoreTrustAnchorProvider {
         try {
             List<String> aliases = Collections.list(keyStore.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();
-            for (String alias: aliases ) {
+            for (String alias : aliases) {
                 X509Certificate certificate = (X509Certificate) keyStore.getCertificate(alias);
                 trustAnchors.add(new TrustAnchor(certificate, null)); //TODO: null?
             }
@@ -64,7 +65,7 @@ public class KeyStoreTrustAnchorProvider {
         }
     }
 
-    private KeyStore loadKeyStoreFromResource(Resource keyStoreResource, String password){
+    private KeyStore loadKeyStoreFromResource(Resource keyStoreResource, String password) {
         KeyStore keyStore = CertificateUtil.generateKeyStore();
         try {
             keyStore.load(keyStoreResource.getInputStream(), password.toCharArray());

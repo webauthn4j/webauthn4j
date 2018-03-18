@@ -25,8 +25,8 @@ import java.security.NoSuchAlgorithmException;
 public class MessageDigestUtil {
 
 
-
-    private MessageDigestUtil(){}
+    private MessageDigestUtil() {
+    }
 
     public static MessageDigest createMessageDigest(String hashAlgorithm) {
         try {

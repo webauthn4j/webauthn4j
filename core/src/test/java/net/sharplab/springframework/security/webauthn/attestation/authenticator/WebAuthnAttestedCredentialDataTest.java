@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnAttestedCredentialDataTest {
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         WebAuthnAttestedCredentialData instanceA = CoreTestUtil.createWebAuthnAttestedCredentialData();
         WebAuthnAttestedCredentialData instanceB = CoreTestUtil.createWebAuthnAttestedCredentialData();
         assertThat(instanceA).isEqualTo(instanceB);

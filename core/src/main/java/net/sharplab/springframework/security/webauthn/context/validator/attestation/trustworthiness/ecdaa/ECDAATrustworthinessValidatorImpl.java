@@ -26,11 +26,11 @@ public class ECDAATrustworthinessValidatorImpl implements ECDAATrustworthinessVa
 
     private FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService;
 
-    public ECDAATrustworthinessValidatorImpl(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public ECDAATrustworthinessValidatorImpl(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         this.fidoMetadataServiceTrustAnchorService = fidoMetadataServiceTrustAnchorService;
     }
 
-    public void validate(WebAuthnAttestationStatement attestationStatement){
+    public void validate(WebAuthnAttestationStatement attestationStatement) {
         throw new IllegalStateException("not implemented");
     }
 }

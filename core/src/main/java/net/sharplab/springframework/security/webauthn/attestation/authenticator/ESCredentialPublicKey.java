@@ -103,7 +103,7 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey {
 
     private String getCurveName() {
         int curve = getCurve();
-        switch (curve){
+        switch (curve) {
             case 1:
                 return "secp256r1";
             case 2:

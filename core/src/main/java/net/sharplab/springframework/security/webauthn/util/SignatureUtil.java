@@ -24,9 +24,10 @@ import java.security.Signature;
  */
 public class SignatureUtil {
 
-    private SignatureUtil(){}
+    private SignatureUtil() {
+    }
 
-    public static Signature createSignature(String algorithm){
+    public static Signature createSignature(String algorithm) {
         try {
             return Signature.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {

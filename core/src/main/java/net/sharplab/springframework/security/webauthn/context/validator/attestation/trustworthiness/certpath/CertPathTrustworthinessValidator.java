@@ -23,7 +23,7 @@ import java.security.cert.CertPath;
 /**
  * Validates {@link CertPath} instance
  */
-public interface CertPathTrustworthinessValidator{
+public interface CertPathTrustworthinessValidator {
 
     void validate(WebAuthnAttestationStatement attestationStatement);
 }

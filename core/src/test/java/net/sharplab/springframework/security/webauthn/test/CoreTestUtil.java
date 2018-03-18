@@ -43,9 +43,10 @@ import java.util.UUID;
  */
 public class CoreTestUtil {
 
-    private CoreTestUtil(){}
+    private CoreTestUtil() {
+    }
 
-    public static WebAuthnAttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement(){
+    public static WebAuthnAttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
         WebAuthnAttestationObject attestationObject = new WebAuthnAttestationObject();
         String format = "fido-u2f";
         attestationObject.setAuthenticatorData(createWebAuthnAuthenticatorData());
@@ -54,7 +55,7 @@ public class CoreTestUtil {
         return attestationObject;
     }
 
-    public static WebAuthnAuthenticatorData createWebAuthnAuthenticatorData(){
+    public static WebAuthnAuthenticatorData createWebAuthnAuthenticatorData() {
         WebAuthnAuthenticatorData authenticatorData = new WebAuthnAuthenticatorData();
         authenticatorData.setFlagUP(true);
         authenticatorData.setFlagAT(true);
@@ -65,7 +66,7 @@ public class CoreTestUtil {
         return authenticatorData;
     }
 
-    public static WebAuthnAttestedCredentialData createWebAuthnAttestedCredentialData(){
+    public static WebAuthnAttestedCredentialData createWebAuthnAttestedCredentialData() {
         WebAuthnAttestedCredentialData attestedCredentialData = new WebAuthnAttestedCredentialData();
         attestedCredentialData.setAaGuid(new byte[16]);
         attestedCredentialData.setCredentialId(new byte[32]);
@@ -73,7 +74,7 @@ public class CoreTestUtil {
         return attestedCredentialData;
     }
 
-    public static ESCredentialPublicKey createESCredentialPublicKey(){
+    public static ESCredentialPublicKey createESCredentialPublicKey() {
         ESCredentialPublicKey credentialPublicKey = new ESCredentialPublicKey();
         credentialPublicKey.setAlgorithm(CoseAlgorithmConst.ES256);
         credentialPublicKey.setX(new byte[32]);
@@ -89,7 +90,7 @@ public class CoreTestUtil {
         return credentialPublicKey;
     }
 
-    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(){
+    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
 
         byte[] sig = new byte[32];
 
@@ -99,33 +100,33 @@ public class CoreTestUtil {
         return attestationStatement;
     }
 
-    public static CertPath createCertPath(){
+    public static CertPath createCertPath() {
         CertPath x5c;
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            x5c =certificateFactory.generateCertPath(Collections.singletonList(createFirefoxSWTokenAttestationCertificate()));
+            x5c = certificateFactory.generateCertPath(Collections.singletonList(createFirefoxSWTokenAttestationCertificate()));
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
         return x5c;
     }
 
-    public static Certificate createFirefoxSWTokenAttestationCertificate(){
+    public static Certificate createFirefoxSWTokenAttestationCertificate() {
         String base64Certificate = "MIIBMTCB2KADAgECAgRdWm5nMAoGCCqGSM49BAMCMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wHhcNMTcwODE5MTExMDI3WhcNMTcwODIxMTExMDI3WjAhMR8wHQYDVQQDExZGaXJlZm94IFUyRiBTb2Z0IFRva2VuMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmNdtc7TW47xJcunwo_5ZuqSeHKJDZixC3AhTy2OEnYZfLmLZn9ssfWqLmPY4E642bKRDsm6qLNfjj_z9ufejNTAKBggqhkjOPQQDAgNIADBFAiEA6SdHwFyOq1trbQA6TLxLHS11EYUYDWyA24BnsJD8TrACIEw7k4aGBMOYlT5uMXLlj4bV5jo1Svi83VOpBo5ykMvd";
         return createCertificate(base64Certificate);
     }
 
-    public static Certificate createFeitianU2FTokenAttestationCertificate(){
+    public static Certificate createFeitianU2FTokenAttestationCertificate() {
         String base64Certificate = "MIIBTDCB86ADAgECAgrMFgqn4TlPa3dQMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDEZUIEZJRE8gMDEwMDAeFw0xNjA0MTUxNDUwMzJaFw0yNjA0MTUxNDUwMzJaMCcxJTAjBgNVBAMTHEZUIEZJRE8gVTJGIDExNjE2MTczMDMwNTAyMTAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATG1tXh9HyGi4UJapsP3Fw8NEwRr5WEYfV5xOvP2XU4jpnJ17SEbyZTCn7rX38Ept32BPr6IaOmamqAdQvsDpNgoxcwFTATBgsrBgEEAYLlHAIBAQQEAwIEMDAKBggqhkjOPQQDAgNIADBFAiEA3wPvLOvjpbU3VCsKBjWtb5MzcX_I2p7NN_X03kyyFoUCIAxoJPinKGUxoNR_bhx3uZHtQQpwLWuaBND9y2Omhf47";
         return createCertificate(base64Certificate);
     }
 
-    public static Certificate createYubikeyAttestationCertificate(){
+    public static Certificate createYubikeyAttestationCertificate() {
         String base64Certificate = "MIICRDCCAS6gAwIBAgIEeMDfDjALBgkqhkiG9w0BAQswLjEsMCoGA1UEAxMjWXViaWNvIFUyRiBSb290IENBIFNlcmlhbCA0NTcyMDA2MzEwIBcNMTQwODAxMDAwMDAwWhgPMjA1MDA5MDQwMDAwMDBaMCoxKDAmBgNVBAMMH1l1YmljbyBVMkYgRUUgU2VyaWFsIDIwMjU5MDU5MzQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS1uHFcg_3-DqFcRXeshY30jBdv3oedyvS4PUDTIPJvreYl_Pf1yK_YNRj4254h7Ag7GEWAxxfsSkcLlopvuj9vozswOTAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIFIDALBgkqhkiG9w0BAQsDggEBAD72q_ZKkWsL-ZSTjdyVNOBUQAJoVninLEOnq-ZdkGX_YfRRzoo67thmidGQuVCvAHpU0THu8G_ia06nuz4yt5IFpd-nYAQ0U-NK-ETDfNSoX4xcLYcOCiiyt-1EAkH9s3krIHaw4Yr6m0Mu7vwmWLoJBcQbJKk8bsi7ptVvM-jWU9fPa9UBVFWiZZdA99zFHMAxYJzQPqbN6Tmeygh2MpB2P7TI0A9WkGmhJUkAauuwaiGiFOSZmDe0KegdflbTOlSS3ToWHIKTlUCBqn7vdJw6Vj2919ujlcxHPkRpbUGRhcJDesg6wGTBy-RyJ_96G3fH1eoMNn1F9jC9mY1Zsm4=";
         return createCertificate(base64Certificate);
     }
 
-    public static Certificate createCertificate(String base64Certificate){
+    public static Certificate createCertificate(String base64Certificate) {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             return certificateFactory.generateCertificate(new ByteArrayInputStream(Base64Utils.decodeFromUrlSafeString(base64Certificate)));
@@ -157,7 +158,7 @@ public class CoreTestUtil {
         return collectedClientData;
     }
 
-    public static Challenge createChallenge(){
+    public static Challenge createChallenge() {
         UUID uuid = UUID.randomUUID();
         long hi = uuid.getMostSignificantBits();
         long lo = uuid.getLeastSignificantBits();
@@ -165,7 +166,7 @@ public class CoreTestUtil {
         return new DefaultChallenge(challengeValue);
     }
 
-    public static Origin createOrigin(){
+    public static Origin createOrigin() {
         Origin origin = new Origin("https://localhost:8080");
         return origin;
     }

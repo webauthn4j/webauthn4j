@@ -33,7 +33,7 @@ public class CertPathJWSVerifierTest {
     private CertPathJWSVerifier target;
 
     @Before
-    public void setup(){
+    public void setup() {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         target = new CertPathJWSVerifier(resourceLoader);
     }

@@ -31,7 +31,7 @@ public class WebAuthnAuthenticationTokenTest {
      * Verifies that constructor with 3 args yields authenticated token.
      */
     @Test
-    public void webAuthnAuthenticationToken(){
+    public void webAuthnAuthenticationToken() {
         WebAuthnAuthenticationToken webAuthnAuthenticationToken = new WebAuthnAuthenticationToken(null, null, null);
         assertThat(webAuthnAuthenticationToken.isAuthenticated()).isTrue();
     }
@@ -40,7 +40,7 @@ public class WebAuthnAuthenticationTokenTest {
      * Verifies that getter returns constructor parameters
      */
     @Test
-    public void test_methods(){
+    public void test_methods() {
         WebAuthnAuthenticationContext credential = mock(WebAuthnAuthenticationContext.class);
         WebAuthnAuthenticationToken webAuthnAuthenticationToken = new WebAuthnAuthenticationToken("username", credential, null);
 

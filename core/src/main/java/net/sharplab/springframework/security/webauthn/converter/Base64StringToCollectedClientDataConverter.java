@@ -32,7 +32,7 @@ public class Base64StringToCollectedClientDataConverter implements Converter<Str
 
     private ObjectMapper objectMapper;
 
-    public Base64StringToCollectedClientDataConverter(){
+    public Base64StringToCollectedClientDataConverter() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new WebAuthnModule());
     }

@@ -65,7 +65,6 @@ public class WebAuthnAssertionAuthenticationToken extends AbstractAuthentication
      * This object can never be authenticated, call with true result in exception.
      *
      * @param isAuthenticated only false value allowed
-     *
      * @throws IllegalArgumentException if isAuthenticated is true
      */
     @Override

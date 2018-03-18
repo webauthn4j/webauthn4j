@@ -39,14 +39,14 @@ public class WebAuthnRegistrationContextValidatorTest {
     private WebAuthnRegistrationContextValidator target;
 
     @Before
-    public void setup(){
+    public void setup() {
         FIDOMetadataServiceTrustAnchorService trustAnchorService = mock(FIDOMetadataServiceTrustAnchorService.class);
         target = new WebAuthnRegistrationContextValidator(new DefaultAttestationStatementTrustworthinessValidator(trustAnchorService));
     }
 
     @Test
     @Ignore
-    public void test(){
+    public void test() {
         WebAuthnRegistrationContextProvider provider = new WebAuthnRegistrationContextProviderImpl(new RelyingPartyProviderImpl(new HttpSessionChallengeRepository()));
 
         String clientDataBase64 = "eyJjaGFsbGVuZ2UiOiJGRkc1UVdrRFNJUzZvRVY1SFc0Vlp3IiwiaGFzaEFsZyI6IlNIQS0yNTYiLCJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ";

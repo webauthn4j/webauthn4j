@@ -32,17 +32,17 @@ public class RelyingPartyProviderImpl implements RelyingPartyProvider {
     private String rpId = null;
     private ChallengeRepository challengeRepository;
 
-    public RelyingPartyProviderImpl(ChallengeRepository challengeRepository){
+    public RelyingPartyProviderImpl(ChallengeRepository challengeRepository) {
         this.challengeRepository = challengeRepository;
     }
 
-    public RelyingParty provide(HttpServletRequest request, HttpServletResponse response){
+    public RelyingParty provide(HttpServletRequest request, HttpServletResponse response) {
 
         Origin origin = obtainOrigin(request);
         Challenge savedChallenge = obtainSavedChallenge(request);
 
         String rpId = origin.getServerName();
-        if(this.rpId != null){
+        if (this.rpId != null) {
             rpId = this.rpId;
         }
 
@@ -58,7 +58,7 @@ public class RelyingPartyProviderImpl implements RelyingPartyProvider {
     }
 
 
-    private Origin obtainOrigin(HttpServletRequest request){
+    private Origin obtainOrigin(HttpServletRequest request) {
         return new Origin(request.getScheme(), request.getServerName(), request.getServerPort());
     }
 

@@ -25,7 +25,6 @@ import org.springframework.security.config.annotation.authentication.ProviderMan
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
- *
  * @param <B> the type of the {@link SecurityBuilder}
  * @param <C> the type of {@link WebAuthnFirstOfMultiFactorDelegatingAuthenticationConfigurer} this is
  * @param <U> The type of {@link UserDetailsService} that is being used
@@ -35,7 +34,7 @@ public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationConfigurer<B exte
 
     private AbstractUserDetailsAuthenticationProvider authenticationProvider;
 
-    public WebAuthnFirstOfMultiFactorDelegatingAuthenticationConfigurer(AbstractUserDetailsAuthenticationProvider authenticationProvider){
+    public WebAuthnFirstOfMultiFactorDelegatingAuthenticationConfigurer(AbstractUserDetailsAuthenticationProvider authenticationProvider) {
         this.authenticationProvider = authenticationProvider;
     }
 

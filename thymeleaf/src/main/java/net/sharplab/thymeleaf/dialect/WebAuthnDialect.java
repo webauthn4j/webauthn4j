@@ -20,7 +20,7 @@ public class WebAuthnDialect extends AbstractDialect implements IProcessorDialec
         super(NAME);
     }
 
-    public WebAuthnDialect(String prefix){
+    public WebAuthnDialect(String prefix) {
         super(NAME);
         this.prefix = prefix;
     }

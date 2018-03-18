@@ -33,13 +33,13 @@ public class Origin implements Serializable {
         this.port = port;
     }
 
-    public Origin(String originUrl){
+    public Origin(String originUrl) {
         URI uri = URI.create(originUrl);
         this.scheme = uri.getScheme();
         this.serverName = uri.getHost();
         int port = uri.getPort();
-        if(port == -1){
-            switch (this.scheme){
+        if (port == -1) {
+            switch (this.scheme) {
                 case "https":
                     port = 443;
                     break;

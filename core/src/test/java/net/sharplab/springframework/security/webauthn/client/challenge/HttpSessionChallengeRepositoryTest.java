@@ -33,14 +33,14 @@ public class HttpSessionChallengeRepositoryTest {
     private HttpSessionChallengeRepository target = new HttpSessionChallengeRepository();
 
     @Test
-    public void generateChallenge_test(){
+    public void generateChallenge_test() {
         Challenge challenge = target.generateChallenge();
         assertThat(challenge).isNotNull();
         assertThat(challenge.getValue()).hasSize(16);
     }
 
     @Test
-    public void saveChallenge_test(){
+    public void saveChallenge_test() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         String attrName = ".test-challenge";
@@ -50,11 +50,11 @@ public class HttpSessionChallengeRepositoryTest {
         target.saveChallenge(challenge, request, response);
 
         HttpSession session = request.getSession();
-        assertThat((Challenge)session.getAttribute(attrName)).isEqualTo(challenge);
+        assertThat((Challenge) session.getAttribute(attrName)).isEqualTo(challenge);
     }
 
     @Test
-    public void saveChallenge_test_with_null(){
+    public void saveChallenge_test_with_null() {
         MockHttpSession session = new MockHttpSession();
         MockHttpServletRequest prevRequest = new MockHttpServletRequest();
         prevRequest.setSession(session);
@@ -73,7 +73,7 @@ public class HttpSessionChallengeRepositoryTest {
     }
 
     @Test
-    public void saveChallenge_test_without_prev_request(){
+    public void saveChallenge_test_without_prev_request() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -86,7 +86,7 @@ public class HttpSessionChallengeRepositoryTest {
 
 
     @Test
-    public void loadChallenge_test(){
+    public void loadChallenge_test() {
         MockHttpSession session = new MockHttpSession();
         MockHttpServletRequest prevRequest = new MockHttpServletRequest();
         prevRequest.setSession(session);
@@ -105,7 +105,7 @@ public class HttpSessionChallengeRepositoryTest {
     }
 
     @Test
-    public void loadChallenge_test_without_previous_request(){
+    public void loadChallenge_test_without_previous_request() {
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         Challenge loadedChallenge = target.loadChallenge(request);

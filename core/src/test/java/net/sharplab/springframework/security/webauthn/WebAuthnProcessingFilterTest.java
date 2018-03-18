@@ -56,7 +56,7 @@ public class WebAuthnProcessingFilterTest {
     private ArgumentCaptor<Authentication> captor = ArgumentCaptor.forClass(Authentication.class);
 
     @Before
-    public void setup(){
+    public void setup() {
         webAuthnAuthenticationContextProvider = mock(WebAuthnAuthenticationContextProvider.class);
         authenticationManager = mock(AuthenticationManager.class);
         mockHttpServletRequest = new MockHttpServletRequest();
@@ -67,7 +67,7 @@ public class WebAuthnProcessingFilterTest {
     }
 
     @Test
-    public void attemptAuthentication_test_with_username_password(){
+    public void attemptAuthentication_test_with_username_password() {
 
         mockHttpServletRequest.setMethod("POST");
         mockHttpServletRequest.setParameter("username", "username");
@@ -218,7 +218,6 @@ public class WebAuthnProcessingFilterTest {
         //When
         target.attemptAuthentication(mockHttpServletRequest, mockHttpServletResponse);
     }
-
 
 
 }

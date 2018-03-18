@@ -37,7 +37,7 @@ public class WebAuthnModule extends SimpleModule {
     /**
      * Default constructor
      */
-    public WebAuthnModule(){
+    public WebAuthnModule() {
         super("WebAuthnModule");
 
         this.addDeserializer(CertPath.class, new CertPathDeserializer());

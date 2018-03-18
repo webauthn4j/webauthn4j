@@ -55,9 +55,9 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
     @Override
     public PublicKey getPublicKey() {
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
-            new BigInteger(1, getN()),
-            new BigInteger(1, getE())
-    );
+                new BigInteger(1, getN()),
+                new BigInteger(1, getE())
+        );
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(spec);

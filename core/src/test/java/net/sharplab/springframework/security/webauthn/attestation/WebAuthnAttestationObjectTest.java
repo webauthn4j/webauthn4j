@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnAttestationObjectTest {
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         WebAuthnAttestationObject instanceA = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         WebAuthnAttestationObject instanceB = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         assertThat(instanceA).isEqualTo(instanceB);

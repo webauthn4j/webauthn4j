@@ -24,13 +24,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BiometricAccuracyDescriptor {
 
     @JsonProperty
-    private double  FAR;
+    private double FAR;
     @JsonProperty
-    private double  FRR;
+    private double FRR;
     @JsonProperty
-    private double  EER;
+    private double EER;
     @JsonProperty
-    private double  FAAR;
+    private double FAAR;
     @JsonProperty
     private Integer maxReferenceDataSets;
     @JsonProperty

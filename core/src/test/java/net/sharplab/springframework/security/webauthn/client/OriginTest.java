@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class OriginTest {
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         Origin https_examplecom_443 = new Origin("https://example.com:443");
         Origin http_examplecom_default = new Origin("http://example.com");
@@ -40,7 +40,7 @@ public class OriginTest {
     }
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         assertThat(https_examplecom_default.getScheme()).isEqualTo("https");
         assertThat(https_examplecom_default.getServerName()).isEqualTo("example.com");
@@ -49,7 +49,7 @@ public class OriginTest {
     }
 
     @Test
-    public void constructor_test(){
+    public void constructor_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
 
@@ -57,12 +57,12 @@ public class OriginTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void constructor_test_with_illegal_input(){
+    public void constructor_test_with_illegal_input() {
         new Origin("ftp://example.com");
     }
 
     @Test
-    public void hasCode_test(){
+    public void hasCode_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
 

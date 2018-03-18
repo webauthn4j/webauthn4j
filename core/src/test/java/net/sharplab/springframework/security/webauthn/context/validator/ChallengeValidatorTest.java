@@ -32,7 +32,7 @@ public class ChallengeValidatorTest {
     private ChallengeValidator target = new ChallengeValidator();
 
     @Test
-    public void verifyChallenge_test1(){
+    public void verifyChallenge_test1() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
@@ -46,7 +46,7 @@ public class ChallengeValidatorTest {
     }
 
     @Test(expected = BadChallengeException.class)
-    public void verifyChallenge_test_with_different_challenge(){
+    public void verifyChallenge_test_with_different_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
@@ -60,7 +60,7 @@ public class ChallengeValidatorTest {
     }
 
     @Test(expected = MissingChallengeException.class)
-    public void verifyChallenge_test_without_saved_challenge(){
+    public void verifyChallenge_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;

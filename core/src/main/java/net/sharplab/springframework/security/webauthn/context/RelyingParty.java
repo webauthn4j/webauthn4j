@@ -40,7 +40,9 @@ public class RelyingParty implements Serializable {
         return origin;
     }
 
-    public String getRpId(){ return rpId; }
+    public String getRpId() {
+        return rpId;
+    }
 
     public Challenge getChallenge() {
         return challenge;

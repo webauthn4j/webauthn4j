@@ -43,7 +43,7 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
     private WebAuthnAuthenticatorDataDeserializer deserializer;
     private RelyingPartyProvider relyingPartyProvider;
 
-    public WebAuthnAuthenticationContextProviderImpl(RelyingPartyProvider relyingPartyProvider){
+    public WebAuthnAuthenticationContextProviderImpl(RelyingPartyProvider relyingPartyProvider) {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new WebAuthnModule());
         this.deserializer = new WebAuthnAuthenticatorDataDeserializer();

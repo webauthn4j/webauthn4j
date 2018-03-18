@@ -60,7 +60,9 @@ public class WebAuthnAuthenticationContext implements Serializable {
         this.currentAuthentication = currentAuthentication;
     }
 
-    public String getCredentialId(){ return credentialId; }
+    public String getCredentialId() {
+        return credentialId;
+    }
 
     public byte[] getRawClientData() {
         return rawClientData;

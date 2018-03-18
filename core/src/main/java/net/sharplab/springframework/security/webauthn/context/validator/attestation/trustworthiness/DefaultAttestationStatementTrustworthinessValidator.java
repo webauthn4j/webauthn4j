@@ -36,13 +36,13 @@ public class DefaultAttestationStatementTrustworthinessValidator extends Abstrac
     private ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
     private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
 
-    public DefaultAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public DefaultAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         this.fidoMetadataServiceTrustAnchorService = fidoMetadataServiceTrustAnchorService;
     }
 
     @Override
     public SelfAttestationTrustworthinessValidator getSelfAttestationTrustworthinessValidator() {
-        if(selfAttestationTrustworthinessValidator == null){
+        if (selfAttestationTrustworthinessValidator == null) {
             selfAttestationTrustworthinessValidator = new SelfAttestationTrustworthinessValidatorImpl();
         }
         return selfAttestationTrustworthinessValidator;
@@ -55,7 +55,7 @@ public class DefaultAttestationStatementTrustworthinessValidator extends Abstrac
 
     @Override
     public ECDAATrustworthinessValidator getECDAATrustworthinessValidator() {
-        if(ecdaaTrustworthinessValidator == null){
+        if (ecdaaTrustworthinessValidator == null) {
             ecdaaTrustworthinessValidator = new ECDAATrustworthinessValidatorImpl(fidoMetadataServiceTrustAnchorService);
         }
         return ecdaaTrustworthinessValidator;
@@ -68,7 +68,7 @@ public class DefaultAttestationStatementTrustworthinessValidator extends Abstrac
 
     @Override
     public CertPathTrustworthinessValidator getCertPathTrustworthinessValidator() {
-        if(certPathTrustworthinessValidator == null){
+        if (certPathTrustworthinessValidator == null) {
             certPathTrustworthinessValidator = new FIDOMetadataServiceCertPathTrustworthinessValidator(fidoMetadataServiceTrustAnchorService);
         }
         return certPathTrustworthinessValidator;
@@ -79,7 +79,7 @@ public class DefaultAttestationStatementTrustworthinessValidator extends Abstrac
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
     }
 
-    protected FIDOMetadataServiceTrustAnchorService getTrustAnchorService(){
+    protected FIDOMetadataServiceTrustAnchorService getTrustAnchorService() {
         return fidoMetadataServiceTrustAnchorService;
     }
 

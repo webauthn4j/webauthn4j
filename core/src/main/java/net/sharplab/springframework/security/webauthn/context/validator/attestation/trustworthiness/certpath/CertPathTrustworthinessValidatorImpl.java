@@ -35,11 +35,11 @@ public class CertPathTrustworthinessValidatorImpl implements CertPathTrustworthi
 
     private boolean isRevocationCheckEnabled = false;
 
-    public CertPathTrustworthinessValidatorImpl(WebAuthnTrustAnchorService webAuthnTrustAnchorService){
+    public CertPathTrustworthinessValidatorImpl(WebAuthnTrustAnchorService webAuthnTrustAnchorService) {
         this.webAuthnTrustAnchorService = webAuthnTrustAnchorService;
     }
 
-    public void validate(WebAuthnAttestationStatement attestationStatement){
+    public void validate(WebAuthnAttestationStatement attestationStatement) {
 
         FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
         CertPath certPath = fidoU2FAttestationStatement.getX5c();
@@ -48,14 +48,13 @@ public class CertPathTrustworthinessValidatorImpl implements CertPathTrustworthi
         CertPathValidator certPathValidator = CertificateUtil.generateCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.generatePKIXParameters(trustAnchors);
 
-        if(isRevocationCheckEnabled()){
+        if (isRevocationCheckEnabled()) {
             //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.
             //Ref. http://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html#AppB
-            PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker)certPathValidator.getRevocationChecker();
+            PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
             pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
             certPathParameters.addCertPathChecker(pkixRevocationChecker);
-        }
-        else {
+        } else {
             certPathParameters.setRevocationEnabled(false);
         }
 

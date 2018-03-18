@@ -36,12 +36,12 @@ public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestat
 
     private boolean isSelfAttestationAllowed = true;
 
-    public void validate(WebAuthnAttestationStatement attestationStatement){
-        if(!attestationStatement.isSelfAttested()){
+    public void validate(WebAuthnAttestationStatement attestationStatement) {
+        if (!attestationStatement.isSelfAttested()) {
             throw new IllegalArgumentException(messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.attestationStatementIsNotSelfAttested",
                     "attestationStatement is not self attested"));
         }
-        if(isSelfAttestationAllowed()){
+        if (isSelfAttestationAllowed()) {
             X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
             try {
                 attestationCertificate.checkValidity();
@@ -52,8 +52,7 @@ public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestat
                 throw new CertificateException(messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.certificateNotYetValid",
                         "Certificate not yet valid"), e);
             }
-        }
-        else {
+        } else {
             throw new SelfAttestationProhibitedException(
                     messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.selfAttestationProhibited",
                             "Self attestations is prohibited"));

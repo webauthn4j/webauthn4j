@@ -31,21 +31,19 @@ public abstract class AbstractAttestationStatementTrustworthinessValidator imple
     private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
 
     @Override
-    public void validate(WebAuthnAttestationStatement attestationStatement){
-        if(attestationStatement.isSelfAttested()){ // self attestation
-            if(selfAttestationTrustworthinessValidator == null){
+    public void validate(WebAuthnAttestationStatement attestationStatement) {
+        if (attestationStatement.isSelfAttested()) { // self attestation
+            if (selfAttestationTrustworthinessValidator == null) {
                 selfAttestationTrustworthinessValidator = getSelfAttestationTrustworthinessValidator();
             }
             selfAttestationTrustworthinessValidator.validate(attestationStatement);
-        }
-        else if(isECDAA(attestationStatement)){ //ECDAA
-            if (ecdaaTrustworthinessValidator == null){
+        } else if (isECDAA(attestationStatement)) { //ECDAA
+            if (ecdaaTrustworthinessValidator == null) {
                 ecdaaTrustworthinessValidator = getECDAATrustworthinessValidator();
             }
             ecdaaTrustworthinessValidator.validate(attestationStatement);
-        }
-        else{
-            if(certPathTrustworthinessValidator == null){
+        } else {
+            if (certPathTrustworthinessValidator == null) {
                 certPathTrustworthinessValidator = getCertPathTrustworthinessValidator();
             }
             certPathTrustworthinessValidator.validate(attestationStatement);

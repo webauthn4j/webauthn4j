@@ -29,12 +29,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MessageDigestUtilTest {
 
     @Test
-    public void createMessageDigest_test(){
-        MessageDigest s256 =  MessageDigestUtil.createMessageDigest("S256");
-        MessageDigest s384 =  MessageDigestUtil.createMessageDigest("S384");
-        MessageDigest s512 =  MessageDigestUtil.createMessageDigest("S512");
+    public void createMessageDigest_test() {
+        MessageDigest s256 = MessageDigestUtil.createMessageDigest("S256");
+        MessageDigest s384 = MessageDigestUtil.createMessageDigest("S384");
+        MessageDigest s512 = MessageDigestUtil.createMessageDigest("S512");
 
-        MessageDigest sha256 =  MessageDigestUtil.createMessageDigest("SHA-256");
+        MessageDigest sha256 = MessageDigestUtil.createMessageDigest("SHA-256");
 
         assertThat(s256.getAlgorithm()).isEqualTo("SHA-256");
         assertThat(s384.getAlgorithm()).isEqualTo("SHA-384");
@@ -43,8 +43,8 @@ public class MessageDigestUtilTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void createMessageDigest_test_with_wrong_arg(){
-        MessageDigest s256 =  MessageDigestUtil.createMessageDigest("wrong-arg");
+    public void createMessageDigest_test_with_wrong_arg() {
+        MessageDigest s256 = MessageDigestUtil.createMessageDigest("wrong-arg");
     }
 
 }

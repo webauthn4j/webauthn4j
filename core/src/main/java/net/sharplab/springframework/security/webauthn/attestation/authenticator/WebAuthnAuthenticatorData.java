@@ -34,7 +34,8 @@ public class WebAuthnAuthenticatorData implements Serializable {
     private WebAuthnAttestedCredentialData attestationData;
     private List<Extension> extensions;
 
-    public WebAuthnAuthenticatorData(){}
+    public WebAuthnAuthenticatorData() {
+    }
 
     public byte[] getRpIdHash() {
         return rpIdHash;
@@ -59,8 +60,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     public void setFlagUP(boolean flagUP) {
         if (flagUP) {
             this.flags |= BIT_UP;
-        }
-        else {
+        } else {
             this.flags &= ~BIT_UP;
         }
     }
@@ -72,8 +72,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     public void setFlagUV(boolean flagUV) {
         if (flagUV) {
             this.flags |= BIT_UV;
-        }
-        else {
+        } else {
             this.flags &= ~BIT_UV;
         }
     }
@@ -85,8 +84,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     public void setFlagAT(boolean flagAT) {
         if (flagAT) {
             this.flags |= BIT_AT;
-        }
-        else {
+        } else {
             this.flags &= ~BIT_AT;
         }
     }
@@ -98,8 +96,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     public void setFlagED(boolean flagED) {
         if (flagED) {
             this.flags |= BIT_ED;
-        }
-        else {
+        } else {
             this.flags &= ~BIT_ED;
         }
     }
@@ -141,7 +138,8 @@ public class WebAuthnAuthenticatorData implements Serializable {
         if (flags != that.flags) return false;
         if (counter != that.counter) return false;
         if (!Arrays.equals(rpIdHash, that.rpIdHash)) return false;
-        if (attestationData != null ? !attestationData.equals(that.attestationData) : that.attestationData != null) return false;
+        if (attestationData != null ? !attestationData.equals(that.attestationData) : that.attestationData != null)
+            return false;
         return extensions != null ? extensions.equals(that.extensions) : that.extensions == null;
     }
 

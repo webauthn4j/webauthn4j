@@ -31,10 +31,10 @@ public class WebAuthnRegistrationContext {
     private RelyingParty relyingParty;
 
     public WebAuthnRegistrationContext(CollectedClientData collectedClientData,
-                                byte[] clientDataBytes,
-                                WebAuthnAttestationObject attestationObject,
-                                byte[] attestationObjectBytes,
-                                RelyingParty relyingParty){
+                                       byte[] clientDataBytes,
+                                       WebAuthnAttestationObject attestationObject,
+                                       byte[] attestationObjectBytes,
+                                       RelyingParty relyingParty) {
 
         this.collectedClientData = collectedClientData;
         this.clientDataBytes = clientDataBytes;
@@ -59,5 +59,7 @@ public class WebAuthnRegistrationContext {
         return attestationObjectBytes;
     }
 
-    public RelyingParty getRelyingParty(){ return relyingParty;}
+    public RelyingParty getRelyingParty() {
+        return relyingParty;
+    }
 }

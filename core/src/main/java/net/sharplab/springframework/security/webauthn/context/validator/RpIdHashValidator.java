@@ -31,7 +31,7 @@ import java.util.Arrays;
 /**
  * Validates rpIdHash
  */
-public class    RpIdHashValidator {
+public class RpIdHashValidator {
 
     protected final Log logger = LogFactory.getLog(getClass());
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
@@ -41,7 +41,7 @@ public class    RpIdHashValidator {
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
         byte[] relyingPartyRpIdBytes = relyingParty.getRpId().getBytes(StandardCharsets.UTF_8);
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
-        if(!Arrays.equals(rpIdHash, relyingPartyRpIdHash)){
+        if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
             logger.debug("Authentication failed: bad rpId is specified");
             throw new BadRpIdException(messages.getMessage("WebAuthnAuthenticationProvider.badRpId", "Bad rpId"));
         }

@@ -57,8 +57,6 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
     private String signatureParameter = SPRING_SECURITY_FORM_SIGNATURE_KEY;
 
 
-
-
     private WebAuthnAuthenticationContextProvider webAuthnAuthenticationContextProvider;
 
     private boolean postOnly = true;
@@ -67,7 +65,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
         this(AuthorityUtils.createAuthorityList("ROLE_ANONYMOUS"));
     }
 
-    public WebAuthnProcessingFilter(List<GrantedAuthority> authorities){
+    public WebAuthnProcessingFilter(List<GrantedAuthority> authorities) {
         super();
         Assert.notNull(authorities, "Anonymous authorities must be set");
         this.authorities = authorities;
@@ -91,8 +89,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
         AbstractAuthenticationToken authRequest;
         if (StringUtils.isEmpty(credentialId)) {
             authRequest = new FirstOfMultiFactorAuthenticationToken(username, password, authorities);
-        }
-        else {
+        } else {
             Authentication currentAuthentication = getCurrentAuthentication();
 
             WebAuthnAuthenticationContext webAuthnAuthenticationContext =
@@ -107,7 +104,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    Authentication getCurrentAuthentication(){
+    Authentication getCurrentAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 

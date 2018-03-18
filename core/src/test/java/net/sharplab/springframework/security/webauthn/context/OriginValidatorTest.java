@@ -31,7 +31,7 @@ public class OriginValidatorTest {
     private OriginValidator target = new OriginValidator();
 
     @Test
-    public void test(){
+    public void test() {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
@@ -42,7 +42,7 @@ public class OriginValidatorTest {
     }
 
     @Test(expected = BadOriginException.class)
-    public void test_with_not_equal_origins(){
+    public void test_with_not_equal_origins() {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 

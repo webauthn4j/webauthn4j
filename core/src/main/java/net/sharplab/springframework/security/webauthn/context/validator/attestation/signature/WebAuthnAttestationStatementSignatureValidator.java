@@ -22,7 +22,7 @@ import net.sharplab.springframework.security.webauthn.context.WebAuthnRegistrati
 /**
  * Validates {@link WebAuthnAttestationStatement}'s signature
  */
-public class WebAuthnAttestationStatementSignatureValidator implements AttestationStatementSignatureValidator{
+public class WebAuthnAttestationStatementSignatureValidator implements AttestationStatementSignatureValidator {
     @Override
     public void validate(WebAuthnRegistrationContext registrationContext) {
         throw new IllegalStateException(); //TODO not implemented

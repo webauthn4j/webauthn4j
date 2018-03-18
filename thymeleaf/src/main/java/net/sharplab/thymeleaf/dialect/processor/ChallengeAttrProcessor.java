@@ -26,7 +26,7 @@ public class ChallengeAttrProcessor extends AbstractAttributeTagProcessor {
                 false,
                 "challenge",
                 true,
-                 precedence,
+                precedence,
                 true);
     }
 
@@ -37,14 +37,14 @@ public class ChallengeAttrProcessor extends AbstractAttributeTagProcessor {
         structureHandler.setAttribute(TARGET_ATTR_NAME, challengeValue);
     }
 
-    private Challenge getChallenge(ITemplateContext context){
+    private Challenge getChallenge(ITemplateContext context) {
         ApplicationContext applicationContext = SpringContextUtils.getApplicationContext(context);
         IWebContext webContext = (IWebContext) context;
         HttpServletRequest httpServletRequest = webContext.getRequest();
         HttpServletResponse httpServletResponse = webContext.getResponse();
         ChallengeRepository challengeRepository = applicationContext.getBean(ChallengeRepository.class);
         Challenge challenge = challengeRepository.loadChallenge(httpServletRequest);
-        if(challenge == null){
+        if (challenge == null) {
             challenge = challengeRepository.generateChallenge();
             challengeRepository.saveChallenge(challenge, httpServletRequest, httpServletResponse);
         }

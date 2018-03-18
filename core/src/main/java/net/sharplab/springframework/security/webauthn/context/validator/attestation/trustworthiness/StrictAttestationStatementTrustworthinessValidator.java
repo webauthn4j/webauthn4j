@@ -31,7 +31,7 @@ public class StrictAttestationStatementTrustworthinessValidator extends Abstract
 
     private FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService;
 
-    public StrictAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public StrictAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         super();
         this.fidoMetadataServiceTrustAnchorService = fidoMetadataServiceTrustAnchorService;
     }

@@ -46,7 +46,7 @@ public class CertPathDeserializer extends StdDeserializer<CertPath> {
         ObjectCodec oc = p.getCodec();
         ArrayNode node = oc.readTree(p);
         List<Certificate> list = new ArrayList<>();
-        for(JsonNode item : node){
+        for (JsonNode item : node) {
             X509Certificate certificate = oc.treeToValue(item, X509Certificate.class);
             list.add(certificate);
         }

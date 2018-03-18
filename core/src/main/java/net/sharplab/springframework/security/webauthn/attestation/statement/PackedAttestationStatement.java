@@ -61,7 +61,7 @@ public class PackedAttestationStatement implements WebAuthnAttestationStatement 
 
     @Override
     public boolean isSelfAttested() {
-        if(x5c.getCertificates().size()>1){
+        if (x5c.getCertificates().size() > 1) {
             return false;
         }
         X509Certificate attestationCertificate = getEndEntityCertificate();
@@ -70,7 +70,7 @@ public class PackedAttestationStatement implements WebAuthnAttestationStatement 
 
     @Override
     public X509Certificate getEndEntityCertificate() {
-        if(x5c.getCertificates().isEmpty()){
+        if (x5c.getCertificates().isEmpty()) {
             throw new IllegalStateException();
         }
         return (X509Certificate) x5c.getCertificates().get(0);

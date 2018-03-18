@@ -34,7 +34,6 @@ import org.springframework.util.Assert;
 public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider implements AuthenticationProvider {
 
 
-
     // ~ Instance fields
     // ================================================================================================
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
@@ -42,7 +41,7 @@ public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider implemen
     private boolean passwordAuthenticationAllowed = true;
 
 
-    public WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider(AbstractUserDetailsAuthenticationProvider authenticationProvider){
+    public WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider(AbstractUserDetailsAuthenticationProvider authenticationProvider) {
         Assert.notNull(authenticationProvider, "Authentication provider must be set");
         this.authenticationProvider = authenticationProvider;
     }
@@ -53,15 +52,15 @@ public class WebAuthnFirstOfMultiFactorDelegatingAuthenticationProvider implemen
             throw new IllegalArgumentException("Only FirstOfMultiFactorAuthenticationToken is supported, " + authentication.getClass() + " was attempted");
         }
 
-        FirstOfMultiFactorAuthenticationToken firstOfMultiFactorAuthenticationToken = (FirstOfMultiFactorAuthenticationToken)authentication;
+        FirstOfMultiFactorAuthenticationToken firstOfMultiFactorAuthenticationToken = (FirstOfMultiFactorAuthenticationToken) authentication;
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(firstOfMultiFactorAuthenticationToken.getPrincipal(), firstOfMultiFactorAuthenticationToken.getCredentials());
 
-        Authentication result =  authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
+        Authentication result = authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
 
-        if(passwordAuthenticationAllowed && result.isAuthenticated() && result.getPrincipal() instanceof WebAuthnUserDetails){
+        if (passwordAuthenticationAllowed && result.isAuthenticated() && result.getPrincipal() instanceof WebAuthnUserDetails) {
             WebAuthnUserDetails userDetails = (WebAuthnUserDetails) result.getPrincipal();
-            if(userDetails.isPasswordAuthenticationAllowed()){
+            if (userDetails.isPasswordAuthenticationAllowed()) {
                 return result;
             }
         }

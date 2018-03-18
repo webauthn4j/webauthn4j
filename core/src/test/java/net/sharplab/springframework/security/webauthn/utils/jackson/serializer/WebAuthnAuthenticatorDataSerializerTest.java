@@ -46,7 +46,7 @@ public class WebAuthnAuthenticatorDataSerializerTest {
         byte[] aaGuid = new byte[16];
 
         byte[] rpIdHash = new byte[32];
-        byte flags = (byte)(BIT_UP | BIT_AT);
+        byte flags = (byte) (BIT_UP | BIT_AT);
         long counter = 325;
 
         WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData();

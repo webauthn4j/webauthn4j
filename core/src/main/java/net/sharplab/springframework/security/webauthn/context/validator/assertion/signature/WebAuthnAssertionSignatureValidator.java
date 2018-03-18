@@ -32,11 +32,11 @@ public class WebAuthnAssertionSignatureValidator extends AbstractAssertionSignat
         return !"fido-u2f".equals(format);
     }
 
-    protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext){
+    protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
         String hashAlgorithm = webAuthnAuthenticationContext.getCollectedClientData().getHashAlgorithm();
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest(hashAlgorithm);
         byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getRawClientData());
-        byte[] rawAuthenticatorData= webAuthnAuthenticationContext.getRawAuthenticatorData();
+        byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getRawAuthenticatorData();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 

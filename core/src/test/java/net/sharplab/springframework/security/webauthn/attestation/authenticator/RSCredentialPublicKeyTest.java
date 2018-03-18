@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RSCredentialPublicKeyTest {
 
     @Test
-    public void equals_test(){
+    public void equals_test() {
         RSCredentialPublicKey instanceA = CoreTestUtil.createRSCredentialPublicKey();
         RSCredentialPublicKey instanceB = CoreTestUtil.createRSCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);

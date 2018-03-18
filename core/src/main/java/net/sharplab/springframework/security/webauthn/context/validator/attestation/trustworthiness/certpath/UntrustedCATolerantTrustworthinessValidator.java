@@ -37,7 +37,7 @@ public class UntrustedCATolerantTrustworthinessValidator implements CertPathTrus
     @Override
     public void validate(WebAuthnAttestationStatement attestationStatement) {
         X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
-        if(attestationCertificate == null){
+        if (attestationCertificate == null) {
             return;
         }
         try {

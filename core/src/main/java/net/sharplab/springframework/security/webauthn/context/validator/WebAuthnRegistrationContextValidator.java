@@ -51,7 +51,7 @@ public class WebAuthnRegistrationContextValidator {
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
 
-    public WebAuthnRegistrationContextValidator(AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator){
+    public WebAuthnRegistrationContextValidator(AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator) {
         attestationStatementSignatureValidators = Arrays.asList(
                 new FIDOU2FAttestationStatementSignatureValidator(),
                 new WebAuthnAttestationStatementSignatureValidator(),
@@ -60,7 +60,7 @@ public class WebAuthnRegistrationContextValidator {
         this.attestationStatementTrustworthinessValidator = attestationStatementTrustworthinessValidator;
     }
 
-    public void validate(WebAuthnRegistrationContext registrationContext){
+    public void validate(WebAuthnRegistrationContext registrationContext) {
 
         CollectedClientData collectedClientData = registrationContext.getCollectedClientData();
         WebAuthnAttestationObject attestationObject = registrationContext.getAttestationObject();
@@ -106,9 +106,9 @@ public class WebAuthnRegistrationContextValidator {
 
     }
 
-    void validateAttestationStatementSignature(WebAuthnRegistrationContext registrationContext){
-        for(AttestationStatementSignatureValidator attestationStatementSignatureValidator : attestationStatementSignatureValidators){
-            if(attestationStatementSignatureValidator.supports(registrationContext.getAttestationObject().getFormat())){
+    void validateAttestationStatementSignature(WebAuthnRegistrationContext registrationContext) {
+        for (AttestationStatementSignatureValidator attestationStatementSignatureValidator : attestationStatementSignatureValidators) {
+            if (attestationStatementSignatureValidator.supports(registrationContext.getAttestationObject().getFormat())) {
                 attestationStatementSignatureValidator.validate(registrationContext);
                 return;
             }

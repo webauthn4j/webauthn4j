@@ -39,7 +39,7 @@ public class FIDOU2FAttestationStatementSignatureValidator implements Attestatio
 
     @Override
     public void validate(WebAuthnRegistrationContext registrationContext) {
-        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement)registrationContext.getAttestationObject().getAttestationStatement();
+        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationContext.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationContext); //TODO
         byte[] signature = attestationStatement.getSig();
@@ -49,7 +49,7 @@ public class FIDOU2FAttestationStatementSignatureValidator implements Attestatio
             Signature verifier = Signature.getInstance("SHA256withECDSA");
             verifier.initVerify(publicKey);
             verifier.update(signedData);
-            if(verifier.verify(signature)){
+            if (verifier.verify(signature)) {
                 return;
             }
             throw new BadSignatureException(messages.getMessage("FIDOU2FAttestationStatementSignatureValidator.BadSignature", "Bad signature"));
@@ -86,7 +86,7 @@ public class FIDOU2FAttestationStatementSignatureValidator implements Attestatio
         byte[] userPublicKeyBytes = userPublicKey.getEncodedPublicValue();
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
-        byteBuffer.put((byte)0x00); //RFU
+        byteBuffer.put((byte) 0x00); //RFU
         byteBuffer.put(applicationParameter);
         byteBuffer.put(challengeParameter);
         byteBuffer.put(keyHandle);
@@ -94,7 +94,7 @@ public class FIDOU2FAttestationStatementSignatureValidator implements Attestatio
         return byteBuffer.array();
     }
 
-    private PublicKey getPublicKey(FIDOU2FAttestationStatement attestationStatement){
+    private PublicKey getPublicKey(FIDOU2FAttestationStatement attestationStatement) {
         Certificate cert = attestationStatement.getX5c().getCertificates().get(0);
         return cert.getPublicKey();
     }

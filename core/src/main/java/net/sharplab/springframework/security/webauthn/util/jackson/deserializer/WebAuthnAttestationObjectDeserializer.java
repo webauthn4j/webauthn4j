@@ -53,12 +53,12 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
     public WebAuthnAttestationObject deserialize(JsonParser p, DeserializationContext context) throws IOException {
         ObjectCodec oc = p.getCodec();
         JsonNode node = oc.readTree(p);
-        WebAuthnAuthenticatorData webAuthnAuthenticatorData =  oc.treeToValue(node.get("authData"), WebAuthnAuthenticatorData.class);
+        WebAuthnAuthenticatorData webAuthnAuthenticatorData = oc.treeToValue(node.get("authData"), WebAuthnAuthenticatorData.class);
         String format = node.get("fmt").asText();
         JsonNode attestationStatementNode = node.get("attStmt");
         WebAuthnAttestationStatement attestationStatement;
         Class attestationStatementType = attestationStatementTypeMap.getOrDefault(format, null);
-        if(attestationStatementType == null){
+        if (attestationStatementType == null) {
             throw new UnsupportedArgumentException(messages.getMessage(
                     "WebAuthnAttestationObjectDeserializer.unsupportedFormat",
                     "Format is not supported"));
@@ -79,7 +79,6 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
         attestationStatementTypeMap.put("packed", PackedAttestationStatement.class);
         attestationStatementTypeMap.put("none", NoneAttestationStatement.class);
     }
-
 
 
 }

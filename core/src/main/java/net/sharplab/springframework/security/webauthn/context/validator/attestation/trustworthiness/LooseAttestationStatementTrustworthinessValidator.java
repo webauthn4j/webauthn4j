@@ -31,7 +31,7 @@ public class LooseAttestationStatementTrustworthinessValidator extends AbstractA
 
     private FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService;
 
-    public LooseAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public LooseAttestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         super();
         this.fidoMetadataServiceTrustAnchorService = fidoMetadataServiceTrustAnchorService;
     }

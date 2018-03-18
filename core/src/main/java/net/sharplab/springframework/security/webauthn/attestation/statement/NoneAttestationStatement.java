@@ -18,7 +18,7 @@ package net.sharplab.springframework.security.webauthn.attestation.statement;
 
 import java.security.cert.X509Certificate;
 
-public class NoneAttestationStatement implements WebAuthnAttestationStatement{
+public class NoneAttestationStatement implements WebAuthnAttestationStatement {
 
     public static final String FORMAT = "none";
 

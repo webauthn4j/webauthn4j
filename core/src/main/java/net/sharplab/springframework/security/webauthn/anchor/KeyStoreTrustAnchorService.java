@@ -35,7 +35,7 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
     /**
      * Default constructor
      */
-    public KeyStoreTrustAnchorService(){
+    public KeyStoreTrustAnchorService() {
         KeyStoreTrustAnchorProvider keyStoreTrustAnchorProvider = new KeyStoreTrustAnchorProvider();
         this.cachedTrustAnchors = keyStoreTrustAnchorProvider.provide(keyStore, password);
     }
@@ -50,6 +50,7 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
     /**
      * Provides keyStore file resource
+     *
      * @return keyStore file resource
      */
     public Resource getKeyStore() {
@@ -58,6 +59,7 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
     /**
      * Sets keyStore file resource
+     *
      * @param keyStore keyStore file resource
      */
     public void setKeyStore(Resource keyStore) {
@@ -66,6 +68,7 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
     /**
      * Provides keyStore file password
+     *
      * @return keyStore file password
      */
     public String getPassword() {
@@ -74,6 +77,7 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
     /**
      * Sets keyStore file password
+     *
      * @param password keyStore file password
      */
     public void setPassword(String password) {

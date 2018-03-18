@@ -31,7 +31,7 @@ public class RpIdHashValidatorTest {
     private RpIdHashValidator target = new RpIdHashValidator();
 
     @Test
-    public void verifyRpIdHash_test(){
+    public void verifyRpIdHash_test() {
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -45,7 +45,7 @@ public class RpIdHashValidatorTest {
     }
 
     @Test(expected = BadRpIdException.class)
-    public void verifyRpIdHash_test_with_different_rpIds(){
+    public void verifyRpIdHash_test_with_different_rpIds() {
 
         String rpIdA = "sub.example.com";
         String rpIdB = "example.com";

@@ -28,7 +28,7 @@ public class WebAuthnAttestationObjectToBase64StringConverterTest {
     private Base64StringToWebAuthnAttestationObjectConverter base64StringToWebAuthnAttestationObjectConverter = new Base64StringToWebAuthnAttestationObjectConverter();
 
     @Test
-    public void convert_test(){
+    public void convert_test() {
         WebAuthnAttestationObject input = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         String result = target.convert(input);
         WebAuthnAttestationObject deserialized = base64StringToWebAuthnAttestationObjectConverter.convert(result);

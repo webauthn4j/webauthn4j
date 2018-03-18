@@ -23,7 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class UnsignedNumberUtil {
 
-    private UnsignedNumberUtil(){}
+    private UnsignedNumberUtil() {
+    }
 
     public static int getUnsignedShort(ByteBuffer byteBuffer) {
         return (int) byteBuffer.getShort() & 0xffff;

@@ -96,15 +96,8 @@ public class WebAuthnAuthenticationProviderTest {
     }
 
 
-
-
-
-
-
-
-
     @Test
-    public void retrieveWebAuthnAuthenticator_test(){
+    public void retrieveWebAuthnAuthenticator_test() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
         WebAuthnAuthenticator expectedAuthenticator = mock(WebAuthnAuthenticator.class);
@@ -121,7 +114,7 @@ public class WebAuthnAuthenticationProviderTest {
     }
 
     @Test(expected = BadCredentialsException.class)
-    public void retrieveWebAuthnAuthenticator_test_with_CredentialIdNotFoundException(){
+    public void retrieveWebAuthnAuthenticator_test_with_CredentialIdNotFoundException() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
 
@@ -133,7 +126,7 @@ public class WebAuthnAuthenticationProviderTest {
     }
 
     @Test(expected = CredentialIdNotFoundException.class)
-    public void retrieveWebAuthnAuthenticator_test_with_CredentialIdNotFoundException_and_hideCredentialIdNotFoundExceptions_option_false(){
+    public void retrieveWebAuthnAuthenticator_test_with_CredentialIdNotFoundException_and_hideCredentialIdNotFoundExceptions_option_false() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
 
@@ -146,7 +139,7 @@ public class WebAuthnAuthenticationProviderTest {
     }
 
     @Test(expected = InternalAuthenticationServiceException.class)
-    public void retrieveWebAuthnAuthenticator_test_with_RuntimeException_from_webAuthnAuthenticatorService(){
+    public void retrieveWebAuthnAuthenticator_test_with_RuntimeException_from_webAuthnAuthenticatorService() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
 
@@ -159,7 +152,7 @@ public class WebAuthnAuthenticationProviderTest {
     }
 
     @Test(expected = InternalAuthenticationServiceException.class)
-    public void retrieveWebAuthnAuthenticator_test_with_null_from_webAuthnAuthenticatorService(){
+    public void retrieveWebAuthnAuthenticator_test_with_null_from_webAuthnAuthenticatorService() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
 

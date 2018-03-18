@@ -33,7 +33,7 @@ public class WebAuthnAttestationObjectToBase64StringConverter implements Convert
 
     private ObjectMapper objectMapper;
 
-    public WebAuthnAttestationObjectToBase64StringConverter(){
+    public WebAuthnAttestationObjectToBase64StringConverter() {
         this.objectMapper = new ObjectMapper(new CBORFactory());
         this.objectMapper.registerModule(new WebAuthnModule());
     }

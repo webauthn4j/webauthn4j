@@ -27,7 +27,7 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
 
     private FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService;
 
-    public FIDOMetadataServiceCertPathTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public FIDOMetadataServiceCertPathTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         this.fidoMetadataServiceTrustAnchorService = fidoMetadataServiceTrustAnchorService;
     }
 
@@ -35,11 +35,11 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
     public void validate(WebAuthnAttestationStatement attestationStatement) {
 
         Metadata metadata = fidoMetadataServiceTrustAnchorService.findMetadata(attestationStatement);
-        if(metadata == null){
+        if (metadata == null) {
             throw new RuntimeException(); //TODO
         }
         metadata.getStatusReports().forEach(report -> {
-            switch (report.getStatus()){
+            switch (report.getStatus()) {
                 case FIDO_CERTIFIED:
                 case UPDATE_AVAILABLE:
                 case NOT_FIDO_CERTIFIED:

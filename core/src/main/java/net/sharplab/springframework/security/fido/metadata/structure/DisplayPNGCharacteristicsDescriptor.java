@@ -31,15 +31,15 @@ public class DisplayPNGCharacteristicsDescriptor {
     @JsonProperty
     private BigInteger height;
     @JsonProperty
-    private Short      bitDepth;
+    private Short bitDepth;
     @JsonProperty
-    private Short      colorType;
+    private Short colorType;
     @JsonProperty
-    private Short      compression;
+    private Short compression;
     @JsonProperty
-    private Short      filter;
+    private Short filter;
     @JsonProperty
-    private Short      interlace;
+    private Short interlace;
     @JsonProperty
     private List<RGBPalletteEntry> plte;
 }

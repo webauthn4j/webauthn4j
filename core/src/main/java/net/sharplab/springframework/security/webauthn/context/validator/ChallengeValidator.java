@@ -37,7 +37,7 @@ public class ChallengeValidator {
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
 
-    public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty){
+    public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
         Challenge savedChallenge = relyingParty.getChallenge();
         if (savedChallenge == null) {
             logger.debug("Authentication failed: challenge is not stored in the challenge repository");

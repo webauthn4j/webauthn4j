@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnDialectTest {
 
     @Test
-    public void initialize_with_prefix(){
+    public void initialize_with_prefix() {
         WebAuthnDialect target = new WebAuthnDialect("prefix");
         assertThat(target.getPrefix()).isEqualTo("prefix");
         assertThat(target.getProcessors("prefix")).hasSize(1);
@@ -16,7 +16,7 @@ public class WebAuthnDialectTest {
     }
 
     @Test
-    public void initialize_without_prefix(){
+    public void initialize_without_prefix() {
         WebAuthnDialect target = new WebAuthnDialect();
         assertThat(target.getPrefix()).isEqualTo("webauthn");
         assertThat(target.getProcessors("prefix")).hasSize(1);

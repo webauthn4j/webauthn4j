@@ -71,8 +71,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
         List<Extension> extensions;
         if (webAuthnAuthenticatorData.isFlagAT()) {
             attestationData = deserializeAttestedCredentialData(byteBuffer);
-        }
-        else {
+        } else {
             attestationData = null;
         }
         if (webAuthnAuthenticatorData.isFlagED()) {
@@ -121,7 +120,8 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         try {
-            return objectMapper.readValue(remaining, new TypeReference<List<Extension>>(){});
+            return objectMapper.readValue(remaining, new TypeReference<List<Extension>>() {
+            });
         } catch (IOException e) {
             throw new IllegalArgumentException(e);//TODO
         }

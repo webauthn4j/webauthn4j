@@ -45,11 +45,11 @@ public class FIDOMetadataServiceTrustAnchorService {
     LocalDate nextUpdate;
     LocalDateTime lastRefresh;
 
-    public FIDOMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient){
+    public FIDOMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient) {
         this.fidoMetadataServiceClient = fidoMetadataServiceClient;
     }
 
-    public Metadata findMetadata(WebAuthnAttestationStatement attestationStatement){
+    public Metadata findMetadata(WebAuthnAttestationStatement attestationStatement) {
         FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
         CertPath certPath = fidoU2FAttestationStatement.getX5c();
         Map<TrustAnchor, Metadata> metadataMap = getMetadataMap();
@@ -62,7 +62,7 @@ public class FIDOMetadataServiceTrustAnchorService {
 
         PKIXCertPathBuilderResult result;
         try {
-            result = (PKIXCertPathBuilderResult)certPathValidator.validate(certPath, certPathParameters);
+            result = (PKIXCertPathBuilderResult) certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
             throw new IllegalStateException(e);
         } catch (CertPathValidatorException e) {
@@ -72,24 +72,24 @@ public class FIDOMetadataServiceTrustAnchorService {
         return metadataMap.get(result.getTrustAnchor());
     }
 
-    public Map<TrustAnchor, Metadata> getMetadataMap(){
-        if(needsRefresh()){
+    public Map<TrustAnchor, Metadata> getMetadataMap() {
+        if (needsRefresh()) {
             cachedMetadataMap = refreshMetadataMap();
         }
         return cachedMetadataMap;
     }
 
-    boolean needsRefresh(){
+    boolean needsRefresh() {
         return cachedMetadataMap == null || (!nextUpdate.isAfter(LocalDate.now()) && lastRefresh.isBefore(LocalDateTime.now().minusHours(1)));
     }
 
-    Map<TrustAnchor, Metadata> refreshMetadataMap(){
+    Map<TrustAnchor, Metadata> refreshMetadataMap() {
         MetadataTOCPayload metadataTOC = fidoMetadataServiceClient.retrieveMetadataTOC();
         List<MetadataTOCPayloadEntry> entries = metadataTOC.getEntries();
 
         Map<TrustAnchor, Metadata> metadataMap = new HashMap<>();
 
-        for(MetadataTOCPayloadEntry entry : entries){
+        for (MetadataTOCPayloadEntry entry : entries) {
             MetadataStatement metadataStatement = fidoMetadataServiceClient.retrieveMetadataStatement(entry.getUrl());
             Metadata metadata = new Metadata();
             metadata.setAaid(entry.getAaid());
@@ -98,7 +98,7 @@ public class FIDOMetadataServiceTrustAnchorService {
             metadata.setTimeOfLastStatusChange(entry.getTimeOfLastStatusChange());
             metadata.setAttestationCertificateKeyIdentifiers(entry.getAttestationCertificateKeyIdentifiers());
             metadata.setMetadataStatement(metadataStatement);
-            for(X509Certificate certificate : metadataStatement.getAttestationRootCertificates()){
+            for (X509Certificate certificate : metadataStatement.getAttestationRootCertificates()) {
                 metadataMap.put(new TrustAnchor(certificate, null), metadata);
             }
         }

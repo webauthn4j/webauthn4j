@@ -53,7 +53,7 @@ public class WebAuthnAuthenticatorDataSerializer extends StdSerializer<WebAuthnA
         byteArrayOutputStream.write(value.getRpIdHash());
         byteArrayOutputStream.write(new byte[]{value.getFlags()});
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(value.getCounter()));
-        if(value.getAttestationData() != null){
+        if (value.getAttestationData() != null) {
             byteArrayOutputStream.write(serializeAttestationData(value.getAttestationData()));
         }
         byteArrayOutputStream.write(serializeExtensions(value.getExtensions()));
@@ -70,7 +70,7 @@ public class WebAuthnAuthenticatorDataSerializer extends StdSerializer<WebAuthnA
         return byteArrayOutputStream.toByteArray();
     }
 
-    private byte[] serializeExtensions(List<Extension> extensions){
+    private byte[] serializeExtensions(List<Extension> extensions) {
         return new byte[0]; //TODO: to be implemented
     }
 
