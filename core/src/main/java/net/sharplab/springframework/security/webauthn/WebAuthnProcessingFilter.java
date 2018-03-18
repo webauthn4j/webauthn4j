@@ -140,6 +140,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
      *
      * @param postOnly Flag to restrict HTTP method to POST.
      */
+    @Override
     public void setPostOnly(boolean postOnly) {
         this.postOnly = postOnly;
     }

@@ -64,8 +64,7 @@ public class WebSecurityBeanConfig {
 
     @Bean
     public RelyingPartyProvider relyingPartyProvider(ChallengeRepository challengeRepository){
-        RelyingPartyProvider relyingPartyProvider = new RelyingPartyProviderImpl(challengeRepository);
-        return relyingPartyProvider;
+        return new RelyingPartyProviderImpl(challengeRepository);
     }
 
     @Bean //TODO:なぜBean化が自前で必要？
@@ -135,8 +134,7 @@ public class WebSecurityBeanConfig {
 
     @Bean
     public InvalidSessionAccessDeniedHandler invalidSessionAccessDeniedHandler(InvalidSessionStrategy invalidSessionStrategy){
-        InvalidSessionAccessDeniedHandler accessDeniedHandler = new InvalidSessionAccessDeniedHandler(invalidSessionStrategy);
-        return accessDeniedHandler;
+        return new InvalidSessionAccessDeniedHandler(invalidSessionStrategy);
     }
 
     @Bean

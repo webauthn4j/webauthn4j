@@ -50,7 +50,6 @@ public class StrictAttestationStatementTrustworthinessValidator extends Abstract
 
     @Override
     public CertPathTrustworthinessValidator getCertPathTrustworthinessValidator() {
-        FIDOMetadataServiceCertPathTrustworthinessValidator certPathTrustworthinessValidator = new FIDOMetadataServiceCertPathTrustworthinessValidator(fidoMetadataServiceTrustAnchorService);
-        return certPathTrustworthinessValidator;
+        return new FIDOMetadataServiceCertPathTrustworthinessValidator(fidoMetadataServiceTrustAnchorService);
     }
 }

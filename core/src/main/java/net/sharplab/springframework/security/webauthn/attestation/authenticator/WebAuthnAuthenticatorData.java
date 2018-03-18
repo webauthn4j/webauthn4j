@@ -34,9 +34,6 @@ public class WebAuthnAuthenticatorData implements Serializable {
     private WebAuthnAttestedCredentialData attestationData;
     private List<Extension> extensions;
 
-    public WebAuthnAuthenticatorData() {
-    }
-
     public byte[] getRpIdHash() {
         return rpIdHash;
     }

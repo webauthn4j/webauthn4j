@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public class UUIDUtil {
 
+    private UUIDUtil(){}
+
     public static byte[] toByteArray(UUID uuid) {
         long hi = uuid.getMostSignificantBits();
         long lo = uuid.getLeastSignificantBits();
