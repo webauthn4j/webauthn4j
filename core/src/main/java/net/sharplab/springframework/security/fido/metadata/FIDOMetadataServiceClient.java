@@ -89,15 +89,10 @@ public class FIDOMetadataServiceClient {
 
     public MetadataStatement retrieveMetadataStatement(URI uri) {
         ResponseEntity<String> responseEntity;
-        try {
-            responseEntity = restTemplate.getForEntity(uri, String.class);
-        } catch (RuntimeException e) {
-            throw e;
-        }
+        responseEntity = restTemplate.getForEntity(uri, String.class);
         String decoded = new String(Base64Utils.decodeFromString(responseEntity.getBody()), StandardCharsets.UTF_8);
         try {
-            MetadataStatement metadataStatement = objectMapper.readValue(decoded, MetadataStatement.class);
-            return metadataStatement;
+            return objectMapper.readValue(decoded, MetadataStatement.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

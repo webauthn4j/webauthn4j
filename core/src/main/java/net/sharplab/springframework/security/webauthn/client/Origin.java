@@ -37,20 +37,20 @@ public class Origin implements Serializable {
         URI uri = URI.create(originUrl);
         this.scheme = uri.getScheme();
         this.serverName = uri.getHost();
-        int port = uri.getPort();
-        if (port == -1) {
+        int originPort = uri.getPort();
+        if (originPort == -1) {
             switch (this.scheme) {
                 case "https":
-                    port = 443;
+                    originPort = 443;
                     break;
                 case "http":
-                    port = 80;
+                    originPort = 80;
                     break;
                 default:
                     throw new IllegalArgumentException();
             }
         }
-        this.port = port;
+        this.port = originPort;
     }
 
     public String getScheme() {

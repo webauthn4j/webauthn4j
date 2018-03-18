@@ -22,6 +22,7 @@ import net.sharplab.springframework.security.webauthn.exception.UnsupportedArgum
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.SpringSecurityMessageSource;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.AlgorithmParameters;
 import java.security.KeyFactory;
@@ -34,7 +35,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties({"publicKey", "curveName", "algorithmName"})
-public class ESCredentialPublicKey extends AbstractCredentialPublicKey {
+public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
     protected transient MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
@@ -102,7 +103,6 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey {
     }
 
     private String getCurveName() {
-        int curve = getCurve();
         switch (curve) {
             case 1:
                 return "secp256r1";

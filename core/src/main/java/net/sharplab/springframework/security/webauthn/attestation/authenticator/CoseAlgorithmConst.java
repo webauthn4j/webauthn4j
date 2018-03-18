@@ -18,6 +18,8 @@ package net.sharplab.springframework.security.webauthn.attestation.authenticator
 
 public class CoseAlgorithmConst {
 
+    private CoseAlgorithmConst(){}
+
     public static final int RS256 = -257;
     public static final int RS384 = -258;
     public static final int RS512 = -259;

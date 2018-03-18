@@ -19,9 +19,8 @@ package net.sharplab.springframework.security.webauthn.client;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.extension.Extension;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 
-import java.beans.Transient;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * CollectedClientData
@@ -35,8 +34,8 @@ public class CollectedClientData implements Serializable {
     private String hashAlgorithm;
     private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17,
     // made it Object type
-    private HashMap<String, Extension> clientExtensions;
-    private HashMap<String, Extension> authenticatorExtensions;
+    private Map<String, Extension> clientExtensions;
+    private Map<String, Extension> authenticatorExtensions;
 
 
     public String getType() {
@@ -79,19 +78,19 @@ public class CollectedClientData implements Serializable {
         this.tokenBinding = tokenBinding;
     }
 
-    public HashMap<String, Extension> getClientExtensions() {
+    public Map<String, Extension> getClientExtensions() {
         return clientExtensions;
     }
 
-    public void setClientExtensions(HashMap<String, Extension> clientExtensions) {
+    public void setClientExtensions(Map<String, Extension> clientExtensions) {
         this.clientExtensions = clientExtensions;
     }
 
-    public HashMap<String, Extension> getAuthenticatorExtensions() {
+    public Map<String, Extension> getAuthenticatorExtensions() {
         return authenticatorExtensions;
     }
 
-    public void setAuthenticatorExtensions(HashMap<String, Extension> authenticatorExtensions) {
+    public void setAuthenticatorExtensions(Map<String, Extension> authenticatorExtensions) {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 }

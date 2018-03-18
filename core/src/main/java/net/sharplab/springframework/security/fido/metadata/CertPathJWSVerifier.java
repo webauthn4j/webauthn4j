@@ -63,9 +63,9 @@ public class CertPathJWSVerifier implements JWSVerifier {
      */
     public void verify(JWSObject jws) {
         //trust anchor
-        X509Certificate rootCertificate = getX5c();
+        X509Certificate x509rootCertificate = getX5c();
         Set<TrustAnchor> trustAnchor = new HashSet<>();
-        trustAnchor.add(new TrustAnchor(rootCertificate, null)); //TODO null?
+        trustAnchor.add(new TrustAnchor(x509rootCertificate, null)); //TODO null?
 
         //certPath
         List<Certificate> certificates = getCertificatesFromJWSHeader(jws.getHeader());

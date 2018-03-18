@@ -50,7 +50,6 @@ public class LooseAttestationStatementTrustworthinessValidator extends AbstractA
 
     @Override
     public CertPathTrustworthinessValidator getCertPathTrustworthinessValidator() {
-        UntrustedCATolerantTrustworthinessValidator certPathTrustworthinessValidator = new UntrustedCATolerantTrustworthinessValidator();
-        return certPathTrustworthinessValidator;
+        return new UntrustedCATolerantTrustworthinessValidator();
     }
 }

@@ -16,9 +16,10 @@
 
 package net.sharplab.springframework.security.webauthn.attestation.authenticator;
 
+import java.io.Serializable;
 import java.security.PublicKey;
 
-public interface CredentialPublicKey {
+public interface CredentialPublicKey extends Serializable {
 
     boolean verifySignature(byte[] signature, byte[] data);
 
