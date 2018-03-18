@@ -167,8 +167,7 @@ public class CoreTestUtil {
     }
 
     public static Origin createOrigin() {
-        Origin origin = new Origin("https://localhost:8080");
-        return origin;
+        return new Origin("https://localhost:8080");
     }
 
     public static RelyingParty createRelyingParty() {

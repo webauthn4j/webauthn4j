@@ -32,7 +32,7 @@ public class ModelMapperAppConfig {
         modelMapper.addConverter(new UserUpdateFormToUserConverter());
         modelMapper.addConverter(new UserPasswordFormToUserConverter(passwordEncoder));
         modelMapper.addConverter(new UserToUserFormConverter());
-        modelMapper.addConverter(new ProfileUpdateFormToUserConverter(passwordEncoder));
+        modelMapper.addConverter(new ProfileUpdateFormToUserConverter());
         modelMapper.addConverter(new UserToProfileFormConverter());
         modelMapper.addConverter(new AuthorityToAuthorityFormConverter());
         modelMapper.addConverter(new AuthorityFormToAuthorityUpdateDtoConverter());

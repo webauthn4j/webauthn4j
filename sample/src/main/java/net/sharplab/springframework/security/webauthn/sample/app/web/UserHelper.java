@@ -40,7 +40,7 @@ public class UserHelper {
         if (authenticatorForms == null) {
             return true;
         }
-        boolean allValid = authenticatorForms.stream().allMatch(authenticator -> {
+        return authenticatorForms.stream().allMatch(authenticator -> {
             try{
                 WebAuthnRegistrationContext registrationContext = registrationContextProvider.provide(
                         request,
@@ -55,6 +55,5 @@ public class UserHelper {
                 return false;
             }
         });
-        return allValid;
     }
 }

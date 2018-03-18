@@ -18,13 +18,6 @@ import static net.sharplab.springframework.security.webauthn.sample.domain.const
  */
 public class ProfileUpdateFormToUserConverter implements Converter<ProfileUpdateForm, User> {
 
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public ProfileUpdateFormToUserConverter(PasswordEncoder passwordEncoder){
-        this.passwordEncoder = passwordEncoder;
-    }
-
     /**
      * Converts the {@link MappingContext#getSource()} to an instance of
      * {@link MappingContext#getDestinationType()}.

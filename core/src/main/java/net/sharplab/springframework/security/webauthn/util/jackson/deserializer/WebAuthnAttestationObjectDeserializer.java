@@ -46,7 +46,7 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
 
     public WebAuthnAttestationObjectDeserializer() {
         super(WebAuthnAttestationObject.class);
-        initializeAttestationSatementTypeMap();
+        initializeAttestationStatementTypeMap();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
     }
 
     //TODO: polish and retrieve data from config
-    private void initializeAttestationSatementTypeMap() {
+    private void initializeAttestationStatementTypeMap() {
         attestationStatementTypeMap = new HashMap<>();
         attestationStatementTypeMap.put("fido-u2f", FIDOU2FAttestationStatement.class);
         attestationStatementTypeMap.put("packed", PackedAttestationStatement.class);
