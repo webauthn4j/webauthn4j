@@ -1,9 +1,9 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
 
-import net.sharplab.springframework.security.webauthn.attestation.statement.NoneAttestationStatement;
-import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
+import net.sharplab.springframework.security.webauthn.attestation.statement.NoneAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.PackedAttestationStatement;
+import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestationStatementVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.FIDOU2FAttestationStatementVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.NoneAttestationStatementVO;

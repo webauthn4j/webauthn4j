@@ -16,12 +16,12 @@
 
 package net.sharplab.springframework.security.webauthn.context.validator;
 
-import net.sharplab.springframework.security.webauthn.exception.BadChallengeException;
-import net.sharplab.springframework.security.webauthn.exception.MissingChallengeException;
-import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.DefaultChallenge;
+import net.sharplab.springframework.security.webauthn.context.RelyingParty;
+import net.sharplab.springframework.security.webauthn.exception.BadChallengeException;
+import net.sharplab.springframework.security.webauthn.exception.MissingChallengeException;
 import org.junit.Test;
 
 /**

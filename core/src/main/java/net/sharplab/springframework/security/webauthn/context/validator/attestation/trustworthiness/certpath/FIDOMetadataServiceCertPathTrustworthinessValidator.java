@@ -18,14 +18,7 @@ package net.sharplab.springframework.security.webauthn.context.validator.attesta
 
 import net.sharplab.springframework.security.fido.metadata.Metadata;
 import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
-import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
-import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
-
-import java.security.InvalidAlgorithmParameterException;
-import java.security.cert.*;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by ynojima on 2017/09/24.

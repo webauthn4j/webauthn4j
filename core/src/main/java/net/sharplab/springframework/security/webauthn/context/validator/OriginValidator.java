@@ -16,10 +16,10 @@
 
 package net.sharplab.springframework.security.webauthn.context.validator;
 
-import net.sharplab.springframework.security.webauthn.client.Origin;
-import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
-import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
+import net.sharplab.springframework.security.webauthn.client.Origin;
+import net.sharplab.springframework.security.webauthn.context.RelyingParty;
+import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.MessageSourceAccessor;

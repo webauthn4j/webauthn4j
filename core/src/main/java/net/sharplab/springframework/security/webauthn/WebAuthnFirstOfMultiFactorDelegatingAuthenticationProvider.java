@@ -19,11 +19,11 @@ package net.sharplab.springframework.security.webauthn;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.FirstOfMultiFactorAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.authentication.FirstOfMultiFactorAuthenticationToken;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.util.Assert;
 

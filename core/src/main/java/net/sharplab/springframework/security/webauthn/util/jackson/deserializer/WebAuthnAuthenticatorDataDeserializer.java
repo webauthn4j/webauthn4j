@@ -22,7 +22,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import net.sharplab.springframework.security.webauthn.attestation.authenticator.*;
+import net.sharplab.springframework.security.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
+import net.sharplab.springframework.security.webauthn.attestation.authenticator.ESCredentialPublicKey;
+import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAttestedCredentialData;
+import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.extension.Extension;
 import net.sharplab.springframework.security.webauthn.util.UnsignedNumberUtil;
 

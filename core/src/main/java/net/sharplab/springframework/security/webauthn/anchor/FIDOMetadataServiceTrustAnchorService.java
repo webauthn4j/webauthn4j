@@ -29,9 +29,10 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * FIDO Metadata Service backed TrustAnchorService

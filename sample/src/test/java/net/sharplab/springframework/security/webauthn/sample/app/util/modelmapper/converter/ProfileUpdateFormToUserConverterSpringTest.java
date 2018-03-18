@@ -1,18 +1,12 @@
 package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter;
 
-import net.sharplab.springframework.security.webauthn.sample.app.config.ModelMapperAppConfig;
-import net.sharplab.springframework.security.webauthn.sample.app.config.TestSecurityConfig;
-import net.sharplab.springframework.security.webauthn.sample.app.config.WebSecurityConfig;
 import net.sharplab.springframework.security.webauthn.sample.app.web.ProfileUpdateForm;
-import net.sharplab.springframework.security.webauthn.sample.domain.config.DomainConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
-import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.InfrastructureMockConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -21,8 +21,6 @@ import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
 import net.sharplab.springframework.security.fido.metadata.structure.MetadataStatement;
 import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOCPayload;
-import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOCPayloadEntry;
-import net.sharplab.springframework.security.fido.metadata.structure.StatusReport;
 import net.sharplab.springframework.security.webauthn.util.jackson.WebAuthnModule;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +31,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.security.cert.TrustAnchor;
-import java.security.cert.X509Certificate;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Client for FIDO Metadata Service
@@ -57,7 +48,7 @@ public class FIDOMetadataServiceClient {
 
     private String fidoMetadataServiceEndpoint;
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint){
+    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
         this.restTemplate = restTemplate;
         this.jwsVerifier = jwsVerifier;
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
@@ -66,11 +57,11 @@ public class FIDOMetadataServiceClient {
         objectMapper.registerModule(new WebAuthnModule());
     }
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier){
+    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier) {
         this(restTemplate, jwsVerifier, DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT);
     }
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, ResourceLoader resourceLoader){
+    public FIDOMetadataServiceClient(RestTemplate restTemplate, ResourceLoader resourceLoader) {
         this(restTemplate, new CertPathJWSVerifier(resourceLoader));
     }
 
@@ -96,12 +87,11 @@ public class FIDOMetadataServiceClient {
         return payload;
     }
 
-    public MetadataStatement retrieveMetadataStatement(URI uri){
+    public MetadataStatement retrieveMetadataStatement(URI uri) {
         ResponseEntity<String> responseEntity;
-        try{
+        try {
             responseEntity = restTemplate.getForEntity(uri, String.class);
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw e;
         }
         String decoded = new String(Base64Utils.decodeFromString(responseEntity.getBody()), StandardCharsets.UTF_8);
@@ -120,7 +110,6 @@ public class FIDOMetadataServiceClient {
     public void setFidoMetadataServiceEndpoint(String fidoMetadataServiceEndpoint) {
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
     }
-
 
 
 }

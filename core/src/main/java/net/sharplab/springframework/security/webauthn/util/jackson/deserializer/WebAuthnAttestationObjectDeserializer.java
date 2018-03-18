@@ -21,13 +21,13 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import net.sharplab.springframework.security.webauthn.attestation.statement.NoneAttestationStatement;
-import net.sharplab.springframework.security.webauthn.exception.UnsupportedArgumentException;
 import net.sharplab.springframework.security.webauthn.attestation.WebAuthnAttestationObject;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
+import net.sharplab.springframework.security.webauthn.attestation.statement.NoneAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.PackedAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
+import net.sharplab.springframework.security.webauthn.exception.UnsupportedArgumentException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.SpringSecurityMessageSource;
 

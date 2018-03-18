@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.AuthenticatorEntityList;
 import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.AuthorityEntityList;
 import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.GroupEntityList;
 

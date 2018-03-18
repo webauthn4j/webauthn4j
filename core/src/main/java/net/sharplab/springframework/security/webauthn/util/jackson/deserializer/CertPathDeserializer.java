@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
 
 import java.io.IOException;
-import java.security.cert.*;
+import java.security.cert.CertPath;
+import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 

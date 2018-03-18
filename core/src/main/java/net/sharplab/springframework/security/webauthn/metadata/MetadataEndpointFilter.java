@@ -17,7 +17,6 @@
 package net.sharplab.springframework.security.webauthn.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sharplab.springframework.security.webauthn.exception.MetadataException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationTrustResolver;

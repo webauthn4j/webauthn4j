@@ -16,9 +16,9 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
+import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.client.Origin;
-import net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.DefaultChallenge;
 import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;

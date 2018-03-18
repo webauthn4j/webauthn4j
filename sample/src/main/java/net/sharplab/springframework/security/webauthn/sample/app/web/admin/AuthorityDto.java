@@ -4,7 +4,6 @@ import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.Group;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 
-
 import java.util.List;
 
 /**

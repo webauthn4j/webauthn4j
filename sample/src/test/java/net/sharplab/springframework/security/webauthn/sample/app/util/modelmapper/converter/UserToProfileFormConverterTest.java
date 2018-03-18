@@ -2,8 +2,8 @@ package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapp
 
 import net.sharplab.springframework.security.webauthn.sample.app.web.ProfileUpdateForm;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.DomainConfig;
-import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.InfrastructureMockConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
+import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.InfrastructureMockConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;

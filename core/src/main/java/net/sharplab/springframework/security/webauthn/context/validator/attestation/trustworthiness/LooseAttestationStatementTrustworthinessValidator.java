@@ -17,7 +17,6 @@
 package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness;
 
 import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
-import net.sharplab.springframework.security.webauthn.anchor.WebAuthnTrustAnchorService;
 import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.certpath.UntrustedCATolerantTrustworthinessValidator;
 import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;

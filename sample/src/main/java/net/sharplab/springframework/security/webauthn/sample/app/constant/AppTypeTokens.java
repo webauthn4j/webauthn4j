@@ -3,7 +3,6 @@ package net.sharplab.springframework.security.webauthn.sample.app.constant;
 import net.sharplab.springframework.security.webauthn.sample.app.api.admin.CandidateGroupDto;
 import net.sharplab.springframework.security.webauthn.sample.app.api.admin.CandidateUserDto;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
-import net.sharplab.springframework.security.webauthn.sample.domain.model.Authenticator;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.PageImpl;
 

@@ -17,7 +17,6 @@
 package net.sharplab.springframework.security.webauthn.attestation.statement;
 
 import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
-import net.sharplab.springframework.security.webauthn.anchor.WebAuthnTrustAnchorService;
 import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnRegistrationContext;
 import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;

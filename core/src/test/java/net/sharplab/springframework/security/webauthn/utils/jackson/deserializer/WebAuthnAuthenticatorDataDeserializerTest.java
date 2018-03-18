@@ -21,8 +21,6 @@ import net.sharplab.springframework.security.webauthn.util.jackson.deserializer.
 import org.junit.Test;
 import org.springframework.util.Base64Utils;
 
-import java.io.IOException;
-
 import static net.sharplab.springframework.security.webauthn.attestation.authenticator.WebAuthnAuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 

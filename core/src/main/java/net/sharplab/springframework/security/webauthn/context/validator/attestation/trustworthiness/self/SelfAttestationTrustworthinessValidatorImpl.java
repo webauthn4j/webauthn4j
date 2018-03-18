@@ -17,7 +17,6 @@
 package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.self;
 
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
-import net.sharplab.springframework.security.webauthn.context.RelyingParty;
 import net.sharplab.springframework.security.webauthn.exception.CertificateException;
 import net.sharplab.springframework.security.webauthn.exception.SelfAttestationProhibitedException;
 import org.springframework.context.support.MessageSourceAccessor;

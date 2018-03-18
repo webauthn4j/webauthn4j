@@ -5,7 +5,6 @@ import net.sharplab.springframework.security.webauthn.sample.app.config.AppConfi
 import net.sharplab.springframework.security.webauthn.sample.app.config.WebSecurityConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.DomainConfig;
 import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.InfrastructureMockConfig;
-import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.JpaMockConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

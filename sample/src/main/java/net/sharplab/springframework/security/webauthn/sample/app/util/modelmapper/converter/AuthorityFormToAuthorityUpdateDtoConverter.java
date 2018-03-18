@@ -7,7 +7,6 @@ import org.modelmapper.Converter;
 import org.modelmapper.MappingException;
 import org.modelmapper.spi.MappingContext;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

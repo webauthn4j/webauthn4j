@@ -1,15 +1,12 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.component;
 
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
+import net.sharplab.springframework.security.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.AuthenticatorEntity;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.Authenticator;
 import net.sharplab.springframework.security.webauthn.sample.domain.repository.AuthenticatorEntityRepository;
-import net.sharplab.springframework.security.webauthn.exception.CredentialIdNotFoundException;
-import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
-import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

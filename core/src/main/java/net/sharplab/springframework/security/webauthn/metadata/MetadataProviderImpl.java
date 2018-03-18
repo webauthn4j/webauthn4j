@@ -20,8 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.exception.MetadataException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -17,7 +17,6 @@
 package net.sharplab.springframework.security.webauthn.attestation.authenticator;
 
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.extension.Extension;
-import net.sharplab.springframework.security.webauthn.context.WebAuthnAuthenticationContext;
 
 import java.io.Serializable;
 import java.util.Arrays;

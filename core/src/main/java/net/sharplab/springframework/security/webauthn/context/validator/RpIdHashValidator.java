@@ -16,8 +16,8 @@
 
 package net.sharplab.springframework.security.webauthn.context.validator;
 
-import net.sharplab.springframework.security.webauthn.exception.BadRpIdException;
 import net.sharplab.springframework.security.webauthn.context.RelyingParty;
+import net.sharplab.springframework.security.webauthn.exception.BadRpIdException;
 import net.sharplab.springframework.security.webauthn.util.MessageDigestUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

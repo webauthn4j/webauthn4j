@@ -31,7 +31,10 @@ import org.springframework.util.Base64Utils;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
-import java.security.cert.*;
+import java.security.cert.CertPath;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.util.Collections;
 import java.util.UUID;
 

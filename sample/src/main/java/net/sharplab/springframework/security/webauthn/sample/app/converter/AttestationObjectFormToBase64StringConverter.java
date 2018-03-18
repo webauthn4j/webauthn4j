@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AttestationObjectForm;
 import net.sharplab.springframework.security.webauthn.util.jackson.WebAuthnModule;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

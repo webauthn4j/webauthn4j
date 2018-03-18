@@ -21,7 +21,6 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import net.sharplab.springframework.security.webauthn.attestation.WebAuthnAttestationObject;
 import net.sharplab.springframework.security.webauthn.util.jackson.WebAuthnModule;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

@@ -5,7 +5,6 @@ import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import org.modelmapper.Converter;
 import org.modelmapper.MappingException;
 import org.modelmapper.spi.MappingContext;
-import org.springframework.util.Base64Utils;
 
 import static net.sharplab.springframework.security.webauthn.sample.app.constant.AppTypeTokens.AuthenticatorFormList;
 

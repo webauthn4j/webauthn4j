@@ -18,7 +18,6 @@ package net.sharplab.springframework.security.fido.metadata;
 
 import net.sharplab.springframework.security.fido.metadata.structure.MetadataStatement;
 import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOCPayload;
-import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOCPayloadEntry;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -26,7 +25,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.Console;
 import java.net.URI;
 
 /**

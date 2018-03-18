@@ -1,7 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter;
 
 import net.sharplab.springframework.security.webauthn.sample.app.web.ProfileForm;
-import net.sharplab.springframework.security.webauthn.sample.app.web.ProfileUpdateForm;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import org.modelmapper.Converter;
 import org.modelmapper.MappingException;
