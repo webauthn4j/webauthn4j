@@ -2,7 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.app.web;
 
 import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.util.validator.EqualProperties;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * Created by ynojima on 2017/09/17.

@@ -4,7 +4,7 @@ import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.util.validator.EqualProperties;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import java.util.List;

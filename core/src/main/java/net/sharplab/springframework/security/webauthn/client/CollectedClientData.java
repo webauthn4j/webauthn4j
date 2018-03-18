@@ -19,6 +19,7 @@ package net.sharplab.springframework.security.webauthn.client;
 import net.sharplab.springframework.security.webauthn.attestation.authenticator.extension.Extension;
 import net.sharplab.springframework.security.webauthn.client.challenge.Challenge;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.HashMap;
 
