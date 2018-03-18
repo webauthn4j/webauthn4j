@@ -2,7 +2,8 @@ package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 
 import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
-import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
