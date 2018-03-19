@@ -7,7 +7,7 @@ import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import java.util.List;
 
 /**
- * 権限表示Dto
+ * Dto for Authority
  */
 @Data
 public class AuthorityDto {

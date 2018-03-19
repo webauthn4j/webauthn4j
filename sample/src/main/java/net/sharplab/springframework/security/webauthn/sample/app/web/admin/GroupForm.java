@@ -4,7 +4,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * グループ管理フォーム
+ * form for Group
  */
 @Data
 public class GroupForm {

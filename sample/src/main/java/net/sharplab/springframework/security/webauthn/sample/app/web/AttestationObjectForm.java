@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by ynojima on 2017/08/20.
+ * Form for AttestationObject
  */
 @Data
 public class AttestationObjectForm {

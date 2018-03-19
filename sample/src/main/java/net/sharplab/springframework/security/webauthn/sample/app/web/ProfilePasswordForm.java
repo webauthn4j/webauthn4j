@@ -5,7 +5,7 @@ import net.sharplab.springframework.security.webauthn.sample.app.util.validator.
 import javax.validation.constraints.NotEmpty;
 
 /**
- * Created by ynojima on 2017/09/17.
+ * Form for profile password update
  */
 @Data
 @EqualProperties(property = "rawPassword", comparingProperty = "rawPasswordRetyped")

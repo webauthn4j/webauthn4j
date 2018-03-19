@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * 権限フォーム
+ * Form for Authority
  */
 @Data
 public class AuthorityForm {

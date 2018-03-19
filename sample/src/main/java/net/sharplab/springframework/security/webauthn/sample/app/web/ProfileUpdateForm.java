@@ -9,32 +9,32 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Created by ynojima on 2017/09/18.
+ * Form for profile update
  */
 @Data
 public class ProfileUpdateForm {
 
     /**
-     * 名前
+     * first name
      */
     @NotEmpty
     private String  firstName;
 
     /**
-     * 苗字
+     * last name
      */
     @NotEmpty
     private String  lastName;
 
     /**
-     * E-Mailアドレス
+     * e-mail address
      */
     @NotEmpty
     @Email
     private String  emailAddress;
 
     /**
-     * 認証デバイス
+     * authenticators
      */
     @Valid
     private List<AuthenticatorForm> authenticators;
