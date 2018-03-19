@@ -82,15 +82,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.headers().frameOptions().disable(); //TODO
-
         // Authorization
         http.authorizeRequests()
                 .mvcMatchers("/login").permitAll()
                 .mvcMatchers("/signup").permitAll()
                 .mvcMatchers("/health/**").permitAll()
                 .mvcMatchers("/info/**").permitAll()
-                .mvcMatchers("/h2-console/**").hasRole(ADMIN_ROLE)
+                .mvcMatchers("/h2-console/**").denyAll()
                 .mvcMatchers("/admin/**").hasRole(ADMIN_ROLE)
                 .mvcMatchers("/api/admin/**").hasRole(ADMIN_ROLE)
                 .mvcMatchers("cloudfoundryapplication/**").permitAll()
@@ -120,11 +118,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.securityContext()
                 .securityContextRepository(httpSessionSecurityContextRepository);
-
-        // CSRF対策設定
-        http.csrf()
-                .ignoringAntMatchers("/h2-console/**") //TODO:良いのか見直し
-                .and();
 
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
 

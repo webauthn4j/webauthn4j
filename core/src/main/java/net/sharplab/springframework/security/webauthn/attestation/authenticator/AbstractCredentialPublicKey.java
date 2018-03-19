@@ -18,7 +18,6 @@ package net.sharplab.springframework.security.webauthn.attestation.authenticator
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
 import java.security.Signature;
 
 
