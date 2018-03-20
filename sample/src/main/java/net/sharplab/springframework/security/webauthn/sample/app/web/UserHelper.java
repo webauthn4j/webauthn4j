@@ -42,6 +42,7 @@ public class UserHelper {
             return true;
         }
         return authenticatorForms.stream().allMatch(authenticator -> {
+
             try {
                 WebAuthnRegistrationContext registrationContext = registrationContextProvider.provide(
                         request,
