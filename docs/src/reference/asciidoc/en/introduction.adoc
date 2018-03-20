@@ -17,7 +17,6 @@ Spring Security WebAuthn is a Spring Security extension module to provide Web Au
 
 List of supported attestation statement formats is below:
 
-- FIDO U2F Attestation Statement Format
 - None Attestation Statement Format
 
 Other attestation statement formats are also planed to support.

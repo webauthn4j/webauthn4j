@@ -9,8 +9,7 @@ Users can login with WebAuthn compliant authenticator.
 
 ## Documentation
 
-You can find out more details from the [reference](https://ynojima.github.io/spring-security-webauthn/en/) 
-or by browsing the [javadoc](http://).
+You can find out more details from the [reference](https://ynojima.github.io/spring-security-webauthn/en/) .
 
 ## Build
 
@@ -22,12 +21,12 @@ self-contained bootstrap mechanism for the build.
 
 - Java8 or later
 - Spring Framework 5.0 or later
-- Spring Security 5.0 or later
+- Spring Security 5.0 (Customized build)
 
 ### Checkout sources
 
 ```
-git clone <source repository>
+git clone https://github.com/ynojima/spring-security-webauthn
 ```
 
 ### Build all jars

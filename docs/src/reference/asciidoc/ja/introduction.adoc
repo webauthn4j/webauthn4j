@@ -17,7 +17,6 @@ Spring Security拡張です。
 
 Spring Security WebAuthnが現在サポートする証言ステートメントフォーマットは以下の通りです。
 
-- FIDO U2F Attestation Statement Format
 - None Attestation Statement Format
 
 それ以外の証言ステートメントフォーマットのサポートも順次行う予定です。
