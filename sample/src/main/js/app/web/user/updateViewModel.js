@@ -45,7 +45,7 @@ UserUpdateViewModel.prototype.addCredential = function (){
         //timeout
         //excludeCredentials = []
         //authenticatorSelection
-        attestation: "direct",
+        attestation: "none",
         //extensions
     };
     let credentialCreationOptions = {
