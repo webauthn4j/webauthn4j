@@ -17,16 +17,16 @@ public class LoginController {
 
     /**
      * ログインページ
+     *
      * @return 論理ビュー名
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(){
+    public String login() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-        if(authentication instanceof FirstOfMultiFactorAuthenticationToken){
+        if (authentication instanceof FirstOfMultiFactorAuthenticationToken) {
             return ViewNames.VIEW_LOGIN_AUTHENTICATOR_LOGIN;
-        }
-        else {
+        } else {
             return ViewNames.VIEW_LOGIN_LOGIN;
         }
     }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserEntityRepository userEntityRepository;
     private final UserManager userManager;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional(readOnly = true)
-    public User findOne(int id){
+    public User findOne(int id) {
         return userManager.findById(id);
     }
 
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional(readOnly = true)
-    public List<User> findAll(){
+    public List<User> findAll() {
         return modelMapper.map(userEntityRepository.findAll(), DomainTypeTokens.UserList);
     }
 
@@ -54,8 +54,8 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<User> findAll(Pageable pageable){
-        return  modelMapper.map(userEntityRepository.findAll(pageable), DomainTypeTokens.UserPage);
+    public Page<User> findAll(Pageable pageable) {
+        return modelMapper.map(userEntityRepository.findAll(pageable), DomainTypeTokens.UserPage);
     }
 
     /**
@@ -64,10 +64,9 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(readOnly = true)
     public Page<User> findAllByKeyword(Pageable pageable, String keyword) {
-        if(keyword == null){
+        if (keyword == null) {
             return modelMapper.map(userEntityRepository.findAll(pageable), DomainTypeTokens.UserPage);
-        }
-        else {
+        } else {
             return modelMapper.map(userEntityRepository.findAllByKeyword(pageable, keyword), DomainTypeTokens.UserPage);
         }
     }
@@ -95,7 +94,7 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional
-    public void delete(int id){
+    public void delete(int id) {
         userManager.deleteUser(id);
     }
 }

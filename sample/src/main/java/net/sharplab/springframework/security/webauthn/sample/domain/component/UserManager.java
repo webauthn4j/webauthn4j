@@ -11,6 +11,7 @@ public interface UserManager extends UserDetailsService {
 
     /**
      * ユーザーを作成する
+     *
      * @param user ユーザー
      * @return ユーザー
      */
@@ -18,24 +19,28 @@ public interface UserManager extends UserDetailsService {
 
     /**
      * ユーザーを更新する
+     *
      * @param user ユーザー
      */
     void updateUser(User user);
 
     /**
      * ユーザーを削除する
+     *
      * @param username ユーザー名
      */
     void deleteUser(String username);
 
     /**
      * ユーザーを削除する
+     *
      * @param id ユーザーID
      */
     void deleteUser(int id);
 
     /**
      * パスワードを変更する
+     *
      * @param oldPassword 古いパスワード
      * @param newPassword 新しいパスワード
      */
@@ -43,6 +48,7 @@ public interface UserManager extends UserDetailsService {
 
     /**
      * ユーザーの存在確認する
+     *
      * @param username ユーザー名
      * @return ユーザーが存在するか
      */
@@ -50,6 +56,7 @@ public interface UserManager extends UserDetailsService {
 
     /**
      * ユーザーを検索する
+     *
      * @param id ユーザーID
      * @return ユーザー
      */

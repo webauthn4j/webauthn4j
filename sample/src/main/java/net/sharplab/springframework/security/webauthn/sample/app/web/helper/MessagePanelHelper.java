@@ -21,7 +21,7 @@ public class MessagePanelHelper {
         this.messageSource = messageSource;
     }
 
-    public String resolveMessage(ResultMessage resultMessage, Locale locale){
+    public String resolveMessage(ResultMessage resultMessage, Locale locale) {
         return ResultMessageUtils.resolveMessage(resultMessage, messageSource, locale);
     }
 

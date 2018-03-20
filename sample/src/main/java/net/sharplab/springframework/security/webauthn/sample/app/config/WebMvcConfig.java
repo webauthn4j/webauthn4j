@@ -32,20 +32,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private AttestationObjectFormToBase64StringConverter attestationObjectFormToBase64StringConverter;
 
     @Bean
-    public LocaleResolver localeResolver(){
+    public LocaleResolver localeResolver() {
         AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
         localeResolver.setDefaultLocale(Locale.US);
         return localeResolver;
     }
 
     @Bean
-    public WebAuthnDialect webAuthnDialect(){
+    public WebAuthnDialect webAuthnDialect() {
         return new WebAuthnDialect();
     }
 
     @Override
-    public void addFormatters(FormatterRegistry formatterRegistry)
-    {
+    public void addFormatters(FormatterRegistry formatterRegistry) {
         formatterRegistry.addConverter(base64StringToAttestationObjectFormConverter);
         formatterRegistry.addConverter(base64StringToCollectedClientDataFormConverter);
         formatterRegistry.addConverter(attestationObjectFormToBase64StringConverter);

@@ -76,7 +76,7 @@ public class UserController {
             return ViewNames.VIEW_USER_CREATE;
         }
 
-        if (!userHelper.validateAuthenticators(model, request, response, userForm.getAuthenticators())){
+        if (!userHelper.validateAuthenticators(model, request, response, userForm.getAuthenticators())) {
             return ViewNames.VIEW_USER_CREATE;
         }
 
@@ -134,8 +134,7 @@ public class UserController {
         User user;
         try {
             user = userService.findOne(userId);
-        }
-        catch (WebAuthnSampleEntityNotFoundException ex){
+        } catch (WebAuthnSampleEntityNotFoundException ex) {
             redirectAttributes.addFlashAttribute(ResultMessages.error().add(MessageCodes.Error.User.USER_NOT_FOUND));
             return ViewNames.REDIRECT_ADMIN_USERS;
         }
@@ -148,7 +147,7 @@ public class UserController {
             return ViewNames.VIEW_USER_UPDATE;
         }
 
-        if (!userHelper.validateAuthenticators(model, request, response, userUpdateForm.getAuthenticators())){
+        if (!userHelper.validateAuthenticators(model, request, response, userUpdateForm.getAuthenticators())) {
             model.addAttribute(TARGET_USER_ID, userId);
             return ViewNames.VIEW_USER_UPDATE;
         }
@@ -172,7 +171,7 @@ public class UserController {
 
     @RequestMapping(value = "/updatePassword/{userId}", method = RequestMethod.POST)
     public String updatePassword(@PathVariable Integer userId, @Valid @ModelAttribute("userForm") UserPasswordForm userPasswordForm,
-                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+                                 BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute(TARGET_USER_ID, userId);

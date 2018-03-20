@@ -33,8 +33,8 @@ public class SignupController {
 
     @Autowired
     public SignupController(ModelMapper modelMapper,
-                          UserService userService,
-                          UserHelper userHelper) {
+                            UserService userService,
+                            UserHelper userHelper) {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.userHelper = userHelper;
@@ -55,23 +55,23 @@ public class SignupController {
     public String create(HttpServletRequest request, HttpServletResponse response, @Valid @ModelAttribute UserForm userForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
-    if (result.hasErrors()) {
+        if (result.hasErrors()) {
             model.addAttribute(userForm);
-        return ViewNames.VIEW_SIGNUP_SIGNUP;
-    }
+            return ViewNames.VIEW_SIGNUP_SIGNUP;
+        }
 
-    if (!userHelper.validateAuthenticators(model, request, response, userForm.getAuthenticators())){
-        model.addAttribute(userForm);
-        return ViewNames.VIEW_SIGNUP_SIGNUP;
-    }
+        if (!userHelper.validateAuthenticators(model, request, response, userForm.getAuthenticators())) {
+            model.addAttribute(userForm);
+            return ViewNames.VIEW_SIGNUP_SIGNUP;
+        }
 
-    User user = modelMapper.map(userForm, User.class);
+        User user = modelMapper.map(userForm, User.class);
         try {
-        userService.create(user);
-    } catch (WebAuthnSampleBusinessException ex) {
-        model.addAttribute(ex.getResultMessages());
-        return ViewNames.VIEW_SIGNUP_SIGNUP;
-    }
+            userService.create(user);
+        } catch (WebAuthnSampleBusinessException ex) {
+            model.addAttribute(ex.getResultMessages());
+            return ViewNames.VIEW_SIGNUP_SIGNUP;
+        }
         redirectAttributes.addFlashAttribute(ResultMessages.success().add(MessageCodes.Success.User.USER_CREATED));
 
         return ViewNames.REDIRECT_LOGIN;

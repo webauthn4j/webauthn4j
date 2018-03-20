@@ -14,12 +14,12 @@ import java.util.List;
 public class Group implements Serializable {
 
     private Integer id;
-    private String  groupName;
+    private String groupName;
 
     private List<User> users;
     private List<Authority> authorities;
 
-    public Group(){
+    public Group() {
         //NOP
     }
 

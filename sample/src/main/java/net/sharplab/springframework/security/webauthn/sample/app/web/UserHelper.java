@@ -23,16 +23,17 @@ public class UserHelper {
 
     @Autowired
     public UserHelper(WebAuthnRegistrationContextProvider registrationContextProvider,
-                          WebAuthnRegistrationContextValidator registrationContextValidator) {
+                      WebAuthnRegistrationContextValidator registrationContextValidator) {
         this.registrationContextProvider = registrationContextProvider;
         this.registrationContextValidator = registrationContextValidator;
     }
 
-     /**
+    /**
      * returns true if validation success
-     * @param model model
-     * @param request request
-     * @param response reponse
+     *
+     * @param model              model
+     * @param request            request
+     * @param response           reponse
      * @param authenticatorForms authenticator form list
      * @return true if validation success
      */
@@ -41,7 +42,7 @@ public class UserHelper {
             return true;
         }
         return authenticatorForms.stream().allMatch(authenticator -> {
-            try{
+            try {
                 WebAuthnRegistrationContext registrationContext = registrationContextProvider.provide(
                         request,
                         response,
@@ -49,8 +50,7 @@ public class UserHelper {
                         authenticator.getAttestationObject().getAttestationObjectBase64());
                 registrationContextValidator.validate(registrationContext);
                 return true;
-            }
-            catch (BadChallengeException e){
+            } catch (BadChallengeException e) {
                 model.addAttribute(ResultMessages.error().add(MessageCodes.Error.User.BAD_CHALLENGE));
                 return false;
             }

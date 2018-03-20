@@ -12,7 +12,7 @@ public class Base64StringToCollectedClientDataFormConverter implements Converter
 
     private Base64StringToCollectedClientDataConverter base64StringToCollectedClientDataConverter;
 
-    public Base64StringToCollectedClientDataFormConverter(Base64StringToCollectedClientDataConverter base64StringToCollectedClientDataConverter){
+    public Base64StringToCollectedClientDataFormConverter(Base64StringToCollectedClientDataConverter base64StringToCollectedClientDataConverter) {
         this.base64StringToCollectedClientDataConverter = base64StringToCollectedClientDataConverter;
     }
 

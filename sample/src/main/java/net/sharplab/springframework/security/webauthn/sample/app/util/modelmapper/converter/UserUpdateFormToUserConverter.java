@@ -26,17 +26,16 @@ public class UserUpdateFormToUserConverter implements Converter<UserUpdateForm, 
     public User convert(MappingContext<UserUpdateForm, User> context) {
         UserUpdateForm source = context.getSource();
         User destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new User();
         }
 
         destination.setFirstName(source.getFirstName());
         destination.setLastName(source.getLastName());
         destination.setEmailAddress(source.getEmailAddress());
-        if(source.getAuthenticators() == null){
+        if (source.getAuthenticators() == null) {
             destination.setAuthenticators(Collections.emptyList());
-        }
-        else {
+        } else {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorList)));
         }
         destination.setLocked(source.isLocked());

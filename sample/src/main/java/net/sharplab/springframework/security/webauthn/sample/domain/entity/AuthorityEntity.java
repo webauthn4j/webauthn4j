@@ -23,7 +23,7 @@ public class AuthorityEntity implements GrantedAuthority {
 
     @ManyToMany
     @JoinTable(
-            name="r_user_authority",
+            name = "r_user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")}
     )
@@ -31,7 +31,7 @@ public class AuthorityEntity implements GrantedAuthority {
 
     @ManyToMany
     @JoinTable(
-            name="r_group_authority",
+            name = "r_group_authority",
             joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")}
 
@@ -41,7 +41,7 @@ public class AuthorityEntity implements GrantedAuthority {
     @Column(name = "authority")
     private String authority;
 
-    public AuthorityEntity(){
+    public AuthorityEntity() {
         //NOP
     }
 
@@ -51,7 +51,7 @@ public class AuthorityEntity implements GrantedAuthority {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return authority;
     }
 }

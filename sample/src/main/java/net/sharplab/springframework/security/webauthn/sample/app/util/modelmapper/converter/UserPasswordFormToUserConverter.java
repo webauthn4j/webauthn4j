@@ -14,7 +14,7 @@ public class UserPasswordFormToUserConverter implements Converter<UserPasswordFo
 
     private PasswordEncoder passwordEncoder;
 
-    public UserPasswordFormToUserConverter(PasswordEncoder passwordEncoder){
+    public UserPasswordFormToUserConverter(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,7 +30,7 @@ public class UserPasswordFormToUserConverter implements Converter<UserPasswordFo
 
         UserPasswordForm source = context.getSource();
         User destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new User();
         }
 

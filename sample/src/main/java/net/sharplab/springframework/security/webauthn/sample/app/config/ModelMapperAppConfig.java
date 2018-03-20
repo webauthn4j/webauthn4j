@@ -27,7 +27,7 @@ public class ModelMapperAppConfig {
     PasswordEncoder passwordEncoder;
 
     @PostConstruct
-    public void initialize(){
+    public void initialize() {
         modelMapper.addConverter(new UserFormToUserConverter(passwordEncoder));
         modelMapper.addConverter(new UserUpdateFormToUserConverter());
         modelMapper.addConverter(new UserPasswordFormToUserConverter(passwordEncoder));

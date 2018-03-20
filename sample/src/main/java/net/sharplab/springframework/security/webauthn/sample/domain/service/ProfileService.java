@@ -10,6 +10,7 @@ public interface ProfileService {
 
     /**
      * ユーザーを検索する
+     *
      * @param id ユーザーID
      * @return ユーザー
      */
@@ -17,6 +18,7 @@ public interface ProfileService {
 
     /**
      * ユーザーを更新する
+     *
      * @param user ユーザー
      */
     void update(User user);

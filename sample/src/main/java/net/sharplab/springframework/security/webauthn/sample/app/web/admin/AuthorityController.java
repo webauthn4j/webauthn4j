@@ -24,7 +24,7 @@ import javax.validation.Valid;
  * Controller for authority management
  */
 @SuppressWarnings({"squid:S1166", "SameReturnValue"})
-@RequestMapping(value="/admin/authorities")
+@RequestMapping(value = "/admin/authorities")
 @Controller
 public class AuthorityController {
 
@@ -66,7 +66,7 @@ public class AuthorityController {
     public String update(@PathVariable Integer authorityId, @Valid @ModelAttribute AuthorityForm authorityForm, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         //入力チェック
-        if(authorityId == null){
+        if (authorityId == null) {
             redirectAttributes.addFlashAttribute(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND);
             return ViewNames.REDIRECT_ADMIN_AUTHORITIES;
         }
@@ -82,12 +82,10 @@ public class AuthorityController {
             AuthorityUpdateDto authorityUpdateDto = modelMapper.map(authorityForm, AuthorityUpdateDto.class);
             authorityUpdateDto.setId(authorityId);
             authorityService.update(authorityUpdateDto);
-        }
-        catch (WebAuthnSampleEntityNotFoundException ex){
+        } catch (WebAuthnSampleEntityNotFoundException ex) {
             redirectAttributes.addFlashAttribute(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND);
             return ViewNames.REDIRECT_ADMIN_AUTHORITIES;
-        }
-        catch (BusinessException ex) {
+        } catch (BusinessException ex) {
             Authority authority = authorityService.findOne(authorityId);
             AuthorityDto authorityDto = modelMapper.map(authority, AuthorityDto.class);
             model.addAttribute(ex.getResultMessages());
@@ -98,7 +96,7 @@ public class AuthorityController {
         return ViewNames.REDIRECT_ADMIN_AUTHORITIES + authorityId;
     }
 
-    private String respondAuthorityUpdateView(Model model, AuthorityDto authorityDto, int authorityId){
+    private String respondAuthorityUpdateView(Model model, AuthorityDto authorityDto, int authorityId) {
         model.addAttribute(authorityDto);
         model.addAttribute("targetAuthorityId", authorityId);
         return ViewNames.VIEW_AUTHORITY_UPDATE;

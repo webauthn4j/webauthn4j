@@ -18,7 +18,7 @@ public class ModelMapperConfig {
 
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.addConverter(new AttestationStatementToAttestationStatementVOConverter());
         modelMapper.addConverter(new AttestationStatementVOToAttestationStatementConverter());
@@ -35,9 +35,10 @@ public class ModelMapperConfig {
 
     /**
      * creates ModelMapper instance
+     *
      * @return ModelMapper
      */
-    public static ModelMapper createModelMapper(){
+    public static ModelMapper createModelMapper() {
         return new ModelMapperConfig().modelMapper();
     }
 

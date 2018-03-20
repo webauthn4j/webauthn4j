@@ -21,14 +21,14 @@ public class UserForm {
     private String userHandle;
 
     @NotEmpty
-    private String  firstName;
+    private String firstName;
 
     @NotEmpty
-    private String  lastName;
+    private String lastName;
 
     @NotEmpty
     @Email
-    private String  emailAddress;
+    private String emailAddress;
 
     @NotEmpty
     private String rawPassword;

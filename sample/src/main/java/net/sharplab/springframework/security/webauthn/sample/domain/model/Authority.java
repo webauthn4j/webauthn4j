@@ -20,11 +20,11 @@ public class Authority implements GrantedAuthority {
 
     private String authority;
 
-    public Authority(){
+    public Authority() {
         //NOP
     }
 
-    public Authority(int id){
+    public Authority(int id) {
         this.id = id;
     }
 
@@ -46,7 +46,7 @@ public class Authority implements GrantedAuthority {
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return authority;
     }
 }

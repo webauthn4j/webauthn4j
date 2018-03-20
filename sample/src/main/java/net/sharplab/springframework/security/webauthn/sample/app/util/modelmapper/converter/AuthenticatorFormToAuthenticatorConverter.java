@@ -22,10 +22,10 @@ public class AuthenticatorFormToAuthenticatorConverter implements Converter<Auth
     public Authenticator convert(MappingContext<AuthenticatorForm, Authenticator> context) {
         AuthenticatorForm source = context.getSource();
         Authenticator destination = context.getDestination();
-        if(source == null){
+        if (source == null) {
             return null;
         }
-        if(destination == null){
+        if (destination == null) {
             destination = new Authenticator();
         }
         destination.setId(source.getId());

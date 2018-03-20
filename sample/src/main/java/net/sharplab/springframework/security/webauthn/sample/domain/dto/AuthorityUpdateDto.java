@@ -9,7 +9,7 @@ import java.util.List;
  * AuthorityUpdateDto
  */
 @Data
-public class AuthorityUpdateDto implements Serializable{
+public class AuthorityUpdateDto implements Serializable {
 
     private int id;
 

@@ -15,6 +15,7 @@ public interface GroupManager {
 
     /**
      * Locates a group
+     *
      * @param groupId the group to locate
      * @return the group
      */
@@ -22,6 +23,7 @@ public interface GroupManager {
 
     /**
      * Returns all groups that this group manager controls.
+     *
      * @return all groups
      */
     List<Group> findAllGroups();
@@ -60,6 +62,7 @@ public interface GroupManager {
 
     /**
      * Changes the name of a group without altering the assigned authorityEntities or members.
+     *
      * @param groupId the group to rename.
      * @param newName new name
      */
@@ -68,7 +71,7 @@ public interface GroupManager {
     /**
      * Makes a user a member of a particular group.
      *
-     * @param userId the user to be given membership.
+     * @param userId  the user to be given membership.
      * @param groupId the name of the group to which the user will be added.
      */
     void addUserToGroup(int userId, int groupId);
@@ -76,13 +79,14 @@ public interface GroupManager {
     /**
      * Deletes a user's membership of a group.
      *
-     * @param userId the user
+     * @param userId  the user
      * @param groupId the group to remove the user from
      */
-    void removeUserFromGroup(int userId, int groupId) ;
+    void removeUserFromGroup(int userId, int groupId);
 
     /**
      * Obtains the list of authorityEntities which are assigned to a group.
+     *
      * @param groupId the group
      * @return the list of authority the group owns
      */
@@ -90,14 +94,16 @@ public interface GroupManager {
 
     /**
      * Assigns a new authority to a group.
-     * @param groupId the group to assign a new authority
+     *
+     * @param groupId   the group to assign a new authority
      * @param authority the authority to be assigned
      */
     void addGroupAuthority(int groupId, Authority authority);
 
     /**
      * Deletes an authority from those assigned to a group
-     * @param groupId the group
+     *
+     * @param groupId   the group
      * @param authority the authority to be removed
      */
     void removeGroupAuthority(int groupId, Authority authority);

@@ -13,6 +13,7 @@ public interface GroupService {
 
     /**
      * グループを参照する
+     *
      * @param id グループID
      * @return グループ
      */
@@ -20,12 +21,14 @@ public interface GroupService {
 
     /**
      * グループを全件参照する
+     *
      * @return グループのリスト
      */
     List<Group> findAll();
 
     /**
      * グループを全件参照する
+     *
      * @param pageable ページング情報
      * @return グループのリスト
      */
@@ -33,14 +36,16 @@ public interface GroupService {
 
     /**
      * キーワードにヒットするグループを全権参照する
+     *
      * @param pageable ページング情報
-     * @param keyword キーワード
+     * @param keyword  キーワード
      * @return グループのリスト
      */
     Page<Group> findAllByKeyword(Pageable pageable, String keyword);
 
     /**
      * グループを作成する
+     *
      * @param user グループ
      * @return 作成されたグループ
      */
@@ -48,12 +53,14 @@ public interface GroupService {
 
     /**
      * グループを更新する
+     *
      * @param user グループ
      */
     void update(Group user);
 
     /**
      * グループを削除する
+     *
      * @param id グループID
      */
     void delete(int id);

@@ -62,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception{
+    public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.apply(new WebAuthnFirstOfMultiFactorDelegatingAuthenticationConfigurer<>(daoAuthenticationProvider));
         builder.authenticationProvider(applicationContext.getBean(WebAuthnAuthenticationProvider.class));
     }
@@ -102,12 +102,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // WebAuthn SecurityFilterChain
         http.apply(webAuthnLogin())
-            .loginPage("/login")
-            .usernameParameter("username")
-            .passwordParameter("rawPassword")
-            .webAuthnAuthenticationContextProvider(webAuthnAuthenticationContextProvider)
-            .metadataProvider(metadataProvider)
-            .authenticationTrustResolver(trustResolver);
+                .loginPage("/login")
+                .usernameParameter("username")
+                .passwordParameter("rawPassword")
+                .webAuthnAuthenticationContextProvider(webAuthnAuthenticationContextProvider)
+                .metadataProvider(metadataProvider)
+                .authenticationTrustResolver(trustResolver);
 
         http.exceptionHandling();
 

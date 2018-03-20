@@ -18,6 +18,7 @@ public interface AuthorityService {
     Authority findOne(Integer authorityId);
 
     List<Authority> findAll();
+
     Page<Authority> findAll(Pageable pageable);
 
     void update(Authority authority);

@@ -20,29 +20,26 @@ public class AttestationStatementToAttestationStatementVOConverter implements Co
     public AttestationStatementVO convert(MappingContext<WebAuthnAttestationStatement, AttestationStatementVO> context) {
         WebAuthnAttestationStatement source = context.getSource();
         AttestationStatementVO destination = context.getDestination();
-        if(source == null){
+        if (source == null) {
             return null;
         }
         Class sourceClass = source.getClass();
-        if (sourceClass == PackedAttestationStatement.class){
-            if(destination == null){
+        if (sourceClass == PackedAttestationStatement.class) {
+            if (destination == null) {
                 destination = new PackedAttestationStatementVO();
             }
-            context.getMappingEngine().map(context.create((PackedAttestationStatement)source, destination));
-        }
-        else if(sourceClass == FIDOU2FAttestationStatement.class){
-            if(destination == null){
+            context.getMappingEngine().map(context.create((PackedAttestationStatement) source, destination));
+        } else if (sourceClass == FIDOU2FAttestationStatement.class) {
+            if (destination == null) {
                 destination = new FIDOU2FAttestationStatementVO();
             }
-            context.getMappingEngine().map(context.create((FIDOU2FAttestationStatement)source, destination));
-        }
-        else if(sourceClass == NoneAttestationStatement.class){
-            if(destination == null){
+            context.getMappingEngine().map(context.create((FIDOU2FAttestationStatement) source, destination));
+        } else if (sourceClass == NoneAttestationStatement.class) {
+            if (destination == null) {
                 destination = new NoneAttestationStatementVO();
             }
-            context.getMappingEngine().map(context.create((NoneAttestationStatement)source, destination));
-        }
-        else {
+            context.getMappingEngine().map(context.create((NoneAttestationStatement) source, destination));
+        } else {
             throw new IllegalArgumentException();
         }
         return destination;

@@ -14,17 +14,17 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 public class ErrorController {
 
     @RequestMapping("/error/500")
-    public String show500(){
+    public String show500() {
         return "error/500";
     }
 
     @RequestMapping("/error/404")
-    public String show404(){
+    public String show404() {
         return "error/404";
     }
 
     @RequestMapping({"/error/403", "/error/accessDeniedError"})
-    public String show403(){
+    public String show403() {
         return "error/403";
     }
 
@@ -32,7 +32,7 @@ public class ErrorController {
      * Throws business exception to simulate an unhandled business exception.
      */
     @RequestMapping("/admin/error/throwBusinessException")
-    public void throwBusinessError(){
+    public void throwBusinessError() {
         throw new BusinessException(ResultMessages.error().add(MessageCodes.Error.UNKNOWN));
     }
 
@@ -40,7 +40,7 @@ public class ErrorController {
      * Throws business exception to simulate an unhandled business exception.
      */
     @RequestMapping("/admin/error/throwSystemException")
-    public void throwSystemError(){
+    public void throwSystemError() {
         throw new SystemException(MessageCodes.Error.UNKNOWN, "exception message");
     }
 

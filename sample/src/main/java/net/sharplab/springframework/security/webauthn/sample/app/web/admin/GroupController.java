@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * Controller for group management
  */
 @SuppressWarnings({"squid:S1166", "SameReturnValue"})
-@RequestMapping(value="/admin/groups")
+@RequestMapping(value = "/admin/groups")
 @Controller
 public class GroupController {
 

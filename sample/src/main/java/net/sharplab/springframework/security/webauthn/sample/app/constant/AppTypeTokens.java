@@ -14,10 +14,14 @@ import java.util.List;
  */
 public class AppTypeTokens {
 
-    public static final Type CandidateUserDtoPage = new TypeToken<PageImpl<CandidateUserDto>>(){}.getType();
-    public static final Type CandidateGroupDtoPage = new TypeToken<PageImpl<CandidateGroupDto>>(){}.getType();
+    public static final Type CandidateUserDtoPage = new TypeToken<PageImpl<CandidateUserDto>>() {
+    }.getType();
+    public static final Type CandidateGroupDtoPage = new TypeToken<PageImpl<CandidateGroupDto>>() {
+    }.getType();
 
-    public static final Type AuthenticatorFormList = new TypeToken<List<AuthenticatorForm>>(){}.getType();
+    public static final Type AuthenticatorFormList = new TypeToken<List<AuthenticatorForm>>() {
+    }.getType();
 
-    private AppTypeTokens(){}
+    private AppTypeTokens() {
+    }
 }

@@ -12,27 +12,31 @@ public class MessageCodes {
             public static final String EMAIL_ADDRESS_IS_ALREADY_USED = "e.user.email_address_is_already_used";
             public static final String BAD_CHALLENGE = "e.user.bad_challenge";
 
-            private User(){}
+            private User() {
+            }
         }
 
         public class Group {
             public static final String GROUP_NOT_FOUND = "e.group.group_not_found";
 
-            private Group(){}
+            private Group() {
+            }
         }
 
         public class Authority {
             public static final String AUTHORITY_NOT_FOUND = "e.authority.authority_not_found";
 
-            private Authority(){}
+            private Authority() {
+            }
         }
 
         public static final String UNKNOWN = "e.unknown";
 
-        private Error(){}
+        private Error() {
+        }
     }
 
-    public class Success{
+    public class Success {
         public class User {
             public static final String USER_CREATED = "s.user.user_created";
 
@@ -42,13 +46,15 @@ public class MessageCodes {
 
             public static final String USER_DELETED = "s.user.user_deleted";
 
-            private User(){}
+            private User() {
+            }
         }
 
         public class Profile {
             public static final String PROFILE_UPDATED = "s.profile.profile_updated";
 
-            private Profile(){}
+            private Profile() {
+            }
         }
 
         public class Group {
@@ -58,7 +64,8 @@ public class MessageCodes {
 
             public static final String GROUP_DELETED = "s.group.group_deleted";
 
-            private Group(){}
+            private Group() {
+            }
         }
 
         public class Authority {
@@ -68,9 +75,11 @@ public class MessageCodes {
 
             public static final String AUTHORITY_DELETED = "s.authority.authority_deleted";
 
-            private Authority(){}
+            private Authority() {
+            }
         }
     }
 
-    private MessageCodes(){}
+    private MessageCodes() {
+    }
 }

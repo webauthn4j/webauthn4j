@@ -22,7 +22,7 @@ import org.terasoluna.gfw.web.exception.ExceptionLoggingFilter;
 public class AppConfig {
 
     @Bean
-    public ExceptionLoggingFilter exceptionLoggingFilter(ExceptionLogger exceptionLogger){
+    public ExceptionLoggingFilter exceptionLoggingFilter(ExceptionLogger exceptionLogger) {
         ExceptionLoggingFilter exceptionLoggingFilter = new ExceptionLoggingFilter();
         exceptionLoggingFilter.setExceptionLogger(exceptionLogger);
         return exceptionLoggingFilter;
@@ -30,7 +30,7 @@ public class AppConfig {
 
     @Bean
     public UserHelper userHelper(WebAuthnRegistrationContextProvider webAuthnRegistrationContextProvider,
-                                 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator){
+                                 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator) {
         return new UserHelper(webAuthnRegistrationContextProvider, webAuthnRegistrationContextValidator);
     }
 

@@ -35,7 +35,7 @@ public class AuthenticatorManagerImpl implements AuthenticatorManager {
     @Override
     public WebAuthnAuthenticator loadWebAuthnAuthenticatorByCredentialId(byte[] credentialId) {
         AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(credentialId);
-        if(authenticatorEntity == null){
+        if (authenticatorEntity == null) {
             throw new CredentialIdNotFoundException(String.format("User with credentialId'%s' is not found.", credentialId));
         }
         return modelMapper.map(authenticatorEntity, Authenticator.class);

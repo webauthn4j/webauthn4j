@@ -24,15 +24,16 @@ public class Authenticator implements WebAuthnAuthenticator {
     /**
      * Constructor
      */
-    public Authenticator(){
+    public Authenticator() {
         //nop
     }
 
     /**
      * Constructor
+     *
      * @param name authenticator's friendly name
      */
-    public Authenticator(String name){
+    public Authenticator(String name) {
         this.setName(name);
     }
 

@@ -19,7 +19,7 @@ public class CredentialPublicKeyToCredentialPublicKeyVOConverter implements Conv
         AbstractCredentialPublicKey source = context.getSource();
         CredentialPublicKeyVO destination = context.getDestination();
 
-        if(source == null){
+        if (source == null) {
             return null;
         }
         if (source.getClass() == RSCredentialPublicKey.class) {

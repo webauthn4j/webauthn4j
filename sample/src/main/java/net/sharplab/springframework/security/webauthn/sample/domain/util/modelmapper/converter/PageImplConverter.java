@@ -24,7 +24,7 @@ public class PageImplConverter<S, D> implements Converter<PageImpl<S>, PageImpl<
 
     private ModelMapper modelMapper;
 
-    public PageImplConverter(ModelMapper modelMapper){
+    public PageImplConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
@@ -38,7 +38,7 @@ public class PageImplConverter<S, D> implements Converter<PageImpl<S>, PageImpl<
     @Override
     public PageImpl<D> convert(MappingContext<PageImpl<S>, PageImpl<D>> context) {
         PageImpl<S> source = context.getSource();
-        if(source == null){
+        if (source == null) {
             return null;
         }
         Type elementType = getElementType(context);
@@ -55,7 +55,6 @@ public class PageImplConverter<S, D> implements Converter<PageImpl<S>, PageImpl<
             return Types.rawTypeFor(((ParameterizedType) context.getGenericDestinationType()).getActualTypeArguments()[0]);
         }
     }
-
 
 
 }

@@ -19,24 +19,24 @@ import org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor;
 public class DomainConfig {
 
     @Bean
-    public ExceptionLogger exceptionLogger(){
+    public ExceptionLogger exceptionLogger() {
         return new ExceptionLogger();
     }
 
     @Bean
-    public ResultMessagesLoggingInterceptor resultMessagesLoggingInterceptor(ExceptionLogger exceptionLogger){
+    public ResultMessagesLoggingInterceptor resultMessagesLoggingInterceptor(ExceptionLogger exceptionLogger) {
         ResultMessagesLoggingInterceptor resultMessagesLoggingInterceptor = new ResultMessagesLoggingInterceptor();
         resultMessagesLoggingInterceptor.setExceptionLogger(exceptionLogger);
         return resultMessagesLoggingInterceptor;
     }
 
     @Bean
-    public FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient){
+    public FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient) {
         return new FIDOMetadataServiceTrustAnchorService(fidoMetadataServiceClient);
     }
 
     @Bean
-    public FIDOMetadataServiceClient fidoMetadataServiceClient(ResourceLoader resourceLoader){
+    public FIDOMetadataServiceClient fidoMetadataServiceClient(ResourceLoader resourceLoader) {
         return new FIDOMetadataServiceClient(new RestTemplate(), new CertPathJWSVerifier(resourceLoader)); //TODO use CertPathJWSVaerifier
     }
 

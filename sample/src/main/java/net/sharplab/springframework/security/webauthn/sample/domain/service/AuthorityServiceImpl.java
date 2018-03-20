@@ -47,7 +47,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public Authority findOne(Integer authorityId) {
         AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authorityId)
-                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
+                .orElseThrow(() -> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
         return modelMapper.map(retrievedAuthorityEntity, Authority.class);
     }
 
@@ -65,10 +65,9 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Page<Authority> findAllByKeyword(Pageable pageable, String keyword) {
-        if(keyword == null){
+        if (keyword == null) {
             return modelMapper.map(authorityEntityRepository.findAll(pageable), DomainTypeTokens.AuthorityPage);
-        }
-        else {
+        } else {
             return modelMapper.map(authorityEntityRepository.findAllByKeyword(pageable, keyword), DomainTypeTokens.AuthorityPage);
         }
 
@@ -76,7 +75,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public void update(Authority authority) {
-        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authority.getId()).orElseThrow(()->
+        AuthorityEntity retrievedAuthorityEntity = authorityEntityRepository.findById(authority.getId()).orElseThrow(() ->
                 new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Authority.AUTHORITY_NOT_FOUND)));
         modelMapper.map(authority, retrievedAuthorityEntity);
     }
@@ -94,10 +93,9 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public Page<User> findAllCandidateUsersByKeyword(Pageable pageable, String keyword) {
         Page<UserEntity> userEntities;
-        if(keyword == null){
+        if (keyword == null) {
             userEntities = userEntityRepository.findAll(pageable);
-        }
-        else {
+        } else {
             userEntities = userEntityRepository.findAllByKeyword(pageable, keyword);
         }
         return modelMapper.map(userEntities, DomainTypeTokens.UserPage);
@@ -106,10 +104,9 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public Page<Group> findAllCandidateGroupsByKeyword(Pageable pageable, String keyword) {
         Page<GroupEntity> groupEntities;
-        if(keyword == null){
+        if (keyword == null) {
             groupEntities = groupEntityRepository.findAll(pageable);
-        }
-        else {
+        } else {
             groupEntities = groupEntityRepository.findAllByKeyword(pageable, keyword);
         }
         return modelMapper.map(groupEntities, DomainTypeTokens.GroupPage);

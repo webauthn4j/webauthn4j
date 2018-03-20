@@ -34,7 +34,7 @@ public class AuthenticatorEntity implements Serializable {
 
     //TODO: extensions?
 
-    public String getFormat(){
+    public String getFormat() {
         return attestationStatement.getFormat();
     }
 

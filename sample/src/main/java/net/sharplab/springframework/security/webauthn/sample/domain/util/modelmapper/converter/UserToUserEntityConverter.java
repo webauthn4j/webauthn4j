@@ -31,10 +31,10 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
     public UserEntity convert(MappingContext<User, UserEntity> context) {
         User source = context.getSource();
         UserEntity destination = context.getDestination();
-        if(source == null){
+        if (source == null) {
             return null;
         }
-        if(destination == null){
+        if (destination == null) {
             destination = new UserEntity();
         }
 
@@ -43,24 +43,21 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         destination.setFirstName(source.getFirstName());
         destination.setLastName(source.getLastName());
         destination.setEmailAddress(source.getEmailAddress());
-        if(source.getAuthorities() == null){
+        if (source.getAuthorities() == null) {
             destination.setAuthorities(null);
-        }
-        else {
+        } else {
             destination.setAuthorities(context.getMappingEngine().map(context.create(source.getAuthorities(), AuthorityEntityList)));
         }
-        if(source.getGroups() == null){
+        if (source.getGroups() == null) {
             destination.setGroups(null);
-        }
-        else {
+        } else {
             destination.setGroups(context.getMappingEngine().map(context.create(source.getGroups(), GroupEntityList)));
         }
         destination.setPassword(source.getPassword());
 
-        if(source.getAuthenticators() == null){
+        if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
-        }
-        else {
+        } else {
             convertAuthenticators(context);
         }
 
@@ -74,7 +71,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
     private void convertAuthenticators(MappingContext<User, UserEntity> context) {
         User srcUser = context.getSource();
         UserEntity dstUserEntity = context.getDestination();
-        if(dstUserEntity.getAuthenticators() == null){
+        if (dstUserEntity.getAuthenticators() == null) {
             dstUserEntity.setAuthenticators(new ArrayList<>());
         }
 
@@ -82,7 +79,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         List<AuthenticatorEntity> dstAuthenticators = dstUserEntity.getAuthenticators();
         List<AuthenticatorEntity> toBeRemoved = new ArrayList<>();
 
-        dstAuthenticators.forEach(dstAuthenticatorEntity ->{
+        dstAuthenticators.forEach(dstAuthenticatorEntity -> {
             Authenticator matchedSrcAuthenticator = null;
             for (Authenticator srcAuthenticator : srcAuthenticators) {
                 if (Objects.equals(dstAuthenticatorEntity.getId(), srcAuthenticator.getId())) {
@@ -90,16 +87,15 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
                     break;
                 }
             }
-            if(matchedSrcAuthenticator == null){
+            if (matchedSrcAuthenticator == null) {
                 toBeRemoved.add(dstAuthenticatorEntity);
                 dstAuthenticatorEntity.setUser(null);
-            }
-            else {
+            } else {
                 context.getMappingEngine().map(context.create(matchedSrcAuthenticator, dstAuthenticatorEntity));
                 srcAuthenticators.remove(matchedSrcAuthenticator);
             }
         });
-        for(Authenticator srcAuthenticator : srcAuthenticators){
+        for (Authenticator srcAuthenticator : srcAuthenticators) {
             AuthenticatorEntity dstAuthenticator = context.getMappingEngine().map(context.create(srcAuthenticator, AuthenticatorEntity.class));
             dstAuthenticator.setUser(dstUserEntity);
             dstAuthenticators.add(dstAuthenticator);

@@ -26,7 +26,7 @@ public class AuthorityToAuthorityFormConverter implements Converter<Authority, A
     public AuthorityForm convert(MappingContext<Authority, AuthorityForm> context) {
         Authority source = context.getSource();
         AuthorityForm destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new AuthorityForm();
         }
         destination.setUsers(source.getUsers().stream().map(User::getId).collect(Collectors.toList()));

@@ -43,67 +43,67 @@ import java.util.List;
 public class WebSecurityBeanConfig {
 
     @Bean
-    public WebAuthnAuthenticationContextProvider webAuthnAuthenticationContextProvider(RelyingPartyProvider relyingPartyProvider){
+    public WebAuthnAuthenticationContextProvider webAuthnAuthenticationContextProvider(RelyingPartyProvider relyingPartyProvider) {
         return new WebAuthnAuthenticationContextProviderImpl(relyingPartyProvider);
     }
 
     @Bean
-    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators){
+    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators) {
         return new WebAuthnAuthenticationContextValidator(assertionSignatureValidators);
     }
 
     @Bean
-    public WebAuthnRegistrationContextProvider webAuthnRegistrationContextProvider(RelyingPartyProvider relyingPartyProvider){
+    public WebAuthnRegistrationContextProvider webAuthnRegistrationContextProvider(RelyingPartyProvider relyingPartyProvider) {
         return new WebAuthnRegistrationContextProviderImpl(relyingPartyProvider);
     }
 
     @Bean
-    public FIDOU2FAssertionSignatureValidator fidou2FAssertionSignatureValidator(){
+    public FIDOU2FAssertionSignatureValidator fidou2FAssertionSignatureValidator() {
         return new FIDOU2FAssertionSignatureValidator();
     }
 
     @Bean
-    public RelyingPartyProvider relyingPartyProvider(ChallengeRepository challengeRepository){
+    public RelyingPartyProvider relyingPartyProvider(ChallengeRepository challengeRepository) {
         return new RelyingPartyProviderImpl(challengeRepository);
     }
 
     @Bean //TODO:なぜBean化が自前で必要？
-    public AuthenticationTrustResolver authenticationTrustResolver(){
+    public AuthenticationTrustResolver authenticationTrustResolver() {
         return new AuthenticationTrustResolverImpl();
     }
 
     @Bean
-    public ChallengeRepository challengeRepository(){
+    public ChallengeRepository challengeRepository() {
         return new HttpSessionChallengeRepository();
     }
 
     @Bean
-    public WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator(AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator){
+    public WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator(AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator) {
         return new WebAuthnRegistrationContextValidator(attestationStatementTrustworthinessValidator);
     }
 
     @Bean
-    public AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService){
+    public AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
         return new LooseAttestationStatementTrustworthinessValidator(fidoMetadataServiceTrustAnchorService);
     }
 
     @Bean
-    public WebAuthnAssertionSignatureValidator webAuthnAssertionSignatureVerifier(){
+    public WebAuthnAssertionSignatureValidator webAuthnAssertionSignatureVerifier() {
         return new WebAuthnAssertionSignatureValidator();
     }
 
     @Bean
-    public MetadataProvider metadataProvider(WebAuthnUserDetailsService userDetailsService){
+    public MetadataProvider metadataProvider(WebAuthnUserDetailsService userDetailsService) {
         return new MetadataProviderImpl(userDetailsService);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService){
+    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
@@ -115,7 +115,7 @@ public class WebSecurityBeanConfig {
     public WebAuthnAuthenticationProvider webAuthnAuthenticationProvider(
             AuthenticatorManager authenticatorManager,
             WebAuthnAuthenticatorService webAuthnAuthenticatorService,
-            WebAuthnAuthenticationContextValidator authenticationContextValidator){
+            WebAuthnAuthenticationContextValidator authenticationContextValidator) {
 
         WebAuthnAuthenticationProvider webAuthnAuthenticationProvider = new WebAuthnAuthenticationProvider(webAuthnAuthenticatorService, authenticationContextValidator);
         webAuthnAuthenticationProvider.setAuthenticatorService(authenticatorManager);
@@ -123,22 +123,22 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository(){
+    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
         return new HttpSessionSecurityContextRepository();
     }
 
     @Bean
-    public InvalidSessionStrategy invalidSessionStrategy(){
+    public InvalidSessionStrategy invalidSessionStrategy() {
         return new SimpleRedirectInvalidSessionStrategy("/login?expired");
     }
 
     @Bean
-    public InvalidSessionAccessDeniedHandler invalidSessionAccessDeniedHandler(InvalidSessionStrategy invalidSessionStrategy){
+    public InvalidSessionAccessDeniedHandler invalidSessionAccessDeniedHandler(InvalidSessionStrategy invalidSessionStrategy) {
         return new InvalidSessionAccessDeniedHandler(invalidSessionStrategy);
     }
 
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
+    public AccessDeniedHandler accessDeniedHandler() {
         LinkedHashMap<Class<? extends AccessDeniedException>, AccessDeniedHandler> errorHandlers = new LinkedHashMap<>();
 
         // invalid csrf token error handler

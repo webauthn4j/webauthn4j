@@ -16,14 +16,14 @@ import java.util.List;
 public class UserUpdateForm {
 
     @NotEmpty
-    private String  firstName;
+    private String firstName;
 
     @NotEmpty
-    private String  lastName;
+    private String lastName;
 
     @NotEmpty
     @Email
-    private String  emailAddress;
+    private String emailAddress;
 
     @Valid
     private List<AuthenticatorForm> authenticators;

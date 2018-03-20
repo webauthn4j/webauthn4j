@@ -26,12 +26,12 @@ public class AuthorityFormToAuthorityUpdateDtoConverter implements Converter<Aut
     public AuthorityUpdateDto convert(MappingContext<AuthorityForm, AuthorityUpdateDto> context) {
         AuthorityForm source = context.getSource();
         AuthorityUpdateDto destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new AuthorityUpdateDto();
         }
-        List<Integer> users  = source.getUsers();
+        List<Integer> users = source.getUsers();
         List<Integer> groups = source.getGroups();
-        destination.setUsers(users   == null ? Collections.emptyList() : users);
+        destination.setUsers(users == null ? Collections.emptyList() : users);
         destination.setGroups(groups == null ? Collections.emptyList() : groups);
         return destination;
     }

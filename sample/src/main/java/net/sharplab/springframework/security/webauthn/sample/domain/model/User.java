@@ -14,10 +14,10 @@ import java.util.List;
 public class User implements WebAuthnUserDetails {
 
     private Integer id;
-    private byte[]  userHandle;
-    private String  firstName;
-    private String  lastName;
-    private String  emailAddress;
+    private byte[] userHandle;
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
 
     private List<Authority> authorities;
 
@@ -31,15 +31,15 @@ public class User implements WebAuthnUserDetails {
 
     private boolean passwordAuthenticationAllowed = false;
 
-    public User(){
+    public User() {
         //NOP
     }
 
-    public User(int id){
+    public User(int id) {
         this.id = id;
     }
 
-    public User(Integer id, byte[] userHandle, String firstName, String lastName, String emailAddress, List<Authority> authorities, List<Group> groups, List<Authenticator> authenticators, boolean locked, boolean passwordAuthenticationAllowed){
+    public User(Integer id, byte[] userHandle, String firstName, String lastName, String emailAddress, List<Authority> authorities, List<Group> groups, List<Authenticator> authenticators, boolean locked, boolean passwordAuthenticationAllowed) {
         this.id = id;
         this.userHandle = userHandle;
         this.firstName = firstName;
@@ -54,15 +54,17 @@ public class User implements WebAuthnUserDetails {
 
     /**
      * 姓名を返却する
+     *
      * @return 姓名
      */
     @SuppressWarnings("WeakerAccess")
-    public String getFullname(){
+    public String getFullname() {
         return firstName + " " + lastName;
     }
 
     /**
      * ユーザー名を返却する
+     *
      * @return ユーザー名
      */
     @Override
@@ -71,7 +73,9 @@ public class User implements WebAuthnUserDetails {
     }
 
     @Override
-    public List<Authenticator> getAuthenticators() { return this.authenticators; }
+    public List<Authenticator> getAuthenticators() {
+        return this.authenticators;
+    }
 
     @Override
     public boolean isPasswordAuthenticationAllowed() {
@@ -85,6 +89,7 @@ public class User implements WebAuthnUserDetails {
 
     /**
      * アカウントが有効期限内か
+     *
      * @return アカウントが有効期限内の場合<code>true</code>
      */
     @Override
@@ -94,6 +99,7 @@ public class User implements WebAuthnUserDetails {
 
     /**
      * アカウントがロックされていないか
+     *
      * @return アカウントがロックされていない場合<code>true</code>
      */
     @Override
@@ -103,6 +109,7 @@ public class User implements WebAuthnUserDetails {
 
     /**
      * アカウントの認証情報が有効か
+     *
      * @return アカウントの認証情報が有効の場合<code>true</code>
      */
     @Override
@@ -112,6 +119,7 @@ public class User implements WebAuthnUserDetails {
 
     /**
      * アカウントが有効か
+     *
      * @return アカウントが有効の場合<code>true</code>
      */
     @Override

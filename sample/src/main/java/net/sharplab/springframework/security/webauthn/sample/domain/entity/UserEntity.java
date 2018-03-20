@@ -17,14 +17,14 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private byte[]  userHandle;
-    private String  firstName;
-    private String  lastName;
-    private String  emailAddress;
+    private byte[] userHandle;
+    private String firstName;
+    private String lastName;
+    private String emailAddress;
 
     @ManyToMany
     @JoinTable(
-            name="r_user_group",
+            name = "r_user_group",
             joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}
 
@@ -33,7 +33,7 @@ public class UserEntity implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name="r_user_authority",
+            name = "r_user_authority",
             joinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}
 
@@ -52,10 +52,11 @@ public class UserEntity implements Serializable {
 
     /**
      * アカウントの文字列表現。E-Mailアドレス
+     *
      * @return アカウントのE-Mailアドレス
      */
     @Override
-    public String toString(){
+    public String toString() {
         return emailAddress;
     }
 

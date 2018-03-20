@@ -16,7 +16,7 @@ public class AttestationObjectFormToBase64StringConverter implements Converter<A
 
     private ObjectMapper objectMapper;
 
-    public AttestationObjectFormToBase64StringConverter(){
+    public AttestationObjectFormToBase64StringConverter() {
         this.objectMapper = new ObjectMapper(new CBORFactory());
         this.objectMapper.registerModule(new WebAuthnModule());
     }

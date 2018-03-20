@@ -67,33 +67,30 @@ public class ProfileController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String update(@AuthenticationPrincipal User loginUser, @Valid @ModelAttribute("profileForm") ProfileUpdateForm profileUpdateForm,
-                         BindingResult result, Model model, RedirectAttributes redirectAttributes){
+                         BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         User user = null;
-        try{
+        try {
             int userId = loginUser.getId();
             user = profileService.findOne(userId);
             ProfileForm profileForm = modelMapper.map(user, ProfileForm.class);
             modelMapper.map(profileUpdateForm, profileForm);
             model.addAttribute(profileForm);
-        }
-        catch (WebAuthnSampleBusinessException ex){
+        } catch (WebAuthnSampleBusinessException ex) {
             model.addAttribute(ex.getResultMessages());
             return ViewNames.VIEW_PROFILE_UPDATE;
         }
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return ViewNames.VIEW_PROFILE_UPDATE;
         }
 
-        try{
+        try {
             modelMapper.map(profileUpdateForm, user);
             profileService.update(user);
-        }
-        catch(WebAuthnSampleEntityNotFoundException ex) {
+        } catch (WebAuthnSampleEntityNotFoundException ex) {
             model.addAttribute(ex.getResultMessages());
             return ViewNames.REDIRECT_DASHBOARD;
-        }
-        catch (WebAuthnSampleBusinessException ex){
+        } catch (WebAuthnSampleBusinessException ex) {
             model.addAttribute(ex.getResultMessages());
             return ViewNames.VIEW_PROFILE_UPDATE;
         }

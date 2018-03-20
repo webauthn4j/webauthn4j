@@ -37,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
     @Transactional(readOnly = true)
     public Group findOne(int id) {
         GroupEntity retrievedGroupEntity = groupEntityRepository.findById(id)
-                .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
+                .orElseThrow(() -> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
 
         return modelMapper.map(retrievedGroupEntity, Group.class);
     }
@@ -57,10 +57,9 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional(readOnly = true)
     public Page<Group> findAllByKeyword(Pageable pageable, String keyword) {
-        if(keyword == null){
+        if (keyword == null) {
             return modelMapper.map(groupEntityRepository.findAll(pageable), DomainTypeTokens.GroupPage);
-        }
-        else {
+        } else {
             return modelMapper.map(groupEntityRepository.findAllByKeyword(pageable, keyword), DomainTypeTokens.GroupPage);
         }
     }
@@ -75,7 +74,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public void update(Group group) {
         GroupEntity retrievedGroupEntity = groupEntityRepository.findById(group.getId())
-            .orElseThrow(()-> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
+                .orElseThrow(() -> new WebAuthnSampleEntityNotFoundException(ResultMessages.error().add(MessageCodes.Error.Group.GROUP_NOT_FOUND)));
         modelMapper.map(group, retrievedGroupEntity);
     }
 

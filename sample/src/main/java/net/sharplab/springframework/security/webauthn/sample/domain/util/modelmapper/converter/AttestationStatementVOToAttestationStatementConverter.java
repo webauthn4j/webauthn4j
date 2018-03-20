@@ -28,20 +28,17 @@ public class AttestationStatementVOToAttestationStatementConverter implements Co
                 destination = new PackedAttestationStatement();
             }
             context.getMappingEngine().map(context.create((PackedAttestationStatementVO) source, destination));
-        }
-        else if (source.getClass() == FIDOU2FAttestationStatementVO.class) {
+        } else if (source.getClass() == FIDOU2FAttestationStatementVO.class) {
             if (destination == null) {
                 destination = new FIDOU2FAttestationStatement();
             }
             context.getMappingEngine().map(context.create((FIDOU2FAttestationStatementVO) source, destination));
-        }
-        else if(source.getClass() == NoneAttestationStatementVO.class){
+        } else if (source.getClass() == NoneAttestationStatementVO.class) {
             if (destination == null) {
                 destination = new NoneAttestationStatement();
             }
             context.getMappingEngine().map(context.create((NoneAttestationStatementVO) source, destination));
-        }
-        else {
+        } else {
             throw new IllegalArgumentException();
         }
         return destination;

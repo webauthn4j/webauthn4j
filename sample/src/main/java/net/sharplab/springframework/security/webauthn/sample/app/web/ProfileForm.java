@@ -37,20 +37,20 @@ public class ProfileForm {
      * first name
      */
     @NotEmpty
-    private String  firstName;
+    private String firstName;
 
     /**
      * last name
      */
     @NotEmpty
-    private String  lastName;
+    private String lastName;
 
     /**
      * email address
      */
     @NotEmpty
     @Email
-    private String  emailAddress;
+    private String emailAddress;
 
     /**
      * authenticators

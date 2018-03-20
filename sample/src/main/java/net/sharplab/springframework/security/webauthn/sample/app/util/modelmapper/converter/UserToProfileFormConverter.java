@@ -23,25 +23,23 @@ public class UserToProfileFormConverter implements Converter<User, ProfileForm> 
     @Override
     public ProfileForm convert(MappingContext<User, ProfileForm> context) {
         ProfileForm destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new ProfileForm();
         }
         User source = context.getSource();
 
         byte[] sourceUserHandle = source.getUserHandle();
-        if(sourceUserHandle == null){
+        if (sourceUserHandle == null) {
             destination.setUserHandle(null);
-        }
-        else {
+        } else {
             destination.setUserHandle(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(sourceUserHandle));
         }
         destination.setFirstName(source.getFirstName());
         destination.setLastName(source.getLastName());
         destination.setEmailAddress(source.getEmailAddress());
-        if(source.getAuthenticators() == null){
+        if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
-        }
-        else {
+        } else {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorFormList)));
         }
         destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());

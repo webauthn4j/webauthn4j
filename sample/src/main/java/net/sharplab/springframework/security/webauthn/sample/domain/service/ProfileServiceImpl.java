@@ -17,6 +17,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     /**
      * コンストラクタ
+     *
      * @param userManager ユーザーサービス
      */
     @Autowired
@@ -27,22 +28,24 @@ public class ProfileServiceImpl implements ProfileService {
 
     /**
      * ユーザーを検索する
+     *
      * @param id ユーザーID
      */
     @Override
     @Transactional(readOnly = true)
-    public User findOne(int id){
+    public User findOne(int id) {
         return userManager.findById(id);
     }
 
 
     /**
      * ユーザーを更新する
+     *
      * @param user ユーザー
      */
     @Override
     @Transactional
-    public void update(User user){
+    public void update(User user) {
         userManager.updateUser(user);
         //SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorityEntities()));
     }

@@ -24,23 +24,21 @@ public class UserToUserFormConverter implements Converter<User, UserForm> {
     public UserForm convert(MappingContext<User, UserForm> context) {
         User source = context.getSource();
         UserForm destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new UserForm();
         }
         byte[] sourceUserHandle = source.getUserHandle();
-        if(sourceUserHandle == null){
+        if (sourceUserHandle == null) {
             destination.setUserHandle(null);
-        }
-        else {
+        } else {
             destination.setUserHandle(java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(sourceUserHandle));
         }
         destination.setFirstName(source.getFirstName());
         destination.setLastName(source.getLastName());
         destination.setEmailAddress(source.getEmailAddress());
-        if(source.getAuthenticators() == null){
+        if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
-        }
-        else {
+        } else {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorFormList)));
         }
         destination.setLocked(source.isLocked());

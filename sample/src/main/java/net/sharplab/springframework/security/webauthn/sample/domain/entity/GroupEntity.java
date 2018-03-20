@@ -18,11 +18,11 @@ public class GroupEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "group_name")
-    private String  groupName;
+    private String groupName;
 
     @ManyToMany
     @JoinTable(
-            name="r_user_group",
+            name = "r_user_group",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")}
 
@@ -31,7 +31,7 @@ public class GroupEntity implements Serializable {
 
     @ManyToMany
     @JoinTable(
-            name="r_group_authority",
+            name = "r_group_authority",
             joinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")}
 
@@ -40,10 +40,11 @@ public class GroupEntity implements Serializable {
 
     /**
      * グループの文字列表現。グループ名
+     *
      * @return アカウントのグループ名
      */
     @Override
-    public String toString(){
+    public String toString() {
         return groupName;
     }
 

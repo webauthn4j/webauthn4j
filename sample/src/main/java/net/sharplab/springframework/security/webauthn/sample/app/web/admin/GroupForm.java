@@ -1,6 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 
 import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -10,6 +11,6 @@ import javax.validation.constraints.NotEmpty;
 public class GroupForm {
 
     @NotEmpty
-    private String  groupName;
+    private String groupName;
 
 }

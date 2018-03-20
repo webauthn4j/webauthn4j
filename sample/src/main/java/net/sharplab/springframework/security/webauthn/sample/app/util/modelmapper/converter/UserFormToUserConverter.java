@@ -19,7 +19,7 @@ public class UserFormToUserConverter implements Converter<UserForm, User> {
 
     private PasswordEncoder passwordEncoder;
 
-    public UserFormToUserConverter(PasswordEncoder passwordEncoder){
+    public UserFormToUserConverter(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,7 +33,7 @@ public class UserFormToUserConverter implements Converter<UserForm, User> {
     @Override
     public User convert(MappingContext<UserForm, User> context) {
         User destination = context.getDestination();
-        if(destination == null){
+        if (destination == null) {
             destination = new User();
         }
         UserForm source = context.getSource();
@@ -43,10 +43,9 @@ public class UserFormToUserConverter implements Converter<UserForm, User> {
         destination.setLastName(source.getLastName());
         destination.setEmailAddress(source.getEmailAddress());
         destination.setPassword(passwordEncoder.encode(source.getRawPassword()));
-        if(source.getAuthenticators() == null){
+        if (source.getAuthenticators() == null) {
             destination.setAuthenticators(Collections.emptyList());
-        }
-        else {
+        } else {
             destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorList)));
         }
         destination.setLocked(source.isLocked());

@@ -38,7 +38,8 @@ public class ViewNames {
     public static final String VIEW_LOGIN_LOGIN = "login/login";
     public static final String VIEW_LOGIN_AUTHENTICATOR_LOGIN = "login/authenticatorLogin";
 
-    private ViewNames(){}
+    private ViewNames() {
+    }
 
 
 }

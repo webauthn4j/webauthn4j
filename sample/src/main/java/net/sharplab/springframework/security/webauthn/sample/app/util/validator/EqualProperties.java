@@ -11,18 +11,21 @@ import java.lang.annotation.Target;
  * Validation Annotation for ensuring property equality
  */
 @Constraint(validatedBy = {EqualPropertiesValidator.class})
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EqualProperties {
 
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
     String property();
+
     String comparingProperty();
+
     String message() default "property {property} and {comparingProperty} mismatch";
 
-    @interface List{
+    @interface List {
         EqualProperties[] value();
     }
 }
