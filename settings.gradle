@@ -1,9 +1,6 @@
-include "core"
-include "thymeleaf"
-include "sample"
+include "spring-security-webauthn-core"
+include "spring-security-webauthn-thymeleaf"
+include "spring-security-webauthn-sample"
+include "webauthn4j-core"
 
 rootProject.name = 'spring-security-webauthn'
-
-rootProject.children.each { p ->
-    p.name = "spring-security-webauthn-${p.name}"
-}

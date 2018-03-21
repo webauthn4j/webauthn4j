@@ -1,0 +1,41 @@
+description = "Spring Security WebAuthn Core library"
+
+apply plugin: "io.spring.dependency-management"
+apply plugin: 'nebula.provided-base'
+
+repositories {
+    flatDir {
+        dirs "../libs"
+    }
+}
+
+dependencies {
+    compile project(':webauthn4j-core')
+
+    // Custom Spring Security
+    compile('org.springframework.security:spring-security-core:5.0.2.BUILD-SNAPSHOT')
+    compile('org.springframework.security:spring-security-web:5.0.2.BUILD-SNAPSHOT')
+
+    compile("org.springframework:spring-web")
+    compile("org.springframework.security:spring-security-core")
+    compile("org.springframework.security:spring-security-config")
+    compile("org.springframework.security:spring-security-web")
+
+    provided('javax.servlet:javax.servlet-api')
+
+    //Test
+    testCompile('org.projectlombok:lombok')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.security:spring-security-test')
+    testCompile('junit:junit')
+    testCompile('org.mockito:mockito-core')
+    testCompile('org.assertj:assertj-core')
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
+    }
+}

@@ -1,0 +1,40 @@
+group 'com.webauthn4j'
+version '0.1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: "io.spring.dependency-management"
+apply plugin: 'nebula.provided-base'
+
+sourceCompatibility = 1.8
+
+repositories {
+    flatDir {
+        dirs "../libs"
+    }
+}
+
+dependencies {
+    compile("com.nimbusds:nimbus-jose-jwt:${nimbusJoseJwtVersion}")
+    compile("com.augustcellars.cose:cose-java:${coseJavaVersion}")
+    compile("com.fasterxml.jackson.core:jackson-databind")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+    compile("org.apache.httpcomponents:httpclient")
+
+    compile("org.springframework:spring-web")
+
+    provided('javax.servlet:javax.servlet-api')
+
+    //Test
+    testCompile('org.projectlombok:lombok')
+    testCompile('junit:junit')
+    testCompile('org.mockito:mockito-core')
+    testCompile('org.assertj:assertj-core')
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
+    }
+}
