@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.certpath;
+package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic;
 
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
+import net.sharplab.springframework.security.webauthn.exception.CertificateException;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.security.core.SpringSecurityMessageSource;
 
@@ -25,9 +26,9 @@ import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 
 /**
- * Created by ynojima on 2017/09/21.
+ * UntrustedCATolerantTrustworthinessValidator
  */
-public class UntrustedCATolerantTrustworthinessValidator implements CertPathTrustworthinessValidator {
+public class UntrustedCATolerantTrustworthinessValidator implements BasicTrustworthinessValidator {
 
     //~ Instance fields ================================================================================================
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
@@ -37,16 +38,13 @@ public class UntrustedCATolerantTrustworthinessValidator implements CertPathTrus
     @Override
     public void validate(WebAuthnAttestationStatement attestationStatement) {
         X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
-        if (attestationCertificate == null) {
-            return;
-        }
         try {
             attestationCertificate.checkValidity();
         } catch (CertificateExpiredException e) {
-            throw new net.sharplab.springframework.security.webauthn.exception.CertificateException(messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.certificateExpired",
+            throw new CertificateException(messages.getMessage("UntrustedCATolerantTrustworthinessValidator.certificateExpired",
                     "Certificate expired"), e);
         } catch (CertificateNotYetValidException e) {
-            throw new net.sharplab.springframework.security.webauthn.exception.CertificateException(messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.certificateNotYetValid",
+            throw new CertificateException(messages.getMessage("UntrustedCATolerantTrustworthinessValidator.certificateNotYetValid",
                     "Certificate not yet valid"), e);
         }
     }

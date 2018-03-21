@@ -16,6 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.self;
 
+import net.sharplab.springframework.security.webauthn.attestation.statement.AttestationType;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
 import net.sharplab.springframework.security.webauthn.exception.CertificateException;
 import net.sharplab.springframework.security.webauthn.exception.SelfAttestationProhibitedException;
@@ -37,7 +38,7 @@ public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestat
     private boolean isSelfAttestationAllowed = true;
 
     public void validate(WebAuthnAttestationStatement attestationStatement) {
-        if (!attestationStatement.isSelfAttested()) {
+        if (attestationStatement.getAttestationType() == AttestationType.Self) {
             throw new IllegalArgumentException(messages.getMessage("SelfAttestationTrustworthinessValidatorImpl.attestationStatementIsNotSelfAttested",
                     "attestationStatement is not self attested"));
         }

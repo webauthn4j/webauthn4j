@@ -1,7 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
-import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
 import net.sharplab.springframework.security.webauthn.client.challenge.ChallengeRepository;
 import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;
@@ -11,8 +10,11 @@ import net.sharplab.springframework.security.webauthn.context.validator.WebAuthn
 import net.sharplab.springframework.security.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
 import net.sharplab.springframework.security.webauthn.context.validator.assertion.signature.FIDOU2FAssertionSignatureValidator;
 import net.sharplab.springframework.security.webauthn.context.validator.assertion.signature.WebAuthnAssertionSignatureValidator;
-import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.AttestationStatementTrustworthinessValidator;
-import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.LooseAttestationStatementTrustworthinessValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.AttestationStatementValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.FIDOU2FAttestationStatementValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.NoneAttestationStatementValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.PackedAttestationStatementValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProvider;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProviderImpl;
 import net.sharplab.springframework.security.webauthn.sample.domain.component.AuthenticatorManager;
@@ -78,13 +80,23 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator(AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator) {
-        return new WebAuthnRegistrationContextValidator(attestationStatementTrustworthinessValidator);
+    public WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator(List<AttestationStatementValidator> attestationStatementValidators) {
+        return new WebAuthnRegistrationContextValidator(attestationStatementValidators);
     }
 
     @Bean
-    public AttestationStatementTrustworthinessValidator attestationStatementTrustworthinessValidator(FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService) {
-        return new LooseAttestationStatementTrustworthinessValidator(fidoMetadataServiceTrustAnchorService);
+    public FIDOU2FAttestationStatementValidator fidou2FAttestationStatementValidator(){
+        return new FIDOU2FAttestationStatementValidator(new SelfAttestationTrustworthinessValidatorImpl());
+    }
+
+    @Bean
+    public NoneAttestationStatementValidator noneAttestationStatementValidator() {
+        return new NoneAttestationStatementValidator();
+    }
+
+    @Bean
+    public PackedAttestationStatementValidator packedAttestationStatementValidator(){
+        return new PackedAttestationStatementValidator();
     }
 
     @Bean

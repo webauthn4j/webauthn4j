@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.certpath;
+package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic;
 
 import net.sharplab.springframework.security.webauthn.anchor.WebAuthnTrustAnchorService;
 import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
+import net.sharplab.springframework.security.webauthn.exception.CertificateException;
 import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.core.SpringSecurityMessageSource;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -27,15 +30,18 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * Created by ynojima on 2017/09/21.
+ * TrustAnchorBasicTrustworthinessValidator
  */
-public class CertPathTrustworthinessValidatorImpl implements CertPathTrustworthinessValidator {
+public class TrustAnchorBasicTrustworthinessValidator implements BasicTrustworthinessValidator {
+
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
+
 
     private WebAuthnTrustAnchorService webAuthnTrustAnchorService;
 
     private boolean isRevocationCheckEnabled = false;
 
-    public CertPathTrustworthinessValidatorImpl(WebAuthnTrustAnchorService webAuthnTrustAnchorService) {
+    public TrustAnchorBasicTrustworthinessValidator(WebAuthnTrustAnchorService webAuthnTrustAnchorService) {
         this.webAuthnTrustAnchorService = webAuthnTrustAnchorService;
     }
 
@@ -61,9 +67,11 @@ public class CertPathTrustworthinessValidatorImpl implements CertPathTrustworthi
         try {
             certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new IllegalStateException(e);
+            throw new CertificateException(messages.getMessage("TrustAnchorBasicTrustworthinessValidator.invalidAlgorithmParameter",
+                    "invalid algorithm parameter"), e);
         } catch (CertPathValidatorException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new CertificateException(messages.getMessage("TrustAnchorBasicTrustworthinessValidator.invalidCertPath",
+                    "invalid cert path"), e);
         }
     }
 

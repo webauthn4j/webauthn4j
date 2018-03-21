@@ -2,7 +2,6 @@ package net.sharplab.springframework.security.webauthn.sample.domain.config;
 
 import net.sharplab.springframework.security.fido.metadata.CertPathJWSVerifier;
 import net.sharplab.springframework.security.fido.metadata.FIDOMetadataServiceClient;
-import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +27,6 @@ public class DomainConfig {
         ResultMessagesLoggingInterceptor resultMessagesLoggingInterceptor = new ResultMessagesLoggingInterceptor();
         resultMessagesLoggingInterceptor.setExceptionLogger(exceptionLogger);
         return resultMessagesLoggingInterceptor;
-    }
-
-    @Bean
-    public FIDOMetadataServiceTrustAnchorService fidoMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient) {
-        return new FIDOMetadataServiceTrustAnchorService(fidoMetadataServiceClient);
     }
 
     @Bean

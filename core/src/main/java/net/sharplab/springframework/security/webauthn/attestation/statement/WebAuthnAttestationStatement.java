@@ -25,7 +25,7 @@ import java.security.cert.X509Certificate;
 public interface WebAuthnAttestationStatement extends Serializable {
     String getFormat();
 
-    boolean isSelfAttested();
+    AttestationType getAttestationType();
 
     X509Certificate getEndEntityCertificate();
 }

@@ -16,18 +16,19 @@
 
 package net.sharplab.springframework.security.webauthn.attestation.statement;
 
-import net.sharplab.springframework.security.webauthn.anchor.FIDOMetadataServiceTrustAnchorService;
 import net.sharplab.springframework.security.webauthn.client.challenge.HttpSessionChallengeRepository;
 import net.sharplab.springframework.security.webauthn.context.WebAuthnRegistrationContext;
 import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;
 import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnRegistrationContextProvider;
 import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnRegistrationContextProviderImpl;
 import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnRegistrationContextValidator;
-import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.DefaultAttestationStatementTrustworthinessValidator;
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.FIDOU2FAttestationStatementValidator;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import java.util.Collections;
 
 import static org.mockito.Mockito.mock;
 
@@ -40,8 +41,8 @@ public class WebAuthnRegistrationContextValidatorTest {
 
     @Before
     public void setup() {
-        FIDOMetadataServiceTrustAnchorService trustAnchorService = mock(FIDOMetadataServiceTrustAnchorService.class);
-        target = new WebAuthnRegistrationContextValidator(new DefaultAttestationStatementTrustworthinessValidator(trustAnchorService));
+        FIDOU2FAttestationStatementValidator attestationStatementValidator = mock(FIDOU2FAttestationStatementValidator.class);
+        target = new WebAuthnRegistrationContextValidator(Collections.singletonList(attestationStatementValidator));
     }
 
     @Test

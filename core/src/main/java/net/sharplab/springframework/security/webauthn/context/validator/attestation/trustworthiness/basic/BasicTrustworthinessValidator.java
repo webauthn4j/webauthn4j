@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness;
+package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic;
 
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
 
+import java.security.cert.CertPath;
+
 /**
- * Created by ynojima on 2017/09/21.
+ * Validates {@link CertPath} instance
  */
-public interface AttestationStatementTrustworthinessValidator {
+public interface BasicTrustworthinessValidator {
 
     void validate(WebAuthnAttestationStatement attestationStatement);
 }

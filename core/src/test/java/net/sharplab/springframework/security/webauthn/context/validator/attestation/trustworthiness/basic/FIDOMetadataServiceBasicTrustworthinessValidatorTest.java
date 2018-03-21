@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.anchor;
+package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic;
 
+import net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic.FIDOMetadataServiceBasicTrustworthinessValidator;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -27,9 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by ynojima on 2017/09/24.
  */
-public class FIDOMetadataServiceTrustAnchorServiceTest {
+public class FIDOMetadataServiceBasicTrustworthinessValidatorTest {
 
-    public FIDOMetadataServiceTrustAnchorService target = new FIDOMetadataServiceTrustAnchorService(null);
+    public FIDOMetadataServiceBasicTrustworthinessValidator target = new FIDOMetadataServiceBasicTrustworthinessValidator(null);
 
     @Test
     public void needsRefresh_test_with_cache_null() {

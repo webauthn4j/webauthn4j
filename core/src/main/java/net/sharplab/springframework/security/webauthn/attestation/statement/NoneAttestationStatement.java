@@ -16,24 +16,31 @@
 
 package net.sharplab.springframework.security.webauthn.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.security.cert.X509Certificate;
 
+@JsonIgnoreProperties(value = "format")
 public class NoneAttestationStatement implements WebAuthnAttestationStatement {
 
     public static final String FORMAT = "none";
 
+    @JsonIgnore
     @Override
     public String getFormat() {
         return FORMAT;
     }
 
+    @JsonIgnore
     @Override
-    public boolean isSelfAttested() {
-        return false; //TODO
+    public AttestationType getAttestationType() {
+        return AttestationType.None;
     }
 
+    @JsonIgnore
     @Override
     public X509Certificate getEndEntityCertificate() {
-        return null; //TODO
+        throw new UnsupportedOperationException();
     }
 }

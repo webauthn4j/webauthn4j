@@ -16,8 +16,10 @@
 
 package net.sharplab.springframework.security.webauthn.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.sharplab.springframework.security.webauthn.exception.NotImplementedException;
 import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
 
 import java.security.cert.CertPath;
@@ -54,20 +56,25 @@ public class PackedAttestationStatement implements WebAuthnAttestationStatement 
         return ecdaaKeyId;
     }
 
+    @JsonIgnore
     @Override
     public String getFormat() {
         return FORMAT;
     }
 
+    @JsonIgnore
     @Override
-    public boolean isSelfAttested() {
-        if (x5c.getCertificates().size() > 1) {
-            return false;
-        }
+    public AttestationType getAttestationType() {
         X509Certificate attestationCertificate = getEndEntityCertificate();
-        return CertificateUtil.isSelfSigned(attestationCertificate);
+        if (x5c.getCertificates().size() == 1 && CertificateUtil.isSelfSigned(attestationCertificate)) {
+            return AttestationType.Self;
+        }
+        else {
+            throw new NotImplementedException();
+        }
     }
 
+    @JsonIgnore
     @Override
     public X509Certificate getEndEntityCertificate() {
         if (x5c.getCertificates().isEmpty()) {

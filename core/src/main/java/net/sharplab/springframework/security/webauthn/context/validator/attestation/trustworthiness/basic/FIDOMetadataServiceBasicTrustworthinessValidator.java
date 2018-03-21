@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.anchor;
+package net.sharplab.springframework.security.webauthn.context.validator.attestation.trustworthiness.basic;
 
 import net.sharplab.springframework.security.fido.metadata.FIDOMetadataServiceClient;
 import net.sharplab.springframework.security.fido.metadata.Metadata;
@@ -23,7 +23,10 @@ import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOC
 import net.sharplab.springframework.security.fido.metadata.structure.MetadataTOCPayloadEntry;
 import net.sharplab.springframework.security.webauthn.attestation.statement.FIDOU2FAttestationStatement;
 import net.sharplab.springframework.security.webauthn.attestation.statement.WebAuthnAttestationStatement;
+import net.sharplab.springframework.security.webauthn.exception.CertificateException;
 import net.sharplab.springframework.security.webauthn.util.CertificateUtil;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.security.core.SpringSecurityMessageSource;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -35,9 +38,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * FIDO Metadata Service backed TrustAnchorService
+ * FIDOMetadataServiceBasicTrustworthinessValidator
  */
-public class FIDOMetadataServiceTrustAnchorService {
+public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTrustworthinessValidator {
+
+    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     private FIDOMetadataServiceClient fidoMetadataServiceClient;
 
@@ -45,11 +50,37 @@ public class FIDOMetadataServiceTrustAnchorService {
     LocalDate nextUpdate;
     LocalDateTime lastRefresh;
 
-    public FIDOMetadataServiceTrustAnchorService(FIDOMetadataServiceClient fidoMetadataServiceClient) {
+    public FIDOMetadataServiceBasicTrustworthinessValidator(FIDOMetadataServiceClient fidoMetadataServiceClient) {
         this.fidoMetadataServiceClient = fidoMetadataServiceClient;
     }
 
-    public Metadata findMetadata(WebAuthnAttestationStatement attestationStatement) {
+    @Override
+    public void validate(WebAuthnAttestationStatement attestationStatement) {
+        Metadata metadata = findMetadata(attestationStatement);
+        if (metadata == null) {
+            throw new CertificateException(messages.getMessage("FIDOMetadataServiceBasicTrustworthinessValidator.metadataNotFound",
+                    "metadata not found"));
+        }
+        metadata.getStatusReports().forEach(report -> {
+            switch (report.getStatus()) {
+                case FIDO_CERTIFIED:
+                case UPDATE_AVAILABLE:
+                case NOT_FIDO_CERTIFIED:
+                    return;
+                case ATTESTATION_KEY_COMPROMISE:
+                case USER_VERIFICATION_BYPASS:
+                case USER_KEY_REMOTE_COMPROMISE:
+                case USER_KEY_PHYSICAL_COMPROMISE:
+                case REVOKED:
+                default:
+                    String errorMessage = messages.getMessage("FIDOMetadataServiceBasicTrustworthinessValidator.errorResponseFromMetadataService",
+                            "error response from metadata service: {}");
+                    throw new CertificateException(String.format(errorMessage, report.getStatus()));
+            }
+        });
+    }
+
+    Metadata findMetadata(WebAuthnAttestationStatement attestationStatement) {
         FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
         CertPath certPath = fidoU2FAttestationStatement.getX5c();
         Map<TrustAnchor, Metadata> metadataMap = getMetadataMap();
@@ -72,7 +103,7 @@ public class FIDOMetadataServiceTrustAnchorService {
         return metadataMap.get(result.getTrustAnchor());
     }
 
-    public Map<TrustAnchor, Metadata> getMetadataMap() {
+    Map<TrustAnchor, Metadata> getMetadataMap() {
         if (needsRefresh()) {
             cachedMetadataMap = refreshMetadataMap();
         }
@@ -106,5 +137,6 @@ public class FIDOMetadataServiceTrustAnchorService {
         lastRefresh = LocalDateTime.now();
         return metadataMap;
     }
+
 
 }

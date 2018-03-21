@@ -22,11 +22,11 @@ import org.springframework.security.core.AuthenticationException;
  * Created by ynojima on 2017/08/29.
  */
 public class CertificateException extends AuthenticationException {
-    public CertificateException(String msg, Throwable cause) {
-        super(msg, cause);
+    public CertificateException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public CertificateException(String msg) {
-        super(msg);
+    public CertificateException(String message) {
+        super(message);
     }
 }

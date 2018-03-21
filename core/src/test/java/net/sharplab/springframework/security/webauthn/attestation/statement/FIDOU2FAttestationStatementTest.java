@@ -43,16 +43,16 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void isSelfAttested_test() {
+    public void getAttestationType_test() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
-        assertThat(target.isSelfAttested()).isTrue();
+        assertThat(target.getAttestationType()).isEqualTo(AttestationType.Self);
     }
 
     @Test
-    public void isSelfAttested_test_with_multiple_certificates() {
+    public void getAttestationType_test_with_multiple_certificates() {
         FIDOU2FAttestationStatement target = CoreTestUtil.createFIDOU2FAttestationStatement();
         target.setX5c(CertificateUtil.generateCertPath(Lists.newArrayList(CoreTestUtil.createFirefoxSWTokenAttestationCertificate(), CoreTestUtil.createFirefoxSWTokenAttestationCertificate())));
-        assertThat(target.isSelfAttested()).isFalse();
+        assertThat(target.getAttestationType()).isEqualTo(AttestationType.Basic);
     }
 
     @Test
