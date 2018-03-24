@@ -16,27 +16,32 @@
 
 package com.webauthn4j.webauthn.context.validator.assertion.signature;
 
+import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.webauthn.exception.BadSignatureException;
 import com.webauthn4j.webauthn.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 /**
- * WebAuthnAssertionSignatureValidator
+ * AssertionSignatureValidatorImpl
  */
-public class WebAuthnAssertionSignatureValidator extends AbstractAssertionSignatureValidator {
+public class AssertionSignatureValidatorImpl implements AssertionSignatureValidator {
 
-    @Override
-    public boolean supports(String format) {
-        return !"fido-u2f".equals(format);
+    public void verifySignature(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey) {
+        byte[] signedData = getSignedData(webAuthnAuthenticationContext);
+        byte[] signature = webAuthnAuthenticationContext.getSignature();
+        if (!credentialPublicKey.verifySignature(signature, signedData)) {
+            throw new BadSignatureException("Bad signature");
+        }
     }
 
     protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
-        String hashAlgorithm = webAuthnAuthenticationContext.getCollectedClientData().getHashAlgorithm();
-        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest(hashAlgorithm);
-        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getRawClientData());
+        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
         byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getRawAuthenticatorData();
+        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getRawClientData());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 

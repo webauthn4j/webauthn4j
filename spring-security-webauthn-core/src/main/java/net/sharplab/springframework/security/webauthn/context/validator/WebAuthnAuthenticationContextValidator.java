@@ -16,18 +16,18 @@
 
 package net.sharplab.springframework.security.webauthn.context.validator;
 
+import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.webauthn.context.validator.ChallengeValidator;
 import com.webauthn4j.webauthn.context.validator.OriginValidator;
 import com.webauthn4j.webauthn.context.validator.RpIdHashValidator;
 import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
-import net.sharplab.springframework.security.webauthn.WebAuthnAssertionAuthenticationToken;
-import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
-import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
-import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.exception.UserNotVerifiedException;
+import net.sharplab.springframework.security.webauthn.WebAuthnAssertionAuthenticationToken;
+import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.exception.BadChallengeException;
 import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
 import net.sharplab.springframework.security.webauthn.exception.BadRpIdException;
@@ -41,8 +41,6 @@ import org.springframework.security.authentication.FirstOfMultiFactorAuthenticat
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.List;
 
 /**
  * Validates {@link WebAuthnAuthenticationContext} instance
@@ -58,10 +56,10 @@ public class WebAuthnAuthenticationContextValidator {
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
 
-    private List<AssertionSignatureValidator> assertionSignatureValidators;
+    private AssertionSignatureValidator assertionSignatureValidator;
 
-    public WebAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators) {
-        this.assertionSignatureValidators = assertionSignatureValidators;
+    public WebAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
+        this.assertionSignatureValidator = assertionSignatureValidator;
     }
 
     public void validate(WebAuthnUserDetails userDetails, WebAuthnAuthenticator webAuthnAuthenticator, WebAuthnAssertionAuthenticationToken authenticationToken) {
@@ -121,25 +119,11 @@ public class WebAuthnAuthenticationContextValidator {
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
         try{
-            verifyAssertionSignature(webAuthnAuthenticator, webAuthnAuthenticationContext, credentialPublicKey);
+            assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
         }
         catch (com.webauthn4j.webauthn.exception.BadSignatureException e){
             throw new BadSignatureException(messages.getMessage("WebAuthnAuthenticationContextValidator.badSignature", "Bad signature"), e);
         }
-    }
-
-    void verifyAssertionSignature(WebAuthnAuthenticator webAuthnAuthenticator, WebAuthnAuthenticationContext webAuthnAuthenticationContext, AbstractCredentialPublicKey credentialPublicKey) {
-        for (AssertionSignatureValidator assertionSignatureValidator : assertionSignatureValidators) {
-            if (assertionSignatureValidator.supports(webAuthnAuthenticator.getFormat())) {
-                assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
-                return;
-            }
-        }
-
-        logger.debug("Authentication failed: publicKey does not match stored value");
-        throw new BadCredentialsException(messages.getMessage(
-                "WebAuthnAuthenticationContextValidator.badCredentials",
-                "Bad credentials"));
     }
 
     void verifyUserVerified(WebAuthnAuthenticationContext webAuthnAuthenticationContext, String username) {

@@ -30,6 +30,4 @@ public interface WebAuthnAuthenticator extends Serializable {
 
     WebAuthnAttestationStatement getAttestationStatement();
 
-    String getFormat();
-
 }

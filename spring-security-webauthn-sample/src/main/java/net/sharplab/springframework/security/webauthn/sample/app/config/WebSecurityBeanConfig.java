@@ -1,5 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
+import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import net.sharplab.springframework.security.webauthn.context.provider.*;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
@@ -12,8 +13,6 @@ import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnR
 import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
 import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
-import com.webauthn4j.webauthn.context.validator.assertion.signature.FIDOU2FAssertionSignatureValidator;
-import com.webauthn4j.webauthn.context.validator.assertion.signature.WebAuthnAssertionSignatureValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.NoneAttestationStatementValidator;
@@ -54,18 +53,13 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator(List<AssertionSignatureValidator> assertionSignatureValidators) {
-        return new WebAuthnAuthenticationContextValidator(assertionSignatureValidators);
+    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
+        return new WebAuthnAuthenticationContextValidator(assertionSignatureValidator);
     }
 
     @Bean
     public WebAuthnRegistrationContextProvider webAuthnRegistrationContextProvider(RelyingPartyProvider relyingPartyProvider) {
         return new WebAuthnRegistrationContextProviderImpl(relyingPartyProvider);
-    }
-
-    @Bean
-    public FIDOU2FAssertionSignatureValidator fidou2FAssertionSignatureValidator() {
-        return new FIDOU2FAssertionSignatureValidator();
     }
 
     @Bean
@@ -104,8 +98,8 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnAssertionSignatureValidator webAuthnAssertionSignatureVerifier() {
-        return new WebAuthnAssertionSignatureValidator();
+    public AssertionSignatureValidatorImpl webAuthnAssertionSignatureVerifier() {
+        return new AssertionSignatureValidatorImpl();
     }
 
     @Bean

@@ -43,9 +43,4 @@ public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
         return attestationStatement;
     }
 
-    @Override
-    public String getFormat() {
-        return attestationStatement.getFormat();
-    }
-
 }

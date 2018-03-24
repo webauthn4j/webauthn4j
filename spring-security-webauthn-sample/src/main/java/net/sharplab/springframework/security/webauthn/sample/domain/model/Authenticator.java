@@ -37,8 +37,4 @@ public class Authenticator implements WebAuthnAuthenticator {
         this.setName(name);
     }
 
-    @Override
-    public String getFormat() {
-        return attestationStatement.getFormat();
-    }
 }
