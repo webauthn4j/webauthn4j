@@ -61,7 +61,7 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
 
     @Override
     public WebAuthnUserDetails loadUserByAuthenticator(WebAuthnAuthenticator authnAuthenticator) {
-        AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(authnAuthenticator.getAttestationData().getCredentialId());
+        AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(authnAuthenticator.getAttestedCredentialData().getCredentialId());
         return modelMapper.map(authenticatorEntity.getUser(), User.class);
     }
 

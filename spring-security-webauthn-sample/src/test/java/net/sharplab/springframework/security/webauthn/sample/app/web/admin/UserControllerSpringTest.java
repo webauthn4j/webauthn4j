@@ -75,7 +75,7 @@ public class UserControllerSpringTest {
                 .perform(get("/admin/users/create"))
         //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", instanceOf(UserForm.class)));
+                .andExpect(model().attribute("userForm", instanceOf(UserCreateForm.class)));
     }
 
     @Test
@@ -106,9 +106,9 @@ public class UserControllerSpringTest {
 
     @Test
     public void create_without_required_parameters_test() throws Exception{
-        UserForm userForm = new UserForm();
-        userForm.setFirstName("John");
-        userForm.setLastName("Doe");
+        UserCreateForm userCreateForm = new UserCreateForm();
+        userCreateForm.setFirstName("John");
+        userCreateForm.setLastName("Doe");
 
         //Given
 
@@ -121,7 +121,7 @@ public class UserControllerSpringTest {
         )
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", samePropertyValuesAs(userForm)));
+                .andExpect(model().attribute("userForm", samePropertyValuesAs(userCreateForm)));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class UserControllerSpringTest {
         )
         //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", instanceOf(UserForm.class)))
+                .andExpect(model().attribute("userForm", instanceOf(UserCreateForm.class)))
                 .andExpect(model().attribute("resultMessages", samePropertyValuesAs(ResultMessages.error().add(MessageCodes.Error.User.EMAIL_ADDRESS_IS_ALREADY_USED))));
     }
 
@@ -162,12 +162,12 @@ public class UserControllerSpringTest {
         retrievedUser.setLocked(true);
         retrievedUser.setPasswordAuthenticationAllowed(true);
 
-        UserForm userForm = new UserForm();
-        userForm.setFirstName("John");
-        userForm.setLastName("Doe");
-        userForm.setEmailAddress("john.doe@example.com");
-        userForm.setLocked(true);
-        userForm.setPasswordAuthenticationAllowed(true);
+        UserUpdateForm userUpdateForm = new UserUpdateForm();
+        userUpdateForm.setFirstName("John");
+        userUpdateForm.setLastName("Doe");
+        userUpdateForm.setEmailAddress("john.doe@example.com");
+        userUpdateForm.setLocked(true);
+        userUpdateForm.setPasswordAuthenticationAllowed(true);
 
         //Given
         when(userService.findOne(userId)).thenReturn(retrievedUser);
@@ -177,7 +177,7 @@ public class UserControllerSpringTest {
                 .perform(get("/admin/users/1"))
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", samePropertyValuesAs(userForm)));
+                .andExpect(model().attribute("userForm", samePropertyValuesAs(userUpdateForm)));
     }
 
     @Test

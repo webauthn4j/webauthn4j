@@ -41,7 +41,7 @@ public class MetadataProviderImpl implements MetadataProvider {
             Collection<? extends WebAuthnAuthenticator> authenticators = userDetailsService.loadUserByUsername(username).getAuthenticators();
             List<Metadata> metadataList = new ArrayList<>();
             for (WebAuthnAuthenticator authenticator : authenticators) {
-                String credentialIdStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(authenticator.getAttestationData().getCredentialId());
+                String credentialIdStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(authenticator.getAttestedCredentialData().getCredentialId());
                 Metadata metadata = new Metadata();
                 metadata.setCredentialId(credentialIdStr);
                 metadataList.add(metadata);

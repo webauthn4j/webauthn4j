@@ -23,20 +23,10 @@ public class ModelMapperAppConfig {
     @Autowired
     ModelMapper modelMapper;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @PostConstruct
     public void initialize() {
-        modelMapper.addConverter(new UserFormToUserConverter(passwordEncoder));
-        modelMapper.addConverter(new UserUpdateFormToUserConverter());
-        modelMapper.addConverter(new UserPasswordFormToUserConverter(passwordEncoder));
-        modelMapper.addConverter(new UserToUserFormConverter());
-        modelMapper.addConverter(new ProfileUpdateFormToUserConverter());
-        modelMapper.addConverter(new UserToProfileFormConverter());
         modelMapper.addConverter(new AuthorityToAuthorityFormConverter());
         modelMapper.addConverter(new AuthorityFormToAuthorityUpdateDtoConverter());
-        modelMapper.addConverter(new AuthenticatorFormToAuthenticatorConverter());
         modelMapper.addConverter(new AttestationObjectFormToWebAuthnAttestationObjectConverter());
         modelMapper.addConverter(new ClientDataFormToClientDataConverter());
     }

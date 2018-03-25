@@ -15,10 +15,10 @@ public class Authenticator implements WebAuthnAuthenticator {
     //~ Instance fields ================================================================================================
     private Integer id;
     private String name;
-    private User user;
+
     private byte[] rpIdHash;
     private long counter;
-    private WebAuthnAttestedCredentialData attestationData;
+    private WebAuthnAttestedCredentialData attestedCredentialData;
     private WebAuthnAttestationStatement attestationStatement;
 
     /**

@@ -109,24 +109,25 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody id="authenticator-list">
-                                                    <tr th:each="authenticator, stat : *{authenticators}" class="authenticator-item">
-                                                        <td>
-                                                            <span th:text="${authenticator.name}">ThinkPad X1 Carbon</span>
-                                                            <input type="hidden" th:name="|authenticators[${stat.index}].id|" th:value="${authenticator.id}" />
-                                                            <input type="hidden" th:name="|authenticators[${stat.index}].name|" th:value="${authenticator.name}" />
-                                                            <input type="hidden" th:name="|authenticators[${stat.index}].attestationObject|" th:value="${@attestationObjectFormToBase64StringConverter.convert(authenticator.attestationObject)}" /> <!--TODO-->
-                                                        </td>
+                                                        <tr th:each="newAuthenticator, stat : *{newAuthenticators}" class="authenticator-item">
+                                                            <td>
+                                                                <input type="text" th:name="|newAuthenticators[${stat.index}].name|" th:value="${newAuthenticator.name}" value="Office Laptop"
+                                                                       class="form-control input" placeholder="Authenticator Name" />
+                                                                <input type="hidden" th:name="|newAuthenticators[${stat.index}].clientData|" th:value="${newAuthenticator.clientData.clientDataBase64}" />
+                                                                <input type="hidden" th:name="|newAuthenticators[${stat.index}].attestationObject|" th:value="${newAuthenticator.attestationObject.attestationObjectBase64}" />
+                                                                <input type="hidden" th:name="|newAuthenticators[${stat.index}].delete|" class="delete" value="false" />
+                                                            </td>
 
-                                                        <td><button type="button" class="btn btn-box-tool remove-button"><i class="fa fa-remove"></i></button></td>
-                                                    </tr>
+                                                            <td><button type="button" class="btn btn-box-tool remove-button"><i class="fa fa-remove"></i></button></td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="has-error" th:if="${#fields.hasErrors('authenticators')}">
-                                    <span class="help-block" th:errors="*{authenticators}" >Validation error message</span>
+                                <div class="has-error" th:if="${#fields.hasErrors('newAuthenticators')}">
+                                    <span class="help-block" th:errors="*{newAuthenticators}" >Validation error message</span>
                                 </div>
                             </div>
                         </div>

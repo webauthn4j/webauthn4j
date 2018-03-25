@@ -34,7 +34,7 @@ public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
     }
 
     @Override
-    public WebAuthnAttestedCredentialData getAttestationData() {
+    public WebAuthnAttestedCredentialData getAttestedCredentialData() {
         return attestationData;
     }
 

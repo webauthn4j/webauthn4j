@@ -58,7 +58,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
         } else {
-            convertAuthenticators(context);
+            convertAuthenticators(context, source, destination);
         }
 
         destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
@@ -68,9 +68,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
     }
 
     //TODO:polish code
-    private void convertAuthenticators(MappingContext<User, UserEntity> context) {
-        User srcUser = context.getSource();
-        UserEntity dstUserEntity = context.getDestination();
+    private void convertAuthenticators(MappingContext<User, UserEntity> context, User srcUser, UserEntity dstUserEntity) {
         if (dstUserEntity.getAuthenticators() == null) {
             dstUserEntity.setAuthenticators(new ArrayList<>());
         }
@@ -102,4 +100,5 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         }
         dstAuthenticators.removeAll(toBeRemoved);
     }
+
 }

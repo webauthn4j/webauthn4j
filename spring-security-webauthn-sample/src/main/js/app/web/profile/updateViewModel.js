@@ -45,7 +45,7 @@ ProfileUpdateViewModel.prototype.addCredential = function (){
         //timeout
         //excludeCredentials = []
         //authenticatorSelection
-        attestation: "direct",
+        attestation: "none",
         //extensions
     };
     let credentialCreationOptions = {
@@ -74,14 +74,15 @@ ProfileUpdateViewModel.prototype.addCredentialForm = function (clientData, attes
 
     $('<tr />', { class: "authenticator-item" })
         .append($('<td />')
-            .append($('<input />', { type: "text", name: "authenticators["+ _this._authenticatorListIndex +"].name", value: "", class: "form-control input", placeholder: "Authenticator Name"}))
-            .append($('<input />', { type: "hidden", name: "authenticators["+ _this._authenticatorListIndex +"].clientData", value: base64url.encode(clientData)}))
-            .append($('<input />', { type: "hidden", name: "authenticators["+ _this._authenticatorListIndex +"].attestationObject", value: base64url.encode(attestationObject)}))
+            .append($('<input />', { type: "text", name: "newAuthenticators["+ _this._authenticatorListIndex +"].name", value: "", class: "form-control input", placeholder: "Authenticator Name"}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].clientData", value: base64url.encode(clientData)}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].attestationObject", value: base64url.encode(attestationObject)}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].delete", value: false, class: "delete"}))
         )
         .append($('<td />')
             .append(
                 $('<button type="button" class="btn btn-box-tool remove-button"><i class="fa fa-remove"></i></button>')
-                    .on('click', function(e){$(e.target).closest('tr.authenticator-item').remove();})
+                    .on('click', function(e){ $(this).closest('tr.authenticator-item').fadeOut().find('input.delete').val('true');})
             )
         )
     .appendTo($('#authenticator-list'));
@@ -94,9 +95,7 @@ ProfileUpdateViewModel.prototype.setupEventListeners = function () {
     $('#add-credential-button').on('click', function(e){
         _this.addCredential();
     });
-    $('#authenticator-list .remove-button').on('click', function(){
-        $(this).closest('tr.authenticator-item').remove();
-    });
+    $('#authenticator-list .remove-button').on('click', function(){ $(this).closest('tr.authenticator-item').fadeOut().find('input.delete').val('true');});
 };
 
 module.exports = new ProfileUpdateViewModel();

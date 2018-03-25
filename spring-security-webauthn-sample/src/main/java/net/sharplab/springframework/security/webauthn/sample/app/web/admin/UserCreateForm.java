@@ -2,12 +2,14 @@ package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 
 import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.util.validator.EqualProperties;
-import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorUpdateForm;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -15,9 +17,9 @@ import java.util.List;
  */
 @Data
 @EqualProperties(property = "rawPassword", comparingProperty = "rawPasswordRetyped")
-public class UserForm {
+public class UserCreateForm {
 
-    @NotEmpty
+    @NotNull //TODO
     private String userHandle;
 
     @NotEmpty
@@ -37,7 +39,7 @@ public class UserForm {
     private String rawPasswordRetyped;
 
     @Valid
-    private List<AuthenticatorForm> authenticators;
+    private List<AuthenticatorCreateForm> newAuthenticators;
 
     private boolean passwordAuthenticationAllowed;
 

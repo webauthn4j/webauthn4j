@@ -1,6 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter;
 
-import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
 import net.sharplab.springframework.security.webauthn.sample.app.web.admin.AuthorityForm;
 import net.sharplab.springframework.security.webauthn.sample.domain.dto.AuthorityUpdateDto;
 import org.modelmapper.Converter;
@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Converter which converts from {@link AuthenticatorForm} to {@link AuthorityUpdateDto}
+ * Converter which converts from {@link AuthenticatorCreateForm} to {@link AuthorityUpdateDto}
  */
 public class AuthorityFormToAuthorityUpdateDtoConverter implements Converter<AuthorityForm, AuthorityUpdateDto> {
 

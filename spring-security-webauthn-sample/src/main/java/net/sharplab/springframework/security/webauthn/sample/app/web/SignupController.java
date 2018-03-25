@@ -1,6 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web;
 
-import net.sharplab.springframework.security.webauthn.sample.app.web.admin.UserForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.admin.UserCreateForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.helper.AuthenticatorHelper;
+import net.sharplab.springframework.security.webauthn.sample.app.web.helper.UserHelper;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
@@ -26,46 +28,40 @@ import java.util.UUID;
 @Controller
 public class SignupController {
 
-    private final ModelMapper modelMapper;
+    @Autowired
+    private UserService userService;
 
-    private final UserService userService;
+    @Autowired
     private UserHelper userHelper;
 
     @Autowired
-    public SignupController(ModelMapper modelMapper,
-                            UserService userService,
-                            UserHelper userHelper) {
-        this.modelMapper = modelMapper;
-        this.userService = userService;
-        this.userHelper = userHelper;
-    }
-
+    private AuthenticatorHelper authenticatorHelper;
 
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String template(Model model) {
-        UserForm userForm = new UserForm();
+        UserCreateForm userCreateForm = new UserCreateForm();
         UUID userHandle = UUID.randomUUID();
         String userHandleStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(UUIDUtil.toByteArray(userHandle));
-        userForm.setUserHandle(userHandleStr);
-        model.addAttribute(userForm);
+        userCreateForm.setUserHandle(userHandleStr);
+        model.addAttribute(userCreateForm);
         return ViewNames.VIEW_SIGNUP_SIGNUP;
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String create(HttpServletRequest request, HttpServletResponse response, @Valid @ModelAttribute UserForm userForm,
+    public String create(HttpServletRequest request, HttpServletResponse response, @Valid @ModelAttribute UserCreateForm userCreateForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute(userForm);
+            model.addAttribute("userForm", userCreateForm);
             return ViewNames.VIEW_SIGNUP_SIGNUP;
         }
 
-        if (!userHelper.validateAuthenticators(model, request, response, userForm.getAuthenticators())) {
-            model.addAttribute(userForm);
+        if (!authenticatorHelper.validateAuthenticators(model, request, response, userCreateForm.getNewAuthenticators())) {
+            model.addAttribute("userForm", userCreateForm);
             return ViewNames.VIEW_SIGNUP_SIGNUP;
         }
 
-        User user = modelMapper.map(userForm, User.class);
+        User user = userHelper.mapForCreate(userCreateForm);
         try {
             userService.create(user);
         } catch (WebAuthnSampleBusinessException ex) {

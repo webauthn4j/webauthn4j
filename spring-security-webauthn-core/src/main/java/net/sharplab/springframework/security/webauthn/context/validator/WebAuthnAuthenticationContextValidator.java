@@ -72,7 +72,7 @@ public class WebAuthnAuthenticationContextValidator {
                     "Bad credentials"));
         }
         WebAuthnAuthenticationContext webAuthnAuthenticationContext = authenticationToken.getCredentials();
-        AbstractCredentialPublicKey credentialPublicKey = webAuthnAuthenticator.getAttestationData().getCredentialPublicKey();
+        AbstractCredentialPublicKey credentialPublicKey = webAuthnAuthenticator.getAttestedCredentialData().getCredentialPublicKey();
         String username = userDetails.getUsername();
 
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();

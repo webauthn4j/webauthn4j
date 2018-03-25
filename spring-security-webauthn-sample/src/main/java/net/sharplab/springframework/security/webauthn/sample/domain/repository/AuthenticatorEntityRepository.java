@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface AuthenticatorEntityRepository extends JpaRepository<AuthenticatorEntity, Integer> {
 
-    @Query("SELECT authenticator FROM AuthenticatorEntity authenticator WHERE authenticator.attestationData.credentialId = :credentialId")
+    @Query("SELECT authenticator FROM AuthenticatorEntity authenticator WHERE authenticator.attestedCredentialData.credentialId = :credentialId")
     AuthenticatorEntity findOneByCredentialId(@Param("credentialId") byte[] credentialId);
 }

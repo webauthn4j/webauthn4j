@@ -7,12 +7,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * AuthenticatorForm
+ * AuthenticatorCreateForm
  */
 @Data
-public class AuthenticatorForm {
-
-    private Integer id;
+public class AuthenticatorCreateForm {
 
     @NotNull
     @NotEmpty
@@ -25,5 +23,7 @@ public class AuthenticatorForm {
     @NotNull
     @Valid
     private AttestationObjectForm attestationObject;
+
+    private boolean delete;
 
 }

@@ -22,6 +22,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -30,7 +31,7 @@ public class ProfileForm {
     /**
      * userHandle
      */
-    @NotEmpty
+    @NotNull //TODO
     private String userHandle;
 
     /**
@@ -56,7 +57,14 @@ public class ProfileForm {
      * authenticators
      */
     @Valid
-    private List<AuthenticatorForm> authenticators;
+    private List<AuthenticatorUpdateForm> authenticators;
+
+    /**
+     * new authenticators
+     */
+    @Valid
+    private List<AuthenticatorCreateForm> newAuthenticators;
+
 
     /**
      * <code>true</code> if password authentication is allowed

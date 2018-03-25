@@ -73,14 +73,15 @@ UserUpdateViewModel.prototype.addCredentialForm = function (clientData, attestat
 
     $('<tr />', { class: "authenticator-item" })
         .append($('<td />')
-            .append($('<input />', { type: "text", name: "authenticators["+ _this._authenticatorListIndex +"].name", value: "", class: "form-control input", placeholder: "Authenticator Name"}))
-            .append($('<input />', { type: "hidden", name: "authenticators["+ _this._authenticatorListIndex +"].clientData", value: base64url.encode(clientData)}))
-            .append($('<input />', { type: "hidden", name: "authenticators["+ _this._authenticatorListIndex +"].attestationObject", value: base64url.encode(attestationObject)}))
+            .append($('<input />', { type: "text", name: "newAuthenticators["+ _this._authenticatorListIndex +"].name", value: "", class: "form-control input", placeholder: "Authenticator Name"}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].clientData", value: base64url.encode(clientData)}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].attestationObject", value: base64url.encode(attestationObject)}))
+            .append($('<input />', { type: "hidden", name: "newAuthenticators["+ _this._authenticatorListIndex +"].delete", value: false, class: "delete"}))
         )
         .append($('<td />')
             .append(
                 $('<button type="button" class="btn btn-box-tool remove-button"><i class="fa fa-remove"></i></button>')
-                    .on('click', function(e){$(e.target).closest('tr.authenticator-item').remove();})
+                    .on('click', function(e){ $(this).closest('tr.authenticator-item').fadeOut().find('input.delete').val('true');})
             )
         )
     .appendTo($('#authenticator-list'));
@@ -94,7 +95,7 @@ UserUpdateViewModel.prototype.setupEventListeners = function () {
         _this.addCredential();
     });
     $('#authenticator-list .remove-button').on('click', function(){
-        $(this).closest('tr.authenticator-item').remove();
+        $(this).closest('tr.authenticator-item').fadeOut().find('input.delete').val('true');
     });
 };
 

@@ -26,7 +26,7 @@ import java.io.Serializable;
  */
 public interface WebAuthnAuthenticator extends Serializable {
 
-    WebAuthnAttestedCredentialData getAttestationData();
+    WebAuthnAttestedCredentialData getAttestedCredentialData();
 
     WebAuthnAttestationStatement getAttestationStatement();
 

@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.entity;
 
 import lombok.Data;
-import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestationDataVO;
+import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestedCredentialDataVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestationStatementVO;
 import net.sharplab.springframework.security.webauthn.sample.infrastructure.util.jpa.converter.AttestationStatementVOConverter;
 
@@ -30,7 +30,7 @@ public class AuthenticatorEntity implements Serializable {
     private long counter;
 
     @Embedded
-    private AttestationDataVO attestationData;
+    private AttestedCredentialDataVO attestedCredentialData;
 
     //TODO: extensions?
 

@@ -9,11 +9,11 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 /**
- * AttestationDataVO
+ * AttestedCredentialDataVO
  */
 @Data
 @Embeddable
-public class AttestationDataVO implements Serializable {
+public class AttestedCredentialDataVO implements Serializable {
 
     private byte[] aaGuid;
 

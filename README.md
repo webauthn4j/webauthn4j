@@ -5,7 +5,7 @@
 Spring Security WebAuthn provides Web Authentication specification support for your Spring application.
 Users can login with WebAuthn compliant authenticator.
 
-**This is a Proof of Concept. Not for production use for now.**
+**This is a Proof of Concept. Not for production use for now. Design may change radically. **
 
 ## Documentation
 

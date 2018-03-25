@@ -25,7 +25,6 @@ public class GroupEntity implements Serializable {
             name = "r_user_group",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")}
-
     )
     private List<UserEntity> users;
 

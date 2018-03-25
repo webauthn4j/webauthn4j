@@ -2,7 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.app.constant;
 
 import net.sharplab.springframework.security.webauthn.sample.app.api.admin.CandidateGroupDto;
 import net.sharplab.springframework.security.webauthn.sample.app.api.admin.CandidateUserDto;
-import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorForm;
+import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.PageImpl;
 
@@ -19,7 +19,7 @@ public class AppTypeTokens {
     public static final Type CandidateGroupDtoPage = new TypeToken<PageImpl<CandidateGroupDto>>() {
     }.getType();
 
-    public static final Type AuthenticatorFormList = new TypeToken<List<AuthenticatorForm>>() {
+    public static final Type AuthenticatorFormList = new TypeToken<List<AuthenticatorCreateForm>>() {
     }.getType();
 
     private AppTypeTokens() {
