@@ -1,4 +1,4 @@
--- ユーザーテーブル  --
+-- User table  --
 CREATE TABLE m_user (
   id                SERIAL          NOT NULL,
   user_handle       bytea           NOT NULL,
@@ -10,18 +10,19 @@ CREATE TABLE m_user (
   locked            BOOLEAN         NOT NULL
 );
 
--- グループテーブル  --
+-- Group table  --
 CREATE TABLE m_group (
   id                SERIAL          NOT NULL,
   group_name        VARCHAR(32)    NOT NULL
 );
 
--- 権限テーブル  --
+-- Authority table  --
 CREATE TABLE m_authority (
   id                SERIAL          NOT NULL,
   authority         VARCHAR(32)    NOT NULL
 );
 
+-- Authenticator table  --
 CREATE TABLE m_authenticator(
   id                SERIAL         NOT NULL,
   name              VARCHAR(32)    NOT NULL,
@@ -34,19 +35,19 @@ CREATE TABLE m_authenticator(
   attestation_statement  VARCHAR(4096) NOT NULL,
 );
 
--- ユーザー・グループリレーション  --
+-- User-Group relation  --
 CREATE TABLE r_user_group (
   user_id           INTEGER       NOT NULL  REFERENCES m_user(id) ON DELETE CASCADE,
   group_id          INTEGER       NOT NULL  REFERENCES m_group(id) ON DELETE CASCADE
 );
 
--- ユーザー・権限リレーション --
+-- User-Authority relation --
 CREATE TABLE r_user_authority (
   user_id           INTEGER       NOT NULL  REFERENCES m_user(id) ON DELETE CASCADE,
   authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id) ON DELETE CASCADE
 );
 
--- グループ・権限リレーション --
+-- Group-Authority relation --
 CREATE TABLE r_group_authority (
   group_id          INTEGER       NOT NULL  REFERENCES m_group(id) ON DELETE CASCADE,
   authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id) ON DELETE CASCADE
