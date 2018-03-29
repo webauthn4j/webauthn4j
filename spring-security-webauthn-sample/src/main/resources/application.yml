@@ -9,7 +9,7 @@ spring:
     url: jdbc:log4jdbc:h2:mem:webauthn;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;MODE=PostgreSQL
     driverClassName: net.sf.log4jdbc.DriverSpy
     username: sa
-    rawPassword:
+    password:
   jpa:
     hibernate:
       ddl-auto: validate
