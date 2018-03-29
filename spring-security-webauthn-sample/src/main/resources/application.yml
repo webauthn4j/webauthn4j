@@ -20,7 +20,3 @@ spring:
 
   flyway:
     locations: classpath:db/migration/{vendor}
-
-management:
-  cloudfoundry:
-    skip-ssl-validation: true

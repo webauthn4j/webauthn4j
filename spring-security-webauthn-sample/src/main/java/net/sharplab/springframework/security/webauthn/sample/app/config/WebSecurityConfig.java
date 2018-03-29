@@ -91,7 +91,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/h2-console/**").denyAll()
                 .mvcMatchers("/admin/**").hasRole(ADMIN_ROLE)
                 .mvcMatchers("/api/admin/**").hasRole(ADMIN_ROLE)
-                .mvcMatchers("cloudfoundryapplication/**").permitAll()
                 .anyRequest().fullyAuthenticated();
 
         // Logout configuration
