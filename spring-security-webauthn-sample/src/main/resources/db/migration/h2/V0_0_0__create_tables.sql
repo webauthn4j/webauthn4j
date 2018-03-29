@@ -36,19 +36,19 @@ CREATE TABLE m_authenticator(
 
 -- ユーザー・グループリレーション  --
 CREATE TABLE r_user_group (
-  user_id           INTEGER       NOT NULL  REFERENCES m_user(id),
-  group_id          INTEGER       NOT NULL  REFERENCES m_group(id)
+  user_id           INTEGER       NOT NULL  REFERENCES m_user(id) ON DELETE CASCADE,
+  group_id          INTEGER       NOT NULL  REFERENCES m_group(id) ON DELETE CASCADE
 );
 
 -- ユーザー・権限リレーション --
 CREATE TABLE r_user_authority (
-  user_id           INTEGER       NOT NULL  REFERENCES m_user(id),
-  authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id)
+  user_id           INTEGER       NOT NULL  REFERENCES m_user(id) ON DELETE CASCADE,
+  authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id) ON DELETE CASCADE
 );
 
 -- グループ・権限リレーション --
 CREATE TABLE r_group_authority (
-  group_id          INTEGER       NOT NULL  REFERENCES m_group(id),
-  authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id)
+  group_id          INTEGER       NOT NULL  REFERENCES m_group(id) ON DELETE CASCADE,
+  authority_id      INTEGER       NOT NULL  REFERENCES m_authority(id) ON DELETE CASCADE
 );
 
