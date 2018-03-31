@@ -17,9 +17,12 @@
 package net.sharplab.springframework.security.webauthn;
 
 import com.webauthn4j.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
+import net.sharplab.springframework.security.webauthn.exception.BadChallengeException;
+import net.sharplab.springframework.security.webauthn.exception.BadOriginException;
+import net.sharplab.springframework.security.webauthn.exception.BadRpIdException;
+import net.sharplab.springframework.security.webauthn.exception.BadSignatureException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 import org.apache.commons.logging.Log;
@@ -117,7 +120,23 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
         boolean isUserVerified = Objects.equals(currentAuthentication.getName(), user.getUsername());
         boolean userVerificationRequired = !isUserVerified; // If user is not verified, user verification is required.
-        authenticationContextValidator.validate(authenticationToken.getCredentials(), authenticator.getAttestedCredentialData().getCredentialPublicKey(), userVerificationRequired);
+
+        try{
+            authenticationContextValidator.validate(authenticationToken.getCredentials(), authenticator.getAttestedCredentialData().getCredentialPublicKey(), userVerificationRequired);
+        }
+        catch (com.webauthn4j.webauthn.exception.BadChallengeException e){
+            throw new BadChallengeException("Bad challenge", e);
+        }
+        catch (com.webauthn4j.webauthn.exception.BadOriginException e){
+            throw new BadOriginException("Bad origin", e);
+        }
+        catch (com.webauthn4j.webauthn.exception.BadRpIdException e){
+            throw new BadRpIdException("Bad rpId", e);
+        }
+        catch (com.webauthn4j.webauthn.exception.BadSignatureException e){
+            throw new BadSignatureException("Bad signature", e);
+        }
+
 
     }
 

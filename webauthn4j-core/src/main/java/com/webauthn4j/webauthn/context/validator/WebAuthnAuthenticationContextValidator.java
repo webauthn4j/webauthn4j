@@ -70,20 +70,10 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Verify that the challenge member of C matches the challenge that was sent to the authenticator
         // in the PublicKeyCredentialRequestOptions passed to the get() call.
-        try{
-            challengeValidator.validate(collectedClientData, relyingParty);
-        }
-        catch (com.webauthn4j.webauthn.exception.BadChallengeException e){
-            throw new BadChallengeException("Bad challenge", e);
-        }
+        challengeValidator.validate(collectedClientData, relyingParty);
 
         // Verify that the origin member of the collectedClientData matches the Relying Party's origin.
-        try{
-            originValidator.validate(collectedClientData, relyingParty);
-        }
-        catch (com.webauthn4j.webauthn.exception.BadOriginException e){
-            throw new BadOriginException("Bad origin", e);
-        }
+        originValidator.validate(collectedClientData, relyingParty);
 
         // Verify that the tokenBindingId member of the collectedClientData (if present) matches the Token Binding ID for
         // the TLS connection over which the signature was obtained.
@@ -96,21 +86,11 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Verify that the RP ID hash in the authenticatorData is the SHA-256 hash of the RP ID
         // expected by the Relying Party.
-        try{
-            rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
-        }
-        catch (com.webauthn4j.webauthn.exception.BadRpIdException e){
-            throw new BadRpIdException("Bad rpId", e);
-        }
+        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
-        try{
-            assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
-        }
-        catch (com.webauthn4j.webauthn.exception.BadSignatureException e){
-            throw new BadSignatureException("Bad signature", e);
-        }
+        assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
     }
 
 
