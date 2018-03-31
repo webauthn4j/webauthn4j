@@ -20,11 +20,11 @@ package com.webauthn4j.webauthn.exception;
  * Created by ynojima on 2017/08/27.
  */
 public class SelfAttestationProhibitedException extends ValidationException {
-    public SelfAttestationProhibitedException(String msg, Throwable cause) {
-        super(msg, cause);
+    public SelfAttestationProhibitedException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public SelfAttestationProhibitedException(String msg) {
-        super(msg);
+    public SelfAttestationProhibitedException(String message) {
+        super(message);
     }
 }

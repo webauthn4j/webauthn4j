@@ -17,10 +17,10 @@
 package net.sharplab.springframework.security.webauthn;
 
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
-import com.webauthn4j.webauthn.exception.CredentialIdNotFoundException;
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorImpl;
+import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticatorImpl;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
+import net.sharplab.springframework.security.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsImpl;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -80,7 +80,7 @@ public class WebAuthnAuthenticationProviderTest {
                 "$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq",
                 Collections.emptyList(),
                 Collections.singletonList(grantedAuthority));
-        WebAuthnAuthenticator authenticator = new WebAuthnAuthenticatorImpl(null, null);
+        WebAuthnAuthenticator authenticator = new WebAuthnAuthenticatorImpl(null, null, 0);
 
         when(webAuthnAuthenticatorService.loadWebAuthnAuthenticatorByCredentialId(credentialId))
                 .thenReturn(authenticator);

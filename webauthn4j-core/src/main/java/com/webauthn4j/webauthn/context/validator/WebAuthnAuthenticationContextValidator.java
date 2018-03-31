@@ -19,6 +19,7 @@ package com.webauthn4j.webauthn.context.validator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
 import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
@@ -32,6 +33,7 @@ import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * Validates {@link WebAuthnAuthenticationContext} instance
@@ -50,6 +52,8 @@ public class WebAuthnAuthenticationContextValidator {
 
     private AssertionSignatureValidator assertionSignatureValidator;
 
+    private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
+
     public WebAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
         this.assertionSignatureValidator = assertionSignatureValidator;
 
@@ -58,41 +62,82 @@ public class WebAuthnAuthenticationContextValidator {
         this.deserializer = new WebAuthnAuthenticatorDataDeserializer();
     }
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey, boolean userVerificationRequired) {
+    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, WebAuthnAuthenticator authenticator, boolean userVerificationRequired) {
 
+        // In the spec, claimed as "C"
         CollectedClientData collectedClientData = deriveCollectedClientData(new String(webAuthnAuthenticationContext.getCollectedClientData(), StandardCharsets.UTF_8));
         WebAuthnAuthenticatorData authenticatorData = deriveAuthenticatorData(webAuthnAuthenticationContext.getAuthenticatorData());
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
+        // Verify that the value of C.type is the string webauthn.get.
+        if(!Objects.equals(collectedClientData.getType(), "webauthn.get")){
+            throw new MaliciousAssertionException("Bad client data type");
+        }
+
+        // Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
+        // the PublicKeyCredentialRequestOptions passed to the get() call.
+        challengeValidator.validate(collectedClientData, relyingParty);
+
+        // Verify that the value of C.origin matches the Relying Party's origin.
+        originValidator.validate(collectedClientData, relyingParty);
+
+        // Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
+        // which the attestation was obtained. If Token Binding was used on that TLS connection,
+        // also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+        //TODO: not yet implemented
+
+        // Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
+        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
+
+        // If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
         if(userVerificationRequired && !authenticatorData.isFlagUV()){
             throw new UserNotVerifiedException("User not verified");
         }
 
-        // Verify that the challenge member of C matches the challenge that was sent to the authenticator
-        // in the PublicKeyCredentialRequestOptions passed to the get() call.
-        challengeValidator.validate(collectedClientData, relyingParty);
+        // If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
+        if(!userVerificationRequired && !authenticatorData.isFlagUP()){
+            throw new UserNotPresentException("User not present");
+        }
 
-        // Verify that the origin member of the collectedClientData matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, relyingParty);
-
-        // Verify that the tokenBindingId member of the collectedClientData (if present) matches the Token Binding ID for
-        // the TLS connection over which the signature was obtained.
-        //TODO: not yet implemented
-
-        // Verify that the clientExtensions member of the collectedClientData is a proper subset of the extensions
-        // requested by the Relying Party and that the authenticatorExtensions in the collectedClientData is also
-        // a proper subset of the extensions requested by the Relying Party.
+        // Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
+        // extension outputs in the extensions in authData are as expected, considering the client extension input
+        // values that were given as the extensions option in the get() call. In particular, any extension identifier
+        // values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
+        // identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
+        // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         // TODO: not yet implemented
-
-        // Verify that the RP ID hash in the authenticatorData is the SHA-256 hash of the RP ID
-        // expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
-        assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, credentialPublicKey);
+        assertionSignatureValidator.verifySignature(webAuthnAuthenticationContext, authenticator.getAttestedCredentialData().getCredentialPublicKey());
+
+        // If the signature counter value adata.signCount is nonzero or the value stored in conjunction with
+        // credential’s id attribute is nonzero, then run the following sub-step:
+        long presentedCounter = authenticatorData.getCounter();
+        long storedCounter = authenticator.getCounter();
+        if(authenticatorData.getCounter() > 0 || authenticator.getCounter() > 0){
+            // If the signature counter value adata.signCount is
+            // greater than the signature counter value stored in conjunction with credential’s id attribute.
+            if(presentedCounter > storedCounter){
+                authenticator.setCounter(presentedCounter);
+            }
+            // less than or equal to the signature counter value stored in conjunction with credential’s id attribute.
+            else {
+                maliciousCounterValueHandler.maliciousCounterValueDetected(webAuthnAuthenticationContext, authenticator);
+            }
+
+        }
+
+
     }
 
+    public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+        return maliciousCounterValueHandler;
+    }
+
+    public void setMaliciousCounterValueHandler(MaliciousCounterValueHandler maliciousCounterValueHandler) {
+        this.maliciousCounterValueHandler = maliciousCounterValueHandler;
+    }
 
     CollectedClientData deriveCollectedClientData(String clientDataJson) {
         try {

@@ -21,11 +21,11 @@ package com.webauthn4j.webauthn.exception;
  * Created by ynojima on 2017/08/15.
  */
 public class MissingChallengeException extends ValidationException {
-    public MissingChallengeException(String msg, Throwable cause) {
-        super(msg, cause);
+    public MissingChallengeException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public MissingChallengeException(String msg) {
-        super(msg);
+    public MissingChallengeException(String message) {
+        super(message);
     }
 }

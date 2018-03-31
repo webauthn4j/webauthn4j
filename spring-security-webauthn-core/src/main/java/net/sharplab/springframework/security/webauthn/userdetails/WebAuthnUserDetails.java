@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.userdetails;
 
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

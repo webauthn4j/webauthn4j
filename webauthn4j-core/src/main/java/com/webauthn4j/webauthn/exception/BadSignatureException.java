@@ -21,11 +21,11 @@ package com.webauthn4j.webauthn.exception;
  * BadSignatureException
  */
 public class BadSignatureException extends ValidationException {
-    public BadSignatureException(String msg, Throwable cause) {
-        super(msg, cause);
+    public BadSignatureException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public BadSignatureException(String msg) {
-        super(msg);
+    public BadSignatureException(String message) {
+        super(message);
     }
 }

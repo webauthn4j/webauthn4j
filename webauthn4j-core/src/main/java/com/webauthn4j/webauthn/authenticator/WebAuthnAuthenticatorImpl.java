@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.authenticator;
+package com.webauthn4j.webauthn.authenticator;
 
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAttestedCredentialData;
 import com.webauthn4j.webauthn.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.webauthn.util.ConstUtil;
 
 /**
  * A {@link WebAuthnAuthenticator} implementation
@@ -27,10 +28,12 @@ public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
     //~ Instance fields ================================================================================================
     private WebAuthnAttestedCredentialData attestationData;
     private WebAuthnAttestationStatement attestationStatement;
+    private long counter;
 
-    public WebAuthnAuthenticatorImpl(WebAuthnAttestedCredentialData attestationData, WebAuthnAttestationStatement attestationStatement) {
+    public WebAuthnAuthenticatorImpl(WebAuthnAttestedCredentialData attestationData, WebAuthnAttestationStatement attestationStatement, long counter) {
         this.attestationData = attestationData;
         this.attestationStatement = attestationStatement;
+        setCounter(counter);
     }
 
     @Override
@@ -41,6 +44,22 @@ public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
     @Override
     public WebAuthnAttestationStatement getAttestationStatement() {
         return attestationStatement;
+    }
+
+    @Override
+    public long getCounter() {
+        return this.counter;
+    }
+
+    @Override
+    public void setCounter(long value) {
+        if(value > ConstUtil.UINT_MAX_VALUE){
+            throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not exceed 4294967295.");
+        }
+        if(value < 0){
+            throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not be negative value.");
+        }
+        this.counter = value;
     }
 
 }

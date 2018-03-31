@@ -21,11 +21,11 @@ package com.webauthn4j.webauthn.exception;
  * UnsupportedArgumentException
  */
 public class UnsupportedArgumentException extends ValidationException {
-    public UnsupportedArgumentException(String msg, Throwable cause) {
-        super(msg, cause);
+    public UnsupportedArgumentException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public UnsupportedArgumentException(String msg) {
-        super(msg);
+    public UnsupportedArgumentException(String message) {
+        super(message);
     }
 }

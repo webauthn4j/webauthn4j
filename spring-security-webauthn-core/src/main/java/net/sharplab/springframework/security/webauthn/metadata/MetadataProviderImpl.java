@@ -17,7 +17,7 @@
 package net.sharplab.springframework.security.webauthn.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.exception.MetadataException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 

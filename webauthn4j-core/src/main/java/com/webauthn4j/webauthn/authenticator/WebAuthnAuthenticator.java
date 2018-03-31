@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.exception;
+package com.webauthn4j.webauthn.authenticator;
 
+import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAttestedCredentialData;
+import com.webauthn4j.webauthn.attestation.statement.WebAuthnAttestationStatement;
+
+import java.io.Serializable;
 
 /**
- * Thrown if an authentication request is rejected because credentialId is not found.
+ * WebAuthn Authenticator
  */
-public class CredentialIdNotFoundException extends ValidationException {
-    public CredentialIdNotFoundException(String msg) {
-        super(msg);
-    }
+public interface WebAuthnAuthenticator extends Serializable {
 
-    public CredentialIdNotFoundException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
+    WebAuthnAttestedCredentialData getAttestedCredentialData();
+
+    WebAuthnAttestationStatement getAttestationStatement();
+
+    long getCounter();
+
+    void setCounter(long value);
+
 }
