@@ -1,6 +1,6 @@
-INSERT INTO m_user VALUES (1, '', 'Ichiro', 'Tanaka', 'i.tanaka@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', true, false);
-INSERT INTO m_user VALUES (2, '', 'Jiro',   'Yamada', 'j.yamada@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', false, false);
-INSERT INTO m_user VALUES (3, '', 'Saburo',   'Takahashi', 's.takahashi@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', false, false);
+INSERT INTO m_user VALUES (1, '5F0595F889784ABB8220C6736727E8BE', 'Ichiro', 'Tanaka', 'i.tanaka@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', true, false); /* password: "password" */
+INSERT INTO m_user VALUES (2, '6FC60DE8FE5044118803672F93CA1815', 'Jiro',   'Yamada', 'j.yamada@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', false, false); /* password: "password" */
+INSERT INTO m_user VALUES (3, 'B05360907F6040A0914AF9F5FE38C120', 'Saburo',   'Takahashi', 's.takahashi@example.com', '$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq', false, false); /* password: "password" */
 
 INSERT INTO m_group VALUES (1, 'Group A');
 INSERT INTO m_group VALUES (2, 'Group B');

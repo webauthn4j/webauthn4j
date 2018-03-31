@@ -25,6 +25,7 @@ public class AuthenticatorEntity implements Serializable {
     @ManyToOne
     private UserEntity user;
 
+    @Column(columnDefinition = "blob")
     private byte[] rpIdHash;
 
     private long counter;

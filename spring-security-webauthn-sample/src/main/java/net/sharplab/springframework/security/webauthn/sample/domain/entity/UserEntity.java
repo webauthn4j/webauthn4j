@@ -17,6 +17,7 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "blob")
     private byte[] userHandle;
     private String firstName;
     private String lastName;
