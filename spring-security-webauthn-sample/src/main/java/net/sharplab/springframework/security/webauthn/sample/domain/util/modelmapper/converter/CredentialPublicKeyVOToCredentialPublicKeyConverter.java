@@ -1,6 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
 
 import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.RSCredentialPublicKey;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.CredentialPublicKeyVO;
@@ -11,13 +12,13 @@ import org.modelmapper.spi.MappingContext;
 
 
 /**
- * Converter which converts from {@link CredentialPublicKeyVO} to {@link AbstractCredentialPublicKey}
+ * Converter which converts from {@link CredentialPublicKeyVO} to {@link CredentialPublicKey}
  */
-public class CredentialPublicKeyVOToCredentialPublicKeyConverter implements Converter<CredentialPublicKeyVO, AbstractCredentialPublicKey> {
+public class CredentialPublicKeyVOToCredentialPublicKeyConverter implements Converter<CredentialPublicKeyVO, CredentialPublicKey> {
     @Override
-    public AbstractCredentialPublicKey convert(MappingContext<CredentialPublicKeyVO, AbstractCredentialPublicKey> context) {
+    public CredentialPublicKey convert(MappingContext<CredentialPublicKeyVO, CredentialPublicKey> context) {
         CredentialPublicKeyVO source = context.getSource();
-        AbstractCredentialPublicKey destination = context.getDestination();
+        CredentialPublicKey destination = context.getDestination();
         if (source == null) {
             return null;
         }

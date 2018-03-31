@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import com.webauthn4j.webauthn.converter.Base64StringToCollectedClientDataConverter;
-import com.webauthn4j.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
+import net.sharplab.springframework.security.webauthn.converter.Base64StringToCollectedClientDataConverter;
+import net.sharplab.springframework.security.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.formatter.AttestationObjectFormFormatter;
 import net.sharplab.springframework.security.webauthn.sample.app.formatter.CollectedClientDataFormFormatter;
 import org.springframework.context.annotation.Bean;

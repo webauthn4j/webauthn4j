@@ -16,8 +16,7 @@
 
 package com.webauthn4j.webauthn.context;
 
-import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.webauthn.client.CollectedClientData;
+import java.nio.charset.StandardCharsets;
 
 /**
  * WebAuthnAuthenticationContext
@@ -26,28 +25,22 @@ public class WebAuthnAuthenticationContext {
 
     //~ Instance fields ================================================================================================
 
+    // user inputs
     private String credentialId;
-    private byte[] rawClientData;
-    private byte[] rawAuthenticatorData;
-    private String clientDataJson;
-    private CollectedClientData collectedClientData;
-    private WebAuthnAuthenticatorData authenticatorData;
+    private byte[] collectedClientData;
+    private byte[] authenticatorData;
     private byte[] signature;
+
+    // server property
     private RelyingParty relyingParty;
 
 
     public WebAuthnAuthenticationContext(String credentialId,
-                                         byte[] rawClientData,
-                                         byte[] rawAuthenticatorData,
-                                         String clientDataJson,
-                                         CollectedClientData collectedClientData,
-                                         WebAuthnAuthenticatorData authenticatorData,
+                                         byte[] collectedClientData,
+                                         byte[] authenticatorData,
                                          byte[] signature,
                                          RelyingParty relyingParty) {
         this.credentialId = credentialId;
-        this.rawClientData = rawClientData;
-        this.rawAuthenticatorData = rawAuthenticatorData;
-        this.clientDataJson = clientDataJson;
         this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
         this.signature = signature;
@@ -58,23 +51,15 @@ public class WebAuthnAuthenticationContext {
         return credentialId;
     }
 
-    public byte[] getRawClientData() {
-        return rawClientData;
-    }
-
-    public String getClientDataJson() {
-        return clientDataJson;
-    }
-
-    public CollectedClientData getCollectedClientData() {
+    public byte[] getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getRawAuthenticatorData() {
-        return rawAuthenticatorData;
+    public String getCollectedClientDataJson() {
+        return new String(collectedClientData, StandardCharsets.UTF_8);
     }
 
-    public WebAuthnAuthenticatorData getAuthenticatorData() {
+    public byte[] getAuthenticatorData() {
         return authenticatorData;
     }
 

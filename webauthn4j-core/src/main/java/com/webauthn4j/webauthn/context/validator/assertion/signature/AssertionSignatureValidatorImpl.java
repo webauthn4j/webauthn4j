@@ -16,7 +16,6 @@
 
 package com.webauthn4j.webauthn.context.validator.assertion.signature;
 
-import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.webauthn.exception.BadSignatureException;
@@ -40,8 +39,8 @@ public class AssertionSignatureValidatorImpl implements AssertionSignatureValida
 
     protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
-        byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getRawAuthenticatorData();
-        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getRawClientData());
+        byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
+        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getCollectedClientData());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 

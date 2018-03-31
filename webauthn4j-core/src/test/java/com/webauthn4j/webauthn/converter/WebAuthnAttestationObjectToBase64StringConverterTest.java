@@ -24,14 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class WebAuthnAttestationObjectToBase64StringConverterTest {
 
-    private WebAuthnAttestationObjectToBase64StringConverter target = new WebAuthnAttestationObjectToBase64StringConverter();
-    private Base64StringToWebAuthnAttestationObjectConverter base64StringToWebAuthnAttestationObjectConverter = new Base64StringToWebAuthnAttestationObjectConverter();
+    private WebAuthnAttestationObjectConverter target = new WebAuthnAttestationObjectConverter();
 
     @Test
     public void convert_test() {
         WebAuthnAttestationObject input = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         String result = target.convert(input);
-        WebAuthnAttestationObject deserialized = base64StringToWebAuthnAttestationObjectConverter.convert(result);
+        WebAuthnAttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);
     }
 }

@@ -25,9 +25,9 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Base64StringToWebAuthnAttestationObjectConverterTest {
+public class WebAuthnAttestationObjectConverterTest {
 
-    private Base64StringToWebAuthnAttestationObjectConverter target = new Base64StringToWebAuthnAttestationObjectConverter();
+    private WebAuthnAttestationObjectConverter target = new WebAuthnAttestationObjectConverter();
 
     @Ignore
     @Test

@@ -24,7 +24,7 @@ public class WebAuthnAttestedCredentialData implements Serializable {
     //~ Instance fields ================================================================================================
     private byte[] aaGuid;
     private byte[] credentialId;
-    private AbstractCredentialPublicKey credentialPublicKey;
+    private CredentialPublicKey credentialPublicKey;
 
 
     public byte[] getAaGuid() {
@@ -43,11 +43,11 @@ public class WebAuthnAttestedCredentialData implements Serializable {
         this.credentialId = credentialId;
     }
 
-    public AbstractCredentialPublicKey getCredentialPublicKey() {
+    public CredentialPublicKey getCredentialPublicKey() {
         return credentialPublicKey;
     }
 
-    public void setCredentialPublicKey(AbstractCredentialPublicKey credentialPublicKey) {
+    public void setCredentialPublicKey(CredentialPublicKey credentialPublicKey) {
         this.credentialPublicKey = credentialPublicKey;
     }
 

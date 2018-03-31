@@ -1,11 +1,11 @@
 package com.webauthn4j.webauthn.context.validator.attestation;
 
-import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
+import com.webauthn4j.webauthn.context.validator.WebAuthnRegistrationObject;
 
 public interface AttestationStatementValidator {
 
-    void validate(WebAuthnRegistrationContext registrationContext);
+    void validate(WebAuthnRegistrationObject registrationObject);
 
-    boolean supports(WebAuthnRegistrationContext registrationContext);
+    boolean supports(WebAuthnRegistrationObject registrationObject);
 
 }

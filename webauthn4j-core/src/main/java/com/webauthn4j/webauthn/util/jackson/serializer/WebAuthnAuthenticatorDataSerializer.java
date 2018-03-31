@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAttestedCredentialData;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import com.webauthn4j.webauthn.attestation.authenticator.extension.Extension;
@@ -74,7 +75,7 @@ public class WebAuthnAuthenticatorDataSerializer extends StdSerializer<WebAuthnA
         return new byte[0]; //TODO: to be implemented
     }
 
-    private byte[] serializeCredentialPublicKey(AbstractCredentialPublicKey credentialPublicKey) throws JsonProcessingException {
+    private byte[] serializeCredentialPublicKey(CredentialPublicKey credentialPublicKey) throws JsonProcessingException {
         return objectMapper.writeValueAsBytes(credentialPublicKey);
     }
 

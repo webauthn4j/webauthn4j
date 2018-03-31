@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.sharplab.springframework.security.webauthn.context.validator;
+package com.webauthn4j.webauthn.context.validator;
 
 
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
@@ -22,13 +22,10 @@ import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorDa
 import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
-import com.webauthn4j.webauthn.context.validator.ChallengeValidator;
-import com.webauthn4j.webauthn.context.validator.OriginValidator;
-import com.webauthn4j.webauthn.context.validator.RpIdHashValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.AttestationStatementValidator;
-import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.SpringSecurityMessageSource;
+import com.webauthn4j.webauthn.converter.CollectedClientDataConverter;
+import com.webauthn4j.webauthn.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.webauthn.exception.UnsupportedAttestationStatementException;
 
 import java.util.List;
 
@@ -39,22 +36,35 @@ public class WebAuthnRegistrationContextValidator {
 
     //~ Instance fields
     // ================================================================================================
-    protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
 
     List<AttestationStatementValidator> attestationStatementValidators;
 
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private WebAuthnAttestationObjectConverter webAuthnAttestationObjectConverter = new WebAuthnAttestationObjectConverter();
 
     public WebAuthnRegistrationContextValidator(List<AttestationStatementValidator> attestationStatementValidators) {
         this.attestationStatementValidators = attestationStatementValidators;
     }
 
     public void validate(WebAuthnRegistrationContext registrationContext) {
+        byte[] clientDataBytes = registrationContext.getCollectedClientData();
+        byte[] attestationObjectBytes = registrationContext.getAttestationObject();
 
-        CollectedClientData collectedClientData = registrationContext.getCollectedClientData();
-        WebAuthnAttestationObject attestationObject = registrationContext.getAttestationObject();
+        CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
+        WebAuthnAttestationObject attestationObject = webAuthnAttestationObjectConverter.convert(attestationObjectBytes);
+
+
+        WebAuthnRegistrationObject registrationObject = new WebAuthnRegistrationObject(
+            collectedClientData,
+            clientDataBytes,
+            attestationObject,
+            attestationObjectBytes,
+            registrationContext.getRelyingParty()
+        );
+
         WebAuthnAuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         RelyingParty relyingParty = registrationContext.getRelyingParty();
 
@@ -86,7 +96,7 @@ public class WebAuthnRegistrationContextValidator {
         // provides one way to obtain such information, using the AAGUID in the attestation data contained in authData.
         //
         // Assess the attestation trustworthiness using the outputs of the verification procedure in step 10
-        validateAttestationStatement(registrationContext);
+        validateAttestationStatement(registrationObject);
 
         // If the attestation statement attStmt verified successfully and is found to be trustworthy,
         // then register the new credential with the account that was denoted in the options.user passed to create(),
@@ -95,17 +105,15 @@ public class WebAuthnRegistrationContextValidator {
 
     }
 
-    void validateAttestationStatement(WebAuthnRegistrationContext registrationContext) {
+    void validateAttestationStatement(WebAuthnRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
-            if (validator.supports(registrationContext)) {
-                validator.validate(registrationContext);
+            if (validator.supports(registrationObject)) {
+                validator.validate(registrationObject);
                 return;
             }
         }
 
-        throw new InternalAuthenticationServiceException(messages.getMessage(
-                "WebAuthnRegistrationContextValidator.noAttestationStatementValidator",
-                "No applicable AttestationStatementValidator is available"));
+        throw new UnsupportedAttestationStatementException("Supplied AttestationStatement format is not supported.");
     }
 
 }

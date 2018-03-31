@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.formatter;
 
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
+import net.sharplab.springframework.security.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AttestationObjectForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;

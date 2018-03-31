@@ -16,47 +16,30 @@
 
 package com.webauthn4j.webauthn.context;
 
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.client.CollectedClientData;
-
 /**
  * WebAuthnRegistrationContext
  */
 public class WebAuthnRegistrationContext {
 
-    private CollectedClientData collectedClientData;
-    private byte[] clientDataBytes;
-    private WebAuthnAttestationObject attestationObject;
-    private byte[] attestationObjectBytes;
+    private byte[] collectedClientData;
+    private byte[] attestationObject;
     private RelyingParty relyingParty;
 
-    public WebAuthnRegistrationContext(CollectedClientData collectedClientData,
-                                       byte[] clientDataBytes,
-                                       WebAuthnAttestationObject attestationObject,
-                                       byte[] attestationObjectBytes,
+    public WebAuthnRegistrationContext(byte[] collectedClientData,
+                                       byte[] attestationObject,
                                        RelyingParty relyingParty) {
 
         this.collectedClientData = collectedClientData;
-        this.clientDataBytes = clientDataBytes;
         this.attestationObject = attestationObject;
-        this.attestationObjectBytes = attestationObjectBytes;
         this.relyingParty = relyingParty;
     }
 
-    public CollectedClientData getCollectedClientData() {
+    public byte[] getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getClientDataBytes() {
-        return clientDataBytes;
-    }
-
-    public WebAuthnAttestationObject getAttestationObject() {
+    public byte[] getAttestationObject() {
         return attestationObject;
-    }
-
-    public byte[] getAttestationObjectBytes() {
-        return attestationObjectBytes;
     }
 
     public RelyingParty getRelyingParty() {

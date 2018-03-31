@@ -85,6 +85,7 @@ public class WebAuthnProcessingFilter extends UsernamePasswordAuthenticationFilt
         String authenticatorData = obtainAuthenticatorData(request);
         String signature = obtainSignatureData(request);
 
+
         AbstractAuthenticationToken authRequest;
         if (StringUtils.isEmpty(credentialId)) {
             authRequest = new FirstOfMultiFactorAuthenticationToken(username, password, authorities);

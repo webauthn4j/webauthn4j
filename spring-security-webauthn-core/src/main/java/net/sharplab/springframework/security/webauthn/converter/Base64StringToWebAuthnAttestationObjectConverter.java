@@ -14,37 +14,28 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.converter;
+package net.sharplab.springframework.security.webauthn.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.webauthn.converter.WebAuthnAttestationObjectConverter;
 import com.webauthn4j.webauthn.util.WebAuthnModule;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
 /**
- * Converter which converts from {@link WebAuthnAttestationObject} to {@link String}
+ * Converter which converts from Base64{@link String} to {@link WebAuthnAttestationObject}
  */
-public class WebAuthnAttestationObjectToBase64StringConverter implements Converter<WebAuthnAttestationObject, String> {
+public class Base64StringToWebAuthnAttestationObjectConverter implements Converter<String, WebAuthnAttestationObject> {
 
-    private ObjectMapper objectMapper;
-
-    public WebAuthnAttestationObjectToBase64StringConverter() {
-        this.objectMapper = new ObjectMapper(new CBORFactory());
-        this.objectMapper.registerModule(new WebAuthnModule());
-    }
+    private WebAuthnAttestationObjectConverter converter = new WebAuthnAttestationObjectConverter();
 
     @Override
-    public String convert(WebAuthnAttestationObject source) {
-        try {
-            byte[] bytes = objectMapper.writeValueAsBytes(source);
-            return Base64Utils.encodeToUrlSafeString(bytes);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+    public WebAuthnAttestationObject convert(String source) {
+        return converter.convert(source);
     }
+
 }

@@ -2,10 +2,8 @@ package net.sharplab.springframework.security.webauthn.sample.app.web.helper;
 
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
 import com.webauthn4j.webauthn.exception.BadChallengeException;
-import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnRegistrationContextProvider;
-import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnRegistrationContextValidator;
+import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorUpdateForm;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
@@ -21,15 +19,12 @@ import java.util.List;
 @Component
 public class AuthenticatorHelper {
 
-    private WebAuthnRegistrationContextProvider registrationContextProvider;
-    private WebAuthnRegistrationContextValidator registrationContextValidator;
+    private WebAuthnRegistrationRequestValidator registrationRequestValidator;
 
     public AuthenticatorHelper(
-            WebAuthnRegistrationContextProvider registrationContextProvider,
-            WebAuthnRegistrationContextValidator registrationContextValidator){
+            WebAuthnRegistrationRequestValidator registrationRequestValidator){
 
-        this.registrationContextProvider = registrationContextProvider;
-        this.registrationContextValidator = registrationContextValidator;
+        this.registrationRequestValidator = registrationRequestValidator;
     }
 
     /**
@@ -48,12 +43,11 @@ public class AuthenticatorHelper {
         return authenticatorCreateForms.stream().allMatch(authenticator -> {
 
             try {
-                WebAuthnRegistrationContext registrationContext = registrationContextProvider.provide(
+                registrationRequestValidator.validate(
                         request,
                         response,
                         authenticator.getClientData().getClientDataBase64(),
                         authenticator.getAttestationObject().getAttestationObjectBase64());
-                registrationContextValidator.validate(registrationContext);
                 return true;
             } catch (BadChallengeException e) {
                 model.addAttribute(ResultMessages.error().add(MessageCodes.Error.User.BAD_CHALLENGE));

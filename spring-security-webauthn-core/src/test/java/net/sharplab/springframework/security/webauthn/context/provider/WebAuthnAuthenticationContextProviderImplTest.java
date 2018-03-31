@@ -16,8 +16,6 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
-import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.client.Origin;
 import com.webauthn4j.webauthn.client.challenge.Challenge;
 import com.webauthn4j.webauthn.client.challenge.DefaultChallenge;
@@ -61,11 +59,9 @@ public class WebAuthnAuthenticationContextProviderImplTest {
         WebAuthnAuthenticationContext context = webAuthnContextProvider.provide(request, response, credentialId, clientData, authenticatorData, signature);
         assertThat(context).isNotNull();
         assertThat(context.getCredentialId()).isEqualTo(credentialId);
-        assertThat(context.getRawClientData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(clientData));
-        assertThat(context.getClientDataJson()).isEqualTo("{\"challenge\":\"xWj3Edq2S6aYrwQLXrmGrA\",\"hashAlg\":\"SHA-256\",\"origin\":\"http://localhost:8080\"}");
-        assertThat(context.getCollectedClientData()).isInstanceOf(CollectedClientData.class);
-        assertThat(context.getRawAuthenticatorData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(authenticatorData));
-        assertThat(context.getAuthenticatorData()).isInstanceOf(WebAuthnAuthenticatorData.class);
+        assertThat(context.getCollectedClientData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(clientData));
+        assertThat(context.getCollectedClientDataJson()).isEqualTo("{\"challenge\":\"xWj3Edq2S6aYrwQLXrmGrA\",\"hashAlg\":\"SHA-256\",\"origin\":\"http://localhost:8080\"}");
+        assertThat(context.getAuthenticatorData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(authenticatorData));
         assertThat(context.getSignature()).isEqualTo(Base64Utils.decodeFromUrlSafeString(signature));
         assertThat(context.getRelyingParty().getChallenge().getValue()).isEqualTo(new byte[]{0x00});
         assertThat(context.getRelyingParty().getOrigin()).isEqualTo(expectedOrigin);

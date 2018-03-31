@@ -1,23 +1,23 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
-import net.sharplab.springframework.security.webauthn.context.provider.*;
-import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
-import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
-import net.sharplab.springframework.security.webauthn.challenge.ChallengeRepository;
-import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
-import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProvider;
-import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProviderImpl;
-import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnRegistrationContextProvider;
-import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnRegistrationContextProviderImpl;
-import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
-import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.webauthn.context.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
+import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.webauthn.context.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.PackedAttestationStatementValidator;
 import com.webauthn4j.webauthn.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
+import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
+import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
+import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
+import net.sharplab.springframework.security.webauthn.challenge.ChallengeRepository;
+import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
+import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProvider;
+import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;
+import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProvider;
+import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProviderImpl;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProvider;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProviderImpl;
 import net.sharplab.springframework.security.webauthn.sample.domain.component.AuthenticatorManager;
@@ -58,8 +58,8 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnRegistrationContextProvider webAuthnRegistrationContextProvider(RelyingPartyProvider relyingPartyProvider) {
-        return new WebAuthnRegistrationContextProviderImpl(relyingPartyProvider);
+    public WebAuthnRegistrationRequestValidator webAuthnRegistrationRequestValidator(WebAuthnRegistrationContextValidator registrationContextValidator, RelyingPartyProvider relyingPartyProvider) {
+        return new WebAuthnRegistrationRequestValidator(registrationContextValidator, relyingPartyProvider);
     }
 
     @Bean

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.converter;
+package net.sharplab.springframework.security.webauthn.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.webauthn.converter.CollectedClientDataConverter;
 import com.webauthn4j.webauthn.util.WebAuthnModule;
 import com.webauthn4j.webauthn.client.CollectedClientData;
 import org.springframework.core.convert.converter.Converter;
@@ -30,21 +31,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class Base64StringToCollectedClientDataConverter implements Converter<String, CollectedClientData> {
 
-    private ObjectMapper objectMapper;
+    private CollectedClientDataConverter converter = new CollectedClientDataConverter();
 
-    public Base64StringToCollectedClientDataConverter() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new WebAuthnModule());
-    }
 
     @Override
     public CollectedClientData convert(String source) {
-        byte[] jsonBytes = java.util.Base64.getUrlDecoder().decode(source);
-        String jsonString = new String(jsonBytes, StandardCharsets.UTF_8);
-        try {
-            return objectMapper.readValue(jsonString, CollectedClientData.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return converter.convert(source);
     }
 }

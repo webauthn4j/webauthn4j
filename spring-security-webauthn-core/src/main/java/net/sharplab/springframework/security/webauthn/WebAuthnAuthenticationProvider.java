@@ -16,10 +16,14 @@
 
 package net.sharplab.springframework.security.webauthn;
 
+import com.webauthn4j.webauthn.context.RelyingParty;
+import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.webauthn.exception.UserNotVerifiedException;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
-import net.sharplab.springframework.security.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.webauthn.exception.CredentialIdNotFoundException;
+import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProvider;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 import org.apache.commons.logging.Log;
@@ -30,11 +34,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsChecker;
 import org.springframework.util.Base64Utils;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * WebAuthnAuthenticationProvider
@@ -75,11 +81,11 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         byte[] credentialId = Base64Utils.decodeFromUrlSafeString(authenticationToken.getCredentials().getCredentialId());
 
         // Using credential’s id attribute, look up the corresponding credential public key.
-        WebAuthnAuthenticator webAuthnAuthenticator = retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
-        WebAuthnUserDetails user = userDetailsService.loadUserByAuthenticator(webAuthnAuthenticator);
+        WebAuthnAuthenticator authenticator = retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
+        WebAuthnUserDetails user = userDetailsService.loadUserByAuthenticator(authenticator);
 
         preAuthenticationChecks.check(user);
-        authenticationContextValidator.validate(user, webAuthnAuthenticator, authenticationToken);
+        doAuthenticate(authenticationToken, authenticator, user);
         postAuthenticationChecks.check(user);
 
         Serializable principalToReturn = user;
@@ -100,6 +106,23 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         return WebAuthnAssertionAuthenticationToken.class.isAssignableFrom(authentication);
+    }
+
+    void doAuthenticate(WebAuthnAssertionAuthenticationToken authenticationToken, WebAuthnAuthenticator authenticator, WebAuthnUserDetails user){
+        if (authenticationToken.getCredentials() == null) {
+            logger.debug("Authentication failed: no credentials provided");
+
+            throw new BadCredentialsException(messages.getMessage(
+                    "WebAuthnAuthenticationContextValidator.badCredentials",
+                    "Bad credentials"));
+        }
+
+
+        Authentication currentAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isUserVerified = Objects.equals(currentAuthentication.getName(), user.getUsername());
+        boolean userVerificationRequired = !isUserVerified; // If user is not verified, user verification is required.
+        authenticationContextValidator.validate(authenticationToken.getCredentials(), authenticator.getAttestedCredentialData().getCredentialPublicKey(), userVerificationRequired);
+
     }
 
     public void setForcePrincipalAsString(boolean forcePrincipalAsString) {

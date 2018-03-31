@@ -3,7 +3,7 @@ package com.webauthn4j.webauthn.context.validator.attestation;
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.webauthn.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.webauthn.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
+import com.webauthn4j.webauthn.context.validator.WebAuthnRegistrationObject;
 import com.webauthn4j.webauthn.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.webauthn.exception.BadSignatureException;
 import com.webauthn4j.webauthn.exception.NotImplementedException;
@@ -24,10 +24,10 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    protected void validateSignature(WebAuthnRegistrationContext registrationContext) {
-        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationContext.getAttestationObject().getAttestationStatement();
+    protected void validateSignature(WebAuthnRegistrationObject registrationObject) {
+        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        byte[] signedData = getSignedData(registrationContext);
+        byte[] signedData = getSignedData(registrationObject);
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
@@ -46,8 +46,8 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    protected void validateTrustworthiness(WebAuthnRegistrationContext registrationContext) {
-        WebAuthnAttestationStatement attestationStatement = registrationContext.getAttestationObject().getAttestationStatement();
+    protected void validateTrustworthiness(WebAuthnRegistrationObject registrationObject) {
+        WebAuthnAttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         switch (attestationStatement.getAttestationType()){
             case Self:
                 selfAttestationTrustworthinessValidator.validate(attestationStatement);
@@ -60,23 +60,23 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    public boolean supports(WebAuthnRegistrationContext registrationContext) {
-        WebAuthnAttestationStatement attestationStatement = registrationContext.getAttestationObject().getAttestationStatement();
+    public boolean supports(WebAuthnRegistrationObject registrationObject) {
+        WebAuthnAttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return FIDOU2FAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
 
-    private byte[] getSignedData(WebAuthnRegistrationContext registrationContext) {
+    private byte[] getSignedData(WebAuthnRegistrationObject registrationObject) {
 
-        String rpId = registrationContext.getRelyingParty().getRpId();
+        String rpId = registrationObject.getRelyingParty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
 
-        WebAuthnAttestationObject attestationObject = registrationContext.getAttestationObject();
+        WebAuthnAttestationObject attestationObject = registrationObject.getAttestationObject();
         ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestationData().getCredentialPublicKey().getPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 
-        byte[] clientDataJsonBytes = registrationContext.getClientDataBytes();
+        byte[] clientDataJsonBytes = registrationObject.getCollectedClientDataBytes();
 
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
