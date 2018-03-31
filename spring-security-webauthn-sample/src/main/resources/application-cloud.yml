@@ -1,8 +1,0 @@
-spring:
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
-management:
-  security:
-    enabled: false
-endpoints:
-  sensitive: false
