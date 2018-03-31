@@ -16,7 +16,6 @@
 
 package com.webauthn4j.webauthn.client;
 
-import com.webauthn4j.webauthn.client.Origin;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

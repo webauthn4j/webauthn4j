@@ -16,7 +16,6 @@
 
 package com.webauthn4j.webauthn.context.validator.attestation.trustworthiness.basic;
 
-import com.webauthn4j.webauthn.context.validator.attestation.trustworthiness.basic.FIDOMetadataServiceBasicTrustworthinessValidator;
 import org.junit.Test;
 
 import java.time.LocalDate;

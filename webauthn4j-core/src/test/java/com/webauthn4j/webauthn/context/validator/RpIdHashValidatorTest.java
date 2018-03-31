@@ -17,7 +17,6 @@
 package com.webauthn4j.webauthn.context.validator;
 
 import com.webauthn4j.webauthn.context.RelyingParty;
-import com.webauthn4j.webauthn.context.validator.RpIdHashValidator;
 import com.webauthn4j.webauthn.exception.BadRpIdException;
 import com.webauthn4j.webauthn.util.MessageDigestUtil;
 import org.junit.Test;

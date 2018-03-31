@@ -17,13 +17,13 @@
 package com.webauthn4j.webauthn.util.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.webauthn.client.challenge.Challenge;
 import com.webauthn4j.webauthn.util.jackson.deserializer.*;
 import com.webauthn4j.webauthn.util.jackson.serializer.CertPathSerializer;
 import com.webauthn4j.webauthn.util.jackson.serializer.WebAuthnAuthenticatorDataSerializer;
 import com.webauthn4j.webauthn.util.jackson.serializer.X509CertificateSerializer;
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.webauthn.client.challenge.Challenge;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;

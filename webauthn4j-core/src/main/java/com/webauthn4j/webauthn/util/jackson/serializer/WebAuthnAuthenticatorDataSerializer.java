@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.webauthn.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAttestedCredentialData;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;

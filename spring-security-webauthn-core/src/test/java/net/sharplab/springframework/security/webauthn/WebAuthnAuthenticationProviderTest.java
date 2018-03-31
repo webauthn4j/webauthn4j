@@ -16,11 +16,11 @@
 
 package net.sharplab.springframework.security.webauthn;
 
+import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorImpl;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
-import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
-import com.webauthn4j.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsImpl;
 import org.junit.Ignore;
 import org.junit.Rule;

@@ -2,7 +2,6 @@ package com.webauthn4j.webauthn.context.validator.attestation;
 
 import com.webauthn4j.webauthn.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.webauthn.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
 import com.webauthn4j.webauthn.context.validator.WebAuthnRegistrationObject;
 import com.webauthn4j.webauthn.exception.NotImplementedException;
 

@@ -17,8 +17,6 @@
 package com.webauthn4j.webauthn.attestation.statement;
 
 import com.webauthn4j.test.CoreTestUtil;
-import com.webauthn4j.webauthn.attestation.statement.AttestationType;
-import com.webauthn4j.webauthn.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.webauthn.util.CertificateUtil;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
