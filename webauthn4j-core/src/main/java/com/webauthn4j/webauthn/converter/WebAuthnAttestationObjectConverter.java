@@ -3,7 +3,7 @@ package com.webauthn4j.webauthn.converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.util.WebAuthnModule;
+import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
 import org.springframework.util.Base64Utils;
 
 import java.io.IOException;

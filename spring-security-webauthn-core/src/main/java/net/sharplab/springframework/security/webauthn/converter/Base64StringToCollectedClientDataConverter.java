@@ -16,15 +16,9 @@
 
 package net.sharplab.springframework.security.webauthn.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.webauthn.converter.CollectedClientDataConverter;
-import com.webauthn4j.webauthn.util.WebAuthnModule;
 import com.webauthn4j.webauthn.client.CollectedClientData;
 import org.springframework.core.convert.converter.Converter;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Converter which converts from Base64{@link String} to {@link CollectedClientData}

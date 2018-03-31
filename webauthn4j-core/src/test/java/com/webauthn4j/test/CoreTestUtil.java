@@ -26,7 +26,7 @@ import com.webauthn4j.webauthn.client.Origin;
 import com.webauthn4j.webauthn.client.challenge.Challenge;
 import com.webauthn4j.webauthn.client.challenge.DefaultChallenge;
 import com.webauthn4j.webauthn.context.RelyingParty;
-import com.webauthn4j.webauthn.util.WebAuthnModule;
+import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
 import org.springframework.util.Base64Utils;
 
 import java.io.ByteArrayInputStream;

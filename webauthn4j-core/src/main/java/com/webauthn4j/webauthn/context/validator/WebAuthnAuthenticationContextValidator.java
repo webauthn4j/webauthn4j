@@ -24,7 +24,7 @@ import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
 import com.webauthn4j.webauthn.exception.*;
-import com.webauthn4j.webauthn.util.WebAuthnModule;
+import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
 import com.webauthn4j.webauthn.util.jackson.deserializer.WebAuthnAuthenticatorDataDeserializer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

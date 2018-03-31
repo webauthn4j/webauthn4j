@@ -16,15 +16,9 @@
 
 package net.sharplab.springframework.security.webauthn.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.webauthn.converter.WebAuthnAttestationObjectConverter;
-import com.webauthn4j.webauthn.util.WebAuthnModule;
 import org.springframework.core.convert.converter.Converter;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
 
 /**
  * Converter which converts from Base64{@link String} to {@link WebAuthnAttestationObject}

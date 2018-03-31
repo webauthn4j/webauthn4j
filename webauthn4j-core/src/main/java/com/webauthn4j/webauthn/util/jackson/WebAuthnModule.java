@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.util;
+package com.webauthn4j.webauthn.util.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.webauthn.util.jackson.deserializer.*;
