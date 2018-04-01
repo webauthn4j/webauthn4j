@@ -121,8 +121,8 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         try{
             authenticationContextValidator.validate(authenticationToken.getCredentials(), authenticator, userVerificationRequired);
         }
-        catch (com.webauthn4j.webauthn.exception.MaliciousAssertionException e){
-            throw new MaliciousAssertionException("Bad client data type", e);
+        catch (com.webauthn4j.webauthn.exception.MaliciousDataException e){
+            throw new MaliciousDataException("Bad client data type", e);
         }
         catch (com.webauthn4j.webauthn.exception.BadChallengeException e){
             throw new BadChallengeException("Bad challenge", e);

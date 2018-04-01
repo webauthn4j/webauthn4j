@@ -25,9 +25,11 @@ import com.webauthn4j.webauthn.context.WebAuthnRegistrationContext;
 import com.webauthn4j.webauthn.context.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.webauthn.converter.CollectedClientDataConverter;
 import com.webauthn4j.webauthn.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.webauthn.exception.MaliciousDataException;
 import com.webauthn4j.webauthn.exception.UnsupportedAttestationStatementException;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Validates {@link WebAuthnRegistrationContext} instance
@@ -67,6 +69,10 @@ public class WebAuthnRegistrationContextValidator {
 
         WebAuthnAuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         RelyingParty relyingParty = registrationContext.getRelyingParty();
+
+        if(!Objects.equals(collectedClientData.getType(), "webauthn.create")){
+            throw new MaliciousDataException("Bad client data type");
+        }
 
         // Verify that the challenge in the collectedClientData matches the challenge that was sent to the authenticator
         // in the create() call.

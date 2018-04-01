@@ -17,7 +17,6 @@
 package com.webauthn4j.webauthn.context.validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.webauthn.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
 import com.webauthn4j.webauthn.client.CollectedClientData;
@@ -71,7 +70,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Verify that the value of C.type is the string webauthn.get.
         if(!Objects.equals(collectedClientData.getType(), "webauthn.get")){
-            throw new MaliciousAssertionException("Bad client data type");
+            throw new MaliciousDataException("Bad client data type");
         }
 
         // Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
