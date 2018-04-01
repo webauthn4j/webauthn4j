@@ -3,6 +3,7 @@ package net.sharplab.springframework.security.webauthn.sample.app.web;
 import net.sharplab.springframework.security.webauthn.sample.app.web.admin.UserCreateForm;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.AuthenticatorHelper;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.UserHelper;
+import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserCreateFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +32,9 @@ import java.util.UUID;
 public class SignupController {
 
     @Autowired
+    private UserCreateFormValidator userCreateFormValidator;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -37,13 +43,18 @@ public class SignupController {
     @Autowired
     private AuthenticatorHelper authenticatorHelper;
 
+    @InitBinder("userCreateForm")
+    public void initBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(userCreateFormValidator);
+    }
+
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     public String template(Model model) {
         UserCreateForm userCreateForm = new UserCreateForm();
         UUID userHandle = UUID.randomUUID();
         String userHandleStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(UUIDUtil.toByteArray(userHandle));
         userCreateForm.setUserHandle(userHandleStr);
-        model.addAttribute(userCreateForm);
+        model.addAttribute( userCreateForm);
         return ViewNames.VIEW_SIGNUP_SIGNUP;
     }
 
@@ -52,12 +63,10 @@ public class SignupController {
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            model.addAttribute("userForm", userCreateForm);
             return ViewNames.VIEW_SIGNUP_SIGNUP;
         }
 
         if (!authenticatorHelper.validateAuthenticators(model, request, response, userCreateForm.getNewAuthenticators())) {
-            model.addAttribute("userForm", userCreateForm);
             return ViewNames.VIEW_SIGNUP_SIGNUP;
         }
 

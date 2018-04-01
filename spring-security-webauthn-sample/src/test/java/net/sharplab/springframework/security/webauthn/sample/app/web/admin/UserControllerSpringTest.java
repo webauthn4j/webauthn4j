@@ -75,7 +75,7 @@ public class UserControllerSpringTest {
                 .perform(get("/admin/users/create"))
         //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", instanceOf(UserCreateForm.class)));
+                .andExpect(model().attribute("userCreateForm", instanceOf(UserCreateForm.class)));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class UserControllerSpringTest {
         )
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", samePropertyValuesAs(userCreateForm)));
+                .andExpect(model().attribute("userCreateForm", samePropertyValuesAs(userCreateForm)));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class UserControllerSpringTest {
         )
         //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", instanceOf(UserCreateForm.class)))
+                .andExpect(model().attribute("userCreateForm", instanceOf(UserCreateForm.class)))
                 .andExpect(model().attribute("resultMessages", samePropertyValuesAs(ResultMessages.error().add(MessageCodes.Error.User.EMAIL_ADDRESS_IS_ALREADY_USED))));
     }
 
@@ -177,7 +177,7 @@ public class UserControllerSpringTest {
                 .perform(get("/admin/users/1"))
                 //Then
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("userForm", samePropertyValuesAs(userUpdateForm)));
+                .andExpect(model().attribute("userUpdateForm", samePropertyValuesAs(userUpdateForm)));
     }
 
     @Test
@@ -260,8 +260,8 @@ public class UserControllerSpringTest {
                 )
         //Then
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(model().attribute("userForm", hasProperty("firstName", is("John"))))
-                .andExpect(model().attribute("userForm", hasProperty("lastName", is("Doe"))));
+                .andExpect(model().attribute("userUpdateForm", hasProperty("firstName", is("John"))))
+                .andExpect(model().attribute("userUpdateForm", hasProperty("lastName", is("Doe"))));
 
     }
 
@@ -293,11 +293,11 @@ public class UserControllerSpringTest {
                 )
         //Then
         .andExpect(status().isOk())
-        .andExpect(model().attribute("userForm", hasProperty("firstName", is("new first name"))))
-        .andExpect(model().attribute("userForm", hasProperty("lastName", is("new last name"))))
-        .andExpect(model().attribute("userForm", hasProperty("emailAddress", is("new.email.address@example.com"))))
-        .andExpect(model().attribute("userForm", hasProperty("locked", is(true))))
-        .andExpect(model().attribute("userForm", hasProperty("passwordAuthenticationAllowed", is(true))));
+        .andExpect(model().attribute("userUpdateForm", hasProperty("firstName", is("new first name"))))
+        .andExpect(model().attribute("userUpdateForm", hasProperty("lastName", is("new last name"))))
+        .andExpect(model().attribute("userUpdateForm", hasProperty("emailAddress", is("new.email.address@example.com"))))
+        .andExpect(model().attribute("userUpdateForm", hasProperty("locked", is(true))))
+        .andExpect(model().attribute("userUpdateForm", hasProperty("passwordAuthenticationAllowed", is(true))));
     }
 
     @Test

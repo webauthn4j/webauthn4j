@@ -2,6 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.app.web;
 
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.AuthenticatorHelper;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.ProfileHelper;
+import net.sharplab.springframework.security.webauthn.sample.app.web.validator.ProfileFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleEntityNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,10 +38,18 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @Autowired
+    private ProfileFormValidator profileFormValidator;
+
+    @Autowired
     private ProfileHelper profileHelper;
 
     @Autowired
     private AuthenticatorHelper authenticatorHelper;
+
+    @InitBinder("profileForm")
+    public void initBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(profileFormValidator);
+    }
 
     @Autowired
     public ProfileController(ProfileService profileService) {
@@ -66,7 +77,7 @@ public class ProfileController {
         try {
             user = profileService.findOne(userId);
             ProfilePasswordForm profilePasswordForm = profileHelper.map(user, (ProfilePasswordForm) null);
-            model.addAttribute("profileForm", profilePasswordForm);
+            model.addAttribute(profilePasswordForm);
             return ViewNames.VIEW_PROFILE_PASSWORD_UPDATE;
         }
         catch (WebAuthnSampleBusinessException ex) {
@@ -77,7 +88,7 @@ public class ProfileController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String update(HttpServletRequest request, HttpServletResponse response,
-                         @AuthenticationPrincipal User loginUser, @Valid @ModelAttribute("profileForm") ProfileForm profileForm,
+                         @AuthenticationPrincipal User loginUser, @Valid @ModelAttribute ProfileForm profileForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return ViewNames.VIEW_PROFILE_UPDATE;
@@ -108,7 +119,7 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-    public String updatePassword(@AuthenticationPrincipal User loginUser, @Valid @ModelAttribute("profileForm") ProfilePasswordForm profileForm,
+    public String updatePassword(@AuthenticationPrincipal User loginUser, @Valid @ModelAttribute ProfilePasswordForm profileForm,
                                  BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         int userId = loginUser.getId();

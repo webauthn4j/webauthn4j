@@ -3,6 +3,8 @@ package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.AuthenticatorHelper;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.UserHelper;
 import net.sharplab.springframework.security.webauthn.sample.app.web.ViewNames;
+import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserCreateFormValidator;
+import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserUpdateFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleEntityNotFoundException;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.terasoluna.gfw.common.message.ResultMessages;
@@ -35,6 +38,12 @@ public class UserController {
     private static final String TARGET_USER_ID = "targetUserId";
 
     @Autowired
+    private UserCreateFormValidator userCreateFormValidator;
+
+    @Autowired
+    private UserUpdateFormValidator userUpdateFormValidator;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -43,6 +52,15 @@ public class UserController {
     @Autowired
     private AuthenticatorHelper authenticatorHelper;
 
+    @InitBinder("userCreateForm")
+    public void initUserCreateFormBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(userCreateFormValidator);
+    }
+
+    @InitBinder("userUpdateForm")
+    public void initUserUpdateFormBinder(WebDataBinder webDataBinder){
+        webDataBinder.addValidators(userUpdateFormValidator);
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String list(Pageable pageable, Model model, @RequestParam(required = false, value = "keyword") String keyword) {
@@ -60,12 +78,12 @@ public class UserController {
         UUID userHandle = UUID.randomUUID();
         String userHandleStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(UUIDUtil.toByteArray(userHandle));
         userCreateForm.setUserHandle(userHandleStr);
-        model.addAttribute("userForm", userCreateForm);
+        model.addAttribute(userCreateForm);
         return ViewNames.VIEW_USER_CREATE;
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(HttpServletRequest request, HttpServletResponse response, @Valid @ModelAttribute("userForm") UserCreateForm userCreateForm,
+    public String create(HttpServletRequest request, HttpServletResponse response, @Valid @ModelAttribute UserCreateForm userCreateForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -100,7 +118,7 @@ public class UserController {
             return ViewNames.REDIRECT_ADMIN_USERS;
         }
         UserUpdateForm userUpdateForm = userHelper.map(user, (UserUpdateForm) null);
-        model.addAttribute("userForm", userUpdateForm);
+        model.addAttribute(userUpdateForm);
         model.addAttribute(TARGET_USER_ID, userId);
 
         return ViewNames.VIEW_USER_UPDATE;
@@ -117,14 +135,14 @@ public class UserController {
             return ViewNames.REDIRECT_ADMIN_USERS;
         }
         UserPasswordForm userPasswordForm = userHelper.map(user, (UserPasswordForm) null);
-        model.addAttribute("userForm", userPasswordForm);
+        model.addAttribute(userPasswordForm);
         model.addAttribute(TARGET_USER_ID, userId);
 
         return ViewNames.VIEW_USER_PASSWORD_UPDATE;
     }
 
     @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-    public String update(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer userId, @Valid @ModelAttribute("userForm") UserUpdateForm userUpdateForm,
+    public String update(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer userId, @Valid @ModelAttribute UserUpdateForm userUpdateForm,
                          BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -154,7 +172,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/updatePassword/{userId}", method = RequestMethod.POST)
-    public String updatePassword(@PathVariable Integer userId, @Valid @ModelAttribute("userForm") UserPasswordForm userPasswordForm,
+    public String updatePassword(@PathVariable Integer userId, @Valid @ModelAttribute UserPasswordForm userPasswordForm,
                                  BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -168,7 +186,7 @@ public class UserController {
             userHelper.mapForUpdate(userPasswordForm, user);
             userService.update(user);
         } catch (WebAuthnSampleBusinessException ex) {
-            model.addAttribute("userForm", userPasswordForm);
+            model.addAttribute(userPasswordForm);
             model.addAttribute(TARGET_USER_ID, userId);
             model.addAttribute(ex.getResultMessages());
             return ViewNames.VIEW_USER_PASSWORD_UPDATE;
