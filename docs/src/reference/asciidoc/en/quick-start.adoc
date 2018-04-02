@@ -3,9 +3,8 @@
 
 === Supported browsers
 
-As of March 2018, Firefox Nightly is the only supported browser.
-You need to enable the flags `security.webauthn.webauthn` and `security.webauthn.webauthn_enable_usbtoken`
-in the configuration editor (`about:config` page) to use FIDO-U2F compliant authenticator.
+As of March 2018, Firefox Beta is the only supported browser.
+Chrome Canary may also works, but it seems not so stable.
 
 === Sample application execution
 
