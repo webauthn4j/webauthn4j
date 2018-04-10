@@ -13,8 +13,8 @@ dependencies {
     compile project(':webauthn4j-core')
 
     // Custom Spring Security
-    compile('org.springframework.security:spring-security-core:5.0.2.BUILD-SNAPSHOT')
-    compile('org.springframework.security:spring-security-web:5.0.2.BUILD-SNAPSHOT')
+    compile('org.springframework.security:spring-security-core:5.1.0.BUILD-SNAPSHOT')
+    compile('org.springframework.security:spring-security-web:5.1.0.BUILD-SNAPSHOT')
 
     compile("org.springframework:spring-web")
     compile("org.springframework.security:spring-security-core")
