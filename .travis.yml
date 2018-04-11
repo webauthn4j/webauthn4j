@@ -17,6 +17,7 @@ deploy:
   target-branch: gh-pages
   on:
     branch: master
+    jdk: openjdk8
 
 addons:
   sonarcloud:
