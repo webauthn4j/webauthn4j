@@ -16,6 +16,7 @@
 
 package com.webauthn4j.webauthn.anchor;
 
+import com.webauthn4j.webauthn.util.Experimental;
 import org.springframework.core.io.Resource;
 
 import java.security.cert.TrustAnchor;
@@ -25,6 +26,7 @@ import java.util.Set;
  * KeyStore backed TrustAnchorService
  * Load a key store at first time access and cache it.
  */
+@Experimental
 public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
     private Resource keyStore;

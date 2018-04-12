@@ -16,12 +16,15 @@
 
 package com.webauthn4j.webauthn.anchor;
 
+import com.webauthn4j.webauthn.util.Experimental;
+
 import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
  * Provides {@link TrustAnchor} set.
  */
+@Experimental
 public interface WebAuthnTrustAnchorService {
 
     /**

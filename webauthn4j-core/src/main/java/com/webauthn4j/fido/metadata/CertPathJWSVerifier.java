@@ -21,6 +21,7 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.util.Base64;
 import com.webauthn4j.webauthn.exception.CertificateException;
 import com.webauthn4j.webauthn.util.CertificateUtil;
+import com.webauthn4j.webauthn.util.Experimental;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -38,6 +39,7 @@ import java.util.stream.Collectors;
 /**
  * A JWSVerifier for CertPath based check
  */
+@Experimental
 public class CertPathJWSVerifier implements JWSVerifier {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ROOT_CERTIFICATE_CLASSPATH = "classpath:metadata/certs/FIDOMetadataService.cer";

@@ -19,6 +19,7 @@ package com.webauthn4j.webauthn.anchor;
 import com.webauthn4j.fido.exception.KeyStoreLoadException;
 import com.webauthn4j.webauthn.exception.CertificateException;
 import com.webauthn4j.webauthn.util.CertificateUtil;
+import com.webauthn4j.webauthn.util.Experimental;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -35,6 +36,7 @@ import java.util.Set;
 /**
  * Provides {@link TrustAnchor}'{@link Set} backed by Java KeyStore file.
  */
+@Experimental
 public class KeyStoreTrustAnchorProvider {
 
     //~ Instance fields ================================================================================================
