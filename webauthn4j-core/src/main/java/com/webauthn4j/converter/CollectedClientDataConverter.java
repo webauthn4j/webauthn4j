@@ -17,8 +17,8 @@ public class CollectedClientDataConverter {
         objectMapper.registerModule(new WebAuthnModule());
     }
 
-    public CollectedClientData convert(String source) {
-        byte[] bytes = java.util.Base64.getUrlDecoder().decode(source);
+    public CollectedClientData convert(String base64UrlString) {
+        byte[] bytes = java.util.Base64.getUrlDecoder().decode(base64UrlString);
         return convert(bytes);
     }
 
