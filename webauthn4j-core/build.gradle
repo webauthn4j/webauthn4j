@@ -19,6 +19,7 @@ dependencies {
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
+    testCompile('ch.qos.logback:logback-classic')
     testCompile('org.projectlombok:lombok')
     testCompile('junit:junit')
     testCompile('org.mockito:mockito-core')
