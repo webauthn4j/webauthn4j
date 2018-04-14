@@ -16,8 +16,8 @@
 
 package net.sharplab.springframework.security.webauthn.converter;
 
-import com.webauthn4j.webauthn.client.CollectedClientData;
-import com.webauthn4j.webauthn.converter.CollectedClientDataConverter;
+import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import org.springframework.core.convert.converter.Converter;
 
 /**

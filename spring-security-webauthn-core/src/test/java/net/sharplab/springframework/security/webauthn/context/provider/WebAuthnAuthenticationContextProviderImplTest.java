@@ -16,11 +16,11 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
-import com.webauthn4j.webauthn.client.Origin;
-import com.webauthn4j.webauthn.client.challenge.Challenge;
-import com.webauthn4j.webauthn.client.challenge.DefaultChallenge;
-import com.webauthn4j.webauthn.context.RelyingParty;
-import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.client.Origin;
+import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.context.RelyingParty;
+import com.webauthn4j.context.WebAuthnAuthenticationContext;
 import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -16,8 +16,8 @@
 
 package net.sharplab.springframework.security.webauthn;
 
-import com.webauthn4j.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.context.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
 import net.sharplab.springframework.security.webauthn.exception.*;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
@@ -121,28 +121,28 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         try{
             authenticationContextValidator.validate(authenticationToken.getCredentials(), authenticator, userVerificationRequired);
         }
-        catch (com.webauthn4j.webauthn.exception.MaliciousDataException e){
+        catch (com.webauthn4j.exception.MaliciousDataException e){
             throw new MaliciousDataException("Bad client data type", e);
         }
-        catch (com.webauthn4j.webauthn.exception.BadChallengeException e){
+        catch (com.webauthn4j.exception.BadChallengeException e){
             throw new BadChallengeException("Bad challenge", e);
         }
-        catch (com.webauthn4j.webauthn.exception.BadOriginException e){
+        catch (com.webauthn4j.exception.BadOriginException e){
             throw new BadOriginException("Bad origin", e);
         }
-        catch (com.webauthn4j.webauthn.exception.BadRpIdException e){
+        catch (com.webauthn4j.exception.BadRpIdException e){
             throw new BadRpIdException("Bad rpId", e);
         }
-        catch (com.webauthn4j.webauthn.exception.UserNotVerifiedException e){
+        catch (com.webauthn4j.exception.UserNotVerifiedException e){
             throw new UserNotVerifiedException("User not verified", e);
         }
-        catch (com.webauthn4j.webauthn.exception.UserNotPresentException e){
+        catch (com.webauthn4j.exception.UserNotPresentException e){
             throw new UserNotPresentException("User not verified", e);
         }
-        catch (com.webauthn4j.webauthn.exception.BadSignatureException e){
+        catch (com.webauthn4j.exception.BadSignatureException e){
             throw new BadSignatureException("Bad signature", e);
         }
-        catch (com.webauthn4j.webauthn.exception.MaliciousCounterValueException e){
+        catch (com.webauthn4j.exception.MaliciousCounterValueException e){
             throw new MaliciousCounterValueException("Malicious counter value is detected. Cloned authenticators exist in parallel.", e);
         }
 

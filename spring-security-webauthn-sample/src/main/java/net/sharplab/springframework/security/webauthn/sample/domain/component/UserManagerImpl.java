@@ -1,6 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.component;
 
-import com.webauthn4j.webauthn.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.WebAuthnAuthenticator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.AuthenticatorEntity;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.UserEntity;

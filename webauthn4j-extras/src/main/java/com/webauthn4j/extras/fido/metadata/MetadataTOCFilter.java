@@ -17,7 +17,7 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
-import com.webauthn4j.webauthn.util.Experimental;
+import com.webauthn4j.util.Experimental;
 
 import java.util.function.Predicate;
 

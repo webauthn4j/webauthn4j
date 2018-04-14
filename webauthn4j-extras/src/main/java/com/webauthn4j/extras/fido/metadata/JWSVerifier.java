@@ -17,7 +17,7 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.nimbusds.jose.JWSObject;
-import com.webauthn4j.webauthn.util.Experimental;
+import com.webauthn4j.util.Experimental;
 
 /**
  * Verifier for JWS (Json Web Signature)

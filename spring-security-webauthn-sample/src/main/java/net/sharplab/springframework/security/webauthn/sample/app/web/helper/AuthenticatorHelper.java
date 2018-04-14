@@ -1,8 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web.helper;
 
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.webauthn.exception.BadChallengeException;
+import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.exception.BadChallengeException;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorUpdateForm;

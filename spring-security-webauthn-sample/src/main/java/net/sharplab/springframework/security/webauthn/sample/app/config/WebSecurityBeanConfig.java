@@ -1,14 +1,14 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import com.webauthn4j.webauthn.context.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.webauthn.context.validator.WebAuthnRegistrationContextValidator;
-import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
-import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
-import com.webauthn4j.webauthn.context.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.webauthn.context.validator.attestation.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.webauthn.context.validator.attestation.NoneAttestationStatementValidator;
-import com.webauthn4j.webauthn.context.validator.attestation.PackedAttestationStatementValidator;
-import com.webauthn4j.webauthn.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
+import com.webauthn4j.context.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.context.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.context.validator.assertion.signature.AssertionSignatureValidator;
+import com.webauthn4j.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
+import com.webauthn4j.context.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.context.validator.attestation.FIDOU2FAttestationStatementValidator;
+import com.webauthn4j.context.validator.attestation.NoneAttestationStatementValidator;
+import com.webauthn4j.context.validator.attestation.PackedAttestationStatementValidator;
+import com.webauthn4j.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;

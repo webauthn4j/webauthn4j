@@ -18,15 +18,15 @@ package com.webauthn4j.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.attestation.authenticator.*;
-import com.webauthn4j.webauthn.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.webauthn.client.CollectedClientData;
-import com.webauthn4j.webauthn.client.Origin;
-import com.webauthn4j.webauthn.client.challenge.Challenge;
-import com.webauthn4j.webauthn.client.challenge.DefaultChallenge;
-import com.webauthn4j.webauthn.context.RelyingParty;
-import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
+import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.authenticator.*;
+import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.client.Origin;
+import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.context.RelyingParty;
+import com.webauthn4j.util.jackson.WebAuthnModule;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;

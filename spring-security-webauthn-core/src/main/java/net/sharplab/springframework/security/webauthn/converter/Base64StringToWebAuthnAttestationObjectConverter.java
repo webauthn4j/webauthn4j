@@ -16,8 +16,8 @@
 
 package net.sharplab.springframework.security.webauthn.converter;
 
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.webauthn.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
 import org.springframework.core.convert.converter.Converter;
 
 /**

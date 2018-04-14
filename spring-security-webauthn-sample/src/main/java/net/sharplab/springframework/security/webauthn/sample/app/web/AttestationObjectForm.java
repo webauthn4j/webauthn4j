@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web;
 
 import lombok.Data;
-import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.WebAuthnAttestationObject;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
