@@ -70,8 +70,8 @@ public class CertPathJWSVerifier implements JWSVerifier {
         List<Certificate> certificates = getCertificatesFromJWSHeader(jws.getHeader());
         CertPath certPath = CertificateUtil.generateCertPath(certificates);
 
-        CertPathValidator validator = CertificateUtil.generateCertPathValidator();
-        PKIXParameters certPathParameters = CertificateUtil.generatePKIXParameters(trustAnchor);
+        CertPathValidator validator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchor);
 
         //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.
         //Ref. http://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html#AppB

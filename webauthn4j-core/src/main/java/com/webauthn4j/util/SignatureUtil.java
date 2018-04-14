@@ -28,6 +28,7 @@ public class SignatureUtil {
     }
 
     public static Signature createSignature(String algorithm) {
+        AssertUtil.notNull(algorithm, "algorithm is required; it must not be null");
         try {
             return Signature.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {

@@ -46,8 +46,8 @@ public class TrustAnchorBasicTrustworthinessValidator implements BasicTrustworth
         CertPath certPath = fidoU2FAttestationStatement.getX5c();
         Set<TrustAnchor> trustAnchors = webAuthnTrustAnchorService.getTrustAnchors();
 
-        CertPathValidator certPathValidator = CertificateUtil.generateCertPathValidator();
-        PKIXParameters certPathParameters = CertificateUtil.generatePKIXParameters(trustAnchors);
+        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
 
         if (isRevocationCheckEnabled()) {
             //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.

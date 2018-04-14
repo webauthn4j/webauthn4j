@@ -72,7 +72,7 @@ public class KeyStoreTrustAnchorProvider {
     }
 
     private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password) {
-        KeyStore keyStore = CertificateUtil.generateKeyStore();
+        KeyStore keyStore = CertificateUtil.createKeyStore();
         try {
             keyStore.load(inputStream, password.toCharArray());
         } catch (IOException e) {

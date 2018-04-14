@@ -83,8 +83,8 @@ public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTr
 
         Set<TrustAnchor> trustAnchors = metadataMap.keySet();
 
-        CertPathValidator certPathValidator = CertificateUtil.generateCertPathValidator();
-        PKIXParameters certPathParameters = CertificateUtil.generatePKIXParameters(trustAnchors);
+        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
         certPathParameters.setRevocationEnabled(false);
 
         PKIXCertPathBuilderResult result;

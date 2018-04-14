@@ -16,6 +16,8 @@
 
 package com.webauthn4j.util;
 
+import com.webauthn4j.exception.UnexpectedCheckedException;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.*;
@@ -38,31 +40,32 @@ public class CertificateUtil {
         try {
             certificateFactory = CertificateFactory.getInstance("X.509");
         } catch (CertificateException e) {
-            throw new IllegalStateException(e);
+            throw new UnexpectedCheckedException(e);
         }
     }
 
-    public static CertPathValidator generateCertPathValidator() {
+    public static CertPathValidator createCertPathValidator() {
         try {
             return CertPathValidator.getInstance("PKIX");
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new UnexpectedCheckedException(e);
         }
     }
 
-    public static PKIXParameters generatePKIXParameters(Set<TrustAnchor> trustAnchors) {
+    public static PKIXParameters createPKIXParameters(Set<TrustAnchor> trustAnchors) {
+        AssertUtil.notEmpty(trustAnchors, "trustAnchors is required; it must not be empty");
         try {
             return new PKIXParameters(trustAnchors);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new UnexpectedCheckedException(e);
         }
     }
 
-    public static KeyStore generateKeyStore() {
+    public static KeyStore createKeyStore() {
         try {
             return KeyStore.getInstance(KeyStore.getDefaultType());
         } catch (KeyStoreException e) {
-            throw new IllegalStateException(e);
+            throw new UnexpectedCheckedException(e);
         }
     }
 
@@ -70,7 +73,7 @@ public class CertificateUtil {
         try {
             return certificateFactory.generateCertPath(certificates);
         } catch (CertificateException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new IllegalArgumentException(e);
         }
     }
 
@@ -82,7 +85,7 @@ public class CertificateUtil {
         try {
             return (X509Certificate) certificateFactory.generateCertificate(inputStream);
         } catch (CertificateException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new IllegalArgumentException(e);
         }
     }
 
