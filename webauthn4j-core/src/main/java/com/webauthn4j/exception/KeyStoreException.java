@@ -19,13 +19,17 @@ package com.webauthn4j.exception;
 /**
  * Created by ynojima on 2017/09/09.
  */
-public class KeyStoreLoadException extends RuntimeException {
-    public KeyStoreLoadException(String msg, Throwable cause) {
+public class KeyStoreException extends RuntimeException {
+    public KeyStoreException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
-    public KeyStoreLoadException(String msg) {
+    public KeyStoreException(String msg) {
         super(msg);
+    }
+
+    public KeyStoreException(Throwable cause) {
+        super(cause);
     }
 
 }

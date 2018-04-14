@@ -27,7 +27,7 @@ public class DefaultChallenge implements Challenge {
      * @param value the value of the challenge
      */
     public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
+        AssertUtil.notNull(value, "value cannot be null");
         this.value = value;
     }
 

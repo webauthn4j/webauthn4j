@@ -16,9 +16,9 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Experimental;
 
-import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.util.Set;
 
@@ -27,12 +27,15 @@ import java.util.Set;
  * Load a key store at first time access and cache it.
  */
 @Experimental
-public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
+public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorService {
 
-    private Path keyStore;
-    private String password;
-
+    private TrustAnchorProvider trustAnchorProvider;
     private Set<TrustAnchor> cachedTrustAnchors;
+
+    public WebAuthnTrustAnchorServiceImpl(TrustAnchorProvider trustAnchorProvider){
+        AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider cannot be null");
+        this.trustAnchorProvider = trustAnchorProvider;
+    }
 
     /**
      * {@inheritDoc}
@@ -44,45 +47,9 @@ public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
             return cachedTrustAnchors;
         }
 
-        KeyStoreTrustAnchorProvider keyStoreTrustAnchorProvider = new KeyStoreTrustAnchorProvider();
-        this.cachedTrustAnchors = keyStoreTrustAnchorProvider.provide(getKeyStore(), password);
+        this.cachedTrustAnchors = trustAnchorProvider.provide();
 
         return cachedTrustAnchors;
     }
 
-    /**
-     * Provides keyStore file
-     *
-     * @return keyStore file
-     */
-    public Path getKeyStore() {
-        return keyStore;
-    }
-
-    /**
-     * Sets keyStore file
-     *
-     * @param keyStore keyStore file
-     */
-    public void setKeyStore(Path keyStore) {
-        this.keyStore = keyStore;
-    }
-
-    /**
-     * Provides keyStore file password
-     *
-     * @return keyStore file password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets keyStore file password
-     *
-     * @param password keyStore file password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
