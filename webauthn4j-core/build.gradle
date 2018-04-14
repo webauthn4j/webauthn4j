@@ -15,8 +15,6 @@ repositories {
 
 dependencies {
     compile("org.slf4j:slf4j-api")
-    compile("com.nimbusds:nimbus-jose-jwt:${nimbusJoseJwtVersion}")
-    compile("com.augustcellars.cose:cose-java:${coseJavaVersion}")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
