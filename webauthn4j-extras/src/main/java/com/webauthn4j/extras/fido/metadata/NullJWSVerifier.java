@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
+package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.webauthn.util.AssertUtil;
+import com.nimbusds.jose.JWSObject;
+import com.webauthn4j.webauthn.util.Experimental;
 
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
+/**
+ * A JWSVerifier but does nothing
+ */
+@Experimental
+public class NullJWSVerifier implements JWSVerifier {
 
     /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
+     * {@inheritDoc}
      */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
-    }
-
     @Override
-    public byte[] getValue() {
-        return this.value;
+    public void verify(JWSObject jws) {
+        //nop
     }
 }

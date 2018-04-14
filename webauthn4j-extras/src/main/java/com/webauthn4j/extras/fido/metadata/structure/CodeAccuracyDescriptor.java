@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
+package com.webauthn4j.extras.fido.metadata.structure;
 
-import com.webauthn4j.webauthn.util.AssertUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
+/**
+ * Created by ynojima on 2017/09/08.
+ */
+public class CodeAccuracyDescriptor {
 
-    /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
-     */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
-    }
-
-    @Override
-    public byte[] getValue() {
-        return this.value;
-    }
+    @JsonProperty
+    private Integer base;
+    @JsonProperty
+    private Integer minLength;
+    @JsonProperty
+    private Integer maxRetries;
+    @JsonProperty
+    private Integer blockSlowdown;
 }

@@ -20,8 +20,8 @@ import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.client.Origin;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.exception.BadOriginException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 
@@ -30,7 +30,7 @@ import java.util.Objects;
  */
 public class OriginValidator {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
         if (!Objects.equals(collectedClientData.getOrigin(), relyingParty.getOrigin())) {

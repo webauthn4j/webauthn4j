@@ -18,7 +18,8 @@ package com.webauthn4j.webauthn.util.jackson.deserializer;
 
 import com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData;
 import org.junit.Test;
-import org.springframework.util.Base64Utils;
+
+import java.util.Base64;
 
 import static com.webauthn4j.webauthn.attestation.authenticator.WebAuthnAuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ public class WebAuthnAuthenticatorDataDeserializerTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
 
         //When
-        WebAuthnAuthenticatorData result = new WebAuthnAuthenticatorDataDeserializer().deserialize(Base64Utils.decodeFromUrlSafeString(input));
+        WebAuthnAuthenticatorData result = new WebAuthnAuthenticatorDataDeserializer().deserialize(Base64.getUrlDecoder().decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();

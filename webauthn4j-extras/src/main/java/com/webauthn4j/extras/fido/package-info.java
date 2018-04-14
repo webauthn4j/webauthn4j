@@ -14,25 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
-
-import com.webauthn4j.webauthn.util.AssertUtil;
-
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
-
-    /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
-     */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
-    }
-
-    @Override
-    public byte[] getValue() {
-        return this.value;
-    }
-}
+/**
+ * Classes related to the FIDO specification
+ */
+package com.webauthn4j.extras.fido;

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.webauthn.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
-import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Base64;
 
 public class WebAuthnAttestationObjectConverter {
 
@@ -34,7 +34,7 @@ public class WebAuthnAttestationObjectConverter {
     public String convert(WebAuthnAttestationObject source) {
         try {
             byte[] bytes = objectMapper.writeValueAsBytes(source);
-            return Base64Utils.encodeToUrlSafeString(bytes);
+            return Base64.getUrlEncoder().encodeToString(bytes);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

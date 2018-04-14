@@ -17,8 +17,9 @@
 package com.webauthn4j.webauthn.anchor;
 
 import com.webauthn4j.webauthn.util.Experimental;
-import org.springframework.core.io.Resource;
 
+import java.io.*;
+import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.util.Set;
 
@@ -29,42 +30,42 @@ import java.util.Set;
 @Experimental
 public class KeyStoreTrustAnchorService implements WebAuthnTrustAnchorService {
 
-    private Resource keyStore;
+    private Path keyStore;
     private String password;
 
     private Set<TrustAnchor> cachedTrustAnchors;
-
-    /**
-     * Default constructor
-     */
-    public KeyStoreTrustAnchorService() {
-        KeyStoreTrustAnchorProvider keyStoreTrustAnchorProvider = new KeyStoreTrustAnchorProvider();
-        this.cachedTrustAnchors = keyStoreTrustAnchorProvider.provide(keyStore, password);
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public Set<TrustAnchor> getTrustAnchors() {
+
+        if(cachedTrustAnchors != null){
+            return cachedTrustAnchors;
+        }
+
+        KeyStoreTrustAnchorProvider keyStoreTrustAnchorProvider = new KeyStoreTrustAnchorProvider();
+        this.cachedTrustAnchors = keyStoreTrustAnchorProvider.provide(getKeyStore(), password);
+
         return cachedTrustAnchors;
     }
 
     /**
-     * Provides keyStore file resource
+     * Provides keyStore file
      *
-     * @return keyStore file resource
+     * @return keyStore file
      */
-    public Resource getKeyStore() {
+    public Path getKeyStore() {
         return keyStore;
     }
 
     /**
-     * Sets keyStore file resource
+     * Sets keyStore file
      *
-     * @param keyStore keyStore file resource
+     * @param keyStore keyStore file
      */
-    public void setKeyStore(Resource keyStore) {
+    public void setKeyStore(Path keyStore) {
         this.keyStore = keyStore;
     }
 

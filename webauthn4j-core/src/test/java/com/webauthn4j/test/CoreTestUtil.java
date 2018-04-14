@@ -27,7 +27,6 @@ import com.webauthn4j.webauthn.client.challenge.Challenge;
 import com.webauthn4j.webauthn.client.challenge.DefaultChallenge;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
-import org.springframework.util.Base64Utils;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
@@ -35,6 +34,7 @@ import java.security.cert.CertPath;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -129,7 +129,7 @@ public class CoreTestUtil {
     public static Certificate createCertificate(String base64Certificate) {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            return certificateFactory.generateCertificate(new ByteArrayInputStream(Base64Utils.decodeFromUrlSafeString(base64Certificate)));
+            return certificateFactory.generateCertificate(new ByteArrayInputStream(Base64.getUrlDecoder().decode(base64Certificate)));
         } catch (CertificateException e) {
             throw new IllegalStateException(e);
         }

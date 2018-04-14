@@ -14,25 +14,34 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
+package com.webauthn4j.extras.fido.metadata.structure;
 
-import com.webauthn4j.webauthn.util.AssertUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
+import java.time.LocalDate;
+import java.util.List;
 
-    /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
-     */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
+/**
+ * Created by ynojima on 2017/09/08.
+ */
+public class MetadataTOCPayload {
+    @JsonProperty
+    private LocalDate nextUpdate;
+    @JsonProperty
+    private Integer no;
+    @JsonProperty
+    private List<MetadataTOCPayloadEntry> entries;
+
+    public LocalDate getNextUpdate() {
+        return nextUpdate;
     }
 
-    @Override
-    public byte[] getValue() {
-        return this.value;
+    public Integer getNo() {
+        return no;
     }
+
+    public List<MetadataTOCPayloadEntry> getEntries() {
+        return entries;
+    }
+
 }

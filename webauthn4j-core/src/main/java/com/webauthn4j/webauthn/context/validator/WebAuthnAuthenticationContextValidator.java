@@ -23,11 +23,13 @@ import com.webauthn4j.webauthn.client.CollectedClientData;
 import com.webauthn4j.webauthn.context.RelyingParty;
 import com.webauthn4j.webauthn.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.webauthn.context.validator.assertion.signature.AssertionSignatureValidator;
-import com.webauthn4j.webauthn.exception.*;
+import com.webauthn4j.webauthn.exception.MaliciousDataException;
+import com.webauthn4j.webauthn.exception.UserNotPresentException;
+import com.webauthn4j.webauthn.exception.UserNotVerifiedException;
 import com.webauthn4j.webauthn.util.jackson.WebAuthnModule;
 import com.webauthn4j.webauthn.util.jackson.deserializer.WebAuthnAuthenticatorDataDeserializer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -41,7 +43,7 @@ public class WebAuthnAuthenticationContextValidator {
 
     //~ Instance fields
     // ================================================================================================
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();

@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.config;
 
-import com.webauthn4j.fido.metadata.CertPathJWSVerifier;
-import com.webauthn4j.fido.metadata.FIDOMetadataServiceClient;
+import com.webauthn4j.extras.fido.metadata.CertPathJWSVerifier;
+import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

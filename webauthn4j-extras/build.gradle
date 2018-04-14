@@ -14,12 +14,10 @@ repositories {
 }
 
 dependencies {
-    compile("org.slf4j:slf4j-api")
-    compile("com.nimbusds:nimbus-jose-jwt:${nimbusJoseJwtVersion}")
-    compile("com.augustcellars.cose:cose-java:${coseJavaVersion}")
-    compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
-    provided('javax.servlet:javax.servlet-api')
+    compile project(':webauthn4j-core')
+
+    compile("org.apache.httpcomponents:httpclient")
+    compile("org.springframework:spring-web")
 
     //Test
     testCompile('org.projectlombok:lombok')

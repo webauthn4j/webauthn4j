@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
+package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.webauthn.util.AssertUtil;
+import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
+import com.webauthn4j.webauthn.util.Experimental;
 
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
+import java.util.function.Predicate;
 
-    /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
-     */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
-    }
-
-    @Override
-    public byte[] getValue() {
-        return this.value;
-    }
+/**
+ * A functional interface for representing MetaDataTOC filtering logic.
+ */
+@SuppressWarnings("WeakerAccess")
+@Experimental
+public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
 }

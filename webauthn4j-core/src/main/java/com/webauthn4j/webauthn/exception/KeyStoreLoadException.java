@@ -14,25 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.webauthn.client.challenge;
+package com.webauthn4j.webauthn.exception;
 
-import com.webauthn4j.webauthn.util.AssertUtil;
-
-public class DefaultChallenge implements Challenge {
-    private final byte[] value;
-
-    /**
-     * Creates a new instance
-     *
-     * @param value the value of the challenge
-     */
-    public DefaultChallenge(byte[] value) {
-        AssertUtil.notNull(value, "value cannot be null or empty");
-        this.value = value;
+/**
+ * Created by ynojima on 2017/09/09.
+ */
+public class KeyStoreLoadException extends RuntimeException {
+    public KeyStoreLoadException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 
-    @Override
-    public byte[] getValue() {
-        return this.value;
+    public KeyStoreLoadException(String msg) {
+        super(msg);
     }
+
 }
