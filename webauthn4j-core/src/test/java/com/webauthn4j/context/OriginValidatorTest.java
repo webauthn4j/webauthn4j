@@ -16,11 +16,11 @@
 
 package com.webauthn4j.context;
 
-import com.webauthn4j.test.CoreTestUtil;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.context.validator.OriginValidator;
 import com.webauthn4j.exception.BadOriginException;
+import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Test;
 
 /**

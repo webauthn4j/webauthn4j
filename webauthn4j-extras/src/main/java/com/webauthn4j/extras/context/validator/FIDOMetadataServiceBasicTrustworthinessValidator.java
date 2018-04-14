@@ -16,15 +16,15 @@
 
 package com.webauthn4j.extras.context.validator;
 
+import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.context.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
+import com.webauthn4j.exception.CertificateException;
 import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.context.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
-import com.webauthn4j.exception.CertificateException;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.Experimental;
 

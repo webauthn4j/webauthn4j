@@ -18,7 +18,6 @@ package com.webauthn4j.anchor;
 
 import com.webauthn4j.util.Experimental;
 
-import java.io.*;
 import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.util.Set;

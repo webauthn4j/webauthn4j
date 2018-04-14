@@ -17,9 +17,9 @@
 package com.webauthn4j.util.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.test.CoreTestUtil;
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 

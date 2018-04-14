@@ -16,7 +16,6 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
 import org.junit.Before;

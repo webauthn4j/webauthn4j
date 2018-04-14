@@ -18,7 +18,6 @@ package com.webauthn4j.extras.fido.metadata;
 
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
-import com.webauthn4j.extras.fido.metadata.CertPathJWSVerifier;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;

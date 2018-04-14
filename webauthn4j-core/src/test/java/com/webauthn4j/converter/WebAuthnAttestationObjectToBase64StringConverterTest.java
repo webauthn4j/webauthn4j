@@ -16,8 +16,8 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.test.CoreTestUtil;
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

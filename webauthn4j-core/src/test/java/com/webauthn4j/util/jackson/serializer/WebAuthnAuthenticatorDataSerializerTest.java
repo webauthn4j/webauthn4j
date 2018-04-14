@@ -17,11 +17,11 @@
 package com.webauthn4j.util.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.test.CoreTestUtil;
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Test;
 
 import java.io.IOException;

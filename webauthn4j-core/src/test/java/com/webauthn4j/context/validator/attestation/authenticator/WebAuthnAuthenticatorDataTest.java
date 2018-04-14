@@ -16,8 +16,8 @@
 
 package com.webauthn4j.context.validator.attestation.authenticator;
 
-import com.webauthn4j.test.CoreTestUtil;
 import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
