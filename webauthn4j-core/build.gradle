@@ -19,7 +19,6 @@ dependencies {
     compile("com.augustcellars.cose:cose-java:${coseJavaVersion}")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
-    provided('javax.servlet:javax.servlet-api')
 
     //Test
     testCompile('org.projectlombok:lombok')
@@ -32,6 +31,5 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-        mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
     }
 }
