@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.context.validator.attestation.authenticator;
+package com.webauthn4j.attestation.authenticator;
 
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
+import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.test.CoreTestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by ynojima on 2017/08/19.
+ * Test for ESCredentialPublicKey
  */
-public class WebAuthnAttestedCredentialDataTest {
+public class ESCredentialPublicKeyTest {
 
     @Test
     public void equals_test() {
-        WebAuthnAttestedCredentialData instanceA = CoreTestUtil.createWebAuthnAttestedCredentialData();
-        WebAuthnAttestedCredentialData instanceB = CoreTestUtil.createWebAuthnAttestedCredentialData();
+        ESCredentialPublicKey instanceA = CoreTestUtil.createESCredentialPublicKey();
+        ESCredentialPublicKey instanceB = CoreTestUtil.createESCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

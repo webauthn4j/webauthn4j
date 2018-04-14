@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.context.validator.attestation.authenticator;
+package com.webauthn4j.attestation.authenticator;
 
 import com.webauthn4j.attestation.authenticator.RSCredentialPublicKey;
 import com.webauthn4j.test.CoreTestUtil;
