@@ -23,6 +23,8 @@ import java.nio.ByteBuffer;
  */
 public class UnsignedNumberUtil {
 
+    public static byte BYTE_MAX = (byte)0xFF;
+
     private UnsignedNumberUtil() {
     }
 

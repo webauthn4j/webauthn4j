@@ -18,6 +18,7 @@ package com.webauthn4j.context;
 
 import java.nio.charset.StandardCharsets;
 
+
 /**
  * WebAuthnAuthenticationContext
  */

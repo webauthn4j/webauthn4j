@@ -26,12 +26,14 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.context.RelyingParty;
+import com.webauthn4j.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.jackson.WebAuthnModule;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.security.PrivateKey;
 import java.security.cert.CertPath;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -191,5 +193,10 @@ public class CoreTestUtil {
 
     public static RelyingParty createRelyingParty() {
         return new RelyingParty(createOrigin(), "localhost", createChallenge());
+    }
+
+    public static PrivateKey loadPrivateKeyFromClassPath(String classPath) {
+        InputStream inputStream = ClassLoader.class.getResourceAsStream(classPath);
+        return null; //TODO
     }
 }

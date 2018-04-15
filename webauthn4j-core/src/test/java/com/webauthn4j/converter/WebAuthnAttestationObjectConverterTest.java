@@ -53,7 +53,7 @@ public class WebAuthnAttestationObjectConverterTest {
     @Test
     public void convert_serialization_test() {
         WebAuthnAttestationObject input = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
-        String result = target.convert(input);
+        String result = target.convertToString(input);
         WebAuthnAttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);
     }

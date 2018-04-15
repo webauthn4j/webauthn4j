@@ -7,6 +7,7 @@ import com.webauthn4j.util.jackson.WebAuthnModule;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class CollectedClientDataConverter {
 
@@ -30,4 +31,18 @@ public class CollectedClientDataConverter {
             throw new UncheckedIOException(e);
         }
     }
+
+    public byte[] convertToBytes(CollectedClientData source) {
+        try {
+            return objectMapper.writeValueAsBytes(source);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public String convertToString(CollectedClientData source) {
+        byte[] bytes = convertToBytes(source);
+        return Base64.getUrlEncoder().encodeToString(bytes);
+    }
+
 }
