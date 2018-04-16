@@ -153,12 +153,12 @@ public class WebSecurityBeanConfig {
     public AccessDeniedHandler accessDeniedHandler() {
         LinkedHashMap<Class<? extends AccessDeniedException>, AccessDeniedHandler> errorHandlers = new LinkedHashMap<>();
 
-        // invalid csrf token error handler
+        // invalid csrf authenticator error handler
         AccessDeniedHandlerImpl invalidCsrfTokenErrorHandler = new AccessDeniedHandlerImpl();
         invalidCsrfTokenErrorHandler.setErrorPage("/error/invalidCsrfTokenError");
         errorHandlers.put(InvalidCsrfTokenException.class, invalidCsrfTokenErrorHandler);
 
-        // invalid csrf token error handler
+        // invalid csrf authenticator error handler
         AccessDeniedHandlerImpl missingCsrfTokenErrorHandler = new AccessDeniedHandlerImpl();
         missingCsrfTokenErrorHandler.setErrorPage("/error/invalidCsrfTokenError");
         errorHandlers.put(MissingCsrfTokenException.class, missingCsrfTokenErrorHandler);

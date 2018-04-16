@@ -20,7 +20,7 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.context.validator.OriginValidator;
 import com.webauthn4j.exception.BadOriginException;
-import com.webauthn4j.test.CoreTestUtil;
+import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 /**
@@ -35,9 +35,9 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
-        CollectedClientData collectedClientData = CoreTestUtil.createClientData();
+        CollectedClientData collectedClientData = TestUtil.createClientData();
         collectedClientData.setOrigin(originA);
-        RelyingParty relyingParty = new RelyingParty(originB, "example.com", CoreTestUtil.createChallenge());
+        RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
     }
 
@@ -46,9 +46,9 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = CoreTestUtil.createClientData();
+        CollectedClientData collectedClientData = TestUtil.createClientData();
         collectedClientData.setOrigin(originA);
-        RelyingParty relyingParty = new RelyingParty(originB, "example.com", CoreTestUtil.createChallenge());
+        RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
     }
 

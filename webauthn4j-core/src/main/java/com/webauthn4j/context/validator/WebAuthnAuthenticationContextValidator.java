@@ -23,11 +23,11 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.context.RelyingParty;
 import com.webauthn4j.context.WebAuthnAuthenticationContext;
 import com.webauthn4j.context.validator.assertion.signature.AssertionSignatureValidator;
+import com.webauthn4j.converter.WebAuthnModule;
 import com.webauthn4j.exception.MaliciousDataException;
 import com.webauthn4j.exception.UserNotPresentException;
 import com.webauthn4j.exception.UserNotVerifiedException;
-import com.webauthn4j.util.jackson.WebAuthnModule;
-import com.webauthn4j.util.jackson.deserializer.WebAuthnAuthenticatorDataDeserializer;
+import com.webauthn4j.jackson.deserializer.WebAuthnAuthenticatorDataDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -16,8 +16,7 @@
 
 package com.webauthn4j.attestation.authenticator;
 
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
-import com.webauthn4j.test.CoreTestUtil;
+import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +28,8 @@ public class ESCredentialPublicKeyTest {
 
     @Test
     public void equals_test() {
-        ESCredentialPublicKey instanceA = CoreTestUtil.createESCredentialPublicKey();
-        ESCredentialPublicKey instanceB = CoreTestUtil.createESCredentialPublicKey();
+        ESCredentialPublicKey instanceA = TestUtil.createESCredentialPublicKey();
+        ESCredentialPublicKey instanceB = TestUtil.createESCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

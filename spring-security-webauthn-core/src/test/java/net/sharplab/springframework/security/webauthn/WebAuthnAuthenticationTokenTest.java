@@ -28,7 +28,7 @@ import static org.mockito.Mockito.mock;
 public class WebAuthnAuthenticationTokenTest {
 
     /**
-     * Verifies that constructor with 3 args yields authenticated token.
+     * Verifies that constructor with 3 args yields authenticated authenticator.
      */
     @Test
     public void webAuthnAuthenticationToken() {

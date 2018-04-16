@@ -16,8 +16,7 @@
 
 package com.webauthn4j.attestation.authenticator;
 
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.test.CoreTestUtil;
+import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +28,8 @@ public class WebAuthnAttestedCredentialDataTest {
 
     @Test
     public void equals_test() {
-        WebAuthnAttestedCredentialData instanceA = CoreTestUtil.createWebAuthnAttestedCredentialData();
-        WebAuthnAttestedCredentialData instanceB = CoreTestUtil.createWebAuthnAttestedCredentialData();
+        WebAuthnAttestedCredentialData instanceA = TestUtil.createWebAuthnAttestedCredentialData();
+        WebAuthnAttestedCredentialData instanceB = TestUtil.createWebAuthnAttestedCredentialData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

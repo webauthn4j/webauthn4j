@@ -3,5 +3,9 @@ include "spring-security-webauthn-thymeleaf"
 include "spring-security-webauthn-sample"
 include "webauthn4j-core"
 include 'webauthn4j-extras'
+include 'webauthn4j-test'
+include 'webauthn4j-util'
 
 rootProject.name = 'spring-security-webauthn'
+
+

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.attestation;
 
-import com.webauthn4j.test.CoreTestUtil;
+import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,8 +28,8 @@ public class WebAuthnAttestationObjectTest {
 
     @Test
     public void equals_test() {
-        WebAuthnAttestationObject instanceA = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
-        WebAuthnAttestationObject instanceB = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
+        WebAuthnAttestationObject instanceA = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
+        WebAuthnAttestationObject instanceB = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

@@ -1,0 +1,28 @@
+group 'com.webauthn4j'
+version '0.1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: "io.spring.dependency-management"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':webauthn4j-core')
+
+    //Test
+    testCompile('ch.qos.logback:logback-classic')
+    testCompile('org.projectlombok:lombok')
+    testCompile('junit:junit')
+    testCompile('org.mockito:mockito-core')
+    testCompile('org.assertj:assertj-core')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
+}

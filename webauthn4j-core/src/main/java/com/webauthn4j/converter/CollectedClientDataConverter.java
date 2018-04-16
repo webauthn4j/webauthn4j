@@ -2,7 +2,6 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.util.jackson.WebAuthnModule;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

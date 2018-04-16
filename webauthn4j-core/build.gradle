@@ -8,17 +8,17 @@ apply plugin: 'nebula.provided-base'
 sourceCompatibility = 1.8
 
 repositories {
-    flatDir {
-        dirs "../libs"
-    }
+    mavenCentral()
 }
 
 dependencies {
+    compile project(':webauthn4j-util')
     compile("org.slf4j:slf4j-api")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
+    testCompile project(':webauthn4j-test')
     testCompile('ch.qos.logback:logback-classic')
     testCompile('org.projectlombok:lombok')
     testCompile('junit:junit')

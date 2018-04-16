@@ -20,7 +20,7 @@ import com.webauthn4j.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.test.CoreTestUtil;
+import com.webauthn4j.test.TestUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class WebAuthnAttestationObjectConverterTest {
 
     @Test
     public void convert_serialization_test() {
-        WebAuthnAttestationObject input = CoreTestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
+        WebAuthnAttestationObject input = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         String result = target.convertToString(input);
         WebAuthnAttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);
