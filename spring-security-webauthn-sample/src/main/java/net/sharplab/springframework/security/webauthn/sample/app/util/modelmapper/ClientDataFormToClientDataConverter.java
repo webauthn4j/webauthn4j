@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper;
 
 import com.webauthn4j.client.CollectedClientData;
 import net.sharplab.springframework.security.webauthn.sample.app.web.CollectedClientDataForm;

@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;

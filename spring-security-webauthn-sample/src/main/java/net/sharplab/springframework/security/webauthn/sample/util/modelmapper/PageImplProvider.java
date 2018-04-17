@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.provider;
+package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
 import org.modelmapper.Provider;
 import org.springframework.data.domain.PageImpl;

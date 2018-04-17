@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util;
+package net.sharplab.springframework.security.webauthn.sample.util;
 
 import java.nio.ByteBuffer;
 import java.util.UUID;

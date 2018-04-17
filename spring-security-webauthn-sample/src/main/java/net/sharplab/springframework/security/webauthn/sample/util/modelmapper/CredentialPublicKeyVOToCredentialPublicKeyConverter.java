@@ -1,6 +1,5 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
-import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.RSCredentialPublicKey;

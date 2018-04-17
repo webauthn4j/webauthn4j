@@ -1,13 +1,15 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter.*;
+import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AttestationObjectFormToWebAuthnAttestationObjectConverter;
+import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AuthorityFormToAuthorityUpdateDtoConverter;
+import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AuthorityToAuthorityFormConverter;
+import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.ClientDataFormToClientDataConverter;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.ModelMapperConfig;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 

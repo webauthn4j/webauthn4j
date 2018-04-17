@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.AuthenticatorEntity;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.UserEntity;

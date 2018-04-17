@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
  */
 @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
 @Configuration
-@ComponentScan(basePackages = "net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter")
+@ComponentScan(basePackages = "net.sharplab.springframework.security.webauthn.sample.util.modelmapper.converter")
 public class UserServiceImplTest {
 
     @Rule

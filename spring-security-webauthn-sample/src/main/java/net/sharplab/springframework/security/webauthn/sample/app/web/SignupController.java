@@ -8,8 +8,7 @@ import net.sharplab.springframework.security.webauthn.sample.domain.constant.Mes
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import net.sharplab.springframework.security.webauthn.sample.domain.service.UserService;
-import net.sharplab.springframework.security.webauthn.sample.domain.util.UUIDUtil;
-import org.modelmapper.ModelMapper;
+import net.sharplab.springframework.security.webauthn.sample.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

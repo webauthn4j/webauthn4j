@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.domain.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
 import org.modelmapper.Converter;
 import org.modelmapper.MappingException;

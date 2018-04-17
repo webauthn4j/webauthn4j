@@ -1,4 +1,4 @@
-package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.converter;
+package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper;
 
 import net.sharplab.springframework.security.webauthn.sample.app.web.admin.AuthorityForm;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.Authority;

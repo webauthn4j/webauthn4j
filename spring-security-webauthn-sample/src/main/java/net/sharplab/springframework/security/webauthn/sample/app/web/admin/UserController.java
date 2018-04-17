@@ -7,10 +7,9 @@ import net.sharplab.springframework.security.webauthn.sample.app.web.validator.U
 import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserUpdateFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleBusinessException;
-import net.sharplab.springframework.security.webauthn.sample.domain.exception.WebAuthnSampleEntityNotFoundException;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import net.sharplab.springframework.security.webauthn.sample.domain.service.UserService;
-import net.sharplab.springframework.security.webauthn.sample.domain.util.UUIDUtil;
+import net.sharplab.springframework.security.webauthn.sample.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
