@@ -2,10 +2,12 @@ package com.webauthn4j.test.platform;
 
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.util.Experimental;
 
 import java.util.List;
 import java.util.Map;
 
+@Experimental
 public class PublicKeyCredentialRequestOptions {
 
     private Challenge challenge;

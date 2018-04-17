@@ -1,5 +1,8 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
+import com.webauthn4j.util.Experimental;
+
+@Experimental
 public class RegistrationRequest {
 
     private byte[] challengeParameter;

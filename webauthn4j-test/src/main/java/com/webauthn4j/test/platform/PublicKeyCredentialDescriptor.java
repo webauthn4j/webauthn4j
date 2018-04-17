@@ -1,7 +1,10 @@
 package com.webauthn4j.test.platform;
 
+import com.webauthn4j.util.Experimental;
+
 import java.util.List;
 
+@Experimental
 public class PublicKeyCredentialDescriptor {
     private PublicKeyCredentialType type;
     private byte[] id;

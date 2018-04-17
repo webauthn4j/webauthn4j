@@ -10,10 +10,12 @@ import com.webauthn4j.converter.WebAuthnAuthenticatorDataConverter;
 import com.webauthn4j.test.authenticator.fido.u2f.AuthenticationRequest;
 import com.webauthn4j.test.authenticator.fido.u2f.AuthenticationResponse;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
+import com.webauthn4j.util.Experimental;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.charset.StandardCharsets;
 
+@Experimental
 public class ClientPlatform {
 
     private FIDOU2FAuthenticator softwareToken = new FIDOU2FAuthenticator();
