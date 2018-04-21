@@ -22,6 +22,9 @@ import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnA
 import net.sharplab.springframework.security.webauthn.metadata.MetadataEndpointFilter;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProvider;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
+import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
+import org.springframework.security.authentication.MFATokenEvaluator;
+import org.springframework.security.authentication.MFATokenEvaluatorImpl;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
@@ -63,7 +66,7 @@ import static net.sharplab.springframework.security.webauthn.WebAuthnProcessingF
 public final class WebAuthnLoginConfigurer<H extends HttpSecurityBuilder<H>> extends
         AbstractAuthenticationFilterConfigurer<H, WebAuthnLoginConfigurer<H>, WebAuthnProcessingFilter> {
 
-    private AuthenticationTrustResolver authenticationTrustResolver;
+    private MFATokenEvaluator mfaTokenEvaluator;
     private MetadataProvider metadataProvider;
 
     public WebAuthnLoginConfigurer() {
@@ -83,6 +86,8 @@ public final class WebAuthnLoginConfigurer<H extends HttpSecurityBuilder<H>> ext
     @Override
     public void init(H http) throws Exception {
         super.init(http);
+
+        http.setSharedObject(MFATokenEvaluator.class, mfaTokenEvaluator);
     }
 
     /**
@@ -91,8 +96,20 @@ public final class WebAuthnLoginConfigurer<H extends HttpSecurityBuilder<H>> ext
     @Override
     public void configure(H http) throws Exception {
         super.configure(http);
-        http.addFilterAfter(
-                new MetadataEndpointFilter(metadataProvider, authenticationTrustResolver), SessionManagementFilter.class);
+        MetadataEndpointFilter metadataEndpointFilter = new MetadataEndpointFilter(metadataProvider);
+        AuthenticationTrustResolver trustResolver = http
+                .getSharedObject(AuthenticationTrustResolver.class);
+        if (trustResolver != null) {
+            metadataEndpointFilter.setTrustResolver(trustResolver);
+        }
+
+        MFATokenEvaluator mfaTokenEvaluator = http
+                .getSharedObject(MFATokenEvaluator.class);
+        if(mfaTokenEvaluator != null){
+            metadataEndpointFilter.setMFATokenEvaluator(mfaTokenEvaluator);
+        }
+
+        http.addFilterAfter(metadataEndpointFilter, SessionManagementFilter.class);
     }
 
     /**
@@ -202,9 +219,8 @@ public final class WebAuthnLoginConfigurer<H extends HttpSecurityBuilder<H>> ext
         return this;
     }
 
-
-    public WebAuthnLoginConfigurer<H> authenticationTrustResolver(AuthenticationTrustResolver authenticationTrustResolver) {
-        this.authenticationTrustResolver = authenticationTrustResolver;
+    public WebAuthnLoginConfigurer<H> mfaTokenEvaluator(MFATokenEvaluator mfaTokenEvaluator) {
+        this.mfaTokenEvaluator = mfaTokenEvaluator;
         return this;
     }
 

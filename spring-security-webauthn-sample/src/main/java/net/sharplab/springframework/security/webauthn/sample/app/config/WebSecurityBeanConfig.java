@@ -67,11 +67,6 @@ public class WebSecurityBeanConfig {
         return new RelyingPartyProviderImpl(challengeRepository);
     }
 
-    @Bean //TODO:なぜBean化が自前で必要？
-    public AuthenticationTrustResolver authenticationTrustResolver() {
-        return new AuthenticationTrustResolverImpl();
-    }
-
     @Bean
     public ChallengeRepository challengeRepository() {
         return new HttpSessionChallengeRepository();

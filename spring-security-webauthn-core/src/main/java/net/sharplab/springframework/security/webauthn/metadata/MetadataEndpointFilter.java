@@ -19,10 +19,7 @@ package net.sharplab.springframework.security.webauthn.metadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.authentication.MFATokenEvaluator;
-import org.springframework.security.authentication.MFATokenEvaluatorImpl;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,13 +50,12 @@ public class MetadataEndpointFilter extends GenericFilterBean {
 
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     private MetadataProvider metadataProvider;
-    private AuthenticationTrustResolver trustResolver;
+    private AuthenticationTrustResolver trustResolver = new AuthenticationTrustResolverImpl();
     private MFATokenEvaluator mfaTokenEvaluator = new MFATokenEvaluatorImpl();
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public MetadataEndpointFilter(MetadataProvider metadataProvider, AuthenticationTrustResolver trustResolver) {
+    public MetadataEndpointFilter(MetadataProvider metadataProvider) {
         this.metadataProvider = metadataProvider;
-        this.trustResolver = trustResolver;
     }
 
     @Override
@@ -112,6 +108,10 @@ public class MetadataEndpointFilter extends GenericFilterBean {
         }
         response.setContentType("application/json");
         response.getWriter().print(responseText);
+    }
+
+    public void setTrustResolver(AuthenticationTrustResolver trustResolver) {
+        this.trustResolver = trustResolver;
     }
 
     public void setMFATokenEvaluator(MFATokenEvaluator mfaTokenEvaluator) {

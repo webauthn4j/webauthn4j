@@ -57,9 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MetadataProvider metadataProvider;
 
-    @Autowired
-    private AuthenticationTrustResolver trustResolver;
-
 
     @Override
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
@@ -105,8 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("rawPassword")
                 .webAuthnAuthenticationContextProvider(webAuthnAuthenticationContextProvider)
-                .metadataProvider(metadataProvider)
-                .authenticationTrustResolver(trustResolver);
+                .metadataProvider(metadataProvider);
 
         http.exceptionHandling();
 
