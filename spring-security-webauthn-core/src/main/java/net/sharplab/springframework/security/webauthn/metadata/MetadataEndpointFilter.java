@@ -21,6 +21,8 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.authentication.MFATokenEvaluator;
+import org.springframework.security.authentication.MFATokenEvaluatorImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.SpringSecurityMessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,6 +54,7 @@ public class MetadataEndpointFilter extends GenericFilterBean {
     protected MessageSourceAccessor messages = SpringSecurityMessageSource.getAccessor();
     private MetadataProvider metadataProvider;
     private AuthenticationTrustResolver trustResolver;
+    private MFATokenEvaluator mfaTokenEvaluator = new MFATokenEvaluatorImpl();
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public MetadataEndpointFilter(MetadataProvider metadataProvider, AuthenticationTrustResolver trustResolver) {
@@ -85,7 +88,7 @@ public class MetadataEndpointFilter extends GenericFilterBean {
         String responseText;
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            if (trustResolver.isFullyAnonymous(authentication)) {
+            if (trustResolver.isAnonymous(authentication) && !mfaTokenEvaluator.isFirstOfMultiFactorAuthentication(authentication)) {
                 throw new InsufficientAuthenticationException(messages.getMessage(
                         "MetadataEndpointFilter.insufficientAuthentication",
                         "Anonymous user is not allowed"));
@@ -111,4 +114,7 @@ public class MetadataEndpointFilter extends GenericFilterBean {
         response.getWriter().print(responseText);
     }
 
+    public void setMFATokenEvaluator(MFATokenEvaluator mfaTokenEvaluator) {
+        this.mfaTokenEvaluator = mfaTokenEvaluator;
+    }
 }
