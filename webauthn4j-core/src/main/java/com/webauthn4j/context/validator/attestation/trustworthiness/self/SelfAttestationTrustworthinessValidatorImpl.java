@@ -35,7 +35,7 @@ public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestat
 
     public void validate(WebAuthnAttestationStatement attestationStatement) {
         if (attestationStatement.getAttestationType() == AttestationType.Self) {
-            throw new IllegalArgumentException("attestationStatement is not self attestedCredentialData");
+            throw new IllegalArgumentException("attestationStatement is not self attested");
         }
         if (isSelfAttestationAllowed()) {
             X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();

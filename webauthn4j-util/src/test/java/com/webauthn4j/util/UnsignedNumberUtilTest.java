@@ -32,7 +32,7 @@ public class UnsignedNumberUtilTest {
         byte[] bytes = new byte[4];
         bytes[0] = 0x00;
         bytes[1] = 0x01;
-        long result = UnsignedNumberUtil.getUnsignedShort(ByteBuffer.wrap(bytes));
+        int result = UnsignedNumberUtil.getUnsignedShort(ByteBuffer.wrap(bytes));
         assertThat(result).isEqualTo(1);
     }
 
@@ -41,8 +41,8 @@ public class UnsignedNumberUtilTest {
         byte[] bytes = new byte[4];
         bytes[0] = (byte) 0xFF;
         bytes[1] = (byte) 0xFF;
-        long result = UnsignedNumberUtil.getUnsignedShort(ByteBuffer.wrap(bytes));
-        assertThat(result).isEqualTo(0xFFFFL);
+        int result = UnsignedNumberUtil.getUnsignedShort(ByteBuffer.wrap(bytes));
+        assertThat(result).isEqualTo(0x0000FFFF);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UnsignedNumberUtilTest {
         bytes[2] = (byte) 0xFF;
         bytes[3] = (byte) 0xFF;
         long result = UnsignedNumberUtil.getUnsignedInt(ByteBuffer.wrap(bytes));
-        assertThat(result).isEqualTo(0xFFFFFFFFL);
+        assertThat(result).isEqualTo(0x00000000FFFFFFFFL);
     }
 
     @Test

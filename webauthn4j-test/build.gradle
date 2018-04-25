@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     compile project(':webauthn4j-core')
+    compile("org.springframework:spring-core")
 
     //Test
     testCompile('ch.qos.logback:logback-classic')

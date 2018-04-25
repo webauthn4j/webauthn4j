@@ -28,9 +28,16 @@ import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.context.RelyingParty;
 import com.webauthn4j.converter.WebAuthnModule;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.KeyUtil;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.StreamUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.PrivateKey;
 import java.security.cert.CertPath;
@@ -51,9 +58,7 @@ public class TestUtil {
 
     public static WebAuthnAttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
         WebAuthnAttestationObject attestationObject = new WebAuthnAttestationObject();
-        String format = "fido-u2f";
         attestationObject.setAuthenticatorData(createWebAuthnAuthenticatorData());
-        attestationObject.setFormat(format);
         attestationObject.setAttestationStatement(createFIDOU2FAttestationStatement());
         return attestationObject;
     }
@@ -79,7 +84,7 @@ public class TestUtil {
 
     public static ESCredentialPublicKey createESCredentialPublicKey() {
         ESCredentialPublicKey credentialPublicKey = new ESCredentialPublicKey();
-        credentialPublicKey.setAlgorithm(CoseAlgorithmConst.ES256);
+        credentialPublicKey.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
         credentialPublicKey.setX(new byte[32]);
         credentialPublicKey.setY(new byte[32]);
         return credentialPublicKey;
@@ -87,7 +92,7 @@ public class TestUtil {
 
     public static RSCredentialPublicKey createRSCredentialPublicKey() {
         RSCredentialPublicKey credentialPublicKey = new RSCredentialPublicKey();
-        credentialPublicKey.setAlgorithm(CoseAlgorithmConst.RS256);
+        credentialPublicKey.setAlgorithm(RSSignatureAlgorithm.SHA256withRSA);
         credentialPublicKey.setN(new byte[32]);
         credentialPublicKey.setE(new byte[32]);
         return credentialPublicKey;
@@ -122,7 +127,7 @@ public class TestUtil {
         return loadCertificateFromClassPath("/attestation/certs/ssw-test-intermediate.crt");
     }
 
-    public static X509Certificate loadTestAuthenticatorCertificate() {
+    public static X509Certificate loadTestAuthenticatorAttestationCertificate() {
         return loadCertificateFromClassPath("/attestation/certs/ssw-test-authenticator.crt");
     }
 
@@ -194,8 +199,23 @@ public class TestUtil {
         return new RelyingParty(createOrigin(), "localhost", createChallenge());
     }
 
-    public static PrivateKey loadPrivateKeyFromClassPath(String classPath) {
-        InputStream inputStream = ClassLoader.class.getResourceAsStream(classPath);
-        return null; //TODO
+    public static PrivateKey loadTestAuthenticatorAttestationPrivateKey(){
+        return loadPrivateKey("classpath:attestation/private/ssw-test-authenticator.der");
+    }
+
+    public static PrivateKey loadPrivateKeyFromResource(Resource resource){
+        try {
+            InputStream inputStream = resource.getInputStream();
+            byte[] data = StreamUtils.copyToByteArray(inputStream);
+            return KeyUtil.loadECDSAPrivateKey(data);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static PrivateKey loadPrivateKey(String resourcePath){
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource(resourcePath);
+        return loadPrivateKeyFromResource(resource);
     }
 }

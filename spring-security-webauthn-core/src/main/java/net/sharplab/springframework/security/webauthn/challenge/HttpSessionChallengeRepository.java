@@ -41,7 +41,7 @@ public class HttpSessionChallengeRepository implements ChallengeRepository {
 
     @Override
     public Challenge generateChallenge() {
-        return new DefaultChallenge(createNewChallenge());
+        return new DefaultChallenge();
     }
 
     @Override
@@ -77,10 +77,4 @@ public class HttpSessionChallengeRepository implements ChallengeRepository {
         this.sessionAttributeName = sessionAttributeName;
     }
 
-    private byte[] createNewChallenge() {
-        UUID uuid = UUID.randomUUID();
-        long hi = uuid.getMostSignificantBits();
-        long lo = uuid.getLeastSignificantBits();
-        return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
-    }
 }

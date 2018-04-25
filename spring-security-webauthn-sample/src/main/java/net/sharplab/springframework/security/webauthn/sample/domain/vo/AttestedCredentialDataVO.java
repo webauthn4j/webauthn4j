@@ -6,7 +6,6 @@ import net.sharplab.springframework.security.webauthn.sample.infrastructure.util
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-import javax.persistence.Lob;
 import java.io.Serializable;
 
 /**
@@ -24,6 +23,6 @@ public class AttestedCredentialDataVO implements Serializable {
 
     @Column(columnDefinition = "text")
     @Convert(converter = CredentialPublicKeyVOConverter.class)
-    private CredentialPublicKeyVO credentialPublicKey;
+    private AbstractCredentialPublicKeyVO credentialPublicKey;
 
 }

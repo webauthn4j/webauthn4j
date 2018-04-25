@@ -17,6 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.exception.NotImplementedException;
 
 import java.security.Signature;
 
@@ -27,8 +28,6 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private int keyType;
     @JsonProperty("2")
     private byte[] keyId;
-    @JsonProperty("3")
-    private int algorithm;
     @JsonProperty("4")
     private int[] keyOpts;
     @JsonProperty("5")
@@ -50,14 +49,6 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         this.keyId = keyId;
     }
 
-    public int getAlgorithm() {
-        return algorithm;
-    }
-
-    public void setAlgorithm(int algorithm) {
-        this.algorithm = algorithm;
-    }
-
     public int[] getKeyOpts() {
         return keyOpts;
     }
@@ -74,6 +65,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         this.baseIV = baseIV;
     }
 
+    protected abstract String getAlgorithmName();
+
     @Override
     public boolean verifySignature(byte[] signature, byte[] data) {
         try {
@@ -88,6 +81,4 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
             return false;
         }
     }
-
-    protected abstract String getAlgorithmName();
 }

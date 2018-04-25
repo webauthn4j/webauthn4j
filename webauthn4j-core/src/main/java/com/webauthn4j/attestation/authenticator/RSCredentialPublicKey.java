@@ -16,21 +16,27 @@
 
 package com.webauthn4j.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.exception.UnsupportedArgumentException;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
+import java.util.Objects;
 
+@JsonIgnoreProperties({"publicKey"})
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
     @JsonProperty("-1")
     private byte[] n;
+
     @JsonProperty("-2")
     private byte[] e;
+
+    @JsonProperty("3")
+    protected RSSignatureAlgorithm algorithm;
 
     public byte[] getN() {
         return n;
@@ -48,6 +54,19 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
         this.e = e;
     }
 
+    public RSSignatureAlgorithm getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(RSSignatureAlgorithm algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    @Override
+    protected String getAlgorithmName() {
+        return algorithm.getName();
+    }
+
     @Override
     public PublicKey getPublicKey() {
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
@@ -63,29 +82,20 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
     }
 
     @Override
-    protected String getAlgorithmName() {
-        int alg = getAlgorithm();
-        switch (alg) {
-            case -257:
-                return "SHA256withRSA";
-            default:
-                throw new UnsupportedArgumentException("Signature algorithm is not supported");
-        }
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RSCredentialPublicKey that = (RSCredentialPublicKey) o;
         return Arrays.equals(n, that.n) &&
-                Arrays.equals(e, that.e);
+                Arrays.equals(e, that.e) &&
+                Objects.equals(algorithm, that.algorithm);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Arrays.hashCode(n);
+        int result = Objects.hash(algorithm);
+        result = 31 * result + Arrays.hashCode(n);
         result = 31 * result + Arrays.hashCode(e);
         return result;
     }

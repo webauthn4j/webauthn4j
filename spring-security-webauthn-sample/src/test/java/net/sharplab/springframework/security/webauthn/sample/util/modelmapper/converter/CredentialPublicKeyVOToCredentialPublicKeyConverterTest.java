@@ -2,6 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.util.modelmapper.c
 
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ESSignatureAlgorithm;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.ModelMapperConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.ESCredentialPublicKeyVO;
 import org.junit.Test;
@@ -20,16 +21,16 @@ public class CredentialPublicKeyVOToCredentialPublicKeyConverterTest {
 
         //Given
         ESCredentialPublicKeyVO source = new ESCredentialPublicKeyVO();
-        source.setAlgorithm(-7);
+        source.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
         source.setX(new byte[]{0x00, 0x01});
         source.setY(new byte[]{0x02, 0x03});
-        AbstractCredentialPublicKey destination = new ESCredentialPublicKey();
+        ESCredentialPublicKey destination = new ESCredentialPublicKey();
 
         //When
         modelMapper.map(source, destination);
 
         //Then
-        assertThat(destination).hasFieldOrPropertyWithValue("algorithm", -7);
+        assertThat(destination).hasFieldOrPropertyWithValue("algorithm", ESSignatureAlgorithm.SHA256withECDSA);
         assertThat(destination).hasFieldOrPropertyWithValue("x", new byte[]{0x00, 0x01});
         assertThat(destination).hasFieldOrPropertyWithValue("y", new byte[]{0x02, 0x03});
     }

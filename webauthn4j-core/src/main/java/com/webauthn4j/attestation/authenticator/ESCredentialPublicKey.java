@@ -18,7 +18,6 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.exception.UnsupportedArgumentException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -32,11 +31,11 @@ import java.security.spec.ECPublicKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
-@JsonIgnoreProperties({"publicKey", "curveName", "algorithmName"})
+@JsonIgnoreProperties({"publicKey"})
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
     @JsonProperty("-1")
-    private int curve;
+    private Curve curve;
     @JsonProperty("-2")
     private byte[] x;
     @JsonProperty("-3")
@@ -44,11 +43,14 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-4")
     private byte[] d;
 
-    public int getCurve() {
+    @JsonProperty("3")
+    private ESSignatureAlgorithm algorithm;
+
+    public Curve getCurve() {
         return curve;
     }
 
-    public void setCurve(int curve) {
+    public void setCurve(Curve curve) {
         this.curve = curve;
     }
 
@@ -76,6 +78,19 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         this.d = d;
     }
 
+    public ESSignatureAlgorithm getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(ESSignatureAlgorithm algorithm) {
+        this.algorithm = algorithm;
+    }
+
+    @Override
+    protected String getAlgorithmName() {
+        return algorithm.getName();
+    }
+
     @Override
     public PublicKey getPublicKey() {
         ECPoint ecPoint = new ECPoint(
@@ -85,7 +100,7 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
 
         try {
             AlgorithmParameters parameters = AlgorithmParameters.getInstance("EC", "SunEC");
-            parameters.init(new ECGenParameterSpec(getCurveName()));
+            parameters.init(new ECGenParameterSpec(curve.getName()));
             ECParameterSpec ecParameterSpec = parameters.getParameterSpec(ECParameterSpec.class);
             ECPublicKeySpec spec = new ECPublicKeySpec(
                     ecPoint,
@@ -98,34 +113,6 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         }
     }
 
-    private String getCurveName() {
-        switch (curve) {
-            case 1:
-                return "secp256r1";
-            case 2:
-                return "secp384r1";
-            case 3:
-                return "secp521r1";
-            default:
-                throw new UnsupportedArgumentException("Signature algorithm is not supported");
-        }
-    }
-
-    @Override
-    protected String getAlgorithmName() {
-        int alg = getAlgorithm();
-        switch (alg) {
-            case -7:
-                return "SHA256withECDSA";
-            case -35:
-                return "SHA384withECDSA";
-            case -36:
-                return "SHA512withECDSA";
-            default:
-                throw new UnsupportedArgumentException("Signature algorithm is not supported");
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -134,13 +121,14 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
                 Arrays.equals(y, that.y) &&
-                Arrays.equals(d, that.d);
+                Arrays.equals(d, that.d) &&
+                Objects.equals(algorithm, that.algorithm);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(curve);
+        int result = Objects.hash(curve, algorithm);
         result = 31 * result + Arrays.hashCode(x);
         result = 31 * result + Arrays.hashCode(y);
         result = 31 * result + Arrays.hashCode(d);

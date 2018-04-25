@@ -2,7 +2,7 @@ package net.sharplab.springframework.security.webauthn.sample.infrastructure.uti
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sharplab.springframework.security.webauthn.sample.domain.vo.CredentialPublicKeyVO;
+import net.sharplab.springframework.security.webauthn.sample.domain.vo.AbstractCredentialPublicKeyVO;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 @Converter
-public class CredentialPublicKeyVOConverter implements AttributeConverter<CredentialPublicKeyVO, String> {
+public class CredentialPublicKeyVOConverter implements AttributeConverter<AbstractCredentialPublicKeyVO, String> {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public String convertToDatabaseColumn(CredentialPublicKeyVO attribute) {
+    public String convertToDatabaseColumn(AbstractCredentialPublicKeyVO attribute) {
         try {
             return objectMapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
@@ -24,9 +24,9 @@ public class CredentialPublicKeyVOConverter implements AttributeConverter<Creden
     }
 
     @Override
-    public CredentialPublicKeyVO convertToEntityAttribute(String dbData) {
+    public AbstractCredentialPublicKeyVO convertToEntityAttribute(String dbData) {
         try {
-            return objectMapper.readValue(dbData, CredentialPublicKeyVO.class);
+            return objectMapper.readValue(dbData, AbstractCredentialPublicKeyVO.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

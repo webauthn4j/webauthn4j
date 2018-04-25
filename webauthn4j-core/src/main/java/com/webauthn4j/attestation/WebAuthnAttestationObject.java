@@ -21,14 +21,14 @@ import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class WebAuthnAttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")
     private WebAuthnAuthenticatorData AuthenticatorData;
-    @JsonProperty("fmt")
-    private String format;
+
     @JsonProperty("attStmt")
     private WebAuthnAttestationStatement attestationStatement; //TODO: generalize
 
@@ -41,12 +41,9 @@ public class WebAuthnAttestationObject implements Serializable {
         this.AuthenticatorData = webAuthnAuthenticatorData;
     }
 
+    @JsonProperty("fmt")
     public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
+        return attestationStatement.getFormat();
     }
 
     public WebAuthnAttestationStatement getAttestationStatement() {
@@ -60,21 +57,15 @@ public class WebAuthnAttestationObject implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WebAuthnAttestationObject)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         WebAuthnAttestationObject that = (WebAuthnAttestationObject) o;
-
-        if (AuthenticatorData != null ? !AuthenticatorData.equals(that.AuthenticatorData) : that.AuthenticatorData != null)
-            return false;
-        if (format != null ? !format.equals(that.format) : that.format != null) return false;
-        return attestationStatement != null ? attestationStatement.equals(that.attestationStatement) : that.attestationStatement == null;
+        return Objects.equals(AuthenticatorData, that.AuthenticatorData) &&
+                Objects.equals(attestationStatement, that.attestationStatement);
     }
 
     @Override
     public int hashCode() {
-        int result = AuthenticatorData != null ? AuthenticatorData.hashCode() : 0;
-        result = 31 * result + (format != null ? format.hashCode() : 0);
-        result = 31 * result + (attestationStatement != null ? attestationStatement.hashCode() : 0);
-        return result;
+
+        return Objects.hash(AuthenticatorData, attestationStatement);
     }
 }

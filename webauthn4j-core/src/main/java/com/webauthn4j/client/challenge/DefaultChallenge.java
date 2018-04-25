@@ -18,7 +18,9 @@ package com.webauthn4j.client.challenge;
 
 import com.webauthn4j.util.AssertUtil;
 
+import java.nio.ByteBuffer;
 import java.util.Base64;
+import java.util.UUID;
 
 public class DefaultChallenge implements Challenge {
     private final byte[] value;
@@ -36,6 +38,13 @@ public class DefaultChallenge implements Challenge {
     public DefaultChallenge(String base64urlString){
         AssertUtil.notNull(base64urlString, "base64urlString cannot be null");
         this.value = Base64.getUrlDecoder().decode(base64urlString);
+    }
+
+    public DefaultChallenge(){
+        UUID uuid = UUID.randomUUID();
+        long hi = uuid.getMostSignificantBits();
+        long lo = uuid.getLeastSignificantBits();
+        this.value = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
     }
 
     @Override

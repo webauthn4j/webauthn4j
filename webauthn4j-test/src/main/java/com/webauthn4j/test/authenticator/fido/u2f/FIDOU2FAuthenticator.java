@@ -6,6 +6,8 @@ import com.webauthn4j.util.*;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECPoint;
 import java.util.Arrays;
 
 @Experimental
@@ -18,6 +20,9 @@ public class FIDOU2FAuthenticator {
     private boolean countUpEnabled;
 
     public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter){
+        AssertUtil.notNull(attestationPrivateKey, "attestationPrivateKey must not be null");
+        AssertUtil.notNull(attestationPublicKeyCertificate, "attestationPublicKeyCertificate must not be null");
+
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationPublicKeyCertificate = attestationPublicKeyCertificate;
         this.counter = counter;
@@ -44,7 +49,7 @@ public class FIDOU2FAuthenticator {
         byte[] mac = MACUtil.caclucalteHMAC(message, attestationPrivateKey.getEncoded());
         byte[] keyHandle = ByteBuffer.allocate(64).put(nonce).put(mac).array();
 
-        byte[] userPublicKey = keyPair.getPublic().getEncoded();
+        byte[] userPublicKey = getBytesFromECPublicKey((ECPublicKey)keyPair.getPublic());
 
         byte rfu = 0x00;
 
@@ -71,9 +76,21 @@ public class FIDOU2FAuthenticator {
         return new AuthenticationResponse(userPresence, getCounterBytes(), signature);
     }
 
+    private byte[] getBytesFromECPublicKey(ECPublicKey ecPublicKey){
+        ECPoint ecPoint = ecPublicKey.getW();
+        byte type = 0x04;
+        byte[] x = ecPoint.getAffineX().toByteArray();
+        byte[] y = ecPoint.getAffineY().toByteArray();
+        return ByteBuffer.allocate(1 + 32 + 32)
+                .put(type)
+                .put(Arrays.copyOfRange(x, x.length-32, x.length))
+                .put(Arrays.copyOfRange(y, y.length-32, y.length))
+                .array();
+    }
+
     private KeyPair getKeyPair(byte[] applicationParameter, byte[] nonce) {
         byte[] seed = ByteBuffer.allocate(64).put(applicationParameter).put(nonce).array();
-        return KeyPairUtil.createKeyPair(seed);
+        return KeyUtil.createKeyPair(seed);
     }
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData){

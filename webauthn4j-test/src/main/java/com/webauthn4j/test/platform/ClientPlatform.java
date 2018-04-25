@@ -1,71 +1,51 @@
 package com.webauthn4j.test.platform;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
-import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
-import com.webauthn4j.converter.WebAuthnAuthenticatorDataConverter;
-import com.webauthn4j.test.authenticator.fido.u2f.AuthenticationRequest;
-import com.webauthn4j.test.authenticator.fido.u2f.AuthenticationResponse;
-import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
+import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.util.Experimental;
-import com.webauthn4j.util.MessageDigestUtil;
-
-import java.nio.charset.StandardCharsets;
 
 @Experimental
 public class ClientPlatform {
 
-    private FIDOU2FAuthenticator softwareToken = new FIDOU2FAuthenticator();
-    private Origin origin = new Origin("http://localhost:8080");
+    private Origin origin;
+    //TODO: support multiple authenticators
+    private FIDOU2FAuthenticatorAdaptor fidoU2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
 
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private WebAuthnAttestationObjectConverter webAuthnAttestationObjectConverter = new WebAuthnAttestationObjectConverter();
-    private WebAuthnAuthenticatorDataConverter webAuthnAuthenticatorDataConverter = new WebAuthnAuthenticatorDataConverter();
+    public ClientPlatform(Origin origin){
+        this.origin = origin;
+    }
 
     public ClientPlatform(){
-
+        this(new Origin("http://localhost:8080"));
     }
 
     public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions){
-        CollectedClientData collectedClientData = new CollectedClientData();
-        WebAuthnAttestationObject webAuthnAttestationObject = new WebAuthnAttestationObject();
+        CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
 
-        collectedClientData.setType("webauthn.create");
-        collectedClientData.setChallenge(publicKeyCredentialCreationOptions.getChallenge());
-        collectedClientData.setOrigin(origin);
-
-        byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        byte[] attestationObjectBytes = webAuthnAttestationObjectConverter.convertToBytes(webAuthnAttestationObject);
-        return new WebAuthnRegistrationRequest(collectedClientDataBytes, attestationObjectBytes);
+        return fidoU2FAuthenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData);
     }
 
     public WebAuthnAuthenticationRequest get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions){
 
+        CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_GET, publicKeyCredentialRequestOptions.getChallenge());
         for(PublicKeyCredentialDescriptor credentialDescriptor : publicKeyCredentialRequestOptions.getAllowCredentials()){
-
-            String rpId = publicKeyCredentialRequestOptions.getRpId();
-            CollectedClientData collectedClientData = new CollectedClientData();
-            byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-
-            byte control = 0x00;
-            byte[] challenge = publicKeyCredentialRequestOptions.getChallenge().getValue();
-            byte[] applicationParameter = MessageDigestUtil.createMessageDigest("SHA-256").digest(rpId.getBytes(StandardCharsets.UTF_8));
-            byte[] keyHandle = credentialDescriptor.getId();
-
-            AuthenticationRequest authenticationRequest = new AuthenticationRequest(control, challenge, applicationParameter, keyHandle);
-
-            AuthenticationResponse authenticationResponse = softwareToken.authenticate(authenticationRequest);
-
-            String credentialId = rpId;
-            WebAuthnAuthenticatorData webAuthnAuthenticatorData = new WebAuthnAuthenticatorData();
-            byte[] authenticatorDataBytes = webAuthnAuthenticatorDataConverter.convertToBytes(webAuthnAuthenticatorData);
-            byte[] signature = authenticationResponse.getSignature();
-            return new WebAuthnAuthenticationRequest(credentialId, collectedClientDataBytes, authenticatorDataBytes, signature);
+            return fidoU2FAuthenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor);
         }
         throw new NoAuthenticatorSuccessException();
+    }
+
+    private CollectedClientData createCollectedClientData(String type, Challenge challenge) {
+        CollectedClientData collectedClientData = new CollectedClientData();
+        collectedClientData.setType(type);
+        collectedClientData.setChallenge(challenge);
+        collectedClientData.setOrigin(origin);
+        collectedClientData.setHashAlgorithm("SHA-256");
+        collectedClientData.setTokenBinding(null);
+        collectedClientData.setClientExtensions(null);
+        collectedClientData.setAuthenticatorExtensions(null);
+        return collectedClientData;
     }
 
 }

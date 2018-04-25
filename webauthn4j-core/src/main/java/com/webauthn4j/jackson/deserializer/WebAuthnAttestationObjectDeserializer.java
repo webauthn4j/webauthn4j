@@ -61,7 +61,6 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
 
         WebAuthnAttestationObject attestationObject = new WebAuthnAttestationObject();
         attestationObject.setAuthenticatorData(webAuthnAuthenticatorData);
-        attestationObject.setFormat(format);
         attestationObject.setAttestationStatement(attestationStatement);
         return attestationObject;
     }

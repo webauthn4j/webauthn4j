@@ -27,6 +27,9 @@ import java.util.Map;
  */
 public class CollectedClientData implements Serializable {
 
+    public static final String TYPE_WEBAUTHN_GET = "webauthn.get";
+    public static final String TYPE_WEBAUTHN_CREATE = "webauthn.create";
+
     //~ Instance fields ================================================================================================
     private String type;
     private Challenge challenge;

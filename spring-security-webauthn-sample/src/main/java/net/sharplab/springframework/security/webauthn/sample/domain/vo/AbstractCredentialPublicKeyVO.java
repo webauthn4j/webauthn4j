@@ -3,7 +3,9 @@ package net.sharplab.springframework.security.webauthn.sample.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.webauthn4j.attestation.authenticator.AbstractSignatureAlgorithm;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -13,11 +15,11 @@ import java.io.Serializable;
         @JsonSubTypes.Type(name = "ESCredentialPublicKey", value = ESCredentialPublicKeyVO.class)
 })
 @Data
-public class CredentialPublicKeyVO implements Serializable {
+@EqualsAndHashCode
+public abstract class AbstractCredentialPublicKeyVO implements Serializable {
 
     private int keyType;
     private byte[] keyId;
-    private int algorithm;
     private int[] keyOpts;
     private byte[] baseIV;
 

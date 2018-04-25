@@ -38,7 +38,11 @@ public class WebAuthnAuthenticatorData implements Serializable {
         return rpIdHash;
     }
 
-    public void setRpIdHash(byte[] rpIdHash) {
+    public void setRpIdHash(byte[] rpIdHash)
+    {
+        if(rpIdHash.length != 32){
+            throw new IllegalArgumentException("rpIdHash must be 32 bytes length");
+        }
         this.rpIdHash = rpIdHash;
     }
 

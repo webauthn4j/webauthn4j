@@ -18,16 +18,25 @@ package com.webauthn4j.client;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URLEncoder;
 
 /**
  * Origin
  */
 public class Origin implements Serializable {
+
+    private static final String SCHEME_HTTPS = "https";
+    private static final String SCHEME_HTTP  = "http";
+
     private String scheme;
     private String serverName;
     private int port;
 
     public Origin(String scheme, String serverName, int port) {
+        if(!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)){
+            throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+        }
+
         this.scheme = scheme;
         this.serverName = serverName;
         this.port = port;
@@ -38,16 +47,21 @@ public class Origin implements Serializable {
         this.scheme = uri.getScheme();
         this.serverName = uri.getHost();
         int originPort = uri.getPort();
+
+        if(!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)){
+            throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+        }
+
         if (originPort == -1) {
             switch (this.scheme) {
-                case "https":
+                case SCHEME_HTTPS:
                     originPort = 443;
                     break;
-                case "http":
+                case SCHEME_HTTP:
                     originPort = 80;
                     break;
                 default:
-                    throw new IllegalArgumentException();
+                    throw new IllegalStateException();
             }
         }
         this.port = originPort;
@@ -63,6 +77,26 @@ public class Origin implements Serializable {
 
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public String toString(){
+        String result = this.scheme + "://" + this.serverName;
+        switch (this.scheme){
+            case SCHEME_HTTPS:
+                if(this.port != 443){
+                    result += ":" + this.port;
+                }
+                break;
+            case SCHEME_HTTP:
+                if(this.port != 80){
+                    result += ":" + this.port;
+                }
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+        return result;
     }
 
     @Override

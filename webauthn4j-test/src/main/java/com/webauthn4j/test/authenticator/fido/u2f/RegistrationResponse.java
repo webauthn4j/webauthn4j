@@ -19,8 +19,12 @@ public class RegistrationResponse {
     private byte[] signature;
 
     public RegistrationResponse(byte reservedByte, byte[] userPublicKey, byte[] keyHandle, X509Certificate attestationCertificate, byte[] signature) {
-        if(userPublicKey.length != 65){throw new IllegalArgumentException("userPublicKey must be 65 bytes");}
-        if(keyHandle.length > UnsignedNumberUtil.BYTE_MAX){throw new IllegalArgumentException("keyHandle length must not exceed " + UnsignedNumberUtil.BYTE_MAX + " bytes");}
+        if(userPublicKey.length != 65){
+            throw new IllegalArgumentException("userPublicKey must be 65 bytes");
+        }
+        if(keyHandle.length > (UnsignedNumberUtil.UNSIGNED_BYTE_MAX)){
+            throw new IllegalArgumentException("keyHandle length must not exceed " + (UnsignedNumberUtil.UNSIGNED_BYTE_MAX) + " bytes");
+        }
 
         this.reservedByte = reservedByte;
         this.userPublicKey = userPublicKey;

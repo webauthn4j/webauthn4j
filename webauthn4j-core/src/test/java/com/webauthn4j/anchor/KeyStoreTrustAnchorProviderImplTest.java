@@ -17,7 +17,7 @@ public class KeyStoreTrustAnchorProviderImplTest {
     @Test
     public void provide_test() throws Exception{
         target = new KeyStoreTrustAnchorProviderImpl();
-        Path path = Paths.get(ClassLoader.getSystemResource("attestation/jks/ssw-test.jks").toURI());
+        Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreTrustAnchorProviderImplTest/test.jks").toURI());
         target.setKeyStore(path);
         target.setPassword("password");
 

@@ -50,17 +50,18 @@ public class WebAuthnAuthenticatorDataSerializer extends StdSerializer<WebAuthnA
 
     byte[] serialize(WebAuthnAuthenticatorData value) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(value.getRpIdHash());
+        byte[] rpIdHash = value.getRpIdHash();
+        byteArrayOutputStream.write(rpIdHash);
         byteArrayOutputStream.write(new byte[]{value.getFlags()});
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(value.getCounter()));
         if (value.getAttestationData() != null) {
-            byteArrayOutputStream.write(serializeAttestationData(value.getAttestationData()));
+            byteArrayOutputStream.write(serializeAttestedCredentialData(value.getAttestationData()));
         }
         byteArrayOutputStream.write(serializeExtensions(value.getExtensions()));
         return byteArrayOutputStream.toByteArray();
     }
 
-    private byte[] serializeAttestationData(WebAuthnAttestedCredentialData attestationData) throws IOException {
+    private byte[] serializeAttestedCredentialData(WebAuthnAttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byteArrayOutputStream.write(attestationData.getAaGuid());
