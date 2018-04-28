@@ -37,15 +37,7 @@ public class ClientPlatform {
     }
 
     private CollectedClientData createCollectedClientData(String type, Challenge challenge) {
-        CollectedClientData collectedClientData = new CollectedClientData();
-        collectedClientData.setType(type);
-        collectedClientData.setChallenge(challenge);
-        collectedClientData.setOrigin(origin);
-        collectedClientData.setHashAlgorithm("SHA-256");
-        collectedClientData.setTokenBinding(null);
-        collectedClientData.setClientExtensions(null);
-        collectedClientData.setAuthenticatorExtensions(null);
-        return collectedClientData;
+        return new CollectedClientData(type, challenge, origin, null);
     }
 
 }

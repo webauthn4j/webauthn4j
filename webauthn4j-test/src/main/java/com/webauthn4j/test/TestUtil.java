@@ -175,15 +175,8 @@ public class TestUtil {
         return objectMapper;
     }
 
-    public static CollectedClientData createClientData() {
-        CollectedClientData collectedClientData = new CollectedClientData();
-        collectedClientData.setChallenge(createChallenge());
-        collectedClientData.setOrigin(createOrigin());
-        collectedClientData.setHashAlgorithm("SHA-256");
-        collectedClientData.setTokenBinding(null);
-        collectedClientData.setClientExtensions(null);
-        collectedClientData.setAuthenticatorExtensions(null);
-        return collectedClientData;
+    public static CollectedClientData createClientData(String type) {
+        return new CollectedClientData(type, createChallenge(), createOrigin(), null);
     }
 
     public static Challenge createChallenge() {

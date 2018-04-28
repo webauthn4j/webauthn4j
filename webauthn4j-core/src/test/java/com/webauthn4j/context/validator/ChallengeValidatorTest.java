@@ -24,6 +24,8 @@ import com.webauthn4j.exception.BadChallengeException;
 import com.webauthn4j.exception.MissingChallengeException;
 import org.junit.Test;
 
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
+
 /**
  * Test for ChallengeValidator
  */

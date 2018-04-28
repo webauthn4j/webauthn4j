@@ -32,6 +32,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +110,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
         try {
             return objectMapper.readValue(inputStream, ESCredentialPublicKey.class); //TODO
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);//TODO
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -123,7 +124,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
             return objectMapper.readValue(remaining, new TypeReference<List<Extension>>() {
             });
         } catch (IOException e) {
-            throw new IllegalArgumentException(e);//TODO
+            throw new UncheckedIOException(e);
         }
     }
 

@@ -34,12 +34,19 @@ public class CollectedClientData implements Serializable {
     private String type;
     private Challenge challenge;
     private Origin origin;
-    private String hashAlgorithm;
-    private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17,
-    // made it Object type
-    private Map<String, Extension> clientExtensions;
-    private Map<String, Extension> authenticatorExtensions;
+    private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17, made it Object type
 
+    public CollectedClientData(String type,
+                               Challenge challenge,
+                               Origin origin,
+                               Object tokenBinding) {
+        this.type = type;
+        this.challenge = challenge;
+        this.origin = origin;
+        this.tokenBinding = tokenBinding;
+    }
+
+    public CollectedClientData(){}
 
     public String getType() {
         return type;
@@ -65,14 +72,6 @@ public class CollectedClientData implements Serializable {
         this.origin = origin;
     }
 
-    public String getHashAlgorithm() {
-        return hashAlgorithm;
-    }
-
-    public void setHashAlgorithm(String hashAlgorithm) {
-        this.hashAlgorithm = hashAlgorithm;
-    }
-
     public Object getTokenBinding() {
         return tokenBinding;
     }
@@ -81,19 +80,4 @@ public class CollectedClientData implements Serializable {
         this.tokenBinding = tokenBinding;
     }
 
-    public Map<String, Extension> getClientExtensions() {
-        return clientExtensions;
-    }
-
-    public void setClientExtensions(Map<String, Extension> clientExtensions) {
-        this.clientExtensions = clientExtensions;
-    }
-
-    public Map<String, Extension> getAuthenticatorExtensions() {
-        return authenticatorExtensions;
-    }
-
-    public void setAuthenticatorExtensions(Map<String, Extension> authenticatorExtensions) {
-        this.authenticatorExtensions = authenticatorExtensions;
-    }
 }

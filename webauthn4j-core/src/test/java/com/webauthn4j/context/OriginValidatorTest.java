@@ -23,6 +23,8 @@ import com.webauthn4j.exception.BadOriginException;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
+
 /**
  * Test for OriginValidator
  */
@@ -35,7 +37,7 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
-        CollectedClientData collectedClientData = TestUtil.createClientData();
+        CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
         collectedClientData.setOrigin(originA);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
@@ -46,7 +48,7 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = TestUtil.createClientData();
+        CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
         collectedClientData.setOrigin(originA);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
