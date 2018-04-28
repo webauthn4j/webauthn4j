@@ -71,7 +71,7 @@ public class AuthenticatorHelper {
 
             destination.setRpIdHash(authnAuthenticatorData.getRpIdHash());
             destination.setCounter(authnAuthenticatorData.getCounter());
-            destination.setAttestedCredentialData(authnAuthenticatorData.getAttestationData());
+            destination.setAttestedCredentialData(authnAuthenticatorData.getAttestedCredentialData());
             destination.setAttestationStatement(attestationObject.getAttestationStatement());
         }
         return destination;

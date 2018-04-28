@@ -72,7 +72,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
         MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
 
         WebAuthnAttestationObject attestationObject = registrationObject.getAttestationObject();
-        ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestationData().getCredentialPublicKey().getPublicKey();
+        ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 
@@ -80,7 +80,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
 
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
-        byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestationData().getCredentialId();
+        byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] userPublicKeyBytes = userPublicKey.getEncodedPublicValue();
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);

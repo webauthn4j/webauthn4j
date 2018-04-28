@@ -26,19 +26,19 @@ import com.webauthn4j.util.ConstUtil;
 public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
 
     //~ Instance fields ================================================================================================
-    private WebAuthnAttestedCredentialData attestationData;
+    private WebAuthnAttestedCredentialData attestedCredentialData;
     private WebAuthnAttestationStatement attestationStatement;
     private long counter;
 
-    public WebAuthnAuthenticatorImpl(WebAuthnAttestedCredentialData attestationData, WebAuthnAttestationStatement attestationStatement, long counter) {
-        this.attestationData = attestationData;
+    public WebAuthnAuthenticatorImpl(WebAuthnAttestedCredentialData attestedCredentialData, WebAuthnAttestationStatement attestationStatement, long counter) {
+        this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         setCounter(counter);
     }
 
     @Override
     public WebAuthnAttestedCredentialData getAttestedCredentialData() {
-        return attestationData;
+        return attestedCredentialData;
     }
 
     @Override

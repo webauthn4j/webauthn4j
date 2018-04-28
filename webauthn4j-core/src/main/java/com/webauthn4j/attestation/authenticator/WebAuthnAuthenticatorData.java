@@ -31,7 +31,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     private byte[] rpIdHash;
     private byte flags;
     private long counter;
-    private WebAuthnAttestedCredentialData attestationData;
+    private WebAuthnAttestedCredentialData attestedCredentialData;
     private List<Extension> extensions;
 
     public byte[] getRpIdHash() {
@@ -110,12 +110,12 @@ public class WebAuthnAuthenticatorData implements Serializable {
         this.counter = counter;
     }
 
-    public WebAuthnAttestedCredentialData getAttestationData() {
-        return attestationData;
+    public WebAuthnAttestedCredentialData getAttestedCredentialData() {
+        return attestedCredentialData;
     }
 
-    public void setAttestationData(WebAuthnAttestedCredentialData attestationData) {
-        this.attestationData = attestationData;
+    public void setAttestedCredentialData(WebAuthnAttestedCredentialData attestedCredentialData) {
+        this.attestedCredentialData = attestedCredentialData;
     }
 
     public List<Extension> getExtensions() {
@@ -139,7 +139,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
         if (flags != that.flags) return false;
         if (counter != that.counter) return false;
         if (!Arrays.equals(rpIdHash, that.rpIdHash)) return false;
-        if (attestationData != null ? !attestationData.equals(that.attestationData) : that.attestationData != null)
+        if (attestedCredentialData != null ? !attestedCredentialData.equals(that.attestedCredentialData) : that.attestedCredentialData != null)
             return false;
         return extensions != null ? extensions.equals(that.extensions) : that.extensions == null;
     }
@@ -152,7 +152,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
         int result = Arrays.hashCode(rpIdHash);
         result = 31 * result + (int) flags;
         result = 31 * result + (int) (counter ^ (counter >>> 32));
-        result = 31 * result + (attestationData != null ? attestationData.hashCode() : 0);
+        result = 31 * result + (attestedCredentialData != null ? attestedCredentialData.hashCode() : 0);
         result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
         return result;
     }

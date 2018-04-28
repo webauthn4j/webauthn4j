@@ -18,15 +18,10 @@ import java.util.Collections;
 public class WebAuthnRegistrationContextValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
-    private ClientPlatform clientPlatform;
+    private ClientPlatform clientPlatform = new ClientPlatform(origin);
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator(new SelfAttestationTrustworthinessValidatorImpl());
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator));
-
-    @Before
-    public void setup(){
-        clientPlatform = new ClientPlatform(origin);
-    }
 
     @Test
     public void validate_test(){

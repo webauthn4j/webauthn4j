@@ -58,7 +58,7 @@ public class WebAuthnAuthenticatorDataSerializerTest {
         authenticatorData.setRpIdHash(rpIdHash);
         authenticatorData.setFlags(flags);
         authenticatorData.setCounter(counter);
-        authenticatorData.setAttestationData(attestationData);
+        authenticatorData.setAttestedCredentialData(attestationData);
 
         //Given
 
@@ -71,10 +71,10 @@ public class WebAuthnAuthenticatorDataSerializerTest {
         assertThat(deserialized.getRpIdHash()).isEqualTo(rpIdHash);
         assertThat(deserialized.getFlags()).isEqualTo(flags);
         assertThat(deserialized.getCounter()).isEqualTo(counter);
-        assertThat(deserialized.getAttestationData()).isNotNull();
-        assertThat(deserialized.getAttestationData().getAaGuid()).isEqualTo(aaGuid);
-        assertThat(deserialized.getAttestationData().getCredentialId()).isEqualTo(credentialId);
-        assertThat(deserialized.getAttestationData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
+        assertThat(deserialized.getAttestedCredentialData()).isNotNull();
+        assertThat(deserialized.getAttestedCredentialData().getAaGuid()).isEqualTo(aaGuid);
+        assertThat(deserialized.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId);
+        assertThat(deserialized.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
         assertThat(deserialized.getExtensions()).isNull();
     }
 

@@ -80,7 +80,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
             extensions = null;
         }
 
-        webAuthnAuthenticatorData.setAttestationData(attestationData);
+        webAuthnAuthenticatorData.setAttestedCredentialData(attestationData);
         webAuthnAuthenticatorData.setExtensions(extensions);
 
         return webAuthnAuthenticatorData;

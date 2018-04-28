@@ -1,10 +1,7 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.Curve;
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
@@ -16,8 +13,9 @@ import com.webauthn4j.exception.NotImplementedException;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import org.springframework.util.Base64Utils;
 
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
@@ -71,7 +69,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         webAuthnAuthenticatorData.setRpIdHash(rpIdHash);
         webAuthnAuthenticatorData.setFlags(flag);
         webAuthnAuthenticatorData.setCounter(0);
-        webAuthnAuthenticatorData.setAttestationData(webAuthnAttestedCredentialData);
+        webAuthnAuthenticatorData.setAttestedCredentialData(webAuthnAttestedCredentialData);
         webAuthnAuthenticatorData.setExtensions(null);
 
         WebAuthnAttestationObject webAuthnAttestationObject = new WebAuthnAttestationObject();
@@ -89,9 +87,10 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         String rpId = publicKeyCredentialRequestOptions.getRpId();
 
+        byte[] rpIdHash = MessageDigestUtil.createMessageDigest("SHA-256").digest(rpId.getBytes(StandardCharsets.UTF_8));;
         byte control = 0x00;
-        byte[] challenge = publicKeyCredentialRequestOptions.getChallenge().getValue();
-        byte[] applicationParameter = MessageDigestUtil.createMessageDigest("SHA-256").digest(rpId.getBytes(StandardCharsets.UTF_8));
+        byte[] challenge = MessageDigestUtil.createMessageDigest("SHA-256").digest(collectedClientDataBytes);
+        byte[] applicationParameter = rpIdHash;
         byte[] keyHandle = credentialDescriptor.getId();
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(control, challenge, applicationParameter, keyHandle);
@@ -100,6 +99,12 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
 
         String credentialId = rpId;
         WebAuthnAuthenticatorData webAuthnAuthenticatorData = new WebAuthnAuthenticatorData();
+        webAuthnAuthenticatorData.setRpIdHash(rpIdHash);
+        webAuthnAuthenticatorData.setFlags(authenticationResponse.getUserPresense());
+        webAuthnAuthenticatorData.setCounter(ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0));
+        webAuthnAuthenticatorData.setAttestedCredentialData(null); //always null for authenticate
+        webAuthnAuthenticatorData.setExtensions(null);
+
         byte[] authenticatorDataBytes = webAuthnAuthenticatorDataConverter.convertToBytes(webAuthnAuthenticatorData);
         byte[] signature = authenticationResponse.getSignature();
         return new WebAuthnAuthenticationRequest(credentialId, collectedClientDataBytes, authenticatorDataBytes, signature);
@@ -110,6 +115,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
         ESCredentialPublicKey esCredentialPublicKey = new ESCredentialPublicKey();
         esCredentialPublicKey.setCurve(Curve.SECP256R1);
+        esCredentialPublicKey.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
         esCredentialPublicKey.setX(x);
         esCredentialPublicKey.setY(y);
         return esCredentialPublicKey;

@@ -21,12 +21,17 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.WebAuthnAuthenticatorImpl;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.context.RelyingParty;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
 import com.webauthn4j.converter.WebAuthnModule;
+import com.webauthn4j.test.platform.WebAuthnRegistrationRequest;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -70,7 +75,7 @@ public class TestUtil {
         authenticatorData.setFlagED(false);
         authenticatorData.setRpIdHash(new byte[32]);
         authenticatorData.setCounter(1);
-        authenticatorData.setAttestationData(createWebAuthnAttestedCredentialData());
+        authenticatorData.setAttestedCredentialData(createWebAuthnAttestedCredentialData());
         return authenticatorData;
     }
 
@@ -217,5 +222,10 @@ public class TestUtil {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.getResource(resourcePath);
         return loadPrivateKeyFromResource(resource);
+    }
+
+    public static WebAuthnAuthenticator createAuthenticator(WebAuthnAttestationObject attestationObject){
+        WebAuthnAttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
+        return new WebAuthnAuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getCounter());
     }
 }
