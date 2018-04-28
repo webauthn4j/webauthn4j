@@ -3,6 +3,7 @@ package net.sharplab.springframework.security.webauthn;
 import com.webauthn4j.context.RelyingParty;
 import com.webauthn4j.context.WebAuthnRegistrationContext;
 import com.webauthn4j.context.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.util.Base64UrlUtil;
 import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProvider;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +32,8 @@ public class WebAuthnRegistrationRequestValidator {
                                                        String clientDataBase64,
                                                        String attestationObjectBase64) {
 
-        byte[] clientDataBytes = Base64.getUrlDecoder().decode(clientDataBase64);
-        byte[] attestationObjectBytes = Base64.getUrlDecoder().decode(attestationObjectBase64);
+        byte[] clientDataBytes = Base64UrlUtil.decode(clientDataBase64);
+        byte[] attestationObjectBytes = Base64UrlUtil.decode(attestationObjectBase64);
         RelyingParty relyingParty = relyingPartyProvider.provide(request, response);
 
         return new WebAuthnRegistrationContext(clientDataBytes, attestationObjectBytes, relyingParty);

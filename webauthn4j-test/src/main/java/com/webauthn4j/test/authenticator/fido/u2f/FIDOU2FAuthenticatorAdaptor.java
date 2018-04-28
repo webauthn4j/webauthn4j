@@ -32,9 +32,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
 
     public WebAuthnRegistrationRequest register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData){
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
-        byte[] rpIdHash = MessageDigestUtil.createMessageDigest("SHA-256").digest(rpId.getBytes(StandardCharsets.UTF_8));
+        byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
 
-        byte[] challengeParameter = MessageDigestUtil.createMessageDigest("SHA-256").digest(collectedClientDataConverter.convertToBytes(collectedClientData));
+        byte[] challengeParameter = MessageDigestUtil.createSHA256().digest(collectedClientDataConverter.convertToBytes(collectedClientData));
         byte[] applicationParameter = rpIdHash;
         RegistrationRequest registrationRequest = new RegistrationRequest(challengeParameter, applicationParameter);
         RegistrationResponse registrationResponse = fidoU2FAuthenticator.register(registrationRequest);
@@ -87,9 +87,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         String rpId = publicKeyCredentialRequestOptions.getRpId();
 
-        byte[] rpIdHash = MessageDigestUtil.createMessageDigest("SHA-256").digest(rpId.getBytes(StandardCharsets.UTF_8));;
+        byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));;
         byte control = 0x00;
-        byte[] challenge = MessageDigestUtil.createMessageDigest("SHA-256").digest(collectedClientDataBytes);
+        byte[] challenge = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         byte[] applicationParameter = rpIdHash;
         byte[] keyHandle = credentialDescriptor.getId();
 

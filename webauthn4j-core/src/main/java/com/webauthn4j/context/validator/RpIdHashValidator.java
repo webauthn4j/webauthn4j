@@ -34,7 +34,7 @@ public class RpIdHashValidator {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void validate(byte[] rpIdHash, RelyingParty relyingParty) {
-        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
+        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] relyingPartyRpIdBytes = relyingParty.getRpId().getBytes(StandardCharsets.UTF_8);
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {

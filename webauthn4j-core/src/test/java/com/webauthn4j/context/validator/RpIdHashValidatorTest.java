@@ -36,7 +36,7 @@ public class RpIdHashValidatorTest {
         String rpIdA = "example.com";
         String rpIdB = "example.com";
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
-        byte[] rpIdHashA = MessageDigestUtil.createMessageDigest("S256").digest(rpIdBytesA);
+        byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
         RelyingParty relyingParty = new RelyingParty(null, rpIdB, null);
 
@@ -50,7 +50,7 @@ public class RpIdHashValidatorTest {
         String rpIdA = "sub.example.com";
         String rpIdB = "example.com";
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
-        byte[] rpIdHashA = MessageDigestUtil.createMessageDigest("S256").digest(rpIdBytesA);
+        byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
         RelyingParty relyingParty = new RelyingParty(null, rpIdB, null);
 

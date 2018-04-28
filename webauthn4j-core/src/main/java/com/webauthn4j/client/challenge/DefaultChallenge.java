@@ -17,6 +17,7 @@
 package com.webauthn4j.client.challenge;
 
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Base64;
@@ -37,7 +38,7 @@ public class DefaultChallenge implements Challenge {
 
     public DefaultChallenge(String base64urlString) {
         AssertUtil.notNull(base64urlString, "base64urlString cannot be null");
-        this.value = Base64.getUrlDecoder().decode(base64urlString);
+        this.value = Base64UrlUtil.decode(base64urlString);
     }
 
     public DefaultChallenge() {

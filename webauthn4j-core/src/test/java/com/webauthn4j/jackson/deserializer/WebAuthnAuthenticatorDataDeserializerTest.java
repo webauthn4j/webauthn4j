@@ -17,6 +17,7 @@
 package com.webauthn4j.jackson.deserializer;
 
 import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
 import java.util.Base64;
@@ -35,7 +36,7 @@ public class WebAuthnAuthenticatorDataDeserializerTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
 
         //When
-        WebAuthnAuthenticatorData result = new WebAuthnAuthenticatorDataDeserializer().deserialize(Base64.getUrlDecoder().decode(input));
+        WebAuthnAuthenticatorData result = new WebAuthnAuthenticatorDataDeserializer().deserialize(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();

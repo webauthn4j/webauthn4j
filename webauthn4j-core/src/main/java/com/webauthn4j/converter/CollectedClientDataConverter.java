@@ -2,6 +2,7 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,7 +19,7 @@ public class CollectedClientDataConverter {
     }
 
     public CollectedClientData convert(String base64UrlString) {
-        byte[] bytes = java.util.Base64.getUrlDecoder().decode(base64UrlString);
+        byte[] bytes = Base64UrlUtil.decode(base64UrlString);
         return convert(bytes);
     }
 
@@ -41,7 +42,7 @@ public class CollectedClientDataConverter {
 
     public String convertToString(CollectedClientData source) {
         byte[] bytes = convertToBytes(source);
-        return Base64.getUrlEncoder().encodeToString(bytes);
+        return Base64UrlUtil.encodeToString(bytes);
     }
 
 }

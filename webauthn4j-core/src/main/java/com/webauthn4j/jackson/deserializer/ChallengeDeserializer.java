@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -35,7 +36,7 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
 
     @Override
     public Challenge deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        byte[] challenge = Base64.getUrlDecoder().decode(p.getValueAsString());
+        byte[] challenge = Base64UrlUtil.decode(p.getValueAsString());
         return new DefaultChallenge(challenge);
     }
 }

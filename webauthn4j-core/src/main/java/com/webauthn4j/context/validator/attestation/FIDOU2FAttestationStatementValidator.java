@@ -68,7 +68,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     private byte[] getSignedData(WebAuthnRegistrationObject registrationObject) {
 
         String rpId = registrationObject.getRelyingParty().getRpId();
-        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
+        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         WebAuthnAttestationObject attestationObject = registrationObject.getAttestationObject();
         ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();

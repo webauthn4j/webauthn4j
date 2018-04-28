@@ -3,6 +3,7 @@ package com.webauthn4j.converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -18,7 +19,7 @@ public class WebAuthnAttestationObjectConverter {
     }
 
     public WebAuthnAttestationObject convert(String source) {
-        byte[] value = java.util.Base64.getUrlDecoder().decode(source);
+        byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
     }
 
@@ -40,7 +41,7 @@ public class WebAuthnAttestationObjectConverter {
 
     public String convertToString(WebAuthnAttestationObject source) {
         byte[] bytes = convertToBytes(source);
-        return Base64.getUrlEncoder().encodeToString(bytes);
+        return Base64UrlUtil.encodeToString(bytes);
     }
 
 }

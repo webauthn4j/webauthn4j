@@ -38,7 +38,7 @@ public class AssertionSignatureValidatorImpl implements AssertionSignatureValida
     }
 
     protected byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
-        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest("S256");
+        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
         byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getCollectedClientData());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
