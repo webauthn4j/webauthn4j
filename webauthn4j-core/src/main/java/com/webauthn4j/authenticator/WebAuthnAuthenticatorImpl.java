@@ -53,10 +53,10 @@ public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
 
     @Override
     public void setCounter(long value) {
-        if(value > ConstUtil.UINT_MAX_VALUE){
+        if (value > ConstUtil.UINT_MAX_VALUE) {
             throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not exceed 4294967295.");
         }
-        if(value < 0){
+        if (value < 0) {
             throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not be negative value.");
         }
         this.counter = value;

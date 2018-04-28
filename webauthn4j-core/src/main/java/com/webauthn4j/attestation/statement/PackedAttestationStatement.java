@@ -68,8 +68,7 @@ public class PackedAttestationStatement implements WebAuthnAttestationStatement 
         X509Certificate attestationCertificate = getEndEntityCertificate();
         if (x5c.getCertificates().size() == 1 && CertificateUtil.isSelfSigned(attestationCertificate)) {
             return AttestationType.Self;
-        }
-        else {
+        } else {
             throw new NotImplementedException();
         }
     }

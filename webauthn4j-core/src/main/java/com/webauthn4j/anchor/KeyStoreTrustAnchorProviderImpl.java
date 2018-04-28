@@ -51,7 +51,7 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
      */
     public Set<TrustAnchor> provide() {
         Path keystore = getKeyStore();
-        try(InputStream inputStream = Files.newInputStream(keystore)){
+        try (InputStream inputStream = Files.newInputStream(keystore)) {
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());
             List<String> aliases = Collections.list(keyStoreObject.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();
@@ -60,8 +60,7 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
                 trustAnchors.add(new TrustAnchor(certificate, null));
             }
             return trustAnchors;
-        }
-        catch (java.security.KeyStoreException | IOException e) {
+        } catch (java.security.KeyStoreException | IOException e) {
             throw new KeyStoreException(e);
         }
     }

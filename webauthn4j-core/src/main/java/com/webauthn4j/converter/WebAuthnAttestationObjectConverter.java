@@ -22,7 +22,7 @@ public class WebAuthnAttestationObjectConverter {
         return convert(value);
     }
 
-    public WebAuthnAttestationObject convert(byte[] source){
+    public WebAuthnAttestationObject convert(byte[] source) {
         try {
             return objectMapper.readValue(source, WebAuthnAttestationObject.class);
         } catch (IOException e) {

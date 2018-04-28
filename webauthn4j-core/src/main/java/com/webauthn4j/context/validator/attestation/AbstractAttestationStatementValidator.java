@@ -6,8 +6,8 @@ import com.webauthn4j.exception.NotImplementedException;
 public abstract class AbstractAttestationStatementValidator implements AttestationStatementValidator {
 
 
-    public void validate(WebAuthnRegistrationObject registrationObject){
-        if(!supports(registrationObject)){
+    public void validate(WebAuthnRegistrationObject registrationObject) {
+        if (!supports(registrationObject)) {
             throw new NotImplementedException(); //TODO
         }
 

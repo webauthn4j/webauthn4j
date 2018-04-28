@@ -8,7 +8,7 @@ public abstract class AbstractSignatureAlgorithm implements Serializable {
     private int value;
     private String name;
 
-    public AbstractSignatureAlgorithm(int value, String name){
+    public AbstractSignatureAlgorithm(int value, String name) {
         this.value = value;
         this.name = name;
     }

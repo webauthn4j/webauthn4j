@@ -9,11 +9,9 @@ import com.webauthn4j.context.validator.attestation.FIDOU2FAttestationStatementV
 import com.webauthn4j.context.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import com.webauthn4j.test.platform.*;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 public class WebAuthnRegistrationContextValidatorTest {
 
@@ -24,7 +22,7 @@ public class WebAuthnRegistrationContextValidatorTest {
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator));
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         String rpId = "localhost";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();

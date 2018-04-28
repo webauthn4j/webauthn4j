@@ -29,14 +29,12 @@ import java.util.Objects;
 @JsonIgnoreProperties({"publicKey"})
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
-    @JsonProperty("-1")
-    private byte[] n;
-
-    @JsonProperty("-2")
-    private byte[] e;
-
     @JsonProperty("3")
     protected RSSignatureAlgorithm algorithm;
+    @JsonProperty("-1")
+    private byte[] n;
+    @JsonProperty("-2")
+    private byte[] e;
 
     public byte[] getN() {
         return n;

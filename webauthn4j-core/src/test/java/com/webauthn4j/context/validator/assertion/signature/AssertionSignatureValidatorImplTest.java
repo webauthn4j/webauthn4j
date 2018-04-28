@@ -7,7 +7,7 @@ public class AssertionSignatureValidatorImplTest {
     AssertionSignatureValidatorImpl target = new AssertionSignatureValidatorImpl();
 
     @Test
-    public void dummy(){
+    public void dummy() {
 
     }
 

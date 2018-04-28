@@ -36,6 +36,8 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
+
 /**
  * Validates {@link WebAuthnAuthenticationContext} instance
  */
@@ -71,7 +73,7 @@ public class WebAuthnAuthenticationContextValidator {
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
         // Verify that the value of C.type is the string webauthn.get.
-        if(!Objects.equals(collectedClientData.getType(), "webauthn.get")){
+        if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_GET)) {
             throw new MaliciousDataException("Bad client data type");
         }
 
@@ -91,12 +93,12 @@ public class WebAuthnAuthenticationContextValidator {
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
 
         // If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
-        if(userVerificationRequired && !authenticatorData.isFlagUV()){
+        if (userVerificationRequired && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("User not verified");
         }
 
         // If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
-        if(!userVerificationRequired && !authenticatorData.isFlagUP()){
+        if (!userVerificationRequired && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
 
@@ -116,10 +118,10 @@ public class WebAuthnAuthenticationContextValidator {
         // credential’s id attribute is nonzero, then run the following sub-step:
         long presentedCounter = authenticatorData.getCounter();
         long storedCounter = authenticator.getCounter();
-        if(authenticatorData.getCounter() > 0 || authenticator.getCounter() > 0){
+        if (authenticatorData.getCounter() > 0 || authenticator.getCounter() > 0) {
             // If the signature counter value adata.signCount is
             // greater than the signature counter value stored in conjunction with credential’s id attribute.
-            if(presentedCounter > storedCounter){
+            if (presentedCounter > storedCounter) {
                 authenticator.setCounter(presentedCounter);
             }
             // less than or equal to the signature counter value stored in conjunction with credential’s id attribute.

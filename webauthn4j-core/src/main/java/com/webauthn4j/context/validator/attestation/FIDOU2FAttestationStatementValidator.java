@@ -19,7 +19,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
 
     private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
 
-    public FIDOU2FAttestationStatementValidator(SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator){
+    public FIDOU2FAttestationStatementValidator(SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
 
@@ -39,8 +39,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
                 return;
             }
             throw new BadSignatureException("Bad signature");
-        }
-        catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("Bad signature", e);
         }
     }
@@ -48,7 +47,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     @Override
     protected void validateTrustworthiness(WebAuthnRegistrationObject registrationObject) {
         WebAuthnAttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        switch (attestationStatement.getAttestationType()){
+        switch (attestationStatement.getAttestationType()) {
             case Self:
                 selfAttestationTrustworthinessValidator.validate(attestationStatement);
                 break;

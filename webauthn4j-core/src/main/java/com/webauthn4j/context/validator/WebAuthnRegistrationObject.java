@@ -12,10 +12,10 @@ public class WebAuthnRegistrationObject {
     private RelyingParty relyingParty;
 
     public WebAuthnRegistrationObject(CollectedClientData collectedClientData,
-                                       byte[] collectedClientDataBytes,
-                                       WebAuthnAttestationObject attestationObject,
-                                       byte[] attestationObjectBytes,
-                                       RelyingParty relyingParty) {
+                                      byte[] collectedClientDataBytes,
+                                      WebAuthnAttestationObject attestationObject,
+                                      byte[] attestationObjectBytes,
+                                      RelyingParty relyingParty) {
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;

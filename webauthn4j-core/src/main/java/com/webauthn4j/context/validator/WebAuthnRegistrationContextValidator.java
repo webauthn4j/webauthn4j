@@ -31,6 +31,8 @@ import com.webauthn4j.exception.UnsupportedAttestationStatementException;
 import java.util.List;
 import java.util.Objects;
 
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
+
 /**
  * Validates {@link WebAuthnRegistrationContext} instance
  */
@@ -60,17 +62,17 @@ public class WebAuthnRegistrationContextValidator {
 
 
         WebAuthnRegistrationObject registrationObject = new WebAuthnRegistrationObject(
-            collectedClientData,
-            clientDataBytes,
-            attestationObject,
-            attestationObjectBytes,
-            registrationContext.getRelyingParty()
+                collectedClientData,
+                clientDataBytes,
+                attestationObject,
+                attestationObjectBytes,
+                registrationContext.getRelyingParty()
         );
 
         WebAuthnAuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         RelyingParty relyingParty = registrationContext.getRelyingParty();
 
-        if(!Objects.equals(collectedClientData.getType(), "webauthn.create")){
+        if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_CREATE)) {
             throw new MaliciousDataException("Bad client data type");
         }
 

@@ -62,8 +62,7 @@ public class FIDOU2FAttestationStatement implements WebAuthnAttestationStatement
         X509Certificate attestationCertificate = getEndEntityCertificate();
         if (x5c.getCertificates().size() == 1 && CertificateUtil.isSelfSigned(attestationCertificate)) {
             return AttestationType.Self;
-        }
-        else {
+        } else {
             return AttestationType.Basic; //TODO support AttCA
         }
     }

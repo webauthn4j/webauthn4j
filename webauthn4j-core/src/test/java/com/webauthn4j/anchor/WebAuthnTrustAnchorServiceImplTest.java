@@ -26,7 +26,7 @@ public class WebAuthnTrustAnchorServiceImplTest {
     private WebAuthnTrustAnchorServiceImpl target;
 
     @Test
-    public void getTrustAnchors_test(){
+    public void getTrustAnchors_test() {
         Set<TrustAnchor> trustAnchorsA = target.getTrustAnchors();
         Set<TrustAnchor> trustAnchorsB = target.getTrustAnchors();
 

@@ -17,7 +17,6 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.exception.NotImplementedException;
 
 import java.security.Signature;
 

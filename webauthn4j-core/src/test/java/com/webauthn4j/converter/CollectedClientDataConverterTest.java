@@ -14,7 +14,7 @@ public class CollectedClientDataConverterTest {
     private CollectedClientDataConverter target = new CollectedClientDataConverter();
 
     @Test
-    public void convert_deserialization_test(){
+    public void convert_deserialization_test() {
         String clientDataBase64UrlString = "eyJjaGFsbGVuZ2UiOiJ0azMxVUgxRVRHR1RQajMzT2hPTXp3IiwiY2xpZW50RXh0ZW5zaW9ucyI6e30sImhhc2hBbGdvcml0aG0iOiJTSEEtMjU2Iiwib3JpZ2luIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwIiwidHlwZSI6IndlYmF1dGhuLmdldCJ9";
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         CollectedClientData expected = new CollectedClientData();

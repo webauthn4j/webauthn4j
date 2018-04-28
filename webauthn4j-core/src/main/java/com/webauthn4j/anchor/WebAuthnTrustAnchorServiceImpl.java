@@ -32,7 +32,7 @@ public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorServic
     private TrustAnchorProvider trustAnchorProvider;
     private Set<TrustAnchor> cachedTrustAnchors;
 
-    public WebAuthnTrustAnchorServiceImpl(TrustAnchorProvider trustAnchorProvider){
+    public WebAuthnTrustAnchorServiceImpl(TrustAnchorProvider trustAnchorProvider) {
         AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider cannot be null");
         this.trustAnchorProvider = trustAnchorProvider;
     }
@@ -43,7 +43,7 @@ public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorServic
     @Override
     public Set<TrustAnchor> getTrustAnchors() {
 
-        if(cachedTrustAnchors != null){
+        if (cachedTrustAnchors != null) {
             return cachedTrustAnchors;
         }
 

@@ -2,7 +2,6 @@ package com.webauthn4j.context.validator;
 
 import com.webauthn4j.attestation.WebAuthnAttestationObject;
 import com.webauthn4j.authenticator.WebAuthnAuthenticator;
-import com.webauthn4j.authenticator.WebAuthnAuthenticatorImpl;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
@@ -24,7 +23,7 @@ public class WebAuthnAuthenticationContextValidatorTest {
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator(assertionSignatureValidator);
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         String rpId = "localhost";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();

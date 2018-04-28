@@ -22,7 +22,7 @@ public class CollectedClientDataConverter {
         return convert(bytes);
     }
 
-    public CollectedClientData convert(byte[] source){
+    public CollectedClientData convert(byte[] source) {
         String jsonString = new String(source, StandardCharsets.UTF_8);
         try {
             return objectMapper.readValue(jsonString, CollectedClientData.class);

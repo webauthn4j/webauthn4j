@@ -13,15 +13,9 @@ public class RSSignatureAlgorithm extends AbstractSignatureAlgorithm {
         super(value, name);
     }
 
-    @JsonValue
-    @Override
-    public int getValue(){
-        return super.getValue();
-    }
-
     @JsonCreator
-    public static RSSignatureAlgorithm create(int value){
-        switch (value){
+    public static RSSignatureAlgorithm create(int value) {
+        switch (value) {
             case -257:
                 return SHA256withRSA;
             case -258:
@@ -31,6 +25,12 @@ public class RSSignatureAlgorithm extends AbstractSignatureAlgorithm {
             default:
                 throw new IllegalArgumentException("value is out of range");
         }
+    }
+
+    @JsonValue
+    @Override
+    public int getValue() {
+        return super.getValue();
     }
 
 }

@@ -14,13 +14,13 @@ import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData.*;
+import static com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData.BIT_AT;
+import static com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData.BIT_UP;
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
 

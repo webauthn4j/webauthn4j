@@ -17,21 +17,12 @@
 package com.webauthn4j.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.converter.WebAuthnAuthenticatorDataConverter;
-import com.webauthn4j.util.UnsignedNumberUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Jackson Serializer for WebAuthnAuthenticatorData

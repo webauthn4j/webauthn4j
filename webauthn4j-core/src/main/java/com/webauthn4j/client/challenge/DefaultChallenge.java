@@ -35,12 +35,12 @@ public class DefaultChallenge implements Challenge {
         this.value = value;
     }
 
-    public DefaultChallenge(String base64urlString){
+    public DefaultChallenge(String base64urlString) {
         AssertUtil.notNull(base64urlString, "base64urlString cannot be null");
         this.value = Base64.getUrlDecoder().decode(base64urlString);
     }
 
-    public DefaultChallenge(){
+    public DefaultChallenge() {
         UUID uuid = UUID.randomUUID();
         long hi = uuid.getMostSignificantBits();
         long lo = uuid.getLeastSignificantBits();

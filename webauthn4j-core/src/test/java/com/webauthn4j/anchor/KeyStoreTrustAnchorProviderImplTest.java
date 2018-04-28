@@ -15,7 +15,7 @@ public class KeyStoreTrustAnchorProviderImplTest {
     private KeyStoreTrustAnchorProviderImpl target;
 
     @Test
-    public void provide_test() throws Exception{
+    public void provide_test() throws Exception {
         target = new KeyStoreTrustAnchorProviderImpl();
         Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreTrustAnchorProviderImplTest/test.jks").toURI());
         target.setKeyStore(path);
@@ -26,7 +26,7 @@ public class KeyStoreTrustAnchorProviderImplTest {
     }
 
     @Test(expected = KeyStoreException.class)
-    public void provide_test_with_invalid_path() throws Exception{
+    public void provide_test_with_invalid_path() throws Exception {
         target = new KeyStoreTrustAnchorProviderImpl();
         Path path = Paths.get("invalid.path.to.jks");
         target.setKeyStore(path);

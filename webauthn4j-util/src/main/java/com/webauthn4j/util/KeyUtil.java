@@ -2,7 +2,6 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
-import java.io.UncheckedIOException;
 import java.security.*;
 import java.security.spec.*;
 

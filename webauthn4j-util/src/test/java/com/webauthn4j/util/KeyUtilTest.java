@@ -2,11 +2,8 @@ package com.webauthn4j.util;
 
 import org.junit.Test;
 
-import java.io.IOException;
 import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

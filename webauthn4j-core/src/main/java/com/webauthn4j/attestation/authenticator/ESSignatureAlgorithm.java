@@ -13,15 +13,9 @@ public class ESSignatureAlgorithm extends AbstractSignatureAlgorithm {
         super(value, name);
     }
 
-    @JsonValue
-    @Override
-    public int getValue(){
-        return super.getValue();
-    }
-
     @JsonCreator
-    public static ESSignatureAlgorithm create(int value){
-        switch (value){
+    public static ESSignatureAlgorithm create(int value) {
+        switch (value) {
             case -7:
                 return SHA256withECDSA;
             case -35:
@@ -31,6 +25,12 @@ public class ESSignatureAlgorithm extends AbstractSignatureAlgorithm {
             default:
                 throw new IllegalArgumentException("value is out of range");
         }
+    }
+
+    @JsonValue
+    @Override
+    public int getValue() {
+        return super.getValue();
     }
 
 }

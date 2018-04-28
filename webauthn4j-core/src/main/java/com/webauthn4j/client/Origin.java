@@ -18,7 +18,6 @@ package com.webauthn4j.client;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.net.URLEncoder;
 
 /**
  * Origin
@@ -26,14 +25,14 @@ import java.net.URLEncoder;
 public class Origin implements Serializable {
 
     private static final String SCHEME_HTTPS = "https";
-    private static final String SCHEME_HTTP  = "http";
+    private static final String SCHEME_HTTP = "http";
 
     private String scheme;
     private String serverName;
     private int port;
 
     public Origin(String scheme, String serverName, int port) {
-        if(!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)){
+        if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
             throw new IllegalArgumentException("scheme must be 'http' or 'https'");
         }
 
@@ -48,7 +47,7 @@ public class Origin implements Serializable {
         this.serverName = uri.getHost();
         int originPort = uri.getPort();
 
-        if(!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)){
+        if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
             throw new IllegalArgumentException("scheme must be 'http' or 'https'");
         }
 
@@ -80,16 +79,16 @@ public class Origin implements Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String result = this.scheme + "://" + this.serverName;
-        switch (this.scheme){
+        switch (this.scheme) {
             case SCHEME_HTTPS:
-                if(this.port != 443){
+                if (this.port != 443) {
                     result += ":" + this.port;
                 }
                 break;
             case SCHEME_HTTP:
-                if(this.port != 80){
+                if (this.port != 80) {
                     result += ":" + this.port;
                 }
                 break;
