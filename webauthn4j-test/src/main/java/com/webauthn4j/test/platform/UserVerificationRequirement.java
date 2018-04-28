@@ -1,8 +1,8 @@
 package com.webauthn4j.test.platform;
 
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
-@Experimental
+@WIP
 public enum  UserVerificationRequirement {
     REQUIRED,
     PREFERRED,

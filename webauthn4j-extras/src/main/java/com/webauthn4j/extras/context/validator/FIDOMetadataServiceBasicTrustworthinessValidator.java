@@ -26,7 +26,7 @@ import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -40,7 +40,7 @@ import java.util.Set;
 /**
  * FIDOMetadataServiceBasicTrustworthinessValidator
  */
-@Experimental
+@WIP
 public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTrustworthinessValidator {
 
     private FIDOMetadataServiceClient fidoMetadataServiceClient;

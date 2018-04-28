@@ -22,7 +22,7 @@ import com.nimbusds.jwt.SignedJWT;
 import com.webauthn4j.converter.WebAuthnModule;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Base64Utils;
@@ -37,7 +37,7 @@ import java.text.ParseException;
 /**
  * Client for FIDO Metadata Service
  */
-@Experimental
+@WIP
 public class FIDOMetadataServiceClient {
 
     RestTemplate restTemplate;

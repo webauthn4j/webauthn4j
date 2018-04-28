@@ -1,13 +1,13 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.nio.ByteBuffer;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
-@Experimental
+@WIP
 public class RegistrationResponse {
 
     private static final byte RESERVED_BYTE = 0x05;

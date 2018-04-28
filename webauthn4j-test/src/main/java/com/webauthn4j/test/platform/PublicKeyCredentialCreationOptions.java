@@ -1,12 +1,12 @@
 package com.webauthn4j.test.platform;
 
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
 import java.math.BigInteger;
 import java.util.List;
 
-@Experimental
+@WIP
 public class PublicKeyCredentialCreationOptions {
     private PublicKeyCredentialRpEntity rp;
     private PublicKeyCredentialUserEntity user;

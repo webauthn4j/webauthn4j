@@ -4,9 +4,9 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
-@Experimental
+@WIP
 public class ClientPlatform {
 
     private Origin origin;

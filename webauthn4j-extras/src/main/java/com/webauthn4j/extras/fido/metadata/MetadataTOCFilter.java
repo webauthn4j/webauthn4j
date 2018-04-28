@@ -17,7 +17,7 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
 import java.util.function.Predicate;
 
@@ -25,6 +25,6 @@ import java.util.function.Predicate;
  * A functional interface for representing MetaDataTOC filtering logic.
  */
 @SuppressWarnings("WeakerAccess")
-@Experimental
+@WIP
 public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
 }

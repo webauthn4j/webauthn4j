@@ -17,12 +17,12 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.nimbusds.jose.JWSObject;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
 /**
  * A JWSVerifier but does nothing
  */
-@Experimental
+@WIP
 public class NullJWSVerifier implements JWSVerifier {
 
     /**

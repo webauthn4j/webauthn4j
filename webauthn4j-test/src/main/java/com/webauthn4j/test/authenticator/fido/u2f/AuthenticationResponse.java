@@ -1,8 +1,8 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
-@Experimental
+@WIP
 public class AuthenticationResponse {
 
     private byte userPresense;

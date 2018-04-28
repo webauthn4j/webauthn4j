@@ -17,12 +17,12 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.nimbusds.jose.JWSObject;
-import com.webauthn4j.util.Experimental;
+import com.webauthn4j.util.WIP;
 
 /**
  * Verifier for JWS (Json Web Signature)
  */
-@Experimental
+@WIP
 public interface JWSVerifier {
 
     /**

@@ -10,7 +10,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.util.Arrays;
 
-@Experimental
+@WIP
 public class FIDOU2FAuthenticator {
 
     private PrivateKey attestationPrivateKey;
