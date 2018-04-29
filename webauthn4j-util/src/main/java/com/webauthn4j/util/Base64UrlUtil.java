@@ -5,7 +5,7 @@ import java.util.Base64;
 public class Base64UrlUtil {
 
     private static java.util.Base64.Decoder decoder = Base64.getUrlDecoder();
-    private static java.util.Base64.Encoder encoder = Base64.getUrlEncoder();
+    private static java.util.Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
     private Base64UrlUtil(){}
 

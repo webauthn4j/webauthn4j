@@ -18,6 +18,7 @@ package net.sharplab.springframework.security.webauthn.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.util.Base64UrlUtil;
 import net.sharplab.springframework.security.webauthn.exception.MetadataException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 
@@ -41,7 +42,7 @@ public class MetadataProviderImpl implements MetadataProvider {
             Collection<? extends WebAuthnAuthenticator> authenticators = userDetailsService.loadUserByUsername(username).getAuthenticators();
             List<Metadata> metadataList = new ArrayList<>();
             for (WebAuthnAuthenticator authenticator : authenticators) {
-                String credentialIdStr = java.util.Base64.getUrlEncoder().withoutPadding().encodeToString(authenticator.getAttestedCredentialData().getCredentialId());
+                String credentialIdStr = Base64UrlUtil.encodeToString(authenticator.getAttestedCredentialData().getCredentialId());
                 Metadata metadata = new Metadata();
                 metadata.setCredentialId(credentialIdStr);
                 metadataList.add(metadata);
