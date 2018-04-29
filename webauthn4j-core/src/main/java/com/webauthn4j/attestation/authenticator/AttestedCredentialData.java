@@ -19,20 +19,20 @@ package com.webauthn4j.attestation.authenticator;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class WebAuthnAttestedCredentialData implements Serializable {
+public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
     private byte[] aaGuid;
     private byte[] credentialId;
     private CredentialPublicKey credentialPublicKey;
 
-    public WebAuthnAttestedCredentialData(byte[] aaGuid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
+    public AttestedCredentialData(byte[] aaGuid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
         this.aaGuid = aaGuid;
         this.credentialId = credentialId;
         this.credentialPublicKey = credentialPublicKey;
     }
 
-    public WebAuthnAttestedCredentialData(){}
+    public AttestedCredentialData(){}
 
     public byte[] getAaGuid() {
         return aaGuid;
@@ -64,9 +64,9 @@ public class WebAuthnAttestedCredentialData implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WebAuthnAttestedCredentialData)) return false;
+        if (!(o instanceof AttestedCredentialData)) return false;
 
-        WebAuthnAttestedCredentialData that = (WebAuthnAttestedCredentialData) o;
+        AttestedCredentialData that = (AttestedCredentialData) o;
 
         if (!Arrays.equals(aaGuid, that.aaGuid)) return false;
         if (!Arrays.equals(credentialId, that.credentialId)) return false;

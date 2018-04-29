@@ -2,36 +2,35 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Base64;
 
-public class WebAuthnAttestationObjectConverter {
+public class AttestationObjectConverter {
 
     private ObjectMapper objectMapper;
 
-    public WebAuthnAttestationObjectConverter() {
+    public AttestationObjectConverter() {
         objectMapper = new ObjectMapper(new CBORFactory());
         objectMapper.registerModule(new WebAuthnModule());
     }
 
-    public WebAuthnAttestationObject convert(String source) {
+    public AttestationObject convert(String source) {
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
     }
 
-    public WebAuthnAttestationObject convert(byte[] source) {
+    public AttestationObject convert(byte[] source) {
         try {
-            return objectMapper.readValue(source, WebAuthnAttestationObject.class);
+            return objectMapper.readValue(source, AttestationObject.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public byte[] convertToBytes(WebAuthnAttestationObject source) {
+    public byte[] convertToBytes(AttestationObject source) {
         try {
             return objectMapper.writeValueAsBytes(source);
         } catch (IOException e) {
@@ -39,7 +38,7 @@ public class WebAuthnAttestationObjectConverter {
         }
     }
 
-    public String convertToString(WebAuthnAttestationObject source) {
+    public String convertToString(AttestationObject source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }

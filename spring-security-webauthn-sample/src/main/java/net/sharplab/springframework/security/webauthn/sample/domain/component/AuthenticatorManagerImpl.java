@@ -1,9 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.component;
 
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import net.sharplab.springframework.security.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.AuthenticatorEntity;
-import net.sharplab.springframework.security.webauthn.sample.domain.model.Authenticator;
 import net.sharplab.springframework.security.webauthn.sample.domain.repository.AuthenticatorEntityRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +32,12 @@ public class AuthenticatorManagerImpl implements AuthenticatorManager {
      * {@inheritDoc}
      */
     @Override
-    public WebAuthnAuthenticator loadWebAuthnAuthenticatorByCredentialId(byte[] credentialId) {
+    public Authenticator loadWebAuthnAuthenticatorByCredentialId(byte[] credentialId) {
         AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(credentialId);
         if (authenticatorEntity == null) {
             throw new CredentialIdNotFoundException(String.format("User with credentialId'%s' is not found.", credentialId));
         }
-        return modelMapper.map(authenticatorEntity, Authenticator.class);
+        return modelMapper.map(authenticatorEntity, net.sharplab.springframework.security.webauthn.sample.domain.model.Authenticator.class);
     }
 
 }

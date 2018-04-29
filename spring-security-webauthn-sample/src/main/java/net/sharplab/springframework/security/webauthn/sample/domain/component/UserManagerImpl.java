@@ -1,6 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.component;
 
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.AuthenticatorEntity;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.UserEntity;
@@ -60,7 +60,7 @@ public class UserManagerImpl implements UserManager, WebAuthnUserDetailsService 
     }
 
     @Override
-    public WebAuthnUserDetails loadUserByAuthenticator(WebAuthnAuthenticator authnAuthenticator) {
+    public WebAuthnUserDetails loadUserByAuthenticator(Authenticator authnAuthenticator) {
         AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(authnAuthenticator.getAttestedCredentialData().getCredentialId());
         return modelMapper.map(authenticatorEntity.getUser(), User.class);
     }

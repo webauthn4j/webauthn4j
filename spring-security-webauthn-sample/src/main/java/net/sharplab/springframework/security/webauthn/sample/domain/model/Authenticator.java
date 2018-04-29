@@ -1,16 +1,15 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.model;
 
 import lombok.Data;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 
 
 /**
  * Authenticator
  */
 @Data
-public class Authenticator implements WebAuthnAuthenticator {
+public class Authenticator implements com.webauthn4j.authenticator.Authenticator {
 
     //~ Instance fields ================================================================================================
     private Integer id;
@@ -18,8 +17,8 @@ public class Authenticator implements WebAuthnAuthenticator {
 
     private byte[] rpIdHash;
     private long counter;
-    private WebAuthnAttestedCredentialData attestedCredentialData;
-    private WebAuthnAttestationStatement attestationStatement;
+    private AttestedCredentialData attestedCredentialData;
+    private AttestationStatement attestationStatement;
 
     /**
      * Constructor

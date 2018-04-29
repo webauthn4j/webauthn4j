@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.basic;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 
 import java.security.cert.CertPath;
 
@@ -25,5 +25,5 @@ import java.security.cert.CertPath;
  */
 public interface BasicTrustworthinessValidator {
 
-    void validate(WebAuthnAttestationStatement attestationStatement);
+    void validate(AttestationStatement attestationStatement);
 }

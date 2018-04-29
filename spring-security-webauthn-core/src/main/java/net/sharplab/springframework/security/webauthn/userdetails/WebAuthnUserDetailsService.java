@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.userdetails;
 
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -24,5 +24,5 @@ public interface WebAuthnUserDetailsService extends UserDetailsService {
 
     WebAuthnUserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    WebAuthnUserDetails loadUserByAuthenticator(WebAuthnAuthenticator authnAuthenticator);
+    WebAuthnUserDetails loadUserByAuthenticator(Authenticator authnAuthenticator);
 }

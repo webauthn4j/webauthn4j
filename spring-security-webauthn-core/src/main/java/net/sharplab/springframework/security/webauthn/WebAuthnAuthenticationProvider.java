@@ -17,7 +17,7 @@
 package net.sharplab.springframework.security.webauthn;
 
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
 import net.sharplab.springframework.security.webauthn.exception.*;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetails;
@@ -77,7 +77,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         byte[] credentialId = Base64Utils.decodeFromUrlSafeString(authenticationToken.getCredentials().getCredentialId());
 
         // Using credential’s id attribute, look up the corresponding credential public key.
-        WebAuthnAuthenticator authenticator = retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
+        Authenticator authenticator = retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
         WebAuthnUserDetails user = userDetailsService.loadUserByAuthenticator(authenticator);
 
         preAuthenticationChecks.check(user);
@@ -104,7 +104,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         return WebAuthnAssertionAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
-    void doAuthenticate(WebAuthnAssertionAuthenticationToken authenticationToken, WebAuthnAuthenticator authenticator, WebAuthnUserDetails user){
+    void doAuthenticate(WebAuthnAssertionAuthenticationToken authenticationToken, Authenticator authenticator, WebAuthnUserDetails user){
         if (authenticationToken.getCredentials() == null) {
             logger.debug("Authentication failed: no credentials provided");
 
@@ -182,11 +182,11 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
         return authenticatorService;
     }
 
-    WebAuthnAuthenticator retrieveWebAuthnAuthenticator(byte[] credentialId, WebAuthnAssertionAuthenticationToken authenticationToken) {
-        WebAuthnAuthenticator loadedWebAuthnAuthenticator;
+    Authenticator retrieveWebAuthnAuthenticator(byte[] credentialId, WebAuthnAssertionAuthenticationToken authenticationToken) {
+        Authenticator loadedAuthenticator;
 
         try {
-            loadedWebAuthnAuthenticator = this.getAuthenticatorService().loadWebAuthnAuthenticatorByCredentialId(credentialId);
+            loadedAuthenticator = this.getAuthenticatorService().loadWebAuthnAuthenticatorByCredentialId(credentialId);
         } catch (CredentialIdNotFoundException notFound) {
             if (hideCredentialIdNotFoundExceptions) {
                 throw new BadCredentialsException(messages.getMessage(
@@ -199,11 +199,11 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
             throw new InternalAuthenticationServiceException(repositoryProblem.getMessage(), repositoryProblem);
         }
 
-        if (loadedWebAuthnAuthenticator == null) {
+        if (loadedAuthenticator == null) {
             throw new InternalAuthenticationServiceException(
                     "UserDetailsService returned null, which is an interface contract violation");
         }
-        return loadedWebAuthnAuthenticator;
+        return loadedAuthenticator;
 
     }
 

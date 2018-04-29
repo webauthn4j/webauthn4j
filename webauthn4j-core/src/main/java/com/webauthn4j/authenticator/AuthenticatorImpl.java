@@ -16,33 +16,33 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.ConstUtil;
 
 /**
- * A {@link WebAuthnAuthenticator} implementation
+ * A {@link Authenticator} implementation
  */
-public class WebAuthnAuthenticatorImpl implements WebAuthnAuthenticator {
+public class AuthenticatorImpl implements Authenticator {
 
     //~ Instance fields ================================================================================================
-    private WebAuthnAttestedCredentialData attestedCredentialData;
-    private WebAuthnAttestationStatement attestationStatement;
+    private AttestedCredentialData attestedCredentialData;
+    private AttestationStatement attestationStatement;
     private long counter;
 
-    public WebAuthnAuthenticatorImpl(WebAuthnAttestedCredentialData attestedCredentialData, WebAuthnAttestationStatement attestationStatement, long counter) {
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         setCounter(counter);
     }
 
     @Override
-    public WebAuthnAttestedCredentialData getAttestedCredentialData() {
+    public AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
     @Override
-    public WebAuthnAttestationStatement getAttestationStatement() {
+    public AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 

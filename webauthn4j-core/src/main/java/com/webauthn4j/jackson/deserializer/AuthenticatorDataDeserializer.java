@@ -23,9 +23,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
@@ -38,56 +38,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Jackson Deserializer for WebAuthnAuthenticatorData
+ * Jackson Deserializer for AuthenticatorData
  */
-public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAuthnAuthenticatorData> {
+public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
     private ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
 
     //TODO: make protected
-    public WebAuthnAuthenticatorDataDeserializer() {
-        super(WebAuthnAuthenticatorData.class);
+    public AuthenticatorDataDeserializer() {
+        super(AuthenticatorData.class);
     }
 
     @Override
-    public WebAuthnAuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public AuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
         return deserialize(value);
     }
 
-    public WebAuthnAuthenticatorData deserialize(byte[] value) {
+    public AuthenticatorData deserialize(byte[] value) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(value);
-        WebAuthnAuthenticatorData webAuthnAuthenticatorData = new WebAuthnAuthenticatorData();
+        AuthenticatorData authenticatorData = new AuthenticatorData();
 
         byte[] rpIdHash = new byte[32];
         byteBuffer.get(rpIdHash, 0, 32);
         byte flags = byteBuffer.get();
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
-        webAuthnAuthenticatorData.setRpIdHash(rpIdHash);
-        webAuthnAuthenticatorData.setFlags(flags);
-        webAuthnAuthenticatorData.setCounter(counter);
+        authenticatorData.setRpIdHash(rpIdHash);
+        authenticatorData.setFlags(flags);
+        authenticatorData.setCounter(counter);
 
-        WebAuthnAttestedCredentialData attestationData;
+        AttestedCredentialData attestationData;
         List<Extension> extensions;
-        if (webAuthnAuthenticatorData.isFlagAT()) {
+        if (authenticatorData.isFlagAT()) {
             attestationData = deserializeAttestedCredentialData(byteBuffer);
         } else {
             attestationData = null;
         }
-        if (webAuthnAuthenticatorData.isFlagED()) {
+        if (authenticatorData.isFlagED()) {
             extensions = deserializeExtensions(byteBuffer);
         } else {
             extensions = null;
         }
 
-        webAuthnAuthenticatorData.setAttestedCredentialData(attestationData);
-        webAuthnAuthenticatorData.setExtensions(extensions);
+        authenticatorData.setAttestedCredentialData(attestationData);
+        authenticatorData.setExtensions(extensions);
 
-        return webAuthnAuthenticatorData;
+        return authenticatorData;
     }
 
-    WebAuthnAttestedCredentialData deserializeAttestedCredentialData(ByteBuffer byteBuffer) {
+    AttestedCredentialData deserializeAttestedCredentialData(ByteBuffer byteBuffer) {
         byte[] aaGuid = new byte[16];
         byteBuffer.get(aaGuid, 0, 16);
         int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
@@ -97,7 +97,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AbstractCredentialPublicKey credentialPublicKey = deserializeCredentialPublicKey(byteArrayInputStream);
-        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
         int extensionsBufferLength = byteArrayInputStream.available();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
         return attestationData;

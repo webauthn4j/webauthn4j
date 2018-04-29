@@ -17,8 +17,8 @@
 package com.webauthn4j.validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
@@ -27,7 +27,7 @@ import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import com.webauthn4j.converter.WebAuthnModule;
-import com.webauthn4j.jackson.deserializer.WebAuthnAuthenticatorDataDeserializer;
+import com.webauthn4j.jackson.deserializer.AuthenticatorDataDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +51,7 @@ public class WebAuthnAuthenticationContextValidator {
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private ObjectMapper objectMapper;
-    private WebAuthnAuthenticatorDataDeserializer deserializer;
+    private AuthenticatorDataDeserializer deserializer;
 
     private AssertionSignatureValidator assertionSignatureValidator;
 
@@ -62,14 +62,14 @@ public class WebAuthnAuthenticationContextValidator {
 
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new WebAuthnModule());
-        this.deserializer = new WebAuthnAuthenticatorDataDeserializer();
+        this.deserializer = new AuthenticatorDataDeserializer();
     }
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, WebAuthnAuthenticator authenticator, boolean userVerificationRequired) {
+    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
 
         // In the spec, claimed as "C"
         CollectedClientData collectedClientData = deriveCollectedClientData(new String(webAuthnAuthenticationContext.getCollectedClientData(), StandardCharsets.UTF_8));
-        WebAuthnAuthenticatorData authenticatorData = deriveAuthenticatorData(webAuthnAuthenticationContext.getAuthenticatorData());
+        AuthenticatorData authenticatorData = deriveAuthenticatorData(webAuthnAuthenticationContext.getAuthenticatorData());
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
         // Verify that the value of C.type is the string webauthn.get.
@@ -151,7 +151,7 @@ public class WebAuthnAuthenticationContextValidator {
         }
     }
 
-    WebAuthnAuthenticatorData deriveAuthenticatorData(byte[] rawAuthenticatorData) {
+    AuthenticatorData deriveAuthenticatorData(byte[] rawAuthenticatorData) {
         return deserializer.deserialize(rawAuthenticatorData);
     }
 

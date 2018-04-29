@@ -16,12 +16,12 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.self;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 
 /**
  * Created by ynojima on 2017/09/21.
  */
 public interface SelfAttestationTrustworthinessValidator {
 
-    void validate(WebAuthnAttestationStatement attestationStatement);
+    void validate(AttestationStatement attestationStatement);
 }

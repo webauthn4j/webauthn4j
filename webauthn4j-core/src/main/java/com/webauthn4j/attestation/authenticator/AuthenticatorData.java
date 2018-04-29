@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class WebAuthnAuthenticatorData implements Serializable {
+public class AuthenticatorData implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;
     public static final byte BIT_AT = (byte) 0b01000000;
@@ -31,7 +31,7 @@ public class WebAuthnAuthenticatorData implements Serializable {
     private byte[] rpIdHash;
     private byte flags;
     private long counter;
-    private WebAuthnAttestedCredentialData attestedCredentialData;
+    private AttestedCredentialData attestedCredentialData;
     private List<Extension> extensions;
 
     public byte[] getRpIdHash() {
@@ -109,11 +109,11 @@ public class WebAuthnAuthenticatorData implements Serializable {
         this.counter = counter;
     }
 
-    public WebAuthnAttestedCredentialData getAttestedCredentialData() {
+    public AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
-    public void setAttestedCredentialData(WebAuthnAttestedCredentialData attestedCredentialData) {
+    public void setAttestedCredentialData(AttestedCredentialData attestedCredentialData) {
         this.attestedCredentialData = attestedCredentialData;
     }
 
@@ -131,9 +131,9 @@ public class WebAuthnAuthenticatorData implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof WebAuthnAuthenticatorData)) return false;
+        if (!(o instanceof AuthenticatorData)) return false;
 
-        WebAuthnAuthenticatorData that = (WebAuthnAuthenticatorData) o;
+        AuthenticatorData that = (AuthenticatorData) o;
 
         if (flags != that.flags) return false;
         if (counter != that.counter) return false;

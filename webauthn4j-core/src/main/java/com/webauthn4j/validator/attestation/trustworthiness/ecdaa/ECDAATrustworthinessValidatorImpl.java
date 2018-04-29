@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
 
 /**
@@ -24,7 +24,7 @@ import com.webauthn4j.util.exception.NotImplementedException;
  */
 public class ECDAATrustworthinessValidatorImpl implements ECDAATrustworthinessValidator {
 
-    public void validate(WebAuthnAttestationStatement attestationStatement) {
+    public void validate(AttestationStatement attestationStatement) {
         throw new NotImplementedException();
     }
 }

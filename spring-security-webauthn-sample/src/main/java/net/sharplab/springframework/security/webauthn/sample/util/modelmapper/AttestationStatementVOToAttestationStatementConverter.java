@@ -3,7 +3,7 @@ package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestationStatementVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.FIDOU2FAttestationStatementVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.NoneAttestationStatementVO;
@@ -12,14 +12,14 @@ import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 
 /**
- * Converter which converts from {@link AttestationStatementVO} to {@link WebAuthnAttestationStatement}
+ * Converter which converts from {@link AttestationStatementVO} to {@link AttestationStatement}
  */
-public class AttestationStatementVOToAttestationStatementConverter implements Converter<AttestationStatementVO, WebAuthnAttestationStatement> {
+public class AttestationStatementVOToAttestationStatementConverter implements Converter<AttestationStatementVO, AttestationStatement> {
 
     @Override
-    public WebAuthnAttestationStatement convert(MappingContext<AttestationStatementVO, WebAuthnAttestationStatement> context) {
+    public AttestationStatement convert(MappingContext<AttestationStatementVO, AttestationStatement> context) {
         AttestationStatementVO source = context.getSource();
-        WebAuthnAttestationStatement destination = context.getDestination();
+        AttestationStatement destination = context.getDestination();
         if (source == null) {
             return null;
         }

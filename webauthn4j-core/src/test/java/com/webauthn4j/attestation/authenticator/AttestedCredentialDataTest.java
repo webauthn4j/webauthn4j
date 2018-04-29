@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.authenticator;
+package com.webauthn4j.attestation.authenticator;
 
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.test.TestUtil;
+import org.junit.Test;
 
-import java.io.Serializable;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * WebAuthn Authenticator
+ * Created by ynojima on 2017/08/19.
  */
-public interface WebAuthnAuthenticator extends Serializable {
+public class AttestedCredentialDataTest {
 
-    WebAuthnAttestedCredentialData getAttestedCredentialData();
-
-    WebAuthnAttestationStatement getAttestationStatement();
-
-    long getCounter();
-
-    void setCounter(long value);
-
+    @Test
+    public void equals_test() {
+        AttestedCredentialData instanceA = TestUtil.createWebAuthnAttestedCredentialData();
+        AttestedCredentialData instanceB = TestUtil.createWebAuthnAttestedCredentialData();
+        assertThat(instanceA).isEqualTo(instanceB);
+    }
 }

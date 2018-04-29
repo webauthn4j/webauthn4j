@@ -21,12 +21,12 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.io.IOException;
@@ -34,33 +34,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Jackson Deserializer for WebAuthnAttestationObject
+ * Jackson Deserializer for AttestationObject
  */
-public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAuthnAttestationObject> {
+public class AttestationObjectDeserializer extends StdDeserializer<AttestationObject> {
 
     private Map<String, Class> attestationStatementTypeMap;
 
-    public WebAuthnAttestationObjectDeserializer() {
-        super(WebAuthnAttestationObject.class);
+    public AttestationObjectDeserializer() {
+        super(AttestationObject.class);
         initializeAttestationStatementTypeMap();
     }
 
     @Override
-    public WebAuthnAttestationObject deserialize(JsonParser p, DeserializationContext context) throws IOException {
+    public AttestationObject deserialize(JsonParser p, DeserializationContext context) throws IOException {
         ObjectCodec oc = p.getCodec();
         JsonNode node = oc.readTree(p);
-        WebAuthnAuthenticatorData webAuthnAuthenticatorData = oc.treeToValue(node.get("authData"), WebAuthnAuthenticatorData.class);
+        AuthenticatorData authenticatorData = oc.treeToValue(node.get("authData"), AuthenticatorData.class);
         String format = node.get("fmt").asText();
         JsonNode attestationStatementNode = node.get("attStmt");
-        WebAuthnAttestationStatement attestationStatement;
+        AttestationStatement attestationStatement;
         Class attestationStatementType = attestationStatementTypeMap.getOrDefault(format, null);
         if (attestationStatementType == null) {
             throw new UnsupportedAttestationFormatException("Format is not supported");
         }
-        attestationStatement = (WebAuthnAttestationStatement) oc.treeToValue(attestationStatementNode, attestationStatementType);
+        attestationStatement = (AttestationStatement) oc.treeToValue(attestationStatementNode, attestationStatementType);
 
-        WebAuthnAttestationObject attestationObject = new WebAuthnAttestationObject();
-        attestationObject.setAuthenticatorData(webAuthnAuthenticatorData);
+        AttestationObject attestationObject = new AttestationObject();
+        attestationObject.setAuthenticatorData(authenticatorData);
         attestationObject.setAttestationStatement(attestationStatement);
         return attestationObject;
     }

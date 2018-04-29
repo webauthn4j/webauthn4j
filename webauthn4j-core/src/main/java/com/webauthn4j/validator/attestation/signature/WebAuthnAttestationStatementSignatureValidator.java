@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator.attestation.signature;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.WebAuthnRegistrationContext;
 
 /**
- * Validates {@link WebAuthnAttestationStatement}'s signature
+ * Validates {@link AttestationStatement}'s signature
  */
 public class WebAuthnAttestationStatementSignatureValidator implements AttestationStatementSignatureValidator {
     @Override

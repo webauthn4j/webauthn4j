@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web.helper;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
@@ -66,8 +66,8 @@ public class AuthenticatorHelper {
         }
         destination.setName(source.getName());
         if(source.getAttestationObject() != null){
-            WebAuthnAttestationObject attestationObject = source.getAttestationObject().getAttestationObject();
-            WebAuthnAuthenticatorData authnAuthenticatorData = attestationObject.getAuthenticatorData();
+            AttestationObject attestationObject = source.getAttestationObject().getAttestationObject();
+            AuthenticatorData authnAuthenticatorData = attestationObject.getAuthenticatorData();
 
             destination.setRpIdHash(authnAuthenticatorData.getRpIdHash());
             destination.setCounter(authnAuthenticatorData.getCounter());

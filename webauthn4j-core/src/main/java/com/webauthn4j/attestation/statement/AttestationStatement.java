@@ -22,7 +22,7 @@ import java.security.cert.X509Certificate;
 /**
  * Attestation metadata.certs container
  */
-public interface WebAuthnAttestationStatement extends Serializable {
+public interface AttestationStatement extends Serializable {
     String getFormat();
 
     AttestationType getAttestationType();

@@ -17,28 +17,27 @@
 package com.webauthn4j.attestation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class WebAuthnAttestationObject implements Serializable {
+public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")
-    private WebAuthnAuthenticatorData AuthenticatorData;
+    private com.webauthn4j.attestation.authenticator.AuthenticatorData authenticatorData;
 
     @JsonProperty("attStmt")
-    private WebAuthnAttestationStatement attestationStatement; //TODO: generalize
+    private AttestationStatement attestationStatement;
 
 
-    public WebAuthnAuthenticatorData getAuthenticatorData() {
-        return AuthenticatorData;
+    public com.webauthn4j.attestation.authenticator.AuthenticatorData getAuthenticatorData() {
+        return authenticatorData;
     }
 
-    public void setAuthenticatorData(WebAuthnAuthenticatorData webAuthnAuthenticatorData) {
-        this.AuthenticatorData = webAuthnAuthenticatorData;
+    public void setAuthenticatorData(com.webauthn4j.attestation.authenticator.AuthenticatorData authenticatorData) {
+        this.authenticatorData = authenticatorData;
     }
 
     @JsonProperty("fmt")
@@ -46,11 +45,11 @@ public class WebAuthnAttestationObject implements Serializable {
         return attestationStatement.getFormat();
     }
 
-    public WebAuthnAttestationStatement getAttestationStatement() {
+    public AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 
-    public void setAttestationStatement(WebAuthnAttestationStatement attestationStatement) {
+    public void setAttestationStatement(AttestationStatement attestationStatement) {
         this.attestationStatement = attestationStatement;
     }
 
@@ -58,14 +57,14 @@ public class WebAuthnAttestationObject implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnAttestationObject that = (WebAuthnAttestationObject) o;
-        return Objects.equals(AuthenticatorData, that.AuthenticatorData) &&
+        AttestationObject that = (AttestationObject) o;
+        return Objects.equals(authenticatorData, that.authenticatorData) &&
                 Objects.equals(attestationStatement, that.attestationStatement);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(AuthenticatorData, attestationStatement);
+        return Objects.hash(authenticatorData, attestationStatement);
     }
 }

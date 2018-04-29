@@ -16,12 +16,12 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 
 /**
- * Validates {@link WebAuthnAttestationStatement} based on ECDAA
+ * Validates {@link AttestationStatement} based on ECDAA
  */
 public interface ECDAATrustworthinessValidator {
 
-    void validate(WebAuthnAttestationStatement attestationStatement);
+    void validate(AttestationStatement attestationStatement);
 }

@@ -16,19 +16,19 @@
 
 package net.sharplab.springframework.security.webauthn.converter;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.converter.AttestationObjectConverter;
 import org.springframework.core.convert.converter.Converter;
 
 /**
- * Converter which converts from Base64{@link String} to {@link WebAuthnAttestationObject}
+ * Converter which converts from Base64{@link String} to {@link AttestationObject}
  */
-public class Base64StringToWebAuthnAttestationObjectConverter implements Converter<String, WebAuthnAttestationObject> {
+public class Base64StringToWebAuthnAttestationObjectConverter implements Converter<String, AttestationObject> {
 
-    private WebAuthnAttestationObjectConverter converter = new WebAuthnAttestationObjectConverter();
+    private AttestationObjectConverter converter = new AttestationObjectConverter();
 
     @Override
-    public WebAuthnAttestationObject convert(String source) {
+    public AttestationObject convert(String source) {
         return converter.convert(source);
     }
 

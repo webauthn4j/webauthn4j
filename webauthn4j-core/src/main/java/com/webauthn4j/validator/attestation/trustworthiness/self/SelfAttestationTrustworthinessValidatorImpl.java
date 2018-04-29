@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 
@@ -26,14 +26,14 @@ import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 
 /**
- * Validates {@link WebAuthnAttestationStatement} as self attestation
+ * Validates {@link AttestationStatement} as self attestation
  */
 public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestationTrustworthinessValidator {
 
     //~ Instance fields ================================================================================================
     private boolean isSelfAttestationAllowed = true;
 
-    public void validate(WebAuthnAttestationStatement attestationStatement) {
+    public void validate(AttestationStatement attestationStatement) {
         if (attestationStatement.getAttestationType() == AttestationType.Self) {
             throw new IllegalArgumentException("attestationStatement is not self attested");
         }

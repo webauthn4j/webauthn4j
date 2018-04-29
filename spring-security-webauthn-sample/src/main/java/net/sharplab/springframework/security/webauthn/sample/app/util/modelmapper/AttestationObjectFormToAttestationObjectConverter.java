@@ -1,16 +1,16 @@
 package net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AttestationObjectForm;
 import org.modelmapper.AbstractConverter;
 
 /**
  * Created by ynojima on 2017/08/20.
  */
-public class AttestationObjectFormToWebAuthnAttestationObjectConverter extends AbstractConverter<AttestationObjectForm, WebAuthnAttestationObject> {
+public class AttestationObjectFormToAttestationObjectConverter extends AbstractConverter<AttestationObjectForm, AttestationObject> {
 
     @Override
-    protected WebAuthnAttestationObject convert(AttestationObjectForm source) {
+    protected AttestationObject convert(AttestationObjectForm source) {
         return source.getAttestationObject();
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.attestation.authenticator;
+package com.webauthn4j.attestation;
 
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
@@ -24,12 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by ynojima on 2017/08/19.
  */
-public class WebAuthnAttestedCredentialDataTest {
+public class AttestationObjectTest {
 
     @Test
     public void equals_test() {
-        WebAuthnAttestedCredentialData instanceA = TestUtil.createWebAuthnAttestedCredentialData();
-        WebAuthnAttestedCredentialData instanceB = TestUtil.createWebAuthnAttestedCredentialData();
+        AttestationObject instanceA = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject instanceB = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

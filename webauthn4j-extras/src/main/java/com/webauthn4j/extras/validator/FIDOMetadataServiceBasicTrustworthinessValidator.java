@@ -17,7 +17,7 @@
 package com.webauthn4j.extras.validator;
 
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
@@ -54,7 +54,7 @@ public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTr
     }
 
     @Override
-    public void validate(WebAuthnAttestationStatement attestationStatement) {
+    public void validate(AttestationStatement attestationStatement) {
         Metadata metadata = findMetadata(attestationStatement);
         if (metadata == null) {
             throw new CertificateException("metadata not found");
@@ -76,7 +76,7 @@ public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTr
         });
     }
 
-    Metadata findMetadata(WebAuthnAttestationStatement attestationStatement) {
+    Metadata findMetadata(AttestationStatement attestationStatement) {
         FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
         CertPath certPath = fidoU2FAttestationStatement.getX5c();
         Map<TrustAnchor, Metadata> metadataMap = getMetadataMap();

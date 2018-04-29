@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by ynojima on 2017/08/11.
  */
-public class WebAuthnAttestationStatementVOConverterTest {
+public class AttestationStatementVOConverterTest {
 
     private AttestationStatementVOConverter target = new AttestationStatementVOConverter();
 

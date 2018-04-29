@@ -3,9 +3,9 @@ package com.webauthn4j.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
@@ -14,16 +14,16 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 
-public class WebAuthnAuthenticatorDataConverter {
+public class AuthenticatorDataConverter {
 
     private ObjectMapper objectMapper;
 
-    public WebAuthnAuthenticatorDataConverter() {
+    public AuthenticatorDataConverter() {
         objectMapper = new ObjectMapper(new CBORFactory());
         objectMapper.registerModule(new WebAuthnModule());
     }
 
-    public byte[] convertToBytes(WebAuthnAuthenticatorData source) {
+    public byte[] convertToBytes(AuthenticatorData source) {
         try {
             return serialize(source);
         } catch (IOException e) {
@@ -31,7 +31,7 @@ public class WebAuthnAuthenticatorDataConverter {
         }
     }
 
-    byte[] serialize(WebAuthnAuthenticatorData value) throws IOException {
+    byte[] serialize(AuthenticatorData value) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] rpIdHash = value.getRpIdHash();
         byteArrayOutputStream.write(rpIdHash);
@@ -44,7 +44,7 @@ public class WebAuthnAuthenticatorDataConverter {
         return byteArrayOutputStream.toByteArray();
     }
 
-    private byte[] serializeAttestedCredentialData(WebAuthnAttestedCredentialData attestationData) throws IOException {
+    private byte[] serializeAttestedCredentialData(AttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byteArrayOutputStream.write(attestationData.getAaGuid());

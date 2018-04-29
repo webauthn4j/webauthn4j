@@ -26,7 +26,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(value = "format")
-public class FIDOU2FAttestationStatement implements WebAuthnAttestationStatement {
+public class FIDOU2FAttestationStatement implements AttestationStatement {
 
     public static final String FORMAT = "fido-u2f";
 

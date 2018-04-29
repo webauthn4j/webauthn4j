@@ -18,23 +18,23 @@ package com.webauthn4j.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.WebAuthnAttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData.BIT_AT;
-import static com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData.BIT_UP;
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by ynojima on 2017/08/18.
  */
-public class WebAuthnAuthenticatorDataSerializerTest {
+public class AuthenticatorDataSerializerTest {
 
     @Test
     public void test() throws IOException {
@@ -49,9 +49,9 @@ public class WebAuthnAuthenticatorDataSerializerTest {
         byte flags = (byte) (BIT_UP | BIT_AT);
         long counter = 325;
 
-        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
 
-        WebAuthnAuthenticatorData authenticatorData = new WebAuthnAuthenticatorData();
+        AuthenticatorData authenticatorData = new AuthenticatorData();
         authenticatorData.setRpIdHash(rpIdHash);
         authenticatorData.setFlags(flags);
         authenticatorData.setCounter(counter);
@@ -61,7 +61,7 @@ public class WebAuthnAuthenticatorDataSerializerTest {
 
         //When
         byte[] result = objectMapper.writeValueAsBytes(authenticatorData);
-        WebAuthnAuthenticatorData deserialized = objectMapper.readValue(result, WebAuthnAuthenticatorData.class);
+        AuthenticatorData deserialized = objectMapper.readValue(result, AuthenticatorData.class);
 
         //Then
 

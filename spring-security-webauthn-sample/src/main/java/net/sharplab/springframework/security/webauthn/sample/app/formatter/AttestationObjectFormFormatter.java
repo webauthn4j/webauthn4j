@@ -1,6 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.formatter;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import net.sharplab.springframework.security.webauthn.converter.Base64StringToWebAuthnAttestationObjectConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AttestationObjectForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class AttestationObjectFormFormatter implements Formatter<AttestationObje
 
     @Override
     public AttestationObjectForm parse(String text, Locale locale) throws ParseException {
-        WebAuthnAttestationObject attestationObject = base64StringToWebAuthnAttestationObjectConverter.convert(text);
+        AttestationObject attestationObject = base64StringToWebAuthnAttestationObjectConverter.convert(text);
         AttestationObjectForm attestationObjectForm = new AttestationObjectForm();
         attestationObjectForm.setAttestationObject(attestationObject);
         attestationObjectForm.setAttestationObjectBase64(text);

@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.userdetails;
 
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -32,22 +32,22 @@ public class WebAuthnUserDetailsImpl extends User implements WebAuthnUserDetails
     // ~ Instance fields
     // ================================================================================================
     private boolean passwordAuthenticationAllowed = false;
-    private List<WebAuthnAuthenticator> authenticators;
+    private List<Authenticator> authenticators;
 
-    public WebAuthnUserDetailsImpl(String username, String password, List<WebAuthnAuthenticator> authenticators,
+    public WebAuthnUserDetailsImpl(String username, String password, List<Authenticator> authenticators,
                                    Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.authenticators = authenticators;
     }
 
-    public WebAuthnUserDetailsImpl(String username, String password, List<WebAuthnAuthenticator> authenticators,
+    public WebAuthnUserDetailsImpl(String username, String password, List<Authenticator> authenticators,
                                    Collection<? extends GrantedAuthority> authorities, boolean passwordAuthenticationAllowed) {
         this(username, password, authenticators, authorities);
         this.passwordAuthenticationAllowed = passwordAuthenticationAllowed;
     }
 
     @Override
-    public List<WebAuthnAuthenticator> getAuthenticators() {
+    public List<Authenticator> getAuthenticators() {
         return this.authenticators;
     }
 

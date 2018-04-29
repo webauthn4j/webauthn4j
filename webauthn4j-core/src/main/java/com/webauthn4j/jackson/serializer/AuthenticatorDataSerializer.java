@@ -19,25 +19,25 @@ package com.webauthn4j.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
-import com.webauthn4j.converter.WebAuthnAuthenticatorDataConverter;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
 
 import java.io.IOException;
 
 /**
- * Jackson Serializer for WebAuthnAuthenticatorData
+ * Jackson Serializer for AuthenticatorData
  */
-public class WebAuthnAuthenticatorDataSerializer extends StdSerializer<WebAuthnAuthenticatorData> {
+public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
 
 
-    public WebAuthnAuthenticatorDataSerializer() {
-        super(WebAuthnAuthenticatorData.class);
+    public AuthenticatorDataSerializer() {
+        super(AuthenticatorData.class);
     }
 
     @Override
-    public void serialize(WebAuthnAuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        WebAuthnAuthenticatorDataConverter webAuthnAuthenticatorDataConverter = new WebAuthnAuthenticatorDataConverter();
-        gen.writeBinary(webAuthnAuthenticatorDataConverter.convertToBytes(value));
+    public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
+        gen.writeBinary(authenticatorDataConverter.convertToBytes(value));
     }
 
 }

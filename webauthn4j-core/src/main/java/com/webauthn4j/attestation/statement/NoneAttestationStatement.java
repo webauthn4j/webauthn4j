@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.security.cert.X509Certificate;
 
 @JsonIgnoreProperties(value = "format")
-public class NoneAttestationStatement implements WebAuthnAttestationStatement {
+public class NoneAttestationStatement implements AttestationStatement {
 
     public static final String FORMAT = "none";
 

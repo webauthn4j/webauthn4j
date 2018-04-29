@@ -1,15 +1,14 @@
 package com.webauthn4j.validator;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
-import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import org.junit.Test;
@@ -35,8 +34,8 @@ public class WebAuthnAuthenticationContextValidatorTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions);
-        WebAuthnAttestationObjectConverter webAuthnAttestationObjectConverter = new WebAuthnAttestationObjectConverter();
-        WebAuthnAttestationObject attestationObject = webAuthnAttestationObjectConverter.convert(registrationRequest.getAttestationObject());
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+        AttestationObject attestationObject = attestationObjectConverter.convert(registrationRequest.getAttestationObject());
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -65,7 +64,7 @@ public class WebAuthnAuthenticationContextValidatorTest {
                         authenticationRequest.getSignature(),
                         relyingParty
                 );
-        WebAuthnAuthenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, false);
     }
 

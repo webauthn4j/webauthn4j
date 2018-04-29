@@ -1,6 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AttestationObjectFormToWebAuthnAttestationObjectConverter;
+import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AttestationObjectFormToAttestationObjectConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AuthorityFormToAuthorityUpdateDtoConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.AuthorityToAuthorityFormConverter;
 import net.sharplab.springframework.security.webauthn.sample.app.util.modelmapper.ClientDataFormToClientDataConverter;
@@ -29,7 +29,7 @@ public class ModelMapperAppConfig {
     public void initialize() {
         modelMapper.addConverter(new AuthorityToAuthorityFormConverter());
         modelMapper.addConverter(new AuthorityFormToAuthorityUpdateDtoConverter());
-        modelMapper.addConverter(new AttestationObjectFormToWebAuthnAttestationObjectConverter());
+        modelMapper.addConverter(new AttestationObjectFormToAttestationObjectConverter());
         modelMapper.addConverter(new ClientDataFormToClientDataConverter());
     }
 

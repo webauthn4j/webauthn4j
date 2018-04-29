@@ -1,7 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web;
 
+import com.webauthn4j.attestation.AttestationObject;
 import lombok.Data;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ public class AttestationObjectForm {
 
     @NotNull
     @Valid
-    private WebAuthnAttestationObject attestationObject;
+    private AttestationObject attestationObject;
     @NotNull
     private String attestationObjectBase64;
 }

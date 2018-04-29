@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.basic;
 
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.cert.CertificateExpiredException;
@@ -33,7 +33,7 @@ public class UntrustedCATolerantTrustworthinessValidator implements BasicTrustwo
     private boolean softFail = false;
 
     @Override
-    public void validate(WebAuthnAttestationStatement attestationStatement) {
+    public void validate(AttestationStatement attestationStatement) {
         X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
         try {
             attestationCertificate.checkValidity();

@@ -17,8 +17,8 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.jackson.deserializer.*;
@@ -41,14 +41,14 @@ public class WebAuthnModule extends SimpleModule {
 
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(WebAuthnAttestationObject.class, new WebAuthnAttestationObjectDeserializer());
-        this.addDeserializer(WebAuthnAuthenticatorData.class, new WebAuthnAuthenticatorDataDeserializer());
+        this.addDeserializer(AttestationObject.class, new AttestationObjectDeserializer());
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(WebAuthnAuthenticatorData.class, new WebAuthnAuthenticatorDataSerializer());
+        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
         //metadata

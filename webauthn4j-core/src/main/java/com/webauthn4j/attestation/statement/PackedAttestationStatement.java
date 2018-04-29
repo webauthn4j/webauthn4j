@@ -27,7 +27,7 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(value = "format")
-public class PackedAttestationStatement implements WebAuthnAttestationStatement {
+public class PackedAttestationStatement implements AttestationStatement {
 
     private static final String FORMAT = "packed";
 

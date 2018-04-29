@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.basic;
 
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.util.CertificateUtil;
 
@@ -40,7 +40,7 @@ public class TrustAnchorBasicTrustworthinessValidator implements BasicTrustworth
         this.webAuthnTrustAnchorService = webAuthnTrustAnchorService;
     }
 
-    public void validate(WebAuthnAttestationStatement attestationStatement) {
+    public void validate(AttestationStatement attestationStatement) {
 
         FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
         CertPath certPath = fidoU2FAttestationStatement.getX5c();

@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.userdetails;
 
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
+import com.webauthn4j.authenticator.Authenticator;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -26,7 +26,7 @@ import java.util.Collection;
  */
 public interface WebAuthnUserDetails extends UserDetails {
 
-    Collection<? extends WebAuthnAuthenticator> getAuthenticators();
+    Collection<? extends Authenticator> getAuthenticators();
 
     boolean isPasswordAuthenticationAllowed();
 

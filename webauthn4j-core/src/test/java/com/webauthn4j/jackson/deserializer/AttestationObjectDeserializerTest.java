@@ -17,7 +17,7 @@
 package com.webauthn4j.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -25,14 +25,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for WebAuthnAttestationObjectDeserializer
+ * Test for AttestationObjectDeserializer
  */
-public class WebAuthnAttestationObjectDeserializerTest {
+public class AttestationObjectDeserializerTest {
 
     @Ignore
     @Test
@@ -43,7 +42,7 @@ public class WebAuthnAttestationObjectDeserializerTest {
         String input = "o2hhdXRoRGF0YVkBLEmWDeWIDoxodDQXD2R2YFuP5K65ooYyx5lc87qDHZdjQQAAAAAAAAAAAAAAAAAAAAAAAAAAAKIACEGtYcgB2I9Pi8jFnIUAoSiwcu_qhHrukfYcbdwM2AXtvtvPsPDt0YV1E0Wo55N0ywXB4BqP-181-H0skABjXUgOEBTA-nPcglfK4PqMNKAH7D5cUE_bUESApv5uOVUKJJTI5F6QtMb9JLd66TwKixWPv5wkzi2faxw6UOhChpg1Mb04o_nn3J8g_GD5l0X7dmbw1dALczYE0dIoxK3Rk_ijY2FsZ2VFUzI1NmF4WCAKdfK3BgGcuTk7CwyGvhWx6FHtulzIf98QyOU4rB8S_WF5WCDej3ykjsl7bHEOfKcRs6Muajo9cb_VfMhDZfbbeo4eWGNmbXRoZmlkby11MmZnYXR0U3RtdKJjeDVjgVkBNTCCATEwgdmgAwIBAgIFAM6vw2EwCgYIKoZIzj0EAwIwITEfMB0GA1UEAxMWRmlyZWZveCBVMkYgU29mdCBUb2tlbjAeFw0xNzA4MTIxMjQxMTBaFw0xNzA4MTQxMjQxMTBaMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQeQb9KKCrSufvfw1g5menpgrfyafB5x-V4Vw3kPQkSHHvtVs1oAfbJiPoIOlG8HavcDTBlwfF1zAJc2LtPJrZKMAoGCCqGSM49BAMCA0cAMEQCIGViHaNVsYdmG8z7ZDoNjXAGRaVkpBQXIwFllOYdlFzVAiBQXTTLAqluPuOhamTgMvUt9NlOgCNdbYRA4o3ucSptY2NzaWdYRzBFAiEArPA-6MOP13BdOdlhZIB3UQJFpOQfQrvE_HuSBQBQlnoCIDNeSUap01fzlm3hh8rJQ4Q4rjDiRX6aV8ArLc71VeMJ";
 
         //When
-        WebAuthnAttestationObject result = objectMapper.readValue(Base64UrlUtil.decode(input), WebAuthnAttestationObject.class);
+        AttestationObject result = objectMapper.readValue(Base64UrlUtil.decode(input), AttestationObject.class);
 
         //Then
         assertThat(result).isNotNull();

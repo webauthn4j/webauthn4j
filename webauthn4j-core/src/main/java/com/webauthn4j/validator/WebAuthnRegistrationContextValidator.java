@@ -17,8 +17,8 @@
 package com.webauthn4j.validator;
 
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
-import com.webauthn4j.attestation.authenticator.WebAuthnAuthenticatorData;
+import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
@@ -26,7 +26,7 @@ import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationStatementException;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
+import com.webauthn4j.converter.AttestationObjectConverter;
 
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +47,7 @@ public class WebAuthnRegistrationContextValidator {
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private WebAuthnAttestationObjectConverter webAuthnAttestationObjectConverter = new WebAuthnAttestationObjectConverter();
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
 
     public WebAuthnRegistrationContextValidator(List<AttestationStatementValidator> attestationStatementValidators) {
         this.attestationStatementValidators = attestationStatementValidators;
@@ -58,10 +58,10 @@ public class WebAuthnRegistrationContextValidator {
         byte[] attestationObjectBytes = registrationContext.getAttestationObject();
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
-        WebAuthnAttestationObject attestationObject = webAuthnAttestationObjectConverter.convert(attestationObjectBytes);
+        AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
 
 
-        WebAuthnRegistrationObject registrationObject = new WebAuthnRegistrationObject(
+        RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
                 clientDataBytes,
                 attestationObject,
@@ -69,7 +69,7 @@ public class WebAuthnRegistrationContextValidator {
                 registrationContext.getRelyingParty()
         );
 
-        WebAuthnAuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
+        AuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         RelyingParty relyingParty = registrationContext.getRelyingParty();
 
         if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_CREATE)) {
@@ -113,7 +113,7 @@ public class WebAuthnRegistrationContextValidator {
 
     }
 
-    void validateAttestationStatement(WebAuthnRegistrationObject registrationObject) {
+    void validateAttestationStatement(RegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 validator.validate(registrationObject);

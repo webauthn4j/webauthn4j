@@ -17,8 +17,8 @@
 package net.sharplab.springframework.security.webauthn;
 
 import com.webauthn4j.WebAuthnAuthenticationContext;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
-import com.webauthn4j.authenticator.WebAuthnAuthenticatorImpl;
+import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.authenticator.AuthenticatorImpl;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
 import net.sharplab.springframework.security.webauthn.exception.CredentialIdNotFoundException;
 import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsImpl;
@@ -80,7 +80,7 @@ public class WebAuthnAuthenticationProviderTest {
                 "$2a$10$P2/aZvvln5dWs9T96ycx0eNFS1EwdiElzRjMObg8j0rTDISHMEdoq",
                 Collections.emptyList(),
                 Collections.singletonList(grantedAuthority));
-        WebAuthnAuthenticator authenticator = new WebAuthnAuthenticatorImpl(null, null, 0);
+        Authenticator authenticator = new AuthenticatorImpl(null, null, 0);
 
         when(webAuthnAuthenticatorService.loadWebAuthnAuthenticatorByCredentialId(credentialId))
                 .thenReturn(authenticator);
@@ -100,13 +100,13 @@ public class WebAuthnAuthenticationProviderTest {
     public void retrieveWebAuthnAuthenticator_test() {
         byte[] credentialId = new byte[0];
         WebAuthnAssertionAuthenticationToken authenticationToken = null;
-        WebAuthnAuthenticator expectedAuthenticator = mock(WebAuthnAuthenticator.class);
+        Authenticator expectedAuthenticator = mock(Authenticator.class);
 
         //Given
         when(webAuthnAuthenticatorService.loadWebAuthnAuthenticatorByCredentialId(credentialId)).thenReturn(expectedAuthenticator);
 
         //When
-        WebAuthnAuthenticator authenticator = webAuthnAuthenticationProvider.retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
+        Authenticator authenticator = webAuthnAuthenticationProvider.retrieveWebAuthnAuthenticator(credentialId, authenticationToken);
 
         //Then
         assertThat(authenticator).isEqualTo(expectedAuthenticator);

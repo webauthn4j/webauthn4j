@@ -1,9 +1,9 @@
 package com.webauthn4j.validator.attestation;
 
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.validator.WebAuthnRegistrationObject;
+import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -24,7 +24,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    protected void validateSignature(WebAuthnRegistrationObject registrationObject) {
+    protected void validateSignature(RegistrationObject registrationObject) {
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -45,8 +45,8 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    protected void validateTrustworthiness(WebAuthnRegistrationObject registrationObject) {
-        WebAuthnAttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+    protected void validateTrustworthiness(RegistrationObject registrationObject) {
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         switch (attestationStatement.getAttestationType()) {
             case Self:
                 selfAttestationTrustworthinessValidator.validate(attestationStatement);
@@ -59,18 +59,18 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     }
 
     @Override
-    public boolean supports(WebAuthnRegistrationObject registrationObject) {
-        WebAuthnAttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+    public boolean supports(RegistrationObject registrationObject) {
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return FIDOU2FAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
 
-    private byte[] getSignedData(WebAuthnRegistrationObject registrationObject) {
+    private byte[] getSignedData(RegistrationObject registrationObject) {
 
         String rpId = registrationObject.getRelyingParty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
-        WebAuthnAttestationObject attestationObject = registrationObject.getAttestationObject();
+        AttestationObject attestationObject = registrationObject.getAttestationObject();
         ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);

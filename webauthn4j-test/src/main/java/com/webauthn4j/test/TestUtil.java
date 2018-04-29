@@ -18,11 +18,11 @@ package com.webauthn4j.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.attestation.WebAuthnAttestationObject;
+import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.authenticator.WebAuthnAuthenticator;
-import com.webauthn4j.authenticator.WebAuthnAuthenticatorImpl;
+import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -58,15 +58,15 @@ public class TestUtil {
     private TestUtil() {
     }
 
-    public static WebAuthnAttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
-        WebAuthnAttestationObject attestationObject = new WebAuthnAttestationObject();
+    public static AttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
+        AttestationObject attestationObject = new AttestationObject();
         attestationObject.setAuthenticatorData(createWebAuthnAuthenticatorData());
         attestationObject.setAttestationStatement(createFIDOU2FAttestationStatement());
         return attestationObject;
     }
 
-    public static WebAuthnAuthenticatorData createWebAuthnAuthenticatorData() {
-        WebAuthnAuthenticatorData authenticatorData = new WebAuthnAuthenticatorData();
+    public static AuthenticatorData createWebAuthnAuthenticatorData() {
+        AuthenticatorData authenticatorData = new AuthenticatorData();
         authenticatorData.setFlagUP(true);
         authenticatorData.setFlagAT(true);
         authenticatorData.setFlagED(false);
@@ -76,8 +76,8 @@ public class TestUtil {
         return authenticatorData;
     }
 
-    public static WebAuthnAttestedCredentialData createWebAuthnAttestedCredentialData() {
-        return new WebAuthnAttestedCredentialData(new byte[16], new byte[32], createESCredentialPublicKey());
+    public static AttestedCredentialData createWebAuthnAttestedCredentialData() {
+        return new AttestedCredentialData(new byte[16], new byte[32], createESCredentialPublicKey());
     }
 
     public static ESCredentialPublicKey createESCredentialPublicKey() {
@@ -210,8 +210,8 @@ public class TestUtil {
         return loadPrivateKeyFromResource(resource);
     }
 
-    public static WebAuthnAuthenticator createAuthenticator(WebAuthnAttestationObject attestationObject){
-        WebAuthnAttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
-        return new WebAuthnAuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getCounter());
+    public static Authenticator createAuthenticator(AttestationObject attestationObject){
+        AttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
+        return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getCounter());
     }
 }
