@@ -2,7 +2,7 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.util.exception.NotImplementedException;
 
 public enum Curve {
 

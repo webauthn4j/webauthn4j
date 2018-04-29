@@ -1,4 +1,4 @@
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 public class MaliciousDataException extends ValidationException {
     public MaliciousDataException(String message) {

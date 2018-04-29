@@ -19,8 +19,8 @@ package com.webauthn4j.context.validator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.context.RelyingParty;
-import com.webauthn4j.exception.BadChallengeException;
-import com.webauthn4j.exception.MissingChallengeException;
+import com.webauthn4j.context.validator.exception.BadChallengeException;
+import com.webauthn4j.context.validator.exception.MissingChallengeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

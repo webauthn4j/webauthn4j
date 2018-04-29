@@ -9,7 +9,7 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
 import com.webauthn4j.converter.WebAuthnAuthenticatorDataConverter;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;

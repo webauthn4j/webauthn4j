@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 /**
- * Created by ynojima on 2017/08/29.
+ * BadOriginException
  */
-public class CertificateException extends ValidationException {
-    public CertificateException(String message, Throwable cause) {
+public class BadOriginException extends ValidationException {
+    public BadOriginException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public CertificateException(String message) {
+    public BadOriginException(String message) {
         super(message);
     }
 }

@@ -27,7 +27,7 @@ import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.exception.UnsupportedArgumentException;
+import com.webauthn4j.context.validator.exception.UnsupportedAttestationFormatException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,7 +55,7 @@ public class WebAuthnAttestationObjectDeserializer extends StdDeserializer<WebAu
         WebAuthnAttestationStatement attestationStatement;
         Class attestationStatementType = attestationStatementTypeMap.getOrDefault(format, null);
         if (attestationStatementType == null) {
-            throw new UnsupportedArgumentException("Format is not supported");
+            throw new UnsupportedAttestationFormatException("Format is not supported");
         }
         attestationStatement = (WebAuthnAttestationStatement) oc.treeToValue(attestationStatementNode, attestationStatementType);
 

@@ -18,8 +18,8 @@ package com.webauthn4j.context.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.exception.CertificateException;
-import com.webauthn4j.exception.SelfAttestationProhibitedException;
+import com.webauthn4j.context.validator.exception.CertificateException;
+import com.webauthn4j.context.validator.exception.SelfAttestationProhibitedException;
 
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;

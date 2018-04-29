@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
+package com.webauthn4j.context.validator.exception;
+
 /**
- * Exception classes for WebAuthn
+ * BadRpIdException
  */
-package com.webauthn4j.exception;
+public class BadRpIdException extends ValidationException {
+    public BadRpIdException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BadRpIdException(String message) {
+        super(message);
+    }
+}

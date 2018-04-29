@@ -19,7 +19,7 @@ package com.webauthn4j.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.security.cert.CertPath;

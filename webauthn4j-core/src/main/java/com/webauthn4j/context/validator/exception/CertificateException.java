@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 /**
- * Created by ynojima on 2017/08/27.
+ * Created by ynojima on 2017/08/29.
  */
-public class SelfAttestationProhibitedException extends ValidationException {
-    public SelfAttestationProhibitedException(String message, Throwable cause) {
+public class CertificateException extends ValidationException {
+    public CertificateException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public SelfAttestationProhibitedException(String message) {
+    public CertificateException(String message) {
         super(message);
     }
 }

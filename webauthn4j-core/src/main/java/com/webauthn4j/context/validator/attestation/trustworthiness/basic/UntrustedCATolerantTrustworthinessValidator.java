@@ -17,7 +17,7 @@
 package com.webauthn4j.context.validator.attestation.trustworthiness.basic;
 
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.exception.CertificateException;
+import com.webauthn4j.context.validator.exception.CertificateException;
 
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;

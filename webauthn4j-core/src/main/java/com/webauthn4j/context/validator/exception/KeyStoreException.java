@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 /**
  * Created by ynojima on 2017/09/09.

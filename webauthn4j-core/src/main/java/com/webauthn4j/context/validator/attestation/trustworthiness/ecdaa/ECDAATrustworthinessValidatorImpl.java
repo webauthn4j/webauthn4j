@@ -17,7 +17,7 @@
 package com.webauthn4j.context.validator.attestation.trustworthiness.ecdaa;
 
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.util.exception.NotImplementedException;
 
 /**
  * ECDAATrustworthinessValidatorImpl

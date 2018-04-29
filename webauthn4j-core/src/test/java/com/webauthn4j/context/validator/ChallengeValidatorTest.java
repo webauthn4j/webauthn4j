@@ -20,8 +20,8 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.context.RelyingParty;
-import com.webauthn4j.exception.BadChallengeException;
-import com.webauthn4j.exception.MissingChallengeException;
+import com.webauthn4j.context.validator.exception.BadChallengeException;
+import com.webauthn4j.context.validator.exception.MissingChallengeException;
 import org.junit.Test;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;

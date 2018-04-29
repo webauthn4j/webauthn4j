@@ -18,16 +18,12 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.AlgorithmParameters;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.ECGenParameterSpec;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.ECPoint;
-import java.security.spec.ECPublicKeySpec;
+import java.security.*;
+import java.security.spec.*;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -108,8 +104,8 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
             );
             KeyFactory factory = KeyFactory.getInstance("EC");
             return factory.generatePublic(spec);
-        } catch (Exception ex) {
-            throw new UnsupportedOperationException(ex);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchProviderException | InvalidParameterSpecException e) {
+            throw new UnexpectedCheckedException(e);
         }
     }
 

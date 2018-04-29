@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 
 /**
- * BadSignatureException
+ * UserNotVerifiedException
  */
-public class BadSignatureException extends ValidationException {
-    public BadSignatureException(String message, Throwable cause) {
+public class UserNotVerifiedException extends ValidationException {
+
+    public UserNotVerifiedException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public BadSignatureException(String message) {
+    public UserNotVerifiedException(String message) {
         super(message);
     }
 }

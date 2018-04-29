@@ -2,7 +2,7 @@ package com.webauthn4j.context.validator;
 
 import com.webauthn4j.authenticator.WebAuthnAuthenticator;
 import com.webauthn4j.context.WebAuthnAuthenticationContext;
-import com.webauthn4j.exception.MaliciousCounterValueException;
+import com.webauthn4j.context.validator.exception.MaliciousCounterValueException;
 
 public class DefaultMaliciousCounterValueHandler implements MaliciousCounterValueHandler {
     @Override

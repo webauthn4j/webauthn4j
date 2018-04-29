@@ -1,4 +1,4 @@
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 public class ValidationException extends RuntimeException {
     public ValidationException(String message, Throwable cause) {

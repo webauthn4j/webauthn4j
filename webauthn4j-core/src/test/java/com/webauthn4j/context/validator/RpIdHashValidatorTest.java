@@ -17,7 +17,7 @@
 package com.webauthn4j.context.validator;
 
 import com.webauthn4j.context.RelyingParty;
-import com.webauthn4j.exception.BadRpIdException;
+import com.webauthn4j.context.validator.exception.BadRpIdException;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.junit.Test;
 

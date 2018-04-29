@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
+
+
+import com.webauthn4j.context.validator.exception.ValidationException;
 
 /**
- * BadRpIdException
+ * UnsupportedAttestationFormatException
  */
-public class BadRpIdException extends ValidationException {
-    public BadRpIdException(String message, Throwable cause) {
+public class UnsupportedAttestationFormatException extends ValidationException {
+    public UnsupportedAttestationFormatException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public BadRpIdException(String message) {
+    public UnsupportedAttestationFormatException(String message) {
         super(message);
     }
 }

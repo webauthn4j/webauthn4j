@@ -1,7 +1,7 @@
 package com.webauthn4j.context.validator.attestation;
 
 import com.webauthn4j.context.validator.WebAuthnRegistrationObject;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.util.exception.NotImplementedException;
 
 public abstract class AbstractAttestationStatementValidator implements AttestationStatementValidator {
 

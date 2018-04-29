@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
-
+package com.webauthn4j.context.validator.exception;
 
 /**
- * UnsupportedArgumentException
+ * Created by ynojima on 2017/08/27.
  */
-public class UnsupportedArgumentException extends ValidationException {
-    public UnsupportedArgumentException(String message, Throwable cause) {
+public class SelfAttestationProhibitedException extends ValidationException {
+    public SelfAttestationProhibitedException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public UnsupportedArgumentException(String message) {
+    public SelfAttestationProhibitedException(String message) {
         super(message);
     }
 }

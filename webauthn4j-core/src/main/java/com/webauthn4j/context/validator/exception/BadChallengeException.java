@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
+package com.webauthn4j.context.validator.exception;
 
 /**
- * BadOriginException
+ * BadChallengeException
  */
-public class BadOriginException extends ValidationException {
-    public BadOriginException(String message, Throwable cause) {
+public class BadChallengeException extends ValidationException {
+
+    public BadChallengeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public BadOriginException(String message) {
+    public BadChallengeException(String message) {
         super(message);
     }
 }

@@ -14,19 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.exception;
-
-
 /**
- * UserNotVerifiedException
+ * Validation exception classes for WebAuthn
  */
-public class UserNotVerifiedException extends ValidationException {
-
-    public UserNotVerifiedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UserNotVerifiedException(String message) {
-        super(message);
-    }
-}
+package com.webauthn4j.context.validator.exception;

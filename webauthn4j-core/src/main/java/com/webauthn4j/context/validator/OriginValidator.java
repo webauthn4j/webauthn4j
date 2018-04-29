@@ -19,7 +19,7 @@ package com.webauthn4j.context.validator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.context.RelyingParty;
-import com.webauthn4j.exception.BadOriginException;
+import com.webauthn4j.context.validator.exception.BadOriginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

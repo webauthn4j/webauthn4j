@@ -5,8 +5,8 @@ import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.WebAuthnAttestationStatement;
 import com.webauthn4j.context.validator.WebAuthnRegistrationObject;
 import com.webauthn4j.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.exception.BadSignatureException;
-import com.webauthn4j.exception.NotImplementedException;
+import com.webauthn4j.context.validator.exception.BadSignatureException;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.MessageDigestUtil;
 import sun.security.ec.ECPublicKeyImpl;
 

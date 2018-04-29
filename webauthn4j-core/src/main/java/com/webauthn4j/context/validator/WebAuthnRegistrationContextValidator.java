@@ -23,10 +23,10 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.context.RelyingParty;
 import com.webauthn4j.context.WebAuthnRegistrationContext;
 import com.webauthn4j.context.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.context.validator.exception.MaliciousDataException;
+import com.webauthn4j.context.validator.exception.UnsupportedAttestationStatementException;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.WebAuthnAttestationObjectConverter;
-import com.webauthn4j.exception.MaliciousDataException;
-import com.webauthn4j.exception.UnsupportedAttestationStatementException;
 
 import java.util.List;
 import java.util.Objects;

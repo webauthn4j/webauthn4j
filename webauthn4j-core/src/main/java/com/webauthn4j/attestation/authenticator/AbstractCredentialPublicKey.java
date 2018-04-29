@@ -18,7 +18,10 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
+import java.security.SignatureException;
 
 
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
@@ -74,7 +77,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
             verifier.update(data);
 
             return verifier.verify(signature);
-        } catch (@SuppressWarnings("squid:S1166") Exception e) {
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
             return false;
         }
     }
