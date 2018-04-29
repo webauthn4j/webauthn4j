@@ -18,10 +18,13 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
@@ -74,8 +77,8 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(spec);
-        } catch (Exception ex) {
-            throw new UnsupportedOperationException(ex);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new UnexpectedCheckedException(e);
         }
     }
 
