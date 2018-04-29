@@ -78,11 +78,7 @@ public class TestUtil {
     }
 
     public static WebAuthnAttestedCredentialData createWebAuthnAttestedCredentialData() {
-        WebAuthnAttestedCredentialData attestedCredentialData = new WebAuthnAttestedCredentialData();
-        attestedCredentialData.setAaGuid(new byte[16]);
-        attestedCredentialData.setCredentialId(new byte[32]);
-        attestedCredentialData.setCredentialPublicKey(createESCredentialPublicKey());
-        return attestedCredentialData;
+        return new WebAuthnAttestedCredentialData(new byte[16], new byte[32], createESCredentialPublicKey());
     }
 
     public static ESCredentialPublicKey createESCredentialPublicKey() {

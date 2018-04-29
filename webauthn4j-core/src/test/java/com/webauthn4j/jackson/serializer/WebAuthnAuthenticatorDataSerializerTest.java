@@ -49,10 +49,7 @@ public class WebAuthnAuthenticatorDataSerializerTest {
         byte flags = (byte) (BIT_UP | BIT_AT);
         long counter = 325;
 
-        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData();
-        attestationData.setAaGuid(aaGuid);
-        attestationData.setCredentialId(credentialId);
-        attestationData.setCredentialPublicKey(credentialPublicKey);
+        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
 
         WebAuthnAuthenticatorData authenticatorData = new WebAuthnAuthenticatorData();
         authenticatorData.setRpIdHash(rpIdHash);

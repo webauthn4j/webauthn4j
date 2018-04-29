@@ -59,10 +59,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
 
         ESCredentialPublicKey esCredentialPublicKey = convertToEsCredentialPublicKey(registrationResponse.getUserPublicKey());
 
-        WebAuthnAttestedCredentialData webAuthnAttestedCredentialData = new WebAuthnAttestedCredentialData();
-        webAuthnAttestedCredentialData.setAaGuid(new byte[16]); // zero-filled 16bytes(128bits) array
-        webAuthnAttestedCredentialData.setCredentialId(registrationResponse.getKeyHandle());
-        webAuthnAttestedCredentialData.setCredentialPublicKey(esCredentialPublicKey);
+        byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
+        WebAuthnAttestedCredentialData webAuthnAttestedCredentialData =
+                new WebAuthnAttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), esCredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
         WebAuthnAuthenticatorData webAuthnAuthenticatorData = new WebAuthnAuthenticatorData();

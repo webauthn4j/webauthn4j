@@ -97,10 +97,7 @@ public class WebAuthnAuthenticatorDataDeserializer extends StdDeserializer<WebAu
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AbstractCredentialPublicKey credentialPublicKey = deserializeCredentialPublicKey(byteArrayInputStream);
-        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData();
-        attestationData.setAaGuid(aaGuid);
-        attestationData.setCredentialId(credentialId);
-        attestationData.setCredentialPublicKey(credentialPublicKey);
+        WebAuthnAttestedCredentialData attestationData = new WebAuthnAttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
         int extensionsBufferLength = byteArrayInputStream.available();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
         return attestationData;
