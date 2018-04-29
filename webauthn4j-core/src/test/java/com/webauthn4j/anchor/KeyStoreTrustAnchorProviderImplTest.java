@@ -1,6 +1,6 @@
 package com.webauthn4j.anchor;
 
-import com.webauthn4j.context.validator.exception.KeyStoreException;
+import com.webauthn4j.validator.exception.KeyStoreException;
 import org.junit.Test;
 
 import java.nio.file.Path;

@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn;
 
-import com.webauthn4j.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.WebAuthnAuthenticationContext;
 import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProvider;
 import org.junit.Before;
 import org.junit.Rule;

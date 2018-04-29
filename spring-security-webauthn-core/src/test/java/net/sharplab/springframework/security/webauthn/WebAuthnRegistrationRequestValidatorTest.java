@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn;
 
-import com.webauthn4j.context.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
 import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;
 import org.junit.Ignore;

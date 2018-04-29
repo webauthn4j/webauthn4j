@@ -1,14 +1,14 @@
 package net.sharplab.springframework.security.webauthn.sample.app.config;
 
-import com.webauthn4j.context.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.context.validator.WebAuthnRegistrationContextValidator;
-import com.webauthn4j.context.validator.assertion.signature.AssertionSignatureValidator;
-import com.webauthn4j.context.validator.assertion.signature.AssertionSignatureValidatorImpl;
-import com.webauthn4j.context.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.context.validator.attestation.FIDOU2FAttestationStatementValidator;
-import com.webauthn4j.context.validator.attestation.NoneAttestationStatementValidator;
-import com.webauthn4j.context.validator.attestation.PackedAttestationStatementValidator;
-import com.webauthn4j.context.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
+import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
+import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.PackedAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
@@ -25,8 +25,6 @@ import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDe
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

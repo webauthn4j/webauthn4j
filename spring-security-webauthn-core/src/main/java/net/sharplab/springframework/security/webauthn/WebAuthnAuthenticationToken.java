@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn;
 
-import com.webauthn4j.context.WebAuthnAuthenticationContext;
+import com.webauthn4j.WebAuthnAuthenticationContext;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
