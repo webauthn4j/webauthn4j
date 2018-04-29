@@ -69,10 +69,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @Override
     public boolean verifySignature(byte[] signature, byte[] data) {
         try {
-            //公開鍵に基づくverifier
             Signature verifier = Signature.getInstance(getAlgorithmName());
             verifier.initVerify(getPublicKey());
-            //検証
             verifier.update(data);
 
             return verifier.verify(signature);
