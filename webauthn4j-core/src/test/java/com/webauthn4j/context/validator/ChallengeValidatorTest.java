@@ -39,8 +39,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
-        CollectedClientData collectedClientData = new CollectedClientData();
-        collectedClientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When
@@ -53,8 +52,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
-        CollectedClientData collectedClientData = new CollectedClientData();
-        collectedClientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When
@@ -67,8 +65,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
-        CollectedClientData collectedClientData = new CollectedClientData();
-        collectedClientData.setChallenge(challengeA);
+        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
         RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
 
         //When

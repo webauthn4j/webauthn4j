@@ -37,8 +37,7 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
-        CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
-        collectedClientData.setOrigin(originA);
+        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, TestUtil.createChallenge(), originA, null);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
     }
@@ -48,8 +47,7 @@ public class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
-        collectedClientData.setOrigin(originA);
+        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, TestUtil.createChallenge(), originA, null);
         RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
         target.validate(collectedClientData, relyingParty);
     }

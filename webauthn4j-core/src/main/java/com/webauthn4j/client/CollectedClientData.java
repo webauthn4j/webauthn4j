@@ -16,11 +16,9 @@
 
 package com.webauthn4j.client;
 
-import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.client.challenge.Challenge;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * CollectedClientData
@@ -52,32 +50,16 @@ public class CollectedClientData implements Serializable {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public Challenge getChallenge() {
         return challenge;
-    }
-
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
     }
 
     public Origin getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Origin origin) {
-        this.origin = origin;
-    }
-
     public Object getTokenBinding() {
         return tokenBinding;
-    }
-
-    public void setTokenBinding(Object tokenBinding) {
-        this.tokenBinding = tokenBinding;
     }
 
 }
