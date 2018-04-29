@@ -16,7 +16,7 @@ import java.io.Serializable;
 })
 @Data
 @EqualsAndHashCode
-public abstract class AbstractCredentialPublicKeyVO implements Serializable {
+public abstract class AbstractCredentialPublicKeyVO implements CredentialPublicKeyVO, Serializable {
 
     private int keyType;
     private byte[] keyId;

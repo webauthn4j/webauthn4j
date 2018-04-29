@@ -23,6 +23,6 @@ public class AttestedCredentialDataVO implements Serializable {
 
     @Column(columnDefinition = "text")
     @Convert(converter = CredentialPublicKeyVOConverter.class)
-    private AbstractCredentialPublicKeyVO credentialPublicKey;
+    private CredentialPublicKeyVO credentialPublicKey;
 
 }

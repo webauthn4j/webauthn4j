@@ -46,6 +46,18 @@ public class WebAuthnAttestedCredentialData implements Serializable {
         return credentialPublicKey;
     }
 
+    public void setAaGuid(byte[] aaGuid) {
+        this.aaGuid = aaGuid;
+    }
+
+    public void setCredentialId(byte[] credentialId) {
+        this.credentialId = credentialId;
+    }
+
+    public void setCredentialPublicKey(CredentialPublicKey credentialPublicKey) {
+        this.credentialPublicKey = credentialPublicKey;
+    }
+
     /**
      * {@inheritDoc}
      */

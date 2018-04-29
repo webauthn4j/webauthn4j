@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.AuthenticatorEntityList;
 import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.AuthorityEntityList;
 import static net.sharplab.springframework.security.webauthn.sample.domain.constant.DomainTypeTokens.GroupEntityList;
 
@@ -58,7 +59,10 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
         } else {
-            convertAuthenticators(context, source, destination);
+            destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorEntityList)));
+            for(AuthenticatorEntity authenticator : destination.getAuthenticators()){
+                authenticator.setUser(destination);
+            }
         }
 
         destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
@@ -67,6 +71,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         return destination;
     }
 
+    /*
     //TODO:polish code
     private void convertAuthenticators(MappingContext<User, UserEntity> context, User srcUser, UserEntity dstUserEntity) {
         if (dstUserEntity.getAuthenticators() == null) {
@@ -100,5 +105,5 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         }
         dstAuthenticators.removeAll(toBeRemoved);
     }
-
+    */
 }
