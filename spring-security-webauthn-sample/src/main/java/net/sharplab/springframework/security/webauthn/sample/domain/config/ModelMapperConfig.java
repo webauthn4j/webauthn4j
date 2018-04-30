@@ -28,8 +28,14 @@ public class ModelMapperConfig {
         modelMapper.addConverter(new StringToChallengeConverter());
         modelMapper.addConverter(new UserToUserEntityConverter());
         modelMapper.addConverter(new UserEntityToUserConverter());
+
         modelMapper.createTypeMap(Page.class, PageImpl.class).setProvider(new PageImplProvider());
         modelMapper.getTypeMap(PageImpl.class, PageImpl.class).setProvider(new PageImplProvider());
+
+        modelMapper.getConfiguration()
+                .setFieldMatchingEnabled(true)
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+
         return modelMapper;
     }
 

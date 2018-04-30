@@ -59,10 +59,7 @@ public class AttestationObjectDeserializer extends StdDeserializer<AttestationOb
         }
         attestationStatement = (AttestationStatement) oc.treeToValue(attestationStatementNode, attestationStatementType);
 
-        AttestationObject attestationObject = new AttestationObject();
-        attestationObject.setAuthenticatorData(authenticatorData);
-        attestationObject.setAttestationStatement(attestationStatement);
-        return attestationObject;
+        return new AttestationObject(authenticatorData, attestationStatement);
     }
 
     //TODO: polish and retrieve data from config

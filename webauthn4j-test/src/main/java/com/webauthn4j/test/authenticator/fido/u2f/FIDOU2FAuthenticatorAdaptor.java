@@ -71,9 +71,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         authenticatorData.setAttestedCredentialData(attestedCredentialData);
         authenticatorData.setExtensions(null);
 
-        AttestationObject attestationObject = new AttestationObject();
-        attestationObject.setAttestationStatement(attestationStatement);
-        attestationObject.setAuthenticatorData(authenticatorData);
+        AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
@@ -112,12 +110,17 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
     private ESCredentialPublicKey convertToEsCredentialPublicKey(byte[] publicKey) {
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        ESCredentialPublicKey esCredentialPublicKey = new ESCredentialPublicKey();
-        esCredentialPublicKey.setCurve(Curve.SECP256R1);
-        esCredentialPublicKey.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
-        esCredentialPublicKey.setX(x);
-        esCredentialPublicKey.setY(y);
-        return esCredentialPublicKey;
+        return new ESCredentialPublicKey(
+                0,
+                null,
+                null,
+                null,
+                ESSignatureAlgorithm.SHA256withECDSA,
+                Curve.SECP256R1,
+                x,
+                y,
+                null
+        );
     }
 
 }

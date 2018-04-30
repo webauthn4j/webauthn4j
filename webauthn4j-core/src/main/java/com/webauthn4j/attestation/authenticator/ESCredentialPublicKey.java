@@ -30,6 +30,9 @@ import java.util.Objects;
 @JsonIgnoreProperties({"publicKey"})
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
+    @JsonProperty("3")
+    private ESSignatureAlgorithm algorithm;
+
     @JsonProperty("-1")
     private Curve curve;
     @JsonProperty("-2")
@@ -39,38 +42,15 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-4")
     private byte[] d;
 
-    @JsonProperty("3")
-    private ESSignatureAlgorithm algorithm;
+    public ESCredentialPublicKey(){super();}
 
-    public Curve getCurve() {
-        return curve;
-    }
-
-    public void setCurve(Curve curve) {
+    public ESCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV,
+                                 ESSignatureAlgorithm algorithm, Curve curve, byte[] x, byte[] y, byte[] d) {
+        super(keyType, keyId, keyOpts, baseIV);
+        this.algorithm = algorithm;
         this.curve = curve;
-    }
-
-    public byte[] getX() {
-        return x;
-    }
-
-    public void setX(byte[] x) {
         this.x = x;
-    }
-
-    public byte[] getY() {
-        return y;
-    }
-
-    public void setY(byte[] y) {
         this.y = y;
-    }
-
-    public byte[] getD() {
-        return d;
-    }
-
-    public void setD(byte[] d) {
         this.d = d;
     }
 
@@ -78,8 +58,20 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         return algorithm;
     }
 
-    public void setAlgorithm(ESSignatureAlgorithm algorithm) {
-        this.algorithm = algorithm;
+    public Curve getCurve() {
+        return curve;
+    }
+
+    public byte[] getX() {
+        return x;
+    }
+
+    public byte[] getY() {
+        return y;
+    }
+
+    public byte[] getD() {
+        return d;
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.security.InvalidKeyException;
@@ -35,38 +36,32 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @JsonProperty("5")
     private byte[] baseIV;
 
-    public int getKeyType() {
-        return keyType;
+    public AbstractCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV) {
+        this.keyType = keyType;
+        this.keyId = keyId;
+        this.keyOpts = keyOpts;
+        this.baseIV = baseIV;
     }
 
-    public void setKeyType(int keyType) {
-        this.keyType = keyType;
+    public AbstractCredentialPublicKey(){}
+
+    public int getKeyType() {
+        return keyType;
     }
 
     public byte[] getKeyId() {
         return keyId;
     }
 
-    public void setKeyId(byte[] keyId) {
-        this.keyId = keyId;
-    }
-
     public int[] getKeyOpts() {
         return keyOpts;
-    }
-
-    public void setKeyOpts(int[] keyOpts) {
-        this.keyOpts = keyOpts;
     }
 
     public byte[] getBaseIV() {
         return baseIV;
     }
 
-    public void setBaseIV(byte[] baseIV) {
-        this.baseIV = baseIV;
-    }
-
+    @JsonIgnore
     protected abstract String getAlgorithmName();
 
     @Override

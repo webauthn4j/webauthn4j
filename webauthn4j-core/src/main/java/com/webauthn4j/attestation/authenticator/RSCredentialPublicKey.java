@@ -16,7 +16,6 @@
 
 package com.webauthn4j.attestation.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
@@ -29,7 +28,6 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
-@JsonIgnoreProperties({"publicKey"})
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
     @JsonProperty("3")
@@ -39,28 +37,25 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
     @JsonProperty("-2")
     private byte[] e;
 
-    public byte[] getN() {
-        return n;
+    public RSCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV, RSSignatureAlgorithm algorithm, byte[] n, byte[] e) {
+        super(keyType, keyId, keyOpts, baseIV);
+        this.algorithm = algorithm;
+        this.n = n;
+        this.e = e;
     }
 
-    public void setN(byte[] n) {
-        this.n = n;
+    public RSCredentialPublicKey(){super();}
+
+    public byte[] getN() {
+        return n;
     }
 
     public byte[] getE() {
         return e;
     }
 
-    public void setE(byte[] e) {
-        this.e = e;
-    }
-
     public RSSignatureAlgorithm getAlgorithm() {
         return algorithm;
-    }
-
-    public void setAlgorithm(RSSignatureAlgorithm algorithm) {
-        this.algorithm = algorithm;
     }
 
     @Override

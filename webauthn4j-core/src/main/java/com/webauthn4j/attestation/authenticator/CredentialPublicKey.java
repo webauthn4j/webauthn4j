@@ -16,6 +16,8 @@
 
 package com.webauthn4j.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.security.PublicKey;
 
@@ -23,5 +25,6 @@ public interface CredentialPublicKey extends Serializable {
 
     boolean verifySignature(byte[] signature, byte[] data);
 
+    @JsonIgnore
     PublicKey getPublicKey();
 }

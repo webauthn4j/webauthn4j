@@ -59,9 +59,7 @@ public class TestUtil {
     }
 
     public static AttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
-        AttestationObject attestationObject = new AttestationObject();
-        attestationObject.setAuthenticatorData(createWebAuthnAuthenticatorData());
-        attestationObject.setAttestationStatement(createFIDOU2FAttestationStatement());
+        AttestationObject attestationObject = new AttestationObject(createWebAuthnAuthenticatorData(), createFIDOU2FAttestationStatement());
         return attestationObject;
     }
 
@@ -81,18 +79,30 @@ public class TestUtil {
     }
 
     public static ESCredentialPublicKey createESCredentialPublicKey() {
-        ESCredentialPublicKey credentialPublicKey = new ESCredentialPublicKey();
-        credentialPublicKey.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
-        credentialPublicKey.setX(new byte[32]);
-        credentialPublicKey.setY(new byte[32]);
-        return credentialPublicKey;
+        return new ESCredentialPublicKey(
+                0,
+                null,
+                null,
+                null,
+                ESSignatureAlgorithm.SHA256withECDSA,
+                Curve.SECP256R1,
+                new byte[32],
+                new byte[32],
+                null
+        );
     }
 
     public static RSCredentialPublicKey createRSCredentialPublicKey() {
-        RSCredentialPublicKey credentialPublicKey = new RSCredentialPublicKey();
-        credentialPublicKey.setAlgorithm(RSSignatureAlgorithm.SHA256withRSA);
-        credentialPublicKey.setN(new byte[32]);
-        credentialPublicKey.setE(new byte[32]);
+        RSCredentialPublicKey credentialPublicKey;
+        credentialPublicKey = new RSCredentialPublicKey(
+                0,
+                null,
+                null,
+                null,
+                RSSignatureAlgorithm.SHA256withRSA,
+                new byte[32],
+                new byte[32]
+        );
         return credentialPublicKey;
     }
 

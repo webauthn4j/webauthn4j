@@ -16,6 +16,7 @@
 
 package com.webauthn4j.attestation.authenticator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -26,10 +27,29 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RSCredentialPublicKeyTest {
 
+    private ObjectMapper jsonMapper = TestUtil.createJsonMapper();
+    private ObjectMapper cborMapper = TestUtil.createCBORMapper();
+
     @Test
     public void equals_test() {
         RSCredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
         RSCredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
+    }
+
+    @Test
+    public void cbor_serialize_deserialize_test() throws Exception {
+        RSCredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        byte[] serialized = cborMapper.writeValueAsBytes(original);
+        RSCredentialPublicKey result = cborMapper.readValue(serialized, RSCredentialPublicKey.class);
+        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
+    }
+
+    @Test
+    public void json_serialize_deserialize_test() throws Exception {
+        RSCredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        String serialized = jsonMapper.writeValueAsString(original);
+        RSCredentialPublicKey result = jsonMapper.readValue(serialized, RSCredentialPublicKey.class);
+        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 }

@@ -17,6 +17,7 @@
 package com.webauthn4j.attestation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 
 import java.io.Serializable;
@@ -31,13 +32,15 @@ public class AttestationObject implements Serializable {
     @JsonProperty("attStmt")
     private AttestationStatement attestationStatement;
 
+    public AttestationObject(AuthenticatorData authenticatorData, AttestationStatement attestationStatement) {
+        this.authenticatorData = authenticatorData;
+        this.attestationStatement = attestationStatement;
+    }
+
+    public AttestationObject(){}
 
     public com.webauthn4j.attestation.authenticator.AuthenticatorData getAuthenticatorData() {
         return authenticatorData;
-    }
-
-    public void setAuthenticatorData(com.webauthn4j.attestation.authenticator.AuthenticatorData authenticatorData) {
-        this.authenticatorData = authenticatorData;
     }
 
     @JsonProperty("fmt")
@@ -47,10 +50,6 @@ public class AttestationObject implements Serializable {
 
     public AttestationStatement getAttestationStatement() {
         return attestationStatement;
-    }
-
-    public void setAttestationStatement(AttestationStatement attestationStatement) {
-        this.attestationStatement = attestationStatement;
     }
 
     @Override
