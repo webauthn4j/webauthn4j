@@ -58,23 +58,23 @@ public class TestUtil {
     private TestUtil() {
     }
 
-    public static AttestationObject createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement() {
-        AttestationObject attestationObject = new AttestationObject(createWebAuthnAuthenticatorData(), createFIDOU2FAttestationStatement());
+    public static AttestationObject createAttestationObjectWithFIDOU2FAttestationStatement() {
+        AttestationObject attestationObject = new AttestationObject(createAuthenticatorData(), createFIDOU2FAttestationStatement());
         return attestationObject;
     }
 
-    public static AuthenticatorData createWebAuthnAuthenticatorData() {
+    public static AuthenticatorData createAuthenticatorData() {
         AuthenticatorData authenticatorData = new AuthenticatorData();
         authenticatorData.setFlagUP(true);
         authenticatorData.setFlagAT(true);
         authenticatorData.setFlagED(false);
         authenticatorData.setRpIdHash(new byte[32]);
         authenticatorData.setCounter(1);
-        authenticatorData.setAttestedCredentialData(createWebAuthnAttestedCredentialData());
+        authenticatorData.setAttestedCredentialData(createAttestedCredentialData());
         return authenticatorData;
     }
 
-    public static AttestedCredentialData createWebAuthnAttestedCredentialData() {
+    public static AttestedCredentialData createAttestedCredentialData() {
         return new AttestedCredentialData(new byte[16], new byte[32], createESCredentialPublicKey());
     }
 

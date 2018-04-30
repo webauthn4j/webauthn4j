@@ -28,8 +28,8 @@ public class AttestationObjectTest {
 
     @Test
     public void equals_test() {
-        AttestationObject instanceA = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
-        AttestationObject instanceB = TestUtil.createWebAuthnAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject instanceA = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject instanceB = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

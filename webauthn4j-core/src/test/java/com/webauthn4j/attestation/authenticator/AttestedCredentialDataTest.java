@@ -28,8 +28,8 @@ public class AttestedCredentialDataTest {
 
     @Test
     public void equals_test() {
-        AttestedCredentialData instanceA = TestUtil.createWebAuthnAttestedCredentialData();
-        AttestedCredentialData instanceB = TestUtil.createWebAuthnAttestedCredentialData();
+        AttestedCredentialData instanceA = TestUtil.createAttestedCredentialData();
+        AttestedCredentialData instanceB = TestUtil.createAttestedCredentialData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 }

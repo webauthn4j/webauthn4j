@@ -50,15 +50,15 @@ public class AuthenticatorDataTest {
 
     @Test
     public void equals_test() {
-        AuthenticatorData instanceA = TestUtil.createWebAuthnAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createWebAuthnAuthenticatorData();
+        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     public void equals_test_with_not_equal_data() {
-        AuthenticatorData instanceA = TestUtil.createWebAuthnAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createWebAuthnAuthenticatorData();
+        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
         instanceA.setFlagUP(false);
         instanceB.setFlagUP(true);
         assertThat(instanceA).isNotEqualTo(instanceB);
@@ -66,15 +66,15 @@ public class AuthenticatorDataTest {
 
     @Test
     public void hashCode_test() {
-        AuthenticatorData instanceA = TestUtil.createWebAuthnAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createWebAuthnAuthenticatorData();
+        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
         assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
     }
 
     @Test
     public void hashCode_test_with_not_equal_data() {
-        AuthenticatorData instanceA = TestUtil.createWebAuthnAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createWebAuthnAuthenticatorData();
+        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
         instanceA.setCounter(1);
         instanceB.setCounter(2);
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
