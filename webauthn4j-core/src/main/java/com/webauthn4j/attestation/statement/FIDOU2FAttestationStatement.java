@@ -35,20 +35,19 @@ public class FIDOU2FAttestationStatement implements AttestationStatement {
     @JsonProperty
     private byte[] sig;
 
+    public FIDOU2FAttestationStatement(CertPath x5c, byte[] sig) {
+        this.x5c = x5c;
+        this.sig = sig;
+    }
+
+    public FIDOU2FAttestationStatement(){}
+
     public CertPath getX5c() {
         return x5c;
     }
 
-    public void setX5c(CertPath x5c) {
-        this.x5c = x5c;
-    }
-
     public byte[] getSig() {
         return sig;
-    }
-
-    public void setSig(byte[] sig) {
-        this.sig = sig;
     }
 
     @Override

@@ -40,6 +40,15 @@ public class PackedAttestationStatement implements AttestationStatement {
     @JsonProperty
     private byte[] ecdaaKeyId;
 
+    public PackedAttestationStatement(String alg, byte[] sig, CertPath x5c, byte[] ecdaaKeyId) {
+        this.alg = alg;
+        this.sig = sig;
+        this.x5c = x5c;
+        this.ecdaaKeyId = ecdaaKeyId;
+    }
+
+    public PackedAttestationStatement(){}
+
     public String getAlg() {
         return alg;
     }

@@ -107,14 +107,16 @@ public class TestUtil {
     }
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
+        return createFIDOU2FAttestationStatement(createCertPath());
+    }
+
+    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(CertPath certPath) {
 
         byte[] sig = new byte[32];
 
-        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement();
-        attestationStatement.setX5c(createCertPath());
-        attestationStatement.setSig(sig);
-        return attestationStatement;
+        return new FIDOU2FAttestationStatement(certPath, sig);
     }
+
 
     public static CertPath createCertPath() {
         CertPath x5c;

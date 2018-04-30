@@ -42,10 +42,10 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         AttestationStatement attestationStatement;
         switch (publicKeyCredentialCreationOptions.getAttestation()){
             case DIRECT:
-                FIDOU2FAttestationStatement fidoU2FAttestationStatement = new FIDOU2FAttestationStatement();
-                fidoU2FAttestationStatement.setSig(registrationResponse.getSignature());
-                fidoU2FAttestationStatement.setX5c(CertificateUtil.generateCertPath(Collections.singletonList(registrationResponse.getAttestationCertificate())));
-                attestationStatement = fidoU2FAttestationStatement;
+                attestationStatement = new FIDOU2FAttestationStatement(
+                        CertificateUtil.generateCertPath(Collections.singletonList(registrationResponse.getAttestationCertificate())),
+                        registrationResponse.getSignature()
+                );
                 break;
             case INDIRECT:
                 throw new NotImplementedException();
