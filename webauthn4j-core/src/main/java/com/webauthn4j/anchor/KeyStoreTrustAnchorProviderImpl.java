@@ -61,7 +61,7 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
             }
             return trustAnchors;
         } catch (java.security.KeyStoreException | IOException e) {
-            throw new KeyStoreException(e);
+            throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }
     }
 
@@ -70,7 +70,7 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
         try {
             keyStoreObject.load(inputStream, password.toCharArray());
         } catch (IOException | NoSuchAlgorithmException | java.security.cert.CertificateException e) {
-            throw new KeyStoreException(e);
+            throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }
         return keyStoreObject;
     }

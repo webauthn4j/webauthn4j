@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * Created by ynojima on 2017/08/29.
+ * CertificateException
  */
 public class CertificateException extends ValidationException {
     public CertificateException(String message, Throwable cause) {

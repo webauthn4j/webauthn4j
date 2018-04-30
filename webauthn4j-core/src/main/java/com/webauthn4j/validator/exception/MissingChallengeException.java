@@ -18,7 +18,7 @@ package com.webauthn4j.validator.exception;
 
 
 /**
- * Created by ynojima on 2017/08/15.
+ * MissingChallengeException
  */
 public class MissingChallengeException extends ValidationException {
     public MissingChallengeException(String message, Throwable cause) {

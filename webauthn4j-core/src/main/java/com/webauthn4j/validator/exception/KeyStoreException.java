@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * Created by ynojima on 2017/09/09.
+ * KeyStoreException
  */
 public class KeyStoreException extends RuntimeException {
     public KeyStoreException(String msg, Throwable cause) {
@@ -26,10 +26,6 @@ public class KeyStoreException extends RuntimeException {
 
     public KeyStoreException(String msg) {
         super(msg);
-    }
-
-    public KeyStoreException(Throwable cause) {
-        super(cause);
     }
 
 }
