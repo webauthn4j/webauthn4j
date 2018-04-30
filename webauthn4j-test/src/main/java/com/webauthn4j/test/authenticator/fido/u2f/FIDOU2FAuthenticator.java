@@ -13,11 +13,15 @@ import java.util.Arrays;
 @WIP
 public class FIDOU2FAuthenticator {
 
+    public static final byte FLAG_OFF = (byte) 0b00000000;
+    public static final byte FLAG_UP  = (byte) 0b00000001;
+
     private PrivateKey attestationPrivateKey;
     private X509Certificate attestationPublicKeyCertificate;
 
     private long counter;
-    private boolean countUpEnabled;
+    private boolean countUpEnabled = true;
+    private byte flags = FLAG_UP;
 
     public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter){
         AssertUtil.notNull(attestationPrivateKey, "attestationPrivateKey must not be null");
@@ -70,10 +74,9 @@ public class FIDOU2FAuthenticator {
         byte[] nonce = Arrays.copyOf(keyHandle, 32);
         KeyPair keyPair = getKeyPair(applicationParameter, nonce);
         countUp();
-        byte userPresence = 0x01; //present
-        byte[] signedData = ByteBuffer.allocate(32 + 1 + 4 + 32).put(applicationParameter).put(userPresence).put(getCounterBytes()).put(challenge).array();
+        byte[] signedData = ByteBuffer.allocate(32 + 1 + 4 + 32).put(applicationParameter).put(flags).put(getCounterBytes()).put(challenge).array();
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
-        return new AuthenticationResponse(userPresence, getCounterBytes(), signature);
+        return new AuthenticationResponse(flags, getCounterBytes(), signature);
     }
 
     private byte[] getBytesFromECPublicKey(ECPublicKey ecPublicKey){
@@ -122,5 +125,13 @@ public class FIDOU2FAuthenticator {
 
     public void setCountUpEnabled(boolean countUpEnabled) {
         this.countUpEnabled = countUpEnabled;
+    }
+
+    public byte getFlags() {
+        return flags;
+    }
+
+    public void setFlags(byte flags) {
+        this.flags = flags;
     }
 }

@@ -119,7 +119,7 @@ public class WebAuthnAuthenticationContextValidator {
         // credential’s id attribute is nonzero, then run the following sub-step:
         long presentedCounter = authenticatorData.getCounter();
         long storedCounter = authenticator.getCounter();
-        if (authenticatorData.getCounter() > 0 || authenticator.getCounter() > 0) {
+        if (presentedCounter > 0 || storedCounter > 0) {
             // If the signature counter value adata.signCount is
             // greater than the signature counter value stored in conjunction with credential’s id attribute.
             if (presentedCounter > storedCounter) {
@@ -129,10 +129,7 @@ public class WebAuthnAuthenticationContextValidator {
             else {
                 maliciousCounterValueHandler.maliciousCounterValueDetected(webAuthnAuthenticationContext, authenticator);
             }
-
         }
-
-
     }
 
     public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {

@@ -29,7 +29,6 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
     private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
-
     public WebAuthnRegistrationRequest register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData){
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
@@ -123,4 +122,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor{
         );
     }
 
+    public FIDOU2FAuthenticator getFidoU2FAuthenticator() {
+        return fidoU2FAuthenticator;
+    }
 }
