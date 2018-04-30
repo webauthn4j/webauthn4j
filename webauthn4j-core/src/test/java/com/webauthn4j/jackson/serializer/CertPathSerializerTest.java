@@ -17,6 +17,7 @@
 package com.webauthn4j.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -36,7 +37,7 @@ public class CertPathSerializerTest {
 
     @Test
     public void test() throws CertificateException, IOException {
-        ObjectMapper objectMapper = TestUtil.createCBORMapper();
+        ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
         //Given
         Certificate cert1 = TestUtil.createFirefoxSWTokenAttestationCertificate();

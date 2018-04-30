@@ -1,8 +1,8 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
@@ -13,8 +13,7 @@ public class AttestationObjectConverter {
     private ObjectMapper objectMapper;
 
     public AttestationObjectConverter() {
-        objectMapper = new ObjectMapper(new CBORFactory());
-        objectMapper.registerModule(new WebAuthnModule());
+        objectMapper = ObjectMapperUtil.createCBORMapper();
     }
 
     public AttestationObject convert(String source) {

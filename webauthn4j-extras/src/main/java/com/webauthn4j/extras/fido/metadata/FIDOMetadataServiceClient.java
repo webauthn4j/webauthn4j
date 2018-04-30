@@ -19,7 +19,8 @@ package com.webauthn4j.extras.fido.metadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
-import com.webauthn4j.converter.WebAuthnModule;
+import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
 import com.webauthn4j.util.WIP;
@@ -55,8 +56,7 @@ public class FIDOMetadataServiceClient {
         this.jwsVerifier = jwsVerifier;
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
 
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new WebAuthnModule());
+        objectMapper = ObjectMapperUtil.createJSONMapper();
     }
 
     public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier) {

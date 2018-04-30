@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.converter;
+package com.webauthn4j.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.attestation.AttestationObject;

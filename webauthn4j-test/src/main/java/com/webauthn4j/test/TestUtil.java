@@ -28,7 +28,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.RelyingParty;
-import com.webauthn4j.converter.WebAuthnModule;
+import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
@@ -168,18 +168,6 @@ public class TestUtil {
         } catch (CertificateException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    public static ObjectMapper createJsonMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new WebAuthnModule());
-        return objectMapper;
-    }
-
-    public static ObjectMapper createCBORMapper() {
-        ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
-        objectMapper.registerModule(new WebAuthnModule());
-        return objectMapper;
     }
 
     public static CollectedClientData createClientData(String type) {

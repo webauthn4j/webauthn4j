@@ -17,6 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -27,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ESCredentialPublicKeyTest {
 
-    private ObjectMapper jsonMapper = TestUtil.createJsonMapper();
-    private ObjectMapper cborMapper = TestUtil.createCBORMapper();
+    private ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
+    private ObjectMapper cborMapper = ObjectMapperUtil.createCBORMapper();
 
     @Test
     public void equals_test() {

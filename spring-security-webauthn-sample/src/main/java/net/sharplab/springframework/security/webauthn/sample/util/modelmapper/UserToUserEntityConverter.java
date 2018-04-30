@@ -59,10 +59,7 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         if (source.getAuthenticators() == null) {
             destination.setAuthenticators(null);
         } else {
-            destination.setAuthenticators(context.getMappingEngine().map(context.create(source.getAuthenticators(), AuthenticatorEntityList)));
-            for(AuthenticatorEntity authenticator : destination.getAuthenticators()){
-                authenticator.setUser(destination);
-            }
+            convertAuthenticators(context, source, destination);
         }
 
         destination.setPasswordAuthenticationAllowed(source.isPasswordAuthenticationAllowed());
@@ -71,7 +68,6 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         return destination;
     }
 
-    /*
     //TODO:polish code
     private void convertAuthenticators(MappingContext<User, UserEntity> context, User srcUser, UserEntity dstUserEntity) {
         if (dstUserEntity.getAuthenticators() == null) {
@@ -105,5 +101,4 @@ public class UserToUserEntityConverter implements Converter<User, UserEntity> {
         }
         dstAuthenticators.removeAll(toBeRemoved);
     }
-    */
 }

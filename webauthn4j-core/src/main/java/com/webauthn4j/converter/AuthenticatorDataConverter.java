@@ -7,6 +7,8 @@ import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -19,8 +21,7 @@ public class AuthenticatorDataConverter {
     private ObjectMapper objectMapper;
 
     public AuthenticatorDataConverter() {
-        objectMapper = new ObjectMapper(new CBORFactory());
-        objectMapper.registerModule(new WebAuthnModule());
+        objectMapper = ObjectMapperUtil.createCBORMapper();
     }
 
     public byte[] convertToBytes(AuthenticatorData source) {

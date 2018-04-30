@@ -2,20 +2,19 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 public class CollectedClientDataConverter {
 
     private ObjectMapper objectMapper;
 
     public CollectedClientDataConverter() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new WebAuthnModule());
+        objectMapper = ObjectMapperUtil.createJSONMapper();
     }
 
     public CollectedClientData convert(String base64UrlString) {

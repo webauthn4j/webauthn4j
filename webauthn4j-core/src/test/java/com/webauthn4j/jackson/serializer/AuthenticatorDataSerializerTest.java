@@ -21,6 +21,7 @@ import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -38,7 +39,7 @@ public class AuthenticatorDataSerializerTest {
 
     @Test
     public void test() throws IOException {
-        ObjectMapper objectMapper = TestUtil.createCBORMapper();
+        ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
         AbstractCredentialPublicKey credentialPublicKey = new ESCredentialPublicKey();

@@ -22,11 +22,12 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
+import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import com.webauthn4j.converter.WebAuthnModule;
+import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.jackson.deserializer.AuthenticatorDataDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +61,7 @@ public class WebAuthnAuthenticationContextValidator {
     public WebAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
         this.assertionSignatureValidator = assertionSignatureValidator;
 
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.registerModule(new WebAuthnModule());
+        this.objectMapper = ObjectMapperUtil.createJSONMapper();
         this.deserializer = new AuthenticatorDataDeserializer();
     }
 
