@@ -1,4 +1,4 @@
-package com.webauthn4j.validator;
+package integration;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -7,6 +7,7 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.test.TestUtil;
@@ -15,7 +16,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class WebAuthnAuthenticationContextValidatorTest {
+public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private Origin origin = new Origin("http://localhost");
     private ClientPlatform clientPlatform = new ClientPlatform(origin);

@@ -1,4 +1,4 @@
-package com.webauthn4j.validator;
+package integration;
 
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-public class WebAuthnRegistrationContextValidatorTest {
+public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private Origin origin = new Origin("http://localhost");
     private ClientPlatform clientPlatform = new ClientPlatform(origin);
