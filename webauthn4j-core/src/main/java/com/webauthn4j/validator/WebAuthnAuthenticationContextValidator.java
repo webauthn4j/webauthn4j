@@ -22,6 +22,7 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.jackson.ObjectMapperUtil;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
@@ -51,25 +52,25 @@ public class WebAuthnAuthenticationContextValidator {
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private ObjectMapper objectMapper;
     private AuthenticatorDataDeserializer deserializer;
 
     private AssertionSignatureValidator assertionSignatureValidator;
+
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 
     public WebAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
         this.assertionSignatureValidator = assertionSignatureValidator;
 
-        this.objectMapper = ObjectMapperUtil.createJSONMapper();
         this.deserializer = new AuthenticatorDataDeserializer();
     }
 
     public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
 
         // In the spec, claimed as "C"
-        CollectedClientData collectedClientData = deriveCollectedClientData(new String(webAuthnAuthenticationContext.getCollectedClientData(), StandardCharsets.UTF_8));
-        AuthenticatorData authenticatorData = deriveAuthenticatorData(webAuthnAuthenticationContext.getAuthenticatorData());
+        CollectedClientData collectedClientData = collectedClientDataConverter.convert(webAuthnAuthenticationContext.getCollectedClientData());
+        AuthenticatorData authenticatorData = deserializer.deserialize(webAuthnAuthenticationContext.getAuthenticatorData());
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
         // Verify that the value of C.type is the string webauthn.get.
@@ -141,18 +142,4 @@ public class WebAuthnAuthenticationContextValidator {
     public void setMaliciousCounterValueHandler(MaliciousCounterValueHandler maliciousCounterValueHandler) {
         this.maliciousCounterValueHandler = maliciousCounterValueHandler;
     }
-
-    CollectedClientData deriveCollectedClientData(String clientDataJson) {
-        try {
-            String trimmedClientDataJson = clientDataJson.replace("\0", "").trim();
-            return objectMapper.readValue(trimmedClientDataJson, CollectedClientData.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    AuthenticatorData deriveAuthenticatorData(byte[] rawAuthenticatorData) {
-        return deserializer.deserialize(rawAuthenticatorData);
-    }
-
 }
