@@ -27,7 +27,6 @@ import java.security.spec.*;
 import java.util.Arrays;
 import java.util.Objects;
 
-@JsonIgnoreProperties({"publicKey"})
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
     @JsonProperty("3")

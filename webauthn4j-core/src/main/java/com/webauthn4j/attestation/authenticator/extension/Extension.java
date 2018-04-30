@@ -16,8 +16,11 @@
 
 package com.webauthn4j.attestation.authenticator.extension;
 
+import com.webauthn4j.util.WIP;
+
 import java.io.Serializable;
 
+@WIP
 public interface Extension extends Serializable {
     String getIdentifier();
 }
