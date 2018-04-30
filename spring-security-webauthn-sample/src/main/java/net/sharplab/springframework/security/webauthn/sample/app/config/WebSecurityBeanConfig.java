@@ -5,10 +5,8 @@ import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.PackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
@@ -76,18 +74,8 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public FIDOU2FAttestationStatementValidator fidou2FAttestationStatementValidator(){
-        return new FIDOU2FAttestationStatementValidator(new SelfAttestationTrustworthinessValidatorImpl());
-    }
-
-    @Bean
     public NoneAttestationStatementValidator noneAttestationStatementValidator() {
         return new NoneAttestationStatementValidator();
-    }
-
-    @Bean
-    public PackedAttestationStatementValidator packedAttestationStatementValidator(){
-        return new PackedAttestationStatementValidator();
     }
 
     @Bean
