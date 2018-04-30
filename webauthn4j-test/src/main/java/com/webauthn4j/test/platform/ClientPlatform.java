@@ -24,6 +24,10 @@ public class ClientPlatform {
     public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions){
         CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
 
+        return create(publicKeyCredentialCreationOptions, collectedClientData);
+    }
+
+    public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData){
         return fidoU2FAuthenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData);
     }
 
@@ -36,7 +40,7 @@ public class ClientPlatform {
         throw new NoAuthenticatorSuccessException();
     }
 
-    private CollectedClientData createCollectedClientData(String type, Challenge challenge) {
+    public CollectedClientData createCollectedClientData(String type, Challenge challenge) {
         return new CollectedClientData(type, challenge, origin, null);
     }
 

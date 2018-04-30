@@ -4,6 +4,7 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -17,10 +18,10 @@ import java.security.cert.Certificate;
 
 public class FIDOU2FAttestationStatementValidator extends AbstractAttestationStatementValidator {
 
-    private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+    private BasicTrustworthinessValidator basicTrustworthinessValidator;
 
-    public FIDOU2FAttestationStatementValidator(SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
-        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
+    public FIDOU2FAttestationStatementValidator(BasicTrustworthinessValidator basicTrustworthinessValidator) {
+        this.basicTrustworthinessValidator = basicTrustworthinessValidator;
     }
 
     @Override
@@ -48,10 +49,8 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
     protected void validateTrustworthiness(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         switch (attestationStatement.getAttestationType()) {
-            case Self:
-                selfAttestationTrustworthinessValidator.validate(attestationStatement);
-                break;
-            case None:
+            case Basic:
+                basicTrustworthinessValidator.validate(attestationStatement);
                 break;
             default:
                 throw new NotImplementedException(); // TODO: To be implemented

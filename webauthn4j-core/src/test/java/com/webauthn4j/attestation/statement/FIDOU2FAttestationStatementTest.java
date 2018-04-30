@@ -43,13 +43,6 @@ public class FIDOU2FAttestationStatementTest {
     @Test
     public void getAttestationType_test() {
         FIDOU2FAttestationStatement target = TestUtil.createFIDOU2FAttestationStatement();
-        assertThat(target.getAttestationType()).isEqualTo(AttestationType.Self);
-    }
-
-    @Test
-    public void getAttestationType_test_with_multiple_certificates() {
-        CertPath certPath = CertificateUtil.generateCertPath(Lists.newArrayList(TestUtil.createFirefoxSWTokenAttestationCertificate(), TestUtil.createFirefoxSWTokenAttestationCertificate()));
-        FIDOU2FAttestationStatement target = TestUtil.createFIDOU2FAttestationStatement(certPath);
         assertThat(target.getAttestationType()).isEqualTo(AttestationType.Basic);
     }
 

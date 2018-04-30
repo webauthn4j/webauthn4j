@@ -58,12 +58,7 @@ public class FIDOU2FAttestationStatement implements AttestationStatement {
     @JsonIgnore
     @Override
     public AttestationType getAttestationType() {
-        X509Certificate attestationCertificate = getEndEntityCertificate();
-        if (x5c.getCertificates().size() == 1 && CertificateUtil.isSelfSigned(attestationCertificate)) {
-            return AttestationType.Self;
-        } else {
-            return AttestationType.Basic; //TODO support AttCA
-        }
+        return AttestationType.Basic; //TODO support AttCA
     }
 
     @JsonIgnore

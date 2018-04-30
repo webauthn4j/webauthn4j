@@ -23,8 +23,8 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationStatementException;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.AttestationObjectConverter;
 
@@ -121,7 +121,7 @@ public class WebAuthnRegistrationContextValidator {
             }
         }
 
-        throw new UnsupportedAttestationStatementException("Supplied AttestationStatement format is not supported.");
+        throw new BadAttestationStatementException("Supplied AttestationStatement format is not configured.");
     }
 
 }

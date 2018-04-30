@@ -20,7 +20,7 @@ package com.webauthn4j.validator.exception;
 /**
  * UnsupportedAttestationFormatException
  */
-public class UnsupportedAttestationFormatException extends ValidationException {
+public class UnsupportedAttestationFormatException extends RuntimeException {
     public UnsupportedAttestationFormatException(String message, Throwable cause) {
         super(message, cause);
     }
