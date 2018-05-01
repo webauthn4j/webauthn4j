@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
@@ -60,18 +61,15 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
                 trustAnchors.add(new TrustAnchor(certificate, null));
             }
             return trustAnchors;
-        } catch (java.security.KeyStoreException | IOException e) {
+        } catch (java.security.KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
             throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }
     }
 
-    private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password) {
+    private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password)
+            throws CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore keyStoreObject = CertificateUtil.createKeyStore();
-        try {
-            keyStoreObject.load(inputStream, password.toCharArray());
-        } catch (IOException | NoSuchAlgorithmException | java.security.cert.CertificateException e) {
-            throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
-        }
+        keyStoreObject.load(inputStream, password.toCharArray());
         return keyStoreObject;
     }
 
