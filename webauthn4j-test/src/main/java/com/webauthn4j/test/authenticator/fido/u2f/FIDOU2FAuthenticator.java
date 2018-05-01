@@ -84,11 +84,15 @@ public class FIDOU2FAuthenticator {
         byte type = 0x04;
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();
-        return ByteBuffer.allocate(1 + 32 + 32)
-                .put(type)
-                .put(Arrays.copyOfRange(x, x.length-32, x.length))
-                .put(Arrays.copyOfRange(y, y.length-32, y.length))
-                .array();
+        x = Arrays.copyOfRange(x, Math.max(0, x.length -32), x.length);
+        y = Arrays.copyOfRange(y, Math.max(0, y.length -32), y.length);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32);
+        byteBuffer.put(type);
+        byteBuffer.position(byteBuffer.position() + 32 - x.length);
+        byteBuffer.put(x);
+        byteBuffer.position(byteBuffer.position() + 32 - y.length);
+        byteBuffer.put(y);
+        return byteBuffer.array();
     }
 
     private KeyPair getKeyPair(byte[] applicationParameter, byte[] nonce) {
