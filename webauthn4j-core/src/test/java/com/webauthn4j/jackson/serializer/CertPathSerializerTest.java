@@ -40,8 +40,8 @@ public class CertPathSerializerTest {
         ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
         //Given
-        Certificate cert1 = TestUtil.createFirefoxSWTokenAttestationCertificate();
-        Certificate cert2 = TestUtil.createFirefoxSWTokenAttestationCertificate();
+        Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
+        Certificate cert2 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
 
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));

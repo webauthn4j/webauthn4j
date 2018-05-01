@@ -52,8 +52,10 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
             case Basic:
                 basicTrustworthinessValidator.validate(attestationStatement);
                 break;
-            default:
+            case AttCA:
                 throw new NotImplementedException(); // TODO: To be implemented
+            default:
+                throw new UnsupportedOperationException();
         }
     }
 

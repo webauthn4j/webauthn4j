@@ -25,6 +25,7 @@ import java.security.cert.*;
 import java.security.cert.Certificate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A Utility class for metadata.certs
@@ -67,6 +68,10 @@ public class CertificateUtil {
         } catch (KeyStoreException e) {
             throw new UnexpectedCheckedException(e);
         }
+    }
+
+    public static Set<TrustAnchor> generateTrustAnchors(List<X509Certificate> certificates){
+        return certificates.stream().map( certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
 
     public static CertPath generateCertPath(List<Certificate> certificates) {

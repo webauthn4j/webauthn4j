@@ -18,7 +18,6 @@ package com.webauthn4j.attestation.statement;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.CertificateUtil;
-import org.assertj.core.util.Lists;
 import org.junit.Test;
 
 import java.security.cert.CertPath;
@@ -77,9 +76,11 @@ public class FIDOU2FAttestationStatementTest {
 
     @Test
     public void equals_test_with_not_equal_certificates() {
-        FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement(
+                CertificateUtil.generateCertPath(Collections.singletonList(TestUtil.loadFirefoxSWTokenAttestationCertificate()))
+        );
         FIDOU2FAttestationStatement instanceB = TestUtil.createFIDOU2FAttestationStatement(
-                CertificateUtil.generateCertPath(Collections.singletonList(TestUtil.createFeitianU2FTokenAttestationCertificate()))
+                CertificateUtil.generateCertPath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()))
         );
 
         assertThat(instanceA).isNotEqualTo(instanceB);
@@ -97,7 +98,7 @@ public class FIDOU2FAttestationStatementTest {
     public void hashCode_test_with_not_equal_certificates() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestUtil.createFIDOU2FAttestationStatement(
-                CertificateUtil.generateCertPath(Collections.singletonList(TestUtil.createFeitianU2FTokenAttestationCertificate()))
+                CertificateUtil.generateCertPath(Collections.singletonList(TestUtil.loadFeitianU2FTokenAttestationCertificate()))
         );
 
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());

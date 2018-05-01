@@ -16,8 +16,6 @@
 
 package com.webauthn4j.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
@@ -28,7 +26,6 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.RelyingParty;
-import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
@@ -59,8 +56,7 @@ public class TestUtil {
     }
 
     public static AttestationObject createAttestationObjectWithFIDOU2FAttestationStatement() {
-        AttestationObject attestationObject = new AttestationObject(createAuthenticatorData(), createFIDOU2FAttestationStatement());
-        return attestationObject;
+        return new AttestationObject(createAuthenticatorData(), createFIDOU2FAttestationStatement());
     }
 
     public static AuthenticatorData createAuthenticatorData() {
@@ -107,7 +103,7 @@ public class TestUtil {
     }
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
-        return createFIDOU2FAttestationStatement(createCertPath());
+        return createFIDOU2FAttestationStatement(create2tierTestAuthenticatorCertPath());
     }
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(CertPath certPath) {
@@ -118,45 +114,54 @@ public class TestUtil {
     }
 
 
-    public static CertPath createCertPath() {
+    public static CertPath create2tierTestAuthenticatorCertPath() {
         CertPath x5c;
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            x5c = certificateFactory.generateCertPath(Collections.singletonList(createFirefoxSWTokenAttestationCertificate()));
+            x5c = certificateFactory.generateCertPath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
         return x5c;
     }
 
-    public static X509Certificate loadTestRootCACertificate() {
-        return loadCertificateFromClassPath("/attestation/certs/ssw-test-root.crt");
+    public static X509Certificate load3tierTestRootCACertificate() {
+        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-root-CA.crt");
     }
 
-    public static X509Certificate loadTestIntermediateCACertificate() {
-        return loadCertificateFromClassPath("/attestation/certs/ssw-test-intermediate.crt");
+    public static X509Certificate load3tierTestIntermediateCACertificate() {
+        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-intermediate-CA.crt");
     }
 
-    public static X509Certificate loadTestAuthenticatorAttestationCertificate() {
-        return loadCertificateFromClassPath("/attestation/certs/ssw-test-authenticator.crt");
+    public static X509Certificate load3tierTestAuthenticatorAttestationCertificate() {
+        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-authenticator.crt");
     }
+
+    public static X509Certificate load2tierTestRootCACertificate() {
+        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-root-CA.crt");
+    }
+
+    public static X509Certificate load2tierTestAuthenticatorAttestationCertificate() {
+        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-authenticator.crt");
+    }
+
 
     public static X509Certificate loadCertificateFromClassPath(String classPath) {
         InputStream inputStream = ClassLoader.class.getResourceAsStream(classPath);
         return CertificateUtil.generateX509Certificate(inputStream);
     }
 
-    public static X509Certificate createFirefoxSWTokenAttestationCertificate() {
+    public static X509Certificate loadFirefoxSWTokenAttestationCertificate() {
         String base64Certificate = "MIIBMTCB2KADAgECAgRdWm5nMAoGCCqGSM49BAMCMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wHhcNMTcwODE5MTExMDI3WhcNMTcwODIxMTExMDI3WjAhMR8wHQYDVQQDExZGaXJlZm94IFUyRiBTb2Z0IFRva2VuMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmNdtc7TW47xJcunwo_5ZuqSeHKJDZixC3AhTy2OEnYZfLmLZn9ssfWqLmPY4E642bKRDsm6qLNfjj_z9ufejNTAKBggqhkjOPQQDAgNIADBFAiEA6SdHwFyOq1trbQA6TLxLHS11EYUYDWyA24BnsJD8TrACIEw7k4aGBMOYlT5uMXLlj4bV5jo1Svi83VOpBo5ykMvd";
         return createCertificate(base64Certificate);
     }
 
-    public static X509Certificate createFeitianU2FTokenAttestationCertificate() {
+    public static X509Certificate loadFeitianU2FTokenAttestationCertificate() {
         String base64Certificate = "MIIBTDCB86ADAgECAgrMFgqn4TlPa3dQMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDEZUIEZJRE8gMDEwMDAeFw0xNjA0MTUxNDUwMzJaFw0yNjA0MTUxNDUwMzJaMCcxJTAjBgNVBAMTHEZUIEZJRE8gVTJGIDExNjE2MTczMDMwNTAyMTAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATG1tXh9HyGi4UJapsP3Fw8NEwRr5WEYfV5xOvP2XU4jpnJ17SEbyZTCn7rX38Ept32BPr6IaOmamqAdQvsDpNgoxcwFTATBgsrBgEEAYLlHAIBAQQEAwIEMDAKBggqhkjOPQQDAgNIADBFAiEA3wPvLOvjpbU3VCsKBjWtb5MzcX_I2p7NN_X03kyyFoUCIAxoJPinKGUxoNR_bhx3uZHtQQpwLWuaBND9y2Omhf47";
         return createCertificate(base64Certificate);
     }
 
-    public static X509Certificate createYubikeyAttestationCertificate() {
+    public static X509Certificate loadYubikeyAttestationCertificate() {
         String base64Certificate = "MIICRDCCAS6gAwIBAgIEeMDfDjALBgkqhkiG9w0BAQswLjEsMCoGA1UEAxMjWXViaWNvIFUyRiBSb290IENBIFNlcmlhbCA0NTcyMDA2MzEwIBcNMTQwODAxMDAwMDAwWhgPMjA1MDA5MDQwMDAwMDBaMCoxKDAmBgNVBAMMH1l1YmljbyBVMkYgRUUgU2VyaWFsIDIwMjU5MDU5MzQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS1uHFcg_3-DqFcRXeshY30jBdv3oedyvS4PUDTIPJvreYl_Pf1yK_YNRj4254h7Ag7GEWAxxfsSkcLlopvuj9vozswOTAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIFIDALBgkqhkiG9w0BAQsDggEBAD72q_ZKkWsL-ZSTjdyVNOBUQAJoVninLEOnq-ZdkGX_YfRRzoo67thmidGQuVCvAHpU0THu8G_ia06nuz4yt5IFpd-nYAQ0U-NK-ETDfNSoX4xcLYcOCiiyt-1EAkH9s3krIHaw4Yr6m0Mu7vwmWLoJBcQbJKk8bsi7ptVvM-jWU9fPa9UBVFWiZZdA99zFHMAxYJzQPqbN6Tmeygh2MpB2P7TI0A9WkGmhJUkAauuwaiGiFOSZmDe0KegdflbTOlSS3ToWHIKTlUCBqn7vdJw6Vj2919ujlcxHPkRpbUGRhcJDesg6wGTBy-RyJ_96G3fH1eoMNn1F9jC9mY1Zsm4=";
         return createCertificate(base64Certificate);
     }
@@ -190,8 +195,12 @@ public class TestUtil {
         return new RelyingParty(createOrigin(), "localhost", createChallenge());
     }
 
-    public static PrivateKey loadTestAuthenticatorAttestationPrivateKey(){
-        return loadPrivateKey("classpath:attestation/private/ssw-test-authenticator.der");
+    public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey(){
+        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-authenticator.der");
+    }
+
+    public static PrivateKey load2tierTestAuthenticatorAttestationPrivateKey(){
+        return loadPrivateKey("classpath:attestation/2tier/private/2tier-test-authenticator.der");
     }
 
     public static PrivateKey loadPrivateKeyFromResource(Resource resource){

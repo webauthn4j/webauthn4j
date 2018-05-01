@@ -10,7 +10,7 @@ public class TestUtilTest {
 
     @Test
     public void loadTestAuthenticatorAttestationPrivateKey_test(){
-        PrivateKey privateKey = TestUtil.loadTestAuthenticatorAttestationPrivateKey();
+        PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         assertThat(privateKey).isNotNull();
     }
 }

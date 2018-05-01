@@ -62,7 +62,7 @@ public class TrustAnchorBasicTrustworthinessValidator implements BasicTrustworth
         try {
             certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
+            throw new CertificateException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
             throw new CertificateException("invalid cert path", e);
         }
