@@ -28,5 +28,5 @@ public class TrustAnchorBasicTrustworthinessValidatorTest {
         AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
         target.validate(attestationStatement);
     }
-    
+
 }
