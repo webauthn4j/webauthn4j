@@ -24,7 +24,6 @@ import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
-import java.util.Base64;
 
 /**
  * Jackson Deserializer for Challenge

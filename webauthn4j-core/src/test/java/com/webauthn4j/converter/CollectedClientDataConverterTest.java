@@ -4,11 +4,9 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;

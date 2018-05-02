@@ -17,16 +17,16 @@
 package com.webauthn4j.validator;
 
 
+import com.webauthn4j.RelyingParty;
+import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.RelyingParty;
-import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.AttestationObjectConverter;
 
 import java.util.List;
 import java.util.Objects;

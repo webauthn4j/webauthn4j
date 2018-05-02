@@ -2,13 +2,11 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.jackson.ObjectMapperUtil;
-import com.webauthn4j.jackson.WebAuthnModule;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayOutputStream;

@@ -16,8 +16,6 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.RelyingParty;
-
 /**
  * WebAuthnRegistrationContext
  */

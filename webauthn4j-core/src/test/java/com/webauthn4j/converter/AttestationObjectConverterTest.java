@@ -18,10 +18,9 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

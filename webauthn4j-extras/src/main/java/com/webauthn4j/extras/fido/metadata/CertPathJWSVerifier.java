@@ -19,9 +19,9 @@ package com.webauthn4j.extras.fido.metadata;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.util.Base64;
-import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.WIP;
+import com.webauthn4j.validator.exception.CertificateException;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 

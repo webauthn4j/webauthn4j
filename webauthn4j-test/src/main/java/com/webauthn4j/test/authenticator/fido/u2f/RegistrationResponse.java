@@ -1,7 +1,7 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
-import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
 import java.security.cert.CertificateEncodingException;

@@ -21,7 +21,6 @@ import com.webauthn4j.util.Base64UrlUtil;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.UUID;
 
 public class DefaultChallenge implements Challenge {

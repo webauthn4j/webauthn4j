@@ -16,9 +16,8 @@
 
 package com.webauthn4j.anchor;
 
-import com.webauthn4j.validator.exception.KeyStoreException;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.WIP;
+import com.webauthn4j.validator.exception.KeyStoreException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +36,6 @@ import java.util.Set;
 /**
  * Provides {@link TrustAnchor}'{@link Set} backed by Java KeyStore file.
  */
-@WIP
 public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
 
     //~ Instance fields ================================================================================================

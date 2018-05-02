@@ -18,14 +18,12 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.util.WIP;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 
-@WIP
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
 
     @JsonProperty("1")

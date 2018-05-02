@@ -1,9 +1,9 @@
 package com.webauthn4j.validator.attestation;
 
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.validator.RegistrationObject;
 
 public class PackedAttestationStatementValidator extends AbstractAttestationStatementValidator {
     @Override

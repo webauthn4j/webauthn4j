@@ -17,9 +17,8 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.RelyingParty;
-import com.webauthn4j.validator.RpIdHashValidator;
-import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.validator.exception.BadRpIdException;
 import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;

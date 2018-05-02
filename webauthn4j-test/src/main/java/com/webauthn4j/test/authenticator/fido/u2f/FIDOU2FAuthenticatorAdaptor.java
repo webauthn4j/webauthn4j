@@ -2,17 +2,17 @@ package com.webauthn4j.test.authenticator.fido.u2f;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;

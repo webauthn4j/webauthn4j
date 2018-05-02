@@ -24,8 +24,6 @@ import org.springframework.util.Assert;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.nio.ByteBuffer;
-import java.util.UUID;
 
 /**
  * ChallengeRequestDataValueProcessor

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test;
 
+import com.webauthn4j.RelyingParty;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
@@ -25,7 +26,6 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.RelyingParty;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;

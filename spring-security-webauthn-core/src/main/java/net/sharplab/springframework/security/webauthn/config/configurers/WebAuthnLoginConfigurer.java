@@ -22,9 +22,7 @@ import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnA
 import net.sharplab.springframework.security.webauthn.metadata.MetadataEndpointFilter;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProvider;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
-import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.authentication.MFATokenEvaluator;
-import org.springframework.security.authentication.MFATokenEvaluatorImpl;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;

@@ -20,9 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.jackson.ObjectMapperUtil;
-import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;

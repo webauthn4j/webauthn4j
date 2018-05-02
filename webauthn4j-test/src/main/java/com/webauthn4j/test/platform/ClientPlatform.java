@@ -3,10 +3,8 @@ package com.webauthn4j.test.platform;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.validator.exception.ValidationException;
 
 @WIP
 public class ClientPlatform {

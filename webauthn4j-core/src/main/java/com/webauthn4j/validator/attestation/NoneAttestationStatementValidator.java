@@ -1,7 +1,7 @@
 package com.webauthn4j.validator.attestation;
 
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 
 public class NoneAttestationStatementValidator extends AbstractAttestationStatementValidator {

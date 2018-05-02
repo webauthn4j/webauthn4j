@@ -2,15 +2,11 @@ package integration;
 
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
-import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.jackson.ObjectMapperUtil;
-import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;

@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.io.IOException;

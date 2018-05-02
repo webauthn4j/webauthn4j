@@ -17,10 +17,10 @@
 package com.webauthn4j.validator.attestation.trustworthiness.basic;
 
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;

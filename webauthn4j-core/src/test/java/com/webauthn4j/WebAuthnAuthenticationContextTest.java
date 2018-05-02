@@ -1,9 +1,7 @@
 package com.webauthn4j;
 
-import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;

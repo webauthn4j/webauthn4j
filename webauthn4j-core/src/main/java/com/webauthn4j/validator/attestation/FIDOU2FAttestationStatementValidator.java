@@ -1,14 +1,13 @@
 package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.util.exception.NotImplementedException;
-import com.webauthn4j.util.MessageDigestUtil;
 import sun.security.ec.ECPublicKeyImpl;
 
 import java.nio.ByteBuffer;

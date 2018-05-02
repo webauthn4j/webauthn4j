@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator.attestation.signature;
 
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 
 public class NoneAttestationStatementSignatureValidator implements AttestationStatementSignatureValidator {
     @Override

@@ -19,9 +19,8 @@ package com.webauthn4j.validator;
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
-import com.webauthn4j.validator.OriginValidator;
-import com.webauthn4j.validator.exception.BadOriginException;
 import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.validator.exception.BadOriginException;
 import org.junit.Test;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;

@@ -7,7 +7,6 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
-import java.util.Base64;
 
 public class ChallengeSerializer extends StdSerializer<Challenge> {
 

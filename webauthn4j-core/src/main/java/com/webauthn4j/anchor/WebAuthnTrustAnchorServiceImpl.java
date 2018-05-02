@@ -17,7 +17,6 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.util.WIP;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
@@ -26,7 +25,6 @@ import java.util.Set;
  * KeyStore backed TrustAnchorService
  * Load a key store at first time access and cache it.
  */
-@WIP
 public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorService {
 
     private TrustAnchorProvider trustAnchorProvider;

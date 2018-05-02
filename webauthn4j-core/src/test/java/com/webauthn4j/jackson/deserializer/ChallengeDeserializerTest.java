@@ -19,7 +19,6 @@ package com.webauthn4j.jackson.deserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.jackson.ObjectMapperUtil;
-import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
 import java.io.IOException;
