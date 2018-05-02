@@ -19,6 +19,7 @@ package com.webauthn4j.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 
@@ -27,9 +28,10 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(value = "format")
+@JsonTypeName(PackedAttestationStatement.FORMAT)
 public class PackedAttestationStatement implements AttestationStatement {
 
-    private static final String FORMAT = "packed";
+    public static final String FORMAT = "packed";
 
     @JsonProperty
     private String alg;

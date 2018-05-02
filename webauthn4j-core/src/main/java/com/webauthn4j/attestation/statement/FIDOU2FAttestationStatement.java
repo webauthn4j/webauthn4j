@@ -16,15 +16,15 @@
 
 package com.webauthn4j.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 @JsonIgnoreProperties(value = "format")
+@JsonTypeName(FIDOU2FAttestationStatement.FORMAT)
 public class FIDOU2FAttestationStatement implements AttestationStatement {
 
     public static final String FORMAT = "fido-u2f";
