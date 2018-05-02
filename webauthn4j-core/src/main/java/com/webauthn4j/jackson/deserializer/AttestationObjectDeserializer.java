@@ -55,7 +55,7 @@ public class AttestationObjectDeserializer extends StdDeserializer<AttestationOb
         AttestationStatement attestationStatement;
         Class attestationStatementType = attestationStatementTypeMap.getOrDefault(format, null);
         if (attestationStatementType == null) {
-            throw new UnsupportedAttestationFormatException("Format is not supported");
+            throw new UnsupportedAttestationFormatException("Specified format is not supported");
         }
         attestationStatement = (AttestationStatement) oc.treeToValue(attestationStatementNode, attestationStatementType);
 

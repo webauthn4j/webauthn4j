@@ -1,23 +1,28 @@
 package integration;
 
+import com.webauthn4j.RelyingParty;
+import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.RelyingParty;
-import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
-import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 import static org.mockito.Mockito.mock;
 
@@ -139,5 +144,47 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(Collections.singletonList(fidoU2FAttestationStatementValidator));
         target.validate(registrationContext);
     }
+
+    @Test(expected = BadSignatureException.class)
+    public void validate_invalid_format_attestation_signature_test() {
+        String rpId = "localhost";
+        Challenge challenge = new DefaultChallenge();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setChallenge(challenge);
+        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
+        RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
+        registrationEmulationOption.setSignatureOverrideEnabled(true);
+        WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption);
+
+        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getCollectedClientData(), registrationRequest.getAttestationObject(), relyingParty);
+        target.validate(registrationContext);
+    }
+
+    @Test(expected = BadSignatureException.class)
+    public void validate_malicious_client_data_test() {
+        Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");
+        Origin validSiteOrigin = new Origin("http://valid.site.example.com");
+        Origin phishingSiteClaimingOrigin = new Origin("http://valid.site.example.com");
+
+        ClientPlatform clientPlatform = new ClientPlatform(phishingSiteOrigin); // client platform loads phishing site
+        String rpId = "valid.site.example.com";
+        Challenge challenge = new DefaultChallenge();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"));
+        credentialCreationOptions.setChallenge(challenge);
+        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
+        WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions);
+
+        CollectedClientData maliciousClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challenge, phishingSiteClaimingOrigin, null);
+        byte[] maliciousClientDataBytes = new CollectedClientDataConverter().convertToBytes(maliciousClientData);
+        RelyingParty relyingParty = new RelyingParty(validSiteOrigin, rpId, challenge);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), relyingParty);
+        target.validate(registrationContext);
+    }
+
+
+
 
 }

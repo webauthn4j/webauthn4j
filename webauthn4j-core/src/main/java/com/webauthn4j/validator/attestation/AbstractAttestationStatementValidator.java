@@ -1,14 +1,14 @@
 package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 public abstract class AbstractAttestationStatementValidator implements AttestationStatementValidator {
 
 
     public void validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new NotImplementedException(); //TODO
+            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
         }
 
         validateSignature(registrationObject);

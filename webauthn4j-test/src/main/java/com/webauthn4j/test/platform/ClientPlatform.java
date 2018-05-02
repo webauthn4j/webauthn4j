@@ -32,27 +32,44 @@ public class ClientPlatform {
         this(new Origin("http://localhost:8080"), new FIDOU2FAuthenticatorAdaptor());
     }
 
-    public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions){
+    public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+                                              CollectedClientData collectedClientData,
+                                              RegistrationEmulationOption registrationEmulationOption){
+        return fidoU2FAuthenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption);
+    }
+
+    public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+                                              RegistrationEmulationOption registrationEmulationOption){
         CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
 
-        return create(publicKeyCredentialCreationOptions, collectedClientData);
+        return create(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption);
     }
 
     public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData){
-        return fidoU2FAuthenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData);
+        return create(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
+    }
+
+    public WebAuthnRegistrationRequest create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions){
+        return create(publicKeyCredentialCreationOptions, new RegistrationEmulationOption());
+    }
+
+    public WebAuthnAuthenticationRequest get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
+                                             CollectedClientData collectedClientData,
+                                             AuthenticationEmulationOption authenticationEmulationOption){
+
+        for(PublicKeyCredentialDescriptor credentialDescriptor : publicKeyCredentialRequestOptions.getAllowCredentials()){
+            return fidoU2FAuthenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, authenticationEmulationOption);
+        }
+        throw new NoAuthenticatorSuccessException();
+    }
+
+    public WebAuthnAuthenticationRequest get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData){
+        return get(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
     public WebAuthnAuthenticationRequest get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions){
         CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_GET, publicKeyCredentialRequestOptions.getChallenge());
         return get(publicKeyCredentialRequestOptions, collectedClientData);
-    }
-
-    public WebAuthnAuthenticationRequest get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData){
-
-        for(PublicKeyCredentialDescriptor credentialDescriptor : publicKeyCredentialRequestOptions.getAllowCredentials()){
-            return fidoU2FAuthenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor);
-        }
-        throw new NoAuthenticatorSuccessException();
     }
 
     public CollectedClientData createCollectedClientData(String type, Challenge challenge) {

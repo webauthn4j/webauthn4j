@@ -1,6 +1,8 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
 import com.webauthn4j.test.TestData;
+import com.webauthn4j.test.platform.AuthenticationEmulationOption;
+import com.webauthn4j.test.platform.RegistrationEmulationOption;
 import com.webauthn4j.util.*;
 
 import java.nio.ByteBuffer;
@@ -36,7 +38,7 @@ public class FIDOU2FAuthenticator {
         this(TestData.FIDO_U2F_AUTHENTICATOR_PRIVATE_KEY, TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_CERTIFICATE, 0);
     }
 
-    public RegistrationResponse register(RegistrationRequest registrationRequest){
+    public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption){
 
         byte[] challengeParameter = registrationRequest.getChallengeParameter();
         byte[] applicationParameter = registrationRequest.getApplicationParameter();
@@ -59,12 +61,23 @@ public class FIDOU2FAuthenticator {
 
         byte[] signedData = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65).put(rfu).put(applicationParameter).put(challengeParameter).put(keyHandle).put(userPublicKey).array();
 
-        byte[] signature = calculateSignature(attestationPrivateKey, signedData);
+        byte[] signature;
+        if(registrationEmulationOption.isSignatureOverrideEnabled()){
+            signature = registrationEmulationOption.getSignature();
+        }
+        else {
+            signature = calculateSignature(attestationPrivateKey, signedData);
+        }
 
         return new RegistrationResponse(userPublicKey, keyHandle, attestationPublicKeyCertificate, signature);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
+    public RegistrationResponse register(RegistrationRequest registrationRequest) {
+        return register(registrationRequest, new RegistrationEmulationOption());
+    }
+
+
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest, AuthenticationEmulationOption authenticationEmulationOption){
 
         byte control = authenticationRequest.getControl();
         byte[] applicationParameter = authenticationRequest.getApplicationParameter();
@@ -77,6 +90,10 @@ public class FIDOU2FAuthenticator {
         byte[] signedData = ByteBuffer.allocate(32 + 1 + 4 + 32).put(applicationParameter).put(flags).put(getCounterBytes()).put(challenge).array();
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
         return new AuthenticationResponse(flags, getCounterBytes(), signature);
+    }
+
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
+        return authenticate(authenticationRequest, new AuthenticationEmulationOption());
     }
 
     private byte[] getBytesFromECPublicKey(ECPublicKey ecPublicKey){
