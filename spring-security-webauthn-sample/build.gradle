@@ -1,29 +1,12 @@
 plugins {
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
     id "com.moowork.node" version "1.1.1"
     id "com.moowork.gulp" version "1.1.1"
 }
 
-jar {
-    baseName = 'spring-security-webauthn-sample'
-    version  = null
-}
-
-apply plugin: "org.springframework.boot"
-apply plugin: "io.spring.dependency-management"
-
-node {
-    download = true
-
-}
-// run npm install
-gulp_default.dependsOn 'npmInstall'
-
-// run gulp install
-gulp_default.dependsOn 'installGulp'
-
-
-// processResources is a Java task. Run the gulpfile.js before this task using the 'default' task in the gulpfile.js
-processResources.dependsOn gulp_default
+group 'net.sharplab.springframework.security.extensions'
+version "${springSecurityWebAuthnVersion}"
 
 description = "Spring Security WebAuthn sample"
 
@@ -81,3 +64,16 @@ dependencyManagement {
         mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
     }
 }
+
+node {
+    download = true
+}
+// run npm install
+gulp_default.dependsOn 'npmInstall'
+
+// run gulp install
+gulp_default.dependsOn 'installGulp'
+
+
+// processResources is a Java task. Run the gulpfile.js before this task using the 'default' task in the gulpfile.js
+processResources.dependsOn gulp_default

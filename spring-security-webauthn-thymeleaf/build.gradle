@@ -1,6 +1,7 @@
-description = "Spring Security WebAuthn Thymeleaf Extension library"
+group 'net.sharplab.springframework.security.extensions'
+version "${springSecurityWebAuthnVersion}"
 
-apply plugin: "io.spring.dependency-management"
+description = "Spring Security WebAuthn Thymeleaf Extension library"
 
 dependencies {
     compile project(':spring-security-webauthn-core')

@@ -1,15 +1,7 @@
 group 'com.webauthn4j'
-version '0.1.0-SNAPSHOT'
+version "${webauthn4jVersion}"
 
-apply plugin: 'java'
-apply plugin: "io.spring.dependency-management"
-apply plugin: 'nebula.provided-base'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
+description = "WebAuthn4J Core library"
 
 dependencies {
     compile project(':webauthn4j-util')

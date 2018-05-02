@@ -21,13 +21,15 @@ asciidoctorj {
 
 asciidoctor {
     sourceDir = file("docs/src/reference/asciidoc")
-//    backends = ['docbook5']
+//  backends = ['docbook5']
     resources {
         from(sourceDir){
             include '*/images/**'
         }
     }
     options eruby: 'erubis'
+
+    //noinspection GroovyAssignabilityCheck
     attributes  docinfo: '',
                 copycss : '',
                 icons : 'font',
@@ -41,22 +43,20 @@ asciidoctor {
                 revnumber : "${springSecurityWebAuthnVersion}"
 }
 
-allprojects{
+subprojects{
     apply plugin: 'java'
-    group 'net.sharplab.springframework.security.extensions'
-    version springSecurityWebAuthnVersion
+    apply plugin: 'nebula.provided-base'
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: 'jacoco'
+
     sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
 
     javadoc {
         options.charSet = 'UTF-8'
         options.encoding = 'UTF-8'
     }
-
-    repositories {
-        mavenCentral()
-    }
-}
-
-subprojects{
-    apply plugin: 'jacoco'
 }

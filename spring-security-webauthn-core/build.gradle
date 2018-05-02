@@ -1,7 +1,7 @@
-description = "Spring Security WebAuthn Core library"
+group 'net.sharplab.springframework.security.extensions'
+version "${springSecurityWebAuthnVersion}"
 
-apply plugin: "io.spring.dependency-management"
-apply plugin: 'nebula.provided-base'
+description = "Spring Security WebAuthn Core library"
 
 repositories {
     flatDir {
