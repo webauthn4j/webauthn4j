@@ -44,10 +44,7 @@ import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.PrivateKey;
 import java.security.cert.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A utility class for core module test
@@ -125,6 +122,10 @@ public class TestUtil {
             throw new IllegalStateException(e);
         }
         return x5c;
+    }
+
+    public static CertPath load3tierTestCertPath() {
+        return CertificateUtil.generateCertPath(Arrays.asList(load3tierTestRootCACertificate(), load3tierTestIntermediateCACertificate()));
     }
 
     public static X509Certificate load3tierTestRootCACertificate() {
@@ -233,4 +234,5 @@ public class TestUtil {
             return set;
         };
     }
+
 }
