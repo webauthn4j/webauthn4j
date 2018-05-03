@@ -81,7 +81,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge);
-        WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions, collectedClientData);
+        RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
+        registrationEmulationOption.setCollectedClientData(collectedClientData);
+        registrationEmulationOption.setCollectedClientDataOverrideEnabled(true);
+        WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption);
 
         RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getCollectedClientData(), registrationRequest.getAttestationObject(), relyingParty);
