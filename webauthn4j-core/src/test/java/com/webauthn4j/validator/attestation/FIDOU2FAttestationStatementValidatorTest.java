@@ -3,7 +3,7 @@ package com.webauthn4j.validator.attestation;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 
@@ -13,8 +13,7 @@ import static org.mockito.Mockito.when;
 
 public class FIDOU2FAttestationStatementValidatorTest {
 
-    BasicTrustworthinessValidator basicTrustworthinessValidator = mock(BasicTrustworthinessValidator .class);
-    private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator(basicTrustworthinessValidator);
+    private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
     @Test
     public void validate_invalid_attestation_statement_test(){

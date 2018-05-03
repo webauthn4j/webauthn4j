@@ -40,9 +40,4 @@ public class NoneAttestationStatement implements AttestationStatement {
         return AttestationType.None;
     }
 
-    @JsonIgnore
-    @Override
-    public X509Certificate getEndEntityCertificate() {
-        throw new UnsupportedOperationException();
-    }
 }

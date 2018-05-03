@@ -17,7 +17,6 @@
 package com.webauthn4j.attestation.statement;
 
 import java.io.Serializable;
-import java.security.cert.X509Certificate;
 
 /**
  * Attestation metadata.certs container
@@ -26,6 +25,4 @@ public interface AttestationStatement extends Serializable {
     String getFormat();
 
     AttestationType getAttestationType();
-
-    X509Certificate getEndEntityCertificate();
 }

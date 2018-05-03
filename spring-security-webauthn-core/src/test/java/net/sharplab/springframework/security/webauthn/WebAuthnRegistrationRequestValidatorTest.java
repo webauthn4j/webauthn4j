@@ -35,7 +35,10 @@ public class WebAuthnRegistrationRequestValidatorTest {
     @Test
     @Ignore
     public void test() {
-        target = new WebAuthnRegistrationRequestValidator(new WebAuthnRegistrationContextValidator(Collections.emptyList()), new RelyingPartyProviderImpl(new HttpSessionChallengeRepository()));
+        target = new WebAuthnRegistrationRequestValidator(
+                new WebAuthnRegistrationContextValidator(Collections.emptyList(), null, null, null),
+                new RelyingPartyProviderImpl(new HttpSessionChallengeRepository())
+        );
 
         String clientDataBase64 = "eyJjaGFsbGVuZ2UiOiJGRkc1UVdrRFNJUzZvRVY1SFc0Vlp3IiwiaGFzaEFsZyI6IlNIQS0yNTYiLCJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ";
         String authenticatorDataBase64 = "o2hhdXRoRGF0YVjaSZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAAAAAAAAAAAAAAAAAAAAAAAAAAUPkhL7CLReeOjs15K_lZ-dzAl9qiMLFVDiPhCy47YK_CATKTTfSYeJkcPxlk1VVuk7tFqXWom7EIvN9JEq1efGIt2KXm4mtYuHJNpWP6wUlNo2NhbGdlRVMyNTZheFgga1LrLL5aWxB9DSl3MaBK1swOMYFFyT_VKKxjAee7T5JheVgggnPC8LwHjrU7xRjo8apkgI88lJOL6TLMJuvWkkQbWQhjZm10aGZpZG8tdTJmZ2F0dFN0bXSiY3g1Y4FZAVAwggFMMIHzoAMCAQICCswWCqfhOU9rd1AwCgYIKoZIzj0EAwIwFzEVMBMGA1UEAxMMRlQgRklETyAwMTAwMB4XDTE2MDQxNTE0NTAzMloXDTI2MDQxNTE0NTAzMlowJzElMCMGA1UEAxMcRlQgRklETyBVMkYgMTE2MTYxNzMwMzA1MDIxMDBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABMbW1eH0fIaLhQlqmw_cXDw0TBGvlYRh9XnE68_ZdTiOmcnXtIRvJlMKfutffwSm3fYE-voho6ZqaoB1C-wOk2CjFzAVMBMGCysGAQQBguUcAgEBBAQDAgQwMAoGCCqGSM49BAMCA0gAMEUCIQDfA-8s6-OltTdUKwoGNa1vkzNxf8jans039fTeTLIWhQIgDGgk-KcoZTGg1H9uHHe5ke1BCnAta5oE0P3LY6aF_jtjc2lnWEcwRQIhAMhC6-Zl4aBd9qUxN-YL4iuk5fJiJT0u5O-ryg6ZRqgcAiAt9emh9-KE98O_4D5HgNUfTwMmyYPSkSCcSpuiBNU0jw";

@@ -21,8 +21,13 @@ import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.*;
-import java.security.spec.*;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.ECPoint;
+import java.security.spec.ECPublicKeySpec;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -85,16 +90,14 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         );
 
         try {
-            AlgorithmParameters parameters = AlgorithmParameters.getInstance("EC", "SunEC");
-            parameters.init(new ECGenParameterSpec(curve.getName()));
-            ECParameterSpec ecParameterSpec = parameters.getParameterSpec(ECParameterSpec.class);
+            ECParameterSpec ecParameterSpec = curve.getECParameterSpec();
             ECPublicKeySpec spec = new ECPublicKeySpec(
                     ecPoint,
                     ecParameterSpec
             );
             KeyFactory factory = KeyFactory.getInstance("EC");
             return factory.generatePublic(spec);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchProviderException | InvalidParameterSpecException e) {
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
     }

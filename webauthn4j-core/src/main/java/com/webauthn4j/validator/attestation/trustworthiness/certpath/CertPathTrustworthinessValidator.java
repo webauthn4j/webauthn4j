@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.signature;
+package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.WebAuthnRegistrationContext;
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
+import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 
-public class NoneAttestationStatementSignatureValidator implements AttestationStatementSignatureValidator {
-    @Override
-    public void validate(WebAuthnRegistrationContext registrationContext) {
-        //nop //TODO
-    }
+import java.security.cert.CertPath;
 
-    @Override
-    public boolean supports(String format) {
-        return NoneAttestationStatement.FORMAT.equals(format);
-    }
+/**
+ * Validates {@link CertPath} instance
+ */
+public interface CertPathTrustworthinessValidator {
+
+    void validate(CertificateBaseAttestationStatement attestationStatement);
 }

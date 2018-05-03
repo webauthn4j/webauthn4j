@@ -2,16 +2,23 @@ package integration;
 
 import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
+import com.webauthn4j.anchor.WebAuthnTrustAnchorServiceImpl;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidatorImpl;
+import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
@@ -27,8 +34,15 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     private Origin origin = new Origin("http://localhost");
     private ClientPlatform clientPlatform = new ClientPlatform(origin);
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator(mock(BasicTrustworthinessValidator.class));
-    private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator));
+    private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+    private TrustAnchorProvider trustAnchorProvider = TestUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
+    private WebAuthnTrustAnchorService webAuthnTrustAnchorService = new WebAuthnTrustAnchorServiceImpl(trustAnchorProvider);
+    private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+            Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
+            new SelfAttestationTrustworthinessValidatorImpl(),
+            new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
+            new ECDAATrustworthinessValidatorImpl()
+    );
 
     @Test
     public void validate_test() {
@@ -137,7 +151,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationRequest registrationRequest = clientPlatform.create(credentialCreationOptions);
         RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getCollectedClientData(), registrationRequest.getAttestationObject(), relyingParty);
-        WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(Collections.singletonList(fidoU2FAttestationStatementValidator));
+        WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+                Collections.singletonList(fidoU2FAttestationStatementValidator),
+                new SelfAttestationTrustworthinessValidatorImpl(),
+                new TrustAnchorCertPathTrustworthinessValidator(mock(WebAuthnTrustAnchorService.class)),
+                new ECDAATrustworthinessValidatorImpl()
+        );
         target.validate(registrationContext);
     }
 

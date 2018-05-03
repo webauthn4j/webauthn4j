@@ -2,29 +2,46 @@ package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
+import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import sun.security.ec.ECPublicKeyImpl;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.security.interfaces.ECPublicKey;
 
-public class FIDOU2FAttestationStatementValidator extends AbstractAttestationStatementValidator {
-
-    private BasicTrustworthinessValidator basicTrustworthinessValidator;
-
-    public FIDOU2FAttestationStatementValidator(BasicTrustworthinessValidator basicTrustworthinessValidator) {
-        this.basicTrustworthinessValidator = basicTrustworthinessValidator;
-    }
+public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
 
     @Override
-    protected void validateSignature(RegistrationObject registrationObject) {
+    public void validate(RegistrationObject registrationObject){
+        if (!supports(registrationObject)) {
+            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+        }
+
+        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        if(attestationStatement.getX5c().getCertificates().size() != 1){
+            throw new CertificateException("FIDO-U2F attestation statement must have only one certificate.");
+        }
+        PublicKey publicKey = attestationStatement.getEndEntityCertificate().getPublicKey();
+        if(!publicKey.getAlgorithm().equals("EC")){
+            throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
+        }
+        if(!((ECPublicKey)publicKey).getParams().equals(ECUtil.P_256_SPEC)){
+            throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
+        }
+        validateSignature(registrationObject);
+    }
+
+    private void validateSignature(RegistrationObject registrationObject) {
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -41,20 +58,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractAttestationSta
             throw new BadSignatureException("Bad signature");
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("Bad signature", e);
-        }
-    }
-
-    @Override
-    protected void validateTrustworthiness(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        switch (attestationStatement.getAttestationType()) {
-            case Basic:
-                basicTrustworthinessValidator.validate(attestationStatement);
-                break;
-            case AttCA:
-                throw new NotImplementedException(); // TODO: To be implemented
-            default:
-                throw new UnsupportedOperationException();
         }
     }
 

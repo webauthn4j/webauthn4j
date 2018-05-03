@@ -21,10 +21,16 @@ import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 
@@ -43,14 +49,27 @@ public class WebAuthnRegistrationContextValidator {
 
     List<AttestationStatementValidator> attestationStatementValidators;
 
+    private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+    private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
+    private ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
+
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
     private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
 
-    public WebAuthnRegistrationContextValidator(List<AttestationStatementValidator> attestationStatementValidators) {
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
+    ) {
         this.attestationStatementValidators = attestationStatementValidators;
+        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
+        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
+        this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
     }
 
     public void validate(WebAuthnRegistrationContext registrationContext) {
@@ -97,23 +116,64 @@ public class WebAuthnRegistrationContextValidator {
         // Verify that attStmt is a correct, validly-signed attestation statement, using the attestation statement
         // format fmt’s verification procedure given authenticator data authData and the hash of the serialized
         // client data computed in step 6.
-
-        // If validation is successful, obtain a list of acceptable trust anchor (attestation root certificates
-        // or ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
-        // from a trusted source or from policy. For example, the FIDO Metadata Service [FIDOMetadataService]
-        // provides one way to obtain such information, using the AAGUID in the attestation data contained in authData.
-        //
-        // Assess the attestation trustworthiness using the outputs of the verification procedure in step 10
         validateAttestationStatement(registrationObject);
+
+        // If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
+        // ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
+        // from a trusted source or from policy.
+        // For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
+        // using the aaguid in the attestedCredentialData in authData.
+        //
+        // Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
+
+        AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
+        switch (attestationStatement.getAttestationType()){
+            // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
+            case Self:
+                if(attestationStatement instanceof CertificateBaseAttestationStatement){
+                    CertificateBaseAttestationStatement certificateBaseAttestationStatement =
+                            (CertificateBaseAttestationStatement) attestationStatement;
+                    selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
+                }
+                else {
+                    throw new IllegalStateException();
+                }
+                break;
+
+            // If ECDAA was used, verify that the identifier of the ECDAA-Issuer public key used is included in the set of
+            // acceptable trust anchors obtained in step 15.
+            case ECDAA:
+                ecdaaTrustworthinessValidator.validate(attestationStatement);
+                break;
+            // Otherwise, use the X.509 certificates returned by the verification procedure to verify that
+            // the attestation public key correctly chains up to an acceptable root certificate.
+            case Basic:
+            case AttCA:
+                if(attestationStatement instanceof CertificateBaseAttestationStatement){
+                    CertificateBaseAttestationStatement certificateBaseAttestationStatement =
+                            (CertificateBaseAttestationStatement) attestationStatement;
+                    certPathTrustworthinessValidator.validate(certificateBaseAttestationStatement);
+                }
+                else {
+                    throw new IllegalStateException();
+                }
+                break;
+            case None:
+                // nop
+                break;
+            default:
+                throw new NotImplementedException();
+        }
 
         // If the attestation statement attStmt verified successfully and is found to be trustworthy,
         // then register the new credential with the account that was denoted in the options.user passed to create(),
         // by associating it with the credential ID and credential public key contained in authData’s attestation data,
         // as appropriate for the Relying Party's systems.
 
+
     }
 
-    void validateAttestationStatement(RegistrationObject registrationObject) {
+    private void validateAttestationStatement(RegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 validator.validate(registrationObject);

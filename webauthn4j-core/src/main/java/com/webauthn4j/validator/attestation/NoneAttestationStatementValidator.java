@@ -4,15 +4,10 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 
-public class NoneAttestationStatementValidator extends AbstractAttestationStatementValidator {
+public class NoneAttestationStatementValidator implements AttestationStatementValidator {
 
     @Override
-    protected void validateSignature(RegistrationObject registrationObject) {
-        // nop
-    }
-
-    @Override
-    protected void validateTrustworthiness(RegistrationObject registrationObject) {
+    public void validate(RegistrationObject registrationObject) {
         // nop
     }
 

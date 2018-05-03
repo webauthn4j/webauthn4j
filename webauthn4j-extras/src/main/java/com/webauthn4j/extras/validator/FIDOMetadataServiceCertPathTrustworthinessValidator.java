@@ -17,6 +17,7 @@
 package com.webauthn4j.extras.validator;
 
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
@@ -25,7 +26,7 @@ import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayloadEntry;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.validator.attestation.trustworthiness.basic.BasicTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -38,10 +39,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * FIDOMetadataServiceBasicTrustworthinessValidator
+ * FIDOMetadataServiceCertPathTrustworthinessValidator
  */
 @WIP
-public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTrustworthinessValidator {
+public class FIDOMetadataServiceCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 
     private FIDOMetadataServiceClient fidoMetadataServiceClient;
 
@@ -49,12 +50,12 @@ public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTr
     LocalDate nextUpdate;
     LocalDateTime lastRefresh;
 
-    public FIDOMetadataServiceBasicTrustworthinessValidator(FIDOMetadataServiceClient fidoMetadataServiceClient) {
+    public FIDOMetadataServiceCertPathTrustworthinessValidator(FIDOMetadataServiceClient fidoMetadataServiceClient) {
         this.fidoMetadataServiceClient = fidoMetadataServiceClient;
     }
 
     @Override
-    public void validate(AttestationStatement attestationStatement) {
+    public void validate(CertificateBaseAttestationStatement attestationStatement) {
         Metadata metadata = findMetadata(attestationStatement);
         if (metadata == null) {
             throw new CertificateException("metadata not found");
@@ -76,9 +77,8 @@ public class FIDOMetadataServiceBasicTrustworthinessValidator implements BasicTr
         });
     }
 
-    Metadata findMetadata(AttestationStatement attestationStatement) {
-        FIDOU2FAttestationStatement fidoU2FAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
-        CertPath certPath = fidoU2FAttestationStatement.getX5c();
+    Metadata findMetadata(CertificateBaseAttestationStatement attestationStatement) {
+        CertPath certPath = attestationStatement.getX5c();
         Map<TrustAnchor, Metadata> metadataMap = getMetadataMap();
 
         Set<TrustAnchor> trustAnchors = metadataMap.keySet();

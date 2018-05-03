@@ -2,7 +2,10 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
+
+import java.security.spec.ECParameterSpec;
 
 public enum Curve {
 
@@ -35,14 +38,14 @@ public enum Curve {
         return value;
     }
 
-    public String getName() {
+    public ECParameterSpec getECParameterSpec() {
         switch (this.value) {
             case 1:
-                return "secp256r1";
+                return ECUtil.P_256_SPEC;
             case 2:
-                return "secp384r1";
+                return ECUtil.P_384_SPEC;
             case 3:
-                return "secp521r1";
+                return ECUtil.P_521_SPEC;
             default:
                 throw new NotImplementedException();
         }

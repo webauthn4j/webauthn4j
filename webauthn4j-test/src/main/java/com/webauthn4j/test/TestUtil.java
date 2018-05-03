@@ -17,6 +17,8 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.RelyingParty;
+import com.webauthn4j.anchor.KeyStoreTrustAnchorProviderImpl;
+import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
@@ -40,11 +42,10 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.PrivateKey;
-import java.security.cert.CertPath;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
+import java.security.cert.*;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -222,5 +223,13 @@ public class TestUtil {
     public static Authenticator createAuthenticator(AttestationObject attestationObject){
         AttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
         return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getCounter());
+    }
+
+    public static TrustAnchorProvider createTrustAnchorProviderWith2tierTestRootCACertificate() {
+        return () -> {
+            Set<TrustAnchor> set = new HashSet<>();
+            set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
+            return set;
+        };
     }
 }

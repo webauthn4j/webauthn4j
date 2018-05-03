@@ -4,15 +4,15 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
-public class PackedAttestationStatementValidator extends AbstractAttestationStatementValidator {
+public class PackedAttestationStatementValidator implements AttestationStatementValidator {
     @Override
-    protected void validateSignature(RegistrationObject registrationObject) {
-        throw new NotImplementedException();
-    }
+    public void validate(RegistrationObject registrationObject) {
+        if (!supports(registrationObject)) {
+            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+        }
 
-    @Override
-    protected void validateTrustworthiness(RegistrationObject registrationObject) {
         throw new NotImplementedException();
     }
 

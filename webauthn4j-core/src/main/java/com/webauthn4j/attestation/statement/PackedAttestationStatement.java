@@ -20,16 +20,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
+@WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(PackedAttestationStatement.FORMAT)
-public class PackedAttestationStatement implements AttestationStatement {
+public class PackedAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "packed";
 
@@ -59,6 +60,7 @@ public class PackedAttestationStatement implements AttestationStatement {
         return sig;
     }
 
+    @Override
     public CertPath getX5c() {
         return x5c;
     }
@@ -76,12 +78,7 @@ public class PackedAttestationStatement implements AttestationStatement {
     @JsonIgnore
     @Override
     public AttestationType getAttestationType() {
-        X509Certificate attestationCertificate = getEndEntityCertificate();
-        if (x5c.getCertificates().size() == 1 && CertificateUtil.isSelfSigned(attestationCertificate)) {
-            return AttestationType.Self;
-        } else {
-            throw new NotImplementedException();
-        }
+        throw new NotImplementedException();
     }
 
     @JsonIgnore

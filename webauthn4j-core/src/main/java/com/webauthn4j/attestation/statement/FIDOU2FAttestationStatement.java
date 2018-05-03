@@ -17,7 +17,6 @@
 package com.webauthn4j.attestation.statement;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -25,7 +24,7 @@ import java.util.Arrays;
 
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(FIDOU2FAttestationStatement.FORMAT)
-public class FIDOU2FAttestationStatement implements AttestationStatement {
+public class FIDOU2FAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "fido-u2f";
 
@@ -41,6 +40,7 @@ public class FIDOU2FAttestationStatement implements AttestationStatement {
 
     public FIDOU2FAttestationStatement(){}
 
+    @Override
     public CertPath getX5c() {
         return x5c;
     }
@@ -54,10 +54,14 @@ public class FIDOU2FAttestationStatement implements AttestationStatement {
         return FORMAT;
     }
 
+    /**
+     * {@link AttestationType}.Basic is always returned as RP cannot differentiate between Basic and Privacy CA from the attestation data,
+     * @return AttestationType.Basic
+     */
     @JsonIgnore
     @Override
     public AttestationType getAttestationType() {
-        return AttestationType.Basic; //TODO support AttCA
+        return AttestationType.Basic;
     }
 
     @JsonIgnore

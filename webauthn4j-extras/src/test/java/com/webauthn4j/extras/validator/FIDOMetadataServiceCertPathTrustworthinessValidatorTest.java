@@ -27,9 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by ynojima on 2017/09/24.
  */
-public class FIDOMetadataServiceBasicTrustworthinessValidatorTest {
+public class FIDOMetadataServiceCertPathTrustworthinessValidatorTest {
 
-    public FIDOMetadataServiceBasicTrustworthinessValidator target = new FIDOMetadataServiceBasicTrustworthinessValidator(null);
+    public FIDOMetadataServiceCertPathTrustworthinessValidator target = new FIDOMetadataServiceCertPathTrustworthinessValidator(null);
 
     @Test
     public void needsRefresh_test_with_cache_null() {
