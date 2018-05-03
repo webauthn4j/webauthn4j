@@ -27,5 +27,5 @@ nbdist/
 
 
 ### Project Files ###
-spring-security-webauthn-sample/node_modules
-spring-security-webauthn-sample/src/main/resources/application-local-with-services.yml
+sample/node_modules
+sample/src/main/resources/application-local-with-services.yml

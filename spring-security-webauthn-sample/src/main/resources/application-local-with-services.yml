@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    url: jdbc:log4jdbc:mysql://localhost/webauthn
-    username: webauthn
-  jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
