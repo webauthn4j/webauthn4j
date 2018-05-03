@@ -15,6 +15,28 @@ plugins{
     id 'org.asciidoctor.convert' version "1.5.2"
 }
 
+group 'net.sharplab.springframework.security.extensions'
+version "${springSecurityWebAuthnVersion}"
+
+subprojects{
+    apply plugin: 'java'
+    apply plugin: 'nebula.provided-base'
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: 'jacoco'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    javadoc {
+        options.charSet = 'UTF-8'
+        options.encoding = 'UTF-8'
+    }
+}
+
+
 asciidoctorj {
     version = asciidoctorVersion
 }
@@ -41,22 +63,4 @@ asciidoctor {
                 doctype: 'book',
                 numbered: '',
                 revnumber : "${springSecurityWebAuthnVersion}"
-}
-
-subprojects{
-    apply plugin: 'java'
-    apply plugin: 'nebula.provided-base'
-    apply plugin: "io.spring.dependency-management"
-    apply plugin: 'jacoco'
-
-    sourceCompatibility = 1.8
-
-    repositories {
-        mavenCentral()
-    }
-
-    javadoc {
-        options.charSet = 'UTF-8'
-        options.encoding = 'UTF-8'
-    }
 }
