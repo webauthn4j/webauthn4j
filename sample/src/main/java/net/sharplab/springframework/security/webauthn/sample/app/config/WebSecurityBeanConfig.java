@@ -6,7 +6,6 @@ import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
 import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.PackedAttestationStatementValidator;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;

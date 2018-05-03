@@ -26,6 +26,7 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Objects;
 
 @WIP
 @JsonIgnoreProperties(value = "format")
@@ -35,7 +36,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     public static final String FORMAT = "packed";
 
     @JsonProperty
-    private String alg;
+    private COSEAlgorithmIdentifier alg;
     @JsonProperty
     private byte[] sig;
     @JsonProperty
@@ -43,7 +44,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @JsonProperty
     private byte[] ecdaaKeyId;
 
-    public PackedAttestationStatement(String alg, byte[] sig, CertPath x5c, byte[] ecdaaKeyId) {
+    public PackedAttestationStatement(COSEAlgorithmIdentifier alg, byte[] sig, CertPath x5c, byte[] ecdaaKeyId) {
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
@@ -52,7 +53,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     public PackedAttestationStatement(){}
 
-    public String getAlg() {
+    public COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
@@ -93,23 +94,20 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PackedAttestationStatement)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         PackedAttestationStatement that = (PackedAttestationStatement) o;
-
-        if (alg != null ? !alg.equals(that.alg) : that.alg != null) return false;
-        if (!Arrays.equals(sig, that.sig)) return false;
-        if (x5c != null ? !x5c.equals(that.x5c) : that.x5c != null) return false;
-        return Arrays.equals(ecdaaKeyId, that.ecdaaKeyId);
+        return alg == that.alg &&
+                Arrays.equals(sig, that.sig) &&
+                Objects.equals(x5c, that.x5c) &&
+                Arrays.equals(ecdaaKeyId, that.ecdaaKeyId);
     }
 
     @Override
     public int hashCode() {
-        int result = alg != null ? alg.hashCode() : 0;
+
+        int result = Objects.hash(alg, x5c);
         result = 31 * result + Arrays.hashCode(sig);
-        result = 31 * result + (x5c != null ? x5c.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(ecdaaKeyId);
         return result;
     }
-
 }

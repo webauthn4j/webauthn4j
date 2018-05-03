@@ -18,10 +18,9 @@ package net.sharplab.springframework.security.webauthn.sample.app.web;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

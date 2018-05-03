@@ -21,6 +21,7 @@ import com.webauthn4j.anchor.KeyStoreTrustAnchorProviderImpl;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
@@ -79,9 +80,9 @@ public class TestUtil {
         return new ESCredentialPublicKey(
                 0,
                 null,
+                COSEAlgorithmIdentifier.ES256,
                 null,
                 null,
-                ESSignatureAlgorithm.SHA256withECDSA,
                 Curve.SECP256R1,
                 new byte[32],
                 new byte[32],
@@ -94,9 +95,9 @@ public class TestUtil {
         credentialPublicKey = new RSCredentialPublicKey(
                 0,
                 null,
+                COSEAlgorithmIdentifier.RS256,
                 null,
                 null,
-                RSSignatureAlgorithm.SHA256withRSA,
                 new byte[32],
                 new byte[32]
         );

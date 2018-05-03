@@ -1,8 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.model;
 
-import lombok.Data;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import lombok.Data;
 
 
 /**

@@ -1,7 +1,6 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.vo;
 
 import com.webauthn4j.attestation.authenticator.Curve;
-import com.webauthn4j.attestation.authenticator.ESSignatureAlgorithm;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +12,5 @@ public class ESCredentialPublicKeyVO extends AbstractCredentialPublicKeyVO {
     private byte[] x;
     private byte[] y;
     private byte[] d;
-
-    private ESSignatureAlgorithm algorithm;
 
 }

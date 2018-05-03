@@ -18,6 +18,7 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -30,14 +31,17 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private int keyType;
     @JsonProperty("2")
     private byte[] keyId;
+    @JsonProperty("3")
+    private COSEAlgorithmIdentifier algorithm;
     @JsonProperty("4")
     private int[] keyOpts;
     @JsonProperty("5")
     private byte[] baseIV;
 
-    public AbstractCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV) {
+    public AbstractCredentialPublicKey(int keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV) {
         this.keyType = keyType;
         this.keyId = keyId;
+        this.algorithm = algorithm;
         this.keyOpts = keyOpts;
         this.baseIV = baseIV;
     }
@@ -52,6 +56,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         return keyId;
     }
 
+    public COSEAlgorithmIdentifier getAlgorithm() { return algorithm; }
+
     public int[] getKeyOpts() {
         return keyOpts;
     }
@@ -61,7 +67,9 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     }
 
     @JsonIgnore
-    protected abstract String getAlgorithmName();
+    protected String getAlgorithmName(){
+        return algorithm.getName();
+    }
 
     @Override
     public boolean verifySignature(byte[] signature, byte[] data) {

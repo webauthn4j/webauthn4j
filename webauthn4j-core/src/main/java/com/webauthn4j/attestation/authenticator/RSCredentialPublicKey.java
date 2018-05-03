@@ -17,6 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.math.BigInteger;
@@ -26,20 +27,16 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
-    @JsonProperty("3")
-    protected RSSignatureAlgorithm algorithm;
     @JsonProperty("-1")
     private byte[] n;
     @JsonProperty("-2")
     private byte[] e;
 
-    public RSCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV, RSSignatureAlgorithm algorithm, byte[] n, byte[] e) {
-        super(keyType, keyId, keyOpts, baseIV);
-        this.algorithm = algorithm;
+    public RSCredentialPublicKey(int keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
+        super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.n = n;
         this.e = e;
     }
@@ -52,15 +49,6 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
     public byte[] getE() {
         return e;
-    }
-
-    public RSSignatureAlgorithm getAlgorithm() {
-        return algorithm;
-    }
-
-    @Override
-    protected String getAlgorithmName() {
-        return algorithm.getName();
     }
 
     @Override
@@ -83,15 +71,13 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
         if (o == null || getClass() != o.getClass()) return false;
         RSCredentialPublicKey that = (RSCredentialPublicKey) o;
         return Arrays.equals(n, that.n) &&
-                Arrays.equals(e, that.e) &&
-                Objects.equals(algorithm, that.algorithm);
+                Arrays.equals(e, that.e);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(algorithm);
-        result = 31 * result + Arrays.hashCode(n);
+        int result = Arrays.hashCode(n);
         result = 31 * result + Arrays.hashCode(e);
         return result;
     }

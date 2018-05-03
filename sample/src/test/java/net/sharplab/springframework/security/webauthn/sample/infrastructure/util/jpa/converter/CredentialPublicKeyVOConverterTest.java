@@ -1,8 +1,7 @@
 package net.sharplab.springframework.security.webauthn.sample.infrastructure.util.jpa.converter;
 
 import com.webauthn4j.attestation.authenticator.Curve;
-import com.webauthn4j.attestation.authenticator.ESSignatureAlgorithm;
-import com.webauthn4j.attestation.authenticator.RSSignatureAlgorithm;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AbstractCredentialPublicKeyVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.ESCredentialPublicKeyVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.RSCredentialPublicKeyVO;
@@ -18,7 +17,7 @@ public class CredentialPublicKeyVOConverterTest {
     public void testESCredentialPublicKeyVO(){
         ESCredentialPublicKeyVO original= new ESCredentialPublicKeyVO();
         original.setCurve(Curve.SECP256R1);
-        original.setAlgorithm(ESSignatureAlgorithm.SHA256withECDSA);
+        original.setAlgorithm(COSEAlgorithmIdentifier.ES256);
         original.setX(new byte[]{0b00, 0b01});
         original.setY(new byte[]{0b10, 0b11});
         String serialized = target.convertToDatabaseColumn(original);
@@ -29,7 +28,7 @@ public class CredentialPublicKeyVOConverterTest {
     @Test
     public void testRSCredentialPublicKeyVO(){
         RSCredentialPublicKeyVO original= new RSCredentialPublicKeyVO();
-        original.setAlgorithm(RSSignatureAlgorithm.SHA256withRSA);
+        original.setAlgorithm(COSEAlgorithmIdentifier.RS256);
         original.setE(new byte[]{0b00, 0b01});
         original.setN(new byte[]{0b10, 0b11});
         String serialized = target.convertToDatabaseColumn(original);

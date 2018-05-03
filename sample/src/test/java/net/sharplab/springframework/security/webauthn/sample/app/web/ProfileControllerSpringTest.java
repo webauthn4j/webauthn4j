@@ -6,7 +6,6 @@ import net.sharplab.springframework.security.webauthn.sample.app.test.WithMockUs
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import net.sharplab.springframework.security.webauthn.sample.domain.service.ProfileService;
 import net.sharplab.springframework.security.webauthn.sample.infrastructure.config.InfrastructureMockConfig;
-import net.sharplab.springframework.security.webauthn.userdetails.WebAuthnUserDetailsService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

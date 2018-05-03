@@ -16,7 +16,10 @@
 
 package com.webauthn4j.attestation.statement;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;

@@ -17,6 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.Serializable;
@@ -33,9 +34,6 @@ import java.util.Objects;
 
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
-    @JsonProperty("3")
-    private ESSignatureAlgorithm algorithm;
-
     @JsonProperty("-1")
     private Curve curve;
     @JsonProperty("-2")
@@ -47,18 +45,13 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
 
     public ESCredentialPublicKey(){super();}
 
-    public ESCredentialPublicKey(int keyType, byte[] keyId, int[] keyOpts, byte[] baseIV,
-                                 ESSignatureAlgorithm algorithm, Curve curve, byte[] x, byte[] y, byte[] d) {
-        super(keyType, keyId, keyOpts, baseIV);
-        this.algorithm = algorithm;
+    public ESCredentialPublicKey(int keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+                                 Curve curve, byte[] x, byte[] y, byte[] d) {
+        super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
         this.x = x;
         this.y = y;
         this.d = d;
-    }
-
-    public ESSignatureAlgorithm getAlgorithm() {
-        return algorithm;
     }
 
     public Curve getCurve() {
@@ -75,11 +68,6 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
 
     public byte[] getD() {
         return d;
-    }
-
-    @Override
-    protected String getAlgorithmName() {
-        return algorithm.getName();
     }
 
     @Override
@@ -110,14 +98,13 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
                 Arrays.equals(y, that.y) &&
-                Arrays.equals(d, that.d) &&
-                Objects.equals(algorithm, that.algorithm);
+                Arrays.equals(d, that.d);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(curve, algorithm);
+        int result = Objects.hash(curve);
         result = 31 * result + Arrays.hashCode(x);
         result = 31 * result + Arrays.hashCode(y);
         result = 31 * result + Arrays.hashCode(d);

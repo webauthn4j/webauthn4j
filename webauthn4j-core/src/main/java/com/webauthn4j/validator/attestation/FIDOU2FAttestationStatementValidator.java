@@ -2,12 +2,10 @@ package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;

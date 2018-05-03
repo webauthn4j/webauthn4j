@@ -3,7 +3,7 @@ package net.sharplab.springframework.security.webauthn.sample.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.webauthn4j.attestation.authenticator.AbstractSignatureAlgorithm;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,5 +22,8 @@ public abstract class AbstractCredentialPublicKeyVO implements CredentialPublicK
     private byte[] keyId;
     private int[] keyOpts;
     private byte[] baseIV;
+
+    private COSEAlgorithmIdentifier algorithm;
+
 
 }

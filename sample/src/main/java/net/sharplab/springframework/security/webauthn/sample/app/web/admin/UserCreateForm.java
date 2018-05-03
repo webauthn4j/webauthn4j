@@ -3,12 +3,10 @@ package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.util.validator.EqualProperties;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
-import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorUpdateForm;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

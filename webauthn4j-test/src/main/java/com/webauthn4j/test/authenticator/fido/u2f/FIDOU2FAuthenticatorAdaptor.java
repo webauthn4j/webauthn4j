@@ -3,6 +3,7 @@ package com.webauthn4j.test.authenticator.fido.u2f;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
@@ -125,9 +126,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         return new ESCredentialPublicKey(
                 0,
                 null,
+                COSEAlgorithmIdentifier.ES256,
                 null,
                 null,
-                ESSignatureAlgorithm.SHA256withECDSA,
                 Curve.SECP256R1,
                 x,
                 y,

@@ -1,8 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.domain.entity;
 
 import lombok.Data;
-import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestedCredentialDataVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestationStatementVO;
+import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestedCredentialDataVO;
 import net.sharplab.springframework.security.webauthn.sample.infrastructure.util.jpa.converter.AttestationStatementVOConverter;
 
 import javax.persistence.*;

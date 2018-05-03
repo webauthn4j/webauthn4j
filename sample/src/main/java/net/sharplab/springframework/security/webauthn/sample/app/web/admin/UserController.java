@@ -1,8 +1,8 @@
 package net.sharplab.springframework.security.webauthn.sample.app.web.admin;
 
+import net.sharplab.springframework.security.webauthn.sample.app.web.ViewNames;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.AuthenticatorHelper;
 import net.sharplab.springframework.security.webauthn.sample.app.web.helper.UserHelper;
-import net.sharplab.springframework.security.webauthn.sample.app.web.ViewNames;
 import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserCreateFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.app.web.validator.UserUpdateFormValidator;
 import net.sharplab.springframework.security.webauthn.sample.domain.constant.MessageCodes;

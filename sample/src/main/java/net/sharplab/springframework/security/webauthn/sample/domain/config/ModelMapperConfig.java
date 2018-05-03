@@ -3,7 +3,6 @@ package net.sharplab.springframework.security.webauthn.sample.domain.config;
 import net.sharplab.springframework.security.webauthn.sample.domain.entity.UserEntity;
 import net.sharplab.springframework.security.webauthn.sample.domain.model.User;
 import net.sharplab.springframework.security.webauthn.sample.util.modelmapper.*;
-import net.sharplab.springframework.security.webauthn.sample.util.modelmapper.PageImplProvider;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

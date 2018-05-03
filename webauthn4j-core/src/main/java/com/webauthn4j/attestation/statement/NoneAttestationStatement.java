@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import java.security.cert.X509Certificate;
-
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(NoneAttestationStatement.FORMAT)
 public class NoneAttestationStatement implements AttestationStatement {

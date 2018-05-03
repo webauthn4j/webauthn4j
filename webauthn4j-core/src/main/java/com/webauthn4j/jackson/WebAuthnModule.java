@@ -31,7 +31,6 @@ import com.webauthn4j.jackson.serializer.*;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
-import java.time.LocalDate;
 
 /**
  * Jackson Module for WebAuthn classes serialization and deserialization

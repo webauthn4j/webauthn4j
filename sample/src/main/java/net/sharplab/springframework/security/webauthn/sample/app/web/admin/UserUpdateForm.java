@@ -4,10 +4,9 @@ import lombok.Data;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorCreateForm;
 import net.sharplab.springframework.security.webauthn.sample.app.web.AuthenticatorUpdateForm;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-
-import javax.validation.Valid;
 import java.util.List;
 
 /**
