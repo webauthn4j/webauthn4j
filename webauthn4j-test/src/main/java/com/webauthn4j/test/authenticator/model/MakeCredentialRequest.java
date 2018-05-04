@@ -1,25 +1,20 @@
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.attestation.authenticator.extension.Extension;
-import com.webauthn4j.attestation.authenticator.extension.ExtensionIdentifier;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.test.platform.PublicKeyCredentialDescriptor;
-import com.webauthn4j.test.platform.PublicKeyCredentialRpEntity;
-import com.webauthn4j.test.platform.PublicKeyCredentialType;
+import com.webauthn4j.test.platform.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MakeCredentialRequest {
 
     private byte[] clientDataHash;
     private PublicKeyCredentialRpEntity rpEntity;
+    private PublicKeyCredentialUserEntity userEntity;
     private boolean requireResidentKey;
+    private boolean requireUserPresence;
     private boolean requireUserVerification;
-    private List<Map.Entry<PublicKeyCredentialType, COSEAlgorithmIdentifier>> credTypesAndPublicKeyAlgs;
+    private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
-    private HashMap<ExtensionIdentifier, Extension> extensions;
+    private AuthenticationExtensionsClientInputs extensions;
 
     public byte[] getClientDataHash() {
         return clientDataHash;
@@ -37,12 +32,28 @@ public class MakeCredentialRequest {
         this.rpEntity = rpEntity;
     }
 
+    public PublicKeyCredentialUserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(PublicKeyCredentialUserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
     public boolean isRequireResidentKey() {
         return requireResidentKey;
     }
 
     public void setRequireResidentKey(boolean requireResidentKey) {
         this.requireResidentKey = requireResidentKey;
+    }
+
+    public boolean isRequireUserPresence() {
+        return requireUserPresence;
+    }
+
+    public void setRequireUserPresence(boolean requireUserPresence) {
+        this.requireUserPresence = requireUserPresence;
     }
 
     public boolean isRequireUserVerification() {
@@ -53,11 +64,11 @@ public class MakeCredentialRequest {
         this.requireUserVerification = requireUserVerification;
     }
 
-    public List<Map.Entry<PublicKeyCredentialType, COSEAlgorithmIdentifier>> getCredTypesAndPublicKeyAlgs() {
+    public List<PublicKeyCredentialParameters> getCredTypesAndPublicKeyAlgs() {
         return credTypesAndPublicKeyAlgs;
     }
 
-    public void setCredTypesAndPublicKeyAlgs(List<Map.Entry<PublicKeyCredentialType, COSEAlgorithmIdentifier>> credTypesAndPublicKeyAlgs) {
+    public void setCredTypesAndPublicKeyAlgs(List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs) {
         this.credTypesAndPublicKeyAlgs = credTypesAndPublicKeyAlgs;
     }
 
@@ -69,11 +80,11 @@ public class MakeCredentialRequest {
         this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
     }
 
-    public HashMap<ExtensionIdentifier, Extension> getExtensions() {
+    public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(HashMap<ExtensionIdentifier, Extension> extensions) {
+    public void setExtensions(AuthenticationExtensionsClientInputs extensions) {
         this.extensions = extensions;
     }
 }

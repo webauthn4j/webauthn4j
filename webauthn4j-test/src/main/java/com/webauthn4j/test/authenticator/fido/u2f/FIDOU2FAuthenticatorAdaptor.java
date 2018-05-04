@@ -7,9 +7,11 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -27,10 +29,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
-    public WebAuthnRegistrationRequest register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
+    public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
 
@@ -74,19 +75,18 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
-        return new WebAuthnRegistrationRequest(collectedClientDataBytes, attestationObjectBytes);
+        return new CredentialCreationResponse(collectedClientDataBytes, attestationObject);
     }
 
-    public WebAuthnRegistrationRequest register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
-                                                CollectedClientData collectedClientData) {
+    public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+                                               CollectedClientData collectedClientData) {
         return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
     }
 
-    public WebAuthnAuthenticationRequest authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                                      CollectedClientData collectedClientData,
-                                                      PublicKeyCredentialDescriptor credentialDescriptor,
-                                                      AuthenticationEmulationOption authenticationEmulationOption) {
+    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
+                                                  CollectedClientData collectedClientData,
+                                                  PublicKeyCredentialDescriptor credentialDescriptor,
+                                                  AuthenticationEmulationOption authenticationEmulationOption) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         String rpId = publicKeyCredentialRequestOptions.getRpId();
 
@@ -101,7 +101,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         AuthenticationResponse authenticationResponse = fidoU2FAuthenticator.authenticate(authenticationRequest, authenticationEmulationOption);
 
-        String credentialId = rpId;
+        byte[] credentialId = credentialDescriptor.getId();
         AuthenticatorData authenticatorData = new AuthenticatorData();
         authenticatorData.setRpIdHash(rpIdHash);
         authenticatorData.setFlags(authenticationResponse.getUserPresense());
@@ -111,12 +111,12 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convertToBytes(authenticatorData);
         byte[] signature = authenticationResponse.getSignature();
-        return new WebAuthnAuthenticationRequest(credentialId, collectedClientDataBytes, authenticatorDataBytes, signature);
+        return new CredentialRequestResponse(credentialId, collectedClientDataBytes, authenticatorDataBytes, signature, null);
     }
 
-    public WebAuthnAuthenticationRequest authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                                      CollectedClientData collectedClientData,
-                                                      PublicKeyCredentialDescriptor credentialDescriptor){
+    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
+                                                  CollectedClientData collectedClientData,
+                                                  PublicKeyCredentialDescriptor credentialDescriptor){
         return authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, new AuthenticationEmulationOption());
     }
 

@@ -74,7 +74,7 @@ public class WebAuthnAuthenticationProvider implements AuthenticationProvider {
 
         WebAuthnAssertionAuthenticationToken authenticationToken = (WebAuthnAssertionAuthenticationToken) authentication;
 
-        byte[] credentialId = Base64Utils.decodeFromUrlSafeString(authenticationToken.getCredentials().getCredentialId());
+        byte[] credentialId = authenticationToken.getCredentials().getCredentialId();
 
         // Using credential’s id attribute, look up the corresponding credential public key.
         Authenticator authenticator = retrieveWebAuthnAuthenticator(credentialId, authenticationToken);

@@ -15,7 +15,7 @@ public class WebAuthnAuthenticationContextTest {
     @Test
     public void getter_test(){
 
-        String credentialId = "";
+        byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AuthenticatorDataConverter().convertToBytes(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};

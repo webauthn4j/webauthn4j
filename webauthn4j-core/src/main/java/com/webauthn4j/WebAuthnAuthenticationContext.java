@@ -27,7 +27,7 @@ public class WebAuthnAuthenticationContext {
     //~ Instance fields ================================================================================================
 
     // user inputs
-    private String credentialId;
+    private byte[] credentialId;
     private byte[] collectedClientData;
     private byte[] authenticatorData;
     private byte[] signature;
@@ -36,7 +36,7 @@ public class WebAuthnAuthenticationContext {
     private RelyingParty relyingParty;
 
 
-    public WebAuthnAuthenticationContext(String credentialId,
+    public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] collectedClientData,
                                          byte[] authenticatorData,
                                          byte[] signature,
@@ -48,7 +48,7 @@ public class WebAuthnAuthenticationContext {
         this.relyingParty = relyingParty;
     }
 
-    public String getCredentialId() {
+    public byte[] getCredentialId() {
         return credentialId;
     }
 

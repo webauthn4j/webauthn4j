@@ -46,6 +46,7 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
                                                  String authenticatorData,
                                                  String signature) {
 
+        byte[] rawId = Base64Utils.decodeFromUrlSafeString(credentialId);
         byte[] rawClientData = Base64Utils.decodeFromUrlSafeString(clientData);
         byte[] rawAuthenticatorData = Base64Utils.decodeFromUrlSafeString(authenticatorData);
         byte[] signatureBytes = Base64Utils.decodeFromUrlSafeString(signature);
@@ -53,7 +54,7 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
         RelyingParty relyingParty = relyingPartyProvider.provide(request, response);
 
         return new WebAuthnAuthenticationContext(
-                credentialId,
+                rawId,
                 rawClientData,
                 rawAuthenticatorData,
                 signatureBytes,

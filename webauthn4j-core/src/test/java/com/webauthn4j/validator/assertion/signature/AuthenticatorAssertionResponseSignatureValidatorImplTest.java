@@ -2,7 +2,7 @@ package com.webauthn4j.validator.assertion.signature;
 
 import org.junit.Test;
 
-public class AssertionSignatureValidatorImplTest {
+public class AuthenticatorAssertionResponseSignatureValidatorImplTest {
 
     AssertionSignatureValidatorImpl target = new AssertionSignatureValidatorImpl();
 
