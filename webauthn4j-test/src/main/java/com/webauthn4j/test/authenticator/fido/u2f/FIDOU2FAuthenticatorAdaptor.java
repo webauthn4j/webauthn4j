@@ -40,23 +40,10 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         RegistrationRequest registrationRequest = new RegistrationRequest(challengeParameter, applicationParameter);
         RegistrationResponse registrationResponse = fidoU2FAuthenticator.register(registrationRequest, registrationEmulationOption);
 
-        AttestationStatement attestationStatement;
-        switch (publicKeyCredentialCreationOptions.getAttestation()) {
-            case DIRECT:
-                attestationStatement = new FIDOU2FAttestationStatement(
-                        CertificateUtil.generateCertPath(Collections.singletonList(registrationResponse.getAttestationCertificate())),
-                        registrationResponse.getSignature()
-                );
-                break;
-            case INDIRECT:
-                throw new NotImplementedException();
-            case NONE:
-                attestationStatement = new NoneAttestationStatement();
-                break;
-            default:
-                throw new NotImplementedException();
-        }
-
+        AttestationStatement attestationStatement = new FIDOU2FAttestationStatement(
+                CertificateUtil.generateCertPath(Collections.singletonList(registrationResponse.getAttestationCertificate())),
+                registrationResponse.getSignature()
+        );
 
         ESCredentialPublicKey esCredentialPublicKey = convertToEsCredentialPublicKey(registrationResponse.getUserPublicKey());
 
