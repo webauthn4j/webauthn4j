@@ -55,11 +55,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         byte flag = BIT_AT | BIT_UP;
         AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(flag);
-        authenticatorData.setCounter(0);
-        authenticatorData.setAttestedCredentialData(attestedCredentialData);
-        authenticatorData.setExtensions(null);
+
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 

@@ -45,7 +45,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 registrationResponse.getSignature()
         );
 
-        ESCredentialPublicKey esCredentialPublicKey = convertToEsCredentialPublicKey(registrationResponse.getUserPublicKey());
+        ESCredentialPublicKey esCredentialPublicKey = ESCredentialPublicKey.create(registrationResponse.getUserPublicKey());
 
         byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =
@@ -105,22 +105,6 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                                                   CollectedClientData collectedClientData,
                                                   PublicKeyCredentialDescriptor credentialDescriptor){
         return authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, new AuthenticationEmulationOption());
-    }
-
-    private ESCredentialPublicKey convertToEsCredentialPublicKey(byte[] publicKey) {
-        byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
-        byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new ESCredentialPublicKey(
-                0,
-                null,
-                COSEAlgorithmIdentifier.ES256,
-                null,
-                null,
-                Curve.SECP256R1,
-                x,
-                y,
-                null
-        );
     }
 
     public FIDOU2FAuthenticator getFidoU2FAuthenticator() {

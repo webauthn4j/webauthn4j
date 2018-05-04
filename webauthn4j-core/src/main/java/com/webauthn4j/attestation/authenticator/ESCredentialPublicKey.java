@@ -18,6 +18,7 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.Serializable;
@@ -52,6 +53,26 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         this.x = x;
         this.y = y;
         this.d = d;
+    }
+
+    public static ESCredentialPublicKey create(byte[] publicKey) {
+        byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
+        byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
+        return new ESCredentialPublicKey(
+                0,
+                null,
+                COSEAlgorithmIdentifier.ES256,
+                null,
+                null,
+                Curve.SECP256R1,
+                x,
+                y,
+                null
+        );
+    }
+
+    public static CredentialPublicKey create(PublicKey publicKey) {
+        throw new NotImplementedException();
     }
 
     public Curve getCurve() {

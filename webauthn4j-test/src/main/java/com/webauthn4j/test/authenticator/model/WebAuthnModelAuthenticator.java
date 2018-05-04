@@ -4,9 +4,13 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestData;
+import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.WIP;
@@ -14,24 +18,27 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.cert.CertPath;
 import java.util.*;
+
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.*;
 
 @WIP
 public class WebAuthnModelAuthenticator {
 
     private PrivateKey attestationPrivateKey;
     private CertPath attestationCertPath;
-    private int counter;
     private boolean capableOfUserVerification;
+    byte[] aaGuid;
+    private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, int counter){
+    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, byte[] aaGuid, int counter){
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationCertPath = attestationCertPath;
         this.capableOfUserVerification = capableOfUserVerification;
+        this.aaGuid = aaGuid;
         this.counter = counter;
         this.credentialMap = new HashMap<>();
     }
@@ -41,6 +48,7 @@ public class WebAuthnModelAuthenticator {
                 TestData.USER_VERIFYING_AUTHENTICATOR_PRIVATE_KEY,
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERT_PATH,
                 true,
+                new byte[16],
                 0
         );
     }
@@ -112,15 +120,17 @@ public class WebAuthnModelAuthenticator {
         }
 
         byte[] credentialId;
+        PrivateKey credentialPrivateKey;
+        CredentialPublicKey credentialPublicKey;
         try{
             KeyPair keyPair = KeyUtil.createKeyPair();
-            PrivateKey privateKey = keyPair.getPrivate();
-            PublicKey publicKey = keyPair.getPublic();
+            credentialPrivateKey = keyPair.getPrivate();
+            credentialPublicKey = ESCredentialPublicKey.create(keyPair.getPublic());
 
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
             PublicKeyCredentialSource credentialSource = new PublicKeyCredentialSource();
             credentialSource.setType(PublicKeyCredentialType.PublicKey);
-            credentialSource.setPrivateKey(privateKey);
+            credentialSource.setPrivateKey(credentialPrivateKey);
             credentialSource.setRpId(rpEntity.getId());
             credentialSource.setUserHandle(userHandle);
             credentialSource.setOtherUI(null);
@@ -141,18 +151,25 @@ public class WebAuthnModelAuthenticator {
         }
 
         //TODO: extension processing
-        List<Extension> processedExtensions = null;
+        List<Extension> processedExtensions = Collections.EMPTY_LIST;
 
         // TODO: counter mode
 
-        byte[] aaGuid = null; //TODO
-        CredentialPublicKey credentialPublicKey = null; //TODO
+        byte[] rpIdHash = null; //TODO
+        byte flag = BIT_AT;
+        if(userConsent) flag |= BIT_UP;
+        if(userVerification) flag |= BIT_UV;
+        if(processedExtensions.size()>0) flag |= BIT_ED;
+
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
         AuthenticatorData authenticatorData = new AuthenticatorData();
+        authenticatorData.setRpIdHash(rpIdHash);
+        authenticatorData.setFlags(flag);
+        authenticatorData.setCounter(counter);
         authenticatorData.setAttestedCredentialData(attestedCredentialData);
         authenticatorData.setExtensions(processedExtensions);
 
-        AttestationStatement attestationStatement = null; //TODO
+        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null);
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
         MakeCredentialResponse makeCredentialResponse = new MakeCredentialResponse();
