@@ -10,7 +10,6 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestData;
-import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.WIP;
@@ -151,7 +150,7 @@ public class WebAuthnModelAuthenticator {
         }
 
         //TODO: extension processing
-        List<Extension> processedExtensions = Collections.EMPTY_LIST;
+        List<Extension> processedExtensions = Collections.emptyList();
 
         // TODO: counter mode
 
@@ -159,7 +158,7 @@ public class WebAuthnModelAuthenticator {
         byte flag = BIT_AT;
         if(userConsent) flag |= BIT_UP;
         if(userVerification) flag |= BIT_UV;
-        if(processedExtensions.size()>0) flag |= BIT_ED;
+        if(processedExtensions.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
         AuthenticatorData authenticatorData = new AuthenticatorData();
