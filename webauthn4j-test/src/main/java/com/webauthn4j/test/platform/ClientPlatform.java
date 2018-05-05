@@ -7,6 +7,7 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
@@ -19,6 +20,7 @@ import com.webauthn4j.validator.exception.ValidationException;
 public class ClientPlatform {
 
     private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
 
     private Origin origin;
     //TODO: support multiple authenticators
@@ -75,9 +77,10 @@ public class ClientPlatform {
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
 
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
+        byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         return new PublicKeyCredential<>(
                 credentialId,
-                new AuthenticatorAttestationResponse(credentialCreationResponse.getCollectedClientData(), attestationObjectBytes)
+                new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes)
         );
     }
 

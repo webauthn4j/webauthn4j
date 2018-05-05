@@ -34,95 +34,50 @@ public class AuthenticatorData implements Serializable {
     private AttestedCredentialData attestedCredentialData;
     private List<Extension> extensions;
 
-    public byte[] getRpIdHash() {
-        return rpIdHash;
+    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter, AttestedCredentialData attestedCredentialData, List<Extension> extensions) {
+        this.rpIdHash = rpIdHash;
+        this.flags = flags;
+        this.counter = counter;
+        this.attestedCredentialData = attestedCredentialData;
+        this.extensions = extensions;
     }
 
-    public void setRpIdHash(byte[] rpIdHash) {
-        if (rpIdHash.length != 32) {
-            throw new IllegalArgumentException("rpIdHash must be 32 bytes length");
-        }
-        this.rpIdHash = rpIdHash;
+    public AuthenticatorData(){}
+
+    public byte[] getRpIdHash() {
+        return rpIdHash;
     }
 
     public byte getFlags() {
         return flags;
     }
 
-    public void setFlags(byte flags) {
-        this.flags = flags;
-    }
-
     public boolean isFlagUP() {
-        return (this.flags & BIT_UP) != 0;
-    }
-
-    public void setFlagUP(boolean flagUP) {
-        if (flagUP) {
-            this.flags |= BIT_UP;
-        } else {
-            this.flags &= ~BIT_UP;
-        }
+        return checkFlagUP(this.flags);
     }
 
     public boolean isFlagUV() {
-        return (this.flags & BIT_UV) != 0;
-    }
-
-    public void setFlagUV(boolean flagUV) {
-        if (flagUV) {
-            this.flags |= BIT_UV;
-        } else {
-            this.flags &= ~BIT_UV;
-        }
+        return checkFlagUV(this.flags);
     }
 
     public boolean isFlagAT() {
-        return (this.flags & BIT_AT) != 0;
-    }
-
-    public void setFlagAT(boolean flagAT) {
-        if (flagAT) {
-            this.flags |= BIT_AT;
-        } else {
-            this.flags &= ~BIT_AT;
-        }
+        return checkFlagAT(this.flags);
     }
 
     public boolean isFlagED() {
-        return (this.flags & BIT_ED) != 0;
-    }
-
-    public void setFlagED(boolean flagED) {
-        if (flagED) {
-            this.flags |= BIT_ED;
-        } else {
-            this.flags &= ~BIT_ED;
-        }
+        return checkFlagED(this.flags);
     }
 
     public long getCounter() {
         return counter;
     }
 
-    public void setCounter(long counter) {
-        this.counter = counter;
-    }
-
     public AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
-    public void setAttestedCredentialData(AttestedCredentialData attestedCredentialData) {
-        this.attestedCredentialData = attestedCredentialData;
-    }
-
     public List<Extension> getExtensions() {
         return extensions;
-    }
-
-    public void setExtensions(List<Extension> extensions) {
-        this.extensions = extensions;
     }
 
     /**
@@ -155,4 +110,21 @@ public class AuthenticatorData implements Serializable {
         result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
         return result;
     }
+
+    public static boolean checkFlagUP(byte flags){
+        return (flags & BIT_UP) != 0;
+    }
+
+    public static boolean checkFlagUV(byte flags){
+        return (flags & BIT_UV) != 0;
+    }
+
+    public static boolean checkFlagAT(byte flags){
+        return (flags & BIT_AT) != 0;
+    }
+
+    public static boolean checkFlagED(byte flags){
+        return (flags & BIT_ED) != 0;
+    }
+
 }

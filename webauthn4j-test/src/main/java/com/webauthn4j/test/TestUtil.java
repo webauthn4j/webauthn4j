@@ -46,6 +46,10 @@ import java.security.PrivateKey;
 import java.security.cert.*;
 import java.util.*;
 
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_ED;
+import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
+
 /**
  * A utility class for core module test
  */
@@ -59,14 +63,8 @@ public class TestUtil {
     }
 
     public static AuthenticatorData createAuthenticatorData() {
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setFlagUP(true);
-        authenticatorData.setFlagAT(true);
-        authenticatorData.setFlagED(false);
-        authenticatorData.setRpIdHash(new byte[32]);
-        authenticatorData.setCounter(1);
-        authenticatorData.setAttestedCredentialData(createAttestedCredentialData());
-        return authenticatorData;
+        byte flags = BIT_UP | BIT_AT;
+        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(), null);
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {

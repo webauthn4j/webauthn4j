@@ -4,16 +4,10 @@ import com.webauthn4j.attestation.AttestationObject;
 
 public class CredentialCreationResponse {
 
-    private byte[] collectedClientData;
     private AttestationObject attestationObject;
 
-    public CredentialCreationResponse(byte[] collectedClientData, AttestationObject attestationObject) {
-        this.collectedClientData = collectedClientData;
+    public CredentialCreationResponse(AttestationObject attestationObject) {
         this.attestationObject = attestationObject;
-    }
-
-    public byte[] getCollectedClientData() {
-        return collectedClientData;
     }
 
     public AttestationObject getAttestationObject() {

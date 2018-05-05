@@ -9,17 +9,20 @@ import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.util.exception.NotImplementedException;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
 import java.security.cert.CertPath;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.*;
 
@@ -32,6 +35,9 @@ public class WebAuthnModelAuthenticator {
     byte[] aaGuid;
     private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
+    private boolean countUpEnabled = true;
+
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
     public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, byte[] aaGuid, int counter){
         this.attestationPrivateKey = attestationPrivateKey;
@@ -161,12 +167,7 @@ public class WebAuthnModelAuthenticator {
         if(processedExtensions.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(flag);
-        authenticatorData.setCounter(counter);
-        authenticatorData.setAttestedCredentialData(attestedCredentialData);
-        authenticatorData.setExtensions(processedExtensions);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
         AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null);
 
@@ -181,7 +182,87 @@ public class WebAuthnModelAuthenticator {
     }
 
     public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption){
-        throw new NotImplementedException();
+
+        byte flags = 0;
+
+        // Check if all the supplied parameters are syntactically well-formed and of the correct length.
+        // If not, return an error code equivalent to "UnknownError" and terminate the operation.
+        //TODO
+
+        //Let credentialOptions be a new empty set of public key credential sources.
+        List<PublicKeyCredentialSource> credentialOptions = new ArrayList<>();
+
+        //If allowCredentialDescriptorList was supplied, then for each descriptor of allowCredentialDescriptorList:
+        if(getAssertionRequest.getAllowCredentialDescriptorList() != null){
+            for(PublicKeyCredentialDescriptor credentialDescriptor : getAssertionRequest.getAllowCredentialDescriptorList()){
+                // Let credSource be the result of looking up descriptor.id in this authenticator.
+                PublicKeyCredentialSource credSource = lookup(credentialDescriptor.getId());
+                if(credSource != null){
+                    credentialOptions.add(credSource);
+                }
+            }
+        }
+        // Otherwise (allowCredentialDescriptorList was not supplied),
+        // for each key → credSource of this authenticator’s credentials map, append credSource to credentialOptions.
+        else {
+            for(Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()){
+                credentialOptions.add(entry.getValue());
+            }
+        }
+        // Remove any items from credentialOptions whose rpId is not equal to rpId.
+        credentialOptions = credentialOptions.stream().filter( item -> !item.getRpId().equals(getAssertionRequest.getRpId())).collect(Collectors.toList());
+
+        // If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation.
+        if(credentialOptions.isEmpty()){
+            throw new NotAllowedException("No matching authenticator found");
+        }
+        // Prompt the user to select a public key credential source selectedCredential from credentialOptions.
+        // Obtain user consent for using selectedCredential. The prompt for obtaining this consent may be shown by
+        // the authenticator if it has its own output capability, or by the user agent otherwise.
+
+        // If requireUserVerification is true, the method of obtaining user consent MUST include user verification.
+        flags |= BIT_UV;
+        // If requireUserPresence is true, the method of obtaining user consent MUST include a test of user presence.
+        flags |= BIT_UP;
+        // If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
+
+        PublicKeyCredentialSource selectedCredential = credentialOptions.get(0); //TODO
+
+        // Let processedExtensions be the result of authenticator extension processing for each supported
+        // extension identifier → authenticator extension input in extensions.
+        List<Extension> processedExtensions = Collections.emptyList();
+        if(!processedExtensions.isEmpty()){
+            flags |= BIT_ED;
+        }
+
+
+        // Increment the RP ID-associated signature counter or the global signature counter value,
+        // depending on which approach is implemented by the authenticator, by some positive value.
+        countUp();
+
+        // Let authenticatorData be the byte array specified in §6.1 Authenticator data including processedExtensions,
+        // if any, as the extensions and excluding attestedCredentialData.
+        byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(getAssertionRequest.getRpId().getBytes(StandardCharsets.UTF_8));
+        AuthenticatorData authenticatorDataObject = new AuthenticatorData(rpIdHash, flags, counter, null, processedExtensions);
+        byte[] authenticatorData = authenticatorDataConverter.convertToBytes(authenticatorDataObject);
+
+        // Let signature be the assertion signature of the concatenation authenticatorData || hash using
+        // the privateKey of selectedCredential as shown in Figure 2, below. A simple, undelimited concatenation is
+        // safe to use here because the authenticator data describes its own length.
+        // The hash of the serialized client data (which potentially has a variable length) is always the last element.
+        byte[] collectedDataHash = getAssertionRequest.getHash();
+        ByteBuffer signedData = ByteBuffer.allocate(authenticatorData.length + collectedDataHash.length).put(collectedDataHash).put(collectedDataHash);
+        byte[] signature = calculateSignature(selectedCredential.getPrivateKey(), signedData.array());
+        // If any error occurred while generating the assertion signature,
+        // return an error code equivalent to "UnknownError" and terminate the operation.
+
+        // Return to the user agent:
+        GetAssertionResponse getAssertionResponse = new GetAssertionResponse();
+        getAssertionResponse.setCredentialId(selectedCredential.getId());
+        getAssertionResponse.setAuthenticatorData(authenticatorData);
+        getAssertionResponse.setSignature(signature);
+        getAssertionResponse.setUserHandle(selectedCredential.getUserHandle());
+        return getAssertionResponse;
     }
 
     public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest){
@@ -201,5 +282,29 @@ public class WebAuthnModelAuthenticator {
                 publicKeyCredentialParameters.getAlg() == COSEAlgorithmIdentifier.ES256;
     }
 
+    public boolean isCountUpEnabled() {
+        return countUpEnabled;
+    }
 
+    public void setCountUpEnabled(boolean countUpEnabled) {
+        this.countUpEnabled = countUpEnabled;
+    }
+
+    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData){
+        try {
+            Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
+            signature.initSign(privateKey);
+            signature.update(signedData);
+            return signature.sign();
+        } catch (InvalidKeyException | SignatureException e) {
+            throw new WebAuthnModelException("Signature calculation error", e);
+        }
+    }
+
+
+    private void countUp(){
+        if(isCountUpEnabled()){
+            counter++;
+        }
+    }
 }

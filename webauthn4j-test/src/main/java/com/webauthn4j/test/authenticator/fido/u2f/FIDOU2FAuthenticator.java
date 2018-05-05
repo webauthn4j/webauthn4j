@@ -118,9 +118,8 @@ public class FIDOU2FAuthenticator {
     }
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData){
-        Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
-
         try {
+            Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
             signature.initSign(privateKey);
             signature.update(signedData);
             return signature.sign();

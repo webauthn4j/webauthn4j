@@ -1,25 +1,23 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
 import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.*;
+import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
+import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
@@ -52,17 +50,11 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), esCredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(flag);
-        authenticatorData.setCounter(0);
-        authenticatorData.setAttestedCredentialData(attestedCredentialData);
-        authenticatorData.setExtensions(null);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData, null);
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
-        byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        return new CredentialCreationResponse(collectedClientDataBytes, attestationObject);
+        return new CredentialCreationResponse(attestationObject);
     }
 
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
@@ -89,12 +81,8 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         AuthenticationResponse authenticationResponse = fidoU2FAuthenticator.authenticate(authenticationRequest, authenticationEmulationOption);
 
         byte[] credentialId = credentialDescriptor.getId();
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(authenticationResponse.getUserPresense());
-        authenticatorData.setCounter(ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0));
-        authenticatorData.setAttestedCredentialData(null); //always null for authenticate
-        authenticatorData.setExtensions(null);
+        long counter = ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresense(), counter, null, null);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convertToBytes(authenticatorData);
         byte[] signature = authenticationResponse.getSignature();

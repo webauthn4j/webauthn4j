@@ -33,7 +33,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 throw new NotImplementedException();
         }
         MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest();
-        makeCredentialRequest.setClientDataHash(clientDataHash);
+        makeCredentialRequest.setHash(clientDataHash);
         makeCredentialRequest.setRpEntity(publicKeyCredentialCreationOptions.getRp());
         makeCredentialRequest.setUserEntity(publicKeyCredentialCreationOptions.getUser());
         makeCredentialRequest.setRequireResidentKey(publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey());
@@ -62,7 +62,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
         */
 
-        return new CredentialCreationResponse(collectedClientDataBytes, makeCredentialResponse.getAttestationObject());
+        return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
     }
 
     @Override

@@ -50,12 +50,7 @@ public class AuthenticatorDataSerializerTest {
         long counter = 325;
 
         AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
-
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(flags);
-        authenticatorData.setCounter(counter);
-        authenticatorData.setAttestedCredentialData(attestationData);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, counter, attestationData, null);
 
         //Given
 

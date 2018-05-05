@@ -57,34 +57,26 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
 
     public AuthenticatorData deserialize(byte[] value) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(value);
-        AuthenticatorData authenticatorData = new AuthenticatorData();
 
         byte[] rpIdHash = new byte[32];
         byteBuffer.get(rpIdHash, 0, 32);
         byte flags = byteBuffer.get();
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
-        authenticatorData.setRpIdHash(rpIdHash);
-        authenticatorData.setFlags(flags);
-        authenticatorData.setCounter(counter);
-
         AttestedCredentialData attestationData;
         List<Extension> extensions;
-        if (authenticatorData.isFlagAT()) {
+        if (AuthenticatorData.checkFlagAT(flags)) {
             attestationData = deserializeAttestedCredentialData(byteBuffer);
         } else {
             attestationData = null;
         }
-        if (authenticatorData.isFlagED()) {
+        if (AuthenticatorData.checkFlagED(flags)) {
             extensions = deserializeExtensions(byteBuffer);
         } else {
             extensions = null;
         }
 
-        authenticatorData.setAttestedCredentialData(attestationData);
-        authenticatorData.setExtensions(extensions);
-
-        return authenticatorData;
+        return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
     }
 
     AttestedCredentialData deserializeAttestedCredentialData(ByteBuffer byteBuffer) {

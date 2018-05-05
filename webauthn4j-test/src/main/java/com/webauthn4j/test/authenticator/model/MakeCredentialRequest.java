@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MakeCredentialRequest {
 
-    private byte[] clientDataHash;
+    private byte[] hash;
     private PublicKeyCredentialRpEntity rpEntity;
     private PublicKeyCredentialUserEntity userEntity;
     private boolean requireResidentKey;
@@ -16,12 +16,12 @@ public class MakeCredentialRequest {
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
     private AuthenticationExtensionsClientInputs extensions;
 
-    public byte[] getClientDataHash() {
-        return clientDataHash;
+    public byte[] getHash() {
+        return hash;
     }
 
-    public void setClientDataHash(byte[] clientDataHash) {
-        this.clientDataHash = clientDataHash;
+    public void setHash(byte[] hash) {
+        this.hash = hash;
     }
 
     public PublicKeyCredentialRpEntity getRpEntity() {
