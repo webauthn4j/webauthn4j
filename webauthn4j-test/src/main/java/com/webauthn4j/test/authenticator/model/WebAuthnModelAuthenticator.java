@@ -197,7 +197,8 @@ public class WebAuthnModelAuthenticator {
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
-        return true; //TODO
+        return publicKeyCredentialParameters.getType() == PublicKeyCredentialType.PublicKey &&
+                publicKeyCredentialParameters.getAlg() == COSEAlgorithmIdentifier.ES256;
     }
 
 
