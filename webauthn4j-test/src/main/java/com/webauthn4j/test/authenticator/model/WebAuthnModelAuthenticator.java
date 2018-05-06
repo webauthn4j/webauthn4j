@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.CertPath;
+import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -117,12 +118,12 @@ public class WebAuthnModelAuthenticator {
         }
         // If requireResidentKey is true and the authenticator cannot store a Client-side-resident Credential Private Key,
         // return an error code equivalent to "ConstraintError" and terminate the operation.
-        if(makeCredentialRequest.isRequireResidentKey() && isCapableOfStoringClientSideResidentCredential()){
+        if(makeCredentialRequest.isRequireResidentKey() && !isCapableOfStoringClientSideResidentCredential()){
             throw new ConstraintException("Authenticator isn't capable of storing client-side resident credential");
         }
         // If requireUserVerification is true and the authenticator cannot perform user verification,
         // return an error code equivalent to "ConstraintError" and terminate the operation.
-        if(makeCredentialRequest.isRequireUserVerification() && isCapableOfUserVerification()){
+        if(makeCredentialRequest.isRequireUserVerification() && !isCapableOfUserVerification()){
             throw new ConstraintException("Authenticator isn't capable of user verification");
         }
 
@@ -154,7 +155,7 @@ public class WebAuthnModelAuthenticator {
         try{
             KeyPair keyPair = KeyUtil.createKeyPair();
             publicKey = keyPair.getPrivate();
-            privateKey = ESCredentialPublicKey.create(keyPair.getPublic());
+            privateKey = ESCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();

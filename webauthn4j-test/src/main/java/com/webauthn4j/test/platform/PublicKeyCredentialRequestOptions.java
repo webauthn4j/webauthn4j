@@ -4,6 +4,7 @@ import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.util.WIP;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 

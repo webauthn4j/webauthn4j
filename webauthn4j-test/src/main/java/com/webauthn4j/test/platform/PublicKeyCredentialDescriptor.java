@@ -2,13 +2,14 @@ package com.webauthn4j.test.platform;
 
 import com.webauthn4j.util.WIP;
 
+import java.util.Collections;
 import java.util.List;
 
 @WIP
 public class PublicKeyCredentialDescriptor {
     private PublicKeyCredentialType type;
     private byte[] id;
-    private List<AuthenticatorTransport> transports;
+    private List<AuthenticatorTransport> transports = Collections.emptyList();
 
     public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, List<AuthenticatorTransport> transports) {
         this.type = type;

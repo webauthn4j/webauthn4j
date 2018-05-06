@@ -26,6 +26,7 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
@@ -71,8 +72,8 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         );
     }
 
-    public static CredentialPublicKey create(PublicKey publicKey) {
-        throw new NotImplementedException();
+    public static CredentialPublicKey create(ECPublicKey publicKey) {
+        return create(publicKey.getEncoded());
     }
 
     public Curve getCurve() {

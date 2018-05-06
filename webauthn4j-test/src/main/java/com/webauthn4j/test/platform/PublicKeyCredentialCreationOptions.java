@@ -4,6 +4,7 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.util.WIP;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 @WIP
@@ -12,9 +13,9 @@ public class PublicKeyCredentialCreationOptions {
     private PublicKeyCredentialUserEntity user;
 
     private Challenge challenge;
-    private List<PublicKeyCredentialParameters> pubKeyCredParams;
+    private List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.emptyList();
     private BigInteger timeout;
-    private List<PublicKeyCredentialDescriptor> excludeCredentials;
+    private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
     private AuthenticationExtensionsClientInputs extentions;
