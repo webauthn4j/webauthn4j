@@ -95,28 +95,48 @@ public class WebAuthnModelAuthenticator {
         // For each descriptor of excludeCredentialDescriptorList:
         for (PublicKeyCredentialDescriptor descriptor : makeCredentialRequest.getExcludeCredentialDescriptorList()){
             PublicKeyCredentialSource publicKeyCredentialSource = lookup(descriptor.getId());
+            // If looking up descriptor.id in this authenticator returns non-null, and the returned item's RP ID
+            // and type match rpEntity.id and excludeCredentialDescriptorList.type respectively,
+            // then obtain user consent for creating a new credential.
+            // The method of obtaining user consent MUST include a test of user presence.
             if(publicKeyCredentialSource != null){
                 if(publicKeyCredentialSource.getRpId().equals(rpEntity.getId()) &&
                         publicKeyCredentialSource.getType().equals(descriptor.getType())){
                     boolean userConsent = true;
+                    // If the user
+                    // confirms consent to create a new credential
                     if(userConsent){
                         throw new InvalidStateException("");
                     }
+                    // does not consent to create a new credential
                     else {
                         throw new NotAllowedException("User consent is required");
                     }
                 }
             }
         }
+        // If requireResidentKey is true and the authenticator cannot store a Client-side-resident Credential Private Key,
+        // return an error code equivalent to "ConstraintError" and terminate the operation.
         if(makeCredentialRequest.isRequireResidentKey() && isCapableOfStoringClientSideResidentCredential()){
             throw new ConstraintException("Authenticator isn't capable of storing client-side resident credential");
         }
+        // If requireUserVerification is true and the authenticator cannot perform user verification,
+        // return an error code equivalent to "ConstraintError" and terminate the operation.
         if(makeCredentialRequest.isRequireUserVerification() && isCapableOfUserVerification()){
             throw new ConstraintException("Authenticator isn't capable of user verification");
         }
 
+        // Obtain user consent for creating a new credential.
+        // The prompt for obtaining this consent is shown by the authenticator if it has its own output capability,
+        // or by the user agent otherwise. The prompt SHOULD display rpEntity.id, rpEntity.name, userEntity.name
+        // and userEntity.displayName, if possible.
         boolean userVerification = true;
         boolean userConsent = true;
+
+        // If requireUserVerification is true, the method of obtaining user consent MUST include user verification.
+        // If requireUserPresence is true, the method of obtaining user consent MUST include a test of user presence.
+        // If the user does not consent or if user verification fails, return an error code equivalent to
+        // "NotAllowedError" and terminate the operation.
         if(makeCredentialRequest.isRequireUserVerification() && !userVerification){
             throw new NotAllowedException("User is not verified.");
         }
@@ -124,54 +144,88 @@ public class WebAuthnModelAuthenticator {
             throw new NotAllowedException("User doesn't provide consent.");
         }
 
+        // Once user consent has been obtained, generate a new credential object:
         byte[] credentialId;
-        PrivateKey credentialPrivateKey;
-        CredentialPublicKey credentialPublicKey;
+        // Let (publicKey, privateKey) be a new pair of cryptographic keys using the combination of
+        // PublicKeyCredentialType and cryptographic parameters represented by the first item in
+        // credTypesAndPubKeyAlgs that is supported by this authenticator.
+        PrivateKey publicKey;
+        CredentialPublicKey privateKey;
         try{
             KeyPair keyPair = KeyUtil.createKeyPair();
-            credentialPrivateKey = keyPair.getPrivate();
-            credentialPublicKey = ESCredentialPublicKey.create(keyPair.getPublic());
+            publicKey = keyPair.getPrivate();
+            privateKey = ESCredentialPublicKey.create(keyPair.getPublic());
 
+            // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
+            // Let credentialSource be a new public key credential source with the fields:
             PublicKeyCredentialSource credentialSource = new PublicKeyCredentialSource();
             credentialSource.setType(PublicKeyCredentialType.PublicKey);
-            credentialSource.setPrivateKey(credentialPrivateKey);
+            credentialSource.setPrivateKey(publicKey);
             credentialSource.setRpId(rpEntity.getId());
             credentialSource.setUserHandle(userHandle);
             credentialSource.setOtherUI(null);
 
+            // If requireResidentKey is true or the authenticator chooses to create a Client-side-resident
+            // Credential Private Key:
             if(makeCredentialRequest.isRequireResidentKey()){
+                // Let credentialId be a new credential id.
                 credentialId = new byte[32];
                 new SecureRandom().nextBytes(credentialId);
+                // Set credentialSource.id to credentialId.
                 credentialSource.setId(credentialId);
-                credentialMap.put(new CredentialMapKey(rpEntity.getId(), userHandle), credentialSource);
+                // Let credentials be this authenticator’s credentials map.
+                Map<CredentialMapKey, PublicKeyCredentialSource> credentials = credentialMap;
+                credentials.put(new CredentialMapKey(rpEntity.getId(), userHandle), credentialSource);
             }
+            // Otherwise:
             else {
-                // TODO: Let credentialId be the result of serializing and encrypting credentialSource so that only this authenticator can decrypt it.
-                credentialId = null;
+                // Let credentialId be the result of serializing and encrypting credentialSource
+                // so that only this authenticator can decrypt it.
+                credentialId = null; // TODO
             }
         }
+        // If any error occurred while creating the new credential object,
+        // return an error code equivalent to "UnknownError" and terminate the operation.
         catch (RuntimeException e){
             throw new WebAuthnModelException(e);
         }
 
-        //TODO: extension processing
-        List<Extension> processedExtensions = Collections.emptyList();
+        // Let processedExtensions be the result of authenticator extension processing for each
+        // supported extension identifier → authenticator extension input in extensions.
+        List<Extension> processedExtensions = Collections.emptyList(); //TODO
 
-        // TODO: counter mode
+        // If the authenticator supports:
+        // a per-RP ID signature counter
+        //   allocate the counter, associate it with the RP ID, and initialize the counter value as zero.
+        // a global signature counter
+        //   Use the global signature counter's actual value when generating authenticator data.
+        // a per credential signature counter
+        //   allocate the counter, associate it with the new credential, and initialize the counter value as zero.
+        countUp(); // TODO: counter mode
 
-        byte[] rpIdHash = null; //TODO
+        // Let attestedCredentialData be the attested credential data byte array including the credentialId and publicKey.
+        byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpEntity.getId().getBytes(StandardCharsets.UTF_8));
         byte flag = BIT_AT;
         if(userConsent) flag |= BIT_UP;
         if(userVerification) flag |= BIT_UV;
         if(processedExtensions.isEmpty()) flag |= BIT_ED;
 
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, privateKey);
+
+        // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
+        // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
         AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null);
 
+        // Return the attestation object for the new credential created by the procedure specified in
+        // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
+        // authenticatorData, and hash. For more details on attestation, see §6.3 Attestation.
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
+
+
+        // On successful completion of this operation, the authenticator returns the attestation object to the client.
         MakeCredentialResponse makeCredentialResponse = new MakeCredentialResponse();
         makeCredentialResponse.setAttestationObject(attestationObject);
         return makeCredentialResponse;
