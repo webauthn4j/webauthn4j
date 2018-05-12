@@ -36,9 +36,9 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     private WebAuthnTrustAnchorService webAuthnTrustAnchorService = new WebAuthnTrustAnchorServiceImpl(trustAnchorProvider);
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, packedAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new SelfAttestationTrustworthinessValidatorImpl(),
             new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
-            new ECDAATrustworthinessValidatorImpl()
+            new ECDAATrustworthinessValidatorImpl(),
+            new SelfAttestationTrustworthinessValidatorImpl()
     );
 
     @Test

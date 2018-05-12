@@ -11,11 +11,11 @@ public class RegistrationObject {
     private byte[] attestationObjectBytes;
     private RelyingParty relyingParty;
 
-    public RegistrationObject(CollectedClientData collectedClientData,
-                              byte[] collectedClientDataBytes,
-                              AttestationObject attestationObject,
-                              byte[] attestationObjectBytes,
-                              RelyingParty relyingParty) {
+    RegistrationObject(CollectedClientData collectedClientData,
+                       byte[] collectedClientDataBytes,
+                       AttestationObject attestationObject,
+                       byte[] attestationObjectBytes,
+                       RelyingParty relyingParty) {
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;

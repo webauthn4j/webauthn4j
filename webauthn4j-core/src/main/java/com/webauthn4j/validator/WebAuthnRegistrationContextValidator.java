@@ -26,11 +26,13 @@ import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 
@@ -48,9 +50,9 @@ public class WebAuthnRegistrationContextValidator {
     // ================================================================================================
 
     private List<AttestationStatementValidator> attestationStatementValidators;
-    private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
     private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
     private ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
+    private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
 
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();
@@ -61,14 +63,32 @@ public class WebAuthnRegistrationContextValidator {
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
+    ) {
+        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
+        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
+
+        this.attestationStatementValidators = attestationStatementValidators;
+        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
+        this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
+        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
+    }
+
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
     ) {
-        this.attestationStatementValidators = attestationStatementValidators;
-        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
-        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
-        this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                new SelfAttestationTrustworthinessValidatorImpl()
+        );
     }
 
     // ~ Methods

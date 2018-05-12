@@ -9,7 +9,6 @@ import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
-import sun.security.ec.ECPublicKeyImpl;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -72,7 +71,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
-        ECPublicKeyImpl userPublicKey = (ECPublicKeyImpl) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
+        ECPublicKey userPublicKey = (ECPublicKey) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 
@@ -81,7 +80,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
-        byte[] userPublicKeyBytes = userPublicKey.getEncodedPublicValue();
+        byte[] userPublicKeyBytes = userPublicKey.getEncoded();
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
         byteBuffer.put((byte) 0x00); //RFU

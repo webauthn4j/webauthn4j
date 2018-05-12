@@ -38,9 +38,9 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     private WebAuthnTrustAnchorService webAuthnTrustAnchorService = new WebAuthnTrustAnchorServiceImpl(trustAnchorProvider);
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new SelfAttestationTrustworthinessValidatorImpl(),
             new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
-            new ECDAATrustworthinessValidatorImpl()
+            new ECDAATrustworthinessValidatorImpl(),
+            new SelfAttestationTrustworthinessValidatorImpl()
     );
 
     @Test
@@ -155,9 +155,9 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
-                new SelfAttestationTrustworthinessValidatorImpl(),
                 new TrustAnchorCertPathTrustworthinessValidator(mock(WebAuthnTrustAnchorService.class)),
-                new ECDAATrustworthinessValidatorImpl()
+                new ECDAATrustworthinessValidatorImpl(),
+                new SelfAttestationTrustworthinessValidatorImpl()
         );
         target.validate(registrationContext);
     }
