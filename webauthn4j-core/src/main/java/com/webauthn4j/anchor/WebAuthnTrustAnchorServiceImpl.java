@@ -31,7 +31,7 @@ public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorServic
     private Set<TrustAnchor> cachedTrustAnchors;
 
     public WebAuthnTrustAnchorServiceImpl(TrustAnchorProvider trustAnchorProvider) {
-        AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider cannot be null");
+        AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider must not be null");
         this.trustAnchorProvider = trustAnchorProvider;
     }
 

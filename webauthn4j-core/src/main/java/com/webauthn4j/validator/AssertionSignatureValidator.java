@@ -29,7 +29,7 @@ import java.security.MessageDigest;
  */
 class AssertionSignatureValidator {
 
-    public void verifySignature(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey) {
+    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey) {
         byte[] signedData = getSignedData(webAuthnAuthenticationContext);
         byte[] signature = webAuthnAuthenticationContext.getSignature();
         if (!credentialPublicKey.verifySignature(signature, signedData)) {

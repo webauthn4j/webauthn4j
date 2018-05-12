@@ -20,6 +20,8 @@ import com.webauthn4j.rp.RelyingParty;
 
 import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
 
 
 /**
@@ -80,5 +82,28 @@ public class WebAuthnAuthenticationContext {
 
     public RelyingParty getRelyingParty() {
         return relyingParty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WebAuthnAuthenticationContext that = (WebAuthnAuthenticationContext) o;
+        return Arrays.equals(credentialId, that.credentialId) &&
+                Arrays.equals(collectedClientData, that.collectedClientData) &&
+                Arrays.equals(authenticatorData, that.authenticatorData) &&
+                Arrays.equals(signature, that.signature) &&
+                Objects.equals(relyingParty, that.relyingParty);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(relyingParty);
+        result = 31 * result + Arrays.hashCode(credentialId);
+        result = 31 * result + Arrays.hashCode(collectedClientData);
+        result = 31 * result + Arrays.hashCode(authenticatorData);
+        result = 31 * result + Arrays.hashCode(signature);
+        return result;
     }
 }

@@ -19,6 +19,8 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import com.webauthn4j.validator.exception.CertificateException;
 
 import java.io.IOException;
 import java.security.cert.CertPath;
@@ -42,7 +44,7 @@ public class CertPathSerializer extends StdSerializer<CertPath> {
             }
             gen.writeEndArray();
         } catch (CertificateEncodingException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new UnexpectedCheckedException(e);
         }
     }
 }

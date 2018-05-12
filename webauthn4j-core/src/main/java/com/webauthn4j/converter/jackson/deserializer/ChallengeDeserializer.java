@@ -29,6 +29,7 @@ import java.io.IOException;
  * Jackson Deserializer for Challenge
  */
 public class ChallengeDeserializer extends StdDeserializer<Challenge> {
+
     public ChallengeDeserializer() {
         super(Challenge.class);
     }

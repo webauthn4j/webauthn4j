@@ -44,7 +44,6 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
 
     private ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
 
-    //TODO: make protected
     public AuthenticatorDataDeserializer() {
         super(AuthenticatorData.class);
     }

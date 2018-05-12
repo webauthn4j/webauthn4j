@@ -19,6 +19,7 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
@@ -38,7 +39,7 @@ public class X509CertificateSerializer extends StdSerializer<X509Certificate> {
         try {
             gen.writeBinary(value.getEncoded());
         } catch (CertificateEncodingException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new UnexpectedCheckedException(e);
         }
     }
 }

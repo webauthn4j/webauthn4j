@@ -19,6 +19,8 @@ package com.webauthn4j;
 import com.webauthn4j.rp.RelyingParty;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * WebAuthnRegistrationContext
@@ -53,5 +55,24 @@ public class WebAuthnRegistrationContext {
 
     public RelyingParty getRelyingParty() {
         return relyingParty;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WebAuthnRegistrationContext that = (WebAuthnRegistrationContext) o;
+        return Arrays.equals(collectedClientData, that.collectedClientData) &&
+                Arrays.equals(attestationObject, that.attestationObject) &&
+                Objects.equals(relyingParty, that.relyingParty);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(relyingParty);
+        result = 31 * result + Arrays.hashCode(collectedClientData);
+        result = 31 * result + Arrays.hashCode(attestationObject);
+        return result;
     }
 }

@@ -27,4 +27,8 @@ public class CertificateException extends ValidationException {
     public CertificateException(String message) {
         super(message);
     }
+
+    public CertificateException(Throwable cause){
+        super(cause);
+    }
 }
