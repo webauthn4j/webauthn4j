@@ -42,7 +42,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @JsonProperty
     private byte[] sig;
 
-    //TODO: size check
     @JsonProperty
     private CertPath x5c;
 
@@ -99,9 +98,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
         if(x5c == null){
             throw new ConstraintViolationException("x5c must not be null");
-        }
-        if(x5c.getCertificates().size() != 1){
-            throw new ConstraintViolationException("x5c must have exactly one certificate");
         }
 
         if(ecdaaKeyId == null){

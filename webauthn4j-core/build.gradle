@@ -7,7 +7,6 @@ dependencies {
     compile project(':webauthn4j-util')
     compile("org.slf4j:slf4j-api")
     compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310") //TODO: move it to extras
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
