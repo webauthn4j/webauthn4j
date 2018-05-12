@@ -3,7 +3,6 @@ package com.webauthn4j.validator;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 public class WebAuthnAuthenticationContextValidatorTest {
 

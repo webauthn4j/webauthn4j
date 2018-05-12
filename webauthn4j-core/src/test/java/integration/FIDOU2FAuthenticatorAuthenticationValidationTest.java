@@ -1,6 +1,5 @@
 package integration;
 
-import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -9,6 +8,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;

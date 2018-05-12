@@ -17,7 +17,6 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.converter.jackson.deserializer.AuthenticatorDataDeserializer;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 

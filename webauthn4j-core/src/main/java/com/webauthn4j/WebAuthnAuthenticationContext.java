@@ -18,7 +18,6 @@ package com.webauthn4j;
 
 import com.webauthn4j.rp.RelyingParty;
 
-import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
@@ -32,16 +31,9 @@ public class WebAuthnAuthenticationContext {
     //~ Instance fields ================================================================================================
 
     // user inputs
-    @NotNull
     private byte[] credentialId;
-
-    @NotNull
     private byte[] collectedClientData;
-
-    @NotNull
     private byte[] authenticatorData;
-
-    @NotNull
     private byte[] signature;
 
     // server property

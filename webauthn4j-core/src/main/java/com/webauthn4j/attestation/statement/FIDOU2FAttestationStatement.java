@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import javax.validation.constraints.NotNull;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -32,12 +32,9 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
 
     public static final String FORMAT = "fido-u2f";
 
-    @NotNull
-    //TODO: size check
     @JsonProperty
     private CertPath x5c;
 
-    @NotNull
     @JsonProperty
     private byte[] sig;
 
@@ -81,6 +78,19 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         return (X509Certificate) x5c.getCertificates().get(0);
     }
 
+    @Override
+    public void validate(){
+        if(x5c == null){
+            throw new ConstraintViolationException("x5c must not be null");
+        }
+        if(x5c.getCertificates().size() != 1){
+            throw new ConstraintViolationException("x5c must have exactly one certificate");
+        }
+
+        if(sig == null){
+            throw new ConstraintViolationException("sig must not be null");
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

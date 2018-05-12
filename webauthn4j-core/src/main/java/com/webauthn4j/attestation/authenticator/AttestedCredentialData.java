@@ -16,24 +16,16 @@
 
 package com.webauthn4j.attestation.authenticator;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Arrays;
 
 public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    @NotNull
-    @Size(min = 16, max = 16)
     private byte[] aaGuid;
 
-    @NotNull
     private byte[] credentialId;
 
-    @NotNull
-    @Valid
     private CredentialPublicKey credentialPublicKey;
 
     public AttestedCredentialData(byte[] aaGuid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {

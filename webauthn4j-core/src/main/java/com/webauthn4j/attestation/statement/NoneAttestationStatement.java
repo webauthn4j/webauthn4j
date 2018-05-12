@@ -38,4 +38,9 @@ public class NoneAttestationStatement implements AttestationStatement {
         return AttestationType.None;
     }
 
+    @Override
+    public void validate() {
+        // nop
+    }
+
 }

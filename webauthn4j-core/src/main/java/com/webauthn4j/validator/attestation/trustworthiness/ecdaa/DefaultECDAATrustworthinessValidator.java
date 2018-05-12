@@ -24,7 +24,7 @@ import com.webauthn4j.util.exception.NotImplementedException;
  * {@inheritDoc}
  */
 @WIP
-public class ECDAATrustworthinessValidatorImpl implements ECDAATrustworthinessValidator {
+public class DefaultECDAATrustworthinessValidator implements ECDAATrustworthinessValidator {
 
     public void validate(AttestationStatement attestationStatement) {
         throw new NotImplementedException();

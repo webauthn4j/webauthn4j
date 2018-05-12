@@ -27,4 +27,9 @@ public interface CredentialPublicKey extends Serializable {
 
     @JsonIgnore
     PublicKey getPublicKey();
+
+    @JsonIgnore
+    byte[] getBytes();
+
+    void validate();
 }

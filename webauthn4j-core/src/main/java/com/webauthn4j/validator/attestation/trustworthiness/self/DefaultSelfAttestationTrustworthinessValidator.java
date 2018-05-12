@@ -29,7 +29,7 @@ import java.security.cert.X509Certificate;
 /**
  * Validates {@link AttestationStatement} as self attestation
  */
-public class SelfAttestationTrustworthinessValidatorImpl implements SelfAttestationTrustworthinessValidator {
+public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttestationTrustworthinessValidator {
 
     //~ Instance fields ================================================================================================
     private boolean isSelfAttestationAllowed = true;

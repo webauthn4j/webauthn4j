@@ -1,6 +1,5 @@
 package integration;
 
-import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
@@ -9,6 +8,7 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
@@ -17,8 +17,8 @@ import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidatorImpl;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -37,8 +37,8 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, packedAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
-            new ECDAATrustworthinessValidatorImpl(),
-            new SelfAttestationTrustworthinessValidatorImpl()
+            new DefaultECDAATrustworthinessValidator(),
+            new DefaultSelfAttestationTrustworthinessValidator()
     );
 
     @Test

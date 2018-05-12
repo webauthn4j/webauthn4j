@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import javax.validation.constraints.NotNull;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -36,20 +36,16 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     public static final String FORMAT = "packed";
 
-    @NotNull
     @JsonProperty
     private COSEAlgorithmIdentifier alg;
 
-    @NotNull
     @JsonProperty
     private byte[] sig;
 
-    @NotNull
     //TODO: size check
     @JsonProperty
     private CertPath x5c;
 
-    @NotNull
     @JsonProperty
     private byte[] ecdaaKeyId;
 
@@ -89,6 +85,29 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @Override
     public AttestationType getAttestationType() {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public void validate() {
+        if(alg == null){
+            throw new ConstraintViolationException("alg must not be null");
+        }
+
+        if(sig == null){
+            throw new ConstraintViolationException("sig must not be null");
+        }
+
+        if(x5c == null){
+            throw new ConstraintViolationException("x5c must not be null");
+        }
+        if(x5c.getCertificates().size() != 1){
+            throw new ConstraintViolationException("x5c must have exactly one certificate");
+        }
+
+        if(ecdaaKeyId == null){
+            throw new ConstraintViolationException("ecdaaKeyId must not be null");
+        }
+
     }
 
     @JsonIgnore

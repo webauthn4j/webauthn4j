@@ -17,11 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.webauthn4j.attestation.authenticator.extension.Extension;
-import com.webauthn4j.validator.annotation.UInt;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,20 +29,15 @@ public class AuthenticatorData implements Serializable {
     public static final byte BIT_AT = (byte) 0b01000000;
     public static final byte BIT_ED = (byte) 0b10000000;
 
-    @NotNull
-    @Size(min=32, max = 32)
     private byte[] rpIdHash;
 
     private byte flags;
 
-    @UInt
+
     private long signCount;
 
-    @Valid
     private AttestedCredentialData attestedCredentialData;
 
-    @NotNull
-    @Valid
     private List<Extension> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter, AttestedCredentialData attestedCredentialData, List<Extension> extensions) {

@@ -17,7 +17,6 @@
 package com.webauthn4j.validator;
 
 
-import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
@@ -26,16 +25,22 @@ import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,7 +92,16 @@ public class WebAuthnRegistrationContextValidator {
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
-                new SelfAttestationTrustworthinessValidatorImpl()
+                new DefaultSelfAttestationTrustworthinessValidator()
+        );
+    }
+
+    public static WebAuthnRegistrationContextValidator createNullAttestationStatementValidator(){
+        return new WebAuthnRegistrationContextValidator(
+                Collections.singletonList(new NoneAttestationStatementValidator()),
+                new NullCertPathTrustworthinessValidator(),
+                new NullECDAATrustworthinessValidator(),
+                new NullSelfAttestationTrustworthinessValidator()
         );
     }
 
@@ -95,12 +109,17 @@ public class WebAuthnRegistrationContextValidator {
     // ========================================================================================================
 
     public void validate(WebAuthnRegistrationContext registrationContext) {
+
+        BeanAssertUtil.validate(registrationContext);
+
         byte[] clientDataBytes = registrationContext.getCollectedClientData();
         byte[] attestationObjectBytes = registrationContext.getAttestationObject();
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
 
+        BeanAssertUtil.validate(collectedClientData);
+        BeanAssertUtil.validate(attestationObject);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,

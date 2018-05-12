@@ -1,6 +1,5 @@
 package integration;
 
-import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
@@ -10,14 +9,15 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidatorImpl;
-import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
@@ -39,8 +39,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
-            new ECDAATrustworthinessValidatorImpl(),
-            new SelfAttestationTrustworthinessValidatorImpl()
+            new DefaultECDAATrustworthinessValidator(),
+            new DefaultSelfAttestationTrustworthinessValidator()
     );
 
     @Test
@@ -156,8 +156,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
                 new TrustAnchorCertPathTrustworthinessValidator(mock(WebAuthnTrustAnchorService.class)),
-                new ECDAATrustworthinessValidatorImpl(),
-                new SelfAttestationTrustworthinessValidatorImpl()
+                new DefaultECDAATrustworthinessValidator(),
+                new DefaultSelfAttestationTrustworthinessValidator()
         );
         target.validate(registrationContext);
     }

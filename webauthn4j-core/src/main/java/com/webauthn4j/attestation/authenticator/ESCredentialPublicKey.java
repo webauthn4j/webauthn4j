@@ -18,12 +18,12 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -37,15 +37,12 @@ import java.util.Objects;
 
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
-    @NotNull
     @JsonProperty("-1")
     private Curve curve;
 
-    @NotNull
     @JsonProperty("-2")
     private byte[] x;
 
-    @NotNull
     @JsonProperty("-3")
     private byte[] y;
 
@@ -101,6 +98,12 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     }
 
     @Override
+    public byte[] getBytes(){
+        byte format = 0x04;
+        return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
+    }
+
+    @Override
     public PublicKey getPublicKey() {
         ECPoint ecPoint = new ECPoint(
                 new BigInteger(1, getX()),
@@ -118,6 +121,22 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
+    }
+
+    public void validate(){
+        if(getAlgorithm() == null){
+            throw new ConstraintViolationException("algorithm must not be null");
+        }
+        if(curve == null){
+            throw new ConstraintViolationException("curve must not be null");
+        }
+        if(x == null){
+            throw new ConstraintViolationException("x must not be null");
+        }
+        if(y == null){
+            throw new ConstraintViolationException("y must not be null");
+        }
+        //TODO: validate d
     }
 
     @Override

@@ -18,9 +18,10 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -31,10 +32,8 @@ import java.util.Arrays;
 
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
-    @NotNull
     @JsonProperty("-1")
     private byte[] n;
-    @NotNull
     @JsonProperty("-2")
     private byte[] e;
 
@@ -65,6 +64,24 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
             return factory.generatePublic(spec);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    @Override
+    public byte[] getBytes() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public void validate() {
+        if(getAlgorithm() == null){
+            throw new ConstraintViolationException("algorithm must not be null");
+        }
+        if(e == null){
+            throw new ConstraintViolationException("e must not be null");
+        }
+        if(n == null){
+            throw new ConstraintViolationException("n must not be null");
         }
     }
 

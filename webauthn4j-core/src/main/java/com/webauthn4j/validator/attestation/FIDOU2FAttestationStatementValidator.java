@@ -1,6 +1,7 @@
 package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
@@ -71,7 +72,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
-        ECPublicKey userPublicKey = (ECPublicKey) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
+        CredentialPublicKey credentialPublicKey = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 
@@ -80,7 +81,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
-        byte[] userPublicKeyBytes = userPublicKey.getEncoded();
+        byte[] userPublicKeyBytes = credentialPublicKey.getBytes();
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
         byteBuffer.put((byte) 0x00); //RFU

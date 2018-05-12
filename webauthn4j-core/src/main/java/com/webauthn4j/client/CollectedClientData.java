@@ -18,7 +18,6 @@ package com.webauthn4j.client;
 
 import com.webauthn4j.client.challenge.Challenge;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -30,11 +29,8 @@ public class CollectedClientData implements Serializable {
     public static final String TYPE_WEBAUTHN_CREATE = "webauthn.create";
 
     //~ Instance fields ================================================================================================
-    @NotNull
     private String type;
-    @NotNull
     private Challenge challenge;
-    @NotNull
     private Origin origin;
     private Object tokenBinding; // Since Firefox Nightly haven't conform latest WebAuthn spec as of 2018-03-17, made it Object type
 

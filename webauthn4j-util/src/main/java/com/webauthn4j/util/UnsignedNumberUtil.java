@@ -24,6 +24,7 @@ import java.nio.ByteBuffer;
 public class UnsignedNumberUtil {
 
     public static final short UNSIGNED_BYTE_MAX = 0xFF;
+    public static final long  UNSIGNED_INT_MAX = 0xFFFFFFFFL;
 
     private UnsignedNumberUtil() {
     }

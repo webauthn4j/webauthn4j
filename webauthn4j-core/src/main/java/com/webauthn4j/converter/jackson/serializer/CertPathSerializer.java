@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import com.webauthn4j.validator.exception.CertificateException;
 
 import java.io.IOException;
 import java.security.cert.CertPath;

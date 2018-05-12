@@ -41,9 +41,6 @@ class RpIdHashValidator {
         if(rpId == null){
             throw new IllegalArgumentException("relyingParty must not be null");
         }
-        if(rpIdHash == null || rpIdHash.length != 32){
-            throw new BadRpIdException("rpIdHash must be 32 bytes length");
-        }
 
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);

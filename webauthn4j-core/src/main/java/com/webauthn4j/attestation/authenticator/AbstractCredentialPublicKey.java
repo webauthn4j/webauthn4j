@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 
-import javax.validation.constraints.NotNull;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
@@ -35,7 +34,6 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @JsonProperty("2")
     private byte[] keyId;
 
-    @NotNull
     @JsonProperty("3")
     private COSEAlgorithmIdentifier algorithm;
 

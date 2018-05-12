@@ -25,4 +25,6 @@ public interface AttestationStatement extends Serializable {
     String getFormat();
 
     AttestationType getAttestationType();
+
+    void validate();
 }
