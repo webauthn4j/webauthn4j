@@ -2,8 +2,6 @@ package net.sharplab.springframework.security.webauthn.sample.app.config;
 
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
-import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
-import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
@@ -48,8 +46,8 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
-        return new WebAuthnAuthenticationContextValidator(assertionSignatureValidator);
+    public WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator() {
+        return new WebAuthnAuthenticationContextValidator();
     }
 
     @Bean
@@ -75,11 +73,6 @@ public class WebSecurityBeanConfig {
     @Bean
     public NoneAttestationStatementValidator noneAttestationStatementValidator() {
         return new NoneAttestationStatementValidator();
-    }
-
-    @Bean
-    public AssertionSignatureValidatorImpl webAuthnAssertionSignatureVerifier() {
-        return new AssertionSignatureValidatorImpl();
     }
 
     @Bean

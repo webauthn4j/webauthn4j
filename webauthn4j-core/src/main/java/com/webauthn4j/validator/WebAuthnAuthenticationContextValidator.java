@@ -16,14 +16,14 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.jackson.deserializer.AuthenticatorDataDeserializer;
-import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
+import com.webauthn4j.converter.jackson.deserializer.AuthenticatorDataDeserializer;
+import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
@@ -46,25 +46,44 @@ public class WebAuthnAuthenticationContextValidator {
     private ChallengeValidator challengeValidator = new ChallengeValidator();
     private OriginValidator originValidator = new OriginValidator();
     private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private AuthenticatorDataDeserializer deserializer;
+    private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
 
-    private AssertionSignatureValidator assertionSignatureValidator;
-
+    private AuthenticatorDataDeserializer authenticatorDataDeserializer = new AuthenticatorDataDeserializer();
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 
-    public WebAuthnAuthenticationContextValidator(AssertionSignatureValidator assertionSignatureValidator) {
-        this.assertionSignatureValidator = assertionSignatureValidator;
-
-        this.deserializer = new AuthenticatorDataDeserializer();
-    }
+    // ~ Methods
+    // ========================================================================================================
 
     public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
 
-        // In the spec, claimed as "C"
-        CollectedClientData collectedClientData = collectedClientDataConverter.convert(webAuthnAuthenticationContext.getCollectedClientData());
-        AuthenticatorData authenticatorData = deserializer.deserialize(webAuthnAuthenticationContext.getAuthenticatorData());
+        byte[] credentialId = webAuthnAuthenticationContext.getCredentialId();
+
+        // Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
+        // and signature respectively.
+        byte[] cData = webAuthnAuthenticationContext.getCollectedClientData();
+        byte[] aData = webAuthnAuthenticationContext.getAuthenticatorData();
+        byte[] sig = webAuthnAuthenticationContext.getSignature();
+
+        if(credentialId == null){
+            throw new ConstraintViolationException("credentialId must not be null");
+        }
+        if(cData == null){
+            throw new ConstraintViolationException("collectedClientData must not be null");
+        }
+        if(aData == null){
+            throw new ConstraintViolationException("authenticatorData must not be null");
+        }
+        if(sig == null){
+            throw new ConstraintViolationException("signature must not be null");
+        }
+
+        // Let JSONtext be the result of running UTF-8 decode on the value of cData.
+        // Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
+        // (In the spec, claimed as "C", but use "collectedClientData" here)
+        CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
+        AuthenticatorData authenticatorData = authenticatorDataDeserializer.deserialize(aData);
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
         // Verify that the value of C.type is the string webauthn.get.
@@ -111,7 +130,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         // If the signature counter value adata.signCount is nonzero or the value stored in conjunction with
         // credential’s id attribute is nonzero, then run the following sub-step:
-        long presentedCounter = authenticatorData.getCounter();
+        long presentedCounter = authenticatorData.getSignCount();
         long storedCounter = authenticator.getCounter();
         if (presentedCounter > 0 || storedCounter > 0) {
             // If the signature counter value adata.signCount is

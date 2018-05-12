@@ -27,7 +27,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * TrustAnchorCertPathTrustworthinessValidator
+ * {@inheritDoc}
  */
 public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 

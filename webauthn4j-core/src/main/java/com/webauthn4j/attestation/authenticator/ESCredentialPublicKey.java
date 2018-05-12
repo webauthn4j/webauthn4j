@@ -21,6 +21,7 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -36,12 +37,19 @@ import java.util.Objects;
 
 public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
+    @NotNull
     @JsonProperty("-1")
     private Curve curve;
+
+    @NotNull
     @JsonProperty("-2")
     private byte[] x;
+
+    @NotNull
     @JsonProperty("-3")
     private byte[] y;
+
+    //TODO
     @JsonProperty("-4")
     private byte[] d;
 

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import javax.validation.constraints.NotNull;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -31,8 +32,12 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
 
     public static final String FORMAT = "fido-u2f";
 
+    @NotNull
+    //TODO: size check
     @JsonProperty
     private CertPath x5c;
+
+    @NotNull
     @JsonProperty
     private byte[] sig;
 

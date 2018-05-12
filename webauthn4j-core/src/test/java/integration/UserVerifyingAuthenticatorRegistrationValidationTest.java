@@ -1,6 +1,6 @@
 package integration;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
@@ -19,7 +19,6 @@ import com.webauthn4j.validator.attestation.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidatorImpl;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidatorImpl;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;

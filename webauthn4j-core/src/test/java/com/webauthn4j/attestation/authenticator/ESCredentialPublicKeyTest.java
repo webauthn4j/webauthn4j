@@ -17,7 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.test.TestUtil;

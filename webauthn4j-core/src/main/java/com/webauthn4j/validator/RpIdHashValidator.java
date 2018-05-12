@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import org.slf4j.Logger;
@@ -29,13 +29,24 @@ import java.util.Arrays;
 /**
  * Validates rpIdHash
  */
-public class RpIdHashValidator {
+class RpIdHashValidator {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void validate(byte[] rpIdHash, RelyingParty relyingParty) {
+        if(relyingParty == null){
+            throw new IllegalArgumentException("relyingParty must not be null");
+        }
+        String rpId = relyingParty.getRpId();
+        if(rpId == null){
+            throw new IllegalArgumentException("relyingParty must not be null");
+        }
+        if(rpIdHash == null || rpIdHash.length != 32){
+            throw new BadRpIdException("rpIdHash must be 32 bytes length");
+        }
+
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
-        byte[] relyingPartyRpIdBytes = relyingParty.getRpId().getBytes(StandardCharsets.UTF_8);
+        byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
             logger.debug("Authentication failed: bad rpId is specified");

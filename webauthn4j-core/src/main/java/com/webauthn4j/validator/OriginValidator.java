@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.validator.exception.BadOriginException;
@@ -28,11 +28,18 @@ import java.util.Objects;
 /**
  * Validates {@link Origin} instance
  */
-public class OriginValidator {
+class OriginValidator {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
+        if(collectedClientData == null){
+            throw new IllegalArgumentException("collectedClientData must not be null");
+        }
+        if(relyingParty == null){
+            throw new IllegalArgumentException("relyingParty must not be null");
+        }
+
         if (!Objects.equals(collectedClientData.getOrigin(), relyingParty.getOrigin())) {
             logger.debug("Authentication failed: bad origin is specified");
             throw new BadOriginException("Bad origin");

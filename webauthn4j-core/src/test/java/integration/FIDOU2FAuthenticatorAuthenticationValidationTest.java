@@ -1,6 +1,6 @@
 package integration;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -14,7 +14,6 @@ import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidatorImpl;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
@@ -27,8 +26,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private Origin origin = new Origin("http://localhost");
     private ClientPlatform clientPlatform = new ClientPlatform(origin);
-    private AssertionSignatureValidatorImpl assertionSignatureValidator = new AssertionSignatureValidatorImpl();
-    private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator(assertionSignatureValidator);
+    private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     @Test
     public void validate_test() {

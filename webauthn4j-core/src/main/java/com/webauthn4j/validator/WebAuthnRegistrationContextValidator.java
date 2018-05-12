@@ -17,7 +17,7 @@
 package com.webauthn4j.validator;
 
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
@@ -40,15 +40,14 @@ import java.util.Objects;
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 /**
- * Validates {@link WebAuthnRegistrationContext} instance
+ * {@inheritDoc}
  */
 public class WebAuthnRegistrationContextValidator {
 
-    //~ Instance fields
+    // ~ Instance fields
     // ================================================================================================
 
-    List<AttestationStatementValidator> attestationStatementValidators;
-
+    private List<AttestationStatementValidator> attestationStatementValidators;
     private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
     private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
     private ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
@@ -71,6 +70,9 @@ public class WebAuthnRegistrationContextValidator {
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
         this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
     }
+
+    // ~ Methods
+    // ========================================================================================================
 
     public void validate(WebAuthnRegistrationContext registrationContext) {
         byte[] clientDataBytes = registrationContext.getCollectedClientData();

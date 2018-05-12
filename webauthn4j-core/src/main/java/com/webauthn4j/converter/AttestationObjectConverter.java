@@ -2,7 +2,7 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;

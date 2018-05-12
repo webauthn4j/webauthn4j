@@ -6,7 +6,7 @@ import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
-import com.webauthn4j.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +35,7 @@ public class AuthenticatorDataConverter {
         byte[] rpIdHash = value.getRpIdHash();
         byteArrayOutputStream.write(rpIdHash);
         byteArrayOutputStream.write(new byte[]{value.getFlags()});
-        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(value.getCounter()));
+        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(value.getSignCount()));
         if (value.getAttestedCredentialData() != null) {
             byteArrayOutputStream.write(serializeAttestedCredentialData(value.getAttestedCredentialData()));
         }

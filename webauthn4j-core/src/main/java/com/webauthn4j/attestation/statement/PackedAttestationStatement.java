@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 
+import javax.validation.constraints.NotNull;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -35,12 +36,20 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     public static final String FORMAT = "packed";
 
+    @NotNull
     @JsonProperty
     private COSEAlgorithmIdentifier alg;
+
+    @NotNull
     @JsonProperty
     private byte[] sig;
+
+    @NotNull
+    //TODO: size check
     @JsonProperty
     private CertPath x5c;
+
+    @NotNull
     @JsonProperty
     private byte[] ecdaaKeyId;
 

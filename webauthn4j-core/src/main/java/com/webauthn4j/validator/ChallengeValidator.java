@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.slf4j.Logger;
@@ -29,24 +29,43 @@ import java.util.Arrays;
 /**
  * Validates {@link Challenge} instance
  */
-public class ChallengeValidator {
+class ChallengeValidator {
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
     public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
+        if(collectedClientData == null){
+            throw new IllegalArgumentException("collectedClientData must not be null");
+        }
+        if(relyingParty == null){
+            throw new IllegalArgumentException("relyingParty must not be null");
+        }
         Challenge savedChallenge = relyingParty.getChallenge();
+        Challenge collectedChallenge = collectedClientData.getChallenge();
+
         if (savedChallenge == null) {
-            logger.debug("Authentication failed: challenge is not stored in the challenge repository");
+            logger.debug("Authentication failed: challenge is not found in the relying party");
             throw new MissingChallengeException("Missing challenge");
         }
-        byte[] savedChallengeValue = savedChallenge.getValue();
-
-        byte[] challengeValueInClientData = collectedClientData.getChallenge().getValue();
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to
         // the authenticator in the PublicKeyCredentialRequestOptions passed to the get() call.
-        if (!Arrays.equals(challengeValueInClientData, savedChallengeValue)) {
+        validate(savedChallenge, collectedChallenge);
+
+    }
+
+    public void validate(Challenge expected, Challenge actual){
+        if(expected == null){
+            throw new IllegalArgumentException("expected must not be null");
+        }
+        if(actual == null){
+            throw new IllegalArgumentException("actual must not be null");
+        }
+        byte[] expectedChallengeBytes = expected.getValue();
+        byte[] actualChallengeBytes = actual.getValue();
+
+        if (!Arrays.equals(expectedChallengeBytes, actualChallengeBytes)) {
             logger.debug("Authentication failed: bad challenge is specified");
             throw new BadChallengeException("Bad challenge");
         }

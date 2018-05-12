@@ -16,8 +16,7 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.RelyingParty;
-import com.webauthn4j.anchor.KeyStoreTrustAnchorProviderImpl;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
@@ -47,7 +46,6 @@ import java.security.cert.*;
 import java.util.*;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
 
 /**
@@ -222,7 +220,7 @@ public class TestUtil {
 
     public static Authenticator createAuthenticator(AttestationObject attestationObject){
         AttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
-        return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getCounter());
+        return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getSignCount());
     }
 
     public static TrustAnchorProvider createTrustAnchorProviderWith2tierTestRootCACertificate() {

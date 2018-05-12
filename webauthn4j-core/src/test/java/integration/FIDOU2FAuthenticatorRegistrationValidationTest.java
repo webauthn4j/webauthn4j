@@ -1,6 +1,6 @@
 package integration;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;

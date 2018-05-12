@@ -1,6 +1,5 @@
 package com.webauthn4j.validator;
 
-import com.webauthn4j.validator.assertion.signature.AssertionSignatureValidator;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,7 +9,7 @@ public class WebAuthnAuthenticationContextValidatorTest {
 
     @Test
     public void getter_setter_test(){
-        WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator(mock(AssertionSignatureValidator.class));
+        WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
         MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
         target.setMaliciousCounterValueHandler(maliciousCounterValueHandler);

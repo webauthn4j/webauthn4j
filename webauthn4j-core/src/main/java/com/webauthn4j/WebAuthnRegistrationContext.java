@@ -16,13 +16,22 @@
 
 package com.webauthn4j;
 
+import com.webauthn4j.rp.RelyingParty;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * WebAuthnRegistrationContext
  */
 public class WebAuthnRegistrationContext {
 
+    @NotNull
     private byte[] collectedClientData;
+
+    @NotNull
     private byte[] attestationObject;
+
+    @NotNull
     private RelyingParty relyingParty;
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,

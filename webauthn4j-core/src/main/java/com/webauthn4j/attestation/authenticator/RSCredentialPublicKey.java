@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -30,8 +31,10 @@ import java.util.Arrays;
 
 public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
 
+    @NotNull
     @JsonProperty("-1")
     private byte[] n;
+    @NotNull
     @JsonProperty("-2")
     private byte[] e;
 

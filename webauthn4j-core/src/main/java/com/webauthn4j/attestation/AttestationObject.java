@@ -21,15 +21,21 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
+    @NotNull
+    @Valid
     @JsonProperty("authData")
-    private com.webauthn4j.attestation.authenticator.AuthenticatorData authenticatorData;
+    private AuthenticatorData authenticatorData;
 
+    @NotNull
+    @Valid
     @JsonProperty("attStmt")
     @JsonTypeInfo(
             use = JsonTypeInfo.Id.NAME,

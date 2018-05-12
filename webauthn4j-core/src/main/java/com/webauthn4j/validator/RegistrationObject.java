@@ -1,6 +1,6 @@
 package com.webauthn4j.validator;
 
-import com.webauthn4j.RelyingParty;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.client.CollectedClientData;
 

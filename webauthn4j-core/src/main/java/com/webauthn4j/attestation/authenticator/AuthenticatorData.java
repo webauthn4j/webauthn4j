@@ -17,9 +17,14 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.validator.annotation.UInt;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AuthenticatorData implements Serializable {
@@ -28,18 +33,33 @@ public class AuthenticatorData implements Serializable {
     public static final byte BIT_AT = (byte) 0b01000000;
     public static final byte BIT_ED = (byte) 0b10000000;
 
+    @NotNull
+    @Size(min=32, max = 32)
     private byte[] rpIdHash;
+
     private byte flags;
-    private long counter;
+
+    @UInt
+    private long signCount;
+
+    @Valid
     private AttestedCredentialData attestedCredentialData;
+
+    @NotNull
+    @Valid
     private List<Extension> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter, AttestedCredentialData attestedCredentialData, List<Extension> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
-        this.counter = counter;
+        this.signCount = counter;
         this.attestedCredentialData = attestedCredentialData;
-        this.extensions = extensions;
+        if(extensions == null){
+            this.extensions = Collections.emptyList();
+        }
+        else {
+            this.extensions = extensions;
+        }
     }
 
     public AuthenticatorData(){}
@@ -68,8 +88,8 @@ public class AuthenticatorData implements Serializable {
         return checkFlagED(this.flags);
     }
 
-    public long getCounter() {
-        return counter;
+    public long getSignCount() {
+        return signCount;
     }
 
     public AttestedCredentialData getAttestedCredentialData() {
@@ -91,7 +111,7 @@ public class AuthenticatorData implements Serializable {
         AuthenticatorData that = (AuthenticatorData) o;
 
         if (flags != that.flags) return false;
-        if (counter != that.counter) return false;
+        if (signCount != that.signCount) return false;
         if (!Arrays.equals(rpIdHash, that.rpIdHash)) return false;
         if (attestedCredentialData != null ? !attestedCredentialData.equals(that.attestedCredentialData) : that.attestedCredentialData != null)
             return false;
@@ -105,7 +125,7 @@ public class AuthenticatorData implements Serializable {
     public int hashCode() {
         int result = Arrays.hashCode(rpIdHash);
         result = 31 * result + (int) flags;
-        result = 31 * result + (int) (counter ^ (counter >>> 32));
+        result = 31 * result + (int) (signCount ^ (signCount >>> 32));
         result = 31 * result + (attestedCredentialData != null ? attestedCredentialData.hashCode() : 0);
         result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
         return result;
