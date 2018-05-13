@@ -3,6 +3,7 @@ package net.sharplab.springframework.security.webauthn.sample.util.modelmapper.c
 import com.webauthn4j.attestation.authenticator.Curve;
 import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyType;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.ModelMapperConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.ESCredentialPublicKeyVO;
 import org.junit.Test;
@@ -21,7 +22,7 @@ public class CredentialPublicKeyToCredentialPublicKeyVOConverterTest {
 
         //Given
         ESCredentialPublicKey source = new ESCredentialPublicKey(
-                0,
+                COSEKeyType.EC2,
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -37,6 +38,7 @@ public class CredentialPublicKeyToCredentialPublicKeyVOConverterTest {
         modelMapper.map(source, destination);
 
         //Then
+        assertThat(destination).hasFieldOrPropertyWithValue("keyType", COSEKeyType.EC2);
         assertThat(destination).hasFieldOrPropertyWithValue("algorithm", COSEAlgorithmIdentifier.ES256);
         assertThat(destination).hasFieldOrPropertyWithValue("curve", Curve.SECP256R1);
         assertThat(destination).hasFieldOrPropertyWithValue("x", new byte[]{0x00, 0x01});

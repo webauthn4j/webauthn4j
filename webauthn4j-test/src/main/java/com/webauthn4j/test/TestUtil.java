@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test;
 
+import com.webauthn4j.attestation.statement.COSEKeyType;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
@@ -71,7 +72,7 @@ public class TestUtil {
 
     public static ESCredentialPublicKey createESCredentialPublicKey() {
         return new ESCredentialPublicKey(
-                0,
+                COSEKeyType.EC2,
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -86,7 +87,7 @@ public class TestUtil {
     public static RSCredentialPublicKey createRSCredentialPublicKey() {
         RSCredentialPublicKey credentialPublicKey;
         credentialPublicKey = new RSCredentialPublicKey(
-                0,
+                COSEKeyType.RSA,
                 null,
                 COSEAlgorithmIdentifier.RS256,
                 null,
