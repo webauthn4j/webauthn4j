@@ -3,7 +3,7 @@ package com.webauthn4j.test.authenticator.fido.u2f;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
@@ -43,11 +43,11 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 registrationResponse.getSignature()
         );
 
-        ESCredentialPublicKey esCredentialPublicKey = ESCredentialPublicKey.create(registrationResponse.getUserPublicKey());
+        ECCredentialPublicKey ecCredentialPublicKey = ECCredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
 
         byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =
-                new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), esCredentialPublicKey);
+                new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ecCredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData, null);

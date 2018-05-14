@@ -12,8 +12,8 @@ import java.io.Serializable;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(name = "RSCredentialPublicKey", value = RSCredentialPublicKeyVO.class),
-        @JsonSubTypes.Type(name = "ESCredentialPublicKey", value = ESCredentialPublicKeyVO.class)
+        @JsonSubTypes.Type(name = "RSACredentialPublicKey", value = RSCredentialPublicKeyVO.class),
+        @JsonSubTypes.Type(name = "ECCredentialPublicKey", value = ECCredentialPublicKeyVO.class)
 })
 @Data
 @EqualsAndHashCode

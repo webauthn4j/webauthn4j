@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class AuthenticatorDataSerializerTest {
         ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
-        AbstractCredentialPublicKey credentialPublicKey = new ESCredentialPublicKey();
+        AbstractCredentialPublicKey credentialPublicKey = new ECCredentialPublicKey();
 
         byte[] aaGuid = new byte[16];
 

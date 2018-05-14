@@ -4,7 +4,7 @@ import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import net.sharplab.springframework.security.webauthn.sample.domain.config.ModelMapperConfig;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.AttestedCredentialDataVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.CredentialPublicKeyVO;
-import net.sharplab.springframework.security.webauthn.sample.domain.vo.ESCredentialPublicKeyVO;
+import net.sharplab.springframework.security.webauthn.sample.domain.vo.ECCredentialPublicKeyVO;
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
 
@@ -19,7 +19,7 @@ public class AttestedCredentialDataVOToAttestedCredentialDataConverterTest {
         //Given
         byte[] aaGuid = new byte[16];
         byte[] credentialId = new byte[32];
-        CredentialPublicKeyVO credentialPublicKey = new ESCredentialPublicKeyVO();
+        CredentialPublicKeyVO credentialPublicKey = new ECCredentialPublicKeyVO();
         AttestedCredentialDataVO source = new AttestedCredentialDataVO();
         source.setAaGuid(aaGuid);
         source.setCredentialId(credentialId);

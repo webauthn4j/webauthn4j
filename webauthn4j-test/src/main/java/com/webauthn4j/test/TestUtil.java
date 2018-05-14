@@ -67,11 +67,11 @@ public class TestUtil {
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {
-        return new AttestedCredentialData(new byte[16], new byte[32], createESCredentialPublicKey());
+        return new AttestedCredentialData(new byte[16], new byte[32], createECCredentialPublicKey());
     }
 
-    public static ESCredentialPublicKey createESCredentialPublicKey() {
-        return new ESCredentialPublicKey(
+    public static ECCredentialPublicKey createECCredentialPublicKey() {
+        return new ECCredentialPublicKey(
                 COSEKeyType.EC2,
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -84,9 +84,9 @@ public class TestUtil {
         );
     }
 
-    public static RSCredentialPublicKey createRSCredentialPublicKey() {
-        RSCredentialPublicKey credentialPublicKey;
-        credentialPublicKey = new RSCredentialPublicKey(
+    public static RSACredentialPublicKey createRSCredentialPublicKey() {
+        RSACredentialPublicKey credentialPublicKey;
+        credentialPublicKey = new RSACredentialPublicKey(
                 COSEKeyType.RSA,
                 null,
                 COSEAlgorithmIdentifier.RS256,

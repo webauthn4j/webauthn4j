@@ -25,7 +25,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
@@ -96,7 +96,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
 
     AbstractCredentialPublicKey deserializeCredentialPublicKey(InputStream inputStream) {
         try {
-            return objectMapper.readValue(inputStream, ESCredentialPublicKey.class); //TODO
+            return objectMapper.readValue(inputStream, ECCredentialPublicKey.class); //TODO
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

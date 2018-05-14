@@ -31,20 +31,20 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 
-public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
+public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
     @JsonProperty("-1")
     private byte[] n;
     @JsonProperty("-2")
     private byte[] e;
 
-    public RSCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
+    public RSACredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.n = n;
         this.e = e;
     }
 
-    public RSCredentialPublicKey(){super();}
+    public RSACredentialPublicKey(){super();}
 
     public byte[] getN() {
         return n;
@@ -90,7 +90,7 @@ public class RSCredentialPublicKey extends AbstractCredentialPublicKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RSCredentialPublicKey that = (RSCredentialPublicKey) o;
+        RSACredentialPublicKey that = (RSACredentialPublicKey) o;
         return Arrays.equals(n, that.n) &&
                 Arrays.equals(e, that.e);
     }

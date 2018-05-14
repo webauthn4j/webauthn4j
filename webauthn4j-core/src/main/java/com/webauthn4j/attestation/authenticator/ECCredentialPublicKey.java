@@ -36,7 +36,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ESCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
+public class ECCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
     @JsonProperty("-1")
     private Curve curve;
@@ -50,12 +50,12 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-4")
     private byte[] d;
 
-    public ESCredentialPublicKey(){super();}
+    public ECCredentialPublicKey(){super();}
 
     /**
-     * Constructor for all fields
+     * Constructor with all arguments
      */
-    public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
                                  Curve curve, byte[] x, byte[] y, byte[] d) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
@@ -67,7 +67,7 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     /**
      * Constructor for public key
      */
-    public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
                                  Curve curve, byte[] x, byte[] y) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
@@ -78,7 +78,7 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     /**
      * Constructor for private key
      */
-    public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
                                  Curve curve, byte[] d) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
@@ -86,12 +86,15 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     }
 
     /**
-     * Factory method for uncompressed ECC key format
+     * create from uncompressed ECC key
      */
-    public static ESCredentialPublicKey create(byte[] publicKey) {
+    public static ECCredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
+        if(publicKey.length != 65){
+            throw new IllegalArgumentException("publicKey must be 65 bytes length");
+        }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new ESCredentialPublicKey(
+        return new ECCredentialPublicKey(
                 COSEKeyType.EC2,
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -99,16 +102,18 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
                 null,
                 Curve.SECP256R1,
                 x,
-                y,
-                null
+                y
         );
     }
 
+    /**
+     * create from {@code ECPublicKey}
+     */
     public static CredentialPublicKey create(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();
-        return new ESCredentialPublicKey(
+        return new ECCredentialPublicKey(
                 COSEKeyType.EC2,
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -116,8 +121,7 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
                 null,
                 Curve.SECP256R1,
                 x,
-                y,
-                null
+                y
         );
     }
 
@@ -170,20 +174,21 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         if(curve == null){
             throw new ConstraintViolationException("curve must not be null");
         }
-        if(x == null){
-            throw new ConstraintViolationException("x must not be null");
+        if(d == null){
+            if(x == null){
+                throw new ConstraintViolationException("x must not be null");
+            }
+            if(y == null){
+                throw new ConstraintViolationException("y must not be null");
+            }
         }
-        if(y == null){
-            throw new ConstraintViolationException("y must not be null");
-        }
-        //TODO: validate d
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ESCredentialPublicKey that = (ESCredentialPublicKey) o;
+        ECCredentialPublicKey that = (ECCredentialPublicKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
                 Arrays.equals(y, that.y) &&

@@ -24,33 +24,33 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for ESCredentialPublicKey
+ * Test for RSACredentialPublicKey
  */
-public class ESCredentialPublicKeyTest {
+public class RSACredentialPublicKeyTest {
 
     private ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
     private ObjectMapper cborMapper = ObjectMapperUtil.createCBORMapper();
 
     @Test
     public void equals_test() {
-        ESCredentialPublicKey instanceA = TestUtil.createESCredentialPublicKey();
-        ESCredentialPublicKey instanceB = TestUtil.createESCredentialPublicKey();
+        RSACredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     public void cbor_serialize_deserialize_test() throws Exception {
-        ESCredentialPublicKey original = TestUtil.createESCredentialPublicKey();
+        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         byte[] serialized = cborMapper.writeValueAsBytes(original);
-        ESCredentialPublicKey result = cborMapper.readValue(serialized, ESCredentialPublicKey.class);
+        RSACredentialPublicKey result = cborMapper.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
     @Test
     public void json_serialize_deserialize_test() throws Exception {
-        ESCredentialPublicKey original = TestUtil.createESCredentialPublicKey();
+        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         String serialized = jsonMapper.writeValueAsString(original);
-        ESCredentialPublicKey result = jsonMapper.readValue(serialized, ESCredentialPublicKey.class);
+        RSACredentialPublicKey result = jsonMapper.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 }

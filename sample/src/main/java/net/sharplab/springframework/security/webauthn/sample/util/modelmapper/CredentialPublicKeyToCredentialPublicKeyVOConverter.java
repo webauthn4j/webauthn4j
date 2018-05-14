@@ -1,10 +1,10 @@
 package net.sharplab.springframework.security.webauthn.sample.util.modelmapper;
 
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.ESCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.RSCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.RSACredentialPublicKey;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.CredentialPublicKeyVO;
-import net.sharplab.springframework.security.webauthn.sample.domain.vo.ESCredentialPublicKeyVO;
+import net.sharplab.springframework.security.webauthn.sample.domain.vo.ECCredentialPublicKeyVO;
 import net.sharplab.springframework.security.webauthn.sample.domain.vo.RSCredentialPublicKeyVO;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
@@ -22,16 +22,16 @@ public class CredentialPublicKeyToCredentialPublicKeyVOConverter implements Conv
         if (source == null) {
             return null;
         }
-        if (source.getClass() == RSCredentialPublicKey.class) {
+        if (source.getClass() == RSACredentialPublicKey.class) {
             if (destination == null) {
                 destination = new RSCredentialPublicKeyVO();
             }
-            context.getMappingEngine().map(context.create((RSCredentialPublicKey) source, (RSCredentialPublicKeyVO)destination));
-        } else if (source.getClass() == ESCredentialPublicKey.class) {
+            context.getMappingEngine().map(context.create((RSACredentialPublicKey) source, (RSCredentialPublicKeyVO)destination));
+        } else if (source.getClass() == ECCredentialPublicKey.class) {
             if (destination == null) {
-                destination = new ESCredentialPublicKeyVO();
+                destination = new ECCredentialPublicKeyVO();
             }
-            context.getMappingEngine().map(context.create((ESCredentialPublicKey) source, (ESCredentialPublicKeyVO)destination));
+            context.getMappingEngine().map(context.create((ECCredentialPublicKey) source, (ECCredentialPublicKeyVO)destination));
         } else {
             throw new IllegalArgumentException();
         }

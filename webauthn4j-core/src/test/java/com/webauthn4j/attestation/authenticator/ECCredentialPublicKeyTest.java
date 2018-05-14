@@ -24,33 +24,33 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for RSCredentialPublicKey
+ * Test for ECCredentialPublicKey
  */
-public class RSCredentialPublicKeyTest {
+public class ECCredentialPublicKeyTest {
 
     private ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
     private ObjectMapper cborMapper = ObjectMapperUtil.createCBORMapper();
 
     @Test
     public void equals_test() {
-        RSCredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
-        RSCredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
+        ECCredentialPublicKey instanceA = TestUtil.createECCredentialPublicKey();
+        ECCredentialPublicKey instanceB = TestUtil.createECCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     public void cbor_serialize_deserialize_test() throws Exception {
-        RSCredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         byte[] serialized = cborMapper.writeValueAsBytes(original);
-        RSCredentialPublicKey result = cborMapper.readValue(serialized, RSCredentialPublicKey.class);
+        ECCredentialPublicKey result = cborMapper.readValue(serialized, ECCredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
     @Test
     public void json_serialize_deserialize_test() throws Exception {
-        RSCredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         String serialized = jsonMapper.writeValueAsString(original);
-        RSCredentialPublicKey result = jsonMapper.readValue(serialized, RSCredentialPublicKey.class);
+        ECCredentialPublicKey result = jsonMapper.readValue(serialized, ECCredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 }

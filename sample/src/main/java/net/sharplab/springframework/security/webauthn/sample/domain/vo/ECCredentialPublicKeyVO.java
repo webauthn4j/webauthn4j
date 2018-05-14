@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ESCredentialPublicKeyVO extends AbstractCredentialPublicKeyVO {
+public class ECCredentialPublicKeyVO extends AbstractCredentialPublicKeyVO {
 
     private Curve curve;
     private byte[] x;
