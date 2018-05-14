@@ -35,7 +35,7 @@ public class FIDOU2FAuthenticator {
     }
 
     public FIDOU2FAuthenticator(){
-        this(TestData.FIDO_U2F_AUTHENTICATOR_PRIVATE_KEY, TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_CERTIFICATE, 0);
+        this(TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY, TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_CERTIFICATE, 0);
     }
 
     public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption){

@@ -70,7 +70,6 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         String rpId = publicKeyCredentialRequestOptions.getRpId();
 
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
-        ;
         byte control = 0x00;
         byte[] challenge = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         byte[] applicationParameter = rpIdHash;

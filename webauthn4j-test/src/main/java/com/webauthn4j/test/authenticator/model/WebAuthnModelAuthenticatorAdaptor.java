@@ -18,20 +18,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
-        boolean requireUserVerification;
-        switch (publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerificationRequirement()){
-            case REQUIRED:
-                requireUserVerification = true;
-                break;
-            case PREFERRED:
-                requireUserVerification = webAuthnModelAuthenticator.isCapableOfUserVerification();
-                break;
-            case DISCOURAGED:
-                requireUserVerification = false;
-                break;
-            default:
-                throw new NotImplementedException();
-        }
+        boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerificationRequirement());
         MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest();
         makeCredentialRequest.setHash(clientDataHash);
         makeCredentialRequest.setRpEntity(publicKeyCredentialCreationOptions.getRp());
@@ -44,24 +31,6 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         makeCredentialRequest.setExtensions(publicKeyCredentialCreationOptions.getExtentions());
         MakeCredentialResponse makeCredentialResponse = webAuthnModelAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
 
-        /*
-        AttestationStatement attestationStatement;
-
-        ESCredentialPublicKey esCredentialPublicKey = convertToEsCredentialPublicKey(makeCredentialResponse.getUserPublicKey());
-
-        byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
-        AttestedCredentialData attestedCredentialData =
-                new AttestedCredentialData(aaGuid, makeCredentialResponse.getKeyHandle(), esCredentialPublicKey);
-
-        byte flag = BIT_AT | BIT_UP;
-        AuthenticatorData authenticatorData = new AuthenticatorData();
-
-
-        AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
-
-        byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
-        */
-
         return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
     }
 
@@ -72,11 +41,44 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     @Override
     public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData, PublicKeyCredentialDescriptor credentialDescriptor) {
-        return null;
+        return authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, new AuthenticationEmulationOption());
     }
 
     @Override
     public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData, PublicKeyCredentialDescriptor credentialDescriptor, AuthenticationEmulationOption authenticationEmulationOption) {
-        return null;
+        byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
+        boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialRequestOptions.getUserVerification());
+
+        GetAssertionRequest getAssertionRequest = new GetAssertionRequest();
+        getAssertionRequest.setRpId(publicKeyCredentialRequestOptions.getRpId());
+        getAssertionRequest.setHash(clientDataHash);
+        getAssertionRequest.setAllowCredentialDescriptorList(publicKeyCredentialRequestOptions.getAllowCredentials());
+        getAssertionRequest.setRequireUserPresence(!requireUserVerification);
+        getAssertionRequest.setRequireUserVerification(requireUserVerification);
+        getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
+
+        GetAssertionResponse getAssertionResponse = webAuthnModelAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
+
+        return new CredentialRequestResponse(
+                getAssertionResponse.getCredentialId(),
+                collectedClientDataBytes,
+                getAssertionResponse.getAuthenticatorData(),
+                getAssertionResponse.getSignature(),
+                getAssertionResponse.getUserHandle()
+        );
+    }
+
+    private boolean getEffectiveUserVerificationRequirementForAssertion(UserVerificationRequirement userVerificationRequirement) {
+        switch (userVerificationRequirement){
+            case REQUIRED:
+                return true;
+            case PREFERRED:
+                return webAuthnModelAuthenticator.isCapableOfUserVerification();
+            case DISCOURAGED:
+                return false;
+            default:
+                throw new NotImplementedException();
+        }
     }
 }

@@ -47,12 +47,14 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-3")
     private byte[] y;
 
-    //TODO
     @JsonProperty("-4")
     private byte[] d;
 
     public ESCredentialPublicKey(){super();}
 
+    /**
+     * Constructor for all fields
+     */
     public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
                                  Curve curve, byte[] x, byte[] y, byte[] d) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
@@ -62,6 +64,30 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
         this.d = d;
     }
 
+    /**
+     * Constructor for public key
+     */
+    public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+                                 Curve curve, byte[] x, byte[] y) {
+        super(keyType, keyId, algorithm, keyOpts, baseIV);
+        this.curve = curve;
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+     * Constructor for private key
+     */
+    public ESCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+                                 Curve curve, byte[] d) {
+        super(keyType, keyId, algorithm, keyOpts, baseIV);
+        this.curve = curve;
+        this.d = d;
+    }
+
+    /**
+     * Factory method for uncompressed ECC key format
+     */
     public static ESCredentialPublicKey create(byte[] publicKey) {
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
@@ -79,7 +105,20 @@ public class ESCredentialPublicKey extends AbstractCredentialPublicKey implement
     }
 
     public static CredentialPublicKey create(ECPublicKey publicKey) {
-        return create(publicKey.getEncoded());
+        ECPoint ecPoint = publicKey.getW();
+        byte[] x = ecPoint.getAffineX().toByteArray();
+        byte[] y = ecPoint.getAffineY().toByteArray();
+        return new ESCredentialPublicKey(
+                COSEKeyType.EC2,
+                null,
+                COSEAlgorithmIdentifier.ES256,
+                null,
+                null,
+                Curve.SECP256R1,
+                x,
+                y,
+                null
+        );
     }
 
     public Curve getCurve() {

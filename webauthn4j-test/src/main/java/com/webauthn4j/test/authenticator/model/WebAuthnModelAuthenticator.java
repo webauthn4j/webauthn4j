@@ -51,7 +51,7 @@ public class WebAuthnModelAuthenticator {
 
     public WebAuthnModelAuthenticator(){
         this(
-                TestData.USER_VERIFYING_AUTHENTICATOR_PRIVATE_KEY,
+                TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERT_PATH,
                 true,
                 new byte[16],
@@ -150,19 +150,19 @@ public class WebAuthnModelAuthenticator {
         // Let (publicKey, privateKey) be a new pair of cryptographic keys using the combination of
         // PublicKeyCredentialType and cryptographic parameters represented by the first item in
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
-        PrivateKey publicKey;
-        CredentialPublicKey privateKey;
+        PrivateKey credentialPrivateKey;
+        CredentialPublicKey credentialPublicKey;
         try{
             KeyPair keyPair = KeyUtil.createKeyPair();
-            publicKey = keyPair.getPrivate();
-            privateKey = ESCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+            credentialPrivateKey = keyPair.getPrivate();
+            credentialPublicKey = ESCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
             // Let credentialSource be a new public key credential source with the fields:
             PublicKeyCredentialSource credentialSource = new PublicKeyCredentialSource();
             credentialSource.setType(PublicKeyCredentialType.PublicKey);
-            credentialSource.setPrivateKey(publicKey);
+            credentialSource.setPrivateKey(credentialPrivateKey);
             credentialSource.setRpId(rpEntity.getId());
             credentialSource.setUserHandle(userHandle);
             credentialSource.setOtherUI(null);
@@ -212,13 +212,13 @@ public class WebAuthnModelAuthenticator {
         if(userVerification) flag |= BIT_UV;
         if(processedExtensions.isEmpty()) flag |= BIT_ED;
 
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, privateKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
-        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null);
+        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null); //TODO:sig
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -265,7 +265,7 @@ public class WebAuthnModelAuthenticator {
             }
         }
         // Remove any items from credentialOptions whose rpId is not equal to rpId.
-        credentialOptions = credentialOptions.stream().filter( item -> !item.getRpId().equals(getAssertionRequest.getRpId())).collect(Collectors.toList());
+        credentialOptions = credentialOptions.stream().filter( item -> item.getRpId().equals(getAssertionRequest.getRpId())).collect(Collectors.toList());
 
         // If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation.
         if(credentialOptions.isEmpty()){
@@ -305,9 +305,9 @@ public class WebAuthnModelAuthenticator {
         // the privateKey of selectedCredential as shown in Figure 2, below. A simple, undelimited concatenation is
         // safe to use here because the authenticator data describes its own length.
         // The hash of the serialized client data (which potentially has a variable length) is always the last element.
-        byte[] collectedDataHash = getAssertionRequest.getHash();
-        ByteBuffer signedData = ByteBuffer.allocate(authenticatorData.length + collectedDataHash.length).put(collectedDataHash).put(collectedDataHash);
-        byte[] signature = calculateSignature(selectedCredential.getPrivateKey(), signedData.array());
+        byte[] clientDataHash = getAssertionRequest.getHash();
+        byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
+        byte[] signature = calculateSignature(selectedCredential.getPrivateKey(), signedData);
         // If any error occurred while generating the assertion signature,
         // return an error code equivalent to "UnknownError" and terminate the operation.
 
