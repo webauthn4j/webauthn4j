@@ -248,7 +248,8 @@ public class WebAuthnModelAuthenticator {
         List<PublicKeyCredentialSource> credentialOptions = new ArrayList<>();
 
         //If allowCredentialDescriptorList was supplied, then for each descriptor of allowCredentialDescriptorList:
-        if(getAssertionRequest.getAllowCredentialDescriptorList() != null){
+        List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList = getAssertionRequest.getAllowCredentialDescriptorList();
+        if(allowCredentialDescriptorList != null && !allowCredentialDescriptorList.isEmpty()){
             for(PublicKeyCredentialDescriptor credentialDescriptor : getAssertionRequest.getAllowCredentialDescriptorList()){
                 // Let credSource be the result of looking up descriptor.id in this authenticator.
                 PublicKeyCredentialSource credSource = lookup(credentialDescriptor.getId());

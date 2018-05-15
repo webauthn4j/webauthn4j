@@ -40,12 +40,13 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
     }
 
     @Override
-    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData, PublicKeyCredentialDescriptor credentialDescriptor) {
-        return authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, new AuthenticationEmulationOption());
+    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData) {
+        return authenticate(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
     @Override
-    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData, PublicKeyCredentialDescriptor credentialDescriptor, AuthenticationEmulationOption authenticationEmulationOption) {
+    public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData,
+                                                  AuthenticationEmulationOption authenticationEmulationOption) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialRequestOptions.getUserVerification());

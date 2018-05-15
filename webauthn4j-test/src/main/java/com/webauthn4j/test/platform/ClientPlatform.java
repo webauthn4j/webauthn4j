@@ -16,6 +16,8 @@ import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
+import java.util.List;
+
 @WIP
 public class ClientPlatform {
 
@@ -96,22 +98,20 @@ public class ClientPlatform {
         if(authenticatorAdaptor == null){
             throw  noAuthenticatorSuccessException;
         }
-        for(PublicKeyCredentialDescriptor credentialDescriptor : publicKeyCredentialRequestOptions.getAllowCredentials()){
-            try{
-                CredentialRequestResponse credentialRequestResponse =
-                        authenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, authenticationEmulationOption);
+        try{
+            CredentialRequestResponse credentialRequestResponse =
+                    authenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, authenticationEmulationOption);
 
-                byte[] credentialId = credentialRequestResponse.getCredentialId();
-                return new PublicKeyCredential<>(credentialId, new AuthenticatorAssertionResponse(
-                        credentialRequestResponse.getCollectedClientDataBytes(),
-                        credentialRequestResponse.getAuthenticatorDataBytes(),
-                        credentialRequestResponse.getSignature(),
-                        credentialRequestResponse.getUserHandle()
-                ));
-            }
-            catch (ValidationException e){
-                noAuthenticatorSuccessException.addSuppressed(e);
-            }
+            byte[] credentialId = credentialRequestResponse.getCredentialId();
+            return new PublicKeyCredential<>(credentialId, new AuthenticatorAssertionResponse(
+                    credentialRequestResponse.getCollectedClientDataBytes(),
+                    credentialRequestResponse.getAuthenticatorDataBytes(),
+                    credentialRequestResponse.getSignature(),
+                    credentialRequestResponse.getUserHandle()
+            ));
+        }
+        catch (ValidationException e){
+            noAuthenticatorSuccessException.addSuppressed(e);
         }
         throw noAuthenticatorSuccessException;
     }

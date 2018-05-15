@@ -13,12 +13,10 @@ public interface AuthenticatorAdaptor {
                                         RegistrationEmulationOption registrationEmulationOption);
 
     CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                           CollectedClientData collectedClientData,
-                                           PublicKeyCredentialDescriptor credentialDescriptor);
+                                           CollectedClientData collectedClientData);
 
     CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
                                            CollectedClientData collectedClientData,
-                                           PublicKeyCredentialDescriptor credentialDescriptor,
                                            AuthenticationEmulationOption authenticationEmulationOption);
 
 }

@@ -50,14 +50,8 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 challenge,
                 timeout,
                 rpId,
-                Collections.singletonList(
-                        new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
-                                attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
-                        )
-                ),
-                UserVerificationRequirement.DISCOURAGED,
+                null,
+                UserVerificationRequirement.REQUIRED,
                 null
         );
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);

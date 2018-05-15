@@ -12,6 +12,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -19,6 +20,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.List;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -29,6 +31,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
+    @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
@@ -57,14 +60,15 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         return new CredentialCreationResponse(attestationObject);
     }
 
+    @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
                                                CollectedClientData collectedClientData) {
         return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
     }
 
+    @Override
     public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
                                                   CollectedClientData collectedClientData,
-                                                  PublicKeyCredentialDescriptor credentialDescriptor,
                                                   AuthenticationEmulationOption authenticationEmulationOption) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         String rpId = publicKeyCredentialRequestOptions.getRpId();
@@ -73,13 +77,18 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte control = 0x00;
         byte[] challenge = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         byte[] applicationParameter = rpIdHash;
-        byte[] keyHandle = credentialDescriptor.getId();
 
+        List<PublicKeyCredentialDescriptor> publicKeyCredentialDescriptors = publicKeyCredentialRequestOptions.getAllowCredentials();
+
+        PublicKeyCredentialDescriptor publicKeyCredentialDescriptor = publicKeyCredentialDescriptors.get(0);
+        //TODO: what to do if multiple publicKeyCredentialDescriptors are supplied
+
+        byte[] keyHandle = publicKeyCredentialDescriptor.getId();
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(control, challenge, applicationParameter, keyHandle);
 
         AuthenticationResponse authenticationResponse = fidoU2FAuthenticator.authenticate(authenticationRequest, authenticationEmulationOption);
 
-        byte[] credentialId = credentialDescriptor.getId();
+        byte[] credentialId = publicKeyCredentialDescriptor.getId();
         long counter = ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0);
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresense(), counter, null, null);
 
@@ -88,10 +97,10 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         return new CredentialRequestResponse(credentialId, collectedClientDataBytes, authenticatorDataBytes, signature, null);
     }
 
+    @Override
     public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                                  CollectedClientData collectedClientData,
-                                                  PublicKeyCredentialDescriptor credentialDescriptor){
-        return authenticate(publicKeyCredentialRequestOptions, collectedClientData, credentialDescriptor, new AuthenticationEmulationOption());
+                                                  CollectedClientData collectedClientData){
+        return authenticate(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
     public FIDOU2FAuthenticator getFidoU2FAuthenticator() {
