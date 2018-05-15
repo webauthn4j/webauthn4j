@@ -12,6 +12,7 @@ import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
@@ -34,15 +35,15 @@ public class ClientPlatform {
     }
 
     public ClientPlatform(AuthenticatorAdaptor authenticatorAdaptor){
-        this(new Origin("http://localhost:8080"), authenticatorAdaptor);
+        this(new Origin("https://example.com"), authenticatorAdaptor);
     }
 
     public ClientPlatform(Origin origin){
-        this(origin, new FIDOU2FAuthenticatorAdaptor());
+        this(origin, new WebAuthnModelAuthenticatorAdaptor());
     }
 
     public ClientPlatform(){
-        this(new Origin("http://localhost:8080"));
+        this(new Origin("https://example.com"));
     }
 
     public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
@@ -129,4 +130,19 @@ public class ClientPlatform {
         return new CollectedClientData(type, challenge, origin, null);
     }
 
+    public Origin getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Origin origin) {
+        this.origin = origin;
+    }
+
+    public AuthenticatorAdaptor getAuthenticatorAdaptor() {
+        return authenticatorAdaptor;
+    }
+
+    public void setAuthenticatorAdaptor(AuthenticatorAdaptor authenticatorAdaptor) {
+        this.authenticatorAdaptor = authenticatorAdaptor;
+    }
 }

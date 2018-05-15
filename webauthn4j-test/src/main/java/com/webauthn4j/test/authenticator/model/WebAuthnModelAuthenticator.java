@@ -277,9 +277,13 @@ public class WebAuthnModelAuthenticator {
         // the authenticator if it has its own output capability, or by the user agent otherwise.
 
         // If requireUserVerification is true, the method of obtaining user consent MUST include user verification.
-        flags |= BIT_UV;
+        if(getAssertionRequest.isRequireUserVerification()){
+            flags |= BIT_UV;
+        }
         // If requireUserPresence is true, the method of obtaining user consent MUST include a test of user presence.
-        flags |= BIT_UP;
+        if(getAssertionRequest.isRequireUserPresence()) {
+            flags |= BIT_UP;
+        }
         // If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
 
         PublicKeyCredentialSource selectedCredential = credentialOptions.get(0); //TODO

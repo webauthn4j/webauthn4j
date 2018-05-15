@@ -11,6 +11,8 @@ import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
@@ -31,7 +33,7 @@ import static org.mockito.Mockito.mock;
 public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private Origin origin = new Origin("http://localhost");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin);
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private TrustAnchorProvider trustAnchorProvider = TestUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
@@ -45,10 +47,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test
     public void validate_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
@@ -59,10 +61,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test
     public void validate_with_direct_attestation_conveyance_preference_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
@@ -73,10 +75,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = MaliciousDataException.class)
     public void validate_with_bad_clientData_type_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
@@ -93,11 +95,11 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = BadChallengeException.class)
     public void validate_with_bad_challenge_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         Challenge badChallenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(badChallenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
@@ -110,15 +112,15 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = BadOriginException.class)
     public void validate_with_bad_origin_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        Origin badOrigin = new Origin("http://bad.origin.example.com");
+        Origin badOrigin = new Origin("http://bad.origin.example.net");
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
-        ClientPlatform clientPlatform = new ClientPlatform(badOrigin);
+        clientPlatform.setOrigin(badOrigin); //bad origin
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
@@ -128,11 +130,11 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = BadRpIdException.class)
     public void validate_with_bad_rpId_test() {
-        String rpId = "localhost";
-        String badRpId = "example.com";
+        String rpId = "example.com";
+        String badRpId = "example.net";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(badRpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(badRpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
@@ -143,10 +145,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = BadAttestationStatementException.class)
     public void validate_with_bad_attestationStatement_test(){
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
@@ -164,10 +166,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     @Test(expected = BadSignatureException.class)
     public void validate_invalid_format_attestation_signature_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
@@ -185,7 +187,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         Origin validSiteOrigin = new Origin("http://valid.site.example.com");
         Origin phishingSiteClaimingOrigin = new Origin("http://valid.site.example.com");
 
-        ClientPlatform clientPlatform = new ClientPlatform(phishingSiteOrigin); // client platform loads phishing site
+        ClientPlatform clientPlatform = new ClientPlatform(phishingSiteOrigin, new FIDOU2FAuthenticatorAdaptor()); // client platform loads phishing site
         String rpId = "valid.site.example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();

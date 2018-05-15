@@ -12,6 +12,7 @@ import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
@@ -24,13 +25,13 @@ import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
-    private Origin origin = new Origin("http://localhost");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin);
+    private Origin origin = new Origin("http://example.com");
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     @Test
     public void validate_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -70,8 +71,8 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = MaliciousDataException.class)
-    public void validate_assertion_test_with_bad_credentialData_type() {
-        String rpId = "localhost";
+    public void validate_assertion_test_with_bad_clientData_type() {
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -93,7 +94,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_CREATE, challenge);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_CREATE, challenge); // bad clientData type
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
@@ -113,7 +114,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = BadChallengeException.class)
     public void validate_assertion_with_bad_challenge_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
         Challenge badChallenge = new DefaultChallenge();
@@ -123,7 +124,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
-                badChallenge,
+                badChallenge, // bad challenge
                 timeout,
                 rpId,
                 Collections.singletonList(
@@ -155,7 +156,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = BadOriginException.class)
     public void validate_assertion_with_bad_origin_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -177,7 +178,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        ClientPlatform clientPlatform = new ClientPlatform(new Origin("https://bad.origin.example.com"));
+        clientPlatform.setOrigin(new Origin("https://bad.origin.example.com")); //bad origin
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
@@ -197,8 +198,8 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = BadRpIdException.class)
     public void validate_assertion_with_bad_rpId_test() {
-        String rpId = "localhost";
-        String badRpId = "bad.rpId.example.com";
+        String rpId = "example.com";
+        String badRpId = "bad.rpId.example.net";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -239,7 +240,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = UserNotVerifiedException.class)
     public void validate_assertion_with_userVerificationRequired_option_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -283,7 +284,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
         fidou2FAuthenticatorAdaptor.getFidoU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
         clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -324,7 +325,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = BadSignatureException.class)
     public void validate_assertion_with_bad_signature_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -365,7 +366,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     @Test(expected = MaliciousCounterValueException.class)
     public void validate_assertion_with_malicious_counter_test() {
-        String rpId = "localhost";
+        String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
 
@@ -407,7 +408,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "localhost"));
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
