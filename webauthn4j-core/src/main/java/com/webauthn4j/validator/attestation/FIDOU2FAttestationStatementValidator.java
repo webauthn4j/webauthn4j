@@ -21,9 +21,9 @@ import java.security.interfaces.ECPublicKey;
 public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
 
     /**
-     * {@link AttestationType}.Basic is always returned as RP cannot differentiate between Basic and Attestation CA from the attestation data,
+     * {@link AttestationType}.BASIC is always returned as RP cannot differentiate between BASIC and Attestation CA from the attestation data,
      *
-     * @return AttestationType.Basic
+     * @return AttestationType.BASIC
      */
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -43,7 +43,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
         }
         validateSignature(registrationObject);
-        return AttestationType.Basic;
+        return AttestationType.BASIC;
     }
 
     private void validateSignature(RegistrationObject registrationObject) {

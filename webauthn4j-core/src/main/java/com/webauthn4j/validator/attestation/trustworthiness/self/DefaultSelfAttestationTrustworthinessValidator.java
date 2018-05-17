@@ -44,7 +44,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
                 throw new CertificateException("Certificate not yet valid", e);
             }
         } else {
-            throw new SelfAttestationProhibitedException("Self attestations is prohibited");
+            throw new SelfAttestationProhibitedException("SELF attestations is prohibited");
         }
     }
 

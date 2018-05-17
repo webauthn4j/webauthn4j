@@ -54,8 +54,8 @@ public class PackedAttestationStatementValidator implements AttestationStatement
             }
             //TODO
 
-            // If successful, return attestation type Basic and attestation trust path x5c.
-            return AttestationType.Basic;
+            // If successful, return attestation type BASIC and attestation trust path x5c.
+            return AttestationType.BASIC;
         }
         // If ecdaaKeyId is present, then the attestation type is ECDAA. In this case:
         else if (attestationStatement.getEcdaaKeyId() != null) {
@@ -80,7 +80,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
                 throw new BadSignatureException("Bad signature");
             }
             // If successful, return attestation type Self and empty attestation trust path.
-            return AttestationType.Self;
+            return AttestationType.SELF;
         }
     }
 

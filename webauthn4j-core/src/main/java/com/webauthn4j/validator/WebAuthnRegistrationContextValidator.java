@@ -171,7 +171,7 @@ public class WebAuthnRegistrationContextValidator {
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
         switch (attestationType) {
             // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
-            case Self:
+            case SELF:
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
@@ -188,8 +188,8 @@ public class WebAuthnRegistrationContextValidator {
                 break;
             // Otherwise, use the X.509 certificates returned by the verification procedure to verify that
             // the attestation public key correctly chains up to an acceptable root certificate.
-            case Basic:
-            case AttCA:
+            case BASIC:
+            case ATT_CA:
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
@@ -198,7 +198,7 @@ public class WebAuthnRegistrationContextValidator {
                     throw new IllegalStateException();
                 }
                 break;
-            case None:
+            case NONE:
                 // nop
                 break;
             default:

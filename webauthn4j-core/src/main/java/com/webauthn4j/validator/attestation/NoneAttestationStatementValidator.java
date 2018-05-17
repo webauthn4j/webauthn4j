@@ -9,7 +9,7 @@ public class NoneAttestationStatementValidator implements AttestationStatementVa
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
-        return AttestationType.None;
+        return AttestationType.NONE;
     }
 
     @Override
