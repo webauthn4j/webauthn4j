@@ -3,6 +3,7 @@ package com.webauthn4j.validator.attestation;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -20,7 +21,7 @@ import java.security.interfaces.ECPublicKey;
 public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
 
     @Override
-    public void validate(RegistrationObject registrationObject){
+    public AttestationType validate(RegistrationObject registrationObject){
         if (!supports(registrationObject)) {
             throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -37,6 +38,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
         }
         validateSignature(registrationObject);
+        return AttestationType.Basic;
     }
 
     private void validateSignature(RegistrationObject registrationObject) {

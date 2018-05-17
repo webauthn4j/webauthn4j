@@ -21,6 +21,7 @@ import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
@@ -157,7 +158,7 @@ public class WebAuthnRegistrationContextValidator {
         // Verify that attStmt is a correct, validly-signed attestation statement, using the attestation statement
         // format fmt’s verification procedure given authenticator data authData and the hash of the serialized
         // client data computed in step 6.
-        validateAttestationStatement(registrationObject);
+        AttestationType attestationType = validateAttestationStatement(registrationObject);
 
         // If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
         // ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
@@ -168,7 +169,7 @@ public class WebAuthnRegistrationContextValidator {
         // Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
 
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
-        switch (attestationStatement.getAttestationType()){
+        switch (attestationType){
             // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
             case Self:
                 if(attestationStatement instanceof CertificateBaseAttestationStatement){
@@ -214,11 +215,10 @@ public class WebAuthnRegistrationContextValidator {
 
     }
 
-    private void validateAttestationStatement(RegistrationObject registrationObject) {
+    private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
-                validator.validate(registrationObject);
-                return;
+                return validator.validate(registrationObject);
             }
         }
 

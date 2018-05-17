@@ -122,7 +122,7 @@ public class TestUtil {
     }
 
     public static CertPath load3tierTestCertPath() {
-        return CertificateUtil.generateCertPath(Arrays.asList(load3tierTestRootCACertificate(), load3tierTestIntermediateCACertificate()));
+        return CertificateUtil.generateCertPath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
 
     public static X509Certificate load3tierTestRootCACertificate() {
@@ -228,6 +228,14 @@ public class TestUtil {
         return () -> {
             Set<TrustAnchor> set = new HashSet<>();
             set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
+            return set;
+        };
+    }
+
+    public static TrustAnchorProvider createTrustAnchorProviderWith3tierTestRootCACertificate() {
+        return () -> {
+            Set<TrustAnchor> set = new HashSet<>();
+            set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
             return set;
         };
     }

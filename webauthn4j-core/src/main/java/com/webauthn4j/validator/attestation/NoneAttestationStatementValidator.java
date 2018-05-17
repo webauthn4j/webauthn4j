@@ -1,14 +1,15 @@
 package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 
 public class NoneAttestationStatementValidator implements AttestationStatementValidator {
 
     @Override
-    public void validate(RegistrationObject registrationObject) {
-        // nop
+    public AttestationType validate(RegistrationObject registrationObject) {
+        return AttestationType.None;
     }
 
     @Override

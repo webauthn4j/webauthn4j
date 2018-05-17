@@ -88,22 +88,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public void validate() {
-        if(alg == null){
-            throw new ConstraintViolationException("alg must not be null");
-        }
-
-        if(sig == null){
-            throw new ConstraintViolationException("sig must not be null");
-        }
-
-        if(x5c == null){
-            throw new ConstraintViolationException("x5c must not be null");
-        }
-
-        if(ecdaaKeyId == null){
-            throw new ConstraintViolationException("ecdaaKeyId must not be null");
-        }
-
+        // nop
     }
 
     @JsonIgnore

@@ -17,6 +17,8 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
 import java.security.PublicKey;
@@ -27,6 +29,16 @@ public interface CredentialPublicKey extends Serializable {
 
     @JsonIgnore
     PublicKey getPublicKey();
+
+    COSEKeyType getKeyType();
+
+    byte[] getKeyId();
+
+    COSEAlgorithmIdentifier getAlgorithm();
+
+    int[] getKeyOpts();
+
+    byte[] getBaseIV();
 
     @JsonIgnore
     byte[] getBytes();
