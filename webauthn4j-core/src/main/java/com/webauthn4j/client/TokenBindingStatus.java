@@ -11,13 +11,13 @@ public enum TokenBindingStatus {
 
     private String value;
 
-    TokenBindingStatus(String value){
+    TokenBindingStatus(String value) {
         this.value = value;
     }
 
     @JsonCreator
     public static TokenBindingStatus create(String value) {
-        switch (value){
+        switch (value) {
             case "present":
                 return PRESENT;
             case "supported":
@@ -30,7 +30,7 @@ public enum TokenBindingStatus {
     }
 
     @JsonValue
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 }

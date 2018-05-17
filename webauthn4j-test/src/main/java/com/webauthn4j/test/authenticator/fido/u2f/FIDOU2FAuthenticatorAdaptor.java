@@ -12,7 +12,6 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
-import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -99,7 +98,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     @Override
     public CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                                  CollectedClientData collectedClientData){
+                                                  CollectedClientData collectedClientData) {
         return authenticate(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 

@@ -8,7 +8,7 @@ public class CertificateExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new CertificateException("dummy");
         new CertificateException("dummy", cause);
     }

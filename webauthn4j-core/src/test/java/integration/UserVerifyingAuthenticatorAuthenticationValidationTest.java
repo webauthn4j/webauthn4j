@@ -29,7 +29,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -65,7 +65,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = MaliciousDataException.class)
-    public void validate_assertion_test_with_bad_clientData_type(){
+    public void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -102,7 +102,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = BadChallengeException.class)
-    public void validate_assertion_with_bad_challenge_test(){
+    public void validate_assertion_with_bad_challenge_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -139,7 +139,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = BadOriginException.class)
-    public void validate_assertion_with_bad_origin_test(){
+    public void validate_assertion_with_bad_origin_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -176,7 +176,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = BadRpIdException.class)
-    public void validate_bad_rpId_test(){
+    public void validate_bad_rpId_test() {
         String rpId = "example.com";
         String anotherSiteRpId = "another.site.example.net";
         long timeout = 0;
@@ -213,7 +213,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test(expected = UserNotVerifiedException.class)
-    public void validate_assertion_with_userVerificationDiscouraged_option_test(){
+    public void validate_assertion_with_userVerificationDiscouraged_option_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -249,7 +249,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
 
-    private AttestationObject createAttestationObject(String rpId, Challenge challenge){
+    private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
         authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
         authenticatorSelectionCriteria.setRequireResidentKey(true);

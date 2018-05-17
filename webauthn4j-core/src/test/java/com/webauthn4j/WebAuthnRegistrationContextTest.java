@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 public class WebAuthnRegistrationContextTest {
 
     @Test
-    public void test(){
+    public void test() {
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AttestationObjectConverter().convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
 

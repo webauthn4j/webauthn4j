@@ -8,7 +8,7 @@ public class BadChallengeExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new BadChallengeException("dummy");
         new BadChallengeException("dummy", cause);
     }

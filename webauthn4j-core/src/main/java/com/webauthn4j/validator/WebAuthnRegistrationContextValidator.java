@@ -97,7 +97,7 @@ public class WebAuthnRegistrationContextValidator {
         );
     }
 
-    public static WebAuthnRegistrationContextValidator createNullAttestationStatementValidator(){
+    public static WebAuthnRegistrationContextValidator createNullAttestationStatementValidator() {
         return new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(new NoneAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),
@@ -169,15 +169,14 @@ public class WebAuthnRegistrationContextValidator {
         // Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
 
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
-        switch (attestationType){
+        switch (attestationType) {
             // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
             case Self:
-                if(attestationStatement instanceof CertificateBaseAttestationStatement){
+                if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
                     selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
-                }
-                else {
+                } else {
                     throw new IllegalStateException();
                 }
                 break;
@@ -191,12 +190,11 @@ public class WebAuthnRegistrationContextValidator {
             // the attestation public key correctly chains up to an acceptable root certificate.
             case Basic:
             case AttCA:
-                if(attestationStatement instanceof CertificateBaseAttestationStatement){
+                if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
                     certPathTrustworthinessValidator.validate(certificateBaseAttestationStatement);
-                }
-                else {
+                } else {
                     throw new IllegalStateException();
                 }
                 break;

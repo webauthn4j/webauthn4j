@@ -8,7 +8,7 @@ public class BadRpIdExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new BadRpIdException("dummy");
         new BadRpIdException("dummy", cause);
     }

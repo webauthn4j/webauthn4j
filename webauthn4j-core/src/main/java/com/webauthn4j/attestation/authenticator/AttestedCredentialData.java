@@ -34,7 +34,8 @@ public class AttestedCredentialData implements Serializable {
         this.credentialPublicKey = credentialPublicKey;
     }
 
-    public AttestedCredentialData(){}
+    public AttestedCredentialData() {
+    }
 
     public byte[] getAaGuid() {
         return aaGuid;

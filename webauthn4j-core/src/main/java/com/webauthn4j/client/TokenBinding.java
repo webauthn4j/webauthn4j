@@ -12,7 +12,8 @@ public class TokenBinding {
         this.id = id;
     }
 
-    public TokenBinding(){}
+    public TokenBinding() {
+    }
 
     public TokenBindingStatus getStatus() {
         return status;

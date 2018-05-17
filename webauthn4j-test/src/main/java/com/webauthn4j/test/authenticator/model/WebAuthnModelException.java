@@ -14,5 +14,6 @@ public class WebAuthnModelException extends RuntimeException {
         super(e);
     }
 
-    public WebAuthnModelException(){}
+    public WebAuthnModelException() {
+    }
 }

@@ -22,23 +22,24 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
 
     /**
      * {@link AttestationType}.Basic is always returned as RP cannot differentiate between Basic and Attestation CA from the attestation data,
+     *
      * @return AttestationType.Basic
      */
     @Override
-    public AttestationType validate(RegistrationObject registrationObject){
+    public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
         }
 
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        if(attestationStatement.getX5c().getCertificates().size() != 1){
+        if (attestationStatement.getX5c().getCertificates().size() != 1) {
             throw new CertificateException("FIDO-U2F attestation statement must have only one certificate.");
         }
         PublicKey publicKey = attestationStatement.getEndEntityCertificate().getPublicKey();
-        if(!publicKey.getAlgorithm().equals("EC")){
+        if (!publicKey.getAlgorithm().equals("EC")) {
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
         }
-        if(!((ECPublicKey)publicKey).getParams().equals(ECUtil.P_256_SPEC)){
+        if (!((ECPublicKey) publicKey).getParams().equals(ECUtil.P_256_SPEC)) {
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
         }
         validateSignature(registrationObject);

@@ -1,6 +1,6 @@
 package com.webauthn4j.test.platform;
 
-public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity{
+public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     private byte[] id;
     private String displayName;
 
@@ -16,7 +16,7 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity{
         this.displayName = displayName;
     }
 
-    public PublicKeyCredentialUserEntity(){
+    public PublicKeyCredentialUserEntity() {
         super();
     }
 

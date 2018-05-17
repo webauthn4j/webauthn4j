@@ -12,13 +12,13 @@ public enum COSEKeyType {
 
     private int value;
 
-    COSEKeyType(int value){
+    COSEKeyType(int value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static COSEKeyType create(int value){
-        switch (value){
+    public static COSEKeyType create(int value) {
+        switch (value) {
             case 1:
                 return OKP;
             case 2:

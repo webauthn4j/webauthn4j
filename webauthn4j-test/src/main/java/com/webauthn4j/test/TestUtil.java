@@ -16,24 +16,23 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.attestation.statement.COSEKeyType;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyType;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -176,7 +175,7 @@ public class TestUtil {
     public static X509Certificate createCertificate(String base64Certificate) {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            return (X509Certificate)certificateFactory.generateCertificate(new ByteArrayInputStream(Base64UrlUtil.decode(base64Certificate)));
+            return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(Base64UrlUtil.decode(base64Certificate)));
         } catch (CertificateException e) {
             throw new IllegalStateException(e);
         }
@@ -202,15 +201,15 @@ public class TestUtil {
         return new RelyingParty(createOrigin(), "localhost", createChallenge());
     }
 
-    public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey(){
+    public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey() {
         return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-authenticator.der");
     }
 
-    public static PrivateKey load2tierTestAuthenticatorAttestationPrivateKey(){
+    public static PrivateKey load2tierTestAuthenticatorAttestationPrivateKey() {
         return loadPrivateKey("classpath:attestation/2tier/private/2tier-test-authenticator.der");
     }
 
-    public static PrivateKey loadPrivateKeyFromResource(Resource resource){
+    public static PrivateKey loadPrivateKeyFromResource(Resource resource) {
         try {
             InputStream inputStream = resource.getInputStream();
             byte[] data = StreamUtils.copyToByteArray(inputStream);
@@ -220,13 +219,13 @@ public class TestUtil {
         }
     }
 
-    public static PrivateKey loadPrivateKey(String resourcePath){
+    public static PrivateKey loadPrivateKey(String resourcePath) {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.getResource(resourcePath);
         return loadPrivateKeyFromResource(resource);
     }
 
-    public static Authenticator createAuthenticator(AttestationObject attestationObject){
+    public static Authenticator createAuthenticator(AttestationObject attestationObject) {
         AttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
         return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getSignCount());
     }

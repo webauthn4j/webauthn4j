@@ -13,19 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PackedAttestationStatementTest {
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         PackedAttestationStatement packedAttestationStatement = TestUtil.createBasicPackedAttestationStatement();
         packedAttestationStatement.validate();
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_invalid_instance_test(){
+    public void validate_invalid_instance_test() {
         PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement();
         packedAttestationStatement.validate();
     }
 
     @Test(expected = IllegalStateException.class)
-    public void getEndEntityCertificate_from_invalid_instance_test(){
+    public void getEndEntityCertificate_from_invalid_instance_test() {
         CertPath emptyCertPath = CertificateUtil.generateCertPath(Collections.emptyList());
         PackedAttestationStatement packedAttestationStatement =
                 new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], emptyCertPath, null);
@@ -33,7 +33,7 @@ public class PackedAttestationStatementTest {
     }
 
     @Test
-    public void equals_and_hashCode_test(){
+    public void equals_and_hashCode_test() {
         PackedAttestationStatement packedAttestationStatementA = TestUtil.createBasicPackedAttestationStatement();
         PackedAttestationStatement packedAttestationStatementB = TestUtil.createBasicPackedAttestationStatement();
         assertThat(packedAttestationStatementA).isEqualTo(packedAttestationStatementB);

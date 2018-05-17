@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestUtilTest {
 
     @Test
-    public void loadTestAuthenticatorAttestationPrivateKey_test(){
+    public void loadTestAuthenticatorAttestationPrivateKey_test() {
         PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         assertThat(privateKey).isNotNull();
     }

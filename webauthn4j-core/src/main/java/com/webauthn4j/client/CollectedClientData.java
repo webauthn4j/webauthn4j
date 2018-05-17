@@ -44,7 +44,8 @@ public class CollectedClientData implements Serializable {
         this.tokenBinding = tokenBinding;
     }
 
-    public CollectedClientData(){}
+    public CollectedClientData() {
+    }
 
     public String getType() {
         return type;

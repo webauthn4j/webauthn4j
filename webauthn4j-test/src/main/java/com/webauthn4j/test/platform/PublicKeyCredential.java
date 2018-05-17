@@ -8,7 +8,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
     private byte[] rawId;
     private T authenticatorResponse;
 
-    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse){
+    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.authenticatorResponse = authenticatorResponse;

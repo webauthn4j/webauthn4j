@@ -12,7 +12,6 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
-import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.FIDOU2FAttestationStatementValidator;
@@ -144,7 +143,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test(expected = BadAttestationStatementException.class)
-    public void validate_with_bad_attestationStatement_test(){
+    public void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
@@ -202,8 +201,6 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), relyingParty);
         target.validate(registrationContext);
     }
-
-
 
 
 }

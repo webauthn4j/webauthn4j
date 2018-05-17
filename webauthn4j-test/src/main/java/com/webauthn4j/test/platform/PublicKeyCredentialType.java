@@ -9,7 +9,7 @@ public enum PublicKeyCredentialType {
 
     private String value;
 
-    PublicKeyCredentialType(String value){
+    PublicKeyCredentialType(String value) {
         this.value = value;
     }
 

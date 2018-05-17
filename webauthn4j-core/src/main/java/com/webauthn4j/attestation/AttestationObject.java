@@ -43,7 +43,8 @@ public class AttestationObject implements Serializable {
         this.attestationStatement = attestationStatement;
     }
 
-    public AttestationObject(){}
+    public AttestationObject() {
+    }
 
     public com.webauthn4j.attestation.authenticator.AuthenticatorData getAuthenticatorData() {
         return authenticatorData;

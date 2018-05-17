@@ -8,7 +8,7 @@ public class MissingChallengeExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new MissingChallengeException("dummy");
         new MissingChallengeException("dummy", cause);
     }

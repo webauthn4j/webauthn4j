@@ -8,7 +8,7 @@ public class KeyStoreExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new KeyStoreException("dummy");
         new KeyStoreException("dummy", cause);
     }

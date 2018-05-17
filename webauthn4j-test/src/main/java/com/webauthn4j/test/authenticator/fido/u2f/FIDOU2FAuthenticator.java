@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class FIDOU2FAuthenticator {
 
     public static final byte FLAG_OFF = (byte) 0b00000000;
-    public static final byte FLAG_UP  = (byte) 0b00000001;
+    public static final byte FLAG_UP = (byte) 0b00000001;
 
     private PrivateKey attestationPrivateKey;
     private X509Certificate attestationPublicKeyCertificate;
@@ -25,7 +25,7 @@ public class FIDOU2FAuthenticator {
     private boolean countUpEnabled = true;
     private byte flags = FLAG_UP;
 
-    public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter){
+    public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter) {
         AssertUtil.notNull(attestationPrivateKey, "attestationPrivateKey must not be null");
         AssertUtil.notNull(attestationPublicKeyCertificate, "attestationPublicKeyCertificate must not be null");
 
@@ -34,11 +34,11 @@ public class FIDOU2FAuthenticator {
         this.counter = counter;
     }
 
-    public FIDOU2FAuthenticator(){
+    public FIDOU2FAuthenticator() {
         this(TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY, TestData.FIDO_U2F_AUTHENTICATOR_ATTESTATION_CERTIFICATE, 0);
     }
 
-    public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption){
+    public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption) {
 
         byte[] challengeParameter = registrationRequest.getChallengeParameter();
         byte[] applicationParameter = registrationRequest.getApplicationParameter();
@@ -55,17 +55,16 @@ public class FIDOU2FAuthenticator {
         byte[] mac = MACUtil.caclucalteHMAC(message, attestationPrivateKey.getEncoded());
         byte[] keyHandle = ByteBuffer.allocate(64).put(nonce).put(mac).array();
 
-        byte[] userPublicKey = getBytesFromECPublicKey((ECPublicKey)keyPair.getPublic());
+        byte[] userPublicKey = getBytesFromECPublicKey((ECPublicKey) keyPair.getPublic());
 
         byte rfu = 0x00;
 
         byte[] signedData = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65).put(rfu).put(applicationParameter).put(challengeParameter).put(keyHandle).put(userPublicKey).array();
 
         byte[] signature;
-        if(registrationEmulationOption.isSignatureOverrideEnabled()){
+        if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
-        }
-        else {
+        } else {
             signature = calculateSignature(attestationPrivateKey, signedData);
         }
 
@@ -77,7 +76,7 @@ public class FIDOU2FAuthenticator {
     }
 
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest, AuthenticationEmulationOption authenticationEmulationOption){
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest, AuthenticationEmulationOption authenticationEmulationOption) {
 
         byte control = authenticationRequest.getControl();
         byte[] applicationParameter = authenticationRequest.getApplicationParameter();
@@ -92,17 +91,17 @@ public class FIDOU2FAuthenticator {
         return new AuthenticationResponse(flags, getCounterBytes(), signature);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
+    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         return authenticate(authenticationRequest, new AuthenticationEmulationOption());
     }
 
-    private byte[] getBytesFromECPublicKey(ECPublicKey ecPublicKey){
+    private byte[] getBytesFromECPublicKey(ECPublicKey ecPublicKey) {
         ECPoint ecPoint = ecPublicKey.getW();
         byte type = 0x04;
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();
-        x = Arrays.copyOfRange(x, Math.max(0, x.length -32), x.length);
-        y = Arrays.copyOfRange(y, Math.max(0, y.length -32), y.length);
+        x = Arrays.copyOfRange(x, Math.max(0, x.length - 32), x.length);
+        y = Arrays.copyOfRange(y, Math.max(0, y.length - 32), y.length);
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32);
         byteBuffer.put(type);
         byteBuffer.position(byteBuffer.position() + 32 - x.length);
@@ -117,7 +116,7 @@ public class FIDOU2FAuthenticator {
         return KeyUtil.createKeyPair(seed);
     }
 
-    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData){
+    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {
             Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
             signature.initSign(privateKey);
@@ -128,13 +127,13 @@ public class FIDOU2FAuthenticator {
         }
     }
 
-    private void countUp(){
-        if(isCountUpEnabled()){
+    private void countUp() {
+        if (isCountUpEnabled()) {
             counter++;
         }
     }
 
-    private byte[] getCounterBytes(){
+    private byte[] getCounterBytes() {
         return UnsignedNumberUtil.toBytes(counter);
     }
 

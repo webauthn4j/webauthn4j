@@ -50,7 +50,9 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-4")
     private byte[] d;
 
-    public ECCredentialPublicKey(){super();}
+    public ECCredentialPublicKey() {
+        super();
+    }
 
     /**
      * Constructor with all arguments
@@ -89,7 +91,7 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
      * create from uncompressed ECC key
      */
     public static ECCredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
-        if(publicKey.length != 65){
+        if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
@@ -142,7 +144,7 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     }
 
     @Override
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
@@ -167,18 +169,18 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
         }
     }
 
-    public void validate(){
-        if(getAlgorithm() == null){
+    public void validate() {
+        if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null");
         }
-        if(curve == null){
+        if (curve == null) {
             throw new ConstraintViolationException("curve must not be null");
         }
-        if(d == null){
-            if(x == null){
+        if (d == null) {
+            if (x == null) {
                 throw new ConstraintViolationException("x must not be null");
             }
-            if(y == null){
+            if (y == null) {
                 throw new ConstraintViolationException("y must not be null");
             }
         }

@@ -8,7 +8,7 @@ public class BadSignatureExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new BadSignatureException("dummy");
         new BadSignatureException("dummy", cause);
     }

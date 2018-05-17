@@ -42,7 +42,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     );
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test(){
+    public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
@@ -73,7 +73,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test(){
+    public void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();

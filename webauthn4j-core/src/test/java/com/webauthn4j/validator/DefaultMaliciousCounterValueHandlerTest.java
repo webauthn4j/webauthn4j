@@ -8,7 +8,7 @@ public class DefaultMaliciousCounterValueHandlerTest {
     private DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
 
     @Test(expected = MaliciousCounterValueException.class)
-    public void maliciousCounterValueDetected_test(){
+    public void maliciousCounterValueDetected_test() {
         target.maliciousCounterValueDetected(null, null);
     }
 

@@ -1,5 +1,5 @@
 package com.webauthn4j.attestation.authenticator.extension;
 
-public enum  ExtensionIdentifier {
+public enum ExtensionIdentifier {
 
 }

@@ -2,7 +2,6 @@ package com.webauthn4j.test.authenticator.model;
 
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.attestation.authenticator.extension.ExtensionIdentifier;
-import com.webauthn4j.test.authenticator.AuthenticationExtensionsAuthenticatorInputs;
 import com.webauthn4j.test.platform.PublicKeyCredentialDescriptor;
 
 import java.util.List;

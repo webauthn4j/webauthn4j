@@ -8,7 +8,7 @@ public class MaliciousDataExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new MaliciousDataException("dummy");
         new MaliciousDataException("dummy", cause);
     }

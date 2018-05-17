@@ -17,7 +17,6 @@
 package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;

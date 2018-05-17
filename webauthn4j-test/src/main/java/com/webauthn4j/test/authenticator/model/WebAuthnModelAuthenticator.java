@@ -30,17 +30,17 @@ import static com.webauthn4j.attestation.authenticator.AuthenticatorData.*;
 @WIP
 public class WebAuthnModelAuthenticator {
 
+    byte[] aaGuid;
     private PrivateKey attestationPrivateKey;
     private CertPath attestationCertPath;
     private boolean capableOfUserVerification;
-    byte[] aaGuid;
     private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private boolean countUpEnabled = true;
 
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, byte[] aaGuid, int counter){
+    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, byte[] aaGuid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationCertPath = attestationCertPath;
         this.capableOfUserVerification = capableOfUserVerification;
@@ -49,7 +49,7 @@ public class WebAuthnModelAuthenticator {
         this.credentialMap = new HashMap<>();
     }
 
-    public WebAuthnModelAuthenticator(){
+    public WebAuthnModelAuthenticator() {
         this(
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERT_PATH,
@@ -59,21 +59,21 @@ public class WebAuthnModelAuthenticator {
         );
     }
 
-    public PublicKeyCredentialSource lookup(byte[] credentialId){
+    public PublicKeyCredentialSource lookup(byte[] credentialId) {
 
-        if(!isCapableOfStoringClientSideResidentCredential()){
+        if (!isCapableOfStoringClientSideResidentCredential()) {
             PublicKeyCredentialSource credentialSource = null; //TODO: decrypt credentialId into a credSource;
             return credentialSource;
         }
-        for(Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()){
-            if(Arrays.equals(credentialId, entry.getValue().getId())){
+        for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
+            if (Arrays.equals(credentialId, entry.getValue().getId())) {
                 return entry.getValue();
             }
         }
         return null;
     }
 
-    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption){
+    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption) {
 
         PublicKeyCredentialRpEntity rpEntity = makeCredentialRequest.getRpEntity();
 
@@ -87,26 +87,26 @@ public class WebAuthnModelAuthenticator {
         Optional<PublicKeyCredentialParameters> optionalPublicKeyCredentialParameters =
                 makeCredentialRequest.getCredTypesAndPublicKeyAlgs().stream().filter(this::isCapableOfHandling).findFirst();
         PublicKeyCredentialParameters publicKeyCredentialParameters;
-        if(optionalPublicKeyCredentialParameters.isPresent()) {
+        if (optionalPublicKeyCredentialParameters.isPresent()) {
             publicKeyCredentialParameters = optionalPublicKeyCredentialParameters.get();
         } else {
             throw new NotSupportedException("Specified PublicKeyCredentialParameters are not supported");
         }
 
         // For each descriptor of excludeCredentialDescriptorList:
-        for (PublicKeyCredentialDescriptor descriptor : makeCredentialRequest.getExcludeCredentialDescriptorList()){
+        for (PublicKeyCredentialDescriptor descriptor : makeCredentialRequest.getExcludeCredentialDescriptorList()) {
             PublicKeyCredentialSource publicKeyCredentialSource = lookup(descriptor.getId());
             // If looking up descriptor.id in this authenticator returns non-null, and the returned item's RP ID
             // and type match rpEntity.id and excludeCredentialDescriptorList.type respectively,
             // then obtain user consent for creating a new credential.
             // The method of obtaining user consent MUST include a test of user presence.
-            if(publicKeyCredentialSource != null){
-                if(publicKeyCredentialSource.getRpId().equals(rpEntity.getId()) &&
-                        publicKeyCredentialSource.getType().equals(descriptor.getType())){
+            if (publicKeyCredentialSource != null) {
+                if (publicKeyCredentialSource.getRpId().equals(rpEntity.getId()) &&
+                        publicKeyCredentialSource.getType().equals(descriptor.getType())) {
                     boolean userConsent = true;
                     // If the user
                     // confirms consent to create a new credential
-                    if(userConsent){
+                    if (userConsent) {
                         throw new InvalidStateException("");
                     }
                     // does not consent to create a new credential
@@ -118,12 +118,12 @@ public class WebAuthnModelAuthenticator {
         }
         // If requireResidentKey is true and the authenticator cannot store a Client-side-resident Credential Private Key,
         // return an error code equivalent to "ConstraintError" and terminate the operation.
-        if(makeCredentialRequest.isRequireResidentKey() && !isCapableOfStoringClientSideResidentCredential()){
+        if (makeCredentialRequest.isRequireResidentKey() && !isCapableOfStoringClientSideResidentCredential()) {
             throw new ConstraintException("Authenticator isn't capable of storing client-side resident credential");
         }
         // If requireUserVerification is true and the authenticator cannot perform user verification,
         // return an error code equivalent to "ConstraintError" and terminate the operation.
-        if(makeCredentialRequest.isRequireUserVerification() && !isCapableOfUserVerification()){
+        if (makeCredentialRequest.isRequireUserVerification() && !isCapableOfUserVerification()) {
             throw new ConstraintException("Authenticator isn't capable of user verification");
         }
 
@@ -138,10 +138,10 @@ public class WebAuthnModelAuthenticator {
         // If requireUserPresence is true, the method of obtaining user consent MUST include a test of user presence.
         // If the user does not consent or if user verification fails, return an error code equivalent to
         // "NotAllowedError" and terminate the operation.
-        if(makeCredentialRequest.isRequireUserVerification() && !userVerification){
+        if (makeCredentialRequest.isRequireUserVerification() && !userVerification) {
             throw new NotAllowedException("User is not verified.");
         }
-        if(makeCredentialRequest.isRequireUserPresence() && !userConsent){
+        if (makeCredentialRequest.isRequireUserPresence() && !userConsent) {
             throw new NotAllowedException("User doesn't provide consent.");
         }
 
@@ -152,7 +152,7 @@ public class WebAuthnModelAuthenticator {
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
         PrivateKey credentialPrivateKey;
         CredentialPublicKey credentialPublicKey;
-        try{
+        try {
             KeyPair keyPair = KeyUtil.createKeyPair();
             credentialPrivateKey = keyPair.getPrivate();
             credentialPublicKey = ECCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
@@ -169,7 +169,7 @@ public class WebAuthnModelAuthenticator {
 
             // If requireResidentKey is true or the authenticator chooses to create a Client-side-resident
             // Credential Private Key:
-            if(makeCredentialRequest.isRequireResidentKey()){
+            if (makeCredentialRequest.isRequireResidentKey()) {
                 // Let credentialId be a new credential id.
                 credentialId = new byte[32];
                 new SecureRandom().nextBytes(credentialId);
@@ -188,7 +188,7 @@ public class WebAuthnModelAuthenticator {
         }
         // If any error occurred while creating the new credential object,
         // return an error code equivalent to "UnknownError" and terminate the operation.
-        catch (RuntimeException e){
+        catch (RuntimeException e) {
             throw new WebAuthnModelException(e);
         }
 
@@ -208,9 +208,9 @@ public class WebAuthnModelAuthenticator {
         // Let attestedCredentialData be the attested credential data byte array including the credentialId and publicKey.
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpEntity.getId().getBytes(StandardCharsets.UTF_8));
         byte flag = BIT_AT;
-        if(userConsent) flag |= BIT_UP;
-        if(userVerification) flag |= BIT_UV;
-        if(processedExtensions.isEmpty()) flag |= BIT_ED;
+        if (userConsent) flag |= BIT_UP;
+        if (userVerification) flag |= BIT_UV;
+        if (processedExtensions.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
 
@@ -232,11 +232,11 @@ public class WebAuthnModelAuthenticator {
         return makeCredentialResponse;
     }
 
-    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest){
+    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
         return makeCredential(makeCredentialRequest, new RegistrationEmulationOption());
     }
 
-    public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption){
+    public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption) {
 
         byte flags = 0;
 
@@ -249,11 +249,11 @@ public class WebAuthnModelAuthenticator {
 
         //If allowCredentialDescriptorList was supplied, then for each descriptor of allowCredentialDescriptorList:
         List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList = getAssertionRequest.getAllowCredentialDescriptorList();
-        if(allowCredentialDescriptorList != null && !allowCredentialDescriptorList.isEmpty()){
-            for(PublicKeyCredentialDescriptor credentialDescriptor : getAssertionRequest.getAllowCredentialDescriptorList()){
+        if (allowCredentialDescriptorList != null && !allowCredentialDescriptorList.isEmpty()) {
+            for (PublicKeyCredentialDescriptor credentialDescriptor : getAssertionRequest.getAllowCredentialDescriptorList()) {
                 // Let credSource be the result of looking up descriptor.id in this authenticator.
                 PublicKeyCredentialSource credSource = lookup(credentialDescriptor.getId());
-                if(credSource != null){
+                if (credSource != null) {
                     credentialOptions.add(credSource);
                 }
             }
@@ -261,15 +261,15 @@ public class WebAuthnModelAuthenticator {
         // Otherwise (allowCredentialDescriptorList was not supplied),
         // for each key → credSource of this authenticator’s credentials map, append credSource to credentialOptions.
         else {
-            for(Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()){
+            for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
                 credentialOptions.add(entry.getValue());
             }
         }
         // Remove any items from credentialOptions whose rpId is not equal to rpId.
-        credentialOptions = credentialOptions.stream().filter( item -> item.getRpId().equals(getAssertionRequest.getRpId())).collect(Collectors.toList());
+        credentialOptions = credentialOptions.stream().filter(item -> item.getRpId().equals(getAssertionRequest.getRpId())).collect(Collectors.toList());
 
         // If credentialOptions is now empty, return an error code equivalent to "NotAllowedError" and terminate the operation.
-        if(credentialOptions.isEmpty()){
+        if (credentialOptions.isEmpty()) {
             throw new NotAllowedException("No matching authenticator found");
         }
         // Prompt the user to select a public key credential source selectedCredential from credentialOptions.
@@ -277,11 +277,11 @@ public class WebAuthnModelAuthenticator {
         // the authenticator if it has its own output capability, or by the user agent otherwise.
 
         // If requireUserVerification is true, the method of obtaining user consent MUST include user verification.
-        if(getAssertionRequest.isRequireUserVerification()){
+        if (getAssertionRequest.isRequireUserVerification()) {
             flags |= BIT_UV;
         }
         // If requireUserPresence is true, the method of obtaining user consent MUST include a test of user presence.
-        if(getAssertionRequest.isRequireUserPresence()) {
+        if (getAssertionRequest.isRequireUserPresence()) {
             flags |= BIT_UP;
         }
         // If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
@@ -291,7 +291,7 @@ public class WebAuthnModelAuthenticator {
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier → authenticator extension input in extensions.
         List<Extension> processedExtensions = Collections.emptyList();
-        if(!processedExtensions.isEmpty()){
+        if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
         }
 
@@ -325,11 +325,11 @@ public class WebAuthnModelAuthenticator {
         return getAssertionResponse;
     }
 
-    public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest){
+    public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest) {
         return getAssertion(getAssertionRequest, new AuthenticationEmulationOption());
     }
 
-    public boolean isCapableOfUserVerification(){
+    public boolean isCapableOfUserVerification() {
         return capableOfUserVerification;
     }
 
@@ -350,7 +350,7 @@ public class WebAuthnModelAuthenticator {
         this.countUpEnabled = countUpEnabled;
     }
 
-    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData){
+    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {
             Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
             signature.initSign(privateKey);
@@ -362,8 +362,8 @@ public class WebAuthnModelAuthenticator {
     }
 
 
-    private void countUp(){
-        if(isCountUpEnabled()){
+    private void countUp() {
+        if (isCountUpEnabled()) {
             counter++;
         }
     }

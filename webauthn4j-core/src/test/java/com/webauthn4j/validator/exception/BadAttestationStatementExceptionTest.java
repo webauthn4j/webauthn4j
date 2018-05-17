@@ -8,7 +8,7 @@ public class BadAttestationStatementExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new BadAttestationStatementException("dummy");
         new BadAttestationStatementException("dummy", cause);
     }

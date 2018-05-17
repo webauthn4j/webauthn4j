@@ -1,6 +1,6 @@
 package com.webauthn4j.validator.exception;
 
-public class BadAlgorithmException extends ValidationException{
+public class BadAlgorithmException extends ValidationException {
     public BadAlgorithmException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -9,7 +9,7 @@ public class BadAlgorithmException extends ValidationException{
         super(message);
     }
 
-    public BadAlgorithmException(Throwable cause){
+    public BadAlgorithmException(Throwable cause) {
         super(cause);
     }
 }

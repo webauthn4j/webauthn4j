@@ -45,15 +45,31 @@ public class AuthenticatorData implements Serializable {
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = attestedCredentialData;
-        if(extensions == null){
+        if (extensions == null) {
             this.extensions = Collections.emptyList();
-        }
-        else {
+        } else {
             this.extensions = extensions;
         }
     }
 
-    public AuthenticatorData(){}
+    public AuthenticatorData() {
+    }
+
+    public static boolean checkFlagUP(byte flags) {
+        return (flags & BIT_UP) != 0;
+    }
+
+    public static boolean checkFlagUV(byte flags) {
+        return (flags & BIT_UV) != 0;
+    }
+
+    public static boolean checkFlagAT(byte flags) {
+        return (flags & BIT_AT) != 0;
+    }
+
+    public static boolean checkFlagED(byte flags) {
+        return (flags & BIT_ED) != 0;
+    }
 
     public byte[] getRpIdHash() {
         return rpIdHash;
@@ -120,22 +136,6 @@ public class AuthenticatorData implements Serializable {
         result = 31 * result + (attestedCredentialData != null ? attestedCredentialData.hashCode() : 0);
         result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
         return result;
-    }
-
-    public static boolean checkFlagUP(byte flags){
-        return (flags & BIT_UP) != 0;
-    }
-
-    public static boolean checkFlagUV(byte flags){
-        return (flags & BIT_UV) != 0;
-    }
-
-    public static boolean checkFlagAT(byte flags){
-        return (flags & BIT_AT) != 0;
-    }
-
-    public static boolean checkFlagED(byte flags){
-        return (flags & BIT_ED) != 0;
     }
 
 }

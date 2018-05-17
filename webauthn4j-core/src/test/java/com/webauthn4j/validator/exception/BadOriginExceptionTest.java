@@ -8,7 +8,7 @@ public class BadOriginExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new BadOriginException("dummy");
         new BadOriginException("dummy", cause);
     }

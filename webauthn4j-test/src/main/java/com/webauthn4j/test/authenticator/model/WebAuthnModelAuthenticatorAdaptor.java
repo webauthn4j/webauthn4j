@@ -2,9 +2,9 @@ package com.webauthn4j.test.authenticator.model;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
+import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -71,7 +71,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
     }
 
     private boolean getEffectiveUserVerificationRequirementForAssertion(UserVerificationRequirement userVerificationRequirement) {
-        switch (userVerificationRequirement){
+        switch (userVerificationRequirement) {
             case REQUIRED:
                 return true;
             case PREFERRED:

@@ -52,7 +52,7 @@ class ChallengeValidator {
 
     }
 
-    public void validate(Challenge expected, Challenge actual){
+    public void validate(Challenge expected, Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();

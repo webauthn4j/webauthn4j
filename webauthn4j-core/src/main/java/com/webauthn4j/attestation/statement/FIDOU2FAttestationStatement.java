@@ -43,7 +43,8 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         this.sig = sig;
     }
 
-    public FIDOU2FAttestationStatement(){}
+    public FIDOU2FAttestationStatement() {
+    }
 
     @Override
     public CertPath getX5c() {
@@ -69,15 +70,15 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     }
 
     @Override
-    public void validate(){
-        if(x5c == null){
+    public void validate() {
+        if (x5c == null) {
             throw new ConstraintViolationException("x5c must not be null");
         }
-        if(x5c.getCertificates().size() != 1){
+        if (x5c.getCertificates().size() != 1) {
             throw new ConstraintViolationException("x5c must have exactly one certificate");
         }
 
-        if(sig == null){
+        if (sig == null) {
             throw new ConstraintViolationException("sig must not be null");
         }
     }

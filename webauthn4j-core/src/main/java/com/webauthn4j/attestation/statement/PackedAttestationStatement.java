@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.security.cert.CertPath;
@@ -55,7 +54,8 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         this.ecdaaKeyId = ecdaaKeyId;
     }
 
-    public PackedAttestationStatement(){}
+    public PackedAttestationStatement() {
+    }
 
     public COSEAlgorithmIdentifier getAlg() {
         return alg;
@@ -82,7 +82,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public void validate() {
-        if(x5c == null && ecdaaKeyId == null){
+        if (x5c == null && ecdaaKeyId == null) {
             throw new ConstraintViolationException("x5c or ecdaaKeyId must not be null");
         }
     }

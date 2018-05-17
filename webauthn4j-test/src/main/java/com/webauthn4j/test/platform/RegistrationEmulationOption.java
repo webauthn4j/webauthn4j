@@ -8,7 +8,7 @@ import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 public class RegistrationEmulationOption {
 
     private boolean signatureOverrideEnabled = false;
-    private byte[] signature = new byte[]{ 0x01, 0x23, 0x45, 0x67 };
+    private byte[] signature = new byte[]{0x01, 0x23, 0x45, 0x67};
     private boolean collectedClientDataOverrideEnabled = false;
     private CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
 

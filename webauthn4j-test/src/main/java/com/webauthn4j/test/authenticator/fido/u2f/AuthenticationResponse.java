@@ -10,7 +10,9 @@ public class AuthenticationResponse {
     private byte[] signature;
 
     public AuthenticationResponse(byte userPresence, byte[] counter, byte[] signature) {
-        if(counter.length != 4){throw new IllegalArgumentException("counter must be 4 bytes");}
+        if (counter.length != 4) {
+            throw new IllegalArgumentException("counter must be 4 bytes");
+        }
 
         this.userPresense = userPresence;
         this.counter = counter;

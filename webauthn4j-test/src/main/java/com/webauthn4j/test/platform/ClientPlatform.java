@@ -8,16 +8,13 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
-import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
-
-import java.util.List;
 
 @WIP
 public class ClientPlatform {
@@ -29,34 +26,33 @@ public class ClientPlatform {
     //TODO: support multiple authenticators
     private AuthenticatorAdaptor authenticatorAdaptor;
 
-    public ClientPlatform(Origin origin, AuthenticatorAdaptor authenticatorAdaptor){
+    public ClientPlatform(Origin origin, AuthenticatorAdaptor authenticatorAdaptor) {
         this.origin = origin;
         this.authenticatorAdaptor = authenticatorAdaptor;
     }
 
-    public ClientPlatform(AuthenticatorAdaptor authenticatorAdaptor){
+    public ClientPlatform(AuthenticatorAdaptor authenticatorAdaptor) {
         this(new Origin("https://example.com"), authenticatorAdaptor);
     }
 
-    public ClientPlatform(Origin origin){
+    public ClientPlatform(Origin origin) {
         this(origin, new WebAuthnModelAuthenticatorAdaptor());
     }
 
-    public ClientPlatform(){
+    public ClientPlatform() {
         this(new Origin("https://example.com"));
     }
 
     public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
-                                                   RegistrationEmulationOption registrationEmulationOption){
+                                                                        RegistrationEmulationOption registrationEmulationOption) {
         CollectedClientData collectedClientData;
-        if(registrationEmulationOption.isCollectedClientDataOverrideEnabled()){
+        if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
             collectedClientData = registrationEmulationOption.getCollectedClientData();
-        }
-        else {
+        } else {
             collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
         }
 
-        if(authenticatorAdaptor == null){
+        if (authenticatorAdaptor == null) {
             throw new NoAuthenticatorSuccessException();
         }
         CredentialCreationResponse credentialCreationResponse =
@@ -87,19 +83,19 @@ public class ClientPlatform {
         );
     }
 
-    public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions){
+    public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
         return create(publicKeyCredentialCreationOptions, new RegistrationEmulationOption());
     }
 
     public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                              CollectedClientData collectedClientData,
-                                              AuthenticationEmulationOption authenticationEmulationOption){
+                                                                   CollectedClientData collectedClientData,
+                                                                   AuthenticationEmulationOption authenticationEmulationOption) {
 
         NoAuthenticatorSuccessException noAuthenticatorSuccessException = new NoAuthenticatorSuccessException();
-        if(authenticatorAdaptor == null){
-            throw  noAuthenticatorSuccessException;
+        if (authenticatorAdaptor == null) {
+            throw noAuthenticatorSuccessException;
         }
-        try{
+        try {
             CredentialRequestResponse credentialRequestResponse =
                     authenticatorAdaptor.authenticate(publicKeyCredentialRequestOptions, collectedClientData, authenticationEmulationOption);
 
@@ -110,18 +106,17 @@ public class ClientPlatform {
                     credentialRequestResponse.getSignature(),
                     credentialRequestResponse.getUserHandle()
             ));
-        }
-        catch (ValidationException e){
+        } catch (ValidationException e) {
             noAuthenticatorSuccessException.addSuppressed(e);
         }
         throw noAuthenticatorSuccessException;
     }
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData){
+    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData) {
         return get(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions){
+    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
         CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_GET, publicKeyCredentialRequestOptions.getChallenge());
         return get(publicKeyCredentialRequestOptions, collectedClientData);
     }

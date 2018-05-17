@@ -70,7 +70,7 @@ public class AuthenticatorDataTest {
 
     @Test
     public void equals_test_with_not_equal_data() {
-        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0 , null ,null);
+        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0, null, null);
         AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0, null, null);
         assertThat(instanceA).isNotEqualTo(instanceB);
     }
@@ -84,7 +84,7 @@ public class AuthenticatorDataTest {
 
     @Test
     public void hashCode_test_with_not_equal_data() {
-        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0 , null ,null);
+        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0, null, null);
         AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0, null, null);
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
     }

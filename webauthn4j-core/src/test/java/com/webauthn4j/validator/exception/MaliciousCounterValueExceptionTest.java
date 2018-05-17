@@ -8,7 +8,7 @@ public class MaliciousCounterValueExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new MaliciousCounterValueException("dummy");
         new MaliciousCounterValueException("dummy", cause);
     }

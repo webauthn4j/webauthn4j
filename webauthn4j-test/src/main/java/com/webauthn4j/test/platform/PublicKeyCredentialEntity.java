@@ -2,6 +2,9 @@ package com.webauthn4j.test.platform;
 
 public class PublicKeyCredentialEntity {
 
+    private String name;
+    private String icon;
+
     public PublicKeyCredentialEntity(String name, String icon) {
         this.name = name;
         this.icon = icon;
@@ -11,11 +14,8 @@ public class PublicKeyCredentialEntity {
         this.name = name;
         this.icon = null;
     }
-
-    public PublicKeyCredentialEntity(){}
-
-    private String name;
-    private String icon;
+    public PublicKeyCredentialEntity() {
+    }
 
     public String getName() {
         return name;

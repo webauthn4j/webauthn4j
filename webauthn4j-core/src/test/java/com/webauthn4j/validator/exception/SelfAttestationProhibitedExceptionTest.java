@@ -8,7 +8,7 @@ public class SelfAttestationProhibitedExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new SelfAttestationProhibitedException("dummy");
         new SelfAttestationProhibitedException("dummy", cause);
     }

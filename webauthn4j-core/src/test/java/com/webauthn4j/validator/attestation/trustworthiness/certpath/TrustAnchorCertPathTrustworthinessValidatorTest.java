@@ -19,7 +19,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
     private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService);
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load2tierTestRootCACertificate()));

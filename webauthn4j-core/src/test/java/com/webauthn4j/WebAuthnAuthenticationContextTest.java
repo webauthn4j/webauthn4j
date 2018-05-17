@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 public class WebAuthnAuthenticationContextTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
 
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
@@ -32,7 +32,7 @@ public class WebAuthnAuthenticationContextTest {
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AuthenticatorDataConverter().convertToBytes(createAuthenticatorData());

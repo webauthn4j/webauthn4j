@@ -15,7 +15,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
     @Test
-    public void validate_invalid_attestation_statement_test(){
+    public void validate_invalid_attestation_statement_test() {
         RegistrationObject registrationObject = mock(RegistrationObject.class);
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(registrationObject.getAttestationObject()).thenReturn(attestationObject);

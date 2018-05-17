@@ -44,7 +44,9 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
         this.e = e;
     }
 
-    public RSACredentialPublicKey(){super();}
+    public RSACredentialPublicKey() {
+        super();
+    }
 
     public byte[] getN() {
         return n;
@@ -75,13 +77,13 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
     @Override
     public void validate() {
-        if(getAlgorithm() == null){
+        if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null");
         }
-        if(e == null){
+        if (e == null) {
             throw new ConstraintViolationException("e must not be null");
         }
-        if(n == null){
+        if (n == null) {
             throw new ConstraintViolationException("n must not be null");
         }
     }

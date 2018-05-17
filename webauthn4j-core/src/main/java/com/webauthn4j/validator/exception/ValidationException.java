@@ -12,7 +12,7 @@ public abstract class ValidationException extends RuntimeException {
         super(message);
     }
 
-    public ValidationException(Throwable cause){
+    public ValidationException(Throwable cause) {
         super(cause);
     }
 }

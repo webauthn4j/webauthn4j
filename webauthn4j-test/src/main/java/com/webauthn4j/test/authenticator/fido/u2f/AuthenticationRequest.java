@@ -10,9 +10,13 @@ public class AuthenticationRequest {
     private byte[] applicationParameter;
     private byte[] keyHandle;
 
-    public AuthenticationRequest(byte control, byte[] challenge, byte[] applicationParameter, byte[] keyHandle){
-        if(challenge.length != 32){throw new IllegalArgumentException("challenge must be 32 bytes");}
-        if(applicationParameter.length != 32){throw new IllegalArgumentException("applicationParameter must be 32 bytes");}
+    public AuthenticationRequest(byte control, byte[] challenge, byte[] applicationParameter, byte[] keyHandle) {
+        if (challenge.length != 32) {
+            throw new IllegalArgumentException("challenge must be 32 bytes");
+        }
+        if (applicationParameter.length != 32) {
+            throw new IllegalArgumentException("applicationParameter must be 32 bytes");
+        }
 
         this.control = control;
         this.challenge = challenge;
@@ -20,7 +24,7 @@ public class AuthenticationRequest {
         this.keyHandle = keyHandle;
     }
 
-    public byte getControl(){
+    public byte getControl() {
         return control;
     }
 

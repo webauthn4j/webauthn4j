@@ -6,9 +6,10 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 
 public class ObjectMapperUtil {
 
-    private ObjectMapperUtil(){}
+    private ObjectMapperUtil() {
+    }
 
-    public static ObjectMapper createJSONMapper(){
+    public static ObjectMapper createJSONMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new WebAuthnModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

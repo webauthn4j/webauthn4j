@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DefaultChallengeTest {
 
     @Test
-    public void hashCode_test(){
+    public void hashCode_test() {
         Challenge challengeA = new DefaultChallenge();
         Challenge challengeB = new DefaultChallenge(challengeA.getValue());
 

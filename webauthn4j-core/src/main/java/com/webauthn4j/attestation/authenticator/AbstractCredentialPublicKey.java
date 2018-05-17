@@ -52,7 +52,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         this.baseIV = baseIV;
     }
 
-    public AbstractCredentialPublicKey(){}
+    public AbstractCredentialPublicKey() {
+    }
 
     public COSEKeyType getKeyType() {
         return keyType;
@@ -62,7 +63,9 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         return keyId;
     }
 
-    public COSEAlgorithmIdentifier getAlgorithm() { return algorithm; }
+    public COSEAlgorithmIdentifier getAlgorithm() {
+        return algorithm;
+    }
 
     public int[] getKeyOpts() {
         return keyOpts;
@@ -73,7 +76,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     }
 
     @JsonIgnore
-    protected String getAlgorithmName(){
+    protected String getAlgorithmName() {
         return algorithm.getName();
     }
 

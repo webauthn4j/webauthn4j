@@ -8,7 +8,7 @@ public class UnsupportedAttestationFormatExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new UnsupportedAttestationFormatException("dummy");
         new UnsupportedAttestationFormatException("dummy", cause);
     }

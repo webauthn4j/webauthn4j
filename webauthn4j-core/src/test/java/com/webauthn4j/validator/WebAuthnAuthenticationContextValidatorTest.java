@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnAuthenticationContextValidatorTest {
 
     @Test
-    public void getter_setter_test(){
+    public void getter_setter_test() {
         WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
         MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();

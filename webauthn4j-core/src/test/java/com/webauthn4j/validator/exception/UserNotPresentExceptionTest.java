@@ -8,7 +8,7 @@ public class UserNotPresentExceptionTest {
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test(){
+    public void test() {
         new UserNotPresentException("dummy");
         new UserNotPresentException("dummy", cause);
     }
