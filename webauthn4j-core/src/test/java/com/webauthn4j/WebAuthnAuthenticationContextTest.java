@@ -30,4 +30,20 @@ public class WebAuthnAuthenticationContextTest {
         assertThat(target.getSignature()).isEqualTo(signature);
         assertThat(target.getRelyingParty()).isEqualTo(relyingParty);
     }
+
+    @Test
+    public void equals_hashCode_test(){
+        byte[] credentialId = new byte[32];
+        byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
+        byte[] authenticatorData = new AuthenticatorDataConverter().convertToBytes(createAuthenticatorData());
+        byte[] signature = new byte[]{0x01, 0x23};
+        RelyingParty relyingParty = mock(RelyingParty.class);
+        WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(
+                credentialId, collectedClientData, authenticatorData, signature, relyingParty);
+        WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
+                credentialId, collectedClientData, authenticatorData, signature, relyingParty);
+
+        assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB);
+        assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB);
+    }
 }
