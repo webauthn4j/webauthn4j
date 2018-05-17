@@ -80,12 +80,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         return FORMAT;
     }
 
-    @JsonIgnore
-    @Override
-    public AttestationType getAttestationType() {
-        throw new NotImplementedException();
-    }
-
     @Override
     public void validate() {
         // nop

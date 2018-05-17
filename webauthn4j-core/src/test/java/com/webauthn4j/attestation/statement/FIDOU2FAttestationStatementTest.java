@@ -40,12 +40,6 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void getAttestationType_test() {
-        FIDOU2FAttestationStatement target = TestUtil.createFIDOU2FAttestationStatement();
-        assertThat(target.getAttestationType()).isEqualTo(AttestationType.Basic);
-    }
-
-    @Test
     public void getFormat_test() {
         FIDOU2FAttestationStatement target = TestUtil.createFIDOU2FAttestationStatement();
         assertThat(target.getFormat()).isEqualTo("fido-u2f");

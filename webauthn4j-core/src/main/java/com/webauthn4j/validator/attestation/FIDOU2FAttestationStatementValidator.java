@@ -20,6 +20,10 @@ import java.security.interfaces.ECPublicKey;
 
 public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
 
+    /**
+     * {@link AttestationType}.Basic is always returned as RP cannot differentiate between Basic and Attestation CA from the attestation data,
+     * @return AttestationType.Basic
+     */
     @Override
     public AttestationType validate(RegistrationObject registrationObject){
         if (!supports(registrationObject)) {

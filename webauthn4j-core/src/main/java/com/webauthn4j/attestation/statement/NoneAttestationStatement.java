@@ -32,12 +32,6 @@ public class NoneAttestationStatement implements AttestationStatement {
         return FORMAT;
     }
 
-    @JsonIgnore
-    @Override
-    public AttestationType getAttestationType() {
-        return AttestationType.None;
-    }
-
     @Override
     public void validate() {
         // nop

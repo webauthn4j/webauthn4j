@@ -35,9 +35,6 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
     private boolean isSelfAttestationAllowed = true;
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
-        if (attestationStatement.getAttestationType() == AttestationType.Self) {
-            throw new IllegalArgumentException("attestationStatement is not self attested");
-        }
         if (isSelfAttestationAllowed()) {
             X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
             try {

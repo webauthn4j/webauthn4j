@@ -9,6 +9,7 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.client.TokenBinding;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -54,11 +55,23 @@ public class BeanAssertUtil {
     }
 
     public static void validate(CollectedClientData collectedClientData) {
+        if(collectedClientData.getType() == null){
+            throw new ConstraintViolationException("type must not be null");
+        }
         if(collectedClientData.getChallenge() == null){
             throw new ConstraintViolationException("challenge must not be null");
         }
-        if(collectedClientData.getType() == null){
-            throw new ConstraintViolationException("type must not be null");
+        if(collectedClientData.getOrigin() == null){
+            throw new ConstraintViolationException("origin must not be null");
+        }
+        if(collectedClientData.getTokenBinding() != null){
+            validate(collectedClientData.getTokenBinding());
+        }
+    }
+
+    public static void validate(TokenBinding tokenBinding){
+        if(tokenBinding.getStatus() == null){
+            throw new ConstraintViolationException("status must not be null");
         }
     }
 

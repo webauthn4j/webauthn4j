@@ -59,16 +59,6 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         return FORMAT;
     }
 
-    /**
-     * {@link AttestationType}.Basic is always returned as RP cannot differentiate between Basic and Privacy CA from the attestation data,
-     * @return AttestationType.Basic
-     */
-    @JsonIgnore
-    @Override
-    public AttestationType getAttestationType() {
-        return AttestationType.Basic;
-    }
-
     @JsonIgnore
     @Override
     public X509Certificate getEndEntityCertificate() {
