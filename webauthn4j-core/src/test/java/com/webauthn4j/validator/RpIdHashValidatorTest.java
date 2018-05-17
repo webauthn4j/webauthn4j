@@ -58,4 +58,30 @@ public class RpIdHashValidatorTest {
         target.validate(rpIdHashA, relyingParty);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void verifyRpIdHash_test_with_relyingParty_null() {
+
+        String rpIdA = "example.com";
+        String rpIdB = "example.com";
+        byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
+        byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
+
+        //When
+        target.validate(rpIdHashA, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void verifyRpIdHash_test_with_relyingParty_rpId_null() {
+
+        String rpIdA = "example.com";
+        String rpIdB = "example.com";
+        byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
+        byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
+
+        RelyingParty relyingParty = new RelyingParty(null, null, null);
+
+        //When
+        target.validate(rpIdHashA, relyingParty);
+    }
+
 }

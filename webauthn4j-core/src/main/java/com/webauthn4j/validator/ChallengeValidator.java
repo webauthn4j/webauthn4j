@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.slf4j.Logger;
@@ -35,12 +36,8 @@ class ChallengeValidator {
 
 
     public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
-        if(collectedClientData == null){
-            throw new IllegalArgumentException("collectedClientData must not be null");
-        }
-        if(relyingParty == null){
-            throw new IllegalArgumentException("relyingParty must not be null");
-        }
+        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
+        AssertUtil.notNull(relyingParty, "relyingParty must not be null");
         Challenge savedChallenge = relyingParty.getChallenge();
         Challenge collectedChallenge = collectedClientData.getChallenge();
 
@@ -56,12 +53,8 @@ class ChallengeValidator {
     }
 
     public void validate(Challenge expected, Challenge actual){
-        if(expected == null){
-            throw new IllegalArgumentException("expected must not be null");
-        }
-        if(actual == null){
-            throw new IllegalArgumentException("actual must not be null");
-        }
+        AssertUtil.notNull(expected, "expected must not be null");
+        AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();
         byte[] actualChallengeBytes = actual.getValue();
 
