@@ -82,12 +82,15 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public void validate() {
-        // nop
+        if(x5c == null && ecdaaKeyId == null){
+            throw new ConstraintViolationException("x5c or ecdaaKeyId must not be null");
+        }
     }
 
     @JsonIgnore
     @Override
     public X509Certificate getEndEntityCertificate() {
+        validate();
         if (x5c.getCertificates().isEmpty()) {
             throw new IllegalStateException();
         }
@@ -107,7 +110,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(alg, x5c);
         result = 31 * result + Arrays.hashCode(sig);
         result = 31 * result + Arrays.hashCode(ecdaaKeyId);

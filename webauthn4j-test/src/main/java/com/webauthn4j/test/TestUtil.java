@@ -17,6 +17,7 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.attestation.statement.COSEKeyType;
+import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
@@ -32,6 +33,7 @@ import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -109,6 +111,11 @@ public class TestUtil {
         return new FIDOU2FAttestationStatement(certPath, sig);
     }
 
+    public static PackedAttestationStatement createBasicPackedAttestationStatement() {
+        byte[] sig = new byte[32];
+        CertPath certPath = load3tierTestCertPath();
+        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, sig, certPath, null);
+    }
 
     public static CertPath create2tierTestAuthenticatorCertPath() {
         CertPath x5c;
