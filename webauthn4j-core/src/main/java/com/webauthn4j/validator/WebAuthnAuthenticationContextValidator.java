@@ -20,8 +20,8 @@ import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.jackson.deserializer.AuthenticatorDataDeserializer;
 import com.webauthn4j.rp.RelyingParty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
@@ -48,7 +48,7 @@ public class WebAuthnAuthenticationContextValidator {
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
 
-    private final AuthenticatorDataDeserializer authenticatorDataDeserializer = new AuthenticatorDataDeserializer();
+    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
@@ -69,7 +69,7 @@ public class WebAuthnAuthenticationContextValidator {
         // Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
-        AuthenticatorData authenticatorData = authenticatorDataDeserializer.deserialize(aData);
+        AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
         RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
 
         BeanAssertUtil.validate(collectedClientData);

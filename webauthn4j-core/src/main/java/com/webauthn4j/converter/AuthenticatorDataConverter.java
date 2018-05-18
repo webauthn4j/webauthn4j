@@ -1,6 +1,7 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
@@ -9,56 +10,118 @@ import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AuthenticatorDataConverter {
 
-    private final ObjectMapper objectMapper;
+    private ObjectMapper cborMapper;
 
-    public AuthenticatorDataConverter(){
-        objectMapper = ObjectMapperUtil.createCBORMapper();
-    }
-
-    public byte[] convertToBytes(AuthenticatorData source) {
+    public byte[] convert(AuthenticatorData source) {
         try {
-            return serialize(source);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] rpIdHash = source.getRpIdHash();
+            byteArrayOutputStream.write(rpIdHash);
+            byteArrayOutputStream.write(new byte[]{source.getFlags()});
+            byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(source.getSignCount()));
+            if (source.getAttestedCredentialData() != null) {
+                byteArrayOutputStream.write(convert(source.getAttestedCredentialData()));
+            }
+            byteArrayOutputStream.write(convert(source.getExtensions()));
+            return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    byte[] serialize(AuthenticatorData value) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] rpIdHash = value.getRpIdHash();
-        byteArrayOutputStream.write(rpIdHash);
-        byteArrayOutputStream.write(new byte[]{value.getFlags()});
-        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(value.getSignCount()));
-        if (value.getAttestedCredentialData() != null) {
-            byteArrayOutputStream.write(serializeAttestedCredentialData(value.getAttestedCredentialData()));
-        }
-        byteArrayOutputStream.write(serializeExtensions(value.getExtensions()));
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    private byte[] serializeAttestedCredentialData(AttestedCredentialData attestationData) throws IOException {
+    private byte[] convert(AttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byteArrayOutputStream.write(attestationData.getAaGuid());
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
         byteArrayOutputStream.write(attestationData.getCredentialId());
-        byteArrayOutputStream.write(serializeCredentialPublicKey(attestationData.getCredentialPublicKey()));
+        byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
         return byteArrayOutputStream.toByteArray();
     }
 
-    private byte[] serializeExtensions(List<Extension> extensions) {
+    public AuthenticatorData convert(byte[] value) {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(value);
+
+        byte[] rpIdHash = new byte[32];
+        byteBuffer.get(rpIdHash, 0, 32);
+        byte flags = byteBuffer.get();
+        long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
+
+        AttestedCredentialData attestationData;
+        List<Extension> extensions;
+        if (AuthenticatorData.checkFlagAT(flags)) {
+            attestationData = convertToAttestedCredentialData(byteBuffer);
+        } else {
+            attestationData = null;
+        }
+        if (AuthenticatorData.checkFlagED(flags)) {
+            extensions = convertToExtensions(byteBuffer);
+        } else {
+            extensions = null;
+        }
+
+        return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
+    }
+
+    AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
+        byte[] aaGuid = new byte[16];
+        byteBuffer.get(aaGuid, 0, 16);
+        int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
+        byte[] credentialId = new byte[length];
+        byteBuffer.get(credentialId, 0, length);
+        byte[] remaining = new byte[byteBuffer.remaining()];
+        byteBuffer.get(remaining);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
+        CredentialPublicKey credentialPublicKey = convertToCredentialPublicKey(byteArrayInputStream);
+        AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        int extensionsBufferLength = byteArrayInputStream.available();
+        byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
+        return attestationData;
+    }
+
+    CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
+        try {
+            return getCborMapper().readValue(inputStream, CredentialPublicKey.class);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    List<Extension> convertToExtensions(ByteBuffer byteBuffer) {
+        if (byteBuffer.remaining() == 0) {
+            return new ArrayList<>();
+        }
+        byte[] remaining = new byte[byteBuffer.remaining()];
+        byteBuffer.get(remaining);
+        try {
+            return getCborMapper().readValue(remaining, new TypeReference<List<Extension>>() {
+            });
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    byte[] convert(List<Extension> extensions) {
         return new byte[0]; //TODO: to be implemented
     }
 
-    private byte[] serializeCredentialPublicKey(CredentialPublicKey credentialPublicKey) throws JsonProcessingException {
-        return objectMapper.writeValueAsBytes(credentialPublicKey);
+    byte[] convert(CredentialPublicKey credentialPublicKey) throws JsonProcessingException {
+        return getCborMapper().writeValueAsBytes(credentialPublicKey);
     }
+
+    private ObjectMapper getCborMapper(){
+        if(cborMapper == null){
+            cborMapper = ObjectMapperUtil.createCBORMapper();
+        }
+        return cborMapper;
+    }
+
 
 }

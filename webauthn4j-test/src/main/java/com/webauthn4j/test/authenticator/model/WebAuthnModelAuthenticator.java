@@ -304,7 +304,7 @@ public class WebAuthnModelAuthenticator {
         // if any, as the extensions and excluding attestedCredentialData.
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(getAssertionRequest.getRpId().getBytes(StandardCharsets.UTF_8));
         AuthenticatorData authenticatorDataObject = new AuthenticatorData(rpIdHash, flags, counter, null, processedExtensions);
-        byte[] authenticatorData = authenticatorDataConverter.convertToBytes(authenticatorDataObject);
+        byte[] authenticatorData = authenticatorDataConverter.convert(authenticatorDataObject);
 
         // Let signature be the assertion signature of the concatenation authenticatorData || hash using
         // the privateKey of selectedCredential as shown in Figure 2, below. A simple, undelimited concatenation is

@@ -18,7 +18,7 @@ public class WebAuthnAuthenticationContextTest {
 
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
-        byte[] authenticatorData = new AuthenticatorDataConverter().convertToBytes(createAuthenticatorData());
+        byte[] authenticatorData = new AuthenticatorDataConverter().convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         RelyingParty relyingParty = mock(RelyingParty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
@@ -35,7 +35,7 @@ public class WebAuthnAuthenticationContextTest {
     public void equals_hashCode_test() {
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
-        byte[] authenticatorData = new AuthenticatorDataConverter().convertToBytes(createAuthenticatorData());
+        byte[] authenticatorData = new AuthenticatorDataConverter().convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         RelyingParty relyingParty = mock(RelyingParty.class);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(

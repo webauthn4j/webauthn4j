@@ -37,7 +37,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
     @Override
     public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
-        gen.writeBinary(authenticatorDataConverter.convertToBytes(value));
+        gen.writeBinary(authenticatorDataConverter.convert(value));
     }
 
 }

@@ -10,11 +10,7 @@ import java.io.UncheckedIOException;
 
 public class AttestationObjectConverter {
 
-    private final ObjectMapper objectMapper;
-
-    public AttestationObjectConverter(){
-        objectMapper = ObjectMapperUtil.createCBORMapper();
-    }
+    private ObjectMapper objectMapper;
 
     public AttestationObject convert(String source) {
         byte[] value = Base64UrlUtil.decode(source);
@@ -23,7 +19,7 @@ public class AttestationObjectConverter {
 
     public AttestationObject convert(byte[] source) {
         try {
-            return objectMapper.readValue(source, AttestationObject.class);
+            return getCborMapper().readValue(source, AttestationObject.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -31,7 +27,7 @@ public class AttestationObjectConverter {
 
     public byte[] convertToBytes(AttestationObject source) {
         try {
-            return objectMapper.writeValueAsBytes(source);
+            return getCborMapper().writeValueAsBytes(source);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -40,6 +36,13 @@ public class AttestationObjectConverter {
     public String convertToString(AttestationObject source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
+    }
+
+    private ObjectMapper getCborMapper(){
+        if(this.objectMapper == null){
+            this.objectMapper = ObjectMapperUtil.createCBORMapper();
+        }
+        return this.objectMapper;
     }
 
 }
