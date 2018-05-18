@@ -41,9 +41,17 @@ public class AuthenticatorImpl implements Authenticator {
         return attestedCredentialData;
     }
 
+    public void setAttestedCredentialData(AttestedCredentialData attestedCredentialData) {
+        this.attestedCredentialData = attestedCredentialData;
+    }
+
     @Override
     public AttestationStatement getAttestationStatement() {
         return attestationStatement;
+    }
+
+    public void setAttestationStatement(AttestationStatement attestationStatement) {
+        this.attestationStatement = attestationStatement;
     }
 
     @Override

@@ -5,11 +5,11 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.rp.RelyingParty;
 
 public class RegistrationObject {
-    private CollectedClientData collectedClientData;
-    private byte[] collectedClientDataBytes;
-    private AttestationObject attestationObject;
-    private byte[] attestationObjectBytes;
-    private RelyingParty relyingParty;
+    private final CollectedClientData collectedClientData;
+    private final byte[] collectedClientDataBytes;
+    private final AttestationObject attestationObject;
+    private final byte[] attestationObjectBytes;
+    private final RelyingParty relyingParty;
 
     RegistrationObject(CollectedClientData collectedClientData,
                        byte[] collectedClientDataBytes,

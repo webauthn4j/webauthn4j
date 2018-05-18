@@ -46,10 +46,10 @@ public class WebAuthnAuthenticationContextValidator {
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
+    private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
 
-    private AuthenticatorDataDeserializer authenticatorDataDeserializer = new AuthenticatorDataDeserializer();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private final AuthenticatorDataDeserializer authenticatorDataDeserializer = new AuthenticatorDataDeserializer();
+    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 

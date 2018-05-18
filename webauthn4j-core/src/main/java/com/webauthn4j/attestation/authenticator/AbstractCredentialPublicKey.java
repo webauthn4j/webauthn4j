@@ -25,6 +25,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
 
@@ -75,7 +77,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     }
 
     @JsonIgnore
-    protected String getAlgorithmName() {
+    private String getAlgorithmName() {
         return algorithm.getName();
     }
 
@@ -90,5 +92,27 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
+        return keyType == that.keyType &&
+                Arrays.equals(keyId, that.keyId) &&
+                algorithm == that.algorithm &&
+                Arrays.equals(keyOpts, that.keyOpts) &&
+                Arrays.equals(baseIV, that.baseIV);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(keyType, algorithm);
+        result = 31 * result + Arrays.hashCode(keyId);
+        result = 31 * result + Arrays.hashCode(keyOpts);
+        result = 31 * result + Arrays.hashCode(baseIV);
+        return result;
     }
 }

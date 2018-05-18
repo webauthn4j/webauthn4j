@@ -31,14 +31,13 @@ public class WebAuthnAuthenticationContext {
     //~ Instance fields ================================================================================================
 
     // user inputs
-    private byte[] credentialId;
-    private byte[] collectedClientData;
-    private byte[] authenticatorData;
-    private byte[] signature;
+    private final byte[] credentialId;
+    private final byte[] collectedClientData;
+    private final byte[] authenticatorData;
+    private final byte[] signature;
 
     // server property
-    private RelyingParty relyingParty;
-
+    private final RelyingParty relyingParty;
 
     public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] collectedClientData,

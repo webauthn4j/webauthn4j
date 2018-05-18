@@ -26,9 +26,9 @@ import java.io.Serializable;
  */
 public class RelyingParty implements Serializable {
 
-    private Origin origin;
-    private String rpId;
-    private Challenge challenge;
+    private final Origin origin;
+    private final String rpId;
+    private final Challenge challenge;
 
     public RelyingParty(Origin origin, String rpId, Challenge challenge) {
         this.origin = origin;

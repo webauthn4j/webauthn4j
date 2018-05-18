@@ -48,6 +48,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean isSelfAttestationAllowed() {
         return this.isSelfAttestationAllowed;
     }
