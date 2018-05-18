@@ -60,7 +60,6 @@ public class GroupControllerSpringTest {
      * なし
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void list_test1() throws Exception{
@@ -86,7 +85,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * 処理成功
      * グループフォームの設定
-     * @throws Exception
      */
     @Test
     public void template_test1() throws Exception{
@@ -107,7 +105,6 @@ public class GroupControllerSpringTest {
      * 処理成功
      * リダイレクト
      * 結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void create_test1() throws Exception{
@@ -135,7 +132,6 @@ public class GroupControllerSpringTest {
      * 必須パラメータ不足
      * [期待結果]
      * バリデーションエラー
-     * @throws Exception
      */
     @Test
     public void create_test2() throws Exception{
@@ -161,7 +157,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP OK
      * サービスが投げた業務例外の結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void create_test3() throws Exception{
@@ -191,7 +186,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP OK
      * グループフォームの設定
-     * @throws Exception
      */
     @Test
     public void read_test1() throws Exception{
@@ -222,7 +216,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP Redirect
      * サービスが投げた業務例外の結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void read_test2() throws Exception{
@@ -252,7 +245,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP Redirect
      * 成功結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void update_test1() throws Exception{
@@ -293,7 +285,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP OK
      * グループフォームの設定
-     * @throws Exception
      */
     @Test
     public void update_test2() throws Exception{
@@ -319,7 +310,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP OK
      * サービスが投げた業務例外の結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void update_test3() throws Exception{
@@ -360,7 +350,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP Redirect
      * 成功結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void delete_test1() throws Exception{
@@ -389,7 +378,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP Redirect
      * サービスが投げた業務例外の結果メッセージの設定
-     * @throws Exception
      */
     @Ignore
     @Test
@@ -417,7 +405,6 @@ public class GroupControllerSpringTest {
      * [期待結果]
      * HTTP OK
      * サービスが投げた業務例外の結果メッセージの設定
-     * @throws Exception
      */
     @Test
     public void delete_test3() throws Exception{

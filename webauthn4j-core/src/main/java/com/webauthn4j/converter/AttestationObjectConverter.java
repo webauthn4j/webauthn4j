@@ -10,9 +10,9 @@ import java.io.UncheckedIOException;
 
 public class AttestationObjectConverter {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    public AttestationObjectConverter() {
+    public AttestationObjectConverter(){
         objectMapper = ObjectMapperUtil.createCBORMapper();
     }
 

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Created by ynojima on 2017/08/18.
  */
@@ -35,7 +37,7 @@ public class AuthenticatorManagerImpl implements AuthenticatorManager {
     public Authenticator loadWebAuthnAuthenticatorByCredentialId(byte[] credentialId) {
         AuthenticatorEntity authenticatorEntity = authenticatorEntityRepository.findOneByCredentialId(credentialId);
         if (authenticatorEntity == null) {
-            throw new CredentialIdNotFoundException(String.format("User with credentialId'%s' is not found.", credentialId));
+            throw new CredentialIdNotFoundException(String.format("User with credentialId'%s' is not found.", new String(credentialId, StandardCharsets.UTF_8)));
         }
         return modelMapper.map(authenticatorEntity, net.sharplab.springframework.security.webauthn.sample.domain.model.Authenticator.class);
     }

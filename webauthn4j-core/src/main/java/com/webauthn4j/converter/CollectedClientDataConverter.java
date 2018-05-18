@@ -11,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 
 public class CollectedClientDataConverter {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    public CollectedClientDataConverter() {
+    public CollectedClientDataConverter(){
         objectMapper = ObjectMapperUtil.createJSONMapper();
     }
 

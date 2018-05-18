@@ -11,8 +11,8 @@ public enum COSEAlgorithmIdentifier {
     ES384(-35, "SHA384withECDSA"),
     ES512(-36, "SHA512withECDSA");
 
-    private long value;
-    private String name;
+    private final long value;
+    private final String name;
 
     COSEAlgorithmIdentifier(long value, String name) {
         this.value = value;

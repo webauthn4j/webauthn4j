@@ -66,7 +66,6 @@ public class AuthorityServiceImplTest {
      * 必須パラメータ満足
      * [期待結果]
      * 処理成功
-     * @throws Exception
      */
     @Test
     public void findOne_test1(){

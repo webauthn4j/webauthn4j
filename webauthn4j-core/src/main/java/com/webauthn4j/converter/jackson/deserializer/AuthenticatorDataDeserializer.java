@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayInputStream;
@@ -39,10 +40,11 @@ import java.util.List;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
-    private ObjectMapper objectMapper = new ObjectMapper(new CBORFactory());
+    private final ObjectMapper objectMapper;
 
     public AuthenticatorDataDeserializer() {
         super(AuthenticatorData.class);
+        objectMapper = new ObjectMapper(new CBORFactory());
     }
 
     @Override

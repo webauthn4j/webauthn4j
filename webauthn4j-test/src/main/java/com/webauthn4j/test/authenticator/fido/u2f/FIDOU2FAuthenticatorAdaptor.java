@@ -36,6 +36,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
 
         byte[] challengeParameter = MessageDigestUtil.createSHA256().digest(collectedClientDataConverter.convertToBytes(collectedClientData));
+        //noinspection UnnecessaryLocalVariable
         byte[] applicationParameter = rpIdHash;
         RegistrationRequest registrationRequest = new RegistrationRequest(challengeParameter, applicationParameter);
         RegistrationResponse registrationResponse = fidoU2FAuthenticator.register(registrationRequest, registrationEmulationOption);
@@ -75,6 +76,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
         byte control = 0x00;
         byte[] challenge = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
+        //noinspection UnnecessaryLocalVariable
         byte[] applicationParameter = rpIdHash;
 
         List<PublicKeyCredentialDescriptor> publicKeyCredentialDescriptors = publicKeyCredentialRequestOptions.getAllowCredentials();

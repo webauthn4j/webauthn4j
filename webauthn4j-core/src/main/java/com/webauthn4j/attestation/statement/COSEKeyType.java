@@ -10,7 +10,7 @@ public enum COSEKeyType {
     SYMMETRIC(4), // https://tools.ietf.org/html/rfc8152#section-13
     RESERVED(0);  // https://tools.ietf.org/html/rfc8152#section-13
 
-    private int value;
+    private final int value;
 
     COSEKeyType(int value) {
         this.value = value;

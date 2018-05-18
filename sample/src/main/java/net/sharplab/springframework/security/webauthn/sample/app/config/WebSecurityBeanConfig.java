@@ -2,8 +2,6 @@ package net.sharplab.springframework.security.webauthn.sample.app.config;
 
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
-import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
 import net.sharplab.springframework.security.webauthn.WebAuthnAuthenticationProvider;
 import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationRequestValidator;
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
@@ -35,7 +33,6 @@ import org.springframework.security.web.session.InvalidSessionStrategy;
 import org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 @Configuration
 public class WebSecurityBeanConfig {

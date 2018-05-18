@@ -26,10 +26,10 @@ import java.util.Objects;
  */
 public class WebAuthnRegistrationContext {
 
-    private byte[] collectedClientData;
-    private byte[] attestationObject;
+    private final byte[] collectedClientData;
+    private final byte[] attestationObject;
 
-    private RelyingParty relyingParty;
+    private final RelyingParty relyingParty;
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
                                        byte[] attestationObject,

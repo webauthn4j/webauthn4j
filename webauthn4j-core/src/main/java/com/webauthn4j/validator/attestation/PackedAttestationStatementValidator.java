@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
 
-    private ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
+    private final ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {

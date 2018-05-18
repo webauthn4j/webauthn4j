@@ -19,9 +19,7 @@ public class AssertUtilTest {
 
     @Test
     public void notNull_test_with_null(){
-        assertThatThrownBy(()->{
-            AssertUtil.notNull(null, "message");
-        }).isInstanceOf(IllegalArgumentException.class).hasMessage("message");
+        assertThatThrownBy(()-> AssertUtil.notNull(null, "message")).isInstanceOf(IllegalArgumentException.class).hasMessage("message");
     }
 
     @Test

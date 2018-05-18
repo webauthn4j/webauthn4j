@@ -16,9 +16,7 @@
 
 package com.webauthn4j.extras.validator;
 
-import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;

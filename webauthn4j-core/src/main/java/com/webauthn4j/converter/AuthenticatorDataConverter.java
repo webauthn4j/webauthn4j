@@ -16,9 +16,9 @@ import java.util.List;
 
 public class AuthenticatorDataConverter {
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    public AuthenticatorDataConverter() {
+    public AuthenticatorDataConverter(){
         objectMapper = ObjectMapperUtil.createCBORMapper();
     }
 

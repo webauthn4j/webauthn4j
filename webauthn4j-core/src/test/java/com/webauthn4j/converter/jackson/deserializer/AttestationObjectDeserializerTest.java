@@ -19,9 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
-import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 

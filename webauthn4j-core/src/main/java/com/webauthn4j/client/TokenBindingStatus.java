@@ -9,7 +9,7 @@ public enum TokenBindingStatus {
     SUPPORTED("supported"),
     NOT_SUPPORTED("not-supported");
 
-    private String value;
+    private final String value;
 
     TokenBindingStatus(String value) {
         this.value = value;

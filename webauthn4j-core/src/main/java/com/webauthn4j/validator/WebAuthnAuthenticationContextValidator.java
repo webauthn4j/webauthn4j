@@ -43,9 +43,9 @@ public class WebAuthnAuthenticationContextValidator {
     // ================================================================================================
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ChallengeValidator challengeValidator = new ChallengeValidator();
-    private OriginValidator originValidator = new OriginValidator();
-    private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+    private final ChallengeValidator challengeValidator = new ChallengeValidator();
+    private final OriginValidator originValidator = new OriginValidator();
+    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
 
     private AuthenticatorDataDeserializer authenticatorDataDeserializer = new AuthenticatorDataDeserializer();

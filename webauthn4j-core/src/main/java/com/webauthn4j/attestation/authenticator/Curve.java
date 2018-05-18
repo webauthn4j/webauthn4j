@@ -13,7 +13,7 @@ public enum Curve {
     SECP384R1(2),
     SECP521R1(3);
 
-    private int value;
+    private final int value;
 
     Curve(int value) {
         this.value = value;
