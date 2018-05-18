@@ -32,6 +32,8 @@ import java.util.Collection;
 */
 public class AssertUtil {
 
+    private AssertUtil(){}
+
 
     /**
      * Assert that an object is not {@code null}.

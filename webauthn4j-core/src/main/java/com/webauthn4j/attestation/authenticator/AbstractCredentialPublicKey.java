@@ -28,7 +28,6 @@ import java.security.SignatureException;
 
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
 
-    //TODO: add annotation
     @JsonProperty("1")
     private COSEKeyType keyType;
 

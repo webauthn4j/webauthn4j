@@ -65,8 +65,8 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(spec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new UnexpectedCheckedException(e);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            throw new UnexpectedCheckedException(ex);
         }
     }
 

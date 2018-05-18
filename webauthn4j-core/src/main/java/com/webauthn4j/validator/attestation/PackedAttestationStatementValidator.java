@@ -52,7 +52,6 @@ public class PackedAttestationStatementValidator implements AttestationStatement
             if (aaguidInCertificate != null && !Arrays.equals(aaguidInCertificate, aaguid)) {
                 throw new BadAttestationStatementException("Bad aaguid");
             }
-            //TODO
 
             // If successful, return attestation type BASIC and attestation trust path x5c.
             return AttestationType.BASIC;

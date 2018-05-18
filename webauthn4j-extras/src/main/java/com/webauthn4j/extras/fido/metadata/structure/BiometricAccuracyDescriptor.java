@@ -19,8 +19,9 @@ package com.webauthn4j.extras.fido.metadata.structure;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * BiometricAccuracyDescriptor
  */
+@SuppressWarnings("squid:S00116")
 public class BiometricAccuracyDescriptor {
 
     @JsonProperty

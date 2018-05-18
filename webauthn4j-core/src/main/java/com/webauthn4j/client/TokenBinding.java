@@ -1,8 +1,9 @@
 package com.webauthn4j.client;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class TokenBinding {
+public class TokenBinding implements Serializable {
 
     private TokenBindingStatus status;
     private String id;
