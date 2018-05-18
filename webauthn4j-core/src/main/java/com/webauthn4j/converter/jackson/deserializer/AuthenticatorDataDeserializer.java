@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
@@ -87,16 +84,16 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        AbstractCredentialPublicKey credentialPublicKey = deserializeCredentialPublicKey(byteArrayInputStream);
+        CredentialPublicKey credentialPublicKey = deserializeCredentialPublicKey(byteArrayInputStream);
         AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
         int extensionsBufferLength = byteArrayInputStream.available();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
         return attestationData;
     }
 
-    AbstractCredentialPublicKey deserializeCredentialPublicKey(InputStream inputStream) {
+    CredentialPublicKey deserializeCredentialPublicKey(InputStream inputStream) {
         try {
-            return objectMapper.readValue(inputStream, ECCredentialPublicKey.class); //TODO
+            return objectMapper.readValue(inputStream, CredentialPublicKey.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

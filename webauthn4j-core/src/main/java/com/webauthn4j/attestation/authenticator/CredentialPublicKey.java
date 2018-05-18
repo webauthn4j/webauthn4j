@@ -17,12 +17,23 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
 import java.security.PublicKey;
 
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "1")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ECCredentialPublicKey.class, name = "1"),
+        @JsonSubTypes.Type(value = ECCredentialPublicKey.class, name = "2"),
+        @JsonSubTypes.Type(value = RSACredentialPublicKey.class, name = "3")
+})
 public interface CredentialPublicKey extends Serializable {
 
     boolean verifySignature(byte[] signature, byte[] data);

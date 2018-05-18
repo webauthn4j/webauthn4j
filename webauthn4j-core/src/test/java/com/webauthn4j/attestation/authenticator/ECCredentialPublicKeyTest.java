@@ -42,7 +42,7 @@ public class ECCredentialPublicKeyTest {
     public void cbor_serialize_deserialize_test() throws Exception {
         ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         byte[] serialized = cborMapper.writeValueAsBytes(original);
-        ECCredentialPublicKey result = cborMapper.readValue(serialized, ECCredentialPublicKey.class);
+        CredentialPublicKey result = cborMapper.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
@@ -50,7 +50,7 @@ public class ECCredentialPublicKeyTest {
     public void json_serialize_deserialize_test() throws Exception {
         ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         String serialized = jsonMapper.writeValueAsString(original);
-        ECCredentialPublicKey result = jsonMapper.readValue(serialized, ECCredentialPublicKey.class);
+        CredentialPublicKey result = jsonMapper.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 }
