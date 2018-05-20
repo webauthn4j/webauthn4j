@@ -4,6 +4,7 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
+import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
@@ -18,6 +19,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.CertPath;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         RegistrationResponse registrationResponse = fidoU2FAuthenticator.register(registrationRequest, registrationEmulationOption);
 
         AttestationStatement attestationStatement = new FIDOU2FAttestationStatement(
-                CertificateUtil.generateCertPath(Collections.singletonList(registrationResponse.getAttestationCertificate())),
+                new AttestationCertificatePath(Collections.singletonList(registrationResponse.getAttestationCertificate())),
                 registrationResponse.getSignature()
         );
 

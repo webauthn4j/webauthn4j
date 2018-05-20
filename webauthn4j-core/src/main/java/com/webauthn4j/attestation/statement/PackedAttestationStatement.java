@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import java.security.cert.CertPath;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -42,12 +40,12 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     private byte[] sig;
 
     @JsonProperty
-    private CertPath x5c;
+    private AttestationCertificatePath x5c;
 
     @JsonProperty
     private byte[] ecdaaKeyId;
 
-    public PackedAttestationStatement(COSEAlgorithmIdentifier alg, byte[] sig, CertPath x5c, byte[] ecdaaKeyId) {
+    public PackedAttestationStatement(COSEAlgorithmIdentifier alg, byte[] sig, AttestationCertificatePath x5c, byte[] ecdaaKeyId) {
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
@@ -66,7 +64,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     }
 
     @Override
-    public CertPath getX5c() {
+    public AttestationCertificatePath getX5c() {
         return x5c;
     }
 
@@ -85,16 +83,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         if (x5c == null && ecdaaKeyId == null) {
             throw new ConstraintViolationException("x5c or ecdaaKeyId must not be null");
         }
-    }
-
-    @JsonIgnore
-    @Override
-    public X509Certificate getEndEntityCertificate() {
-        validate();
-        if (x5c.getCertificates().isEmpty()) {
-            throw new IllegalStateException();
-        }
-        return (X509Certificate) x5c.getCertificates().get(0);
     }
 
     @Override

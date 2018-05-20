@@ -22,9 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import java.security.cert.CertPath;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(FIDOU2FAttestationStatement.FORMAT)
@@ -33,12 +32,12 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     public static final String FORMAT = "fido-u2f";
 
     @JsonProperty
-    private CertPath x5c;
+    private AttestationCertificatePath x5c;
 
     @JsonProperty
     private byte[] sig;
 
-    public FIDOU2FAttestationStatement(CertPath x5c, byte[] sig) {
+    public FIDOU2FAttestationStatement(AttestationCertificatePath x5c, byte[] sig) {
         this.x5c = x5c;
         this.sig = sig;
     }
@@ -47,7 +46,7 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     }
 
     @Override
-    public CertPath getX5c() {
+    public AttestationCertificatePath getX5c() {
         return x5c;
     }
 
@@ -60,21 +59,12 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         return FORMAT;
     }
 
-    @JsonIgnore
-    @Override
-    public X509Certificate getEndEntityCertificate() {
-        if (x5c.getCertificates().isEmpty()) {
-            throw new IllegalStateException();
-        }
-        return (X509Certificate) x5c.getCertificates().get(0);
-    }
-
     @Override
     public void validate() {
         if (x5c == null) {
             throw new ConstraintViolationException("x5c must not be null");
         }
-        if (x5c.getCertificates().size() != 1) {
+        if (x5c.size() != 1) {
             throw new ConstraintViolationException("x5c must have exactly one certificate");
         }
 
@@ -86,17 +76,16 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FIDOU2FAttestationStatement)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         FIDOU2FAttestationStatement that = (FIDOU2FAttestationStatement) o;
-
-        if (x5c != null ? !x5c.equals(that.x5c) : that.x5c != null) return false;
-        return Arrays.equals(sig, that.sig);
+        return Objects.equals(x5c, that.x5c) &&
+                Arrays.equals(sig, that.sig);
     }
 
     @Override
     public int hashCode() {
-        int result = x5c != null ? x5c.hashCode() : 0;
+
+        int result = Objects.hash(x5c);
         result = 31 * result + Arrays.hashCode(sig);
         return result;
     }

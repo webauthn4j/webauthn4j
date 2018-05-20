@@ -16,6 +16,8 @@
 
 package com.webauthn4j.extras.validator;
 
+import com.webauthn4j.attestation.statement.AttestationCertificate;
+import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
@@ -76,7 +78,7 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
     }
 
     Metadata findMetadata(CertificateBaseAttestationStatement attestationStatement) {
-        CertPath certPath = attestationStatement.getX5c();
+        AttestationCertificatePath attestationCertificatePath = attestationStatement.getX5c();
         Map<TrustAnchor, Metadata> metadataMap = getMetadataMap();
 
         Set<TrustAnchor> trustAnchors = metadataMap.keySet();
@@ -87,7 +89,7 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
 
         PKIXCertPathBuilderResult result;
         try {
-            result = (PKIXCertPathBuilderResult) certPathValidator.validate(certPath, certPathParameters);
+            result = (PKIXCertPathBuilderResult) certPathValidator.validate(attestationCertificatePath.createCertPath(), certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
             throw new IllegalStateException(e);
         } catch (CertPathValidatorException e) {

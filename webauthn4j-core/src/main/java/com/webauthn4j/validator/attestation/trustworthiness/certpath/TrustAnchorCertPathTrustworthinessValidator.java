@@ -42,7 +42,7 @@ public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrus
     }
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
-        CertPath certPath = attestationStatement.getX5c();
+        CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = webAuthnTrustAnchorService.getTrustAnchors();
 

@@ -39,10 +39,10 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
     }
 
     void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement){
-        if (attestationStatement.getX5c().getCertificates().size() != 1) {
+        if (attestationStatement.getX5c().size() != 1) {
             throw new CertificateException("FIDO-U2F attestation statement must have only one certificate.");
         }
-        PublicKey publicKey = attestationStatement.getEndEntityCertificate().getPublicKey();
+        PublicKey publicKey = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         validatePublicKey(publicKey);
     }
 
@@ -109,7 +109,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
     }
 
     private PublicKey getPublicKey(FIDOU2FAttestationStatement attestationStatement) {
-        Certificate cert = attestationStatement.getX5c().getCertificates().get(0);
+        Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }
 

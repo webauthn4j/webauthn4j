@@ -10,18 +10,19 @@ import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAlgorithmException;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
+import com.webauthn4j.validator.exception.*;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
+
+    public static final int NON_CA = -1;
 
     private final ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
@@ -39,15 +40,15 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         if (attestationStatement.getX5c() != null) {
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
             // using the attestation public key in x5c with the algorithm specified in alg.
-            if (verifySignature(attestationStatement.getEndEntityCertificate().getPublicKey(), alg, sig, signedData)) {
+            if (verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, signedData)) {
                 throw new BadSignatureException("Bad signature");
             }
             // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
-            //TODO
+            validateAttestationCertificate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
 
             // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
             // the value of this extension matches the aaguid in authenticatorData.
-            byte[] aaguidInCertificate = attestationStatement.getEndEntityCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
+            byte[] aaguidInCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
             byte[] aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaGuid();
             if (aaguidInCertificate != null && !Arrays.equals(aaguidInCertificate, aaguid)) {
                 throw new BadAttestationStatementException("Bad aaguid");
@@ -87,6 +88,22 @@ public class PackedAttestationStatementValidator implements AttestationStatement
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return PackedAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
+    }
+
+    private void validateAttestationCertificate(X509Certificate x509Certificate){
+        if(x509Certificate.getVersion() != 3){
+            throw new CertificateException("Attestation certificate must be version 3");
+        }
+        try {
+            x509Certificate.getSubjectX500Principal();
+            x509Certificate.getSubjectAlternativeNames();
+        } catch (CertificateParsingException e) {
+            throw new CertificateException(e);
+        }
+
+        if(x509Certificate.getBasicConstraints() != NON_CA){
+            throw new CertificateException("Attestation certificate must not be CA certificate");
+        }
     }
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {

@@ -1,10 +1,10 @@
 package com.webauthn4j.validator.attestation;
 
 import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.test.TestUtil;
-import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -15,7 +15,6 @@ import org.junit.Test;
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -38,7 +37,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     public void validateAttestationStatement_test(){
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
-                CertificateUtil.generateCertPath(Arrays.asList(
+                new AttestationCertificatePath(Arrays.asList(
                         TestUtil.load3tierTestAuthenticatorAttestationCertificate(),
                         TestUtil.load3tierTestIntermediateCACertificate()
                 ))

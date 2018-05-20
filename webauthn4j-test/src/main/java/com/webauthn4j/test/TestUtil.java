@@ -19,10 +19,7 @@ package com.webauthn4j.test;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.*;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.attestation.statement.COSEKeyType;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.attestation.statement.*;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.client.CollectedClientData;
@@ -103,7 +100,7 @@ public class TestUtil {
         return createFIDOU2FAttestationStatement(create2tierTestAuthenticatorCertPath());
     }
 
-    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(CertPath certPath) {
+    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(AttestationCertificatePath certPath) {
 
         byte[] sig = new byte[32];
 
@@ -112,23 +109,16 @@ public class TestUtil {
 
     public static PackedAttestationStatement createBasicPackedAttestationStatement() {
         byte[] sig = new byte[32];
-        CertPath certPath = load3tierTestCertPath();
+        AttestationCertificatePath certPath = load3tierTestCertPath();
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, sig, certPath, null);
     }
 
-    public static CertPath create2tierTestAuthenticatorCertPath() {
-        CertPath x5c;
-        try {
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            x5c = certificateFactory.generateCertPath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
-        return x5c;
+    public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {
+        return new AttestationCertificatePath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
     }
 
-    public static CertPath load3tierTestCertPath() {
-        return CertificateUtil.generateCertPath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
+    public static AttestationCertificatePath load3tierTestCertPath() {
+        return new AttestationCertificatePath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
 
     public static X509Certificate load3tierTestRootCACertificate() {

@@ -35,7 +35,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
         if (isSelfAttestationAllowed()) {
-            X509Certificate attestationCertificate = attestationStatement.getEndEntityCertificate();
+            X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
             try {
                 attestationCertificate.checkValidity();
             } catch (CertificateExpiredException e) {

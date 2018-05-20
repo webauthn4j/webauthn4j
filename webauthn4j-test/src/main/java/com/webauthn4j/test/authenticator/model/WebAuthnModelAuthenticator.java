@@ -6,6 +6,7 @@ import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
@@ -20,7 +21,6 @@ import com.webauthn4j.util.WIP;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.cert.CertPath;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ public class WebAuthnModelAuthenticator {
 
     byte[] aaGuid;
     private PrivateKey attestationPrivateKey;
-    private CertPath attestationCertPath;
+    private AttestationCertificatePath attestationCertificatePath;
     private boolean capableOfUserVerification;
     private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
@@ -40,9 +40,9 @@ public class WebAuthnModelAuthenticator {
 
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, CertPath attestationCertPath, boolean capableOfUserVerification, byte[] aaGuid, int counter) {
+    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, byte[] aaGuid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;
-        this.attestationCertPath = attestationCertPath;
+        this.attestationCertificatePath = attestationCertificatePath;
         this.capableOfUserVerification = capableOfUserVerification;
         this.aaGuid = aaGuid;
         this.counter = counter;
@@ -52,7 +52,7 @@ public class WebAuthnModelAuthenticator {
     public WebAuthnModelAuthenticator() {
         this(
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
-                TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERT_PATH,
+                TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH,
                 true,
                 new byte[16],
                 0
@@ -218,7 +218,7 @@ public class WebAuthnModelAuthenticator {
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
-        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertPath, null); //TODO:sig
+        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertificatePath, null); //TODO:sig
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,

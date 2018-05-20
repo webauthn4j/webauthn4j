@@ -25,7 +25,7 @@ public class AttestedCredentialDataVOToAttestedCredentialDataConverterTest {
         source.setCredentialId(credentialId);
         source.setCredentialPublicKey(credentialPublicKey);
 
-        AttestedCredentialData destination = new AttestedCredentialData();
+        AttestedCredentialData destination = new AttestedCredentialData(null, null, null);
 
 
         //When
