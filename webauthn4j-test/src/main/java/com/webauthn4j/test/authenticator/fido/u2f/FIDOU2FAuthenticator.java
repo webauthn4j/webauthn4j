@@ -113,7 +113,7 @@ public class FIDOU2FAuthenticator {
 
     private KeyPair getKeyPair(byte[] applicationParameter, byte[] nonce) {
         byte[] seed = ByteBuffer.allocate(64).put(applicationParameter).put(nonce).array();
-        return KeyUtil.createKeyPair(seed);
+        return KeyUtil.createECKeyPair(seed);
     }
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {

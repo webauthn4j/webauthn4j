@@ -153,7 +153,7 @@ public class WebAuthnModelAuthenticator {
         PrivateKey credentialPrivateKey;
         CredentialPublicKey credentialPublicKey;
         try {
-            KeyPair keyPair = KeyUtil.createKeyPair();
+            KeyPair keyPair = KeyUtil.createECKeyPair();
             credentialPrivateKey = keyPair.getPrivate();
             credentialPublicKey = ECCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
 

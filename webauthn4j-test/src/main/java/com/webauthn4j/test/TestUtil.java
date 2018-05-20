@@ -213,7 +213,7 @@ public class TestUtil {
         try {
             InputStream inputStream = resource.getInputStream();
             byte[] data = StreamUtils.copyToByteArray(inputStream);
-            return KeyUtil.loadECDSAPrivateKey(data);
+            return KeyUtil.loadECPrivateKey(data);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

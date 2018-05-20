@@ -9,7 +9,7 @@ public class KeyUtil {
 
     private KeyUtil(){}
 
-    public static PrivateKey loadECDSAPrivateKey(byte[] bytes){
+    public static PrivateKey loadECPrivateKey(byte[] bytes){
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(bytes);
         KeyFactory keyFactory;
         try {
@@ -24,7 +24,7 @@ public class KeyUtil {
         }
     }
 
-    public static KeyPairGenerator createKeyPairGenerator(){
+    public static KeyPairGenerator createECKeyPairGenerator(){
         try {
             return KeyPairGenerator.getInstance("EC");
         } catch (NoSuchAlgorithmException e) {
@@ -32,8 +32,8 @@ public class KeyUtil {
         }
     }
 
-    public static KeyPair createKeyPair(byte[] seed){
-        KeyPairGenerator keyPairGenerator = createKeyPairGenerator();
+    public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec){
+        KeyPairGenerator keyPairGenerator = createECKeyPairGenerator();
         SecureRandom random = null;
         try {
             if(seed!=null){
@@ -43,17 +43,22 @@ public class KeyUtil {
             else {
                 random = SecureRandom.getInstanceStrong();
             }
-            AlgorithmParameters parameters = AlgorithmParameters.getInstance("EC", "SunEC");
-            parameters.init(new ECGenParameterSpec("secp256r1"));
-            ECParameterSpec ecParameterSpec = parameters.getParameterSpec(ECParameterSpec.class);
             keyPairGenerator.initialize(ecParameterSpec, random);
             return keyPairGenerator.generateKeyPair();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidParameterSpecException | InvalidAlgorithmParameterException e) {
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             throw new UnexpectedCheckedException(e);
         }
     }
 
-    public static KeyPair createKeyPair(){
-        return createKeyPair(null);
+    public static KeyPair createECKeyPair(byte[] seed) {
+        return createECKeyPair(seed, ECUtil.P_256_SPEC);
+    }
+
+    public static KeyPair createECKeyPair(ECParameterSpec ecParameterSpec){
+        return createECKeyPair(null, ecParameterSpec);
+    }
+
+    public static KeyPair createECKeyPair(){
+        return createECKeyPair((byte[]) null);
     }
 }

@@ -31,19 +31,28 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
             throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
         }
 
-        FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        FIDOU2FAttestationStatement attestationStatement =
+                (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatement(attestationStatement);
+        validateSignature(registrationObject);
+        return AttestationType.BASIC;
+    }
+
+    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement){
         if (attestationStatement.getX5c().getCertificates().size() != 1) {
             throw new CertificateException("FIDO-U2F attestation statement must have only one certificate.");
         }
         PublicKey publicKey = attestationStatement.getEndEntityCertificate().getPublicKey();
+        validatePublicKey(publicKey);
+    }
+
+    void validatePublicKey(PublicKey publicKey) {
         if (!publicKey.getAlgorithm().equals("EC")) {
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
         }
         if (!((ECPublicKey) publicKey).getParams().equals(ECUtil.P_256_SPEC)) {
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
         }
-        validateSignature(registrationObject);
-        return AttestationType.BASIC;
     }
 
     private void validateSignature(RegistrationObject registrationObject) {
