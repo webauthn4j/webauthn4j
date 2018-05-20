@@ -1,0 +1,47 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            0d:18:7e:a9:9b:29:2c:3e:80:aa:55:80:d4:9c:88:8d
+    Signature Algorithm: ecdsa-with-SHA256
+        Issuer: O=SharpLab., CN=spring-security-webauthn test intermediate CA
+        Validity
+            Not Before: Sep 22 03:30:16 2017 GMT
+            Not After : Aug 29 03:30:16 2117 GMT
+        Subject: ST=Tokyo, O=SharpLab., CN=spring-security-webauthn test authenticator
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub: 
+                    04:88:64:f0:3f:e5:95:76:80:d5:9c:ee:04:2e:98:
+                    4e:1c:ff:b8:10:7c:e6:04:a6:da:3e:4c:4d:42:8f:
+                    b9:c0:55:f3:4a:7f:ed:e8:fa:19:70:db:ec:fb:5d:
+                    d4:1b:02:7d:0a:1f:a2:e4:59:27:74:17:1d:0f:2c:
+                    ed:3a:8f:63:af
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Key Usage: critical
+                Digital Signature
+            X509v3 Subject Key Identifier: 
+                B7:0B:6D:CC:A7:15:62:C4:C0:0D:93:F2:2D:F6:9E:58:53:77:E1:AC
+    Signature Algorithm: ecdsa-with-SHA256
+         30:46:02:21:00:d2:74:3e:1f:b4:62:57:25:48:fc:a5:10:f7:
+         26:51:2d:71:6f:00:70:48:dd:c5:d6:60:c0:65:95:ab:ed:cd:
+         d5:02:21:00:b8:dc:42:8c:99:b1:96:d5:17:30:80:f9:a1:8c:
+         9e:56:1f:a7:80:c0:6a:04:46:68:dc:ae:eb:ba:6b:ed:16:32
+-----BEGIN CERTIFICATE-----
+MIIB5jCCAYugAwIBAgIQDRh+qZspLD6AqlWA1JyIjTAKBggqhkjOPQQDAjBMMRIw
+EAYDVQQKDAlTaGFycExhYi4xNjA0BgNVBAMMLXNwcmluZy1zZWN1cml0eS13ZWJh
+dXRobiB0ZXN0IGludGVybWVkaWF0ZSBDQTAgFw0xNzA5MjIwMzMwMTZaGA8yMTE3
+MDgyOTAzMzAxNlowWjEOMAwGA1UECAwFVG9reW8xEjAQBgNVBAoMCVNoYXJwTGFi
+LjE0MDIGA1UEAwwrc3ByaW5nLXNlY3VyaXR5LXdlYmF1dGhuIHRlc3QgYXV0aGVu
+dGljYXRvcjBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABIhk8D/llXaA1ZzuBC6Y
+Thz/uBB85gSm2j5MTUKPucBV80p/7ej6GXDb7Ptd1BsCfQofouRZJ3QXHQ8s7TqP
+Y6+jPzA9MAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0GA1UdDgQWBBS3
+C23MpxVixMANk/It9p5YU3fhrDAKBggqhkjOPQQDAgNJADBGAiEA0nQ+H7RiVyVI
+/KUQ9yZRLXFvAHBI3cXWYMBllavtzdUCIQC43EKMmbGW1RcwgPmhjJ5WH6eAwGoE
+Rmjcruu6a+0WMg==
+-----END CERTIFICATE-----

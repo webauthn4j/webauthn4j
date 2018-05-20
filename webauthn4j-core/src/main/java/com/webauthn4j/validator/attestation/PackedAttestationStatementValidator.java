@@ -2,10 +2,7 @@ package com.webauthn4j.validator.attestation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.attestation.statement.*;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -21,8 +18,6 @@ import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
-
-    public static final int NON_CA = -1;
 
     private final ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
 
@@ -44,7 +39,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
                 throw new BadSignatureException("Bad signature");
             }
             // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
-            validateAttestationCertificate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate());
+            attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
 
             // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
             // the value of this extension matches the aaguid in authenticatorData.
@@ -90,21 +85,6 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         return PackedAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
-    private void validateAttestationCertificate(X509Certificate x509Certificate){
-        if(x509Certificate.getVersion() != 3){
-            throw new CertificateException("Attestation certificate must be version 3");
-        }
-        try {
-            x509Certificate.getSubjectX500Principal();
-            x509Certificate.getSubjectAlternativeNames();
-        } catch (CertificateParsingException e) {
-            throw new CertificateException(e);
-        }
-
-        if(x509Certificate.getBasicConstraints() != NON_CA){
-            throw new CertificateException("Attestation certificate must not be CA certificate");
-        }
-    }
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
