@@ -22,7 +22,7 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
@@ -45,6 +45,7 @@ public class WebAuthnAuthenticationContextValidator {
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
+    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
 
@@ -70,11 +71,11 @@ public class WebAuthnAuthenticationContextValidator {
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
-        RelyingParty relyingParty = webAuthnAuthenticationContext.getRelyingParty();
+        ServerProperty serverProperty = webAuthnAuthenticationContext.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
-        BeanAssertUtil.validate(relyingParty);
+        BeanAssertUtil.validate(serverProperty);
 
         // Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_GET)) {
@@ -83,18 +84,18 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
         // the PublicKeyCredentialRequestOptions passed to the get() call.
-        challengeValidator.validate(collectedClientData, relyingParty);
+        challengeValidator.validate(collectedClientData, serverProperty);
 
         // Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, relyingParty);
+        originValidator.validate(collectedClientData, serverProperty);
 
         // Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         // which the attestation was obtained. If Token Binding was used on that TLS connection,
         // also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        //TODO: not yet implemented
+        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         // Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
+        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
         // If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
         if (userVerificationRequired && !authenticatorData.isFlagUV()) {

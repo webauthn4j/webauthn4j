@@ -8,7 +8,7 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
@@ -67,8 +67,8 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -98,8 +98,8 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 }

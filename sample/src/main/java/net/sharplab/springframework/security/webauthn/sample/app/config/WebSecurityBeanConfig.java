@@ -7,8 +7,8 @@ import net.sharplab.springframework.security.webauthn.WebAuthnRegistrationReques
 import net.sharplab.springframework.security.webauthn.authenticator.WebAuthnAuthenticatorService;
 import net.sharplab.springframework.security.webauthn.challenge.ChallengeRepository;
 import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
-import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProvider;
-import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;
+import net.sharplab.springframework.security.webauthn.context.provider.ServerPropertyProvider;
+import net.sharplab.springframework.security.webauthn.context.provider.ServerPropertyProviderImpl;
 import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProvider;
 import net.sharplab.springframework.security.webauthn.context.provider.WebAuthnAuthenticationContextProviderImpl;
 import net.sharplab.springframework.security.webauthn.metadata.MetadataProvider;
@@ -38,8 +38,8 @@ import java.util.LinkedHashMap;
 public class WebSecurityBeanConfig {
 
     @Bean
-    public WebAuthnAuthenticationContextProvider webAuthnAuthenticationContextProvider(RelyingPartyProvider relyingPartyProvider) {
-        return new WebAuthnAuthenticationContextProviderImpl(relyingPartyProvider);
+    public WebAuthnAuthenticationContextProvider webAuthnAuthenticationContextProvider(ServerPropertyProvider serverPropertyProvider) {
+        return new WebAuthnAuthenticationContextProviderImpl(serverPropertyProvider);
     }
 
     @Bean
@@ -48,13 +48,13 @@ public class WebSecurityBeanConfig {
     }
 
     @Bean
-    public WebAuthnRegistrationRequestValidator webAuthnRegistrationRequestValidator(WebAuthnRegistrationContextValidator registrationContextValidator, RelyingPartyProvider relyingPartyProvider) {
-        return new WebAuthnRegistrationRequestValidator(registrationContextValidator, relyingPartyProvider);
+    public WebAuthnRegistrationRequestValidator webAuthnRegistrationRequestValidator(WebAuthnRegistrationContextValidator registrationContextValidator, ServerPropertyProvider serverPropertyProvider) {
+        return new WebAuthnRegistrationRequestValidator(registrationContextValidator, serverPropertyProvider);
     }
 
     @Bean
-    public RelyingPartyProvider relyingPartyProvider(ChallengeRepository challengeRepository) {
-        return new RelyingPartyProviderImpl(challengeRepository);
+    public ServerPropertyProvider relyingPartyProvider(ChallengeRepository challengeRepository) {
+        return new ServerPropertyProviderImpl(challengeRepository);
     }
 
     @Bean

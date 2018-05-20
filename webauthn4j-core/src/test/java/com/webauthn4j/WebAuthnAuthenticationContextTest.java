@@ -2,7 +2,7 @@ package com.webauthn4j;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import org.junit.Test;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
@@ -20,15 +20,15 @@ public class WebAuthnAuthenticationContextTest {
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AuthenticatorDataConverter().convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
-        RelyingParty relyingParty = mock(RelyingParty.class);
+        ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, relyingParty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
         assertThat(target.getCredentialId()).isEqualTo(credentialId);
         assertThat(target.getCollectedClientData()).isEqualTo(collectedClientData);
         assertThat(target.getCollectedClientDataJson()).isEqualTo(new String(collectedClientData));
         assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData);
         assertThat(target.getSignature()).isEqualTo(signature);
-        assertThat(target.getRelyingParty()).isEqualTo(relyingParty);
+        assertThat(target.getServerProperty()).isEqualTo(serverProperty);
     }
 
     @Test
@@ -37,11 +37,11 @@ public class WebAuthnAuthenticationContextTest {
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AuthenticatorDataConverter().convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
-        RelyingParty relyingParty = mock(RelyingParty.class);
+        ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, relyingParty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, relyingParty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
 
         assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB);
         assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB);

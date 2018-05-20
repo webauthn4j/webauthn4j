@@ -26,7 +26,7 @@ import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
@@ -62,6 +62,7 @@ public class WebAuthnRegistrationContextValidator {
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
+    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
 
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
@@ -127,11 +128,11 @@ public class WebAuthnRegistrationContextValidator {
                 clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                registrationContext.getRelyingParty()
+                registrationContext.getServerProperty()
         );
 
         AuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
-        RelyingParty relyingParty = registrationContext.getRelyingParty();
+        ServerProperty serverProperty = registrationContext.getServerProperty();
 
         if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_CREATE)) {
             throw new MaliciousDataException("Bad client data type");
@@ -139,21 +140,21 @@ public class WebAuthnRegistrationContextValidator {
 
         // Verify that the challenge in the collectedClientData matches the challenge that was sent to the authenticator
         // in the create() call.
-        challengeValidator.validate(collectedClientData, relyingParty);
+        challengeValidator.validate(collectedClientData, serverProperty);
 
         // Verify that the origin in the collectedClientData matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, relyingParty);
+        originValidator.validate(collectedClientData, serverProperty);
 
         // Verify that the tokenBindingId in the collectedClientData matches the Token Binding ID for the TLS connection
         // over which the attestation was obtained.
-        // TODO
+        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         // Verify that the clientExtensions in the collectedClientData is a proper subset of the extensions requested by the RP
         // and that the authenticatorExtensions in the collectedClientData is also a proper subset of the extensions requested by the RP.
         // TODO
 
         // Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), relyingParty);
+        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
         // Verify that attStmt is a correct, validly-signed attestation statement, using the attestation statement
         // format fmt’s verification procedure given authenticator data authData and the hash of the serialized
@@ -222,5 +223,4 @@ public class WebAuthnRegistrationContextValidator {
 
         throw new BadAttestationStatementException("Supplied AttestationStatement format is not configured.");
     }
-
 }

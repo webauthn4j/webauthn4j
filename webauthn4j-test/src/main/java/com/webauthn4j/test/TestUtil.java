@@ -26,7 +26,7 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
@@ -187,8 +187,8 @@ public class TestUtil {
         return new Origin("https://localhost:8080");
     }
 
-    public static RelyingParty createRelyingParty() {
-        return new RelyingParty(createOrigin(), "localhost", createChallenge());
+    public static ServerProperty createRelyingParty() {
+        return new ServerProperty(createOrigin(), "localhost", createChallenge(), null);
     }
 
     public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey() {

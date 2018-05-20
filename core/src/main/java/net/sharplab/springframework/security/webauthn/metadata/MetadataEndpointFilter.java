@@ -39,7 +39,7 @@ import java.util.Map;
 public class MetadataEndpointFilter extends GenericFilterBean {
 
     /**
-     * Default name of path suffix which will invoke this filter.
+     * Default name of path suffix which will validate this filter.
      */
     public static final String FILTER_URL = "/webauthn/metadata";
 

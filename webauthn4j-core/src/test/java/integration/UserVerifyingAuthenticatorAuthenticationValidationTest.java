@@ -9,7 +9,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.util.Collections;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
+import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 
 public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
@@ -49,7 +50,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -57,12 +58,52 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);
 
     }
+
+    @Test
+    public void validate_assertion_with_tokenBinding_test() {
+        String rpId = "example.com";
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge();
+
+        // create
+        AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+
+        // get
+        PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                null,
+                UserVerificationRequirement.REQUIRED,
+                null
+        );
+
+        byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge, tokenBindingId);
+        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        WebAuthnAuthenticationContext authenticationContext =
+                new WebAuthnAuthenticationContext(
+                        publicKeyCredential.getRawId(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getSignature(),
+                        serverProperty
+                );
+        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        target.validate(authenticationContext, authenticator, true);
+
+    }
+
 
     @Test(expected = MaliciousDataException.class)
     public void validate_assertion_test_with_bad_clientData_type() {
@@ -86,7 +127,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -94,7 +135,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);
@@ -123,7 +164,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -131,7 +172,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);
@@ -160,7 +201,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -168,12 +209,52 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);
 
     }
+
+    @Test(expected = TokenBindingException.class)
+    public void validate_assertion_with_invalid_tokenBinding_test() {
+        String rpId = "example.com";
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge();
+
+        // create
+        AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+
+        // get
+        PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                null,
+                UserVerificationRequirement.REQUIRED,
+                null
+        );
+
+        byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge, tokenBindingId);
+        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+
+        WebAuthnAuthenticationContext authenticationContext =
+                new WebAuthnAuthenticationContext(
+                        publicKeyCredential.getRawId(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getSignature(),
+                        serverProperty
+                );
+        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        target.validate(authenticationContext, authenticator, true);
+
+    }
+
 
     @Test(expected = BadRpIdException.class)
     public void validate_bad_rpId_test() {
@@ -197,7 +278,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, anotherSiteRpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, anotherSiteRpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -205,7 +286,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);
@@ -233,7 +314,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -241,7 +322,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        relyingParty
+                        serverProperty
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         target.validate(authenticationContext, authenticator, true);

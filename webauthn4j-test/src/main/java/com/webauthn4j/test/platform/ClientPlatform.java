@@ -5,6 +5,8 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
+import com.webauthn4j.client.TokenBinding;
+import com.webauthn4j.client.TokenBindingStatus;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
@@ -123,6 +125,11 @@ public class ClientPlatform {
 
     public CollectedClientData createCollectedClientData(String type, Challenge challenge) {
         return new CollectedClientData(type, challenge, origin, null);
+    }
+
+    public CollectedClientData createCollectedClientData(String type, Challenge challenge, byte[] tokenBindingId) {
+        TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, tokenBindingId);
+        return new CollectedClientData(type, challenge, origin, tokenBinding);
     }
 
     public Origin getOrigin() {

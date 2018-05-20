@@ -17,17 +17,17 @@
 package net.sharplab.springframework.security.webauthn.context.provider;
 
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Provides {@link RelyingParty} instance
+ * Provides {@link ServerProperty} instance
  */
-public interface RelyingPartyProvider {
+public interface ServerPropertyProvider {
 
-    RelyingParty provide(HttpServletRequest request, HttpServletResponse response);
+    ServerProperty provide(HttpServletRequest request, HttpServletResponse response);
 
     String getRpId();
 

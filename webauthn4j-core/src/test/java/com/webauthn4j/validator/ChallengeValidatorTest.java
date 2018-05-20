@@ -19,7 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.junit.Test;
@@ -40,10 +40,10 @@ public class ChallengeValidatorTest {
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
         CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
-        RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
+        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, relyingParty);
+        target.validate(collectedClientData, serverProperty);
     }
 
     @Test(expected = BadChallengeException.class)
@@ -53,10 +53,10 @@ public class ChallengeValidatorTest {
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
         CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
-        RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
+        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, relyingParty);
+        target.validate(collectedClientData, serverProperty);
     }
 
     @Test(expected = MissingChallengeException.class)
@@ -66,9 +66,9 @@ public class ChallengeValidatorTest {
         Challenge challengeB = null;
 
         CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
-        RelyingParty relyingParty = new RelyingParty(null, null, challengeB);
+        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, relyingParty);
+        target.validate(collectedClientData, serverProperty);
     }
 }

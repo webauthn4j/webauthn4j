@@ -18,7 +18,7 @@ package net.sharplab.springframework.security.webauthn;
 
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import net.sharplab.springframework.security.webauthn.challenge.HttpSessionChallengeRepository;
-import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProviderImpl;
+import net.sharplab.springframework.security.webauthn.context.provider.ServerPropertyProviderImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -37,7 +37,7 @@ public class WebAuthnRegistrationRequestValidatorTest {
     public void test() {
         target = new WebAuthnRegistrationRequestValidator(
                 new WebAuthnRegistrationContextValidator(Collections.emptyList(), null, null, null),
-                new RelyingPartyProviderImpl(new HttpSessionChallengeRepository())
+                new ServerPropertyProviderImpl(new HttpSessionChallengeRepository())
         );
 
         String clientDataBase64 = "eyJjaGFsbGVuZ2UiOiJGRkc1UVdrRFNJUzZvRVY1SFc0Vlp3IiwiaGFzaEFsZyI6IlNIQS0yNTYiLCJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjgwODAifQ";

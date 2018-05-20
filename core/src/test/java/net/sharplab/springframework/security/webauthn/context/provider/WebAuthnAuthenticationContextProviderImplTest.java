@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -53,9 +53,9 @@ public class WebAuthnAuthenticationContextProviderImplTest {
 
         Origin expectedOrigin = new Origin("http", "localhost", 8080);
 
-        RelyingPartyProvider relyingPartyProvider = mock(RelyingPartyProvider.class);
-        when(relyingPartyProvider.provide(any(), any())).thenReturn(new RelyingParty(origin, rpId, savedChallenge));
-        WebAuthnAuthenticationContextProviderImpl webAuthnContextProvider = new WebAuthnAuthenticationContextProviderImpl(relyingPartyProvider);
+        ServerPropertyProvider serverPropertyProvider = mock(ServerPropertyProvider.class);
+        when(serverPropertyProvider.provide(any(), any())).thenReturn(new ServerProperty(origin, rpId, savedChallenge, null));
+        WebAuthnAuthenticationContextProviderImpl webAuthnContextProvider = new WebAuthnAuthenticationContextProviderImpl(serverPropertyProvider);
         WebAuthnAuthenticationContext context = webAuthnContextProvider.provide(request, response, credentialId, clientData, authenticatorData, signature);
         assertThat(context).isNotNull();
         assertThat(context.getCredentialId()).isEqualTo(credentialId);
@@ -63,9 +63,9 @@ public class WebAuthnAuthenticationContextProviderImplTest {
         assertThat(context.getCollectedClientDataJson()).isEqualTo("{\"challenge\":\"xWj3Edq2S6aYrwQLXrmGrA\",\"hashAlg\":\"SHA-256\",\"origin\":\"http://localhost:8080\"}");
         assertThat(context.getAuthenticatorData()).isEqualTo(Base64Utils.decodeFromUrlSafeString(authenticatorData));
         assertThat(context.getSignature()).isEqualTo(Base64Utils.decodeFromUrlSafeString(signature));
-        assertThat(context.getRelyingParty().getChallenge().getValue()).isEqualTo(new byte[]{0x00});
-        assertThat(context.getRelyingParty().getOrigin()).isEqualTo(expectedOrigin);
-        assertThat(context.getRelyingParty().getRpId()).isEqualTo("localhost");
+        assertThat(context.getServerProperty().getChallenge().getValue()).isEqualTo(new byte[]{0x00});
+        assertThat(context.getServerProperty().getOrigin()).isEqualTo(expectedOrigin);
+        assertThat(context.getServerProperty().getRpId()).isEqualTo("localhost");
     }
 
     @Ignore
@@ -78,12 +78,12 @@ public class WebAuthnAuthenticationContextProviderImplTest {
         String authenticatorData = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAAAGg";
         String signature = "MEUCIQC42cvnjdgqMVYGPXzf8-CaU4RYPEMgxkzgmFFwn1oC4QIgfrLsvf5WPexdVWBsNckVE3RnXTrzAMX75EgMkpjjQ1I";
 
-        RelyingPartyProviderImpl relyingPartyProvider = new RelyingPartyProviderImpl(new HttpSessionChallengeRepository());
+        ServerPropertyProviderImpl relyingPartyProvider = new ServerPropertyProviderImpl(new HttpSessionChallengeRepository());
         WebAuthnAuthenticationContextProviderImpl webAuthnContextProvider = new WebAuthnAuthenticationContextProviderImpl(relyingPartyProvider);
         assertThat(relyingPartyProvider.getRpId()).isNull();
         relyingPartyProvider.setRpId("example.com");
         WebAuthnAuthenticationContext context = webAuthnContextProvider.provide(request, response, credentialId, clientData, authenticatorData, signature);
-        assertThat(context.getRelyingParty().getRpId()).isEqualTo("example.com");
+        assertThat(context.getServerProperty().getRpId()).isEqualTo("example.com");
     }
 
 }

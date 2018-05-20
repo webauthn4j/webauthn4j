@@ -16,7 +16,7 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -29,15 +29,15 @@ public class WebAuthnRegistrationContext {
     private final byte[] collectedClientData;
     private final byte[] attestationObject;
 
-    private final RelyingParty relyingParty;
+    private final ServerProperty serverProperty;
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
                                        byte[] attestationObject,
-                                       RelyingParty relyingParty) {
+                                       ServerProperty serverProperty) {
 
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
-        this.relyingParty = relyingParty;
+        this.serverProperty = serverProperty;
     }
 
     public byte[] getCollectedClientData() {
@@ -48,8 +48,8 @@ public class WebAuthnRegistrationContext {
         return attestationObject;
     }
 
-    public RelyingParty getRelyingParty() {
-        return relyingParty;
+    public ServerProperty getServerProperty() {
+        return serverProperty;
     }
 
     @Override
@@ -59,13 +59,13 @@ public class WebAuthnRegistrationContext {
         WebAuthnRegistrationContext that = (WebAuthnRegistrationContext) o;
         return Arrays.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(attestationObject, that.attestationObject) &&
-                Objects.equals(relyingParty, that.relyingParty);
+                Objects.equals(serverProperty, that.serverProperty);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(relyingParty);
+        int result = Objects.hash(serverProperty);
         result = 31 * result + Arrays.hashCode(collectedClientData);
         result = 31 * result + Arrays.hashCode(attestationObject);
         return result;

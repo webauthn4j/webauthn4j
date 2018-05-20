@@ -1,23 +1,23 @@
 package net.sharplab.springframework.security.webauthn;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
-import net.sharplab.springframework.security.webauthn.context.provider.RelyingPartyProvider;
+import net.sharplab.springframework.security.webauthn.context.provider.ServerPropertyProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class WebAuthnRegistrationRequestValidator {
 
-    private RelyingPartyProvider relyingPartyProvider;
+    private ServerPropertyProvider serverPropertyProvider;
 
     private WebAuthnRegistrationContextValidator registrationContextValidator;
 
-    public WebAuthnRegistrationRequestValidator(WebAuthnRegistrationContextValidator registrationContextValidator, RelyingPartyProvider relyingPartyProvider) {
+    public WebAuthnRegistrationRequestValidator(WebAuthnRegistrationContextValidator registrationContextValidator, ServerPropertyProvider serverPropertyProvider) {
         this.registrationContextValidator = registrationContextValidator;
-        this.relyingPartyProvider = relyingPartyProvider;
+        this.serverPropertyProvider = serverPropertyProvider;
     }
 
     public void validate(HttpServletRequest request, HttpServletResponse response,
@@ -33,9 +33,9 @@ public class WebAuthnRegistrationRequestValidator {
 
         byte[] clientDataBytes = Base64UrlUtil.decode(clientDataBase64);
         byte[] attestationObjectBytes = Base64UrlUtil.decode(attestationObjectBase64);
-        RelyingParty relyingParty = relyingPartyProvider.provide(request, response);
+        ServerProperty serverProperty = serverPropertyProvider.provide(request, response);
 
-        return new WebAuthnRegistrationContext(clientDataBytes, attestationObjectBytes, relyingParty);
+        return new WebAuthnRegistrationContext(clientDataBytes, attestationObjectBytes, serverProperty);
     }
 
 }

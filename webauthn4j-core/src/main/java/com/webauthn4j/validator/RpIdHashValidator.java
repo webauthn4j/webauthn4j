@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -34,10 +34,10 @@ class RpIdHashValidator {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    public void validate(byte[] rpIdHash, RelyingParty relyingParty) {
-        AssertUtil.notNull(relyingParty, "relyingParty must not be null");
-        String rpId = relyingParty.getRpId();
-        AssertUtil.notNull(rpId, "relyingParty must not be null");
+    public void validate(byte[] rpIdHash, ServerProperty serverProperty) {
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        String rpId = serverProperty.getRpId();
+        AssertUtil.notNull(rpId, "serverProperty must not be null");
 
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);

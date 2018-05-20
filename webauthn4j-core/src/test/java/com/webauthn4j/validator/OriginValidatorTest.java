@@ -18,7 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
 import org.junit.Test;
@@ -38,8 +38,8 @@ public class OriginValidatorTest {
         Origin originB = new Origin("https://example.com:14443");
 
         CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, TestUtil.createChallenge(), originA, null);
-        RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
-        target.validate(collectedClientData, relyingParty);
+        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestUtil.createChallenge(), null);
+        target.validate(collectedClientData, serverProperty);
     }
 
     @Test(expected = BadOriginException.class)
@@ -48,8 +48,8 @@ public class OriginValidatorTest {
         Origin originB = new Origin("http://example.com");
 
         CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, TestUtil.createChallenge(), originA, null);
-        RelyingParty relyingParty = new RelyingParty(originB, "example.com", TestUtil.createChallenge());
-        target.validate(collectedClientData, relyingParty);
+        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestUtil.createChallenge(), null);
+        target.validate(collectedClientData, serverProperty);
     }
 
 }

@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import net.sharplab.springframework.security.webauthn.challenge.ChallengeRepository;
@@ -27,16 +27,16 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * {@inheritDoc}
  */
-public class RelyingPartyProviderImpl implements RelyingPartyProvider {
+public class ServerPropertyProviderImpl implements ServerPropertyProvider {
 
     private String rpId = null;
     private ChallengeRepository challengeRepository;
 
-    public RelyingPartyProviderImpl(ChallengeRepository challengeRepository) {
+    public ServerPropertyProviderImpl(ChallengeRepository challengeRepository) {
         this.challengeRepository = challengeRepository;
     }
 
-    public RelyingParty provide(HttpServletRequest request, HttpServletResponse response) {
+    public ServerProperty provide(HttpServletRequest request, HttpServletResponse response) {
 
         Origin origin = obtainOrigin(request);
         Challenge savedChallenge = obtainSavedChallenge(request);
@@ -46,7 +46,7 @@ public class RelyingPartyProviderImpl implements RelyingPartyProvider {
             rpId = this.rpId;
         }
 
-        return new RelyingParty(origin, rpId, savedChallenge);
+        return new ServerProperty(origin, rpId, savedChallenge, null); // tokenBinding is not supported by Servlet API as of 4.0
     }
 
     public String getRpId() {

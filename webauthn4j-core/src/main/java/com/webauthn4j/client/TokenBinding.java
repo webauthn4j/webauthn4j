@@ -1,6 +1,9 @@
 package com.webauthn4j.client;
 
+import com.webauthn4j.util.Base64UrlUtil;
+
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class TokenBinding implements Serializable {
@@ -11,6 +14,11 @@ public class TokenBinding implements Serializable {
     public TokenBinding(TokenBindingStatus status, String id) {
         this.status = status;
         this.id = id;
+    }
+
+    public TokenBinding(TokenBindingStatus status, byte[] id) {
+        this.status = status;
+        this.id = Base64UrlUtil.encodeToString(id);
     }
 
     public TokenBinding() {
@@ -35,6 +43,7 @@ public class TokenBinding implements Serializable {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(status, id);
     }
 }

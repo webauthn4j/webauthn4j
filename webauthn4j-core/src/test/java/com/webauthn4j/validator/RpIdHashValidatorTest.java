@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import org.junit.Test;
@@ -38,10 +38,10 @@ public class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        RelyingParty relyingParty = new RelyingParty(null, rpIdB, null);
+        ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
 
         //When
-        target.validate(rpIdHashA, relyingParty);
+        target.validate(rpIdHashA, serverProperty);
     }
 
     @Test(expected = BadRpIdException.class)
@@ -52,10 +52,10 @@ public class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        RelyingParty relyingParty = new RelyingParty(null, rpIdB, null);
+        ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
 
         //When
-        target.validate(rpIdHashA, relyingParty);
+        target.validate(rpIdHashA, serverProperty);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -78,10 +78,10 @@ public class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        RelyingParty relyingParty = new RelyingParty(null, null, null);
+        ServerProperty serverProperty = new ServerProperty(null, null, null, null);
 
         //When
-        target.validate(rpIdHashA, relyingParty);
+        target.validate(rpIdHashA, serverProperty);
     }
 
 }

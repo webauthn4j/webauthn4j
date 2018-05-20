@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.rp;
+package com.webauthn4j.server;
 
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -22,18 +22,20 @@ import com.webauthn4j.client.challenge.Challenge;
 import java.io.Serializable;
 
 /**
- * RelyingParty
+ * ServerProperty
  */
-public class RelyingParty implements Serializable {
+public class ServerProperty implements Serializable {
 
     private final Origin origin;
     private final String rpId;
     private final Challenge challenge;
+    private final byte[] tokenBindingId;
 
-    public RelyingParty(Origin origin, String rpId, Challenge challenge) {
+    public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
         this.origin = origin;
         this.rpId = rpId;
         this.challenge = challenge;
+        this.tokenBindingId = tokenBindingId;
     }
 
     public Origin getOrigin() {
@@ -48,4 +50,7 @@ public class RelyingParty implements Serializable {
         return challenge;
     }
 
+    public byte[] getTokenBindingId() {
+        return tokenBindingId;
+    }
 }

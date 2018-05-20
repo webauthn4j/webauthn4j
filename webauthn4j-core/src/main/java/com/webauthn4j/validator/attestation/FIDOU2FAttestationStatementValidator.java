@@ -84,7 +84,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
 
     private byte[] getSignedData(RegistrationObject registrationObject) {
 
-        String rpId = registrationObject.getRelyingParty().getRpId();
+        String rpId = registrationObject.getServerProperty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();

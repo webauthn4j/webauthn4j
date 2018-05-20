@@ -2,26 +2,26 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 
 public class RegistrationObject {
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
-    private final RelyingParty relyingParty;
+    private final ServerProperty serverProperty;
 
     RegistrationObject(CollectedClientData collectedClientData,
                        byte[] collectedClientDataBytes,
                        AttestationObject attestationObject,
                        byte[] attestationObjectBytes,
-                       RelyingParty relyingParty) {
+                       ServerProperty serverProperty) {
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
-        this.relyingParty = relyingParty;
+        this.serverProperty = serverProperty;
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -40,8 +40,8 @@ public class RegistrationObject {
         return attestationObjectBytes;
     }
 
-    public RelyingParty getRelyingParty() {
-        return relyingParty;
+    public ServerProperty getServerProperty() {
+        return serverProperty;
     }
 
 }

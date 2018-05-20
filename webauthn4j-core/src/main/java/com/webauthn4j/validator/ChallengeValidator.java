@@ -18,7 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
@@ -35,10 +35,10 @@ class ChallengeValidator {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-    public void validate(CollectedClientData collectedClientData, RelyingParty relyingParty) {
+    public void validate(CollectedClientData collectedClientData, ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
-        AssertUtil.notNull(relyingParty, "relyingParty must not be null");
-        Challenge savedChallenge = relyingParty.getChallenge();
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        Challenge savedChallenge = serverProperty.getChallenge();
         Challenge collectedChallenge = collectedClientData.getChallenge();
 
         if (savedChallenge == null) {

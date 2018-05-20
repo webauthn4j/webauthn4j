@@ -16,7 +16,7 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -37,18 +37,18 @@ public class WebAuthnAuthenticationContext {
     private final byte[] signature;
 
     // server property
-    private final RelyingParty relyingParty;
+    private final ServerProperty serverProperty;
 
     public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] collectedClientData,
                                          byte[] authenticatorData,
                                          byte[] signature,
-                                         RelyingParty relyingParty) {
+                                         ServerProperty serverProperty) {
         this.credentialId = credentialId;
         this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
         this.signature = signature;
-        this.relyingParty = relyingParty;
+        this.serverProperty = serverProperty;
     }
 
     public byte[] getCredentialId() {
@@ -71,8 +71,8 @@ public class WebAuthnAuthenticationContext {
         return signature;
     }
 
-    public RelyingParty getRelyingParty() {
-        return relyingParty;
+    public ServerProperty getServerProperty() {
+        return serverProperty;
     }
 
     @Override
@@ -84,17 +84,18 @@ public class WebAuthnAuthenticationContext {
                 Arrays.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(authenticatorData, that.authenticatorData) &&
                 Arrays.equals(signature, that.signature) &&
-                Objects.equals(relyingParty, that.relyingParty);
+                Objects.equals(serverProperty, that.serverProperty);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(relyingParty);
+        int result = Objects.hash(serverProperty);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(collectedClientData);
         result = 31 * result + Arrays.hashCode(authenticatorData);
         result = 31 * result + Arrays.hashCode(signature);
         return result;
     }
+
 }

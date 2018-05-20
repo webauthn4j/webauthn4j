@@ -16,7 +16,7 @@
 
 package net.sharplab.springframework.security.webauthn.context.provider;
 
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import org.springframework.util.Base64Utils;
 
@@ -31,10 +31,10 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
 
 
 
-    private RelyingPartyProvider relyingPartyProvider;
+    private ServerPropertyProvider serverPropertyProvider;
 
-    public WebAuthnAuthenticationContextProviderImpl(RelyingPartyProvider relyingPartyProvider) {
-        this.relyingPartyProvider = relyingPartyProvider;
+    public WebAuthnAuthenticationContextProviderImpl(ServerPropertyProvider serverPropertyProvider) {
+        this.serverPropertyProvider = serverPropertyProvider;
     }
 
 
@@ -51,22 +51,22 @@ public class WebAuthnAuthenticationContextProviderImpl implements WebAuthnAuthen
         byte[] rawAuthenticatorData = Base64Utils.decodeFromUrlSafeString(authenticatorData);
         byte[] signatureBytes = Base64Utils.decodeFromUrlSafeString(signature);
 
-        RelyingParty relyingParty = relyingPartyProvider.provide(request, response);
+        ServerProperty serverProperty = serverPropertyProvider.provide(request, response);
 
         return new WebAuthnAuthenticationContext(
                 rawId,
                 rawClientData,
                 rawAuthenticatorData,
                 signatureBytes,
-                relyingParty);
+                serverProperty);
     }
 
-    public RelyingPartyProvider getRelyingPartyProvider() {
-        return relyingPartyProvider;
+    public ServerPropertyProvider getServerPropertyProvider() {
+        return serverPropertyProvider;
     }
 
-    public void setRelyingPartyProvider(RelyingPartyProvider relyingPartyProvider) {
-        this.relyingPartyProvider = relyingPartyProvider;
+    public void setServerPropertyProvider(ServerPropertyProvider serverPropertyProvider) {
+        this.serverPropertyProvider = serverPropertyProvider;
     }
 
 

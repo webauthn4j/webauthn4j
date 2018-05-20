@@ -10,7 +10,7 @@ import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -36,7 +36,7 @@ public class BeanAssertUtil {
         if (webAuthnAuthenticationContext.getSignature() == null) {
             throw new ConstraintViolationException("signature must not be null");
         }
-        if (webAuthnAuthenticationContext.getRelyingParty() == null) {
+        if (webAuthnAuthenticationContext.getServerProperty() == null) {
             throw new ConstraintViolationException("relyingParty must not be null");
         }
     }
@@ -48,7 +48,7 @@ public class BeanAssertUtil {
         if (webAuthnRegistrationContext.getCollectedClientData() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
-        if (webAuthnRegistrationContext.getRelyingParty() == null) {
+        if (webAuthnRegistrationContext.getServerProperty() == null) {
             throw new ConstraintViolationException("relyingParty must not be null");
         }
     }
@@ -140,14 +140,14 @@ public class BeanAssertUtil {
         // nop for now
     }
 
-    public static void validate(RelyingParty relyingParty) {
-        if (relyingParty.getRpId() == null) {
+    public static void validate(ServerProperty serverProperty) {
+        if (serverProperty.getRpId() == null) {
             throw new ConstraintViolationException("rpId must not be null");
         }
-        if (relyingParty.getChallenge() == null) {
+        if (serverProperty.getChallenge() == null) {
             throw new ConstraintViolationException("challenge must not be null");
         }
-        if (relyingParty.getOrigin() == null) {
+        if (serverProperty.getOrigin() == null) {
             throw new ConstraintViolationException("origin must not be null");
         }
     }

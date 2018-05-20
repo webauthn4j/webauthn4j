@@ -2,7 +2,7 @@ package com.webauthn4j;
 
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import org.junit.Test;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
@@ -18,10 +18,10 @@ public class WebAuthnRegistrationContextTest {
         byte[] collectedClientData = new CollectedClientDataConverter().convertToBytes(createClientData(TYPE_WEBAUTHN_GET));
         byte[] authenticatorData = new AttestationObjectConverter().convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
 
-        RelyingParty relyingParty = mock(RelyingParty.class);
+        ServerProperty serverProperty = mock(ServerProperty.class);
 
-        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, relyingParty);
-        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, relyingParty);
+        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty);
+        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty);
 
         assertThat(webAuthnRegistrationContextA).isEqualTo(webAuthnRegistrationContextB);
         assertThat(webAuthnRegistrationContextA).hasSameHashCodeAs(webAuthnRegistrationContextB);

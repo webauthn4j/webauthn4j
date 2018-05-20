@@ -9,7 +9,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.rp.RelyingParty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.platform.*;
@@ -53,8 +53,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -67,8 +67,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -87,8 +87,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         registrationEmulationOption.setCollectedClientDataOverrideEnabled(true);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -104,8 +104,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -122,8 +122,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         clientPlatform.setOrigin(badOrigin); //bad origin
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -137,8 +137,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -152,8 +152,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
                 new TrustAnchorCertPathTrustworthinessValidator(mock(WebAuthnTrustAnchorService.class)),
@@ -175,8 +175,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         registrationEmulationOption.setSignatureOverrideEnabled(true);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
-        RelyingParty relyingParty = new RelyingParty(origin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
@@ -197,8 +197,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         CollectedClientData maliciousClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challenge, phishingSiteClaimingOrigin, null);
         byte[] maliciousClientDataBytes = new CollectedClientDataConverter().convertToBytes(maliciousClientData);
-        RelyingParty relyingParty = new RelyingParty(validSiteOrigin, rpId, challenge);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), relyingParty);
+        ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty);
         target.validate(registrationContext);
     }
 
