@@ -42,7 +42,6 @@ public class WebAuthnModule extends SimpleModule {
 
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        //this.addDeserializer(CredentialPublicKey.class, new CredentialPublicKeyDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 

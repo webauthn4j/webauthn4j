@@ -29,16 +29,11 @@ public class AuthenticatorData implements Serializable {
     public static final byte BIT_AT = (byte) 0b01000000;
     public static final byte BIT_ED = (byte) 0b10000000;
 
-    private byte[] rpIdHash;
-
-    private byte flags;
-
-
-    private long signCount;
-
-    private AttestedCredentialData attestedCredentialData;
-
-    private List<Extension> extensions;
+    private final byte[] rpIdHash;
+    private final byte flags;
+    private final long signCount;
+    private final AttestedCredentialData attestedCredentialData;
+    private final List<Extension> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter, AttestedCredentialData attestedCredentialData, List<Extension> extensions) {
         this.rpIdHash = rpIdHash;
@@ -52,13 +47,12 @@ public class AuthenticatorData implements Serializable {
         }
     }
 
-    public AuthenticatorData() {
-    }
-
+    @SuppressWarnings("WeakerAccess")
     public static boolean checkFlagUP(byte flags) {
         return (flags & BIT_UP) != 0;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static boolean checkFlagUV(byte flags) {
         return (flags & BIT_UV) != 0;
     }

@@ -70,7 +70,7 @@ public class AuthenticatorDataConverter {
         return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
     }
 
-    AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
+    private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
         byte[] aaGuid = new byte[16];
         byteBuffer.get(aaGuid, 0, 16);
         int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
@@ -86,7 +86,7 @@ public class AuthenticatorDataConverter {
         return attestationData;
     }
 
-    CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
+    private CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
         try {
             return getCborMapper().readValue(inputStream, CredentialPublicKey.class);
         } catch (IOException e) {

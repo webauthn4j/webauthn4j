@@ -22,19 +22,16 @@ import java.util.Arrays;
 public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    private byte[] aaGuid;
+    private final byte[] aaGuid;
 
-    private byte[] credentialId;
+    private final byte[] credentialId;
 
-    private CredentialPublicKey credentialPublicKey;
+    private final CredentialPublicKey credentialPublicKey;
 
     public AttestedCredentialData(byte[] aaGuid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
         this.aaGuid = aaGuid;
         this.credentialId = credentialId;
         this.credentialPublicKey = credentialPublicKey;
-    }
-
-    public AttestedCredentialData() {
     }
 
     public byte[] getAaGuid() {

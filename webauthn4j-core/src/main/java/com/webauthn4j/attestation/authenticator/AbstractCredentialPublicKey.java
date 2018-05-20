@@ -45,7 +45,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @JsonProperty("5")
     private byte[] baseIV;
 
-    public AbstractCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV) {
+    AbstractCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV) {
         this.keyType = keyType;
         this.keyId = keyId;
         this.algorithm = algorithm;
@@ -53,7 +53,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         this.baseIV = baseIV;
     }
 
-    public AbstractCredentialPublicKey() {
+    AbstractCredentialPublicKey() {
     }
 
     public COSEKeyType getKeyType() {

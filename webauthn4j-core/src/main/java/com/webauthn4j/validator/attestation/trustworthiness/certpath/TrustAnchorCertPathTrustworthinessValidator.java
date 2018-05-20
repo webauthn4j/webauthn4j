@@ -32,7 +32,7 @@ import java.util.Set;
  */
 public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 
-    private WebAuthnTrustAnchorService webAuthnTrustAnchorService;
+    private final WebAuthnTrustAnchorService webAuthnTrustAnchorService;
 
     private boolean isRevocationCheckEnabled = false;
 

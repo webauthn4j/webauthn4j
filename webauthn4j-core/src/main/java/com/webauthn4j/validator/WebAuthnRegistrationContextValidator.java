@@ -55,17 +55,17 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private List<AttestationStatementValidator> attestationStatementValidators;
-    private CertPathTrustworthinessValidator certPathTrustworthinessValidator;
-    private ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
-    private SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+    private final List<AttestationStatementValidator> attestationStatementValidators;
+    private final CertPathTrustworthinessValidator certPathTrustworthinessValidator;
+    private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
+    private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
 
-    private ChallengeValidator challengeValidator = new ChallengeValidator();
-    private OriginValidator originValidator = new OriginValidator();
-    private RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+    private final ChallengeValidator challengeValidator = new ChallengeValidator();
+    private final OriginValidator originValidator = new OriginValidator();
+    private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
 
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,

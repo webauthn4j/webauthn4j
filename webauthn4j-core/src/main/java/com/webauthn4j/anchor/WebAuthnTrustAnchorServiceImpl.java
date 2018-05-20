@@ -27,7 +27,7 @@ import java.util.Set;
  */
 public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorService {
 
-    private TrustAnchorProvider trustAnchorProvider;
+    private final TrustAnchorProvider trustAnchorProvider;
     private Set<TrustAnchor> cachedTrustAnchors;
 
     public WebAuthnTrustAnchorServiceImpl(TrustAnchorProvider trustAnchorProvider) {

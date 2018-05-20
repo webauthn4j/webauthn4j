@@ -17,6 +17,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public class BeanAssertUtil {
 
     private BeanAssertUtil() {

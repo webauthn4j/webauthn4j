@@ -7,9 +7,9 @@ public enum COSEAlgorithmIdentifier {
     RS256(-257, "SHA256withRSA"),
     RS384(-258, "SHA384withRSA"),
     RS512(-259, "SHA512withRSA"),
-    ES256(-7, "SHA256withECDSA"),
-    ES384(-35, "SHA384withECDSA"),
-    ES512(-36, "SHA512withECDSA");
+    ES256(-7,   "SHA256withECDSA"),
+    ES384(-35,  "SHA384withECDSA"),
+    ES512(-36,  "SHA512withECDSA");
 
     private final long value;
     private final String name;
