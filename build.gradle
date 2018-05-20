@@ -16,7 +16,7 @@ plugins{
     id 'org.asciidoctor.convert' version "1.5.2"
 }
 
-group 'net.sharplab.springframework.security.extensions'
+group 'com.webauth4j'
 version "${webauthn4jVersion}"
 
 subprojects{
