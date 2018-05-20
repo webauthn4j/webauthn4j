@@ -193,7 +193,7 @@ public class WebAuthnModelAuthenticator {
         }
 
         // Let processedExtensions be the result of authenticator extension processing for each
-        // supported extension identifier → authenticator extension input in extensions.
+        // supported extension identifier -> authenticator extension input in extensions.
         List<Extension> processedExtensions = Collections.emptyList(); //TODO
 
         // If the authenticator supports:
@@ -259,7 +259,7 @@ public class WebAuthnModelAuthenticator {
             }
         }
         // Otherwise (allowCredentialDescriptorList was not supplied),
-        // for each key → credSource of this authenticator’s credentials map, append credSource to credentialOptions.
+        // for each key -> credSource of this authenticator’s credentials map, append credSource to credentialOptions.
         else {
             for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
                 credentialOptions.add(entry.getValue());
@@ -289,7 +289,7 @@ public class WebAuthnModelAuthenticator {
         PublicKeyCredentialSource selectedCredential = credentialOptions.get(0); //TODO
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
-        // extension identifier → authenticator extension input in extensions.
+        // extension identifier -> authenticator extension input in extensions.
         List<Extension> processedExtensions = Collections.emptyList();
         if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
