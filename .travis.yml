@@ -2,11 +2,12 @@ language: java
 
 jdk:
   - oraclejdk8
+  - oraclejdk9
   - openjdk8
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - ./gradlew sonarqube bootJar test javadoc asciidoc -Dsonar.organization=ynojima -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+  - ./gradlew sonarqube build test javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 
 deploy:
   provider: pages
@@ -21,4 +22,4 @@ deploy:
 
 addons:
   sonarcloud:
-    organization: "ynojima"
+    organization: "webauthn4j"

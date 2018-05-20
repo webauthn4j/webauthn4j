@@ -16,7 +16,7 @@ plugins{
 }
 
 group 'net.sharplab.springframework.security.extensions'
-version "${springSecurityWebAuthnVersion}"
+version "${webauthn4jVersion}"
 
 subprojects{
     apply plugin: 'java'
@@ -62,5 +62,5 @@ asciidoctor {
                 idseparator: '-',
                 doctype: 'book',
                 numbered: '',
-                revnumber : "${springSecurityWebAuthnVersion}"
+                revnumber : "${webauthn4jVersion}"
 }

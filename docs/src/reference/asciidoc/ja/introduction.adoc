@@ -6,28 +6,28 @@
 Web Authenticationは、W3Cで仕様策定が進められている、Webアプリケーションの新しいセキュアな認証方式仕様です。
 ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固な認証を実現しています。
 主要ブラウザでの実装が進みつつあり、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。
-当初はFIDO AllianceでFIDO2.0として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
+当初はFIDO AllianceでFIDO2.0の一部として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
 
-=== Spring Security WebAuthnとは
+=== WebAuthn4Jとは
 
-Spring Securityで保護されたWebアプリケーションに対して、Web Authentication仕様に基づく認証機能を提供するための
-Spring Security拡張です。
+Web Authentication仕様に基づくアサーションの検証を行うためのポータブルなJavaライブラリです。
+元々はSpring Security WebAuthnの一部として開発を進めていましたが、より多くのアプリケーションに対してWeb Authentication仕様に
+基づく認証機能を提供するためにSpring Security WebAuthnからアサーションの検証に関するコアを切り出して依存関係を最小化しました。
 
 ==== サポートする証言ステートメントフォーマット
 
 Spring Security WebAuthnが現在サポートする証言ステートメントフォーマットは以下の通りです。
 
 - None Attestation Statement Format
+- FIDO-U2F Attestation Statement Format
 
 それ以外の証言ステートメントフォーマットのサポートも順次行う予定です。
 
 === 要件
 
-==== 言語・フレームワーク
+==== 言語
 
 - Java8以降
-- Spring Framework 5.0以降
-- Spring Security 5.0以降
 
 ==== 動作環境
 
@@ -35,13 +35,13 @@ Spring Security WebAuthnが現在サポートする証言ステートメント�
 
 === ソースコード
 
-ソースコードは https://github.com/sharplab/spring-security-webauthn[Github] で管理されています。
+ソースコードは https://github.com/webauthn4j/webauthn4j[Github] で管理されています。
 ----
-git clone git@github.com:sharplab/spring-security-webauthn.git
+git clone git@github.com:webauthn4j/webauthn4j.git
 ----
 
 === ライセンス
 
-Spring Security WebAuthnは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの
+WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの
 オープンソースソフトウェアです。
 

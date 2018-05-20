@@ -1,9 +1,0 @@
----
-applications:
-- name: spring-security-webauthn-sample
-  memory: 1024M
-  path: build/libs/spring-security-webauthn-sample.jar
-  buildpack: java_buildpack
-  services:
-    - webauthn-sample-db
-    - webauthn-sample-kvs

@@ -1,13 +1,13 @@
 <releaseinfo>{revnumber}</releaseinfo>
-<productname>Spring Security WebAuthn</productname>
+<productname>WebAuthn4J</productname>
 <authorgroup>
-<author>
-    <firstname>Yoshikazu</firstname>
-    <surname>Nojima</surname>
-</author>
+    <author>
+        <firstname>Yoshikazu</firstname>
+        <surname>Nojima</surname>
+    </author>
 </authorgroup>
 
 <copyright>
-<year>2018</year>
-<holder>Yoshikazu Nojima</holder>
+    <year>2018</year>
+    <holder>Yoshikazu Nojima</holder>
 </copyright>

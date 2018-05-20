@@ -9,15 +9,16 @@ it provides strong authentication to web sites against authentication process at
 Implementation is in progress in major browsers, the specification offers excellent choices for users who place importance on security and convenience.
 Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but it has been transferred to W3C.
 
-=== Spring Security WebAuthn
+=== WebAuthn4J
 
-Spring Security WebAuthn is a Spring Security extension module to provide Web Authentication specification support for your Spring web application.
+WebAuthn4J is a portable Java library for WebAuthn assertion verification
 
 ==== Supported Attestation Statement Formats
 
 List of supported attestation statement formats is below:
 
 - None Attestation Statement Format
+- FIDO-U2F Attestation Statement Format
 
 Other attestation statement formats are also planed to support.
 
@@ -26,8 +27,6 @@ Other attestation statement formats are also planed to support.
 ==== Language & Framework
 
 - Java8 or later
-- Spring Framework 5.0 or later
-- Spring Security 5.0 or later
 
 ==== Environment
 
@@ -35,12 +34,12 @@ Other attestation statement formats are also planed to support.
 
 === Source code
 
-Source code for this project is hosted on https://github.com/sharplab/spring-security-webauthn[Github].
+Source code for this project is hosted on https://github.com/webauthn4j/webauthn4j[Github].
 ----
-git clone git@github.com:sharplab/spring-security-webauthn.git
+git clone git@github.com:webauthn4j/webauthn4j.git
 ----
 
 === License
 
-Spring Security WebAuthn is an open source software licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
+WebAuthn4J is an open source software licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
 

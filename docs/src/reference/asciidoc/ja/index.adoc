@@ -10,10 +10,6 @@
 :core-jdbc: http://docs.spring.io/spring/docs/{spring-version}/spring-framework-reference/html/jdbc.html
 :core-jdbc-JdbcTemplate: http://docs.spring.io/spring/docs/{spring-version}/spring-framework-reference/html/jdbc.html#jdbc-JdbcTemplate
 
-= Spring Security WebAuthn Reference
+= WebAuthn4J Reference
 
 include::introduction.adoc[]
-include::quick-start.adoc[]
-include::configuration.adoc[]
-include::spring-boot.adoc[]
-include::webauthn-in-a-nutshell.adoc[]

@@ -1,12 +1,9 @@
-include "core"
-include "thymeleaf"
-include "sample"
 include "webauthn4j-core"
 include 'webauthn4j-extras'
 include 'webauthn4j-test'
 include 'webauthn4j-util'
 
-rootProject.name = 'spring-security-webauthn'
+rootProject.name = 'webauthn4j'
 
 rootProject.children.each { project ->
 	if(!project.name.startsWith("webauthn4j")){
