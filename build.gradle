@@ -5,6 +5,7 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${bintrayVersion}")
     }
 
 }
@@ -23,6 +24,7 @@ subprojects{
     apply plugin: 'nebula.provided-base'
     apply plugin: "io.spring.dependency-management"
     apply plugin: 'jacoco'
+    apply plugin: 'com.jfrog.bintray'
 
     sourceCompatibility = 1.8
 

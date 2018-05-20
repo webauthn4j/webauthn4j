@@ -9,15 +9,21 @@ script:
   - ./gradlew sonarqube build test javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 
 deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: $GITHUB_TOKEN
-  keep-history: true
-  local-dir: build/asciidoc/html5
-  target-branch: gh-pages
-  on:
-    branch: master
-    jdk: openjdk8
+  - provider: pages
+    skip-cleanup: true
+    github-token: $GITHUB_TOKEN
+    keep-history: true
+    local-dir: build/asciidoc/html5
+    target-branch: gh-pages
+    on:
+      branch: master
+      jdk: openjdk8
+  - provider: script
+    skip-cleanup: true
+    script: ./gradlew bintrayUpload
+    on:
+      branch: master
+      jdk: openjdk8
 
 addons:
   sonarcloud:

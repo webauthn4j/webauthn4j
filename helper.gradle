@@ -1,0 +1,21 @@
+def getVariable(String envName, String propertyName) {
+    if (envName != null && System.getenv(envName) != null && !System.getenv(envName).isEmpty()) {
+        return System.getenv(envName)
+    }
+    else if (propertyName != null && project.hasProperty(propertyName)) {
+        return project.property(propertyName)
+    }
+    else {
+        return null
+    }
+}
+
+def getVersionNumber() {
+    ver = project.hasProperty('webauthn4jVersion')
+    return (ver.startsWith('v')) ? ver.substring(1) : ver
+}
+
+ext {
+    getVariable = this.&getVariable
+    getVersionNumber = this.&getVersionNumber
+}
