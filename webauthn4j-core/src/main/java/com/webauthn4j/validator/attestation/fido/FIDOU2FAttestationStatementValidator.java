@@ -1,4 +1,4 @@
-package com.webauthn4j.validator.attestation;
+package com.webauthn4j.validator.attestation.fido;
 
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
@@ -8,6 +8,7 @@ import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;

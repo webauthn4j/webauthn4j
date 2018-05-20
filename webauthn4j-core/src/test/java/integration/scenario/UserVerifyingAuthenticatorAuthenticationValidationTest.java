@@ -1,4 +1,4 @@
-package integration;
+package integration.scenario;
 
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.AttestationObject;

@@ -1,4 +1,4 @@
-package com.webauthn4j.validator.attestation;
+package com.webauthn4j.validator.attestation.packed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
@@ -7,6 +7,7 @@ import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.*;
 
 import java.io.IOException;

@@ -30,7 +30,9 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.NoneAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.fido.NullFIDOU2FAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.packed.NullPackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
@@ -41,6 +43,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -100,7 +103,11 @@ public class WebAuthnRegistrationContextValidator {
 
     public static WebAuthnRegistrationContextValidator createNullAttestationStatementValidator() {
         return new WebAuthnRegistrationContextValidator(
-                Collections.singletonList(new NoneAttestationStatementValidator()),
+                Arrays.asList(
+                        new NoneAttestationStatementValidator(),
+                        new NullFIDOU2FAttestationStatementValidator(),
+                        new NullPackedAttestationStatementValidator())
+                ,
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator()

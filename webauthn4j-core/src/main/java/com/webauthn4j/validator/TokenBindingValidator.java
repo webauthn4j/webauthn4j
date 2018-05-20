@@ -13,7 +13,13 @@ public class TokenBindingValidator {
             // nop
         }
         else {
-            byte[] clientDataTokenBindingId = Base64UrlUtil.decode(collectedClientDataTokenBinding.getId());
+            byte[] clientDataTokenBindingId;
+            if(collectedClientDataTokenBinding.getId() == null){
+                clientDataTokenBindingId = null;
+            }
+            else {
+                clientDataTokenBindingId = Base64UrlUtil.decode(collectedClientDataTokenBinding.getId());
+            }
             switch (collectedClientDataTokenBinding.getStatus()){
                 case NOT_SUPPORTED:
                     break;

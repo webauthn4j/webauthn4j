@@ -18,7 +18,12 @@ public class TokenBinding implements Serializable {
 
     public TokenBinding(TokenBindingStatus status, byte[] id) {
         this.status = status;
-        this.id = Base64UrlUtil.encodeToString(id);
+        if(id == null){
+            this.id = null;
+        }
+        else {
+            this.id = Base64UrlUtil.encodeToString(id);
+        }
     }
 
     public TokenBinding() {
