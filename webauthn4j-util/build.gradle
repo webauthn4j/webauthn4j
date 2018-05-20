@@ -30,7 +30,7 @@ bintray {
     pkg {
         userOrg = "webauthn4j"
         repo = "webauthn4j"
-        name = "webauthn4j-core"
+        name = "webauthn4j-util"
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/webauthn4j/webauthn4j'
         version {

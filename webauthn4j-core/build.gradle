@@ -25,3 +25,28 @@ dependencyManagement {
         mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
     }
 }
+
+apply from: "../helper.gradle"
+
+bintray {
+    user = getVariable('BINTRAY_USER', 'bintrayUser')
+    key  = getVariable('BINTRAY_TOKEN', 'bintrayToken')
+    configurations = ['archives']
+    publish = false
+    dryRun = false
+    pkg {
+        userOrg = "webauthn4j"
+        repo = "webauthn4j"
+        name = "webauthn4j-core"
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/webauthn4j/webauthn4j'
+        version {
+            name = "${webauthn4jVersion}"
+            released = new Date()
+            vcsTag = 'v' + "${webauthn4jVersion}"
+            gpg {
+                sign = true
+            }
+        }
+    }
+}
