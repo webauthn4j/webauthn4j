@@ -24,6 +24,7 @@ deploy:
     on:
       branch: master
       jdk: openjdk8
+      tags: true
 
 addons:
   sonarcloud:
