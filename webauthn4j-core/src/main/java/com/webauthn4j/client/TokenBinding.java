@@ -3,7 +3,6 @@ package com.webauthn4j.client;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class TokenBinding implements Serializable {

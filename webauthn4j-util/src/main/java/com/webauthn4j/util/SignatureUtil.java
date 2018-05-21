@@ -32,7 +32,7 @@ public class SignatureUtil {
         try {
             return Signature.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e); //TODO
+            throw new IllegalArgumentException(e);
         }
     }
 }

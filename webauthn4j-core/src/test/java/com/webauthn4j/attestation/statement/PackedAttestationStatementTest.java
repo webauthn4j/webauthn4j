@@ -4,8 +4,6 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PackedAttestationStatementTest {

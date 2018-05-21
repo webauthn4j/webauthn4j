@@ -3,8 +3,6 @@ package com.webauthn4j.attestation.statement;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationCertificatePathTest {

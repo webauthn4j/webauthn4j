@@ -52,7 +52,7 @@ public class FIDOU2FAuthenticator {
 
         byte[] message = ByteBuffer.allocate(32 + rpPrivateKey.length)
                 .put(applicationParameter).put(rpPrivateKey).array();
-        byte[] mac = MACUtil.caclucalteHMAC(message, attestationPrivateKey.getEncoded());
+        byte[] mac = MACUtil.calculateHMAC(message, attestationPrivateKey.getEncoded());
         byte[] keyHandle = ByteBuffer.allocate(64).put(nonce).put(mac).array();
 
         byte[] userPublicKey = getBytesFromECPublicKey((ECPublicKey) keyPair.getPublic());

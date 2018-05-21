@@ -14,12 +14,10 @@ import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.platform.*;
-import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.cert.CertPath;
 import java.util.Collections;
 import java.util.List;
 

@@ -41,7 +41,10 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.PrivateKey;
-import java.security.cert.*;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.TrustAnchor;
+import java.security.cert.X509Certificate;
 import java.util.*;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;

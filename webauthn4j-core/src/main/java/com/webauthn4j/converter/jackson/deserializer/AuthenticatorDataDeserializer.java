@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
-    private final AuthenticatorDataConverter authenticatorDataConverter;
+    private final transient AuthenticatorDataConverter authenticatorDataConverter;
 
     public AuthenticatorDataDeserializer() {
         super(AuthenticatorData.class);

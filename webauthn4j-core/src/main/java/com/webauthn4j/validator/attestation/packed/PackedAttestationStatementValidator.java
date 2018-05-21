@@ -2,20 +2,24 @@ package com.webauthn4j.validator.attestation.packed;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.statement.*;
+import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.attestation.statement.AttestationType;
+import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.exception.*;
+import com.webauthn4j.validator.exception.BadAlgorithmException;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.BadSignatureException;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
-import java.security.cert.CertificateParsingException;
-import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {

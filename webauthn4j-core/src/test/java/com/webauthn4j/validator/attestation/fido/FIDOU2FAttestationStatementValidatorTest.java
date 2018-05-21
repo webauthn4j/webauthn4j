@@ -8,7 +8,6 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.fido.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;

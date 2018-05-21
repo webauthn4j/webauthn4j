@@ -3,7 +3,6 @@ package com.webauthn4j.test;
 import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 
 import java.security.PrivateKey;
-import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 
 public class TestData {

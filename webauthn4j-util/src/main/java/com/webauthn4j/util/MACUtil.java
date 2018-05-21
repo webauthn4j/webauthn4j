@@ -9,7 +9,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class MACUtil {
 
-    public static byte[] caclucalteHMAC(byte[] message, byte[] secret){
+    private MACUtil(){}
+
+    public static byte[] calculateHMAC(byte[] message, byte[] secret){
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret, "HmacSHA256");

@@ -23,7 +23,10 @@ import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.converter.jackson.deserializer.*;
+import com.webauthn4j.converter.jackson.deserializer.AuthenticatorDataDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.CertPathDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.ChallengeDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.X509CertificateDeserializer;
 import com.webauthn4j.converter.jackson.serializer.*;
 
 import java.security.cert.CertPath;
