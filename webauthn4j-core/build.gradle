@@ -28,6 +28,18 @@ dependencyManagement {
 
 apply from: "../helper.gradle"
 
+publishing {
+    publications {
+        bintrayPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            pom.withXml {
+                asNode().appendNode('description', description)
+            }
+        }
+    }
+}
+
 bintray {
     user = getVariable('BINTRAY_USER', 'bintrayUser')
     key  = getVariable('BINTRAY_TOKEN', 'bintrayToken')
