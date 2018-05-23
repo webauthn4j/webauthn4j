@@ -46,6 +46,7 @@ bintray {
     configurations = ['archives']
     publish = false
     dryRun = false
+    publications = ['bintrayPublication']
     pkg {
         userOrg = "webauthn4j"
         repo = "webauthn4j"
