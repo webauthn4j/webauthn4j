@@ -56,7 +56,7 @@ bintray {
         version {
             name = "${webauthn4jVersion}"
             released = new Date()
-            vcsTag = 'v' + "${webauthn4jVersion}"
+            vcsTag = "${webauthn4jVersion}"
             gpg {
                 sign = true
             }
