@@ -22,14 +22,15 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by ynojima on 2017/08/19.
+ * Test for AttestationObject
  */
 public class AttestationObjectTest {
 
     @Test
-    public void equals_test() {
+    public void equals_hashCode_test() {
         AttestationObject instanceA = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AttestationObject instanceB = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 }

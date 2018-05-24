@@ -25,7 +25,7 @@ public enum TokenBindingStatus {
             case "not-supported":
                 return NOT_SUPPORTED;
             default:
-                throw new NotImplementedException();
+                throw new IllegalArgumentException();
         }
     }
 
