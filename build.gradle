@@ -16,8 +16,10 @@ plugins{
     id 'org.asciidoctor.convert' version "1.5.2"
 }
 
-group 'com.webauth4j'
-version "${webauthn4jVersion}"
+allprojects {
+    group 'com.webauthn4j'
+    version "${webauthn4jVersion}"
+}
 
 subprojects{
     apply plugin: 'java'
@@ -52,6 +54,73 @@ subprojects{
         archives sourcesJar
         archives javadocJar
     }
+
+    apply from: "../helper.gradle"
+
+    def projectUrl = "https://github.com/webauthn4j/webauthn4j"
+    def vcsUrl = "https://github.com/webauthn4j/webauthn4j"
+
+    publishing {
+        publications {
+            bintrayPublication(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                pom.withXml {
+                    def node = asNode()
+                    node.children().last() + {
+                        resolveStrategy = Closure.DELEGATE_FIRST
+
+                        name project.name
+                        description project.description
+                        url projectUrl
+                        scm {
+                            url vcsUrl
+                        }
+                        developers {
+                            developer {
+                                id 'ynojima'
+                                name 'Yoshikazu Nojima'
+                                email 'mail@ynojima.net'
+                            }
+                        }
+                        licenses {
+                            license {
+                                name 'The Apache Software License, Version 2.0'
+                                url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                                distribution 'repo'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    bintray {
+        user = getVariable('BINTRAY_USER', 'bintrayUser')
+        key  = getVariable('BINTRAY_TOKEN', 'bintrayToken')
+        configurations = ['archives']
+        publish = false
+        dryRun = false
+        publications = ['bintrayPublication']
+        pkg {
+            userOrg = "webauthn4j"
+            repo = "webauthn4j"
+            name = project.name
+            desc = project.description
+            licenses = ['Apache-2.0']
+            vcsUrl = vcsUrl
+            version {
+                name = "${webauthn4jVersion}"
+                released = new Date()
+                vcsTag = "${webauthn4jVersion}"
+                gpg {
+                    sign = true
+                }
+            }
+        }
+    }
+
 }
 
 
