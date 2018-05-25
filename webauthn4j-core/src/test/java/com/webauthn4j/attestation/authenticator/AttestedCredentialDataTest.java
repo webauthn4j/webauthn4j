@@ -26,6 +26,14 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class AttestedCredentialDataTest {
 
+    /**
+     * AttestedCredentialData must have default constructor
+     */
+    @Test
+    public void constructor_test(){
+        new AttestedCredentialData();
+    }
+
     @Test
     public void equals_test() {
         AttestedCredentialData instanceA = TestUtil.createAttestedCredentialData();
