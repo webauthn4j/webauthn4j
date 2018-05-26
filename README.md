@@ -1,10 +1,14 @@
 # WebAuthn4J
 
 [![Build Status](https://travis-ci.org/webauthn4j/webauthn4j.svg?branch=master)](https://travis-ci.org/webauthn4j/webauthn4j)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=webauthn4j&metric=coverage)](https://sonarcloud.io/dashboard?id=webauthn4j)
+[![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
+[![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
+
 
 A portable Java library for WebAuthn assertion verification
 
-**This is a Proof of Concept. Not for production use for now. Design may change radically.**
+**This library hasn't reached version 1. Design may change.**
 
 ## Documentation
 
