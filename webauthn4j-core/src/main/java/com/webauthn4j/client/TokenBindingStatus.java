@@ -2,7 +2,6 @@ package com.webauthn4j.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.webauthn4j.util.exception.NotImplementedException;
 
 public enum TokenBindingStatus {
     PRESENT("present"),

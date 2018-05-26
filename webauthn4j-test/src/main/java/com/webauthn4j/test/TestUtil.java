@@ -80,8 +80,7 @@ public class TestUtil {
                 null,
                 Curve.SECP256R1,
                 new byte[32],
-                new byte[32],
-                null
+                new byte[32]
         );
     }
 
