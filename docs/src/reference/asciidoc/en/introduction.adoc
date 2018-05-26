@@ -11,7 +11,7 @@ Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but
 
 === WebAuthn4J
 
-WebAuthn4J is a portable Java library for WebAuthn assertion verification
+WebAuthn4J is a portable Java library for WebAuthn assertion and attestation verification
 
 ==== Supported Attestation Statement Formats
 

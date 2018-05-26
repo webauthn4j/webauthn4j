@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
 
-A portable Java library for WebAuthn assertion verification
+A portable Java library for WebAuthn assertion and attestation verification
 
 **This library hasn't reached version 1. Design may change.**
 
@@ -14,7 +14,31 @@ A portable Java library for WebAuthn assertion verification
 
 You can find out more details from the [reference](https://webauthn4j.github.io/webauthn4j/en/).
 
-## Build
+## Getting from Maven Central
+
+If you are using Maven, just add the webauthn4j as a dependency:
+
+```xml
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.5.3.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j.core</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+```
+
+
+## Build from source
 
 WebAuthn4J uses a Gradle based build system.
 In the instructions below, `gradlew` is invoked from the root of the source tree and serves as a cross-platform,
@@ -22,7 +46,7 @@ self-contained bootstrap mechanism for the build.
 
 ### Prerequisites
 
-- Java8 or later
+- Java8
 
 ### Checkout sources
 
@@ -34,6 +58,59 @@ git clone https://github.com/webauthn4j/webauthn4j
 
 ```
 ./gradlew build
+```
+
+## How to use
+
+Verification on registration
+```java 
+// Client properties
+byte[] collectedClientData = null /* set collectedClientData */;
+byte[] attestationObject   = null /* set attestationObject */;
+
+// Server properties
+Origin origin          = null /* set origin */;
+String rpId            = null /* set rpId */;
+Challenge challenge    = null /* set challenge */;
+byte[] tokenBindingId  = null /* set tokenBindingId */;
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty);
+
+WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator = 
+        WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+webAuthnRegistrationContextValidator.validate(registrationContext);
+```
+
+Verification on authentication
+```java 
+// Client properties
+byte[] credentialId        = null /* set credentialId */;
+byte[] collectedClientData = null /* set collectedClientData */;
+byte[] authenticatorData = null /* set authenticatorData */;
+byte[] signature = null /* set signature */;
+
+// Server properties
+Origin origin          = null /* set origin */;
+String rpId            = null /* set rpId */;
+Challenge challenge    = null /* set challenge */;
+byte[] tokenBindingId  = null /* set tokenBindingId */;
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+WebAuthnAuthenticationContext authenticationContext =
+        new WebAuthnAuthenticationContext(
+                credentialId,
+                collectedClientData,
+                authenticatorData,
+                signature,
+                serverProperty
+        );
+Authenticator authenticator = null /* set authenticator */;
+
+WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
+        new WebAuthnAuthenticationContextValidator();
+
+webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator, true);
 ```
 
 ## Sample application

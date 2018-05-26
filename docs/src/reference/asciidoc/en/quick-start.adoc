@@ -1,0 +1,58 @@
+[quick-start]
+== Quick Start
+
+=== Attestation verification
+
+To verify an attestation on authenticator registration, call `WebAuthnRegistrationContextValidator#validate`.
+```java
+// Client properties
+byte[] collectedClientData = null /* set collectedClientData */;
+byte[] attestationObject   = null /* set attestationObject */;
+
+// Server properties
+Origin origin          = null /* set origin */;
+String rpId            = null /* set rpId */;
+Challenge challenge    = null /* set challenge */;
+byte[] tokenBindingId  = null /* set tokenBindingId */;
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty);
+
+WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
+        WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+webAuthnRegistrationContextValidator.validate(registrationContext);
+```
+
+=== Assertion verification
+
+To verify an assertion on authentication, call `WebAuthnAuthenticationContextValidator#validate`.
+```java
+// Client properties
+byte[] credentialId        = null /* set credentialId */;
+byte[] collectedClientData = null /* set collectedClientData */;
+byte[] authenticatorData = null /* set authenticatorData */;
+byte[] signature = null /* set signature */;
+
+// Server properties
+Origin origin          = null /* set origin */;
+String rpId            = null /* set rpId */;
+Challenge challenge    = null /* set challenge */;
+byte[] tokenBindingId  = null /* set tokenBindingId */;
+ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+WebAuthnAuthenticationContext authenticationContext =
+        new WebAuthnAuthenticationContext(
+                credentialId,
+                collectedClientData,
+                authenticatorData,
+                signature,
+                serverProperty
+        );
+Authenticator authenticator = null /* set authenticator */;
+
+WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
+        new WebAuthnAuthenticationContextValidator();
+
+webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator, true);
+```
+
