@@ -14,7 +14,6 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public class AuthenticatorDataConverter {
@@ -103,7 +102,7 @@ public class AuthenticatorDataConverter {
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         try {
-            return getCborMapper().readValue(remaining, new TypeReference<List<ExtensionOutput>>() {
+            return getCborMapper().readValue(remaining, new TypeReference<Map<ExtensionIdentifier, ExtensionOutput>>() {
             });
         } catch (IOException e) {
             throw new UncheckedIOException(e);

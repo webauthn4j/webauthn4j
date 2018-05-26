@@ -1,8 +1,8 @@
 package com.webauthn4j.test.platform;
 
-import com.webauthn4j.extension.ExtensionOutput;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.util.WIP;
 
 import java.util.List;

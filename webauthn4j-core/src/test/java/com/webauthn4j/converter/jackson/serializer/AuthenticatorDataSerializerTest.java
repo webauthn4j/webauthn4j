@@ -67,7 +67,7 @@ public class AuthenticatorDataSerializerTest {
         assertThat(deserialized.getAttestedCredentialData().getAaGuid()).isEqualTo(aaGuid);
         assertThat(deserialized.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId);
         assertThat(deserialized.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
-        assertThat(deserialized.getExtensions()).isEmpty();
+        assertThat(deserialized.getExtensions().isEmpty()).isTrue();
     }
 
 }

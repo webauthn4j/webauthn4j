@@ -23,11 +23,9 @@ import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.converter.jackson.deserializer.AuthenticatorDataDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.CertPathDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.ChallengeDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.X509CertificateDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
+import com.webauthn4j.extension.ExtensionOutput;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -46,6 +44,7 @@ public class WebAuthnModule extends SimpleModule {
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
+        this.addDeserializer(ExtensionOutput.class, new ExtensionOutputDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(CertPath.class, new CertPathSerializer());

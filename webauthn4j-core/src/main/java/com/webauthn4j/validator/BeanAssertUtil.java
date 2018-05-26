@@ -6,17 +6,16 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
@@ -139,11 +138,17 @@ public class BeanAssertUtil {
 
     private static void validate(Map.Entry<ExtensionIdentifier,ExtensionOutput> entry) {
         ExtensionIdentifier identifier = entry.getKey();
-        ExtensionIdentifier valueIdentifier = entry.getValue().getIdentifier();
-        if(!identifier.equals(valueIdentifier)){
-            throw new ConstraintViolationException("extension identifier and extension output type doesn't match");
+        ExtensionIdentifier extensionOutputIdentifier = entry.getValue().getIdentifier();
+        if(identifier == null){
+            throw new ConstraintViolationException("identifier must not be null");
         }
-        entry.getValue().validate();
+        if(!identifier.equals(extensionOutputIdentifier)){
+            throw new ConstraintViolationException("identifier must match");
+        }
+    }
+
+    private static void validate(ExtensionOutput entry) {
+        entry.validate();
     }
 
     public static void validate(ServerProperty serverProperty) {

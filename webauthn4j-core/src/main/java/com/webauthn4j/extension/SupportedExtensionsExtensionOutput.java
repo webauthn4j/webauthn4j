@@ -1,21 +1,16 @@
 package com.webauthn4j.extension;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import java.util.List;
 
-public class SupportedExtensionsExtensionOutput implements ExtensionOutput {
+public class SupportedExtensionsExtensionOutput extends AbstractExtensionOutput<List<String>> {
 
     public static final ExtensionIdentifier ID = new ExtensionIdentifier("exts");
 
-    private List<String> exts;
-
-    public SupportedExtensionsExtensionOutput(List<String> exts) {
-        this.exts = exts;
-    }
-
-    public SupportedExtensionsExtensionOutput() {}
-
-    public List<String> getExts() {
-        return exts;
+    @JsonCreator
+    public SupportedExtensionsExtensionOutput(List<String> value) {
+        super(value);
     }
 
     @Override
@@ -23,8 +18,4 @@ public class SupportedExtensionsExtensionOutput implements ExtensionOutput {
         return ID;
     }
 
-    @Override
-    public void validate() {
-
-    }
 }
