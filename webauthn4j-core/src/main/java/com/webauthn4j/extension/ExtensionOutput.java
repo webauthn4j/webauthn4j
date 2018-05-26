@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.attestation.authenticator.extension;
-
-import com.webauthn4j.util.WIP;
+package com.webauthn4j.extension;
 
 import java.io.Serializable;
 
-@WIP
-public interface Extension extends Serializable {
-    String getIdentifier();
+
+public interface ExtensionOutput extends Serializable {
+    ExtensionIdentifier getIdentifier();
+
+    void validate();
 }

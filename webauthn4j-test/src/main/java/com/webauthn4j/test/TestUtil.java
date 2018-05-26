@@ -64,7 +64,7 @@ public class TestUtil {
 
     public static AuthenticatorData createAuthenticatorData() {
         byte flags = BIT_UP | BIT_AT;
-        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(), null);
+        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData());
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {

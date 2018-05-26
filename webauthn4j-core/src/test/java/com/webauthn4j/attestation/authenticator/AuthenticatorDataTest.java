@@ -33,28 +33,28 @@ public class AuthenticatorDataTest {
         byte flags;
 
         flags = BIT_UP;
-        target = new AuthenticatorData(null, flags, 0, null, null);
+        target = new AuthenticatorData(null, flags, 0);
         assertThat(target.isFlagUP()).isTrue();
         assertThat(target.isFlagUV()).isFalse();
         assertThat(target.isFlagAT()).isFalse();
         assertThat(target.isFlagED()).isFalse();
 
         flags = BIT_UV;
-        target = new AuthenticatorData(null, flags, 0, null, null);
+        target = new AuthenticatorData(null, flags, 0);
         assertThat(target.isFlagUP()).isFalse();
         assertThat(target.isFlagUV()).isTrue();
         assertThat(target.isFlagAT()).isFalse();
         assertThat(target.isFlagED()).isFalse();
 
         flags = BIT_AT;
-        target = new AuthenticatorData(null, flags, 0, null, null);
+        target = new AuthenticatorData(null, flags, 0);
         assertThat(target.isFlagUP()).isFalse();
         assertThat(target.isFlagUV()).isFalse();
         assertThat(target.isFlagAT()).isTrue();
         assertThat(target.isFlagED()).isFalse();
 
         flags = BIT_ED;
-        target = new AuthenticatorData(null, flags, 0, null, null);
+        target = new AuthenticatorData(null, flags, 0);
         assertThat(target.isFlagUP()).isFalse();
         assertThat(target.isFlagUV()).isFalse();
         assertThat(target.isFlagAT()).isFalse();
@@ -70,8 +70,8 @@ public class AuthenticatorDataTest {
 
     @Test
     public void equals_test_with_not_equal_data() {
-        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0, null, null);
-        AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0, null, null);
+        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0);
+        AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0);
         assertThat(instanceA).isNotEqualTo(instanceB);
     }
 
@@ -84,8 +84,8 @@ public class AuthenticatorDataTest {
 
     @Test
     public void hashCode_test_with_not_equal_data() {
-        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0, null, null);
-        AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0, null, null);
+        AuthenticatorData instanceA = new AuthenticatorData(new byte[32], BIT_UP, 0);
+        AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0);
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
     }
 

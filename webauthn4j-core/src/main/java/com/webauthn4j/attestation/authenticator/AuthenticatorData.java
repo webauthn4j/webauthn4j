@@ -16,12 +16,13 @@
 
 package com.webauthn4j.attestation.authenticator;
 
-import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
 public class AuthenticatorData implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
@@ -33,18 +34,42 @@ public class AuthenticatorData implements Serializable {
     private final byte flags;
     private final long signCount;
     private final AttestedCredentialData attestedCredentialData;
-    private final List<Extension> extensions;
+    private final Map<ExtensionIdentifier, ExtensionOutput> extensions;
 
-    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter, AttestedCredentialData attestedCredentialData, List<Extension> extensions) {
+    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
+                             AttestedCredentialData attestedCredentialData,
+                             Map<ExtensionIdentifier, ExtensionOutput> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = attestedCredentialData;
-        if (extensions == null) {
-            this.extensions = Collections.emptyList();
-        } else {
-            this.extensions = extensions;
-        }
+        this.extensions = extensions;
+    }
+
+    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
+                             AttestedCredentialData attestedCredentialData) {
+        this.rpIdHash = rpIdHash;
+        this.flags = flags;
+        this.signCount = counter;
+        this.attestedCredentialData = attestedCredentialData;
+        this.extensions = Collections.emptyMap();
+    }
+
+    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
+                             Map<ExtensionIdentifier, ExtensionOutput> extensions) {
+        this.rpIdHash = rpIdHash;
+        this.flags = flags;
+        this.signCount = counter;
+        this.attestedCredentialData = null;
+        this.extensions = extensions;
+    }
+
+    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter) {
+        this.rpIdHash = rpIdHash;
+        this.flags = flags;
+        this.signCount = counter;
+        this.attestedCredentialData = null;
+        this.extensions = Collections.emptyMap();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -97,7 +122,7 @@ public class AuthenticatorData implements Serializable {
         return attestedCredentialData;
     }
 
-    public List<Extension> getExtensions() {
+    public Map<ExtensionIdentifier, ExtensionOutput> getExtensions() {
         return extensions;
     }
 

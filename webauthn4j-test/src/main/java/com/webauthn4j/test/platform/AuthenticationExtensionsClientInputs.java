@@ -1,8 +1,8 @@
 package com.webauthn4j.test.platform;
 
-import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.extension.ExtensionOutput;
 
 import java.util.HashMap;
 
-public class AuthenticationExtensionsClientInputs extends HashMap<String, Extension> {
+public class AuthenticationExtensionsClientInputs extends HashMap<String, ExtensionOutput> {
 }

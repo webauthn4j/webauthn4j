@@ -6,7 +6,8 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
@@ -16,6 +17,7 @@ import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public class BeanAssertUtil {
@@ -103,11 +105,10 @@ public class BeanAssertUtil {
         if (signCount <= 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        List<Extension> extensions = authenticatorData.getExtensions();
-        if (extensions == null) {
-            throw new ConstraintViolationException("extensions must not be null");
+        Map<ExtensionIdentifier, ExtensionOutput> extensions = authenticatorData.getExtensions();
+        if (extensions != null) {
+            extensions.entrySet().forEach(BeanAssertUtil::validate);
         }
-        extensions.forEach(BeanAssertUtil::validate);
 
     }
 
@@ -136,8 +137,13 @@ public class BeanAssertUtil {
         credentialPublicKey.validate();
     }
 
-    private static void validate(Extension extension) {
-        // nop for now
+    private static void validate(Map.Entry<ExtensionIdentifier,ExtensionOutput> entry) {
+        ExtensionIdentifier identifier = entry.getKey();
+        ExtensionIdentifier valueIdentifier = entry.getValue().getIdentifier();
+        if(!identifier.equals(valueIdentifier)){
+            throw new ConstraintViolationException("extension identifier and extension output type doesn't match");
+        }
+        entry.getValue().validate();
     }
 
     public static void validate(ServerProperty serverProperty) {

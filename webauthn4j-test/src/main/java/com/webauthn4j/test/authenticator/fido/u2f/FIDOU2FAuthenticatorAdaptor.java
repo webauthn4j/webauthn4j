@@ -53,7 +53,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ecCredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData, null);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData);
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
@@ -91,7 +91,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         byte[] credentialId = publicKeyCredentialDescriptor.getId();
         long counter = ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresense(), counter, null, null);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresense(), counter);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signature = authenticationResponse.getSignature();

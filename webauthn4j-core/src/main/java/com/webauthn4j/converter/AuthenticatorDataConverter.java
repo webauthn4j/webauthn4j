@@ -6,14 +6,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.extension.Extension;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class AuthenticatorDataConverter {
 
@@ -55,7 +57,7 @@ public class AuthenticatorDataConverter {
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
         AttestedCredentialData attestationData;
-        List<Extension> extensions;
+        Map<ExtensionIdentifier, ExtensionOutput> extensions;
         if (AuthenticatorData.checkFlagAT(flags)) {
             attestationData = convertToAttestedCredentialData(byteBuffer);
         } else {
@@ -64,7 +66,7 @@ public class AuthenticatorDataConverter {
         if (AuthenticatorData.checkFlagED(flags)) {
             extensions = convertToExtensions(byteBuffer);
         } else {
-            extensions = null;
+            extensions = Collections.emptyMap();
         }
 
         return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
@@ -94,22 +96,31 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    List<Extension> convertToExtensions(ByteBuffer byteBuffer) {
+    Map<ExtensionIdentifier, ExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
-            return new ArrayList<>();
+            return Collections.emptyMap();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         try {
-            return getCborMapper().readValue(remaining, new TypeReference<List<Extension>>() {
+            return getCborMapper().readValue(remaining, new TypeReference<List<ExtensionOutput>>() {
             });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    byte[] convert(List<Extension> extensions) {
-        return new byte[0]; //TODO: to be implemented
+    byte[] convert(Map<ExtensionIdentifier, ExtensionOutput> extensions) {
+        try {
+            if(extensions == null || extensions.isEmpty()){
+                return new byte[0];
+            }
+            else {
+                return getCborMapper().writeValueAsBytes(extensions);
+            }
+        } catch (JsonProcessingException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     byte[] convert(CredentialPublicKey credentialPublicKey) throws JsonProcessingException {

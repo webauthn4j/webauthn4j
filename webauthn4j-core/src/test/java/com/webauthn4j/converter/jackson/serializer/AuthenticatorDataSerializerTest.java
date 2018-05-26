@@ -50,7 +50,7 @@ public class AuthenticatorDataSerializerTest {
         long counter = 325;
 
         AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, counter, attestationData, null);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, counter, attestationData);
 
         //Given
 

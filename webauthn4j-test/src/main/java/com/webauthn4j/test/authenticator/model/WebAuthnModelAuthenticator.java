@@ -5,7 +5,8 @@ import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.extension.Extension;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
@@ -194,7 +195,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        List<Extension> processedExtensions = Collections.emptyList(); //TODO
+        Map<ExtensionIdentifier, ExtensionOutput> processedExtensions = Collections.emptyMap(); //TODO
 
         // If the authenticator supports:
         // a per-RP ID signature counter
@@ -290,7 +291,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier -> authenticator extension input in extensions.
-        List<Extension> processedExtensions = Collections.emptyList();
+        Map<ExtensionIdentifier, ExtensionOutput> processedExtensions = Collections.emptyMap();
         if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
         }
@@ -303,7 +304,7 @@ public class WebAuthnModelAuthenticator {
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data including processedExtensions,
         // if any, as the extensions and excluding attestedCredentialData.
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(getAssertionRequest.getRpId().getBytes(StandardCharsets.UTF_8));
-        AuthenticatorData authenticatorDataObject = new AuthenticatorData(rpIdHash, flags, counter, null, processedExtensions);
+        AuthenticatorData authenticatorDataObject = new AuthenticatorData(rpIdHash, flags, counter, processedExtensions);
         byte[] authenticatorData = authenticatorDataConverter.convert(authenticatorDataObject);
 
         // Let signature be the assertion signature of the concatenation authenticatorData || hash using
