@@ -145,6 +145,7 @@ public class BeanAssertUtil {
         if(!identifier.equals(extensionOutputIdentifier)){
             throw new ConstraintViolationException("identifier must match");
         }
+        validate(entry.getValue());
     }
 
     private static void validate(ExtensionOutput entry) {

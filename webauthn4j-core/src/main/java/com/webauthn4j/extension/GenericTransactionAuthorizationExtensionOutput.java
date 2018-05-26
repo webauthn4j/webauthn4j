@@ -2,6 +2,7 @@ package com.webauthn4j.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -19,7 +20,7 @@ public class GenericTransactionAuthorizationExtensionOutput extends AbstractExte
         return ID;
     }
 
-    public static class TxAuthnGenericArg {
+    public static class TxAuthnGenericArg implements Serializable {
 
         private String contentType;
         private byte[] content;

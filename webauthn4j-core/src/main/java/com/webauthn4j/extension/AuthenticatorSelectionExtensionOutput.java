@@ -2,14 +2,12 @@ package com.webauthn4j.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.util.List;
-
-public class AuthenticatorSelectionExtensionOutput extends AbstractExtensionOutput<List<byte[]>> {
+public class AuthenticatorSelectionExtensionOutput extends AbstractExtensionOutput<byte[][]> {
 
     public static final ExtensionIdentifier ID = new ExtensionIdentifier("authnSel");
 
     @JsonCreator
-    public AuthenticatorSelectionExtensionOutput(List<byte[]> value) {
+    public AuthenticatorSelectionExtensionOutput(byte[][] value) {
         super(value);
     }
 

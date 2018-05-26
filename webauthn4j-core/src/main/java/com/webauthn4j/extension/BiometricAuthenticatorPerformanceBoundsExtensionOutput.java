@@ -2,6 +2,7 @@ package com.webauthn4j.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 public class BiometricAuthenticatorPerformanceBoundsExtensionOutput extends AbstractExtensionOutput<BiometricAuthenticatorPerformanceBoundsExtensionOutput.AuthenticatorBiometricPerfBounds> {
@@ -18,12 +19,16 @@ public class BiometricAuthenticatorPerformanceBoundsExtensionOutput extends Abst
         return ID;
     }
 
-    public static class AuthenticatorBiometricPerfBounds{
+    public static class AuthenticatorBiometricPerfBounds implements Serializable {
 
+        @SuppressWarnings("squid:S00116")
         private float FAR;
+        @SuppressWarnings("squid:S00116")
         private float FRR;
 
-        public AuthenticatorBiometricPerfBounds(float FAR, float FRR) {
+        public AuthenticatorBiometricPerfBounds(
+                @SuppressWarnings("squid:S00117") float FAR,
+                @SuppressWarnings("squid:S00117") float FRR) {
             this.FAR = FAR;
             this.FRR = FRR;
         }

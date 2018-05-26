@@ -2,6 +2,7 @@ package com.webauthn4j.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 public class LocationExtensionOutput extends AbstractExtensionOutput<LocationExtensionOutput.Coordinates> {
@@ -19,7 +20,7 @@ public class LocationExtensionOutput extends AbstractExtensionOutput<LocationExt
     }
 
 
-    public static class Coordinates {
+    public static class Coordinates implements Serializable {
 
         private Double latitude;
         private Double longitude;
