@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
@@ -47,7 +48,7 @@ public interface CredentialPublicKey extends Serializable {
 
     COSEAlgorithmIdentifier getAlgorithm();
 
-    int[] getKeyOpts();
+    COSEKeyOperation[] getKeyOpts();
 
     byte[] getBaseIV();
 

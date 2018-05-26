@@ -19,6 +19,7 @@ package com.webauthn4j.attestation.authenticator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
 
 import java.security.InvalidKeyException;
@@ -40,12 +41,12 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private COSEAlgorithmIdentifier algorithm;
 
     @JsonProperty("4")
-    private int[] keyOpts;
+    private COSEKeyOperation[] keyOpts;
 
     @JsonProperty("5")
     private byte[] baseIV;
 
-    AbstractCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV) {
+    AbstractCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV) {
         this.keyType = keyType;
         this.keyId = keyId;
         this.algorithm = algorithm;
@@ -68,7 +69,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         return algorithm;
     }
 
-    public int[] getKeyOpts() {
+    public COSEKeyOperation[] getKeyOpts() {
         return keyOpts;
     }
 

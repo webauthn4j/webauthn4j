@@ -18,6 +18,7 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -47,44 +48,20 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-3")
     private byte[] y;
 
-    @JsonProperty("-4")
-    private byte[] d;
-
     public ECCredentialPublicKey() {
         super();
     }
 
     /**
-     * Constructor with all arguments
-     */
-    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
-                                 Curve curve, byte[] x, byte[] y, byte[] d) {
-        super(keyType, keyId, algorithm, keyOpts, baseIV);
-        this.curve = curve;
-        this.x = x;
-        this.y = y;
-        this.d = d;
-    }
-
-    /**
      * Constructor for public key
      */
-    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
+    @SuppressWarnings("squid:S00107")
+    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV,
                                  Curve curve, byte[] x, byte[] y) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
         this.x = x;
         this.y = y;
-    }
-
-    /**
-     * Constructor for private key
-     */
-    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV,
-                                 Curve curve, byte[] d) {
-        super(keyType, keyId, algorithm, keyOpts, baseIV);
-        this.curve = curve;
-        this.d = d;
     }
 
     /**
@@ -139,10 +116,6 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
         return y;
     }
 
-    public byte[] getD() {
-        return d;
-    }
-
     @Override
     public byte[] getBytes() {
         byte format = 0x04;
@@ -176,13 +149,11 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
         if (curve == null) {
             throw new ConstraintViolationException("curve must not be null");
         }
-        if (d == null) {
-            if (x == null) {
-                throw new ConstraintViolationException("x must not be null");
-            }
-            if (y == null) {
-                throw new ConstraintViolationException("y must not be null");
-            }
+        if (x == null) {
+            throw new ConstraintViolationException("x must not be null");
+        }
+        if (y == null) {
+            throw new ConstraintViolationException("y must not be null");
         }
     }
 
@@ -190,20 +161,19 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         ECCredentialPublicKey that = (ECCredentialPublicKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
-                Arrays.equals(y, that.y) &&
-                Arrays.equals(d, that.d);
+                Arrays.equals(y, that.y);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(curve);
+        int result = Objects.hash(super.hashCode(), curve);
         result = 31 * result + Arrays.hashCode(x);
         result = 31 * result + Arrays.hashCode(y);
-        result = 31 * result + Arrays.hashCode(d);
         return result;
     }
 }

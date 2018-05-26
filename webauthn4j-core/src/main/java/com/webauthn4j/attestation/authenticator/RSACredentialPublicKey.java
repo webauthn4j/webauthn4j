@@ -18,6 +18,7 @@ package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
@@ -38,7 +39,8 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     @JsonProperty("-2")
     private byte[] e;
 
-    public RSACredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, int[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
+    @SuppressWarnings("squid:S00107")
+    public RSACredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
         super(keyType, keyId, algorithm, keyOpts, baseIV);
         this.n = n;
         this.e = e;
