@@ -61,12 +61,14 @@ public class WebAuthnRegistrationContext {
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired) {
 
-        this.collectedClientData = collectedClientData;
-        this.attestationObject = attestationObject;
-        this.clientExtensionOutputs = null;
-        this.serverProperty = serverProperty;
-        this.userVerificationRequired = userVerificationRequired;
-        this.expectedExtensions = Collections.emptyList();
+        this(
+                collectedClientData,
+                attestationObject,
+                null,
+                serverProperty,
+                userVerificationRequired,
+                Collections.emptyList()
+        );
     }
 
     public byte[] getCollectedClientData() {

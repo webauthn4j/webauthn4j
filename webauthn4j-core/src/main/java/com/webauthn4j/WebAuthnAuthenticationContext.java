@@ -21,6 +21,7 @@ import com.webauthn4j.server.ServerProperty;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,13 +73,16 @@ public class WebAuthnAuthenticationContext {
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired
                                          ) {
-        this.credentialId = credentialId;
-        this.collectedClientData = collectedClientData;
-        this.authenticatorData = authenticatorData;
-        this.signature = signature;
-        this.clientExtensionOutputs = null;
-        this.serverProperty = serverProperty;
-        this.userVerificationRequired = userVerificationRequired;
+        this(
+                credentialId,
+                collectedClientData,
+                authenticatorData,
+                signature,
+                null,
+                serverProperty,
+                userVerificationRequired,
+                Collections.emptyList()
+        );
     }
 
     public byte[] getCredentialId() {

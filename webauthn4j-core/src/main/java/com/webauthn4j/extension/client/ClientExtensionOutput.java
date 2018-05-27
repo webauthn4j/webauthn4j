@@ -16,10 +16,7 @@
 
 package com.webauthn4j.extension.client;
 
-import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.ExtensionOutput;
 
-public interface ClientExtensionOutput {
-    ExtensionIdentifier getIdentifier();
-
-    void validate();
+public interface ClientExtensionOutput extends ExtensionOutput {
 }

@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extension.authneticator;
+package com.webauthn4j.extension;
 
-import com.webauthn4j.extension.ExtensionOutput;
+public interface ExtensionOutput {
+    ExtensionIdentifier getIdentifier();
 
-public interface AuthenticatorExtensionOutput extends ExtensionOutput {
+    void validate();
 }
