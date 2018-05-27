@@ -20,8 +20,8 @@ public class WebAuthnRegistrationContextTest {
 
         ServerProperty serverProperty = mock(ServerProperty.class);
 
-        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false);
-        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false);
+        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false, expectedExtensions);
+        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false, expectedExtensions);
 
         assertThat(webAuthnRegistrationContextA).isEqualTo(webAuthnRegistrationContextB);
         assertThat(webAuthnRegistrationContextA).hasSameHashCodeAs(webAuthnRegistrationContextB);

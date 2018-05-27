@@ -17,9 +17,13 @@
 package com.webauthn4j.validator;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.converter.ClientExtensionOutputsConverter;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;
@@ -28,6 +32,7 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -42,10 +47,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrust
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +76,7 @@ public class WebAuthnRegistrationContextValidator {
 
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
     private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
@@ -130,9 +133,12 @@ public class WebAuthnRegistrationContextValidator {
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
+        Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensionOutputs =
+                clientExtensionOutputsConverter.convert(registrationContext.getClientExtensionOutputs());
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(attestationObject);
+        BeanAssertUtil.validate(clientExtensionOutputs);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
@@ -185,8 +191,18 @@ public class WebAuthnRegistrationContextValidator {
         /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        // TODO
         Map<ExtensionIdentifier, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
+        clientExtensionOutputs.keySet().forEach( identifier -> {
+            if(!registrationContext.getExpectedExtensions().contains(identifier)){
+                throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier.getValue()));
+            }
+        });
+        authenticatorExtensionOutputs.keySet().forEach( identifier -> {
+            if(!registrationContext.getExpectedExtensions().contains(identifier)){
+                throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier.getValue()));
+            }
+        });
+
 
         /// Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
         /// of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered

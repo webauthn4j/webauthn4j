@@ -16,10 +16,12 @@
 
 package com.webauthn4j;
 
+import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -35,9 +37,30 @@ public class WebAuthnAuthenticationContext {
     private final byte[] collectedClientData;
     private final byte[] authenticatorData;
     private final byte[] signature;
+    private final byte[] clientExtensionOutputs;
 
     // server property
     private final ServerProperty serverProperty;
+
+    // verification condition
+
+    private List<ExtensionIdentifier> expectedExtensions;
+
+    public WebAuthnAuthenticationContext(byte[] credentialId,
+                                         byte[] collectedClientData,
+                                         byte[] authenticatorData,
+                                         byte[] signature,
+                                         byte[] clientExtensionOutputs,
+                                         ServerProperty serverProperty,
+                                         List<ExtensionIdentifier> expectedExtensions) {
+        this.credentialId = credentialId;
+        this.collectedClientData = collectedClientData;
+        this.authenticatorData = authenticatorData;
+        this.signature = signature;
+        this.clientExtensionOutputs = clientExtensionOutputs;
+        this.serverProperty = serverProperty;
+        this.expectedExtensions = expectedExtensions;
+    }
 
     public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] collectedClientData,
@@ -48,6 +71,7 @@ public class WebAuthnAuthenticationContext {
         this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
         this.signature = signature;
+        this.clientExtensionOutputs = null;
         this.serverProperty = serverProperty;
     }
 
@@ -71,8 +95,16 @@ public class WebAuthnAuthenticationContext {
         return signature;
     }
 
+    public byte[] getClientExtensionOutputs() {
+        return clientExtensionOutputs;
+    }
+
     public ServerProperty getServerProperty() {
         return serverProperty;
+    }
+
+    public List<ExtensionIdentifier> getExpectedExtensions() {
+        return expectedExtensions;
     }
 
     @Override

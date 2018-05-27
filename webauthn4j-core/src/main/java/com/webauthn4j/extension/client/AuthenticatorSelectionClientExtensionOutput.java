@@ -2,7 +2,6 @@ package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.authneticator.AbstractAuthenticatorExtensionOutput;
 
 public class AuthenticatorSelectionClientExtensionOutput extends AbstractClientExtensionOutput<byte[][]> {
 

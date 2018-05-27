@@ -11,6 +11,7 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
 import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -166,5 +167,9 @@ public class BeanAssertUtil {
 
     public static void validate(AttestationStatement attestationStatement) {
         attestationStatement.validate();
+    }
+
+    public static void validate(Map<ExtensionIdentifier,ClientExtensionOutput> clientExtensionOutputs) {
+        // TODO
     }
 }

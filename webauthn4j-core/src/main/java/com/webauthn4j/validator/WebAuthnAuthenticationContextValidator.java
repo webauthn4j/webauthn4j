@@ -21,15 +21,21 @@ import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.Objects;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
@@ -51,27 +57,30 @@ public class WebAuthnAuthenticationContextValidator {
 
     private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
+    public void validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
 
         // Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         // and signature respectively.
-        byte[] cData = webAuthnAuthenticationContext.getCollectedClientData();
-        byte[] aData = webAuthnAuthenticationContext.getAuthenticatorData();
+        byte[] cData = authenticationContext.getCollectedClientData();
+        byte[] aData = authenticationContext.getAuthenticatorData();
 
-        BeanAssertUtil.validate(webAuthnAuthenticationContext);
+        BeanAssertUtil.validate(authenticationContext);
 
         // Let JSONtext be the result of running UTF-8 decode on the value of cData.
         // Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
-        ServerProperty serverProperty = webAuthnAuthenticationContext.getServerProperty();
+        Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensionOutputs =
+                clientExtensionOutputsConverter.convert(authenticationContext.getClientExtensionOutputs());
+        ServerProperty serverProperty = authenticationContext.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
@@ -113,11 +122,21 @@ public class WebAuthnAuthenticationContextValidator {
         // values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         // identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        // TODO: not yet implemented
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
+        clientExtensionOutputs.keySet().forEach( identifier -> {
+            if(!authenticationContext.getExpectedExtensions().contains(identifier)){
+                throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier.getValue()));
+            }
+        });
+        authenticatorExtensionOutputs.keySet().forEach( identifier -> {
+            if(!authenticationContext.getExpectedExtensions().contains(identifier)){
+                throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier.getValue()));
+            }
+        });
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
-        assertionSignatureValidator.validate(webAuthnAuthenticationContext, authenticator.getAttestedCredentialData().getCredentialPublicKey());
+        assertionSignatureValidator.validate(authenticationContext, authenticator.getAttestedCredentialData().getCredentialPublicKey());
 
         // If the signature counter value adata.signCount is nonzero or the value stored in conjunction with
         // credential’s id attribute is nonzero, then run the following sub-step:
@@ -131,7 +150,7 @@ public class WebAuthnAuthenticationContextValidator {
             }
             // less than or equal to the signature counter value stored in conjunction with credential’s id attribute.
             else {
-                maliciousCounterValueHandler.maliciousCounterValueDetected(webAuthnAuthenticationContext, authenticator);
+                maliciousCounterValueHandler.maliciousCounterValueDetected(authenticationContext, authenticator);
             }
         }
     }

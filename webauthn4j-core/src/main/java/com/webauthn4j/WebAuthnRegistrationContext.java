@@ -16,9 +16,12 @@
 
 package com.webauthn4j;
 
+import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,11 +29,32 @@ import java.util.Objects;
  */
 public class WebAuthnRegistrationContext {
 
+    // client property
     private final byte[] collectedClientData;
     private final byte[] attestationObject;
+    private final byte[] clientExtensionOutputs;
 
+    // server property
     private final ServerProperty serverProperty;
+
+    // verification condition
     private boolean userVerificationRequired;
+    private List<ExtensionIdentifier> expectedExtensions;
+
+    public WebAuthnRegistrationContext(byte[] collectedClientData,
+                                       byte[] attestationObject,
+                                       byte[] clientExtensionOutputs,
+                                       ServerProperty serverProperty,
+                                       boolean userVerificationRequired,
+                                       List<ExtensionIdentifier> expectedExtensions) {
+
+        this.collectedClientData = collectedClientData;
+        this.attestationObject = attestationObject;
+        this.clientExtensionOutputs = clientExtensionOutputs;
+        this.serverProperty = serverProperty;
+        this.userVerificationRequired = userVerificationRequired;
+        this.expectedExtensions = expectedExtensions;
+    }
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
                                        byte[] attestationObject,
@@ -39,8 +63,10 @@ public class WebAuthnRegistrationContext {
 
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
+        this.clientExtensionOutputs = null;
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
+        this.expectedExtensions = Collections.emptyList();
     }
 
     public byte[] getCollectedClientData() {
@@ -51,12 +77,20 @@ public class WebAuthnRegistrationContext {
         return attestationObject;
     }
 
+    public byte[] getClientExtensionOutputs() {
+        return clientExtensionOutputs;
+    }
+
     public ServerProperty getServerProperty() {
         return serverProperty;
     }
 
     public boolean isUserVerificationRequired() {
         return userVerificationRequired;
+    }
+
+    public List<ExtensionIdentifier> getExpectedExtensions() {
+        return expectedExtensions;
     }
 
     @Override
