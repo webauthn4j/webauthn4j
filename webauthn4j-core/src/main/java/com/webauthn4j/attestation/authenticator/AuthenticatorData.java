@@ -16,8 +16,8 @@
 
 package com.webauthn4j.attestation.authenticator;
 
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,11 +33,11 @@ public class AuthenticatorData {
     private final byte flags;
     private final long signCount;
     private final AttestedCredentialData attestedCredentialData;
-    private final Map<ExtensionIdentifier, ExtensionOutput> extensions;
+    private final Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
                              AttestedCredentialData attestedCredentialData,
-                             Map<ExtensionIdentifier, ExtensionOutput> extensions) {
+                             Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -55,7 +55,7 @@ public class AuthenticatorData {
     }
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             Map<ExtensionIdentifier, ExtensionOutput> extensions) {
+                             Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -121,7 +121,7 @@ public class AuthenticatorData {
         return attestedCredentialData;
     }
 
-    public Map<ExtensionIdentifier, ExtensionOutput> getExtensions() {
+    public Map<ExtensionIdentifier, AuthenticatorExtensionOutput> getExtensions() {
         return extensions;
     }
 

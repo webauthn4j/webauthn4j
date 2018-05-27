@@ -23,7 +23,7 @@ public class Sample {
         byte[] tokenBindingId  = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty, false);
 
         WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
                 WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();

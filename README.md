@@ -75,10 +75,11 @@ Challenge challenge    = null /* set challenge */;
 byte[] tokenBindingId  = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty);
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty, false);
 
-WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator = 
+WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
         WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+
 webAuthnRegistrationContextValidator.validate(registrationContext);
 ```
 

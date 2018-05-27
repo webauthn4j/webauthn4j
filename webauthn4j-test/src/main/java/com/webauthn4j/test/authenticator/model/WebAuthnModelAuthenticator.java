@@ -11,7 +11,7 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.platform.*;
 import com.webauthn4j.util.KeyUtil;
@@ -195,7 +195,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        Map<ExtensionIdentifier, ExtensionOutput> processedExtensions = Collections.emptyMap(); //TODO
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = Collections.emptyMap(); //TODO
 
         // If the authenticator supports:
         // a per-RP ID signature counter
@@ -291,7 +291,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier -> authenticator extension input in extensions.
-        Map<ExtensionIdentifier, ExtensionOutput> processedExtensions = Collections.emptyMap();
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = Collections.emptyMap();
         if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
         }

@@ -3,7 +3,9 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
-import com.webauthn4j.extension.*;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.extension.client.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -12,13 +14,13 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExtensionOutputDeserializerTest {
+public class ClientExtensionOutputDeserializerTest {
 
     @Test
     public void deserialize_test_with_JSON_data() throws IOException {
         ObjectMapper objectMapper = ObjectMapperUtil.createJSONMapper(); // use JSON mapper to make test data readable
 
-        Map<ExtensionIdentifier, ExtensionOutput> extensionOutputs =
+        Map<ExtensionIdentifier, ClientExtensionOutput> extensionOutputs =
                 objectMapper.readValue(
                         "{ " +
                                 "\"appid\": true, " +
@@ -30,15 +32,15 @@ public class ExtensionOutputDeserializerTest {
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
                                 "\"biometricPerfBounds\": { \"FAR\": 0, \"FRR\":0 } " +
                         "}",
-                        new TypeReference<Map<ExtensionIdentifier, ExtensionOutput>>(){}
+                        new TypeReference<Map<ExtensionIdentifier, ClientExtensionOutput>>(){}
                 );
 
-        assertThat(extensionOutputs).containsKeys(FIDOAppIDExtensionOutput.ID, SupportedExtensionsExtensionOutput.ID);
+        assertThat(extensionOutputs).containsKeys(FIDOAppIDClientExtensionOutput.ID, SupportedExtensionsClientExtensionOutput.ID);
         assertThat(extensionOutputs).containsValues(
-                new FIDOAppIDExtensionOutput(true),
-                new SimpleTransactionAuthorizationExtensionOutput("authorization message"),
-                new GenericTransactionAuthorizationExtensionOutput(new GenericTransactionAuthorizationExtensionOutput.TxAuthnGenericArg("image/png", null)),
-                new SupportedExtensionsExtensionOutput(Arrays.asList("exts", "authnSel"))
+                new FIDOAppIDClientExtensionOutput(true),
+                new SimpleTransactionAuthorizationClientExtensionOutput("authorization message"),
+                new GenericTransactionAuthorizationClientExtensionOutput(new GenericTransactionAuthorizationClientExtensionOutput.TxAuthnGenericArg("image/png", null)),
+                new SupportedExtensionsClientExtensionOutput(Arrays.asList("exts", "authnSel"))
         );
     }
 }

@@ -18,8 +18,8 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
-import com.webauthn4j.extension.SupportedExtensionsExtensionOutput;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
@@ -59,9 +59,9 @@ public class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        Map<ExtensionIdentifier, ExtensionOutput> extensionOutputMap = new HashMap<>();
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensionOutputMap = new HashMap<>();
         List<String> extension = Collections.singletonList("uvm");
-        SupportedExtensionsExtensionOutput extensionOutput = new SupportedExtensionsExtensionOutput(extension);
+        SupportedExtensionsAuthenticatorExtensionOutput extensionOutput = new SupportedExtensionsAuthenticatorExtensionOutput(extension);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, 0, extensionOutputMap);
 
@@ -75,7 +75,7 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getFlags()).isEqualTo(BIT_ED);
         assertThat(result.getSignCount()).isEqualTo(0);
         assertThat(result.getAttestedCredentialData()).isNull();
-        assertThat(result.getExtensions()).containsKeys(SupportedExtensionsExtensionOutput.ID);
+        assertThat(result.getExtensions()).containsKeys(SupportedExtensionsAuthenticatorExtensionOutput.ID);
         assertThat(result.getExtensions()).containsValues(extensionOutput);
     }
 }

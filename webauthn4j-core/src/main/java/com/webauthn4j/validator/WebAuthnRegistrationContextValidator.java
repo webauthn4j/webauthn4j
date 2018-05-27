@@ -20,12 +20,14 @@ package com.webauthn4j.validator;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -47,6 +49,7 @@ import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
@@ -183,6 +186,7 @@ public class WebAuthnRegistrationContextValidator {
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         // TODO
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
 
         /// Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
         /// of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered

@@ -1,16 +1,16 @@
-package com.webauthn4j.extension;
+package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Objects;
 
-public abstract class AbstractExtensionOutput<T> implements ExtensionOutput {
+public abstract class AbstractClientExtensionOutput<T> implements ClientExtensionOutput {
 
     private T value;
 
     @JsonCreator
-    public AbstractExtensionOutput(T value) {
+    public AbstractClientExtensionOutput(T value) {
         this.value = value;
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractExtensionOutput<T> implements ExtensionOutput {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractExtensionOutput that = (AbstractExtensionOutput) o;
+        AbstractClientExtensionOutput that = (AbstractClientExtensionOutput) o;
         return Objects.equals(value, that.value);
     }
 

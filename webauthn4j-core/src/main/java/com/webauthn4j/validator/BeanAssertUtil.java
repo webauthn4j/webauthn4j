@@ -6,11 +6,11 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -104,7 +104,7 @@ public class BeanAssertUtil {
         if (signCount <= 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        Map<ExtensionIdentifier, ExtensionOutput> extensions = authenticatorData.getExtensions();
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions = authenticatorData.getExtensions();
         if (extensions != null) {
             extensions.entrySet().forEach(BeanAssertUtil::validate);
         }
@@ -136,7 +136,7 @@ public class BeanAssertUtil {
         credentialPublicKey.validate();
     }
 
-    private static void validate(Map.Entry<ExtensionIdentifier,ExtensionOutput> entry) {
+    private static void validate(Map.Entry<ExtensionIdentifier,AuthenticatorExtensionOutput> entry) {
         ExtensionIdentifier identifier = entry.getKey();
         ExtensionIdentifier extensionOutputIdentifier = entry.getValue().getIdentifier();
         if(identifier == null){
@@ -148,7 +148,7 @@ public class BeanAssertUtil {
         validate(entry.getValue());
     }
 
-    private static void validate(ExtensionOutput entry) {
+    private static void validate(AuthenticatorExtensionOutput entry) {
         entry.validate();
     }
 

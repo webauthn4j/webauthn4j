@@ -1,16 +1,17 @@
-package com.webauthn4j.extension;
+package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.extension.ExtensionIdentifier;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class BiometricAuthenticatorPerformanceBoundsExtensionOutput extends AbstractExtensionOutput<BiometricAuthenticatorPerformanceBoundsExtensionOutput.AuthenticatorBiometricPerfBounds> {
+public class BiometricAuthenticatorPerformanceBoundsClientExtensionOutput extends AbstractClientExtensionOutput<BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.AuthenticatorBiometricPerfBounds> {
 
     public static final ExtensionIdentifier ID = new ExtensionIdentifier("biometricPerfBounds");
 
     @JsonCreator
-    public BiometricAuthenticatorPerformanceBoundsExtensionOutput(AuthenticatorBiometricPerfBounds value) {
+    public BiometricAuthenticatorPerformanceBoundsClientExtensionOutput(AuthenticatorBiometricPerfBounds value) {
         super(value);
     }
 

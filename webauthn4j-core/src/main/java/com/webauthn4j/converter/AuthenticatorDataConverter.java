@@ -6,9 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.ExtensionOutput;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -56,7 +56,7 @@ public class AuthenticatorDataConverter {
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
         AttestedCredentialData attestationData;
-        Map<ExtensionIdentifier, ExtensionOutput> extensions;
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions;
         if (AuthenticatorData.checkFlagAT(flags)) {
             attestationData = convertToAttestedCredentialData(byteBuffer);
         } else {
@@ -95,21 +95,21 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    Map<ExtensionIdentifier, ExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
+    Map<ExtensionIdentifier, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return Collections.emptyMap();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         try {
-            return getCborMapper().readValue(remaining, new TypeReference<Map<ExtensionIdentifier, ExtensionOutput>>() {
+            return getCborMapper().readValue(remaining, new TypeReference<Map<ExtensionIdentifier, AuthenticatorExtensionOutput>>() {
             });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    byte[] convert(Map<ExtensionIdentifier, ExtensionOutput> extensions) {
+    byte[] convert(Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
         try {
             if(extensions == null || extensions.isEmpty()){
                 return new byte[0];
