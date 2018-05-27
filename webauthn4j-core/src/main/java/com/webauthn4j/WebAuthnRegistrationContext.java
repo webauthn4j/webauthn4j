@@ -22,24 +22,14 @@ import com.webauthn4j.server.ServerProperty;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * WebAuthnRegistrationContext
  */
-public class WebAuthnRegistrationContext {
+public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
     // client property
-    private final byte[] collectedClientData;
     private final byte[] attestationObject;
-    private final byte[] clientExtensionOutputs;
-
-    // server property
-    private final ServerProperty serverProperty;
-
-    // verification condition
-    private boolean userVerificationRequired;
-    private List<ExtensionIdentifier> expectedExtensions;
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
                                        byte[] attestationObject,
@@ -48,12 +38,14 @@ public class WebAuthnRegistrationContext {
                                        boolean userVerificationRequired,
                                        List<ExtensionIdentifier> expectedExtensions) {
 
-        this.collectedClientData = collectedClientData;
+        super(
+                collectedClientData,
+                clientExtensionOutputs,
+                serverProperty,
+                userVerificationRequired,
+                expectedExtensions
+        );
         this.attestationObject = attestationObject;
-        this.clientExtensionOutputs = clientExtensionOutputs;
-        this.serverProperty = serverProperty;
-        this.userVerificationRequired = userVerificationRequired;
-        this.expectedExtensions = expectedExtensions;
     }
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
@@ -71,50 +63,24 @@ public class WebAuthnRegistrationContext {
         );
     }
 
-    public byte[] getCollectedClientData() {
-        return collectedClientData;
-    }
-
     public byte[] getAttestationObject() {
         return attestationObject;
-    }
-
-    public byte[] getClientExtensionOutputs() {
-        return clientExtensionOutputs;
-    }
-
-    public ServerProperty getServerProperty() {
-        return serverProperty;
-    }
-
-    public boolean isUserVerificationRequired() {
-        return userVerificationRequired;
-    }
-
-    public List<ExtensionIdentifier> getExpectedExtensions() {
-        return expectedExtensions;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         WebAuthnRegistrationContext that = (WebAuthnRegistrationContext) o;
-        return userVerificationRequired == that.userVerificationRequired &&
-                Arrays.equals(collectedClientData, that.collectedClientData) &&
-                Arrays.equals(attestationObject, that.attestationObject) &&
-                Arrays.equals(clientExtensionOutputs, that.clientExtensionOutputs) &&
-                Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(expectedExtensions, that.expectedExtensions);
+        return Arrays.equals(attestationObject, that.attestationObject);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(serverProperty, userVerificationRequired, expectedExtensions);
-        result = 31 * result + Arrays.hashCode(collectedClientData);
+        int result = super.hashCode();
         result = 31 * result + Arrays.hashCode(attestationObject);
-        result = 31 * result + Arrays.hashCode(clientExtensionOutputs);
         return result;
     }
 }
