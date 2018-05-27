@@ -30,14 +30,17 @@ public class WebAuthnRegistrationContext {
     private final byte[] attestationObject;
 
     private final ServerProperty serverProperty;
+    private boolean userVerificationRequired;
 
     public WebAuthnRegistrationContext(byte[] collectedClientData,
                                        byte[] attestationObject,
-                                       ServerProperty serverProperty) {
+                                       ServerProperty serverProperty,
+                                       boolean userVerificationRequired) {
 
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
         this.serverProperty = serverProperty;
+        this.userVerificationRequired = userVerificationRequired;
     }
 
     public byte[] getCollectedClientData() {
@@ -52,12 +55,17 @@ public class WebAuthnRegistrationContext {
         return serverProperty;
     }
 
+    public boolean isUserVerificationRequired() {
+        return userVerificationRequired;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WebAuthnRegistrationContext that = (WebAuthnRegistrationContext) o;
-        return Arrays.equals(collectedClientData, that.collectedClientData) &&
+        return userVerificationRequired == that.userVerificationRequired &&
+                Arrays.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(attestationObject, that.attestationObject) &&
                 Objects.equals(serverProperty, that.serverProperty);
     }
@@ -65,7 +73,7 @@ public class WebAuthnRegistrationContext {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(serverProperty);
+        int result = Objects.hash(serverProperty, userVerificationRequired);
         result = 31 * result + Arrays.hashCode(collectedClientData);
         result = 31 * result + Arrays.hashCode(attestationObject);
         return result;

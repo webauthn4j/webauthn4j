@@ -42,6 +42,8 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttesta
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.UserNotPresentException;
+import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -140,40 +142,68 @@ public class WebAuthnRegistrationContextValidator {
         AuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         ServerProperty serverProperty = registrationContext.getServerProperty();
 
+        // Verify that the value of C.type is webauthn.create.
         if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_CREATE)) {
             throw new MaliciousDataException("Bad client data type");
         }
 
-        // Verify that the challenge in the collectedClientData matches the challenge that was sent to the authenticator
-        // in the create() call.
+        /// Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
         challengeValidator.validate(collectedClientData, serverProperty);
 
-        // Verify that the origin in the collectedClientData matches the Relying Party's origin.
+        /// Verify that the value of C.origin matches the Relying Party's origin.
         originValidator.validate(collectedClientData, serverProperty);
 
-        // Verify that the tokenBindingId in the collectedClientData matches the Token Binding ID for the TLS connection
-        // over which the attestation was obtained.
+        /// Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
+        /// which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
+        /// C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
         tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
-        // Verify that the clientExtensions in the collectedClientData is a proper subset of the extensions requested by the RP
-        // and that the authenticatorExtensions in the collectedClientData is also a proper subset of the extensions requested by the RP.
-        // TODO
+        /// Compute the hash of response.clientDataJSON using SHA-256.
 
-        // Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
+        /// Perform CBOR decoding on the attestationObject field of the AuthenticatorAttestationResponse structure to
+        /// obtain the attestation statement format fmt, the authenticator data authData, and the attestation statement attStmt.
+
+        /// Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
-        // Verify that attStmt is a correct, validly-signed attestation statement, using the attestation statement
-        // format fmt’s verification procedure given authenticator data authData and the hash of the serialized
-        // client data computed in step 6.
+        /// If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
+        if (registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
+            throw new UserNotVerifiedException("User not verified");
+        }
+
+        /// If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
+        if (!registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
+            throw new UserNotPresentException("User not present");
+        }
+
+        /// Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
+        /// extension outputs in the extensions in authData are as expected, considering the client extension input
+        /// values that were given as the extensions option in the create() call. In particular, any extension identifier
+        /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
+        /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
+        /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
+        // TODO
+
+        /// Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
+        /// of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered
+        /// WebAuthn Attestation Statement Format Identifier values is maintained in the in the IANA registry of the same
+        /// name [WebAuthn-Registries].
+
+        /// Verify that attStmt is a correct attestation statement, conveying a valid attestation signature, by using the
+        /// attestation statement format fmt’s verification procedure given attStmt, authData and the hash of the
+        /// serialized client data computed in step 7.
+
+        /// Note: Each attestation statement format specifies its own verification procedure. See §8 Defined Attestation
+        /// Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
-        // If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
-        // ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
-        // from a trusted source or from policy.
-        // For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
-        // using the aaguid in the attestedCredentialData in authData.
-        //
-        // Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
+        /// If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
+        /// ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
+        /// from a trusted source or from policy.
+        /// For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
+        /// using the aaguid in the attestedCredentialData in authData.
+        ///
+        /// Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
 
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
         switch (attestationType) {
@@ -217,6 +247,11 @@ public class WebAuthnRegistrationContextValidator {
         // by associating it with the credential ID and credential public key contained in authData’s attestation data,
         // as appropriate for the Relying Party's systems.
 
+        /// Check that the credentialId is not yet registered to any other user. If registration is requested for
+        /// a credential that is already registered to a different user, the Relying Party SHOULD fail this registration
+        /// ceremony, or it MAY decide to accept the registration, e.g. while deleting the older registration.
+
+        // ******* This step is up to library user *******
 
     }
 
