@@ -16,13 +16,9 @@ public class KeyUtil {
         KeyFactory keyFactory;
         try {
             keyFactory = KeyFactory.getInstance("EC");
-        } catch (NoSuchAlgorithmException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-        try {
             return keyFactory.generatePrivate(keySpec);
-        } catch (InvalidKeySpecException e) {
-           throw new IllegalArgumentException(e); //TODO
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new UnexpectedCheckedException(e);
         }
     }
 
