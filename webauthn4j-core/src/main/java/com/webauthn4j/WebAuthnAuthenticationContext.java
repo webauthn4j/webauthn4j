@@ -43,15 +43,17 @@ public class WebAuthnAuthenticationContext {
     private final ServerProperty serverProperty;
 
     // verification condition
-
+    private boolean userVerificationRequired;
     private List<ExtensionIdentifier> expectedExtensions;
 
+    @SuppressWarnings("squid:S00107")
     public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] collectedClientData,
                                          byte[] authenticatorData,
                                          byte[] signature,
                                          byte[] clientExtensionOutputs,
                                          ServerProperty serverProperty,
+                                         boolean userVerificationRequired,
                                          List<ExtensionIdentifier> expectedExtensions) {
         this.credentialId = credentialId;
         this.collectedClientData = collectedClientData;
@@ -59,6 +61,7 @@ public class WebAuthnAuthenticationContext {
         this.signature = signature;
         this.clientExtensionOutputs = clientExtensionOutputs;
         this.serverProperty = serverProperty;
+        this.userVerificationRequired = userVerificationRequired;
         this.expectedExtensions = expectedExtensions;
     }
 
@@ -66,13 +69,16 @@ public class WebAuthnAuthenticationContext {
                                          byte[] collectedClientData,
                                          byte[] authenticatorData,
                                          byte[] signature,
-                                         ServerProperty serverProperty) {
+                                         ServerProperty serverProperty,
+                                         boolean userVerificationRequired
+                                         ) {
         this.credentialId = credentialId;
         this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
         this.signature = signature;
         this.clientExtensionOutputs = null;
         this.serverProperty = serverProperty;
+        this.userVerificationRequired = userVerificationRequired;
     }
 
     public byte[] getCredentialId() {
@@ -103,6 +109,10 @@ public class WebAuthnAuthenticationContext {
         return serverProperty;
     }
 
+    public boolean isUserVerificationRequired() {
+        return userVerificationRequired;
+    }
+
     public List<ExtensionIdentifier> getExpectedExtensions() {
         return expectedExtensions;
     }
@@ -112,22 +122,25 @@ public class WebAuthnAuthenticationContext {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WebAuthnAuthenticationContext that = (WebAuthnAuthenticationContext) o;
-        return Arrays.equals(credentialId, that.credentialId) &&
+        return userVerificationRequired == that.userVerificationRequired &&
+                Arrays.equals(credentialId, that.credentialId) &&
                 Arrays.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(authenticatorData, that.authenticatorData) &&
                 Arrays.equals(signature, that.signature) &&
-                Objects.equals(serverProperty, that.serverProperty);
+                Arrays.equals(clientExtensionOutputs, that.clientExtensionOutputs) &&
+                Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(expectedExtensions, that.expectedExtensions);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(serverProperty);
+        int result = Objects.hash(serverProperty, userVerificationRequired, expectedExtensions);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(collectedClientData);
         result = 31 * result + Arrays.hashCode(authenticatorData);
         result = 31 * result + Arrays.hashCode(signature);
+        result = 31 * result + Arrays.hashCode(clientExtensionOutputs);
         return result;
     }
-
 }

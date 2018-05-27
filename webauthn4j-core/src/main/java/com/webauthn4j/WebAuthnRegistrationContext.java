@@ -101,15 +101,18 @@ public class WebAuthnRegistrationContext {
         return userVerificationRequired == that.userVerificationRequired &&
                 Arrays.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(attestationObject, that.attestationObject) &&
-                Objects.equals(serverProperty, that.serverProperty);
+                Arrays.equals(clientExtensionOutputs, that.clientExtensionOutputs) &&
+                Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(expectedExtensions, that.expectedExtensions);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(serverProperty, userVerificationRequired);
+        int result = Objects.hash(serverProperty, userVerificationRequired, expectedExtensions);
         result = 31 * result + Arrays.hashCode(collectedClientData);
         result = 31 * result + Arrays.hashCode(attestationObject);
+        result = 31 * result + Arrays.hashCode(clientExtensionOutputs);
         return result;
     }
 }

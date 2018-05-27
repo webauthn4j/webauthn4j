@@ -29,12 +29,12 @@ import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -58,13 +58,14 @@ public class WebAuthnAuthenticationContextValidator {
     private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
     private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+    private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator, boolean userVerificationRequired) {
+    public void validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) {
 
         // Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         // and signature respectively.
@@ -107,12 +108,12 @@ public class WebAuthnAuthenticationContextValidator {
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
         // If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
-        if (userVerificationRequired && !authenticatorData.isFlagUV()) {
+        if (authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("User not verified");
         }
 
         // If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
-        if (!userVerificationRequired && !authenticatorData.isFlagUP()) {
+        if (!authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
 
@@ -123,16 +124,8 @@ public class WebAuthnAuthenticationContextValidator {
         // identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         Map<ExtensionIdentifier, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
-        clientExtensionOutputs.keySet().forEach( identifier -> {
-            if(!authenticationContext.getExpectedExtensions().contains(identifier)){
-                throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier.getValue()));
-            }
-        });
-        authenticatorExtensionOutputs.keySet().forEach( identifier -> {
-            if(!authenticationContext.getExpectedExtensions().contains(identifier)){
-                throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier.getValue()));
-            }
-        });
+        List<ExtensionIdentifier> expectedExtensionIdentifiers = authenticationContext.getExpectedExtensions();
+        extensionValidator.validate(clientExtensionOutputs, authenticatorExtensionOutputs, expectedExtensionIdentifiers);
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.

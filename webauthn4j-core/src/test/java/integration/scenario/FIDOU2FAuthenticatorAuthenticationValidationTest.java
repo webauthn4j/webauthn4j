@@ -63,10 +63,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = MaliciousDataException.class)
@@ -105,10 +106,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = BadChallengeException.class)
@@ -147,10 +149,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = BadOriginException.class)
@@ -189,10 +192,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = BadRpIdException.class)
@@ -231,10 +235,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = UserNotVerifiedException.class)
@@ -272,10 +277,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = UserNotPresentException.class)
@@ -316,10 +322,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = BadSignatureException.class)
@@ -357,10 +364,11 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         new byte[32], //bad signature
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     @Test(expected = MaliciousCounterValueException.class)
@@ -398,11 +406,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         authenticator.setCounter(100); //set expected minimum counter bigger than that of actual authenticator
-        target.validate(authenticationContext, authenticator, false);
+        target.validate(authenticationContext, authenticator);
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {

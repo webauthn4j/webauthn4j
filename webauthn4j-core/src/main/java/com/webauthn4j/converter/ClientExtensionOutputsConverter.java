@@ -16,6 +16,9 @@ public class ClientExtensionOutputsConverter {
 
     public Map<ExtensionIdentifier, ClientExtensionOutput> convert(byte[] value){
         try {
+            if(value == null){
+                return null;
+            }
             return cborMapper.readValue(value, new TypeReference<Map<ExtensionIdentifier, ClientExtensionOutput>>(){});
         } catch (IOException e) {
             throw new UncheckedIOException(e);

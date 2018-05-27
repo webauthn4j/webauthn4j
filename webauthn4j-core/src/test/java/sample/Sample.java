@@ -23,7 +23,7 @@ public class Sample {
         byte[] tokenBindingId  = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty, false, expectedExtensions);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty, false);
 
         WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
                 WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
@@ -51,13 +51,14 @@ public class Sample {
                         collectedClientData,
                         authenticatorData,
                         signature,
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = null /* set authenticator */;
 
         WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
                 new WebAuthnAuthenticationContextValidator();
 
-        webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator, true);
+        webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
     }
 }

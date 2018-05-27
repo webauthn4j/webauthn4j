@@ -22,13 +22,14 @@ public class WebAuthnAuthenticationContextTest {
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty, false);
         assertThat(target.getCredentialId()).isEqualTo(credentialId);
         assertThat(target.getCollectedClientData()).isEqualTo(collectedClientData);
         assertThat(target.getCollectedClientDataJson()).isEqualTo(new String(collectedClientData));
         assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData);
         assertThat(target.getSignature()).isEqualTo(signature);
         assertThat(target.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(target.isUserVerificationRequired()).isFalse();
     }
 
     @Test
@@ -39,9 +40,9 @@ public class WebAuthnAuthenticationContextTest {
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty);
+                credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
 
         assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB);
         assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB);

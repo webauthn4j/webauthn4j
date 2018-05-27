@@ -58,10 +58,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -97,10 +98,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -135,10 +137,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -172,10 +175,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -209,10 +213,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -248,10 +253,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -286,10 +292,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
@@ -322,10 +329,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        serverProperty
+                        serverProperty,
+                        true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator, true);
+        target.validate(authenticationContext, authenticator);
 
     }
 
