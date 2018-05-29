@@ -10,13 +10,9 @@ public class ExtensionIdentifier {
     private String value;
 
     @SuppressWarnings("WeakerAccess")
+    @JsonCreator
     public ExtensionIdentifier(String value){
         this.value = value;
-    }
-
-    @JsonCreator
-    public static ExtensionIdentifier create(String value){
-        return new ExtensionIdentifier(value);
     }
 
     @JsonValue
