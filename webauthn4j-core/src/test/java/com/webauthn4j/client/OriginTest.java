@@ -43,7 +43,7 @@ public class OriginTest {
     public void getter_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         assertThat(https_examplecom_default.getScheme()).isEqualTo("https");
-        assertThat(https_examplecom_default.getServerName()).isEqualTo("example.com");
+        assertThat(https_examplecom_default.getHost()).isEqualTo("example.com");
         assertThat(https_examplecom_default.getPort()).isEqualTo(443);
 
     }

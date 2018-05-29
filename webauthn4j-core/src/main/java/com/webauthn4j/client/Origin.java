@@ -28,23 +28,23 @@ public class Origin implements Serializable {
     private static final String SCHEME_HTTP = "http";
 
     private String scheme;
-    private String serverName;
+    private String host;
     private int port;
 
-    public Origin(String scheme, String serverName, int port) {
+    public Origin(String scheme, String host, int port) {
         if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
             throw new IllegalArgumentException("scheme must be 'http' or 'https'");
         }
 
         this.scheme = scheme;
-        this.serverName = serverName;
+        this.host = host;
         this.port = port;
     }
 
     public Origin(String originUrl) {
         URI uri = URI.create(originUrl);
         this.scheme = uri.getScheme();
-        this.serverName = uri.getHost();
+        this.host = uri.getHost();
         int originPort = uri.getPort();
 
         if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
@@ -70,8 +70,8 @@ public class Origin implements Serializable {
         return scheme;
     }
 
-    public String getServerName() {
-        return serverName;
+    public String getHost() {
+        return host;
     }
 
     public int getPort() {
@@ -80,7 +80,7 @@ public class Origin implements Serializable {
 
     @Override
     public String toString() {
-        String result = this.scheme + "://" + this.serverName;
+        String result = this.scheme + "://" + this.host;
         switch (this.scheme) {
             case SCHEME_HTTPS:
                 if (this.port != 443) {
@@ -107,13 +107,13 @@ public class Origin implements Serializable {
 
         if (port != origin.port) return false;
         if (!scheme.equals(origin.scheme)) return false;
-        return serverName.equals(origin.serverName);
+        return host.equals(origin.host);
     }
 
     @Override
     public int hashCode() {
         int result = scheme.hashCode();
-        result = 31 * result + serverName.hashCode();
+        result = 31 * result + host.hashCode();
         result = 31 * result + port;
         return result;
     }
