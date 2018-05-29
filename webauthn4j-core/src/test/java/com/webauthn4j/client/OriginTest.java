@@ -58,6 +58,11 @@ public class OriginTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructor_test_with_illegal_input() {
+        new Origin("ftp", "example.com", 80);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void single_string_constructor_test_with_illegal_input() {
         new Origin("ftp://example.com");
     }
 
