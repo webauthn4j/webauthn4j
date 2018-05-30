@@ -13,6 +13,10 @@ public class Base64UrlUtil {
         return decoder.decode(source);
     }
 
+    public static byte[] decode(byte[] source){
+        return decoder.decode(source);
+    }
+
     public static byte[] encode(byte[] source){
         return encoder.encode(source);
     }
