@@ -13,7 +13,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
-import com.webauthn4j.test.platform.*;
+import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;

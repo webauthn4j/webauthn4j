@@ -8,7 +8,7 @@ import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
-import com.webauthn4j.test.platform.*;
+import com.webauthn4j.test.client.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.Test;
 

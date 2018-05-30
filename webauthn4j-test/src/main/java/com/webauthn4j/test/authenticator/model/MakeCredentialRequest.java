@@ -1,6 +1,6 @@
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.test.platform.*;
+import com.webauthn4j.test.client.*;
 
 import java.util.List;
 

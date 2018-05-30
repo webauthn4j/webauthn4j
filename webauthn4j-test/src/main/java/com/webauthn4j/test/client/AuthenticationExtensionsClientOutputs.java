@@ -1,4 +1,4 @@
-package com.webauthn4j.test.platform;
+package com.webauthn4j.test.client;
 
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 

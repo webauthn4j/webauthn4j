@@ -1,4 +1,4 @@
-package com.webauthn4j.test.platform;
+package com.webauthn4j.test.client;
 
 public enum AuthenticatorAttachment {
     PLATFORM,

@@ -13,7 +13,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
-import com.webauthn4j.test.platform.*;
+import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;

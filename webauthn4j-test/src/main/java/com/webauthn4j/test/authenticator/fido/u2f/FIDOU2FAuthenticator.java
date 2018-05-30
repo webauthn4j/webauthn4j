@@ -1,8 +1,8 @@
 package com.webauthn4j.test.authenticator.fido.u2f;
 
 import com.webauthn4j.test.TestData;
-import com.webauthn4j.test.platform.AuthenticationEmulationOption;
-import com.webauthn4j.test.platform.RegistrationEmulationOption;
+import com.webauthn4j.test.client.AuthenticationEmulationOption;
+import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.*;
 
 import java.nio.ByteBuffer;
