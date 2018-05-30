@@ -8,6 +8,7 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
@@ -23,6 +24,8 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
@@ -96,6 +99,9 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
         credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
+        Map<ExtensionIdentifier, ExtensionInput> extensions = new HashMap<>();
+
+        credentialCreationOptions.setExtentions(extensions);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

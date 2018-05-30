@@ -1,11 +1,13 @@
 package com.webauthn4j.test.platform;
 
 import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.util.WIP;
 
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @WIP
 public class PublicKeyCredentialCreationOptions {
@@ -18,7 +20,7 @@ public class PublicKeyCredentialCreationOptions {
     private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
-    private AuthenticationExtensionsClientInputs extentions;
+    private Map<ExtensionIdentifier, ExtensionInput> extentions;
 
 
     public PublicKeyCredentialRpEntity getRp() {
@@ -85,11 +87,11 @@ public class PublicKeyCredentialCreationOptions {
         this.attestation = attestation;
     }
 
-    public AuthenticationExtensionsClientInputs getExtentions() {
+    public Map<ExtensionIdentifier, ExtensionInput> getExtentions() {
         return extentions;
     }
 
-    public void setExtentions(AuthenticationExtensionsClientInputs extentions) {
+    public void setExtentions(Map<ExtensionIdentifier, ExtensionInput> extentions) {
         this.extentions = extentions;
     }
 }
