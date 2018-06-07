@@ -20,12 +20,10 @@ import com.webauthn4j.validator.attestation.packed.PackedAttestationStatementVal
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
+import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
@@ -99,13 +97,56 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
         credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
-        Map<ExtensionIdentifier, ExtensionInput> extensions = new HashMap<>();
+        Map<ExtensionIdentifier, ClientExtensionInput> extensions = new HashMap<>();
 
-        credentialCreationOptions.setExtentions(extensions);
+        credentialCreationOptions.setExtensions(extensions);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        target.validate(registrationContext);
+    }
+
+
+    @Test(expected = UnexpectedExtensionException.class)
+    public void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
+        authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
+        authenticatorSelectionCriteria.setRequireResidentKey(true);
+        authenticatorSelectionCriteria.setUserVerificationRequirement(UserVerificationRequirement.REQUIRED);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
+        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+
+        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
+        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
+        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
+        credentialCreationOptions.setChallenge(challenge);
+        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+        credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
+        credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
+        credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
+        Map<ExtensionIdentifier, ClientExtensionInput> extensions = new HashMap<>();
+        extensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsClientExtensionInput(true));
+        credentialCreationOptions.setExtensions(extensions);
+
+        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        List<ExtensionIdentifier> expectedExtensions = Collections.singletonList(new ExtensionIdentifier("uvm"));
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
+                registrationRequest.getClientDataJSON(),
+                registrationRequest.getAttestationObject(),
+                registrationRequest.getClientExtensions(),
+                serverProperty,
+                false,
+                expectedExtensions
+        );
         target.validate(registrationContext);
     }
 }

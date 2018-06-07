@@ -12,7 +12,9 @@ import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
+import com.webauthn4j.test.authenticator.AuthenticatorExtensionInput;
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -195,7 +197,13 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = Collections.emptyMap(); //TODO
+        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = new HashMap<>();
+        for(Map.Entry<ExtensionIdentifier, AuthenticatorExtensionInput> entry : makeCredentialRequest.getExtensions().entrySet()){
+            ExtensionIdentifier extensionIdentifier = entry.getKey();
+            if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
+                processedExtensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionOutput(Collections.singletonList("exts")));
+            }
+        }
 
         // If the authenticator supports:
         // a per-RP ID signature counter

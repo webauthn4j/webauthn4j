@@ -2,12 +2,15 @@ package com.webauthn4j.test.authenticator.model;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
-import com.webauthn4j.test.authenticator.CredentialCreationResponse;
-import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.test.authenticator.*;
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
@@ -28,7 +31,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         makeCredentialRequest.setRequireUserVerification(requireUserVerification);
         makeCredentialRequest.setCredTypesAndPublicKeyAlgs(publicKeyCredentialCreationOptions.getPubKeyCredParams());
         makeCredentialRequest.setExcludeCredentialDescriptorList(publicKeyCredentialCreationOptions.getExcludeCredentials());
-        makeCredentialRequest.setExtensions(publicKeyCredentialCreationOptions.getExtentions());
+        makeCredentialRequest.setExtensions(convertExtensions(publicKeyCredentialCreationOptions.getExtensions()));
         MakeCredentialResponse makeCredentialResponse = webAuthnModelAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
 
         return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
@@ -68,6 +71,22 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 getAssertionResponse.getSignature(),
                 getAssertionResponse.getUserHandle()
         );
+    }
+
+    private Map<ExtensionIdentifier,AuthenticatorExtensionInput> convertExtensions(Map<ExtensionIdentifier,ClientExtensionInput> extensions) {
+        if(extensions == null){
+            return Collections.emptyMap();
+        }
+
+        Map<ExtensionIdentifier, AuthenticatorExtensionInput> map = new HashMap<>();
+        for(Map.Entry<ExtensionIdentifier, ClientExtensionInput> clientExtensionInputEntry : extensions.entrySet()){
+            ExtensionIdentifier extensionIdentifier = clientExtensionInputEntry.getKey();
+            if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
+                SupportedExtensionsClientExtensionInput clientExtensionInput = (SupportedExtensionsClientExtensionInput) clientExtensionInputEntry.getValue();
+                map.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionInput(clientExtensionInput.getValue()));
+            }
+        }
+        return map;
     }
 
     private boolean getEffectiveUserVerificationRequirementForAssertion(UserVerificationRequirement userVerificationRequirement) {

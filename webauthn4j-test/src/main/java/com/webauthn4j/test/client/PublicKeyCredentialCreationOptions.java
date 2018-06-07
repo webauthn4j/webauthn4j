@@ -20,7 +20,7 @@ public class PublicKeyCredentialCreationOptions {
     private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
-    private Map<ExtensionIdentifier, ExtensionInput> extentions;
+    private Map<ExtensionIdentifier, ClientExtensionInput> extensions;
 
 
     public PublicKeyCredentialRpEntity getRp() {
@@ -87,11 +87,11 @@ public class PublicKeyCredentialCreationOptions {
         this.attestation = attestation;
     }
 
-    public Map<ExtensionIdentifier, ExtensionInput> getExtentions() {
-        return extentions;
+    public Map<ExtensionIdentifier, ClientExtensionInput> getExtensions() {
+        return extensions;
     }
 
-    public void setExtentions(Map<ExtensionIdentifier, ExtensionInput> extentions) {
-        this.extentions = extentions;
+    public void setExtensions(Map<ExtensionIdentifier, ClientExtensionInput> extensions) {
+        this.extensions = extensions;
     }
 }

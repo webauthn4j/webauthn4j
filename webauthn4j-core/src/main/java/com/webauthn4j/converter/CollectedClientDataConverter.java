@@ -11,10 +11,10 @@ import java.nio.charset.StandardCharsets;
 
 public class CollectedClientDataConverter {
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper jsonMapper;
 
     public CollectedClientDataConverter(){
-        objectMapper = ObjectMapperUtil.createJSONMapper();
+        jsonMapper = ObjectMapperUtil.createJSONMapper();
     }
 
     public CollectedClientData convert(String base64UrlString) {
@@ -25,7 +25,7 @@ public class CollectedClientDataConverter {
     public CollectedClientData convert(byte[] source) {
         String jsonString = new String(source, StandardCharsets.UTF_8);
         try {
-            return objectMapper.readValue(jsonString, CollectedClientData.class);
+            return jsonMapper.readValue(jsonString, CollectedClientData.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -33,7 +33,7 @@ public class CollectedClientDataConverter {
 
     public byte[] convertToBytes(CollectedClientData source) {
         try {
-            return objectMapper.writeValueAsBytes(source);
+            return jsonMapper.writeValueAsBytes(source);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

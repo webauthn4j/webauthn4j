@@ -1,8 +1,11 @@
 package com.webauthn4j.test.authenticator.model;
 
+import com.webauthn4j.extension.ExtensionIdentifier;
+import com.webauthn4j.test.authenticator.AuthenticatorExtensionInput;
 import com.webauthn4j.test.client.*;
 
 import java.util.List;
+import java.util.Map;
 
 public class MakeCredentialRequest {
 
@@ -14,7 +17,7 @@ public class MakeCredentialRequest {
     private boolean requireUserVerification;
     private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
-    private AuthenticationExtensionsClientInputs extensions;
+    private Map<ExtensionIdentifier, AuthenticatorExtensionInput> extensions;
 
     public byte[] getHash() {
         return hash;
@@ -80,11 +83,11 @@ public class MakeCredentialRequest {
         this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
     }
 
-    public AuthenticationExtensionsClientInputs getExtensions() {
+    public Map<ExtensionIdentifier, AuthenticatorExtensionInput> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(AuthenticationExtensionsClientInputs extensions) {
+    public void setExtensions(Map<ExtensionIdentifier, AuthenticatorExtensionInput> extensions) {
         this.extensions = extensions;
     }
 }
