@@ -31,7 +31,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
     // client property
     private final byte[] attestationObject;
 
-    public WebAuthnRegistrationContext(byte[] collectedClientData,
+    public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
                                        byte[] clientExtensionOutputs,
                                        ServerProperty serverProperty,
@@ -39,7 +39,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
                                        List<ExtensionIdentifier> expectedExtensions) {
 
         super(
-                collectedClientData,
+                clientDataJSON,
                 clientExtensionOutputs,
                 serverProperty,
                 userVerificationRequired,
@@ -48,13 +48,13 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
         this.attestationObject = attestationObject;
     }
 
-    public WebAuthnRegistrationContext(byte[] collectedClientData,
+    public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired) {
 
         this(
-                collectedClientData,
+                clientDataJSON,
                 attestationObject,
                 null,
                 serverProperty,

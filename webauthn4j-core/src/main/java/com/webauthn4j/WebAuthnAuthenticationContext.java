@@ -38,7 +38,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
 
     @SuppressWarnings("squid:S00107")
     public WebAuthnAuthenticationContext(byte[] credentialId,
-                                         byte[] collectedClientData,
+                                         byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
                                          byte[] clientExtensionOutputs,
@@ -47,7 +47,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          List<ExtensionIdentifier> expectedExtensions) {
 
         super(
-                collectedClientData,
+                clientDataJSON,
                 clientExtensionOutputs,
                 serverProperty,
                 userVerificationRequired,
@@ -60,7 +60,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
     }
 
     public WebAuthnAuthenticationContext(byte[] credentialId,
-                                         byte[] collectedClientData,
+                                         byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
                                          ServerProperty serverProperty,
@@ -68,7 +68,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          ) {
         this(
                 credentialId,
-                collectedClientData,
+                clientDataJSON,
                 authenticatorData,
                 signature,
                 null,
