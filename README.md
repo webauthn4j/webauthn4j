@@ -65,8 +65,8 @@ git clone https://github.com/webauthn4j/webauthn4j
 Verification on registration
 ```java 
 // Client properties
-byte[] collectedClientData = null /* set collectedClientData */;
-byte[] attestationObject   = null /* set attestationObject */;
+byte[] clientDataJSON    = null /* set clientDataJSON */;
+byte[] attestationObject = null /* set attestationObject */;
 
 // Server properties
 Origin origin          = null /* set origin */;
@@ -75,7 +75,7 @@ Challenge challenge    = null /* set challenge */;
 byte[] tokenBindingId  = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(collectedClientData, attestationObject, serverProperty, false);
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
         WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
@@ -86,8 +86,8 @@ webAuthnRegistrationContextValidator.validate(registrationContext);
 Verification on authentication
 ```java 
 // Client properties
-byte[] credentialId        = null /* set credentialId */;
-byte[] collectedClientData = null /* set collectedClientData */;
+byte[] credentialId      = null /* set credentialId */;
+byte[] clientDataJSON    = null /* set clientDataJSON */;
 byte[] authenticatorData = null /* set authenticatorData */;
 byte[] signature = null /* set signature */;
 
@@ -101,17 +101,18 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 WebAuthnAuthenticationContext authenticationContext =
         new WebAuthnAuthenticationContext(
                 credentialId,
-                collectedClientData,
+                clientDataJSON,
                 authenticatorData,
                 signature,
-                serverProperty
+                serverProperty,
+                true
         );
 Authenticator authenticator = null /* set authenticator */;
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();
 
-webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator, true);
+webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
 ```
 
 ## Sample application
