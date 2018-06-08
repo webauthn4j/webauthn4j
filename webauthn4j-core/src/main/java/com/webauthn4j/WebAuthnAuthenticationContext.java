@@ -44,14 +44,14 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          String clientExtensionsJSON,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired,
-                                         List<ExtensionIdentifier> expectedExtensions) {
+                                         List<ExtensionIdentifier> expectedExtensionIds) {
 
         super(
                 clientDataJSON,
                 clientExtensionsJSON,
                 serverProperty,
                 userVerificationRequired,
-                expectedExtensions
+                expectedExtensionIds
         );
 
         this.credentialId = credentialId;
