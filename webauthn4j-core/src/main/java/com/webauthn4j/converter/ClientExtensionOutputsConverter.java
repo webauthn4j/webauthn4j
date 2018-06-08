@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
-import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
