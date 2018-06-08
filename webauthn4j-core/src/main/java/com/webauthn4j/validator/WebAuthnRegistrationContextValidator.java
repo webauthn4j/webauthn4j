@@ -129,13 +129,13 @@ public class WebAuthnRegistrationContextValidator {
 
         BeanAssertUtil.validate(registrationContext);
 
-        byte[] clientDataBytes = registrationContext.getCollectedClientData();
+        byte[] clientDataBytes = registrationContext.getClientDataJSON();
         byte[] attestationObjectBytes = registrationContext.getAttestationObject();
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensionOutputs =
-                clientExtensionOutputsConverter.convert(registrationContext.getClientExtensionOutputs());
+                clientExtensionOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(attestationObject);

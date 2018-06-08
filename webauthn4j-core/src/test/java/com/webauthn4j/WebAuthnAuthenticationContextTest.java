@@ -24,8 +24,7 @@ public class WebAuthnAuthenticationContextTest {
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
                 credentialId, collectedClientData, authenticatorData, signature, serverProperty, false);
         assertThat(target.getCredentialId()).isEqualTo(credentialId);
-        assertThat(target.getCollectedClientData()).isEqualTo(collectedClientData);
-        assertThat(target.getClientDataJSON()).isEqualTo(new String(collectedClientData));
+        assertThat(target.getClientDataJSON()).isEqualTo(collectedClientData);
         assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData);
         assertThat(target.getSignature()).isEqualTo(signature);
         assertThat(target.getServerProperty()).isEqualTo(serverProperty);

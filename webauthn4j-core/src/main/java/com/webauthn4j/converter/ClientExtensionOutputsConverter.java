@@ -9,6 +9,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class ClientExtensionOutputsConverter {
@@ -16,6 +17,10 @@ public class ClientExtensionOutputsConverter {
     private final ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
 
     public Map<ExtensionIdentifier, ClientExtensionOutput> convert(byte[] value){
+        return convert(new String(value, StandardCharsets.UTF_8));
+    }
+
+    public Map<ExtensionIdentifier, ClientExtensionOutput> convert(String value){
         try {
             if(value == null){
                 return null;

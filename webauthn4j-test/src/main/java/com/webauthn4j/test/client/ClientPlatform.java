@@ -91,10 +91,10 @@ public class ClientPlatform {
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensions = convertExtensions(credentialCreationResponse.getAttestationObject().getAuthenticatorData().getExtensions());
-        byte[] clientExtensionBytes = clientExtensionOutputsConverter.convertToBytes(clientExtensions);
+        String clientExtensionsJSON = clientExtensionOutputsConverter.convertToString(clientExtensions);
         return new PublicKeyCredential<>(
                 credentialId,
-                new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes, clientExtensionBytes)
+                new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes, clientExtensionsJSON)
         );
     }
 

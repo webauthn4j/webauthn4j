@@ -9,8 +9,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject,
-                                            byte[] clientExtensions) {
-        super(clientDataJSON, clientExtensions);
+                                            String clientExtensionsJSON) {
+        super(clientDataJSON, clientExtensionsJSON);
         this.attestationObject = attestationObject;
     }
 

@@ -69,7 +69,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         // and signature respectively.
-        byte[] cData = authenticationContext.getCollectedClientData();
+        byte[] cData = authenticationContext.getClientDataJSON();
         byte[] aData = authenticationContext.getAuthenticatorData();
 
         BeanAssertUtil.validate(authenticationContext);
@@ -80,7 +80,7 @@ public class WebAuthnAuthenticationContextValidator {
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
         Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensionOutputs =
-                clientExtensionOutputsConverter.convert(authenticationContext.getClientExtensionOutputs());
+                clientExtensionOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
         ServerProperty serverProperty = authenticationContext.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);

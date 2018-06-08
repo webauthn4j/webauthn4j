@@ -33,14 +33,14 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
     public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
-                                       byte[] clientExtensionOutputs,
+                                       String clientExtensionsJSON,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired,
                                        List<ExtensionIdentifier> expectedExtensions) {
 
         super(
                 clientDataJSON,
-                clientExtensionOutputs,
+                clientExtensionsJSON,
                 serverProperty,
                 userVerificationRequired,
                 expectedExtensions

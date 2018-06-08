@@ -34,7 +34,7 @@ class AbstractWebAuthnContext {
 
     // user inputs
     private final byte[] clientDataJSON;
-    private final byte[] clientExtensionOutputs;
+    private final String clientExtensionsJSON;
 
     // server property
     private final ServerProperty serverProperty;
@@ -45,27 +45,23 @@ class AbstractWebAuthnContext {
 
     public AbstractWebAuthnContext(
                                          byte[] clientDataJSON,
-                                         byte[] clientExtensionOutputs,
+                                         String clientExtensionsJSON,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired,
                                          List<ExtensionIdentifier> expectedExtensions) {
         this.clientDataJSON = clientDataJSON;
-        this.clientExtensionOutputs = clientExtensionOutputs;
+        this.clientExtensionsJSON = clientExtensionsJSON;
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.expectedExtensions = expectedExtensions;
     }
 
-    public byte[] getCollectedClientData() {
+    public byte[] getClientDataJSON() {
         return clientDataJSON;
     }
 
-    public String getClientDataJSON() {
-        return new String(clientDataJSON, StandardCharsets.UTF_8);
-    }
-
-    public byte[] getClientExtensionOutputs() {
-        return clientExtensionOutputs;
+    public String getClientExtensionsJSON() {
+        return clientExtensionsJSON;
     }
 
     public ServerProperty getServerProperty() {
@@ -87,7 +83,7 @@ class AbstractWebAuthnContext {
         AbstractWebAuthnContext that = (AbstractWebAuthnContext) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 Arrays.equals(clientDataJSON, that.clientDataJSON) &&
-                Arrays.equals(clientExtensionOutputs, that.clientExtensionOutputs) &&
+                Objects.equals(clientExtensionsJSON, that.clientExtensionsJSON) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
                 Objects.equals(expectedExtensions, that.expectedExtensions);
     }
@@ -95,9 +91,8 @@ class AbstractWebAuthnContext {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(serverProperty, userVerificationRequired, expectedExtensions);
+        int result = Objects.hash(clientExtensionsJSON, serverProperty, userVerificationRequired, expectedExtensions);
         result = 31 * result + Arrays.hashCode(clientDataJSON);
-        result = 31 * result + Arrays.hashCode(clientExtensionOutputs);
         return result;
     }
 }

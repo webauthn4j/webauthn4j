@@ -3,11 +3,11 @@ package com.webauthn4j.test.client;
 public class AuthenticatorResponse {
 
     private byte[] clientDataJSON;
-    private byte[] clientExtensions;
+    private String clientExtensionsJSON;
 
-    public AuthenticatorResponse(byte[] clientDataJSON, byte[] clientExtensions) {
+    public AuthenticatorResponse(byte[] clientDataJSON, String clientExtensionsJSON) {
         this.clientDataJSON = clientDataJSON;
-        this.clientExtensions = clientExtensions;
+        this.clientExtensionsJSON = clientExtensionsJSON;
     }
 
     public AuthenticatorResponse(byte[] clientDataJSON) {
@@ -18,7 +18,7 @@ public class AuthenticatorResponse {
         return clientDataJSON;
     }
 
-    public byte[] getClientExtensions() {
-        return clientExtensions;
+    public String getClientExtensionsJSON() {
+        return clientExtensionsJSON;
     }
 }

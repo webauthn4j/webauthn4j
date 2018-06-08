@@ -41,14 +41,14 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
-                                         byte[] clientExtensionOutputs,
+                                         String clientExtensionsJSON,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired,
                                          List<ExtensionIdentifier> expectedExtensions) {
 
         super(
                 clientDataJSON,
-                clientExtensionOutputs,
+                clientExtensionsJSON,
                 serverProperty,
                 userVerificationRequired,
                 expectedExtensions

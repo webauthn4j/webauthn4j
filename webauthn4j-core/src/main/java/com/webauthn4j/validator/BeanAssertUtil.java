@@ -29,7 +29,7 @@ public class BeanAssertUtil {
         if (webAuthnAuthenticationContext.getCredentialId() == null) {
             throw new ConstraintViolationException("credentialId must not be null");
         }
-        if (webAuthnAuthenticationContext.getCollectedClientData() == null) {
+        if (webAuthnAuthenticationContext.getClientDataJSON() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
         if (webAuthnAuthenticationContext.getAuthenticatorData() == null) {
@@ -47,7 +47,7 @@ public class BeanAssertUtil {
         if (webAuthnRegistrationContext.getAttestationObject() == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
-        if (webAuthnRegistrationContext.getCollectedClientData() == null) {
+        if (webAuthnRegistrationContext.getClientDataJSON() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
         if (webAuthnRegistrationContext.getServerProperty() == null) {

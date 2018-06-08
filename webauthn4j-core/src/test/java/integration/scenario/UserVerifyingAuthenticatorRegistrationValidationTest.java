@@ -142,7 +142,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
-                registrationRequest.getClientExtensions(),
+                registrationRequest.getClientExtensionsJSON(),
                 serverProperty,
                 false,
                 expectedExtensions
