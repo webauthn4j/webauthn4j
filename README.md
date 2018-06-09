@@ -46,7 +46,7 @@ self-contained bootstrap mechanism for the build.
 
 ### Prerequisites
 
-- Java8
+- Java8 or later
 
 ### Checkout sources
 
