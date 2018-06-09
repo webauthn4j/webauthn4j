@@ -32,6 +32,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -147,8 +148,12 @@ public class TestUtil {
 
 
     public static X509Certificate loadCertificateFromClassPath(String classPath) {
-        InputStream inputStream = ClassLoader.class.getResourceAsStream(classPath);
-        return CertificateUtil.generateX509Certificate(inputStream);
+        ClassPathResource resource = new ClassPathResource(classPath);
+        try {
+            return CertificateUtil.generateX509Certificate(resource.getInputStream());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     public static X509Certificate loadFirefoxSWTokenAttestationCertificate() {
