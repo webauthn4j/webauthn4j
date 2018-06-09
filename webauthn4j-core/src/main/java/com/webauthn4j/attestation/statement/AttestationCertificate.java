@@ -1,27 +1,19 @@
 package com.webauthn4j.attestation.statement;
 
 import com.webauthn4j.validator.exception.CertificateException;
-import sun.security.x509.X500Name;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Objects;
 
 
 public class AttestationCertificate {
 
-    public static final int CERTIFICATE_VERSION_3 = 3;
-    public static final int NON_CA = -1;
-    private static final Map<String, String> cHashMap;
-
-    static {
-        cHashMap = new HashMap<>();
-        cHashMap.put("", "");
-    }
-
+    private static final int CERTIFICATE_VERSION_3 = 3;
+    private static final int NON_CA = -1;
     private X509Certificate certificate;
 
     public AttestationCertificate(X509Certificate certificate) {
@@ -33,35 +25,19 @@ public class AttestationCertificate {
     }
 
     public String getSubjectCountry() {
-        try {
-            return getX500Name().getCountry();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return getValue("C");
     }
 
     public String getSubjectOrganization() {
-        try {
-            return getX500Name().getOrganization();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return getValue("O");
     }
 
     public String getSubjectOrganizationUnit() {
-        try {
-            return getX500Name().getOrganizationalUnit();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return getValue("OU");
     }
 
     public String getSubjectCommonName() {
-        try {
-            return getX500Name().getCommonName();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return getValue("CN");
     }
 
     public void validate() {
@@ -91,8 +67,22 @@ public class AttestationCertificate {
         }
     }
 
-    private X500Name getX500Name() throws IOException {
-        return new X500Name(certificate.getSubjectX500Principal().getName());
+    private List<Rdn> getX500Name() {
+        String subjectDN = getCertificate().getSubjectX500Principal().getName();
+        try {
+            return new LdapName(subjectDN).getRdns();
+        } catch (InvalidNameException e) {
+            throw new CertificateException("invalid subjectDN: " + subjectDN);
+        }
+    }
+
+    private String getValue(String name){
+        for (Rdn rdn : getX500Name()) {
+            if(rdn.getType().equalsIgnoreCase(name)){
+                return (String)rdn.getValue();
+            }
+        }
+        return null;
     }
 
     @Override
