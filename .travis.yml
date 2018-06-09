@@ -4,6 +4,10 @@ jdk:
   - oraclejdk8
   - openjdk8
 
+cache:
+  directories:
+  - $HOME/.m2
+
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - ./gradlew sonarqube build test javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
