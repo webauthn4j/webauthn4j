@@ -138,7 +138,7 @@ public class WebAuthnRegistrationContextValidator {
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(attestationObject);
-        BeanAssertUtil.validate(clientExtensionOutputs);
+        BeanAssertUtil.validateClientExtensionsOutputs(clientExtensionOutputs);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
