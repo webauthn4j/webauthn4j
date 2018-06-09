@@ -15,6 +15,6 @@
  */
 
 /**
- * Spring Converter classes
+ * Converter classes
  */
 package com.webauthn4j.converter;
