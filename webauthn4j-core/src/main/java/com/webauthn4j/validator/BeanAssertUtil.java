@@ -63,6 +63,9 @@ class BeanAssertUtil {
     }
 
     public static void validate(CollectedClientData collectedClientData) {
+        if(collectedClientData == null){
+            throw new ConstraintViolationException("collectedClientData must not be null");
+        }
         if (collectedClientData.getType() == null) {
             throw new ConstraintViolationException("type must not be null");
         }
@@ -72,18 +75,22 @@ class BeanAssertUtil {
         if (collectedClientData.getOrigin() == null) {
             throw new ConstraintViolationException("origin must not be null");
         }
-        if (collectedClientData.getTokenBinding() != null) {
-            validate(collectedClientData.getTokenBinding());
-        }
+        validate(collectedClientData.getTokenBinding());
     }
 
     public static void validate(TokenBinding tokenBinding) {
+        if (tokenBinding == null) {
+            return;
+        }
         if (tokenBinding.getStatus() == null) {
             throw new ConstraintViolationException("status must not be null");
         }
     }
 
     public static void validate(AttestationObject attestationObject) {
+        if(attestationObject == null){
+            throw new ConstraintViolationException("attestationObject must not be null");
+        }
         if (attestationObject.getAttestationStatement() == null) {
             throw new ConstraintViolationException("attestationStatement must not be null");
         }
