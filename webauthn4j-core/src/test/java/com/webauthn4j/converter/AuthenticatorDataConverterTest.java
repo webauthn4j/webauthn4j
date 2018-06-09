@@ -17,7 +17,6 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -59,7 +58,7 @@ public class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensionOutputMap = new HashMap<>();
+        Map<String, AuthenticatorExtensionOutput> extensionOutputMap = new HashMap<>();
         List<String> extension = Collections.singletonList("uvm");
         SupportedExtensionsAuthenticatorExtensionOutput extensionOutput = new SupportedExtensionsAuthenticatorExtensionOutput(extension);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);

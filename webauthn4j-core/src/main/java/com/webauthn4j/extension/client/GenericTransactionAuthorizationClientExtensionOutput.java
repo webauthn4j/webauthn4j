@@ -1,7 +1,6 @@
 package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.webauthn4j.extension.ExtensionIdentifier;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -9,7 +8,7 @@ import java.util.Objects;
 
 public class GenericTransactionAuthorizationClientExtensionOutput extends AbstractClientExtensionOutput<GenericTransactionAuthorizationClientExtensionOutput.TxAuthnGenericArg> {
 
-    public static final ExtensionIdentifier ID = new ExtensionIdentifier("txAuthGeneric");
+    public static final String ID = "txAuthGeneric";
 
     @JsonCreator
     public GenericTransactionAuthorizationClientExtensionOutput(TxAuthnGenericArg value) {
@@ -17,7 +16,7 @@ public class GenericTransactionAuthorizationClientExtensionOutput extends Abstra
     }
 
     @Override
-    public ExtensionIdentifier getIdentifier() {
+    public String getIdentifier() {
         return ID;
     }
 

@@ -1,11 +1,10 @@
 package com.webauthn4j.extension.authneticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.webauthn4j.extension.ExtensionIdentifier;
 
 public class SimpleTransactionAuthorizationAuthenticatorExtensionOutput extends AbstractAuthenticatorExtensionOutput<String> {
 
-    public static final ExtensionIdentifier ID = new ExtensionIdentifier("txAuthSimple");
+    public static final String ID = "txAuthSimple";
 
     @JsonCreator
     public SimpleTransactionAuthorizationAuthenticatorExtensionOutput(String value) {
@@ -13,7 +12,7 @@ public class SimpleTransactionAuthorizationAuthenticatorExtensionOutput extends 
     }
 
     @Override
-    public ExtensionIdentifier getIdentifier() {
+    public String getIdentifier() {
         return ID;
     }
 

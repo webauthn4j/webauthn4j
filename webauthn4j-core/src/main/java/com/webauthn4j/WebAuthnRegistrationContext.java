@@ -16,7 +16,6 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
                                        String clientExtensionsJSON,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired,
-                                       List<ExtensionIdentifier> expectedExtensionIds) {
+                                       List<String> expectedExtensionIds) {
 
         super(
                 clientDataJSON,

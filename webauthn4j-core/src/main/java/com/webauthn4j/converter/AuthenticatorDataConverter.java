@@ -8,7 +8,6 @@ import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -56,7 +55,7 @@ public class AuthenticatorDataConverter {
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
         AttestedCredentialData attestationData;
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions;
+        Map<String, AuthenticatorExtensionOutput> extensions;
         if (AuthenticatorData.checkFlagAT(flags)) {
             attestationData = convertToAttestedCredentialData(byteBuffer);
         } else {
@@ -95,21 +94,21 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    Map<ExtensionIdentifier, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
+    Map<String, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return Collections.emptyMap();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         try {
-            return getCborMapper().readValue(remaining, new TypeReference<Map<ExtensionIdentifier, AuthenticatorExtensionOutput>>() {
+            return getCborMapper().readValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>() {
             });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    byte[] convert(Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
+    byte[] convert(Map<String, AuthenticatorExtensionOutput> extensions) {
         try {
             if(extensions == null || extensions.isEmpty()){
                 return new byte[0];

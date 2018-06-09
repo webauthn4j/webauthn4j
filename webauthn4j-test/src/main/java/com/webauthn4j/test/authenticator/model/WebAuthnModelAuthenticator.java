@@ -10,7 +10,6 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
@@ -197,9 +196,9 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = new HashMap<>();
-        for(Map.Entry<ExtensionIdentifier, AuthenticatorExtensionInput> entry : makeCredentialRequest.getExtensions().entrySet()){
-            ExtensionIdentifier extensionIdentifier = entry.getKey();
+        Map<String, AuthenticatorExtensionOutput> processedExtensions = new HashMap<>();
+        for(Map.Entry<String, AuthenticatorExtensionInput> entry : makeCredentialRequest.getExtensions().entrySet()){
+            String extensionIdentifier = entry.getKey();
             if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
                 processedExtensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionOutput(Collections.singletonList("exts")));
             }
@@ -299,7 +298,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier -> authenticator extension input in extensions.
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> processedExtensions = Collections.emptyMap();
+        Map<String, AuthenticatorExtensionOutput> processedExtensions = Collections.emptyMap();
         if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
         }

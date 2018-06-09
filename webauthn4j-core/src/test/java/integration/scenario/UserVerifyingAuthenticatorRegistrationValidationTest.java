@@ -8,7 +8,6 @@ import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
@@ -97,7 +96,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
         credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
-        Map<ExtensionIdentifier, ClientExtensionInput> extensions = new HashMap<>();
+        Map<String, ClientExtensionInput> extensions = new HashMap<>();
 
         credentialCreationOptions.setExtensions(extensions);
 
@@ -132,13 +131,13 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
         credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
-        Map<ExtensionIdentifier, ClientExtensionInput> extensions = new HashMap<>();
+        Map<String, ClientExtensionInput> extensions = new HashMap<>();
         extensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsClientExtensionInput(true));
         credentialCreationOptions.setExtensions(extensions);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        List<ExtensionIdentifier> expectedExtensions = Collections.singletonList(new ExtensionIdentifier("uvm"));
+        List<String> expectedExtensions = Collections.singletonList("uvm");
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),

@@ -1,6 +1,5 @@
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.test.client.PublicKeyCredentialDescriptor;
 
@@ -14,7 +13,7 @@ public class GetAssertionRequest {
     private List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList;
     private boolean requireUserPresence;
     private boolean requireUserVerification;
-    private Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions;
+    private Map<String, AuthenticatorExtensionOutput> extensions;
 
     public String getRpId() {
         return rpId;
@@ -56,11 +55,11 @@ public class GetAssertionRequest {
         this.requireUserVerification = requireUserVerification;
     }
 
-    public Map<ExtensionIdentifier, AuthenticatorExtensionOutput> getExtensions() {
+    public Map<String, AuthenticatorExtensionOutput> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
+    public void setExtensions(Map<String, AuthenticatorExtensionOutput> extensions) {
         this.extensions = extensions;
     }
 }

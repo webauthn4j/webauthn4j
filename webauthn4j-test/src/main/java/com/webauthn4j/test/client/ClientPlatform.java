@@ -11,7 +11,6 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
@@ -19,7 +18,6 @@ import com.webauthn4j.extension.client.SupportedExtensionsClientExtensionOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
-import com.webauthn4j.test.authenticator.SupportedExtensionsAuthenticatorExtensionInput;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -90,7 +88,7 @@ public class ClientPlatform {
 
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensions = convertExtensions(credentialCreationResponse.getAttestationObject().getAuthenticatorData().getExtensions());
+        Map<String, ClientExtensionOutput> clientExtensions = convertExtensions(credentialCreationResponse.getAttestationObject().getAuthenticatorData().getExtensions());
         String clientExtensionsJSON = clientExtensionOutputsConverter.convertToString(clientExtensions);
         return new PublicKeyCredential<>(
                 credentialId,
@@ -98,8 +96,8 @@ public class ClientPlatform {
         );
     }
 
-    private Map<ExtensionIdentifier,ClientExtensionOutput> convertExtensions(Map<ExtensionIdentifier,AuthenticatorExtensionOutput> extensions) {
-        Map<ExtensionIdentifier,ClientExtensionOutput> map = new HashMap<>();
+    private Map<String,ClientExtensionOutput> convertExtensions(Map<String,AuthenticatorExtensionOutput> extensions) {
+        Map<String,ClientExtensionOutput> map = new HashMap<>();
         extensions.forEach((key, value) -> {
             if(key.equals(SupportedExtensionsAuthenticatorExtensionOutput.ID)){
                 SupportedExtensionsAuthenticatorExtensionOutput authenticatorExtensionOutput = (SupportedExtensionsAuthenticatorExtensionOutput)value;

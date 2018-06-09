@@ -10,7 +10,6 @@ import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.TokenBinding;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -105,7 +104,7 @@ public class BeanAssertUtil {
         if (signCount <= 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions = authenticatorData.getExtensions();
+        Map<String, AuthenticatorExtensionOutput> extensions = authenticatorData.getExtensions();
         if (extensions != null) {
             extensions.entrySet().forEach(BeanAssertUtil::validate);
         }
@@ -137,9 +136,9 @@ public class BeanAssertUtil {
         credentialPublicKey.validate();
     }
 
-    private static void validate(Map.Entry<ExtensionIdentifier,AuthenticatorExtensionOutput> entry) {
-        ExtensionIdentifier identifier = entry.getKey();
-        ExtensionIdentifier extensionOutputIdentifier = entry.getValue().getIdentifier();
+    private static void validate(Map.Entry<String,AuthenticatorExtensionOutput> entry) {
+        String identifier = entry.getKey();
+        String extensionOutputIdentifier = entry.getValue().getIdentifier();
         if(identifier == null){
             throw new ConstraintViolationException("identifier must not be null");
         }
@@ -169,7 +168,7 @@ public class BeanAssertUtil {
         attestationStatement.validate();
     }
 
-    public static void validate(Map<ExtensionIdentifier,ClientExtensionOutput> clientExtensionOutputs) {
+    public static void validate(Map<String,ClientExtensionOutput> clientExtensionOutputs) {
         // TODO
     }
 }

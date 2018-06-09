@@ -16,7 +16,6 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.server.ServerProperty;
 
 import java.util.Arrays;
@@ -40,19 +39,19 @@ class AbstractWebAuthnContext {
 
     // verification condition
     private boolean userVerificationRequired;
-    private List<ExtensionIdentifier> expectedExtensions;
+    private List<String> expectedExtensionIds;
 
     public AbstractWebAuthnContext(
                                          byte[] clientDataJSON,
                                          String clientExtensionsJSON,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired,
-                                         List<ExtensionIdentifier> expectedExtensionIds) {
+                                         List<String> expectedExtensionIds) {
         this.clientDataJSON = clientDataJSON;
         this.clientExtensionsJSON = clientExtensionsJSON;
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
-        this.expectedExtensions = expectedExtensionIds;
+        this.expectedExtensionIds = expectedExtensionIds;
     }
 
     public byte[] getClientDataJSON() {
@@ -71,8 +70,8 @@ class AbstractWebAuthnContext {
         return userVerificationRequired;
     }
 
-    public List<ExtensionIdentifier> getExpectedExtensions() {
-        return expectedExtensions;
+    public List<String> getExpectedExtensionIds() {
+        return expectedExtensionIds;
     }
 
     @Override
@@ -84,13 +83,13 @@ class AbstractWebAuthnContext {
                 Arrays.equals(clientDataJSON, that.clientDataJSON) &&
                 Objects.equals(clientExtensionsJSON, that.clientExtensionsJSON) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(expectedExtensions, that.expectedExtensions);
+                Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(clientExtensionsJSON, serverProperty, userVerificationRequired, expectedExtensions);
+        int result = Objects.hash(clientExtensionsJSON, serverProperty, userVerificationRequired, expectedExtensionIds);
         result = 31 * result + Arrays.hashCode(clientDataJSON);
         return result;
     }

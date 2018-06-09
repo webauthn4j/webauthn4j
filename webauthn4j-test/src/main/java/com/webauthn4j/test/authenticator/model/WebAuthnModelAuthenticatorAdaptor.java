@@ -2,7 +2,6 @@ package com.webauthn4j.test.authenticator.model;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.test.authenticator.*;
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -73,14 +72,14 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         );
     }
 
-    private Map<ExtensionIdentifier,AuthenticatorExtensionInput> convertExtensions(Map<ExtensionIdentifier,ClientExtensionInput> extensions) {
+    private Map<String,AuthenticatorExtensionInput> convertExtensions(Map<String,ClientExtensionInput> extensions) {
         if(extensions == null){
             return Collections.emptyMap();
         }
 
-        Map<ExtensionIdentifier, AuthenticatorExtensionInput> map = new HashMap<>();
-        for(Map.Entry<ExtensionIdentifier, ClientExtensionInput> clientExtensionInputEntry : extensions.entrySet()){
-            ExtensionIdentifier extensionIdentifier = clientExtensionInputEntry.getKey();
+        Map<String, AuthenticatorExtensionInput> map = new HashMap<>();
+        for(Map.Entry<String, ClientExtensionInput> clientExtensionInputEntry : extensions.entrySet()){
+            String extensionIdentifier = clientExtensionInputEntry.getKey();
             if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
                 SupportedExtensionsClientExtensionInput clientExtensionInput = (SupportedExtensionsClientExtensionInput) clientExtensionInputEntry.getValue();
                 map.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionInput(clientExtensionInput.getValue()));

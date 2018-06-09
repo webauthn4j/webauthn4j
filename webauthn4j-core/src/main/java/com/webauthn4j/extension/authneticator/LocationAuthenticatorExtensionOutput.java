@@ -2,11 +2,10 @@ package com.webauthn4j.extension.authneticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.extension.Coordinates;
-import com.webauthn4j.extension.ExtensionIdentifier;
 
 public class LocationAuthenticatorExtensionOutput extends AbstractAuthenticatorExtensionOutput<Coordinates> {
 
-    public static final ExtensionIdentifier ID = new ExtensionIdentifier("loc");
+    public static final String ID = "loc";
 
     @JsonCreator
     public LocationAuthenticatorExtensionOutput(Coordinates value) {
@@ -14,7 +13,7 @@ public class LocationAuthenticatorExtensionOutput extends AbstractAuthenticatorE
     }
 
     @Override
-    public ExtensionIdentifier getIdentifier() {
+    public String getIdentifier() {
         return ID;
     }
 

@@ -3,7 +3,6 @@ package com.webauthn4j.converter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
 
 import java.io.IOException;
@@ -15,22 +14,22 @@ public class ClientExtensionOutputsConverter {
 
     private final ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
 
-    public Map<ExtensionIdentifier, ClientExtensionOutput> convert(byte[] value){
+    public Map<String, ClientExtensionOutput> convert(byte[] value){
         return convert(new String(value, StandardCharsets.UTF_8));
     }
 
-    public Map<ExtensionIdentifier, ClientExtensionOutput> convert(String value){
+    public Map<String, ClientExtensionOutput> convert(String value){
         try {
             if(value == null){
                 return null;
             }
-            return jsonMapper.readValue(value, new TypeReference<Map<ExtensionIdentifier, ClientExtensionOutput>>(){});
+            return jsonMapper.readValue(value, new TypeReference<Map<String, ClientExtensionOutput>>(){});
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public String convertToString(Map<ExtensionIdentifier, ClientExtensionOutput> value){
+    public String convertToString(Map<String, ClientExtensionOutput> value){
         try {
             if(value == null){
                 return null;
@@ -41,7 +40,7 @@ public class ClientExtensionOutputsConverter {
         }
     }
 
-    public byte[] convertToBytes(Map<ExtensionIdentifier, ClientExtensionOutput> value){
+    public byte[] convertToBytes(Map<String, ClientExtensionOutput> value){
         try {
             if(value == null){
                 return new byte[0];

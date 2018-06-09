@@ -17,7 +17,7 @@
 package com.webauthn4j.extension;
 
 public interface ExtensionOutput<T> {
-    ExtensionIdentifier getIdentifier();
+    String getIdentifier();
 
     void validate();
 

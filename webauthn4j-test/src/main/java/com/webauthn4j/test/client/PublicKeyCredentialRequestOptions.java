@@ -1,7 +1,6 @@
 package com.webauthn4j.test.client;
 
 import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.util.WIP;
 
@@ -16,14 +15,14 @@ public class PublicKeyCredentialRequestOptions {
     private String rpId;
     private List<PublicKeyCredentialDescriptor> allowCredentials;
     private UserVerificationRequirement userVerification;
-    private Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions;
+    private Map<String, AuthenticatorExtensionOutput> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
-                                             Map<ExtensionIdentifier, AuthenticatorExtensionOutput> extensions) {
+                                             Map<String, AuthenticatorExtensionOutput> extensions) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -52,7 +51,7 @@ public class PublicKeyCredentialRequestOptions {
         return userVerification;
     }
 
-    public Map<ExtensionIdentifier, AuthenticatorExtensionOutput> getExtensions() {
+    public Map<String, AuthenticatorExtensionOutput> getExtensions() {
         return extensions;
     }
 }

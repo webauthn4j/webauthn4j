@@ -3,8 +3,6 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
-import com.webauthn4j.extension.ExtensionIdentifier;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.*;
 import org.junit.Test;
 
@@ -20,7 +18,7 @@ public class ClientExtensionOutputDeserializerTest {
     public void deserialize_test_with_JSON_data() throws IOException {
         ObjectMapper objectMapper = ObjectMapperUtil.createJSONMapper(); // use JSON mapper to make test data readable
 
-        Map<ExtensionIdentifier, ClientExtensionOutput> extensionOutputs =
+        Map<String, ClientExtensionOutput> extensionOutputs =
                 objectMapper.readValue(
                         "{ " +
                                 "\"appid\": true, " +
@@ -32,7 +30,7 @@ public class ClientExtensionOutputDeserializerTest {
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
                                 "\"biometricPerfBounds\": { \"FAR\": 0, \"FRR\":0 } " +
                         "}",
-                        new TypeReference<Map<ExtensionIdentifier, ClientExtensionOutput>>(){}
+                        new TypeReference<Map<String, ClientExtensionOutput>>(){}
                 );
 
         assertThat(extensionOutputs).containsKeys(FIDOAppIDClientExtensionOutput.ID, SupportedExtensionsClientExtensionOutput.ID);

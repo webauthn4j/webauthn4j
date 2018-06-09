@@ -27,7 +27,6 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.ExtensionIdentifier;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
@@ -134,7 +133,7 @@ public class WebAuthnRegistrationContextValidator {
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
-        Map<ExtensionIdentifier, ClientExtensionOutput> clientExtensionOutputs =
+        Map<String, ClientExtensionOutput> clientExtensionOutputs =
                 clientExtensionOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);
@@ -192,8 +191,8 @@ public class WebAuthnRegistrationContextValidator {
         /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        Map<ExtensionIdentifier, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
-        List<ExtensionIdentifier> expectedExtensionIdentifiers = registrationContext.getExpectedExtensions();
+        Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
+        List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensionOutputs, authenticatorExtensionOutputs, expectedExtensionIdentifiers);
 
 
