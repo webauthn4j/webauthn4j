@@ -22,6 +22,7 @@ import com.webauthn4j.attestation.authenticator.*;
 import com.webauthn4j.attestation.statement.*;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -174,11 +175,11 @@ public class TestUtil {
         }
     }
 
-    public static CollectedClientData createClientData(String type) {
+    public static CollectedClientData createClientData(ClientDataType type) {
         return new CollectedClientData(type, createChallenge(), createOrigin(), null);
     }
 
-    public static byte[] createClientDataJSON(String type) {
+    public static byte[] createClientDataJSON(ClientDataType type) {
         return new CollectedClientDataConverter().convertToBytes(createClientData(type));
     }
 

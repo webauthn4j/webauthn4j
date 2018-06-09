@@ -4,6 +4,7 @@ import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
 import com.webauthn4j.anchor.WebAuthnTrustAnchorServiceImpl;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -25,8 +26,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 import static org.mockito.Mockito.mock;
 
 public class FIDOU2FAuthenticatorRegistrationValidationTest {
@@ -81,7 +80,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
 
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge);
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
         registrationEmulationOption.setCollectedClientData(collectedClientData);
         registrationEmulationOption.setCollectedClientDataOverrideEnabled(true);
@@ -195,7 +194,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        CollectedClientData maliciousClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challenge, phishingSiteClaimingOrigin, null);
+        CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
         byte[] maliciousClientDataBytes = new CollectedClientDataConverter().convertToBytes(maliciousClientData);
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty, false);

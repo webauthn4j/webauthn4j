@@ -23,6 +23,7 @@ import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
@@ -52,8 +53,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 /**
  * {@inheritDoc}
@@ -152,7 +151,7 @@ public class WebAuthnRegistrationContextValidator {
         ServerProperty serverProperty = registrationContext.getServerProperty();
 
         // Verify that the value of C.type is webauthn.create.
-        if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_CREATE)) {
+        if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
             throw new MaliciousDataException("Bad client data type");
         }
 

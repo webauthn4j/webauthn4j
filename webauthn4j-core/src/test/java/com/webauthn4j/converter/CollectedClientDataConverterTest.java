@@ -1,5 +1,6 @@
 package com.webauthn4j.converter;
 
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.DefaultChallenge;
@@ -8,8 +9,6 @@ import org.junit.Test;
 
 import java.nio.charset.StandardCharsets;
 
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CollectedClientDataConverterTest {
@@ -21,7 +20,7 @@ public class CollectedClientDataConverterTest {
         String clientDataJson = "{\"challenge\":\"tk31UH1ETGGTPj33OhOMzw\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.get\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
-        assertThat(collectedClientData.getType()).isEqualTo(TYPE_WEBAUTHN_GET);
+        assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.GET);
         assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("tk31UH1ETGGTPj33OhOMzw"));
         assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"));
     }
@@ -31,7 +30,7 @@ public class CollectedClientDataConverterTest {
         String clientDataJson = "{\"challenge\":\"Tgup0LZZQKinvtQcZFYdRw\",\"new_keys_may_be_added_here\":\"do not compare clientDataJSON against a template. See https://goo.gl/yabPex\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.create\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
-        assertThat(collectedClientData.getType()).isEqualTo(TYPE_WEBAUTHN_CREATE);
+        assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE);
         assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("Tgup0LZZQKinvtQcZFYdRw"));
         assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"));
     }

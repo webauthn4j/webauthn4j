@@ -4,6 +4,7 @@ import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -18,9 +19,6 @@ import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
 import java.util.Collections;
-
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 
 public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
@@ -86,7 +84,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge, tokenBindingId);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
@@ -125,7 +123,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.REQUIRED,
                 null
         );
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_CREATE, challenge); // bad clientData type
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
@@ -241,7 +239,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_GET, challenge, tokenBindingId);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 

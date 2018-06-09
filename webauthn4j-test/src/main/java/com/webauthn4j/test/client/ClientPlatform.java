@@ -3,10 +3,7 @@ package com.webauthn4j.test.client;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.Origin;
-import com.webauthn4j.client.TokenBinding;
-import com.webauthn4j.client.TokenBindingStatus;
+import com.webauthn4j.client.*;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
@@ -60,7 +57,7 @@ public class ClientPlatform {
         if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
             collectedClientData = registrationEmulationOption.getCollectedClientData();
         } else {
-            collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
+            collectedClientData = createCollectedClientData(ClientDataType.CREATE, publicKeyCredentialCreationOptions.getChallenge());
         }
 
         if (authenticatorAdaptor == null) {
@@ -141,15 +138,15 @@ public class ClientPlatform {
     }
 
     public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
-        CollectedClientData collectedClientData = createCollectedClientData(CollectedClientData.TYPE_WEBAUTHN_GET, publicKeyCredentialRequestOptions.getChallenge());
+        CollectedClientData collectedClientData = createCollectedClientData(ClientDataType.GET, publicKeyCredentialRequestOptions.getChallenge());
         return get(publicKeyCredentialRequestOptions, collectedClientData);
     }
 
-    public CollectedClientData createCollectedClientData(String type, Challenge challenge) {
+    public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge) {
         return new CollectedClientData(type, challenge, origin, null);
     }
 
-    public CollectedClientData createCollectedClientData(String type, Challenge challenge, byte[] tokenBindingId) {
+    public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge, byte[] tokenBindingId) {
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, tokenBindingId);
         return new CollectedClientData(type, challenge, origin, tokenBinding);
     }

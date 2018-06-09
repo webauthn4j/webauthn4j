@@ -25,16 +25,13 @@ import java.io.Serializable;
  */
 public class CollectedClientData implements Serializable {
 
-    public static final String TYPE_WEBAUTHN_GET = "webauthn.get";
-    public static final String TYPE_WEBAUTHN_CREATE = "webauthn.create";
-
     //~ Instance fields ================================================================================================
-    private String type;
+    private ClientDataType type;
     private Challenge challenge;
     private Origin origin;
     private TokenBinding tokenBinding;
 
-    public CollectedClientData(String type,
+    public CollectedClientData(ClientDataType type,
                                Challenge challenge,
                                Origin origin,
                                TokenBinding tokenBinding) {
@@ -47,7 +44,7 @@ public class CollectedClientData implements Serializable {
     public CollectedClientData() {
     }
 
-    public String getType() {
+    public ClientDataType getType() {
         return type;
     }
 

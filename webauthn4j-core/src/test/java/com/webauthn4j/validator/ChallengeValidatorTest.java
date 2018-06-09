@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
@@ -24,7 +25,6 @@ import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.junit.Test;
 
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 /**
  * Test for ChallengeValidator
@@ -39,7 +39,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
-        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
@@ -52,7 +52,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
-        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
@@ -65,7 +65,7 @@ public class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
-        CollectedClientData collectedClientData = new CollectedClientData(TYPE_WEBAUTHN_CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When

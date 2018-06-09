@@ -3,6 +3,7 @@ package integration.scenario;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -19,8 +20,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
@@ -94,7 +93,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(TYPE_WEBAUTHN_CREATE, challenge); // bad clientData type
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
         PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 

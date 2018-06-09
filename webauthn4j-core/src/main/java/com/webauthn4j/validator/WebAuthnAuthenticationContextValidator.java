@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
@@ -36,8 +37,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_GET;
 
 /**
  * Validates {@link WebAuthnAuthenticationContext} instance
@@ -87,7 +86,7 @@ public class WebAuthnAuthenticationContextValidator {
         BeanAssertUtil.validate(serverProperty);
 
         // Verify that the value of C.type is the string webauthn.get.
-        if (!Objects.equals(collectedClientData.getType(), TYPE_WEBAUTHN_GET)) {
+        if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
             throw new MaliciousDataException("Bad client data type");
         }
 

@@ -1,16 +1,15 @@
 package com.webauthn4j.test.client;
 
+import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.test.TestUtil;
-
-import static com.webauthn4j.client.CollectedClientData.TYPE_WEBAUTHN_CREATE;
 
 public class RegistrationEmulationOption {
 
     private boolean signatureOverrideEnabled = false;
     private byte[] signature = new byte[]{0x01, 0x23, 0x45, 0x67};
     private boolean collectedClientDataOverrideEnabled = false;
-    private CollectedClientData collectedClientData = TestUtil.createClientData(TYPE_WEBAUTHN_CREATE);
+    private CollectedClientData collectedClientData = TestUtil.createClientData(ClientDataType.CREATE);
 
     public boolean isSignatureOverrideEnabled() {
         return signatureOverrideEnabled;
