@@ -9,24 +9,22 @@ import java.util.Arrays;
 public class TokenBindingValidator {
 
     public void validate(TokenBinding collectedClientDataTokenBinding, byte[] serverTokenBindingId) {
-        if(collectedClientDataTokenBinding == null){
+        if (collectedClientDataTokenBinding == null) {
             // nop
-        }
-        else {
+        } else {
             byte[] clientDataTokenBindingId;
-            if(collectedClientDataTokenBinding.getId() == null){
+            if (collectedClientDataTokenBinding.getId() == null) {
                 clientDataTokenBindingId = null;
-            }
-            else {
+            } else {
                 clientDataTokenBindingId = Base64UrlUtil.decode(collectedClientDataTokenBinding.getId());
             }
-            switch (collectedClientDataTokenBinding.getStatus()){
+            switch (collectedClientDataTokenBinding.getStatus()) {
                 case NOT_SUPPORTED:
                     break;
                 case SUPPORTED:
                     break;
                 case PRESENT:
-                    if(!Arrays.equals(clientDataTokenBindingId, serverTokenBindingId)){
+                    if (!Arrays.equals(clientDataTokenBindingId, serverTokenBindingId)) {
                         throw new TokenBindingException("TokenBinding id does not match");
                     }
             }

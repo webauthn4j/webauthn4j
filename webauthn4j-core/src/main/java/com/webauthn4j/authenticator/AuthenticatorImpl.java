@@ -36,7 +36,8 @@ public class AuthenticatorImpl implements Authenticator {
         setCounter(counter);
     }
 
-    public AuthenticatorImpl() {}
+    public AuthenticatorImpl() {
+    }
 
     @Override
     public AttestedCredentialData getAttestedCredentialData() {

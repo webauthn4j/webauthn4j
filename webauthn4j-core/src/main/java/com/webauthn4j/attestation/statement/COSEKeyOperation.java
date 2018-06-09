@@ -3,7 +3,7 @@ package com.webauthn4j.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum  COSEKeyOperation {
+public enum COSEKeyOperation {
     SIGN(1),
     VERIFY(2),
     ENCRYPT(3),
@@ -17,7 +17,7 @@ public enum  COSEKeyOperation {
 
     private int value;
 
-    COSEKeyOperation(int value){
+    COSEKeyOperation(int value) {
         this.value = value;
     }
 

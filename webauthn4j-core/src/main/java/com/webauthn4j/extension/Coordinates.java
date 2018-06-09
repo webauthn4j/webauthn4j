@@ -23,7 +23,8 @@ public class Coordinates implements Serializable {
         this.speed = speed;
     }
 
-    public Coordinates(){}
+    public Coordinates() {
+    }
 
     public Double getLatitude() {
         return latitude;

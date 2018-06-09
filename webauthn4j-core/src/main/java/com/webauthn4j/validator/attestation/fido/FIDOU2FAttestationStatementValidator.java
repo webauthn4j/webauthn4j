@@ -39,7 +39,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         return AttestationType.BASIC;
     }
 
-    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement){
+    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().size() != 1) {
             throw new CertificateException("FIDO-U2F attestation statement must have only one certificate.");
         }

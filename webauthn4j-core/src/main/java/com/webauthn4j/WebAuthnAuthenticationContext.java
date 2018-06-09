@@ -64,7 +64,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          byte[] signature,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired
-                                         ) {
+    ) {
         this(
                 credentialId,
                 clientDataJSON,

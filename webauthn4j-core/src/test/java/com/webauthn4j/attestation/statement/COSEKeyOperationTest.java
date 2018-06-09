@@ -9,7 +9,7 @@ public class COSEKeyOperationTest {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    public void create_test(){
+    public void create_test() {
 
         assertThat(COSEKeyOperation.create(1)).isEqualTo(COSEKeyOperation.SIGN);
         assertThat(COSEKeyOperation.create(2)).isEqualTo(COSEKeyOperation.VERIFY);
@@ -22,12 +22,12 @@ public class COSEKeyOperationTest {
         assertThat(COSEKeyOperation.create(9)).isEqualTo(COSEKeyOperation.MAC_CREATE);
         assertThat(COSEKeyOperation.create(10)).isEqualTo(COSEKeyOperation.MAC_VERIFY);
 
-        assertThatThrownBy(()-> COSEKeyOperation.create(0)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()-> COSEKeyOperation.create(11)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> COSEKeyOperation.create(0)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> COSEKeyOperation.create(11)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void getValueTest(){
+    public void getValueTest() {
         assertThat(COSEKeyOperation.SIGN.getValue()).isEqualTo(1);
     }
 }

@@ -30,7 +30,8 @@ public class GenericTransactionAuthorizationClientExtensionOutput extends Abstra
             this.content = content;
         }
 
-        public TxAuthnGenericArg(){}
+        public TxAuthnGenericArg() {
+        }
 
         public String getContentType() {
             return contentType;

@@ -30,7 +30,7 @@ public class AttestedCredentialDataTest {
      * AttestedCredentialData must have default constructor
      */
     @Test
-    public void constructor_test(){
+    public void constructor_test() {
         new AttestedCredentialData();
     }
 

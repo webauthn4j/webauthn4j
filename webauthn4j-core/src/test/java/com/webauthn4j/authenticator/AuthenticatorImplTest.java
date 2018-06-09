@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class AuthenticatorImplTest {
 
     @Test
-    public void getter_setter_test(){
+    public void getter_setter_test() {
 
         AttestedCredentialData attestedCredentialData = TestUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement();
@@ -28,9 +28,13 @@ public class AuthenticatorImplTest {
     }
 
     @Test
-    public void setCounter_range_test(){
+    public void setCounter_range_test() {
         AuthenticatorImpl authenticator = new AuthenticatorImpl();
-        assertThatThrownBy(()-> { authenticator.setCounter(-1); }).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()-> { authenticator.setCounter(4294967296L); }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            authenticator.setCounter(-1);
+        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> {
+            authenticator.setCounter(4294967296L);
+        }).isInstanceOf(IllegalArgumentException.class);
     }
 }

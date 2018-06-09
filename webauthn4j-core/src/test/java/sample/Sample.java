@@ -11,16 +11,16 @@ import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 
 public class Sample {
 
-    public void registrationValidationSample(){
+    public void registrationValidationSample() {
         // Client properties
-        byte[] clientDataJSON    = null /* set clientDataJSON */;
+        byte[] clientDataJSON = null /* set clientDataJSON */;
         byte[] attestationObject = null /* set attestationObject */;
 
         // Server properties
-        Origin origin          = null /* set origin */;
-        String rpId            = null /* set rpId */;
-        Challenge challenge    = null /* set challenge */;
-        byte[] tokenBindingId  = null /* set tokenBindingId */;
+        Origin origin = null /* set origin */;
+        String rpId = null /* set rpId */;
+        Challenge challenge = null /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
@@ -31,18 +31,18 @@ public class Sample {
         webAuthnRegistrationContextValidator.validate(registrationContext);
     }
 
-    public void authenticationValidationSample(){
+    public void authenticationValidationSample() {
         // Client properties
-        byte[] credentialId      = null /* set credentialId */;
-        byte[] clientDataJSON    = null /* set clientDataJSON */;
+        byte[] credentialId = null /* set credentialId */;
+        byte[] clientDataJSON = null /* set clientDataJSON */;
         byte[] authenticatorData = null /* set authenticatorData */;
         byte[] signature = null /* set signature */;
 
         // Server properties
-        Origin origin          = null /* set origin */;
-        String rpId            = null /* set rpId */;
-        Challenge challenge    = null /* set challenge */;
-        byte[] tokenBindingId  = null /* set tokenBindingId */;
+        Origin origin = null /* set origin */;
+        String rpId = null /* set rpId */;
+        Challenge challenge = null /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
         WebAuthnAuthenticationContext authenticationContext =

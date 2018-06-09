@@ -17,12 +17,12 @@ public class AttestationCertificate {
     public static final int NON_CA = -1;
     private static final Map<String, String> cHashMap;
 
-    private X509Certificate certificate;
-
     static {
         cHashMap = new HashMap<>();
         cHashMap.put("", "");
     }
+
+    private X509Certificate certificate;
 
     public AttestationCertificate(X509Certificate certificate) {
         this.certificate = certificate;
@@ -32,7 +32,7 @@ public class AttestationCertificate {
         return certificate;
     }
 
-    public String getSubjectCountry(){
+    public String getSubjectCountry() {
         try {
             return getX500Name().getCountry();
         } catch (IOException e) {
@@ -40,7 +40,7 @@ public class AttestationCertificate {
         }
     }
 
-    public String getSubjectOrganization(){
+    public String getSubjectOrganization() {
         try {
             return getX500Name().getOrganization();
         } catch (IOException e) {
@@ -48,7 +48,7 @@ public class AttestationCertificate {
         }
     }
 
-    public String getSubjectOrganizationUnit(){
+    public String getSubjectOrganizationUnit() {
         try {
             return getX500Name().getOrganizationalUnit();
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class AttestationCertificate {
         }
     }
 
-    public String getSubjectCommonName(){
+    public String getSubjectCommonName() {
         try {
             return getX500Name().getCommonName();
         } catch (IOException e) {
@@ -64,29 +64,29 @@ public class AttestationCertificate {
         }
     }
 
-    public void validate(){
-        if(certificate.getVersion() != CERTIFICATE_VERSION_3){
+    public void validate() {
+        if (certificate.getVersion() != CERTIFICATE_VERSION_3) {
             throw new CertificateException("Attestation certificate must be version 3");
         }
 
         String country = getSubjectCountry();
-        if(country == null || country.isEmpty()){
+        if (country == null || country.isEmpty()) {
             throw new CertificateException("Subject-C must be present");
         }
         String organization = getSubjectOrganization();
-        if(organization == null || organization.isEmpty()){
+        if (organization == null || organization.isEmpty()) {
             throw new CertificateException("Subject-O must be present");
         }
         String organizationUnit = getSubjectOrganizationUnit();
-        if(organizationUnit == null || !organizationUnit.equals("Authenticator Attestation")){
+        if (organizationUnit == null || !organizationUnit.equals("Authenticator Attestation")) {
             throw new CertificateException("Subject-OU must be present");
         }
         String commonName = getSubjectCommonName();
-        if(commonName == null || commonName.isEmpty()){
+        if (commonName == null || commonName.isEmpty()) {
             throw new CertificateException("Subject-CN must be present");
         }
 
-        if(certificate.getBasicConstraints() != NON_CA){
+        if (certificate.getBasicConstraints() != NON_CA) {
             throw new CertificateException("Attestation certificate must not be CA certificate");
         }
     }

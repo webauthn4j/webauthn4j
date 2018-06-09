@@ -7,15 +7,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CoordinatesTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         Coordinates instance = new Coordinates(
-            12.34,
-            23.45,
-            34.56,
-            4.5,
-            5.6,
-            7.8,
-             8.9
+                12.34,
+                23.45,
+                34.56,
+                4.5,
+                5.6,
+                7.8,
+                8.9
         );
 
         assertThat(instance.getLatitude()).isEqualTo(12.34);
@@ -28,7 +28,7 @@ public class CoordinatesTest {
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         Coordinates instanceA = new Coordinates();
         Coordinates instanceB = new Coordinates();
 

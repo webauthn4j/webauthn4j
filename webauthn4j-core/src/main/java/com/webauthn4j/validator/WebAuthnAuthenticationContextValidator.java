@@ -66,12 +66,12 @@ public class WebAuthnAuthenticationContextValidator {
 
     public void validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) {
 
+        BeanAssertUtil.validate(authenticationContext);
+
         // Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         // and signature respectively.
         byte[] cData = authenticationContext.getClientDataJSON();
         byte[] aData = authenticationContext.getAuthenticatorData();
-
-        BeanAssertUtil.validate(authenticationContext);
 
         // Let JSONtext be the result of running UTF-8 decode on the value of cData.
         // Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.

@@ -34,7 +34,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validateAttestationStatement_test(){
+    public void validateAttestationStatement_test() {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
                 new AttestationCertificatePath(Arrays.asList(
@@ -46,14 +46,14 @@ public class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test(expected = CertificateException.class)
-    public void validatePublicKey_with_rsa_key_test(){
+    public void validatePublicKey_with_rsa_key_test() {
         PublicKey publicKey = mock(PublicKey.class);
         when(publicKey.getAlgorithm()).thenReturn("RSA");
         target.validatePublicKey(publicKey);
     }
 
     @Test(expected = CertificateException.class)
-    public void validatePublicKey_with_non_p256_curve_ec_key_test(){
+    public void validatePublicKey_with_non_p256_curve_ec_key_test() {
         KeyPair keyPair = KeyUtil.createECKeyPair(ECUtil.P_521_SPEC);
         target.validatePublicKey(keyPair.getPublic());
     }

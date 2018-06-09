@@ -19,34 +19,27 @@ public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExt
 
         String currentName = p.getParsingContext().getCurrentName();
 
-        if(FIDOAppIDClientExtensionOutput.ID.equals(currentName)){
+        if (FIDOAppIDClientExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, FIDOAppIDClientExtensionOutput.class);
-        }
-        else if(SimpleTransactionAuthorizationClientExtensionOutput.ID.equals(currentName)){
+        } else if (SimpleTransactionAuthorizationClientExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, SimpleTransactionAuthorizationClientExtensionOutput.class);
-        }
-        else if(UserVerificationIndexClientExtensionOutput.ID.equals(currentName)){
+        } else if (UserVerificationIndexClientExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
         }
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
 
-        if(GenericTransactionAuthorizationClientExtensionOutput.ID.equals(parentName)){
+        if (GenericTransactionAuthorizationClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, GenericTransactionAuthorizationClientExtensionOutput.class);
-        }
-        else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(parentName)) {
+        } else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
-        }
-        else if (SupportedExtensionsClientExtensionOutput.ID.equals(parentName)) {
+        } else if (SupportedExtensionsClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, SupportedExtensionsClientExtensionOutput.class);
-        }
-        else if (LocationClientExtensionOutput.ID.equals(parentName)) {
+        } else if (LocationClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, LocationClientExtensionOutput.class);
-        }
-        else if (UserVerificationIndexClientExtensionOutput.ID.equals(parentName)) {
+        } else if (UserVerificationIndexClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
-        }
-        else if(BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID.equals(parentName)){
+        } else if (BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.class);
         }
 

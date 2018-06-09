@@ -14,24 +14,25 @@ public class ClientExtensionOutputsConverter {
 
     private final ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
 
-    public Map<String, ClientExtensionOutput> convert(byte[] value){
+    public Map<String, ClientExtensionOutput> convert(byte[] value) {
         return convert(new String(value, StandardCharsets.UTF_8));
     }
 
-    public Map<String, ClientExtensionOutput> convert(String value){
+    public Map<String, ClientExtensionOutput> convert(String value) {
         try {
-            if(value == null){
+            if (value == null) {
                 return null;
             }
-            return jsonMapper.readValue(value, new TypeReference<Map<String, ClientExtensionOutput>>(){});
+            return jsonMapper.readValue(value, new TypeReference<Map<String, ClientExtensionOutput>>() {
+            });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public String convertToString(Map<String, ClientExtensionOutput> value){
+    public String convertToString(Map<String, ClientExtensionOutput> value) {
         try {
-            if(value == null){
+            if (value == null) {
                 return null;
             }
             return jsonMapper.writeValueAsString(value);
@@ -40,9 +41,9 @@ public class ClientExtensionOutputsConverter {
         }
     }
 
-    public byte[] convertToBytes(Map<String, ClientExtensionOutput> value){
+    public byte[] convertToBytes(Map<String, ClientExtensionOutput> value) {
         try {
-            if(value == null){
+            if (value == null) {
                 return new byte[0];
             }
             return jsonMapper.writeValueAsBytes(value);

@@ -33,7 +33,8 @@ public class BiometricAuthenticatorPerformanceBoundsClientExtensionOutput extend
             this.FRR = FRR;
         }
 
-        public AuthenticatorBiometricPerfBounds(){}
+        public AuthenticatorBiometricPerfBounds() {
+        }
 
         public float getFAR() {
             return FAR;

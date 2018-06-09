@@ -29,8 +29,9 @@ public class ClientExtensionOutputDeserializerTest {
                                 "\"uvi\": null, " +
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
                                 "\"biometricPerfBounds\": { \"FAR\": 0, \"FRR\":0 } " +
-                        "}",
-                        new TypeReference<Map<String, ClientExtensionOutput>>(){}
+                                "}",
+                        new TypeReference<Map<String, ClientExtensionOutput>>() {
+                        }
                 );
 
         assertThat(extensionOutputs).containsKeys(FIDOAppIDClientExtensionOutput.ID, SupportedExtensionsClientExtensionOutput.ID);

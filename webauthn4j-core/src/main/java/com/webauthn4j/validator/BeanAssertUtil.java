@@ -135,23 +135,23 @@ public class BeanAssertUtil {
     }
 
 
-    public static void validateClientExtensionsOutputs(Map<String,ClientExtensionOutput> clientExtensionOutputs) {
-        if(clientExtensionOutputs != null){
+    public static void validateClientExtensionsOutputs(Map<String, ClientExtensionOutput> clientExtensionOutputs) {
+        if (clientExtensionOutputs != null) {
             clientExtensionOutputs.forEach(BeanAssertUtil::validate);
         }
     }
 
     public static void validateAuthenticatorExtensionsOutputs(Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs) {
-        if(authenticatorExtensionOutputs != null){
+        if (authenticatorExtensionOutputs != null) {
             authenticatorExtensionOutputs.forEach(BeanAssertUtil::validate);
         }
     }
 
-    public static void validate(String identifier, ExtensionOutput extensionOutput){
-        if(identifier == null){
+    public static void validate(String identifier, ExtensionOutput extensionOutput) {
+        if (identifier == null) {
             throw new ConstraintViolationException("identifier must not be null");
         }
-        if(!identifier.equals(extensionOutput.getIdentifier())){
+        if (!identifier.equals(extensionOutput.getIdentifier())) {
             throw new ConstraintViolationException("identifier must match");
         }
         extensionOutput.validate();

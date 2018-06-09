@@ -38,8 +38,8 @@ public class AttestationObjectConverter {
         return Base64UrlUtil.encodeToString(bytes);
     }
 
-    private ObjectMapper getCborMapper(){
-        if(this.objectMapper == null){
+    private ObjectMapper getCborMapper() {
+        if (this.objectMapper == null) {
             this.objectMapper = ObjectMapperUtil.createCBORMapper();
         }
         return this.objectMapper;

@@ -9,18 +9,18 @@ import java.util.List;
 
 public class AttestationCertificatePath extends ArrayList<X509Certificate> {
 
-    public AttestationCertificatePath(List<X509Certificate> certificates){
+    public AttestationCertificatePath(List<X509Certificate> certificates) {
         this.addAll(certificates);
     }
 
-    public AttestationCertificatePath(){
+    public AttestationCertificatePath() {
     }
 
-    public CertPath createCertPath(){
+    public CertPath createCertPath() {
         return CertificateUtil.generateCertPath(new ArrayList<>(this));
     }
 
-    public AttestationCertificate getEndEntityAttestationCertificate(){
+    public AttestationCertificate getEndEntityAttestationCertificate() {
         if (this.isEmpty()) {
             throw new IllegalStateException();
         }

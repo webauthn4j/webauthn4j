@@ -12,16 +12,16 @@ public class ExtensionValidator {
     public void validate(Map<String, ClientExtensionOutput> clientExtensionOutputs,
                          Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs,
                          List<String> expectedExtensionIdentifiers) {
-        if(clientExtensionOutputs != null){
-            clientExtensionOutputs.keySet().forEach( identifier -> {
-                if(!expectedExtensionIdentifiers.contains(identifier)){
+        if (clientExtensionOutputs != null) {
+            clientExtensionOutputs.keySet().forEach(identifier -> {
+                if (!expectedExtensionIdentifiers.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
                 }
             });
         }
-        if(authenticatorExtensionOutputs != null){
-            authenticatorExtensionOutputs.keySet().forEach( identifier -> {
-                if(!expectedExtensionIdentifiers.contains(identifier)){
+        if (authenticatorExtensionOutputs != null) {
+            authenticatorExtensionOutputs.keySet().forEach(identifier -> {
+                if (!expectedExtensionIdentifiers.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier));
                 }
             });

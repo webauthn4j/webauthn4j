@@ -44,8 +44,6 @@ public class FIDOU2FAttestationStatementTest {
     }
 
 
-
-
     @Test
     public void equals_test() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();

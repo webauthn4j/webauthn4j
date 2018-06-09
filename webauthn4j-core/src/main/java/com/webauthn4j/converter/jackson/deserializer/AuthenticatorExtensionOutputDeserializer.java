@@ -19,25 +19,21 @@ public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<Au
 
         String currentName = p.getParsingContext().getCurrentName();
 
-        if(SimpleTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(currentName)){
+        if (SimpleTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, SimpleTransactionAuthorizationAuthenticatorExtensionOutput.class);
-        }
-        else if(UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(currentName)){
+        } else if (UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
         }
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
 
-        if(GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(parentName)){
+        if (GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, GenericTransactionAuthorizationAuthenticatorExtensionOutput.class);
-        }
-        else if (SupportedExtensionsAuthenticatorExtensionOutput.ID.equals(parentName)) {
+        } else if (SupportedExtensionsAuthenticatorExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, SupportedExtensionsAuthenticatorExtensionOutput.class);
-        }
-        else if (LocationAuthenticatorExtensionOutput.ID.equals(parentName)) {
+        } else if (LocationAuthenticatorExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, LocationAuthenticatorExtensionOutput.class);
-        }
-        else if (UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(parentName)) {
+        } else if (UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
         }
 

@@ -13,7 +13,7 @@ public class CollectedClientDataConverter {
 
     private final ObjectMapper jsonMapper;
 
-    public CollectedClientDataConverter(){
+    public CollectedClientDataConverter() {
         jsonMapper = ObjectMapperUtil.createJSONMapper();
     }
 

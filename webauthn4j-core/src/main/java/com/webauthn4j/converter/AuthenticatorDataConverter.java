@@ -110,10 +110,9 @@ public class AuthenticatorDataConverter {
 
     byte[] convert(Map<String, AuthenticatorExtensionOutput> extensions) {
         try {
-            if(extensions == null || extensions.isEmpty()){
+            if (extensions == null || extensions.isEmpty()) {
                 return new byte[0];
-            }
-            else {
+            } else {
                 return getCborMapper().writeValueAsBytes(extensions);
             }
         } catch (JsonProcessingException e) {
@@ -125,8 +124,8 @@ public class AuthenticatorDataConverter {
         return getCborMapper().writeValueAsBytes(credentialPublicKey);
     }
 
-    private ObjectMapper getCborMapper(){
-        if(cborMapper == null){
+    private ObjectMapper getCborMapper() {
+        if (cborMapper == null) {
             cborMapper = ObjectMapperUtil.createCBORMapper();
         }
         return cborMapper;

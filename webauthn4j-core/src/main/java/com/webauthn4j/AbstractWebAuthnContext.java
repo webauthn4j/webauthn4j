@@ -42,11 +42,11 @@ class AbstractWebAuthnContext {
     private List<String> expectedExtensionIds;
 
     public AbstractWebAuthnContext(
-                                         byte[] clientDataJSON,
-                                         String clientExtensionsJSON,
-                                         ServerProperty serverProperty,
-                                         boolean userVerificationRequired,
-                                         List<String> expectedExtensionIds) {
+            byte[] clientDataJSON,
+            String clientExtensionsJSON,
+            ServerProperty serverProperty,
+            boolean userVerificationRequired,
+            List<String> expectedExtensionIds) {
         this.clientDataJSON = clientDataJSON;
         this.clientExtensionsJSON = clientExtensionsJSON;
         this.serverProperty = serverProperty;
