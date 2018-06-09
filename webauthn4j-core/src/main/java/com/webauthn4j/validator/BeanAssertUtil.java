@@ -19,13 +19,16 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Map;
 
-@SuppressWarnings("WeakerAccess")
-public class BeanAssertUtil {
+class BeanAssertUtil {
 
     private BeanAssertUtil() {
     }
 
     public static void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
+
+        if(webAuthnAuthenticationContext == null){
+            throw new ConstraintViolationException("webAuthnAuthenticationContext must not be null");
+        }
         if (webAuthnAuthenticationContext.getCredentialId() == null) {
             throw new ConstraintViolationException("credentialId must not be null");
         }
@@ -44,6 +47,10 @@ public class BeanAssertUtil {
     }
 
     public static void validate(WebAuthnRegistrationContext webAuthnRegistrationContext) {
+
+        if(webAuthnRegistrationContext == null){
+            throw new ConstraintViolationException("webAuthnRegistrationContext must not be null");
+        }
         if (webAuthnRegistrationContext.getAttestationObject() == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
@@ -109,7 +116,7 @@ public class BeanAssertUtil {
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
-    private static void validate(AttestedCredentialData attestedCredentialData) {
+    public static void validate(AttestedCredentialData attestedCredentialData) {
 
         byte[] aaGuid = attestedCredentialData.getAaGuid();
         if (aaGuid == null) {
@@ -130,21 +137,18 @@ public class BeanAssertUtil {
         validate(credentialPublicKey);
     }
 
-    private static void validate(CredentialPublicKey credentialPublicKey) {
-        credentialPublicKey.validate();
-    }
-
-
     public static void validateClientExtensionsOutputs(Map<String, ClientExtensionOutput> clientExtensionOutputs) {
-        if (clientExtensionOutputs != null) {
-            clientExtensionOutputs.forEach(BeanAssertUtil::validate);
+        if (clientExtensionOutputs == null) {
+            return;
         }
+        clientExtensionOutputs.forEach(BeanAssertUtil::validate);
     }
 
     public static void validateAuthenticatorExtensionsOutputs(Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs) {
-        if (authenticatorExtensionOutputs != null) {
-            authenticatorExtensionOutputs.forEach(BeanAssertUtil::validate);
+        if (authenticatorExtensionOutputs == null) {
+            return;
         }
+        authenticatorExtensionOutputs.forEach(BeanAssertUtil::validate);
     }
 
     public static void validate(String identifier, ExtensionOutput extensionOutput) {
@@ -171,6 +175,10 @@ public class BeanAssertUtil {
 
     public static void validate(AttestationStatement attestationStatement) {
         attestationStatement.validate();
+    }
+
+    public static void validate(CredentialPublicKey credentialPublicKey) {
+        credentialPublicKey.validate();
     }
 
 }
