@@ -49,7 +49,7 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("credentialId must not be null");
         }
         if (webAuthnAuthenticationContext.getClientDataJSON() == null) {
-            throw new ConstraintViolationException("collectedClientData must not be null");
+            throw new ConstraintViolationException("clientDataJSON must not be null");
         }
         if (webAuthnAuthenticationContext.getAuthenticatorData() == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
@@ -58,7 +58,7 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("signature must not be null");
         }
         if (webAuthnAuthenticationContext.getServerProperty() == null) {
-            throw new ConstraintViolationException("relyingParty must not be null");
+            throw new ConstraintViolationException("serverProperty must not be null");
         }
     }
 
@@ -71,10 +71,10 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
         if (webAuthnRegistrationContext.getClientDataJSON() == null) {
-            throw new ConstraintViolationException("collectedClientData must not be null");
+            throw new ConstraintViolationException("clientDataJSON must not be null");
         }
         if (webAuthnRegistrationContext.getServerProperty() == null) {
-            throw new ConstraintViolationException("relyingParty must not be null");
+            throw new ConstraintViolationException("serverProperty must not be null");
         }
     }
 
