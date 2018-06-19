@@ -37,6 +37,10 @@ public class ExtensionValidator {
             expected = expectedExtensionIdentifiers;
         }
 
+// Since Chrome violates this validation rule as of 2018-06-19, it is disabled temporarily.
+// https://bugs.chromium.org/p/chromium/issues/detail?id=853770
+// TODO: enable this validation rule again
+/*
         if (clientExtensionOutputs != null) {
             clientExtensionOutputs.keySet().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
@@ -51,5 +55,6 @@ public class ExtensionValidator {
                 }
             });
         }
+*/
     }
 }
