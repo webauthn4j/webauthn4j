@@ -71,11 +71,11 @@ public class WebAuthnRegistrationContextValidator {
     private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
+    private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
     private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
     private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
     private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
-    private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
