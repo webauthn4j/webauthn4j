@@ -35,7 +35,7 @@ public class AttestationObjectConverter {
 
     public AttestationObject convert(byte[] source) {
         try {
-            return getCborMapper().readValue(source, AttestationObject.class);
+            return getCBORMapper().readValue(source, AttestationObject.class);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -43,7 +43,7 @@ public class AttestationObjectConverter {
 
     public byte[] convertToBytes(AttestationObject source) {
         try {
-            return getCborMapper().writeValueAsBytes(source);
+            return getCBORMapper().writeValueAsBytes(source);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -54,7 +54,7 @@ public class AttestationObjectConverter {
         return Base64UrlUtil.encodeToString(bytes);
     }
 
-    private ObjectMapper getCborMapper() {
+    private ObjectMapper getCBORMapper() {
         if (this.objectMapper == null) {
             this.objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
         }
