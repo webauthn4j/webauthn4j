@@ -49,6 +49,8 @@ public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExt
             return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
         } else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
+        } else if (BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID.equals(currentName)) {
+            return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.class);
         }
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
@@ -61,8 +63,6 @@ public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExt
             return ctxt.readValue(p, LocationClientExtensionOutput.class);
         } else if (UserVerificationIndexClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
-        } else if (BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.class);
         }
 
         throw new NotImplementedException();

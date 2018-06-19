@@ -19,8 +19,10 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.extension.Coordinates;
 import com.webauthn4j.extension.authneticator.GenericTransactionAuthorizationAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SimpleTransactionAuthorizationAuthenticatorExtensionOutput;
+import com.webauthn4j.extension.authneticator.UserVerificationIndexAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.*;
 import org.junit.Test;
 
@@ -46,7 +48,7 @@ public class ClientExtensionOutputDeserializerTest {
                                 "\"exts\": [\"exts\", \"authnSel\"], " +
                                 "\"uvi\": [], " +
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
-                                "\"biometricPerfBounds\": { \"FAR\": 0, \"FRR\":0 } " +
+                                "\"biometricPerfBounds\": true " +
                                 "}",
                         new TypeReference<Map<String, ClientExtensionOutput>>() {
                         }
@@ -67,7 +69,10 @@ public class ClientExtensionOutputDeserializerTest {
                 new SimpleTransactionAuthorizationClientExtensionOutput("authorization message"),
                 new GenericTransactionAuthorizationClientExtensionOutput(new GenericTransactionAuthorizationClientExtensionOutput.TxAuthnGenericArg("image/png", null)),
                 new AuthenticatorSelectionClientExtensionOutput(true),
-                new SupportedExtensionsClientExtensionOutput(Arrays.asList("exts", "authnSel"))
+                new SupportedExtensionsClientExtensionOutput(Arrays.asList("exts", "authnSel")),
+                //new UserVerificationIndexClientExtensionOutput(new byte[0]),
+                new LocationClientExtensionOutput(new Coordinates(0d, 0d, null, 1d, null, null, null)),
+                new BiometricAuthenticatorPerformanceBoundsClientExtensionOutput(true)
         );
     }
 }
