@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.security.cert.X509Certificate;
 
 /**
- * Jackson Deserializer for X509Certificate
+ * Jackson Deserializer for {@link X509Certificate}
  */
 public class X509CertificateDeserializer extends StdDeserializer<X509Certificate> {
 
@@ -34,6 +34,9 @@ public class X509CertificateDeserializer extends StdDeserializer<X509Certificate
         super(X509Certificate.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public X509Certificate deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();

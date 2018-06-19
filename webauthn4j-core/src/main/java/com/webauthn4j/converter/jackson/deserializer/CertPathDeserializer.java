@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Jackson Deserializer for CertPath
+ * Jackson Deserializer for {@link CertPath}
  */
 public class CertPathDeserializer extends StdDeserializer<CertPath> {
 
@@ -40,6 +40,9 @@ public class CertPathDeserializer extends StdDeserializer<CertPath> {
         super(CertPath.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertPath deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 

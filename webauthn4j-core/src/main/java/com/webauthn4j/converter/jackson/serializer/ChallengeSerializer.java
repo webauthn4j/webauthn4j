@@ -24,12 +24,18 @@ import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link Challenge}
+ */
 public class ChallengeSerializer extends StdSerializer<Challenge> {
 
     public ChallengeSerializer() {
         super(Challenge.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void serialize(Challenge value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         String challenge = Base64UrlUtil.encodeToString(value.getValue());

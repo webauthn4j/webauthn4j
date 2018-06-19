@@ -25,7 +25,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import java.io.IOException;
 
 /**
- * Jackson Serializer for AuthenticatorData
+ * Jackson Serializer for {@link AuthenticatorData}
  */
 public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
 
@@ -34,6 +34,9 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
         super(AuthenticatorData.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();

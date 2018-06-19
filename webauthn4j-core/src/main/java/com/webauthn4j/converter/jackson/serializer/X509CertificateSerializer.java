@@ -26,7 +26,7 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 
 /**
- * Jackson Serializer for X509Certificate
+ * Jackson Serializer for {@link X509Certificate}
  */
 public class X509CertificateSerializer extends StdSerializer<X509Certificate> {
 
@@ -34,6 +34,9 @@ public class X509CertificateSerializer extends StdSerializer<X509Certificate> {
         super(X509Certificate.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void serialize(X509Certificate value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         try {

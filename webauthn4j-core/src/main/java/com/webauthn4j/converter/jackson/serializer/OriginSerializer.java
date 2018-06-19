@@ -23,11 +23,17 @@ import com.webauthn4j.client.Origin;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link Origin}
+ */
 public class OriginSerializer extends StdSerializer<Origin> {
     public OriginSerializer() {
         super(Origin.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void serialize(Origin value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeString(value.toString());

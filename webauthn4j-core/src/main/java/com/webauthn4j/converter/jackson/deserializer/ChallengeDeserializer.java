@@ -26,7 +26,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import java.io.IOException;
 
 /**
- * Jackson Deserializer for Challenge
+ * Jackson Deserializer for {@link Challenge}
  */
 public class ChallengeDeserializer extends StdDeserializer<Challenge> {
 
@@ -34,6 +34,9 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
         super(Challenge.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Challenge deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] challenge = Base64UrlUtil.decode(p.getValueAsString());

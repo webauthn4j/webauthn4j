@@ -25,7 +25,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import java.io.IOException;
 
 /**
- * Jackson Deserializer for AuthenticatorData
+ * Jackson Deserializer for {@link AuthenticatorData}
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
@@ -36,6 +36,9 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
         authenticatorDataConverter = new AuthenticatorDataConverter();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();

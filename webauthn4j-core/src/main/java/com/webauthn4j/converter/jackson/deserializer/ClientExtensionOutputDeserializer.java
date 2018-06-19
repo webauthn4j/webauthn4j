@@ -24,12 +24,18 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.io.IOException;
 
+/**
+ * Jackson Deserializer for {@link ClientExtensionOutput}
+ */
 public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExtensionOutput> {
 
     public ClientExtensionOutputDeserializer() {
         super(ClientExtensionOutput.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClientExtensionOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 

@@ -27,13 +27,16 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 
 /**
- * Jackson Serializer for CertPath
+ * Jackson Serializer for {@link CertPath}
  */
 public class CertPathSerializer extends StdSerializer<CertPath> {
     public CertPathSerializer() {
         super(CertPath.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void serialize(CertPath value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         try {
