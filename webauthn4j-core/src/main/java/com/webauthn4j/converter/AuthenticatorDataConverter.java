@@ -16,9 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
@@ -32,8 +30,6 @@ import java.util.Collections;
 import java.util.Map;
 
 public class AuthenticatorDataConverter {
-
-    private ObjectMapper cborMapper;
 
     public byte[] convert(AuthenticatorData source) {
         try {
@@ -103,11 +99,7 @@ public class AuthenticatorDataConverter {
     }
 
     private CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
-        try {
-            return getCborMapper().readValue(inputStream, CredentialPublicKey.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return ObjectMapperUtil.readCBORValue(inputStream, CredentialPublicKey.class);
     }
 
     Map<String, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
@@ -116,36 +108,19 @@ public class AuthenticatorDataConverter {
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
-        try {
-            return getCborMapper().readValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>() {
-            });
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return ObjectMapperUtil.readCBORValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>(){});
     }
 
     byte[] convert(Map<String, AuthenticatorExtensionOutput> extensions) {
-        try {
-            if (extensions == null || extensions.isEmpty()) {
-                return new byte[0];
-            } else {
-                return getCborMapper().writeValueAsBytes(extensions);
-            }
-        } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
+        if (extensions == null || extensions.isEmpty()) {
+            return new byte[0];
+        } else {
+            return ObjectMapperUtil.writeValueAsCBORBytes(extensions);
         }
     }
 
-    byte[] convert(CredentialPublicKey credentialPublicKey) throws JsonProcessingException {
-        return getCborMapper().writeValueAsBytes(credentialPublicKey);
+    byte[] convert(CredentialPublicKey credentialPublicKey) {
+        return ObjectMapperUtil.writeValueAsCBORBytes(credentialPublicKey);
     }
-
-    private ObjectMapper getCborMapper() {
-        if (cborMapper == null) {
-            cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
-        }
-        return cborMapper;
-    }
-
 
 }

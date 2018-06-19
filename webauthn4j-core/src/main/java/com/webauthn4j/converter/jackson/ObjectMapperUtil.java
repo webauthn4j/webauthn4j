@@ -16,14 +16,23 @@
 
 package com.webauthn4j.converter.jackson;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 
 /**
  * A utility class for {@link ObjectMapper} creation
  */
 public class ObjectMapperUtil {
+
+    private static ObjectMapper jsonMapper = createWebAuthnClassesAwareJSONMapper();
+    private static ObjectMapper cborMapper = createWebAuthnClassesAwareCBORMapper();
 
     private ObjectMapperUtil() {
     }
@@ -48,5 +57,80 @@ public class ObjectMapperUtil {
         objectMapper.registerModule(new WebAuthnModule());
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T readJSONValue(String src, Class valueType){
+        try {
+            return (T)jsonMapper.readValue(src, valueType);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T readCBORValue(byte[] src, Class valueType){
+        try {
+            return (T)cborMapper.readValue(src, valueType);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T readCBORValue(InputStream src, Class valueType){
+        try {
+            return (T)cborMapper.readValue(src, valueType);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static <T> T readJSONValue(byte[] src, TypeReference valueTypeRef) {
+        try {
+            return jsonMapper.readValue(src, valueTypeRef);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static <T> T readJSONValue(String src, TypeReference valueTypeRef) {
+        try {
+            return jsonMapper.readValue(src, valueTypeRef);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static <T> T readCBORValue(byte[] src, TypeReference valueTypeRef) {
+        try {
+            return cborMapper.readValue(src, valueTypeRef);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static byte[] writeValueAsJSONBytes(Object value) {
+        try {
+            return jsonMapper.writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static byte[] writeValueAsCBORBytes(Object value){
+        try {
+            return cborMapper.writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static String writeValueAsJSONString(Object value) {
+        try {
+            return jsonMapper.writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
 
-    private final ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
+    private final ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -128,7 +128,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private byte[] deriveAuthenticatorDataFromAttestationObject(byte[] attestationObject) {
         try {
-            return objectMapper.readTree(attestationObject).get("authData").binaryValue();
+            return cborMapper.readTree(attestationObject).get("authData").binaryValue();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

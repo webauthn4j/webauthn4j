@@ -16,22 +16,13 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
 public class CollectedClientDataConverter {
-
-    private final ObjectMapper jsonMapper;
-
-    public CollectedClientDataConverter() {
-        jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
-    }
 
     public CollectedClientData convert(String base64UrlString) {
         byte[] bytes = Base64UrlUtil.decode(base64UrlString);
@@ -40,22 +31,14 @@ public class CollectedClientDataConverter {
 
     public CollectedClientData convert(byte[] source) {
         String jsonString = new String(source, StandardCharsets.UTF_8);
-        try {
-            return jsonMapper.readValue(jsonString, CollectedClientData.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return ObjectMapperUtil.readJSONValue(jsonString, CollectedClientData.class);
     }
 
     public byte[] convertToBytes(CollectedClientData source) {
-        try {
-            return jsonMapper.writeValueAsBytes(source);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return ObjectMapperUtil.writeValueAsJSONBytes(source);
     }
 
-    public String convertToString(CollectedClientData source) {
+    public String convertToBase64UrlString(CollectedClientData source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }
