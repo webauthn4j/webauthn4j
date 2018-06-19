@@ -70,7 +70,7 @@ public class ClientExtensionOutputDeserializerTest {
                 new GenericTransactionAuthorizationClientExtensionOutput(new GenericTransactionAuthorizationClientExtensionOutput.TxAuthnGenericArg("image/png", null)),
                 new AuthenticatorSelectionClientExtensionOutput(true),
                 new SupportedExtensionsClientExtensionOutput(Arrays.asList("exts", "authnSel")),
-                //new UserVerificationIndexClientExtensionOutput(new byte[0]),
+                new UserVerificationIndexClientExtensionOutput(new byte[0]),
                 new LocationClientExtensionOutput(new Coordinates(0d, 0d, null, 1d, null, null, null)),
                 new BiometricAuthenticatorPerformanceBoundsClientExtensionOutput(true)
         );

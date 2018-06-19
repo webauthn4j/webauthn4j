@@ -17,6 +17,9 @@
 package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.extension.AbstractExtensionOutput;
+
+import java.util.Arrays;
 
 public class UserVerificationIndexClientExtensionOutput extends AbstractClientExtensionOutput<byte[]> {
 
@@ -30,6 +33,19 @@ public class UserVerificationIndexClientExtensionOutput extends AbstractClientEx
     @Override
     public String getIdentifier() {
         return ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractExtensionOutput that = (AbstractExtensionOutput) o;
+        return Arrays.equals(this.getValue(), (byte[])that.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(getValue());
     }
 
 }
