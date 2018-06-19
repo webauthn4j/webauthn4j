@@ -47,14 +47,14 @@ public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExt
             return ctxt.readValue(p, SimpleTransactionAuthorizationClientExtensionOutput.class);
         } else if (UserVerificationIndexClientExtensionOutput.ID.equals(currentName)) {
             return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
+        } else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(currentName)) {
+            return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
         }
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
 
         if (GenericTransactionAuthorizationClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, GenericTransactionAuthorizationClientExtensionOutput.class);
-        } else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
         } else if (SupportedExtensionsClientExtensionOutput.ID.equals(parentName)) {
             return ctxt.readValue(p, SupportedExtensionsClientExtensionOutput.class);
         } else if (LocationClientExtensionOutput.ID.equals(parentName)) {

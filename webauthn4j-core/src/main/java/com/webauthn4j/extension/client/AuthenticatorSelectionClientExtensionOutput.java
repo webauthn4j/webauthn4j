@@ -18,12 +18,12 @@ package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public class AuthenticatorSelectionClientExtensionOutput extends AbstractClientExtensionOutput<byte[][]> {
+public class AuthenticatorSelectionClientExtensionOutput extends AbstractClientExtensionOutput<Boolean> {
 
     public static final String ID = "authnSel";
 
     @JsonCreator
-    public AuthenticatorSelectionClientExtensionOutput(byte[][] value) {
+    public AuthenticatorSelectionClientExtensionOutput(boolean value) {
         super(value);
     }
 

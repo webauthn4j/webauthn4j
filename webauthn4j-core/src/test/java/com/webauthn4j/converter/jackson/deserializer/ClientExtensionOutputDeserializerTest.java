@@ -42,7 +42,7 @@ public class ClientExtensionOutputDeserializerTest {
                                 "\"appid\": true, " +
                                 "\"txAuthSimple\": \"authorization message\", " +
                                 "\"txAuthGeneric\": { \"contentType\": \"image/png\", \"content\": null }, " +
-                                "\"authnSel\": [], " +
+                                "\"authnSel\": true, " +
                                 "\"exts\": [\"exts\", \"authnSel\"], " +
                                 "\"uvi\": [], " +
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
@@ -66,6 +66,7 @@ public class ClientExtensionOutputDeserializerTest {
                 new FIDOAppIDClientExtensionOutput(true),
                 new SimpleTransactionAuthorizationClientExtensionOutput("authorization message"),
                 new GenericTransactionAuthorizationClientExtensionOutput(new GenericTransactionAuthorizationClientExtensionOutput.TxAuthnGenericArg("image/png", null)),
+                new AuthenticatorSelectionClientExtensionOutput(true),
                 new SupportedExtensionsClientExtensionOutput(Arrays.asList("exts", "authnSel"))
         );
     }
