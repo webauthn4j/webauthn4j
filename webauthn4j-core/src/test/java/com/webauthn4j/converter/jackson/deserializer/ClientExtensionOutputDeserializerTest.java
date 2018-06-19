@@ -19,6 +19,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.extension.authneticator.GenericTransactionAuthorizationAuthenticatorExtensionOutput;
+import com.webauthn4j.extension.authneticator.SimpleTransactionAuthorizationAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.*;
 import org.junit.Test;
 
@@ -42,7 +44,7 @@ public class ClientExtensionOutputDeserializerTest {
                                 "\"txAuthGeneric\": { \"contentType\": \"image/png\", \"content\": null }, " +
                                 "\"authnSel\": [], " +
                                 "\"exts\": [\"exts\", \"authnSel\"], " +
-                                "\"uvi\": null, " +
+                                "\"uvi\": [], " +
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
                                 "\"biometricPerfBounds\": { \"FAR\": 0, \"FRR\":0 } " +
                                 "}",
@@ -50,7 +52,16 @@ public class ClientExtensionOutputDeserializerTest {
                         }
                 );
 
-        assertThat(extensionOutputs).containsKeys(FIDOAppIDClientExtensionOutput.ID, SupportedExtensionsClientExtensionOutput.ID);
+        assertThat(extensionOutputs).containsKeys(
+                FIDOAppIDClientExtensionOutput.ID,
+                SimpleTransactionAuthorizationAuthenticatorExtensionOutput.ID,
+                GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID,
+                AuthenticatorSelectionClientExtensionOutput.ID,
+                SupportedExtensionsClientExtensionOutput.ID,
+                UserVerificationIndexClientExtensionOutput.ID,
+                LocationClientExtensionOutput.ID,
+                BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID
+        );
         assertThat(extensionOutputs).containsValues(
                 new FIDOAppIDClientExtensionOutput(true),
                 new SimpleTransactionAuthorizationClientExtensionOutput("authorization message"),
