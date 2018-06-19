@@ -29,4 +29,9 @@ public class UserNotVerifiedException extends ValidationException {
     public UserNotVerifiedException(String message) {
         super(message);
     }
+
+    public UserNotVerifiedException(Throwable cause) {
+        super(cause);
+    }
+
 }

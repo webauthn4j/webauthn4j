@@ -25,7 +25,8 @@ public class UnsupportedAttestationFormatExceptionTest {
 
     @Test
     public void test() {
-        new UnsupportedAttestationFormatException("dummy");
         new UnsupportedAttestationFormatException("dummy", cause);
+        new UnsupportedAttestationFormatException("dummy");
+        new UnsupportedAttestationFormatException(cause);
     }
 }

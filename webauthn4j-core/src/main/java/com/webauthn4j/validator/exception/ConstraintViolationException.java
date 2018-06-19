@@ -26,4 +26,8 @@ public class ConstraintViolationException extends ValidationException {
         super(message);
     }
 
+    public ConstraintViolationException(Throwable cause) {
+        super(cause);
+    }
+
 }

@@ -25,7 +25,8 @@ public class BadSignatureExceptionTest {
 
     @Test
     public void test() {
-        new BadSignatureException("dummy");
         new BadSignatureException("dummy", cause);
+        new BadSignatureException("dummy");
+        new BadSignatureException(cause);
     }
 }

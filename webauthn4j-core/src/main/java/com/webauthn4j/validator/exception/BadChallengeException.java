@@ -28,4 +28,6 @@ public class BadChallengeException extends ValidationException {
     public BadChallengeException(String message) {
         super(message);
     }
+
+    public BadChallengeException(Throwable cause){ super(cause);}
 }

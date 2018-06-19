@@ -27,4 +27,8 @@ public class BadRpIdException extends ValidationException {
     public BadRpIdException(String message) {
         super(message);
     }
+
+    public BadRpIdException(Throwable cause) {
+        super(cause);
+    }
 }

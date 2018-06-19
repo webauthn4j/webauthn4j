@@ -28,4 +28,8 @@ public class UserNotPresentException extends ValidationException {
     public UserNotPresentException(String message) {
         super(message);
     }
+
+    public UserNotPresentException(Throwable cause) {
+        super(cause);
+    }
 }

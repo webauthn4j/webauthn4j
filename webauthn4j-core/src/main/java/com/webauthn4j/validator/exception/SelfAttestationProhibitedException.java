@@ -27,4 +27,8 @@ public class SelfAttestationProhibitedException extends ValidationException {
     public SelfAttestationProhibitedException(String message) {
         super(message);
     }
+
+    public SelfAttestationProhibitedException(Throwable cause) {
+        super(cause);
+    }
 }

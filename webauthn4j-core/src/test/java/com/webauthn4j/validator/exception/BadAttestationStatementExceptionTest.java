@@ -25,7 +25,8 @@ public class BadAttestationStatementExceptionTest {
 
     @Test
     public void test() {
-        new BadAttestationStatementException("dummy");
         new BadAttestationStatementException("dummy", cause);
+        new BadAttestationStatementException("dummy");
+        new BadAttestationStatementException(cause);
     }
 }

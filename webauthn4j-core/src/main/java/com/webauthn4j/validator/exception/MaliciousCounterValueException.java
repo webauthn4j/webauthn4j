@@ -27,4 +27,9 @@ public class MaliciousCounterValueException extends ValidationException {
     public MaliciousCounterValueException(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public MaliciousCounterValueException(Throwable cause) {
+        super(cause);
+    }
+
 }

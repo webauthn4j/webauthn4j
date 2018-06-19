@@ -25,7 +25,8 @@ public class SelfAttestationProhibitedExceptionTest {
 
     @Test
     public void test() {
-        new SelfAttestationProhibitedException("dummy");
         new SelfAttestationProhibitedException("dummy", cause);
+        new SelfAttestationProhibitedException("dummy");
+        new SelfAttestationProhibitedException(cause);
     }
 }

@@ -25,7 +25,8 @@ public class BadChallengeExceptionTest {
 
     @Test
     public void test() {
-        new BadChallengeException("dummy");
         new BadChallengeException("dummy", cause);
+        new BadChallengeException("dummy");
+        new BadChallengeException(cause);
     }
 }

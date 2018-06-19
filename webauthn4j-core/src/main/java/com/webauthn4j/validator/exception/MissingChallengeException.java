@@ -28,4 +28,9 @@ public class MissingChallengeException extends ValidationException {
     public MissingChallengeException(String message) {
         super(message);
     }
+
+    public MissingChallengeException(Throwable cause) {
+        super(cause);
+    }
+
 }

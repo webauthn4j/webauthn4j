@@ -25,7 +25,8 @@ public class KeyStoreExceptionTest {
 
     @Test
     public void test() {
-        new KeyStoreException("dummy");
         new KeyStoreException("dummy", cause);
+        new KeyStoreException("dummy");
+        new KeyStoreException(cause);
     }
 }

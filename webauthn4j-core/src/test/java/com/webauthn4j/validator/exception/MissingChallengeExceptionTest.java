@@ -25,7 +25,8 @@ public class MissingChallengeExceptionTest {
 
     @Test
     public void test() {
-        new MissingChallengeException("dummy");
         new MissingChallengeException("dummy", cause);
+        new MissingChallengeException("dummy");
+        new MissingChallengeException(cause);
     }
 }

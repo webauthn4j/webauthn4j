@@ -25,7 +25,8 @@ public class BadRpIdExceptionTest {
 
     @Test
     public void test() {
-        new BadRpIdException("dummy");
         new BadRpIdException("dummy", cause);
+        new BadRpIdException("dummy");
+        new BadRpIdException(cause);
     }
 }

@@ -28,4 +28,8 @@ public class KeyStoreException extends RuntimeException {
         super(msg);
     }
 
+    public KeyStoreException(Throwable cause) {
+        super(cause);
+    }
+
 }

@@ -25,7 +25,8 @@ public class UserNotPresentExceptionTest {
 
     @Test
     public void test() {
-        new UserNotPresentException("dummy");
         new UserNotPresentException("dummy", cause);
+        new UserNotPresentException("dummy");
+        new UserNotPresentException(cause);
     }
 }

@@ -25,7 +25,8 @@ public class MaliciousDataExceptionTest {
 
     @Test
     public void test() {
-        new MaliciousDataException("dummy");
         new MaliciousDataException("dummy", cause);
+        new MaliciousDataException("dummy");
+        new MaliciousDataException(cause);
     }
 }

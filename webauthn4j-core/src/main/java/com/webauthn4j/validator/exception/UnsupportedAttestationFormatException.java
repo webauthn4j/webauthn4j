@@ -28,4 +28,8 @@ public class UnsupportedAttestationFormatException extends RuntimeException {
     public UnsupportedAttestationFormatException(String message) {
         super(message);
     }
+
+    public UnsupportedAttestationFormatException(Throwable cause) {
+        super(cause);
+    }
 }

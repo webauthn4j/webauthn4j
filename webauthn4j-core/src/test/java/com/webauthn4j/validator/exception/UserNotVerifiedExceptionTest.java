@@ -25,7 +25,8 @@ public class UserNotVerifiedExceptionTest {
 
     @Test
     public void test() {
-        new UserNotVerifiedException("dummy");
         new UserNotVerifiedException("dummy", cause);
+        new UserNotVerifiedException("dummy");
+        new UserNotVerifiedException(cause);
     }
 }

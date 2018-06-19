@@ -25,7 +25,8 @@ public class BadOriginExceptionTest {
 
     @Test
     public void test() {
-        new BadOriginException("dummy");
         new BadOriginException("dummy", cause);
+        new BadOriginException("dummy");
+        new BadOriginException(cause);
     }
 }

@@ -19,14 +19,14 @@ package com.webauthn4j.validator.exception;
 import org.junit.Test;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class CertificateExceptionTest {
+public class UnexpectedExtensionExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
     public void test() {
-        new CertificateException("dummy", cause);
-        new CertificateException("dummy");
-        new CertificateException(cause);
+        new UnexpectedExtensionException("dummy", cause);
+        new UnexpectedExtensionException("dummy");
+        new UnexpectedExtensionException(cause);
     }
 }

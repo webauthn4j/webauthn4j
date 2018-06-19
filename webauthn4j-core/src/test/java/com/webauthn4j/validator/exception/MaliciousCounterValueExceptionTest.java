@@ -25,7 +25,8 @@ public class MaliciousCounterValueExceptionTest {
 
     @Test
     public void test() {
-        new MaliciousCounterValueException("dummy");
         new MaliciousCounterValueException("dummy", cause);
+        new MaliciousCounterValueException("dummy");
+        new MaliciousCounterValueException(cause);
     }
 }

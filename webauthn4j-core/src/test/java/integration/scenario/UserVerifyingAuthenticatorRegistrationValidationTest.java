@@ -36,6 +36,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchor
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;

@@ -28,4 +28,8 @@ public class BadSignatureException extends ValidationException {
     public BadSignatureException(String message) {
         super(message);
     }
+
+    public BadSignatureException(Throwable cause) {
+        super(cause);
+    }
 }
