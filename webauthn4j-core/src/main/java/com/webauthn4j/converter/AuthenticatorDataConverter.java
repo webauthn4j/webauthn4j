@@ -142,7 +142,7 @@ public class AuthenticatorDataConverter {
 
     private ObjectMapper getCborMapper() {
         if (cborMapper == null) {
-            cborMapper = ObjectMapperUtil.createCBORMapper();
+            cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
         }
         return cborMapper;
     }

@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class ClientExtensionOutputsConverter {
 
-    private final ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
+    private final ObjectMapper jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
 
     public Map<String, ClientExtensionOutput> convert(byte[] value) {
         return convert(new String(value, StandardCharsets.UTF_8));

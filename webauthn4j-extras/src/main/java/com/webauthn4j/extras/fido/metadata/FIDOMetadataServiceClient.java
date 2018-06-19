@@ -56,7 +56,7 @@ public class FIDOMetadataServiceClient {
         this.jwsVerifier = jwsVerifier;
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
 
-        objectMapper = ObjectMapperUtil.createJSONMapper();
+        objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
 

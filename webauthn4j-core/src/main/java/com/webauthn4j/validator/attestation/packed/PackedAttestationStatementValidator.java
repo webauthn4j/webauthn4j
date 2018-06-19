@@ -40,7 +40,7 @@ import java.util.Arrays;
 
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
 
-    private final ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
+    private final ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {

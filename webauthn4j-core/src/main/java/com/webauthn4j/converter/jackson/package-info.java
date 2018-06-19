@@ -15,6 +15,6 @@
  */
 
 /**
- * Jackson serializer and deserializer classes for WebAuthn classes
+ * Jackson serializer and deserializer for WebAuthn classes
  */
 package com.webauthn4j.converter.jackson;

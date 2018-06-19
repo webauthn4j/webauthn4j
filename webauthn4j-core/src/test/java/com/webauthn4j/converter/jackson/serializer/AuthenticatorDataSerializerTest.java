@@ -38,7 +38,7 @@ public class AuthenticatorDataSerializerTest {
 
     @Test
     public void test() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
+        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
         AbstractCredentialPublicKey credentialPublicKey = new ECCredentialPublicKey();

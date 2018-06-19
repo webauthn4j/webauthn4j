@@ -32,7 +32,7 @@ public class ClientExtensionOutputDeserializerTest {
 
     @Test
     public void deserialize_test_with_JSON_data() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createJSONMapper(); // use JSON mapper to make test data readable
+        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper(); // use JSON mapper to make test data readable
 
         Map<String, ClientExtensionOutput> extensionOutputs =
                 objectMapper.readValue(

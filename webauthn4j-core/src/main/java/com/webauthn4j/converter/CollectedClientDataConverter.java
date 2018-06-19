@@ -30,7 +30,7 @@ public class CollectedClientDataConverter {
     private final ObjectMapper jsonMapper;
 
     public CollectedClientDataConverter() {
-        jsonMapper = ObjectMapperUtil.createJSONMapper();
+        jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
     }
 
     public CollectedClientData convert(String base64UrlString) {

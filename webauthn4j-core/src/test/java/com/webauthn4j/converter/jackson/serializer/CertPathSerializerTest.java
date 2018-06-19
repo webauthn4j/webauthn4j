@@ -37,7 +37,7 @@ public class CertPathSerializerTest {
 
     @Test
     public void test() throws CertificateException, IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createCBORMapper();
+        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
         //Given
         Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();

@@ -32,7 +32,7 @@ public class ChallengeDeserializerTest {
 
     @Test
     public void test() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createJSONMapper();
+        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
 
         //Given
         String input = "{ \"challenge\" : \"\" }";

@@ -56,7 +56,7 @@ public class AttestationObjectConverter {
 
     private ObjectMapper getCborMapper() {
         if (this.objectMapper == null) {
-            this.objectMapper = ObjectMapperUtil.createCBORMapper();
+            this.objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
         }
         return this.objectMapper;
     }

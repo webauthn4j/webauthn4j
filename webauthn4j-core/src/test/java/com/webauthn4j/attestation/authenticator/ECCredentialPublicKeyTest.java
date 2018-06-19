@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ECCredentialPublicKeyTest {
 
-    private ObjectMapper jsonMapper = ObjectMapperUtil.createJSONMapper();
-    private ObjectMapper cborMapper = ObjectMapperUtil.createCBORMapper();
+    private ObjectMapper jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
+    private ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
     @Test
     public void equals_test() {
