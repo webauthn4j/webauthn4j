@@ -35,7 +35,7 @@ public class ECUtil {
 
     private static ECParameterSpec createECParameterSpec(String name){
         try {
-            AlgorithmParameters parameters = null;
+            AlgorithmParameters parameters;
             parameters = AlgorithmParameters.getInstance("EC", "SunEC");
             parameters.init(new ECGenParameterSpec(name));
             return parameters.getParameterSpec(ECParameterSpec.class);
