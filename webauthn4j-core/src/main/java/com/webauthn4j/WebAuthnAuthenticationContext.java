@@ -24,7 +24,7 @@ import java.util.List;
 
 
 /**
- * WebAuthnAuthenticationContext
+ * WebAuthn authentication context
  */
 public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
 

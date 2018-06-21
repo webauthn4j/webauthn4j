@@ -38,6 +38,9 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
 
+/**
+ * Validates the specified {@link AttestationStatement} is a valid packed attestation
+ */
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
 
     private final ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();

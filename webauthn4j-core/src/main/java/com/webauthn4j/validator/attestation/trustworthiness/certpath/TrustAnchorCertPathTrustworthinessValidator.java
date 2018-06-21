@@ -17,6 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
+import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
@@ -28,7 +29,7 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * {@inheritDoc}
+ * Validates the specified {@link AttestationStatement} x5c trustworthiness based on {@link TrustAnchor}
  */
 public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 

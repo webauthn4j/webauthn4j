@@ -35,6 +35,9 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Map;
 
+/**
+ * Per field checker utility class
+ */
 class BeanAssertUtil {
 
     private BeanAssertUtil() {

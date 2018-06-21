@@ -24,9 +24,9 @@ import java.util.Objects;
 
 
 /**
- * AbstractWebAuthnContext
+ * WebAuthn abstract base context
  */
-class AbstractWebAuthnContext {
+abstract class AbstractWebAuthnContext {
 
     //~ Instance fields ================================================================================================
 

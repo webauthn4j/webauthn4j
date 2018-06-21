@@ -19,7 +19,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 
 /**
- * Validates {@link AttestationStatement} based on ECDAA
+ * Validates the specified {@link AttestationStatement} trustworthiness based on ECDAA algorithm
  */
 public interface ECDAATrustworthinessValidator {
 

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
 /**
- * Validates {@link Origin} instance
+ * Validates the specified {@link Origin} instance
  */
 class OriginValidator {
 

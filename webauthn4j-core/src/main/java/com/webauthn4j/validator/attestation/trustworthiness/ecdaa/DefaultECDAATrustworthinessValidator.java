@@ -21,7 +21,7 @@ import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 
 /**
- * {@inheritDoc}
+ * Default implementation of {@link ECDAATrustworthinessValidator}
  */
 @WIP
 public class DefaultECDAATrustworthinessValidator implements ECDAATrustworthinessValidator {

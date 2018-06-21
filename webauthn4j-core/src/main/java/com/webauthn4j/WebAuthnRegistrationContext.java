@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * WebAuthnRegistrationContext
+ * WebAuthn registration context
  */
 public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 

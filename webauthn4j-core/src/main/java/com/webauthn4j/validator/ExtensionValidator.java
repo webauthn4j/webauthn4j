@@ -24,6 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Validates clientExtensionOutputs and authenticatorExtensionOutputs
+ */
 public class ExtensionValidator {
 
     public void validate(Map<String, ClientExtensionOutput> clientExtensionOutputs,

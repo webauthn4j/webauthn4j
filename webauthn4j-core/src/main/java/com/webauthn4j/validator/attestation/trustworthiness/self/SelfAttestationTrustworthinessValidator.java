@@ -20,7 +20,7 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 
 /**
- * Validates {@link AttestationStatement} as self attestation
+ * Validates the specified {@link AttestationStatement} trustworthiness based on self-attestation rule
  */
 public interface SelfAttestationTrustworthinessValidator {
 

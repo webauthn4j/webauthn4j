@@ -55,7 +55,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * {@inheritDoc}
+ * Validates the specified {@link WebAuthnRegistrationContext} instance
  */
 public class WebAuthnRegistrationContextValidator {
 

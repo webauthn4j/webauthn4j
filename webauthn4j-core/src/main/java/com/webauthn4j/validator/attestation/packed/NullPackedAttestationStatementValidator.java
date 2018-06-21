@@ -22,6 +22,9 @@ import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 
+/**
+ * Null validator for {@link PackedAttestationStatement}
+ */
 public class NullPackedAttestationStatementValidator implements AttestationStatementValidator {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {

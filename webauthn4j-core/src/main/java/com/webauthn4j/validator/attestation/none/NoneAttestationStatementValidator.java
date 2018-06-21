@@ -22,6 +22,9 @@ import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 
+/**
+ * Validates the specified {@link AttestationStatement} is a none attestation
+ */
 public class NoneAttestationStatementValidator implements AttestationStatementValidator {
 
     @Override

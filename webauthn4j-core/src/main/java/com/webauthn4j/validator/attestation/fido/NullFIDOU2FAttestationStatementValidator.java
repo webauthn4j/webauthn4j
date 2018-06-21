@@ -22,6 +22,9 @@ import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 
+/**
+ * Null validator for {@link FIDOU2FAttestationStatement}
+ */
 public class NullFIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {

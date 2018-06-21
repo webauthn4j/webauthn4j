@@ -35,6 +35,9 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.interfaces.ECPublicKey;
 
+/**
+ * Validates the specified {@link AttestationStatement} is a valid FIDO-U2F attestation
+ */
 public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
 
     /**

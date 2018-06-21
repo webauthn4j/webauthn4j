@@ -20,6 +20,9 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.server.ServerProperty;
 
+/**
+ * Internal data transfer object for registration data
+ */
 public class RegistrationObject {
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;

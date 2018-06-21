@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Validates {@link WebAuthnAuthenticationContext} instance
+ * Validates the specified {@link WebAuthnAuthenticationContext} instance
  */
 public class WebAuthnAuthenticationContextValidator {
 

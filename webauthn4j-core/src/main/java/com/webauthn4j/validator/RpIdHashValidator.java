@@ -28,7 +28,7 @@ import java.security.MessageDigest;
 import java.util.Arrays;
 
 /**
- * Validates rpIdHash
+ * Validates the specified rpIdHash
  */
 class RpIdHashValidator {
 

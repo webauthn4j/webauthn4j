@@ -19,6 +19,9 @@ package com.webauthn4j.validator;
 import com.webauthn4j.WebAuthnAuthenticationContext;
 import com.webauthn4j.authenticator.Authenticator;
 
+/**
+ * Strategy interface to handle malicious counter value
+ */
 public interface MaliciousCounterValueHandler {
 
     void maliciousCounterValueDetected(WebAuthnAuthenticationContext webAuthnAuthenticationContext, Authenticator authenticator);

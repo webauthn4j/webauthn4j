@@ -25,7 +25,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 /**
- * AssertionSignatureValidatorImpl
+ * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link CredentialPublicKey}
  */
 class AssertionSignatureValidator {
 

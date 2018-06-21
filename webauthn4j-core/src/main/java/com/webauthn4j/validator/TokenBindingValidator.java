@@ -22,19 +22,22 @@ import com.webauthn4j.validator.exception.TokenBindingException;
 
 import java.util.Arrays;
 
+/**
+ * Validates the specified {@link TokenBinding}
+ */
 public class TokenBindingValidator {
 
-    public void validate(TokenBinding collectedClientDataTokenBinding, byte[] serverTokenBindingId) {
-        if (collectedClientDataTokenBinding == null) {
+    public void validate(TokenBinding clientDataTokenBinding, byte[] serverTokenBindingId) {
+        if (clientDataTokenBinding == null) {
             // nop
         } else {
             byte[] clientDataTokenBindingId;
-            if (collectedClientDataTokenBinding.getId() == null) {
+            if (clientDataTokenBinding.getId() == null) {
                 clientDataTokenBindingId = null;
             } else {
-                clientDataTokenBindingId = Base64UrlUtil.decode(collectedClientDataTokenBinding.getId());
+                clientDataTokenBindingId = Base64UrlUtil.decode(clientDataTokenBinding.getId());
             }
-            switch (collectedClientDataTokenBinding.getStatus()) {
+            switch (clientDataTokenBinding.getStatus()) {
                 case NOT_SUPPORTED:
                     break;
                 case SUPPORTED:

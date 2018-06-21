@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- * Validates {@link Challenge} instance
+ * Validates the specified {@link Challenge}
  */
 class ChallengeValidator {
 
