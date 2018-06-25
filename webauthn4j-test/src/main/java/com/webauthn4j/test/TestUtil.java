@@ -181,7 +181,11 @@ public class TestUtil {
     }
 
     public static CollectedClientData createClientData(ClientDataType type) {
-        return new CollectedClientData(type, createChallenge(), createOrigin(), null);
+        return createClientData(type, TestUtil.createChallenge());
+    }
+
+    public static CollectedClientData createClientData(ClientDataType type, Challenge challenge) {
+        return new CollectedClientData(type, challenge, createOrigin(), null);
     }
 
     public static byte[] createClientDataJSON(ClientDataType type) {
@@ -249,4 +253,23 @@ public class TestUtil {
         };
     }
 
+    public static ServerProperty createServerProperty() {
+        return createServerProperty(TestUtil.createChallenge());
+    }
+
+    public static ServerProperty createServerProperty(Challenge challenge) {
+        return new ServerProperty(TestUtil.createOrigin(), "example.com", challenge, new byte[32]);
+    }
+
+    public static Authenticator createAuthenticator(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement){
+        AuthenticatorImpl authenticator = new AuthenticatorImpl();
+        authenticator.setAttestedCredentialData(attestedCredentialData);
+        authenticator.setAttestationStatement(attestationStatement);
+        authenticator.setCounter(1);
+        return authenticator;
+    }
+
+    public static Authenticator createAuthenticator() {
+        return createAuthenticator(TestUtil.createAttestedCredentialData(), TestUtil.createFIDOU2FAttestationStatement());
+    }
 }

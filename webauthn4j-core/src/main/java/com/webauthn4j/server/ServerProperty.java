@@ -20,6 +20,8 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * ServerProperty
@@ -52,5 +54,24 @@ public class ServerProperty implements Serializable {
 
     public byte[] getTokenBindingId() {
         return tokenBindingId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ServerProperty that = (ServerProperty) o;
+        return Objects.equals(origin, that.origin) &&
+                Objects.equals(rpId, that.rpId) &&
+                Objects.equals(challenge, that.challenge) &&
+                Arrays.equals(tokenBindingId, that.tokenBindingId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(origin, rpId, challenge);
+        result = 31 * result + Arrays.hashCode(tokenBindingId);
+        return result;
     }
 }

@@ -31,11 +31,7 @@ public class AuthenticatorImplTest {
 
         AttestedCredentialData attestedCredentialData = TestUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement();
-
-        AuthenticatorImpl authenticator = new AuthenticatorImpl();
-        authenticator.setAttestedCredentialData(attestedCredentialData);
-        authenticator.setAttestationStatement(attestationStatement);
-        authenticator.setCounter(1);
+        Authenticator authenticator = TestUtil.createAuthenticator(attestedCredentialData, attestationStatement);
 
         assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData);
         assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement);
@@ -52,5 +48,14 @@ public class AuthenticatorImplTest {
         assertThatThrownBy(() -> {
             authenticator.setCounter(4294967296L);
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void equals_hashCode_test(){
+        Authenticator authenticatorA = TestUtil.createAuthenticator();
+        Authenticator authenticatorB = TestUtil.createAuthenticator();
+
+        assertThat(authenticatorA).isEqualTo(authenticatorB);
+        assertThat(authenticatorA).hasSameHashCodeAs(authenticatorB);
     }
 }

@@ -20,6 +20,8 @@ import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.ConstUtil;
 
+import java.util.Objects;
+
 /**
  * An {@link Authenticator} implementation
  */
@@ -73,4 +75,19 @@ public class AuthenticatorImpl implements Authenticator {
         this.counter = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticatorImpl that = (AuthenticatorImpl) o;
+        return counter == that.counter &&
+                Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
+                Objects.equals(attestationStatement, that.attestationStatement);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(attestedCredentialData, attestationStatement, counter);
+    }
 }
