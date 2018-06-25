@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * MaliciousDataException
+ * Thrown if malicious data is specified
  */
 public class MaliciousDataException extends ValidationException {
     public MaliciousDataException(String message, Throwable cause) {

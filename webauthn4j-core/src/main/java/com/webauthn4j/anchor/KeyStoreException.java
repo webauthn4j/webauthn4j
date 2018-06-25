@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.exception;
+package com.webauthn4j.anchor;
 
 import java.security.KeyStore;
 

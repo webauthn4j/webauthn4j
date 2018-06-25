@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.anchor.KeyStoreException;
 import org.junit.Test;
 
 @SuppressWarnings("ThrowableNotThrown")

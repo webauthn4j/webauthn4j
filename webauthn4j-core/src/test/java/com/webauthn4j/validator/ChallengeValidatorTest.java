@@ -22,7 +22,7 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.validator.exception.BadChallengeException;
-import com.webauthn4j.validator.exception.MissingChallengeException;
+import com.webauthn4j.validator.exception.ChallengeException;
 import org.junit.Test;
 
 
@@ -59,7 +59,7 @@ public class ChallengeValidatorTest {
         target.validate(collectedClientData, serverProperty);
     }
 
-    @Test(expected = MissingChallengeException.class)
+    @Test(expected = ChallengeException.class)
     public void verifyChallenge_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});

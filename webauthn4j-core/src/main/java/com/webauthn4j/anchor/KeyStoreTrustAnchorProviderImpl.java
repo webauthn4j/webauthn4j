@@ -17,7 +17,6 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.validator.exception.KeyStoreException;
 
 import java.io.IOException;
 import java.io.InputStream;

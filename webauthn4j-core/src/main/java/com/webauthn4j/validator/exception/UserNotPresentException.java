@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * UserNotPresentException
+ * Thrown if user is to be present but not present
  */
 public class UserNotPresentException extends ValidationException {
 

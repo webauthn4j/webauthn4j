@@ -18,18 +18,18 @@ package com.webauthn4j.validator.exception;
 
 
 /**
- * MissingChallengeException
+ * Thrown if challenge problems happen
  */
-public class MissingChallengeException extends ValidationException {
-    public MissingChallengeException(String message, Throwable cause) {
+public class ChallengeException extends ValidationException {
+    public ChallengeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public MissingChallengeException(String message) {
+    public ChallengeException(String message) {
         super(message);
     }
 
-    public MissingChallengeException(Throwable cause) {
+    public ChallengeException(Throwable cause) {
         super(cause);
     }
 

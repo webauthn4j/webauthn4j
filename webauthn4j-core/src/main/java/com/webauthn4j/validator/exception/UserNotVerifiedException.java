@@ -18,7 +18,7 @@ package com.webauthn4j.validator.exception;
 
 
 /**
- * UserNotVerifiedException
+ * Thrown if user is to be verified but not verified
  */
 public class UserNotVerifiedException extends ValidationException {
 

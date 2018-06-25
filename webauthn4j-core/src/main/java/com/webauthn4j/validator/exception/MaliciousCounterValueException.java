@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * MaliciousCounterValueException
+ * Thrown if the counter value is lower than expected value
  */
 public class MaliciousCounterValueException extends ValidationException {
     public MaliciousCounterValueException(String message) {

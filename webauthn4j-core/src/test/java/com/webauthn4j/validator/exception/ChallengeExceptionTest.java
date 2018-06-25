@@ -19,14 +19,14 @@ package com.webauthn4j.validator.exception;
 import org.junit.Test;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class MissingChallengeExceptionTest {
+public class ChallengeExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
     public void test() {
-        new MissingChallengeException("dummy", cause);
-        new MissingChallengeException("dummy");
-        new MissingChallengeException(cause);
+        new ChallengeException("dummy", cause);
+        new ChallengeException("dummy");
+        new ChallengeException(cause);
     }
 }
