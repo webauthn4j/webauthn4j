@@ -29,6 +29,9 @@ import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Converter for {@link AuthenticatorData}
+ */
 public class AuthenticatorDataConverter {
 
     public byte[] convert(AuthenticatorData source) {

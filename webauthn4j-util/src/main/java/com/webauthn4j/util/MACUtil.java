@@ -23,6 +23,9 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * A Utility class for Message Authentication Code(MAC) manipulation
+ */
 public class MACUtil {
 
     private MACUtil(){}

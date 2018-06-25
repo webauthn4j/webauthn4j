@@ -20,14 +20,14 @@ import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
- * Provides {@link TrustAnchor} set.
+ * Provides {@link TrustAnchor} {@link Set}.
  */
 public interface WebAuthnTrustAnchorService {
 
     /**
-     * Provides {@link TrustAnchor} set.
+     * Provides {@link TrustAnchor} {@link Set}.
      *
-     * @return {@link TrustAnchor} set.
+     * @return {@link TrustAnchor} {@link Set}.
      */
     Set<TrustAnchor> getTrustAnchors();
 }

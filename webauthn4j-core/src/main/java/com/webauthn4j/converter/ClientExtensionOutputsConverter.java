@@ -22,6 +22,9 @@ import com.webauthn4j.extension.client.ClientExtensionOutput;
 
 import java.util.Map;
 
+/**
+ * Converter for {@link Map} of {@link String} and {@link ClientExtensionOutput}
+ */
 public class ClientExtensionOutputsConverter {
 
     public Map<String, ClientExtensionOutput> convert(String value) {

@@ -16,6 +16,9 @@
 
 package com.webauthn4j.validator.exception;
 
+/**
+ * Thrown if bad algorithm is specified
+ */
 public class BadAlgorithmException extends ValidationException {
     public BadAlgorithmException(String message, Throwable cause) {
         super(message, cause);

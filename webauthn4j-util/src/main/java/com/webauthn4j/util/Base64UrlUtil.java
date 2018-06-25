@@ -18,6 +18,9 @@ package com.webauthn4j.util;
 
 import java.util.Base64;
 
+/**
+ * A Utility class for base64url manipulation
+ */
 public class Base64UrlUtil {
 
     private static java.util.Base64.Decoder decoder = Base64.getUrlDecoder();

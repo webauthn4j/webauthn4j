@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * BadOriginException
+ * Thrown if bad origin is specified
  */
 public class BadOriginException extends ValidationException {
     public BadOriginException(String message, Throwable cause) {

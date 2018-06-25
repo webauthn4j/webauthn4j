@@ -18,7 +18,7 @@ package com.webauthn4j.validator.exception;
 
 
 /**
- * BadSignatureException
+ * Thrown if bad signature is specified
  */
 public class BadSignatureException extends ValidationException {
     public BadSignatureException(String message, Throwable cause) {

@@ -22,7 +22,7 @@ import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
- * KeyStore backed TrustAnchorService
+ * KeyStore backed {@link WebAuthnTrustAnchorService}
  * Load a key store at first time access and cache it.
  */
 public class WebAuthnTrustAnchorServiceImpl implements WebAuthnTrustAnchorService {

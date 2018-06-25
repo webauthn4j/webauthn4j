@@ -22,6 +22,9 @@ import com.webauthn4j.util.Base64UrlUtil;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Converter for {@link CollectedClientData}
+ */
 public class CollectedClientDataConverter {
 
     public CollectedClientData convert(String base64UrlString) {

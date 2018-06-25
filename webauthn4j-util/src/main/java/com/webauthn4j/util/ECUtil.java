@@ -25,6 +25,9 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 
+/**
+ * A Utility class for Epic Curve(EC) manipulation
+ */
 public class ECUtil {
 
     private ECUtil(){}

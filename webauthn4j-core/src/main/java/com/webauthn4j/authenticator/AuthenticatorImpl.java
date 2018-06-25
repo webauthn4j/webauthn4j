@@ -21,7 +21,7 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.ConstUtil;
 
 /**
- * A {@link Authenticator} implementation
+ * An {@link Authenticator} implementation
  */
 public class AuthenticatorImpl implements Authenticator {
 

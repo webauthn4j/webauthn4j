@@ -20,6 +20,9 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
+/**
+ * Converter for {@link AttestationObject}
+ */
 public class AttestationObjectConverter {
 
     public AttestationObject convert(String source) {

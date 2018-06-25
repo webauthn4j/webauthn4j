@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Provides {@link TrustAnchor}'{@link Set} backed by Java KeyStore file.
+ * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
  */
 public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
 
@@ -44,9 +44,9 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
     private String password;
 
     /**
-     * Provides {@link TrustAnchor}'{@link Set} backed by Java KeyStore file.
+     * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
      *
-     * @return {@link TrustAnchor}'{@link Set}
+     * @return {@link TrustAnchor} {@link Set}
      */
     public Set<TrustAnchor> provide() {
         Path keystore = getKeyStore();

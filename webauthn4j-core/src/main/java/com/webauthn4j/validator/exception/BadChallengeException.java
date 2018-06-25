@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * BadChallengeException
+ * Thrown if bad challenge is detected
  */
 public class BadChallengeException extends ValidationException {
 

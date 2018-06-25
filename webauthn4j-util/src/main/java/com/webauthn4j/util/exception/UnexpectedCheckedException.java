@@ -17,7 +17,7 @@
 package com.webauthn4j.util.exception;
 
 /**
- * An exception expected not to be thrown
+ * Thrown if unexpected checked exception is thrown
  */
 public class UnexpectedCheckedException extends RuntimeException {
     public UnexpectedCheckedException(Throwable throwable){

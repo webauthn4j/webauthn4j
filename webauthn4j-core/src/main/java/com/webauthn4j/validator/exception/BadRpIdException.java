@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * BadRpIdException
+ * Thrown if bad rpId is specified
  */
 public class BadRpIdException extends ValidationException {
     public BadRpIdException(String message, Throwable cause) {

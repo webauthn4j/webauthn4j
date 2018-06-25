@@ -16,8 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
+import java.security.KeyStore;
+
 /**
- * KeyStoreException
+ * Thrown if it fails to load certificate from {@link KeyStore}
  */
 public class KeyStoreException extends RuntimeException {
     public KeyStoreException(String msg, Throwable cause) {

@@ -23,6 +23,9 @@ import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 
+/**
+ * A Utility class for key manipulation
+ */
 public class KeyUtil {
 
     private KeyUtil(){}

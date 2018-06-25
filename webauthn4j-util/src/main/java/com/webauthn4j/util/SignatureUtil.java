@@ -20,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 
 /**
- * A Utility class for signature
+ * A Utility class for signature calculation
  */
 public class SignatureUtil {
 

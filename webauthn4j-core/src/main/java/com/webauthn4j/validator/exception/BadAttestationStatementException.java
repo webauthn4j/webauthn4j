@@ -18,7 +18,7 @@ package com.webauthn4j.validator.exception;
 
 
 /**
- * BadAttestationStatementException
+ * Thrown if bad attestation statement is specified
  */
 public class BadAttestationStatementException extends ValidationException {
     public BadAttestationStatementException(String message, Throwable cause) {
