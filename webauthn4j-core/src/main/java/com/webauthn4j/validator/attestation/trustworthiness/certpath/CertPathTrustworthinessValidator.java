@@ -19,8 +19,6 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 
-import java.security.cert.CertPath;
-
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness
  */

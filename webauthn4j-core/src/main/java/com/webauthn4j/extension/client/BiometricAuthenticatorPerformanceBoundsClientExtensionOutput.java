@@ -18,9 +18,6 @@ package com.webauthn4j.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 public class BiometricAuthenticatorPerformanceBoundsClientExtensionOutput extends AbstractClientExtensionOutput<Boolean> {
 
     public static final String ID = "biometricPerfBounds";
