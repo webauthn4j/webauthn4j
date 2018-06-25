@@ -21,7 +21,7 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
-import com.webauthn4j.validator.exception.ChallengeException;
+import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ class ChallengeValidator {
 
         if (savedChallenge == null) {
             logger.debug("Authentication failed: challenge is not found in the relying party");
-            throw new ChallengeException("Missing challenge");
+            throw new MissingChallengeException("Missing challenge");
         }
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to

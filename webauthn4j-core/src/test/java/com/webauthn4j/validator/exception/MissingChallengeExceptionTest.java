@@ -16,21 +16,17 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.junit.Test;
 
-/**
- * Thrown if challenge problems happen
- */
-public class ChallengeException extends ValidationException {
-    public ChallengeException(String message, Throwable cause) {
-        super(message, cause);
+@SuppressWarnings("ThrowableNotThrown")
+public class MissingChallengeExceptionTest {
+
+    private RuntimeException cause = new RuntimeException();
+
+    @Test
+    public void test() {
+        new MissingChallengeException("dummy", cause);
+        new MissingChallengeException("dummy");
+        new MissingChallengeException(cause);
     }
-
-    public ChallengeException(String message) {
-        super(message);
-    }
-
-    public ChallengeException(Throwable cause) {
-        super(cause);
-    }
-
 }
