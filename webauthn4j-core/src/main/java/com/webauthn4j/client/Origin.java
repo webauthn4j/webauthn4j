@@ -47,10 +47,6 @@ public class Origin implements Serializable {
         this.host = uri.getHost();
         int originPort = uri.getPort();
 
-        if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
-            throw new IllegalArgumentException("scheme must be 'http' or 'https'");
-        }
-
         if (originPort == -1) {
             switch (this.scheme) {
                 case SCHEME_HTTPS:
@@ -60,7 +56,7 @@ public class Origin implements Serializable {
                     originPort = 80;
                     break;
                 default:
-                    throw new IllegalStateException();
+                    throw new IllegalArgumentException("scheme must be 'http' or 'https'");
             }
         }
         this.port = originPort;
