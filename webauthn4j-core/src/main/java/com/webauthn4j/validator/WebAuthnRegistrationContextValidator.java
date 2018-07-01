@@ -107,7 +107,7 @@ public class WebAuthnRegistrationContextValidator {
         );
     }
 
-    public static WebAuthnRegistrationContextValidator createNullAttestationStatementValidator() {
+    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
         return new WebAuthnRegistrationContextValidator(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),

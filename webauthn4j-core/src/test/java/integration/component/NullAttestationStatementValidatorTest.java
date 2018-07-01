@@ -33,7 +33,7 @@ import java.util.Collections;
 public class NullAttestationStatementValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
-    private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+    private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
     @Test
     public void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {

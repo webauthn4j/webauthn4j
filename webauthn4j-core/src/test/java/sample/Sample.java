@@ -42,7 +42,7 @@ public class Sample {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
         WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-                WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+                WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
         webAuthnRegistrationContextValidator.validate(registrationContext);
     }
