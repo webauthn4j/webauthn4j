@@ -16,11 +16,20 @@
 
 package com.webauthn4j.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.io.Serializable;
 
 /**
  * Attestation metadata.certs container
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "format")
+@JsonSubTypes({
+        @JsonSubTypes.Type(name = "fido-u2f", value = FIDOU2FAttestationStatement.class),
+        @JsonSubTypes.Type(name = "packed", value = PackedAttestationStatement.class),
+        @JsonSubTypes.Type(name = "none", value = NoneAttestationStatement.class)
+})
 public interface AttestationStatement extends Serializable {
     String getFormat();
 
