@@ -174,12 +174,12 @@ public class WebAuthnRegistrationContextValidator {
         /// Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
-        /// If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
+        /// If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("User not verified");
         }
 
-        /// If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
+        /// If user verification is not required for this registration, verify that the User Present bit of the flags in authData is set.
         if (!registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
