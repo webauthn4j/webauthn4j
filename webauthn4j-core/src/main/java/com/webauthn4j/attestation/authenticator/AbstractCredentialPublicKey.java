@@ -31,9 +31,6 @@ import java.util.Objects;
 
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
 
-    @JsonProperty("1")
-    private COSEKeyType keyType;
-
     @JsonProperty("2")
     private byte[] keyId;
 
@@ -46,8 +43,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @JsonProperty("5")
     private byte[] baseIV;
 
-    AbstractCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV) {
-        this.keyType = keyType;
+    AbstractCredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV) {
         this.keyId = keyId;
         this.algorithm = algorithm;
         this.keyOpts = keyOpts;
@@ -57,9 +53,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     AbstractCredentialPublicKey() {
     }
 
-    public COSEKeyType getKeyType() {
-        return keyType;
-    }
+    @JsonProperty("1")
+    public abstract COSEKeyType getKeyType();
 
     public byte[] getKeyId() {
         return keyId;
@@ -100,8 +95,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
-        return keyType == that.keyType &&
-                Arrays.equals(keyId, that.keyId) &&
+        return Arrays.equals(keyId, that.keyId) &&
                 algorithm == that.algorithm &&
                 Arrays.equals(keyOpts, that.keyOpts) &&
                 Arrays.equals(baseIV, that.baseIV);
@@ -110,7 +104,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(keyType, algorithm);
+        int result = Objects.hash(algorithm);
         result = 31 * result + Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(keyOpts);
         result = 31 * result + Arrays.hashCode(baseIV);

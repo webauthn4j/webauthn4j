@@ -74,9 +74,8 @@ public class TestUtil {
         return new AttestedCredentialData(new byte[16], new byte[32], createECCredentialPublicKey());
     }
 
-    public static ECCredentialPublicKey createECCredentialPublicKey() {
-        return new ECCredentialPublicKey(
-                COSEKeyType.EC2,
+    public static EC2CredentialPublicKey createECCredentialPublicKey() {
+        return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -90,7 +89,6 @@ public class TestUtil {
     public static RSACredentialPublicKey createRSCredentialPublicKey() {
         RSACredentialPublicKey credentialPublicKey;
         credentialPublicKey = new RSACredentialPublicKey(
-                COSEKeyType.RSA,
                 null,
                 COSEAlgorithmIdentifier.RS256,
                 null,

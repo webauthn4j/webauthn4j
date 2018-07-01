@@ -19,7 +19,7 @@ package com.webauthn4j.test.authenticator.fido.u2f;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
@@ -62,11 +62,11 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 registrationResponse.getSignature()
         );
 
-        ECCredentialPublicKey ecCredentialPublicKey = ECCredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
+        EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
 
         byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =
-                new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ecCredentialPublicKey);
+                new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData);

@@ -37,7 +37,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class ECCredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
+public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
 
     @JsonProperty("-1")
     private Curve curve;
@@ -48,7 +48,7 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     @JsonProperty("-3")
     private byte[] y;
 
-    public ECCredentialPublicKey() {
+    public EC2CredentialPublicKey() {
         super();
     }
 
@@ -56,9 +56,9 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
      * Constructor for public key
      */
     @SuppressWarnings("squid:S00107")
-    public ECCredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV,
-                                 Curve curve, byte[] x, byte[] y) {
-        super(keyType, keyId, algorithm, keyOpts, baseIV);
+    public EC2CredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV,
+                                  Curve curve, byte[] x, byte[] y) {
+        super(keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
         this.x = x;
         this.y = y;
@@ -67,14 +67,13 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
     /**
      * create from uncompressed ECC key
      */
-    public static ECCredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
+    public static EC2CredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
         if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new ECCredentialPublicKey(
-                COSEKeyType.EC2,
+        return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -92,8 +91,7 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
         ECPoint ecPoint = publicKey.getW();
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();
-        return new ECCredentialPublicKey(
-                COSEKeyType.EC2,
+        return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -102,6 +100,11 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
                 x,
                 y
         );
+    }
+
+    @Override
+    public COSEKeyType getKeyType() {
+        return COSEKeyType.EC2;
     }
 
     public Curve getCurve() {
@@ -162,7 +165,7 @@ public class ECCredentialPublicKey extends AbstractCredentialPublicKey implement
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ECCredentialPublicKey that = (ECCredentialPublicKey) o;
+        EC2CredentialPublicKey that = (EC2CredentialPublicKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
                 Arrays.equals(y, that.y);

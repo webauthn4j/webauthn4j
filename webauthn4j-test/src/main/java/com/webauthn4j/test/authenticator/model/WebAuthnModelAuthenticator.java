@@ -20,7 +20,7 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.ECCredentialPublicKey;
+import com.webauthn4j.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
@@ -173,7 +173,7 @@ public class WebAuthnModelAuthenticator {
         try {
             KeyPair keyPair = KeyUtil.createECKeyPair();
             credentialPrivateKey = keyPair.getPrivate();
-            credentialPublicKey = ECCredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();

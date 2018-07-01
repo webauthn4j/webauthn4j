@@ -40,14 +40,19 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     private byte[] e;
 
     @SuppressWarnings("squid:S00107")
-    public RSACredentialPublicKey(COSEKeyType keyType, byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
-        super(keyType, keyId, algorithm, keyOpts, baseIV);
+    public RSACredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
+        super(keyId, algorithm, keyOpts, baseIV);
         this.n = n;
         this.e = e;
     }
 
     public RSACredentialPublicKey() {
         super();
+    }
+
+    @Override
+    public COSEKeyType getKeyType() {
+        return COSEKeyType.RSA;
     }
 
     public byte[] getN() {

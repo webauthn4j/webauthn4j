@@ -24,23 +24,23 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for ECCredentialPublicKey
+ * Test for EC2CredentialPublicKey
  */
-public class ECCredentialPublicKeyTest {
+public class EC2CredentialPublicKeyTest {
 
     private ObjectMapper jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
     private ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
     @Test
     public void equals_test() {
-        ECCredentialPublicKey instanceA = TestUtil.createECCredentialPublicKey();
-        ECCredentialPublicKey instanceB = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey instanceA = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey instanceB = TestUtil.createECCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     public void cbor_serialize_deserialize_test() throws Exception {
-        ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         byte[] serialized = cborMapper.writeValueAsBytes(original);
         CredentialPublicKey result = cborMapper.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -48,7 +48,7 @@ public class ECCredentialPublicKeyTest {
 
     @Test
     public void json_serialize_deserialize_test() throws Exception {
-        ECCredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         String serialized = jsonMapper.writeValueAsString(original);
         CredentialPublicKey result = jsonMapper.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
