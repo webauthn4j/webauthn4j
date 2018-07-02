@@ -18,8 +18,6 @@ package integration.scenario;
 
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
-import com.webauthn4j.anchor.WebAuthnTrustAnchorService;
-import com.webauthn4j.anchor.WebAuthnTrustAnchorServiceImpl;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
@@ -50,10 +48,9 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private TrustAnchorProvider trustAnchorProvider = TestUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
-    private WebAuthnTrustAnchorService webAuthnTrustAnchorService = new WebAuthnTrustAnchorServiceImpl(trustAnchorProvider);
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, packedAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(webAuthnTrustAnchorService),
+            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorProvider),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()
     );

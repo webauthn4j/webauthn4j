@@ -25,13 +25,13 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KeyStoreTrustAnchorProviderImplTest {
+public class KeyStoreTrustAnchorProviderTest {
 
-    private KeyStoreTrustAnchorProviderImpl target;
+    private KeyStoreTrustAnchorProvider target;
 
     @Test
     public void provide_test() throws Exception {
-        target = new KeyStoreTrustAnchorProviderImpl();
+        target = new KeyStoreTrustAnchorProvider();
         Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreTrustAnchorProviderImplTest/test.jks").toURI());
         target.setKeyStore(path);
         target.setPassword("password");
@@ -42,7 +42,7 @@ public class KeyStoreTrustAnchorProviderImplTest {
 
     @Test(expected = KeyStoreException.class)
     public void provide_test_with_invalid_path() throws Exception {
-        target = new KeyStoreTrustAnchorProviderImpl();
+        target = new KeyStoreTrustAnchorProvider();
         Path path = Paths.get("invalid.path.to.jks");
         target.setKeyStore(path);
         target.setPassword("password");

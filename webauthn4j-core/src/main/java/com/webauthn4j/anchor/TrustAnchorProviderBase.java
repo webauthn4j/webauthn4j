@@ -20,14 +20,28 @@ import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
- * Provides {@link TrustAnchor} {@link Set}.
+ * An abstract {@link TrustAnchorProvider}
+ * Load trustAnchors at first time access and cache it.
  */
-public interface WebAuthnTrustAnchorService {
+public abstract class TrustAnchorProviderBase implements TrustAnchorProvider {
+
+    private Set<TrustAnchor> cachedTrustAnchors;
 
     /**
-     * Provides {@link TrustAnchor} {@link Set}.
-     *
-     * @return {@link TrustAnchor} {@link Set}.
+     * {@inheritDoc}
      */
-    Set<TrustAnchor> getTrustAnchors();
+    @Override
+    public Set<TrustAnchor> provide() {
+
+        if (cachedTrustAnchors != null) {
+            return cachedTrustAnchors;
+        }
+
+        this.cachedTrustAnchors = loadTrustAnchors();
+
+        return cachedTrustAnchors;
+    }
+
+    protected abstract Set<TrustAnchor> loadTrustAnchors();
+
 }

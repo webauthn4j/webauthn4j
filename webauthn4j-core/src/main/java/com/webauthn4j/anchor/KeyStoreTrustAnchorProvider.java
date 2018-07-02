@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
  */
-public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
+public class KeyStoreTrustAnchorProvider extends TrustAnchorProviderBase {
 
     //~ Instance fields ================================================================================================
 
@@ -43,11 +43,12 @@ public class KeyStoreTrustAnchorProviderImpl implements TrustAnchorProvider {
     private String password;
 
     /**
-     * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
+     * retrieve {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
      *
      * @return {@link TrustAnchor} {@link Set}
      */
-    public Set<TrustAnchor> provide() {
+    @Override
+    public Set<TrustAnchor> loadTrustAnchors() {
         Path keystore = getKeyStore();
         try (InputStream inputStream = Files.newInputStream(keystore)) {
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());
