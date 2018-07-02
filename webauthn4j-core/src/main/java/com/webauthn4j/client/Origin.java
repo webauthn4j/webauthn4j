@@ -18,6 +18,7 @@ package com.webauthn4j.client;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Objects;
 
 /**
  * Origin
@@ -32,7 +33,7 @@ public class Origin implements Serializable {
     private int port;
 
     public Origin(String scheme, String host, int port) {
-        if (!scheme.equals(SCHEME_HTTPS) && !scheme.equals(SCHEME_HTTP)) {
+        if (!Objects.equals(SCHEME_HTTPS, scheme) && !Objects.equals(SCHEME_HTTP, scheme)) {
             throw new IllegalArgumentException("scheme must be 'http' or 'https'");
         }
 
@@ -48,6 +49,9 @@ public class Origin implements Serializable {
         int originPort = uri.getPort();
 
         if (originPort == -1) {
+            if(this.scheme == null){
+                throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+            }
             switch (this.scheme) {
                 case SCHEME_HTTPS:
                     originPort = 443;
