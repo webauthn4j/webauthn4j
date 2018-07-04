@@ -30,6 +30,12 @@ deploy:
       branch: master
       jdk: openjdk8
       tags: true
+  - provider: script
+    skip-cleanup: true
+    script: ./gradlew artifactoryPublish
+    on:
+      branch: master
+      jdk: openjdk8
 
 addons:
   sonarcloud:

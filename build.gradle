@@ -30,6 +30,7 @@ plugins{
     id "org.sonarqube" version "2.6.2"
     id 'nebula.provided-base' version '3.0.3'
     id 'org.asciidoctor.convert' version "1.5.2"
+    id "com.jfrog.artifactory" version "4.7.5"
 }
 
 allprojects {
@@ -44,6 +45,7 @@ subprojects{
     apply plugin: 'jacoco'
     apply plugin: 'com.jfrog.bintray'
     apply plugin: "maven-publish"
+    apply plugin: "com.jfrog.artifactory"
 
     sourceCompatibility = 1.8
 
@@ -78,7 +80,7 @@ subprojects{
 
     publishing {
         publications {
-            bintrayPublication(MavenPublication) {
+            artifactPublication(MavenPublication) {
                 from components.java
                 artifact sourcesJar
                 pom.withXml {
@@ -112,13 +114,33 @@ subprojects{
         }
     }
 
+    def bintrayUser = getVariable('BINTRAY_USER', 'bintrayUser')
+    def bintrayToken = getVariable('BINTRAY_TOKEN', 'bintrayToken')
+    def artifactoryUser = getVariable('ARTIFACTORY_USER', 'artifactoryUser')
+    def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
+
+    artifactory {
+        contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
+        publish {
+            repository {
+                repoKey = 'oss-snapshot-local' // The Artifactory repository key to publish to
+                username = artifactoryUser
+                password = artifactoryPassword
+            }
+            defaults {
+                publications('artifactPublication')
+                publishArtifacts = true
+            }
+        }
+    }
+
     bintray {
-        user = getVariable('BINTRAY_USER', 'bintrayUser')
-        key  = getVariable('BINTRAY_TOKEN', 'bintrayToken')
+        user = bintrayUser
+        key  = bintrayToken
         configurations = ['archives']
         publish = false
         dryRun = false
-        publications = ['bintrayPublication']
+        publications = ['artifactPublication']
         pkg {
             userOrg = "webauthn4j"
             repo = "webauthn4j"
