@@ -1,0 +1,26 @@
+[configuration]
+== 設定
+
+===== 構成証明ステートメントの署名の検証
+
+Spring Security WebAuthnは `AttestationStatementSignatureValidator` インタフェースの実装として、
+`FIDOU2FAttestationStatementSignatureValidator` と `WebAuthnAttestationStatementSignatureValidator` を提供します。
+Spring Security WebAuthnは `AttestationStatementSignatureValidator` インタフェースを実装したクラスのBeanを自動で検出し、
+署名の検証時、フォーマットと適合する `AttestationStatementSignatureValidator` を使用して検証を行います。
+
+
+===== 構成証明ステートメントの信頼性の検証
+
+信頼の検証は、構成証明ステートメントが自己署名か、ECDAAか、それ以外かによって方法が異なり、
+Spring Security WebAuthnではそれぞれの検証手段のインタフェースとして `SelfAttestationTrustworthinessValidator` 、
+`ECDAATrustworthinessValidator` 、 `CertPathTrustworthinessValidator` を用意しています。
+
+`CertPathTrustworthinessValidator` が証明書パスに基づいて構成証明ステートメントを検証する際、WebAuthn4Jは
+`TrustAnchorProvider` インタフェースの実装を用いてトラスト・アンカーを取得します。
+
+===== FIDOMetadataServiceCertPathTrustworthinessValidator
+
+`FIDOMetadataServiceCertPathTrustworthinessValidator` は `CertPathTrustworthinessValidator` インタフェースを実装した
+クラスで、FIDO Metadata Serviceで公開されている証明書をトラストアンカーに構成証明証明書の信頼を検証します。
+更に、FIDO Metadata Serviceから得られた各構成証明証明書のStatus Reportを元に検証を行います。
+

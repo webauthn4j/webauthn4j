@@ -35,7 +35,7 @@ import java.util.Set;
 /**
  * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
  */
-public class KeyStoreTrustAnchorProvider extends TrustAnchorProviderBase {
+public class KeyStoreFileTrustAnchorProvider extends TrustAnchorProviderBase {
 
     //~ Instance fields ================================================================================================
 
