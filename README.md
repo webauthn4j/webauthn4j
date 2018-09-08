@@ -30,7 +30,7 @@ If you are using Maven, just add the webauthn4j as a dependency:
   ...
   <dependency>
     <groupId>com.webauthn4j</groupId>
-    <artifactId>webauthn4j.core</artifactId>
+    <artifactId>webauthn4j-core</artifactId>
     <version>${webauthn4j.version}</version>
   </dependency>
   ...
