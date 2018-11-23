@@ -59,7 +59,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         if (attestationStatement.getX5c() != null) {
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
             // using the attestation public key in x5c with the algorithm specified in alg.
-            if (verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, signedData)) {
+            if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, signedData)) {
                 throw new BadSignatureException("Bad signature");
             }
             // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
@@ -95,7 +95,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
                 throw new BadAlgorithmException("Algorithm doesn't match");
             }
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
-            if (verifySignature(credentialPublicKey.getPublicKey(), alg, sig, signedData)) {
+            if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, signedData)) {
                 throw new BadSignatureException("Bad signature");
             }
             // If successful, return attestation type Self and empty attestation trust path.
