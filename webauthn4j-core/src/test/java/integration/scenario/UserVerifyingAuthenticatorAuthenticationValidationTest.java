@@ -360,11 +360,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
         publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
         publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
         credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));

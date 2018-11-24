@@ -179,7 +179,7 @@ public class WebAuthnModelAuthenticator {
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
             // Let credentialSource be a new public key credential source with the fields:
             PublicKeyCredentialSource credentialSource = new PublicKeyCredentialSource();
-            credentialSource.setType(PublicKeyCredentialType.PublicKey);
+            credentialSource.setType(PublicKeyCredentialType.PUBLIC_KEY);
             credentialSource.setPrivateKey(credentialPrivateKey);
             credentialSource.setRpId(rpEntity.getId());
             credentialSource.setUserHandle(userHandle);
@@ -362,7 +362,7 @@ public class WebAuthnModelAuthenticator {
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
-        return publicKeyCredentialParameters.getType() == PublicKeyCredentialType.PublicKey &&
+        return publicKeyCredentialParameters.getType() == PublicKeyCredentialType.PUBLIC_KEY &&
                 publicKeyCredentialParameters.getAlg() == COSEAlgorithmIdentifier.ES256;
     }
 

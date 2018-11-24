@@ -59,7 +59,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -101,7 +101,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -145,7 +145,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -187,7 +187,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -231,7 +231,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 badRpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -273,7 +273,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -318,7 +318,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -360,7 +360,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
@@ -402,7 +402,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 Collections.singletonList(
                         new PublicKeyCredentialDescriptor(
-                                PublicKeyCredentialType.PublicKey,
+                                PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
                                 Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )

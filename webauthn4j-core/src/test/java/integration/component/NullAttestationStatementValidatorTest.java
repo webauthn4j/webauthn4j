@@ -64,10 +64,10 @@ public class NullAttestationStatementValidatorTest {
 
         PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
         publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PublicKey);
+        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
         publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();

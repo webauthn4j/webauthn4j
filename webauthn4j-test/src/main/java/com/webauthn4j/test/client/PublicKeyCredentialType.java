@@ -16,12 +16,14 @@
 
 package com.webauthn4j.test.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.WIP;
 
 @WIP
 public enum PublicKeyCredentialType {
 
-    PublicKey("public-key");
+    PUBLIC_KEY("public-key");
 
     private String value;
 
@@ -29,6 +31,17 @@ public enum PublicKeyCredentialType {
         this.value = value;
     }
 
+    @JsonCreator
+    public static PublicKeyCredentialType create(String value) {
+        switch (value) {
+            case "public-key":
+                return PUBLIC_KEY;
+            default:
+                throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonValue
     public String getValue() {
         return value;
     }
