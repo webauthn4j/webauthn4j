@@ -30,11 +30,11 @@ public class RegistrationObject {
     private final byte[] attestationObjectBytes;
     private final ServerProperty serverProperty;
 
-    RegistrationObject(CollectedClientData collectedClientData,
-                       byte[] collectedClientDataBytes,
-                       AttestationObject attestationObject,
-                       byte[] attestationObjectBytes,
-                       ServerProperty serverProperty) {
+    public RegistrationObject(CollectedClientData collectedClientData,
+                              byte[] collectedClientDataBytes,
+                              AttestationObject attestationObject,
+                              byte[] attestationObjectBytes,
+                              ServerProperty serverProperty) {
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;
