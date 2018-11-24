@@ -1,4 +1,4 @@
-package com.webauthn4j.attestation.packed;
+package com.webauthn4j.validator.attestation.packed;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -18,7 +18,6 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.packed.PackedAttestationStatementValidator;
 import org.junit.Test;
 import sun.security.x509.*;
 
