@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
@@ -26,6 +27,7 @@ import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
@@ -35,7 +37,10 @@ import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.WIP;
+import com.webauthn4j.validator.RegistrationObject;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
@@ -56,6 +61,7 @@ public class WebAuthnModelAuthenticator {
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private boolean countUpEnabled = true;
 
+    private final ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
 
     public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, byte[] aaGuid, int counter) {
@@ -242,7 +248,17 @@ public class WebAuthnModelAuthenticator {
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
-        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, null, attestationCertificatePath, null); //TODO:sig
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes ,makeCredentialRequest.getHash());
+
+        byte[] signature;
+        if (registrationEmulationOption.isSignatureOverrideEnabled()) {
+            signature = registrationEmulationOption.getSignature();
+        } else {
+            signature = calculateSignature(attestationPrivateKey, signedData);
+        }
+
+        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -385,6 +401,17 @@ public class WebAuthnModelAuthenticator {
         }
     }
 
+    private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
+        return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
+    }
+
+    private byte[] deriveAuthenticatorDataFromAttestationObject(byte[] attestationObject) {
+        try {
+            return cborMapper.readTree(attestationObject).get("authData").binaryValue();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     private void countUp() {
         if (isCountUpEnabled()) {
