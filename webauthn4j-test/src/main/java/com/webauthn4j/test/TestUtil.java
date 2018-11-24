@@ -70,8 +70,17 @@ public class TestUtil {
         return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData());
     }
 
+    public static AuthenticatorData createAuthenticatorData(EC2CredentialPublicKey ecCredentialPublicKey) {
+        byte flags = BIT_UP | BIT_AT;
+        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(ecCredentialPublicKey));
+    }
+
     public static AttestedCredentialData createAttestedCredentialData() {
-        return new AttestedCredentialData(new byte[16], new byte[32], createECCredentialPublicKey());
+        return createAttestedCredentialData(createECCredentialPublicKey());
+    }
+
+    public static AttestedCredentialData createAttestedCredentialData(EC2CredentialPublicKey ecCredentialPublicKey) {
+        return new AttestedCredentialData(new byte[16], new byte[32], ecCredentialPublicKey);
     }
 
     public static EC2CredentialPublicKey createECCredentialPublicKey() {

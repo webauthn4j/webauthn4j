@@ -87,7 +87,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     /**
      * create from {@code ECPublicKey}
      */
-    public static CredentialPublicKey create(ECPublicKey publicKey) {
+    public static EC2CredentialPublicKey create(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();

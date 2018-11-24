@@ -22,6 +22,7 @@ import java.security.*;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.RSAKeyGenParameterSpec;
 
 /**
  * A Utility class for key manipulation
@@ -77,5 +78,16 @@ public class KeyUtil {
 
     public static KeyPair createECKeyPair(){
         return createECKeyPair((byte[]) null);
+    }
+
+    public static KeyPair createRSAKeyPair() {
+        KeyPairGenerator keyPairGenerator = null;
+        try {
+            keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4), new SecureRandom());
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+        return keyPairGenerator.generateKeyPair();
     }
 }
