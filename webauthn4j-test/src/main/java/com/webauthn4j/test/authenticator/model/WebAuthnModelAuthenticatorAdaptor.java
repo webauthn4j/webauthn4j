@@ -76,7 +76,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         getAssertionRequest.setAllowCredentialDescriptorList(publicKeyCredentialRequestOptions.getAllowCredentials());
         getAssertionRequest.setRequireUserPresence(!requireUserVerification);
         getAssertionRequest.setRequireUserVerification(requireUserVerification);
-        getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
+        getAssertionRequest.setExtensions(convertExtensions(publicKeyCredentialRequestOptions.getExtensions()));
 
         GetAssertionResponse getAssertionResponse = webAuthnModelAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
 

@@ -149,7 +149,6 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         assertThat(response.getClientExtensionOutputs()).isNotNull();
     }
 
-    @Ignore
     @Test(expected = UnexpectedExtensionException.class)
     public void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
         String rpId = "example.com";

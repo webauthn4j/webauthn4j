@@ -24,7 +24,6 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.extension.client.SupportedExtensionsClientExtensionOutput;
@@ -37,6 +36,7 @@ import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class ClientPlatform {
 
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        Map<String, ClientExtensionOutput> clientExtensions = Collections.emptyMap(); //TODO
+        Map<String, ClientExtensionOutput> clientExtensions = processExtensions(publicKeyCredentialCreationOptions.getExtensions());
         String clientExtensionsJSON = clientExtensionOutputsConverter.convertToString(clientExtensions);
         return new PublicKeyCredential<>(
                 credentialId,
@@ -112,12 +112,21 @@ public class ClientPlatform {
         );
     }
 
-    private Map<String,ClientExtensionOutput> convertExtensions(Map<String,AuthenticatorExtensionOutput> extensions) {
+    private Map<String,ClientExtensionOutput> processExtensions(Map<String,ClientExtensionInput> extensions) {
+
+        if(extensions == null){
+            extensions = Collections.emptyMap();
+        }
+
         Map<String,ClientExtensionOutput> map = new HashMap<>();
         extensions.forEach((key, value) -> {
-            if(key.equals(SupportedExtensionsAuthenticatorExtensionOutput.ID)){
-                SupportedExtensionsAuthenticatorExtensionOutput authenticatorExtensionOutput = (SupportedExtensionsAuthenticatorExtensionOutput)value;
-                map.put(key, new SupportedExtensionsClientExtensionOutput(authenticatorExtensionOutput.getValue()));
+            switch (key){
+                case SupportedExtensionsClientExtensionInput.ID:
+                    SupportedExtensionsClientExtensionInput clientExtensionInput = (SupportedExtensionsClientExtensionInput)value;
+                    if(clientExtensionInput.getValue()){
+                        map.put(key, new SupportedExtensionsClientExtensionOutput(Arrays.asList(SupportedExtensionsClientExtensionInput.ID)));
+                    }
+                    break;
             }
         });
         return map;
@@ -141,7 +150,7 @@ public class ClientPlatform {
 
             byte[] credentialId = credentialRequestResponse.getCredentialId();
 
-            Map<String, ClientExtensionOutput> clientExtensions = Collections.emptyMap(); //TODO
+            Map<String, ClientExtensionOutput> clientExtensions = processExtensions(publicKeyCredentialRequestOptions.getExtensions());
             String clientExtensionsJSON = clientExtensionOutputsConverter.convertToString(clientExtensions);
 
             return new PublicKeyCredential<>(credentialId, new AuthenticatorAssertionResponse(

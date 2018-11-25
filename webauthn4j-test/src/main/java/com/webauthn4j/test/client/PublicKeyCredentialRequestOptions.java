@@ -31,14 +31,14 @@ public class PublicKeyCredentialRequestOptions {
     private String rpId;
     private List<PublicKeyCredentialDescriptor> allowCredentials;
     private UserVerificationRequirement userVerification;
-    private Map<String, AuthenticatorExtensionOutput> extensions;
+    private Map<String, ClientExtensionInput> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
-                                             Map<String, AuthenticatorExtensionOutput> extensions) {
+                                             Map<String, ClientExtensionInput> extensions) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -67,7 +67,7 @@ public class PublicKeyCredentialRequestOptions {
         return userVerification;
     }
 
-    public Map<String, AuthenticatorExtensionOutput> getExtensions() {
+    public Map<String, ClientExtensionInput> getExtensions() {
         return extensions;
     }
 }
