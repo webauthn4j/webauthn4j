@@ -24,11 +24,18 @@ import com.webauthn4j.server.ServerProperty;
  * Internal data transfer object for registration data
  */
 public class RegistrationObject {
+
+    //~ Instance fields
+    // ================================================================================================
+
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
     private final ServerProperty serverProperty;
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public RegistrationObject(CollectedClientData collectedClientData,
                               byte[] collectedClientDataBytes,
@@ -42,6 +49,9 @@ public class RegistrationObject {
         this.attestationObjectBytes = attestationObjectBytes;
         this.serverProperty = serverProperty;
     }
+
+    // ~ Methods
+    // ========================================================================================================
 
     public CollectedClientData getCollectedClientData() {
         return collectedClientData;

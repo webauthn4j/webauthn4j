@@ -62,10 +62,9 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private final List<AttestationStatementValidator> attestationStatementValidators;
-    private final CertPathTrustworthinessValidator certPathTrustworthinessValidator;
-    private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
-    private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -73,9 +72,14 @@ public class WebAuthnRegistrationContextValidator {
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
-    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+    private final List<AttestationStatementValidator> attestationStatementValidators;
+    private final CertPathTrustworthinessValidator certPathTrustworthinessValidator;
+    private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
+    private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
@@ -106,6 +110,9 @@ public class WebAuthnRegistrationContextValidator {
                 new DefaultSelfAttestationTrustworthinessValidator()
         );
     }
+
+    // ~ Factory methods
+    // ========================================================================================================
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
         return new WebAuthnRegistrationContextValidator(

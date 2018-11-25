@@ -34,6 +34,9 @@ import java.util.Map;
  */
 public class AuthenticatorDataConverter {
 
+    //~ Methods
+    // ================================================================================================
+
     public byte[] convert(AuthenticatorData source) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

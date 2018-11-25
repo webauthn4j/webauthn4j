@@ -27,6 +27,9 @@ import java.util.Map;
  */
 public class ClientExtensionOutputsConverter {
 
+    //~ Methods
+    // ================================================================================================
+
     public Map<String, ClientExtensionOutput> convert(String value) {
         if (value == null) {
             return null;

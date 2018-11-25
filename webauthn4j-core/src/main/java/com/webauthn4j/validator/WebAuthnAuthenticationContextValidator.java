@@ -47,18 +47,23 @@ public class WebAuthnAuthenticationContextValidator {
     // ================================================================================================
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
+    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
-
-    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
-    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
     private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
+
+    // ~ Constructor
+    // ========================================================================================================
+
+
 
     // ~ Methods
     // ========================================================================================================

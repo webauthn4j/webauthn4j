@@ -29,6 +29,9 @@ import java.util.Map;
  */
 public class ExtensionValidator {
 
+    // ~ Methods
+    // ========================================================================================================
+
     public void validate(Map<String, ClientExtensionOutput> clientExtensionOutputs,
                          Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs,
                          List<String> expectedExtensionIdentifiers) {

@@ -32,7 +32,13 @@ import java.util.Arrays;
  */
 class RpIdHashValidator {
 
+    //~ Instance fields
+    // ================================================================================================
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    // ~ Methods
+    // ========================================================================================================
 
     public void validate(byte[] rpIdHash, ServerProperty serverProperty) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");

@@ -43,6 +43,9 @@ class BeanAssertUtil {
     private BeanAssertUtil() {
     }
 
+    // ~ Static Methods
+    // ========================================================================================================
+
     public static void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
 
         if(webAuthnAuthenticationContext == null){

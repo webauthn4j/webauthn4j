@@ -27,6 +27,9 @@ import java.nio.charset.StandardCharsets;
  */
 public class CollectedClientDataConverter {
 
+    //~ Methods
+    // ================================================================================================
+
     public CollectedClientData convert(String base64UrlString) {
         byte[] bytes = Base64UrlUtil.decode(base64UrlString);
         return convert(bytes);

@@ -32,8 +32,13 @@ import java.util.Arrays;
  */
 class ChallengeValidator {
 
+    //~ Instance fields
+    // ================================================================================================
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    // ~ Methods
+    // ========================================================================================================
 
     public void validate(CollectedClientData collectedClientData, ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");

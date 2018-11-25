@@ -27,6 +27,9 @@ import java.util.Arrays;
  */
 public class TokenBindingValidator {
 
+    // ~ Methods
+    // ========================================================================================================
+
     public void validate(TokenBinding clientDataTokenBinding, byte[] serverTokenBindingId) {
         if (clientDataTokenBinding == null) {
             // nop

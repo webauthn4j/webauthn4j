@@ -25,6 +25,12 @@ import com.webauthn4j.util.Base64UrlUtil;
  */
 public class AttestationObjectConverter {
 
+    //~ Instance fields
+    // ================================================================================================
+
+    //~ Methods
+    // ================================================================================================
+
     public AttestationObject convert(String source) {
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);

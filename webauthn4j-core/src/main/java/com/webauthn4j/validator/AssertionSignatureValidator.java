@@ -29,6 +29,9 @@ import java.security.MessageDigest;
  */
 class AssertionSignatureValidator {
 
+    // ~ Methods
+    // ========================================================================================================
+
     public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey) {
         byte[] signedData = getSignedData(webAuthnAuthenticationContext);
         byte[] signature = webAuthnAuthenticationContext.getSignature();
