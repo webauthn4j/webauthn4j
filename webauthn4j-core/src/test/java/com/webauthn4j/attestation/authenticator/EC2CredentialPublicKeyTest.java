@@ -17,7 +17,7 @@
 package com.webauthn4j.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class EC2CredentialPublicKeyTest {
 
-    private ObjectMapper jsonMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
-    private ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
+    private ObjectMapper jsonMapper =  new Registry().getJsonMapper();
+    private ObjectMapper cborMapper = new Registry().getCborMapper();
 
     @Test
     public void equals_test() {

@@ -19,6 +19,7 @@ package com.webauthn4j.converter;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
@@ -36,13 +37,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class AuthenticatorDataConverterTest {
 
+    private Registry registry = new Registry();
+
     @Test
     public void convert_test() {
         //Given
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
 
         //When
-        AuthenticatorData result = new AuthenticatorDataConverter().convert(Base64UrlUtil.decode(input));
+        AuthenticatorData result = new AuthenticatorDataConverter(registry).convert(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -65,8 +68,8 @@ public class AuthenticatorDataConverterTest {
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, 0, extensionOutputMap);
 
         //When
-        byte[] serialized = new AuthenticatorDataConverter().convert(authenticatorData);
-        AuthenticatorData result = new AuthenticatorDataConverter().convert(serialized);
+        byte[] serialized = new AuthenticatorDataConverter(registry).convert(authenticatorData);
+        AuthenticatorData result = new AuthenticatorDataConverter(registry).convert(serialized);
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();

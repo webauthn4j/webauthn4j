@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -35,9 +35,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CertPathSerializerTest {
 
+    private ObjectMapper cborMapper = new Registry().getCborMapper();
+
     @Test
     public void test() throws CertificateException, IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
         //Given
         Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
@@ -46,10 +47,10 @@ public class CertPathSerializerTest {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));
 
-        byte[] result = objectMapper.writeValueAsBytes(certPath);
+        byte[] result = cborMapper.writeValueAsBytes(certPath);
 
         //When
-        CertPath deserialized = objectMapper.readValue(result, CertPath.class);
+        CertPath deserialized = cborMapper.readValue(result, CertPath.class);
 
         //Then
         assertThat(deserialized.getCertificates().toArray()).containsExactly(cert1, cert2);

@@ -17,8 +17,12 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 /**
  * Converter for {@link AttestationObject}
@@ -27,6 +31,14 @@ public class AttestationObjectConverter {
 
     //~ Instance fields
     // ================================================================================================
+    private CborConverter cborConverter;
+
+    //~ Constructors
+    // ================================================================================================
+
+    public AttestationObjectConverter(Registry registry){
+        cborConverter = new CborConverter(registry.getCborMapper());
+    }
 
     //~ Methods
     // ================================================================================================
@@ -37,16 +49,25 @@ public class AttestationObjectConverter {
     }
 
     public AttestationObject convert(byte[] source) {
-        return ObjectMapperUtil.readCBORValue(source, AttestationObject.class);
+        return cborConverter.readValue(source, AttestationObject.class);
     }
 
     public byte[] convertToBytes(AttestationObject source) {
-        return ObjectMapperUtil.writeValueAsCBORBytes(source);
+        return cborConverter.writeValueAsBytes(source);
     }
 
     public String convertToString(AttestationObject source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }
+
+    public byte[] extractAuthenticatorData(byte[] attestationObject) {
+        try {
+            return cborConverter.readTree(attestationObject).get("authData").binaryValue();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
 
 }

@@ -18,7 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class ChallengeDeserializerTest {
 
     @Test
     public void test() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
+        ObjectMapper objectMapper = new Registry().getJsonMapper();
 
         //Given
         String input = "{ \"challenge\" : \"\" }";

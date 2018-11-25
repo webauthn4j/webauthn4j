@@ -18,6 +18,7 @@ package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
+import com.webauthn4j.registry.Registry;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -33,6 +34,8 @@ import java.net.URI;
 
 public class FIDOMetadataServiceClientIntegrationTest {
 
+    private Registry registry = new Registry();
+
     private FIDOMetadataServiceClient target;
 
     @Before
@@ -40,7 +43,7 @@ public class FIDOMetadataServiceClientIntegrationTest {
         HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         RestTemplate restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        target = new FIDOMetadataServiceClient(restTemplate, resourceLoader);
+        target = new FIDOMetadataServiceClient(registry, restTemplate, resourceLoader);
     }
 
     @Test

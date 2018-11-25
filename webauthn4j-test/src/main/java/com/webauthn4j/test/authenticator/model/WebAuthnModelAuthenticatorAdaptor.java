@@ -18,6 +18,7 @@ package com.webauthn4j.test.authenticator.model;
 
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.authenticator.*;
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -30,7 +31,7 @@ import java.util.Map;
 public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     private WebAuthnModelAuthenticator webAuthnModelAuthenticator = new WebAuthnModelAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(new Registry());
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

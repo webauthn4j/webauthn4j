@@ -27,6 +27,7 @@ import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.registry.Registry;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -36,15 +37,12 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnModule extends SimpleModule {
 
-    /**
-     * Default constructor
-     */
-    public WebAuthnModule() {
+    public WebAuthnModule(Registry registry) {
         super("WebAuthnModule");
 
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
         this.addDeserializer(AuthenticatorExtensionOutput.class, new AuthenticatorExtensionOutputDeserializer());
         this.addDeserializer(ClientExtensionOutput.class, new ClientExtensionOutputDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -52,7 +50,7 @@ public class WebAuthnModule extends SimpleModule {
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer());
+        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(registry));
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
         this.registerSubtypes(FIDOU2FAttestationStatement.class);

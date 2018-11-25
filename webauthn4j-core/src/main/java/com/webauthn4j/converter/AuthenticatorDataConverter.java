@@ -20,8 +20,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -33,6 +34,18 @@ import java.util.Map;
  * Converter for {@link AuthenticatorData}
  */
 public class AuthenticatorDataConverter {
+
+    //~ Instance fields
+    // ================================================================================================
+    private CborConverter cborConverter;
+
+    //~ Constructors
+    // ================================================================================================
+
+    public AuthenticatorDataConverter(Registry registry){
+        cborConverter = new CborConverter(registry.getCborMapper());
+    }
+
 
     //~ Methods
     // ================================================================================================
@@ -105,7 +118,7 @@ public class AuthenticatorDataConverter {
     }
 
     private CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
-        return ObjectMapperUtil.readCBORValue(inputStream, CredentialPublicKey.class);
+        return cborConverter.readValue(inputStream, CredentialPublicKey.class);
     }
 
     Map<String, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
@@ -114,19 +127,19 @@ public class AuthenticatorDataConverter {
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
-        return ObjectMapperUtil.readCBORValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>(){});
+        return cborConverter.readValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>(){});
     }
 
     byte[] convert(Map<String, AuthenticatorExtensionOutput> extensions) {
         if (extensions == null || extensions.isEmpty()) {
             return new byte[0];
         } else {
-            return ObjectMapperUtil.writeValueAsCBORBytes(extensions);
+            return cborConverter.writeValueAsBytes(extensions);
         }
     }
 
     byte[] convert(CredentialPublicKey credentialPublicKey) {
-        return ObjectMapperUtil.writeValueAsCBORBytes(credentialPublicKey);
+        return cborConverter.writeValueAsBytes(credentialPublicKey);
     }
 
 }

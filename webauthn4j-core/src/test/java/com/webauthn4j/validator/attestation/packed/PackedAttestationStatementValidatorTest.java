@@ -15,6 +15,7 @@ import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
@@ -39,7 +40,7 @@ import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
 
 public class PackedAttestationStatementValidatorTest {
 
-
+    private Registry registry = new Registry();
     private static Base64.Decoder decoder = Base64.getUrlDecoder();
 
     private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
@@ -126,19 +127,20 @@ public class PackedAttestationStatementValidatorTest {
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {
 
-        byte[] attestationObjectBytes = new AttestationObjectConverter().convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(registry).convertToBytes(attestationObject);
 
         Origin origin = new Origin(originUrl);
         Challenge challenge = (Challenge) () -> decoder.decode(challengeString);
 
-
-        CollectedClientData collectedClientData = new CollectedClientDataConverter().convert(clientDataBytes);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
+        CollectedClientData collectedClientData = new CollectedClientDataConverter(registry).convert(clientDataBytes);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
                 clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
+                attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes),
                 new ServerProperty(origin, rpId, challenge, tokenBindingId)
         );
 
@@ -194,8 +196,8 @@ public class PackedAttestationStatementValidatorTest {
         return mapper.writeValueAsString(json).getBytes();
     }
 
-    private static byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] authenticatorData = new AuthenticatorDataConverter().convert(data);
+    private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(data);
         byte[] clientDataHash = hash(clientDataJSON);
 
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

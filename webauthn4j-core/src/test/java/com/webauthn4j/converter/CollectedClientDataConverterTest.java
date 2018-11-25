@@ -20,6 +20,7 @@ import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CollectedClientDataConverterTest {
 
-    private CollectedClientDataConverter target = new CollectedClientDataConverter();
+    private CollectedClientDataConverter target = new CollectedClientDataConverter(new Registry());
 
     @Test
     public void convert_deserialization_test() {

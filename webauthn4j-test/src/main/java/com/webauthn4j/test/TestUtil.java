@@ -28,6 +28,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
@@ -196,7 +197,7 @@ public class TestUtil {
     }
 
     public static byte[] createClientDataJSON(ClientDataType type) {
-        return new CollectedClientDataConverter().convertToBytes(createClientData(type));
+        return new CollectedClientDataConverter(new Registry()).convertToBytes(createClientData(type));
     }
 
     public static Challenge createChallenge() {

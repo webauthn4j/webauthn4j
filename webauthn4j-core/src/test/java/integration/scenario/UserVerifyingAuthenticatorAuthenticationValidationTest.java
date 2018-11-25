@@ -26,6 +26,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
@@ -37,6 +38,8 @@ import org.junit.Test;
 import java.util.Collections;
 
 public class UserVerifyingAuthenticatorAuthenticationValidationTest {
+
+    private Registry registry = new Registry();
 
     private Origin origin = new Origin("http://example.com");
     private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
@@ -375,7 +378,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

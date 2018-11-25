@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.registry.Registry;
 
 import java.io.IOException;
 
@@ -31,9 +32,9 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
 
     private final transient AuthenticatorDataConverter authenticatorDataConverter;
 
-    public AuthenticatorDataDeserializer() {
+    public AuthenticatorDataDeserializer(Registry registry) {
         super(AuthenticatorData.class);
-        authenticatorDataConverter = new AuthenticatorDataConverter();
+        authenticatorDataConverter = new AuthenticatorDataConverter(registry);
     }
 
     /**

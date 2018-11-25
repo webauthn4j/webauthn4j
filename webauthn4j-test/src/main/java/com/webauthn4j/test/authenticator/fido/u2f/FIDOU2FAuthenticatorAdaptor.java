@@ -26,6 +26,7 @@ import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -42,9 +43,11 @@ import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
+    private Registry registry = new Registry();
+
     private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(registry);
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

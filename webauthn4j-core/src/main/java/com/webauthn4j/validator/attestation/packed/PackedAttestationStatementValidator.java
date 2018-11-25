@@ -16,13 +16,11 @@
 
 package com.webauthn4j.validator.attestation.packed;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
@@ -32,8 +30,6 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
@@ -42,8 +38,6 @@ import java.util.Arrays;
  * Validates the specified {@link AttestationStatement} is a valid packed attestation
  */
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
-
-    private final ObjectMapper cborMapper = ObjectMapperUtil.createWebAuthnClassesAwareCBORMapper();
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -124,17 +118,9 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private byte[] getSignedData(RegistrationObject registrationObject) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
-        byte[] authenticatorData = deriveAuthenticatorDataFromAttestationObject(registrationObject.getAttestationObjectBytes());
+        byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-    }
-
-    private byte[] deriveAuthenticatorDataFromAttestationObject(byte[] attestationObject) {
-        try {
-            return cborMapper.readTree(attestationObject).get("authData").binaryValue();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
     }
 
 }

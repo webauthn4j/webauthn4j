@@ -17,7 +17,8 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -26,6 +27,17 @@ import java.nio.charset.StandardCharsets;
  * Converter for {@link CollectedClientData}
  */
 public class CollectedClientDataConverter {
+
+    //~ Instance fields
+    // ================================================================================================
+    private JsonConverter jsonConverter;
+
+    //~ Constructors
+    // ================================================================================================
+
+    public CollectedClientDataConverter(Registry registry){
+        jsonConverter = new JsonConverter(registry.getJsonMapper());
+    }
 
     //~ Methods
     // ================================================================================================
@@ -37,11 +49,11 @@ public class CollectedClientDataConverter {
 
     public CollectedClientData convert(byte[] source) {
         String jsonString = new String(source, StandardCharsets.UTF_8);
-        return ObjectMapperUtil.readJSONValue(jsonString, CollectedClientData.class);
+        return jsonConverter.readValue(jsonString, CollectedClientData.class);
     }
 
     public byte[] convertToBytes(CollectedClientData source) {
-        return ObjectMapperUtil.writeValueAsJSONBytes(source);
+        return jsonConverter.writeValueAsBytes(source);
     }
 
     public String convertToBase64UrlString(CollectedClientData source) {
