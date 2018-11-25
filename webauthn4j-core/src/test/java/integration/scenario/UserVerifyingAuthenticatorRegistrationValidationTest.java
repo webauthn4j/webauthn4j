@@ -26,6 +26,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.client.*;
+import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.fido.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
@@ -38,6 +39,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
@@ -82,8 +85,21 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        WebAuthnRegistrationContext registrationContext
+                = new WebAuthnRegistrationContext(
+                    registrationRequest.getClientDataJSON(),
+                    registrationRequest.getAttestationObject(),
+                    registrationRequest.getClientExtensionsJSON(),
+                    serverProperty,
+                    false,
+                    Collections.emptyList()
+                );
+
+        WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAttestationObject()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
     }
 
     @Test
@@ -116,8 +132,21 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        WebAuthnRegistrationContext registrationContext
+                = new WebAuthnRegistrationContext(
+                registrationRequest.getClientDataJSON(),
+                registrationRequest.getAttestationObject(),
+                registrationRequest.getClientExtensionsJSON(),
+                serverProperty,
+                false,
+                Collections.emptyList()
+        );
+
+        WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAttestationObject()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
     }
 
     @Ignore

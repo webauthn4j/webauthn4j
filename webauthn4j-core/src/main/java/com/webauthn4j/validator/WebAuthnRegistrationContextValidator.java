@@ -172,7 +172,7 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnRegistrationContext registrationContext) {
+    public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) {
 
         BeanAssertUtil.validate(registrationContext);
 
@@ -316,6 +316,7 @@ public class WebAuthnRegistrationContextValidator {
 
         // ******* This step is up to library user *******
 
+        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensionOutputs);
     }
 
     private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {

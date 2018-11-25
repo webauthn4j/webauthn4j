@@ -31,12 +31,15 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.*;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
@@ -81,11 +84,18 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
+                        authenticationRequest.getClientExtensionsJSON(),
                         serverProperty,
-                        false
+                        false,
+                        Collections.emptyList()
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+
+        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAuthenticatorData()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
     }
 
     @Test(expected = MaliciousDataException.class)
@@ -128,7 +138,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+
+        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAuthenticatorData()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
     }
 
     @Test(expected = BadChallengeException.class)
