@@ -20,9 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.SignedJWT;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.structure.MetadataTOCPayload;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.WIP;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
@@ -51,21 +51,21 @@ public class FIDOMetadataServiceClient {
 
     private String fidoMetadataServiceEndpoint;
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
+    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
         this.restTemplate = restTemplate;
         this.jwsVerifier = jwsVerifier;
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
 
-        objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper();
+        objectMapper = registry.getJsonMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, JWSVerifier jwsVerifier) {
-        this(restTemplate, jwsVerifier, DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT);
+    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier) {
+        this(registry, restTemplate, jwsVerifier, DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT);
     }
 
-    public FIDOMetadataServiceClient(RestTemplate restTemplate, ResourceLoader resourceLoader) {
-        this(restTemplate, new CertPathJWSVerifier(resourceLoader));
+    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, ResourceLoader resourceLoader) {
+        this(registry, restTemplate, new CertPathJWSVerifier(resourceLoader));
     }
 
     public MetadataTOCPayload retrieveMetadataTOC() {

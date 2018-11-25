@@ -24,6 +24,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
@@ -43,6 +44,8 @@ import java.util.Collections;
 import static org.mockito.Mockito.mock;
 
 public class FIDOU2FAuthenticatorRegistrationValidationTest {
+
+    private Registry registry = new Registry();
 
     private Origin origin = new Origin("http://localhost");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
@@ -208,7 +211,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
-        byte[] maliciousClientDataBytes = new CollectedClientDataConverter().convertToBytes(maliciousClientData);
+        byte[] maliciousClientDataBytes = new CollectedClientDataConverter(registry).convertToBytes(maliciousClientData);
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty, false);
         target.validate(registrationContext);

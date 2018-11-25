@@ -30,6 +30,7 @@ import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -49,6 +50,8 @@ import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -62,9 +65,11 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+    private final Registry registry;
+
+    private final CollectedClientDataConverter collectedClientDataConverter;
+    private final AttestationObjectConverter attestationObjectConverter;
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter;
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -87,10 +92,41 @@ public class WebAuthnRegistrationContextValidator {
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
+        this(attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                new Registry());
+    }
+
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
+    ) {
+        this(attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                new DefaultSelfAttestationTrustworthinessValidator(),
+                new Registry());
+    }
+
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            Registry registry
+    ) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
+
+        this.registry = registry;
+        collectedClientDataConverter = new CollectedClientDataConverter(registry);
+        attestationObjectConverter = new AttestationObjectConverter(registry);
+        clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
 
         this.attestationStatementValidators = attestationStatementValidators;
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
@@ -101,15 +137,18 @@ public class WebAuthnRegistrationContextValidator {
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+            Registry registry
     ) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
-                new DefaultSelfAttestationTrustworthinessValidator()
+                new DefaultSelfAttestationTrustworthinessValidator(),
+                registry
         );
     }
+
 
     // ~ Factory methods
     // ========================================================================================================
@@ -146,11 +185,14 @@ public class WebAuthnRegistrationContextValidator {
         BeanAssertUtil.validate(attestationObject);
         BeanAssertUtil.validateClientExtensionsOutputs(clientExtensionOutputs);
 
+        byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
+
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
                 clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
+                authenticatorDataBytes,
                 registrationContext.getServerProperty()
         );
 
@@ -282,4 +324,5 @@ public class WebAuthnRegistrationContextValidator {
 
         throw new BadAttestationStatementException("Supplied AttestationStatement format is not configured.");
     }
+
 }

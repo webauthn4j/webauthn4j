@@ -25,6 +25,7 @@ import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticator;
@@ -38,6 +39,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
+
+    private Registry registry = new Registry();
 
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
@@ -435,7 +438,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
         credentialCreationOptions.setChallenge(challenge);
         credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 

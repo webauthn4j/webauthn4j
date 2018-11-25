@@ -26,6 +26,7 @@ import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
@@ -47,9 +48,11 @@ public class WebAuthnAuthenticationContextValidator {
     // ================================================================================================
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
-    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+    private final Registry registry;
+
+    private final AuthenticatorDataConverter authenticatorDataConverter;
+    private final CollectedClientDataConverter collectedClientDataConverter;
+    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter;
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -63,7 +66,16 @@ public class WebAuthnAuthenticationContextValidator {
     // ~ Constructor
     // ========================================================================================================
 
+    public WebAuthnAuthenticationContextValidator(){
+        this(new Registry());
+    }
 
+    public WebAuthnAuthenticationContextValidator(Registry registry){
+        this.registry = registry;
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(registry);
+        this.collectedClientDataConverter  = new CollectedClientDataConverter(registry);
+        this.clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
+    }
 
     // ~ Methods
     // ========================================================================================================

@@ -20,6 +20,7 @@ import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -27,7 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationObjectConverterTest {
 
-    private AttestationObjectConverter target = new AttestationObjectConverter();
+    private Registry registry = new Registry();
+    private AttestationObjectConverter target = new AttestationObjectConverter(registry);
 
     @Test
     public void convert_deserialization_test() {

@@ -18,12 +18,11 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
 import com.webauthn4j.extension.Coordinates;
 import com.webauthn4j.extension.authneticator.GenericTransactionAuthorizationAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SimpleTransactionAuthorizationAuthenticatorExtensionOutput;
-import com.webauthn4j.extension.authneticator.UserVerificationIndexAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.*;
+import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,7 +35,7 @@ public class ClientExtensionOutputDeserializerTest {
 
     @Test
     public void deserialize_test_with_JSON_data() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperUtil.createWebAuthnClassesAwareJSONMapper(); // use JSON mapper to make test data readable
+        ObjectMapper objectMapper = new Registry().getJsonMapper();
 
         Map<String, ClientExtensionOutput> extensionOutputs =
                 objectMapper.readValue(

@@ -17,8 +17,9 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.webauthn4j.converter.jackson.ObjectMapperUtil;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.registry.Registry;
 
 import java.util.Map;
 
@@ -27,6 +28,17 @@ import java.util.Map;
  */
 public class ClientExtensionOutputsConverter {
 
+    //~ Instance fields
+    // ================================================================================================
+    private JsonConverter jsonConverter;
+
+    //~ Constructors
+    // ================================================================================================
+
+    public ClientExtensionOutputsConverter(Registry registry){
+        jsonConverter = new JsonConverter(registry.getJsonMapper());
+    }
+
     //~ Methods
     // ================================================================================================
 
@@ -34,14 +46,14 @@ public class ClientExtensionOutputsConverter {
         if (value == null) {
             return null;
         }
-        return ObjectMapperUtil.readJSONValue(value, new TypeReference<Map<String, ClientExtensionOutput>>(){});
+        return jsonConverter.readValue(value, new TypeReference<Map<String, ClientExtensionOutput>>(){});
     }
 
     public String convertToString(Map<String, ClientExtensionOutput> value) {
         if (value == null) {
             return null;
         }
-        return ObjectMapperUtil.writeValueAsJSONString(value);
+        return jsonConverter.writeValueAsString(value);
     }
 
 }

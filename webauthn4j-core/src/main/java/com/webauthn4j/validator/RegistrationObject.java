@@ -32,6 +32,7 @@ public class RegistrationObject {
     private final byte[] collectedClientDataBytes;
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
+    private final byte[] authenticatorDataBytes;
     private final ServerProperty serverProperty;
 
     // ~ Constructor
@@ -41,12 +42,14 @@ public class RegistrationObject {
                               byte[] collectedClientDataBytes,
                               AttestationObject attestationObject,
                               byte[] attestationObjectBytes,
+                              byte[] authenticatorDataBytes,
                               ServerProperty serverProperty) {
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
+        this.authenticatorDataBytes = authenticatorDataBytes;
         this.serverProperty = serverProperty;
     }
 
@@ -67,6 +70,10 @@ public class RegistrationObject {
 
     public byte[] getAttestationObjectBytes() {
         return attestationObjectBytes;
+    }
+
+    public byte[] getAuthenticatorDataBytes() {
+        return authenticatorDataBytes;
     }
 
     public ServerProperty getServerProperty() {

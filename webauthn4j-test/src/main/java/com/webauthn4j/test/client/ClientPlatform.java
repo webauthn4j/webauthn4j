@@ -28,6 +28,7 @@ import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.extension.client.SupportedExtensionsClientExtensionOutput;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -42,9 +43,10 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter();
-    private ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter();
+    private Registry registry = new Registry();
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
+    private ClientExtensionOutputsConverter clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
 
     private Origin origin;
     //TODO: support multiple authenticators
