@@ -43,7 +43,7 @@ class RpIdHashValidator {
     public void validate(byte[] rpIdHash, ServerProperty serverProperty) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();
-        AssertUtil.notNull(rpId, "serverProperty must not be null");
+        AssertUtil.notNull(rpId, "rpId must not be null");
 
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
