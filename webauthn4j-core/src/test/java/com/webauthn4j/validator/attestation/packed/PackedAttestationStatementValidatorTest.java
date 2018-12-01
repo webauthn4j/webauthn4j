@@ -32,6 +32,7 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.RSAKeyGenParameterSpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -234,7 +235,7 @@ public class PackedAttestationStatementValidatorTest {
             x509.sign(pair.getPrivate(), signAlgo);
 
 
-            return new AttestationCertificatePath(Arrays.asList(x509));
+            return new AttestationCertificatePath(Collections.singletonList(x509));
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

@@ -49,14 +49,15 @@ public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<Au
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
 
-        if (GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, GenericTransactionAuthorizationAuthenticatorExtensionOutput.class);
-        } else if (SupportedExtensionsAuthenticatorExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, SupportedExtensionsAuthenticatorExtensionOutput.class);
-        } else if (LocationAuthenticatorExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, LocationAuthenticatorExtensionOutput.class);
-        } else if (UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
+        switch (parentName) {
+            case GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID:
+                return ctxt.readValue(p, GenericTransactionAuthorizationAuthenticatorExtensionOutput.class);
+            case SupportedExtensionsAuthenticatorExtensionOutput.ID:
+                return ctxt.readValue(p, SupportedExtensionsAuthenticatorExtensionOutput.class);
+            case LocationAuthenticatorExtensionOutput.ID:
+                return ctxt.readValue(p, LocationAuthenticatorExtensionOutput.class);
+            case UserVerificationIndexAuthenticatorExtensionOutput.ID:
+                return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
         }
 
         throw new NotImplementedException();

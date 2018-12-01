@@ -110,7 +110,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         byte[] credentialId = publicKeyCredentialDescriptor.getId();
         long counter = ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresense(), counter);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresence(), counter);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signature = authenticationResponse.getSignature();

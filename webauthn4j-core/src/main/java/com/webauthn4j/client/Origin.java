@@ -106,6 +106,7 @@ public class Origin implements Serializable {
         Origin origin = (Origin) o;
 
         if (port != origin.port) return false;
+        //noinspection SimplifiableIfStatement
         if (!scheme.equals(origin.scheme)) return false;
         return host.equals(origin.host);
     }

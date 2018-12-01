@@ -42,6 +42,7 @@ public class AuthenticatorDataConverterTest {
     @Test
     public void convert_test() {
         //Given
+        //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
 
         //When

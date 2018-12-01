@@ -41,30 +41,36 @@ public class ClientExtensionOutputDeserializer extends StdDeserializer<ClientExt
 
         String currentName = p.getParsingContext().getCurrentName();
 
-        if (FIDOAppIDClientExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, FIDOAppIDClientExtensionOutput.class);
-        } else if (SimpleTransactionAuthorizationClientExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, SimpleTransactionAuthorizationClientExtensionOutput.class);
-        } else if (UserVerificationIndexClientExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
-        } else if (AuthenticatorSelectionClientExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
-        } else if (BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.class);
+        if (currentName != null) {
+            switch (currentName) {
+                case FIDOAppIDClientExtensionOutput.ID:
+                    return ctxt.readValue(p, FIDOAppIDClientExtensionOutput.class);
+                case SimpleTransactionAuthorizationClientExtensionOutput.ID:
+                    return ctxt.readValue(p, SimpleTransactionAuthorizationClientExtensionOutput.class);
+                case UserVerificationIndexClientExtensionOutput.ID:
+                    return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
+                case AuthenticatorSelectionClientExtensionOutput.ID:
+                    return ctxt.readValue(p, AuthenticatorSelectionClientExtensionOutput.class);
+                case BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.ID:
+                    return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsClientExtensionOutput.class);
+                default:
+                    throw new NotImplementedException();
+            }
+        } else {
+            String parentName = p.getParsingContext().getParent().getCurrentName();
+
+            switch (parentName) {
+                case GenericTransactionAuthorizationClientExtensionOutput.ID:
+                    return ctxt.readValue(p, GenericTransactionAuthorizationClientExtensionOutput.class);
+                case SupportedExtensionsClientExtensionOutput.ID:
+                    return ctxt.readValue(p, SupportedExtensionsClientExtensionOutput.class);
+                case LocationClientExtensionOutput.ID:
+                    return ctxt.readValue(p, LocationClientExtensionOutput.class);
+                case UserVerificationIndexClientExtensionOutput.ID:
+                    return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
+                default:
+                    throw new NotImplementedException();
+            }
         }
-
-        String parentName = p.getParsingContext().getParent().getCurrentName();
-
-        if (GenericTransactionAuthorizationClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, GenericTransactionAuthorizationClientExtensionOutput.class);
-        } else if (SupportedExtensionsClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, SupportedExtensionsClientExtensionOutput.class);
-        } else if (LocationClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, LocationClientExtensionOutput.class);
-        } else if (UserVerificationIndexClientExtensionOutput.ID.equals(parentName)) {
-            return ctxt.readValue(p, UserVerificationIndexClientExtensionOutput.class);
-        }
-
-        throw new NotImplementedException();
     }
 }

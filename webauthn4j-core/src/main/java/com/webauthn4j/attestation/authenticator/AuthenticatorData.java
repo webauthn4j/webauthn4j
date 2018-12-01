@@ -137,6 +137,7 @@ public class AuthenticatorData {
         if (flags != that.flags) return false;
         if (signCount != that.signCount) return false;
         if (!Arrays.equals(rpIdHash, that.rpIdHash)) return false;
+        //noinspection SimplifiableIfStatement
         if (attestedCredentialData != null ? !attestedCredentialData.equals(that.attestedCredentialData) : that.attestedCredentialData != null)
             return false;
         return extensions != null ? extensions.equals(that.extensions) : that.extensions == null;

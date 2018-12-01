@@ -63,6 +63,7 @@ public class AttestedCredentialData implements Serializable {
         AttestedCredentialData that = (AttestedCredentialData) o;
 
         if (!Arrays.equals(aaGuid, that.aaGuid)) return false;
+        //noinspection SimplifiableIfStatement
         if (!Arrays.equals(credentialId, that.credentialId)) return false;
         return credentialPublicKey != null ? credentialPublicKey.equals(that.credentialPublicKey) : that.credentialPublicKey == null;
     }

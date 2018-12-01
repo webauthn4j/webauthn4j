@@ -47,9 +47,7 @@ public class CertificateUtilTest {
     @Test
     public void createPKIXParameters_test_with_empty_trustAnchors(){
         HashSet<TrustAnchor> trustAnchors = new HashSet<>();
-        assertThatThrownBy(()->{
-                CertificateUtil.createPKIXParameters(trustAnchors);
-        }).isInstanceOf(IllegalArgumentException.class).hasMessage("trustAnchors is required; it must not be empty");
+        assertThatThrownBy(()-> CertificateUtil.createPKIXParameters(trustAnchors)).isInstanceOf(IllegalArgumentException.class).hasMessage("trustAnchors is required; it must not be empty");
     }
 
     @Test

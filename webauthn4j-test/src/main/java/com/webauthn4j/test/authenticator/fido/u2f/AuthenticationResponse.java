@@ -21,7 +21,7 @@ import com.webauthn4j.util.WIP;
 @WIP
 public class AuthenticationResponse {
 
-    private byte userPresense;
+    private byte userPresence;
     private byte[] counter;
     private byte[] signature;
 
@@ -30,13 +30,13 @@ public class AuthenticationResponse {
             throw new IllegalArgumentException("counter must be 4 bytes");
         }
 
-        this.userPresense = userPresence;
+        this.userPresence = userPresence;
         this.counter = counter;
         this.signature = signature;
     }
 
-    public byte getUserPresense() {
-        return userPresense;
+    public byte getUserPresence() {
+        return userPresence;
     }
 
     public byte[] getCounter() {

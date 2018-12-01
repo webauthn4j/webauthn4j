@@ -124,7 +124,7 @@ public class ClientPlatform {
                 case SupportedExtensionsClientExtensionInput.ID:
                     SupportedExtensionsClientExtensionInput clientExtensionInput = (SupportedExtensionsClientExtensionInput)value;
                     if(clientExtensionInput.getValue()){
-                        map.put(key, new SupportedExtensionsClientExtensionOutput(Arrays.asList(SupportedExtensionsClientExtensionInput.ID)));
+                        map.put(key, new SupportedExtensionsClientExtensionOutput(Collections.singletonList(SupportedExtensionsClientExtensionInput.ID)));
                     }
                     break;
             }
