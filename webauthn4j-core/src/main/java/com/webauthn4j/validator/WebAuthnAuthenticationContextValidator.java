@@ -80,7 +80,7 @@ public class WebAuthnAuthenticationContextValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) {
+    public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) {
 
         BeanAssertUtil.validate(authenticationContext);
 
@@ -161,6 +161,8 @@ public class WebAuthnAuthenticationContextValidator {
                 maliciousCounterValueHandler.maliciousCounterValueDetected(authenticationContext, authenticator);
             }
         }
+
+        return new WebAuthnAuthenticationContextValidationResponse(collectedClientData, authenticatorData, clientExtensionOutputs);
     }
 
     public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {

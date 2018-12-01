@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
 
-    private final AuthenticatorDataConverter authenticatorDataConverter;
+    private final transient AuthenticatorDataConverter authenticatorDataConverter;
 
     public AuthenticatorDataSerializer(Registry registry) {
         super(AuthenticatorData.class);

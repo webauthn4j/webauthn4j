@@ -154,6 +154,10 @@ public class WebAuthnRegistrationContextValidator {
     // ========================================================================================================
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
+        return createNonStrictRegistrationContextValidator(new Registry());
+    }
+
+    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(Registry registry) {
         return new WebAuthnRegistrationContextValidator(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
@@ -162,14 +166,15 @@ public class WebAuthnRegistrationContextValidator {
                 ,
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
-                new NullSelfAttestationTrustworthinessValidator()
+                new NullSelfAttestationTrustworthinessValidator(),
+                registry
         );
     }
 
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnRegistrationContext registrationContext) {
+    public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) {
 
         BeanAssertUtil.validate(registrationContext);
 
@@ -313,6 +318,7 @@ public class WebAuthnRegistrationContextValidator {
 
         // ******* This step is up to library user *******
 
+        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensionOutputs);
     }
 
     private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {

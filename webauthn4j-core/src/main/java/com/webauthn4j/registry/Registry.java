@@ -15,8 +15,7 @@ public class Registry {
     private ObjectMapper jsonMapper;
     private ObjectMapper cborMapper;
 
-    // private ExtensionConverter;
-    // private ExtensionValidator;
+    // TODO: Hold ExtensionConverter, ExtensionValidator
 
     public Registry(){
         jsonMapper = new ObjectMapper();

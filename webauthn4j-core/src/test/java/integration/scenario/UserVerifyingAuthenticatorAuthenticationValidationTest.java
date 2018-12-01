@@ -31,11 +31,14 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.client.*;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
 import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
@@ -75,11 +78,18 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
+                        authenticationRequest.getClientExtensionsJSON(),
                         serverProperty,
-                        true
+                        true,
+                        Collections.emptyList()
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+
+        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAuthenticatorData()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
 
     }
 
@@ -115,11 +125,18 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
+                        authenticationRequest.getClientExtensionsJSON(),
                         serverProperty,
-                        true
+                        true,
+                        Collections.emptyList()
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+
+        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+
+        assertThat(response.getCollectedClientData()).isNotNull();
+        assertThat(response.getAuthenticatorData()).isNotNull();
+        assertThat(response.getClientExtensionOutputs()).isNotNull();
 
     }
 
