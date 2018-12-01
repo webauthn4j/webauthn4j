@@ -1,12 +1,15 @@
 [configuration]
 == 設定
 
-===== 構成証明ステートメントの署名の検証
+===== 構成証明ステートメントの検証
 
-Spring Security WebAuthnは `AttestationStatementSignatureValidator` インタフェースの実装として、
-`FIDOU2FAttestationStatementSignatureValidator` と `WebAuthnAttestationStatementSignatureValidator` を提供します。
-Spring Security WebAuthnは `AttestationStatementSignatureValidator` インタフェースを実装したクラスのBeanを自動で検出し、
-署名の検証時、フォーマットと適合する `AttestationStatementSignatureValidator` を使用して検証を行います。
+WebAuthn4Jでは、`WebAuthnRegistrationContextValidator` が認証デバイスの登録要求の検証を行いますが、
+取得した構成証明ステートメントの署名と信頼性の検証は、それぞれ `AttestationStatementValidator` と
+`CertPathTrustworthinessValidator` インタフェースの実装に委譲します。
+
+厳密な構成証明ステートメントの検証を必要としないサイト向けに、`AttestationStatementValidator` と
+`CertPathTrustworthinessValidator` を構成した `WebAuthnRegistrationContextValidator` のインスタンスは、
+`WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` ファクトリメソッドで作成出来ます。
 
 
 ===== 構成証明ステートメントの信頼性の検証
