@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
+import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -69,12 +70,7 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
                 new BigInteger(1, getN()),
                 new BigInteger(1, getE())
         );
-        try {
-            KeyFactory factory = KeyFactory.getInstance("RSA");
-            return factory.generatePublic(spec);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new UnexpectedCheckedException(ex);
-        }
+        return RSAUtil.createPublicKey(spec);
     }
 
     @Override

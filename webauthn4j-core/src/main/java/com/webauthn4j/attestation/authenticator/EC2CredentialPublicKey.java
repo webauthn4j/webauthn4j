@@ -132,8 +132,9 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
                 new BigInteger(1, getX()),
                 new BigInteger(1, getY())
         );
+        ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, curve.getECParameterSpec());
 
-        return ECUtil.createPublicKey(curve.getECParameterSpec(), ecPoint);
+        return ECUtil.createPublicKey(spec);
     }
 
     public void validate() {

@@ -20,6 +20,7 @@ import com.webauthn4j.util.ECUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CurveTest {
 
@@ -28,6 +29,8 @@ public class CurveTest {
         assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1);
         assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1);
         assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1);
+        //noinspection ResultOfMethodCallIgnored
+        assertThatThrownBy(()-> Curve.create(4)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

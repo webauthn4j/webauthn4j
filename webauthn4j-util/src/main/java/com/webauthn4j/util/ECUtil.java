@@ -32,15 +32,10 @@ public class ECUtil {
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
     public static final ECParameterSpec P_521_SPEC = createECParameterSpec("secp521r1");
 
-    public static PublicKey createPublicKey(ECParameterSpec parameterSpec, ECPoint ecPoint){
+    public static PublicKey createPublicKey(ECPublicKeySpec ecPublicKeySpec){
         try {
-
-            ECPublicKeySpec spec = new ECPublicKeySpec(
-                    ecPoint,
-                    parameterSpec
-            );
             KeyFactory factory = KeyFactory.getInstance("EC");
-            return factory.generatePublic(spec);
+            return factory.generatePublic(ecPublicKeySpec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }

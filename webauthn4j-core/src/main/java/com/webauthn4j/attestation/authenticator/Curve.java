@@ -45,7 +45,7 @@ public enum Curve {
             case 3:
                 return SECP521R1;
             default:
-                throw new NotImplementedException();
+                throw new IllegalArgumentException();
         }
     }
 
@@ -63,7 +63,7 @@ public enum Curve {
             case 3:
                 return ECUtil.P_521_SPEC;
             default:
-                throw new NotImplementedException();
+                throw new IllegalStateException();
         }
     }
 }
