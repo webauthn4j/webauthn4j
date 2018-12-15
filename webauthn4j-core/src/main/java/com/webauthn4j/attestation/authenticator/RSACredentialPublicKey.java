@@ -75,7 +75,7 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
     @Override
     public byte[] getBytes() {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); //TODO
     }
 
     @Override

@@ -58,8 +58,8 @@ public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<Au
                 return ctxt.readValue(p, LocationAuthenticatorExtensionOutput.class);
             case UserVerificationIndexAuthenticatorExtensionOutput.ID:
                 return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
+            default:
+                throw new NotImplementedException();
         }
-
-        throw new NotImplementedException();
     }
 }
