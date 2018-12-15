@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.attestation.statement.COSEKeyType;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -132,17 +133,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
                 new BigInteger(1, getY())
         );
 
-        try {
-            ECParameterSpec ecParameterSpec = curve.getECParameterSpec();
-            ECPublicKeySpec spec = new ECPublicKeySpec(
-                    ecPoint,
-                    ecParameterSpec
-            );
-            KeyFactory factory = KeyFactory.getInstance("EC");
-            return factory.generatePublic(spec);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new UnexpectedCheckedException(e);
-        }
+        return ECUtil.createPublicKey(curve.getECParameterSpec(), ecPoint);
     }
 
     public void validate() {

@@ -18,12 +18,8 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
-import java.security.AlgorithmParameters;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.ECGenParameterSpec;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.InvalidParameterSpecException;
+import java.security.*;
+import java.security.spec.*;
 
 /**
  * A Utility class for Epic Curve(EC) manipulation
@@ -35,6 +31,20 @@ public class ECUtil {
     public static final ECParameterSpec P_256_SPEC = createECParameterSpec("secp256r1");
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
     public static final ECParameterSpec P_521_SPEC = createECParameterSpec("secp521r1");
+
+    public static PublicKey createPublicKey(ECParameterSpec parameterSpec, ECPoint ecPoint){
+        try {
+
+            ECPublicKeySpec spec = new ECPublicKeySpec(
+                    ecPoint,
+                    parameterSpec
+            );
+            KeyFactory factory = KeyFactory.getInstance("EC");
+            return factory.generatePublic(spec);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
 
     private static ECParameterSpec createECParameterSpec(String name){
         try {

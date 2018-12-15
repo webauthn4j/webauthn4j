@@ -21,6 +21,7 @@ import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 public class AuthenticatorData {
     public static final byte BIT_UP = (byte) 0b00000001;
@@ -130,17 +131,13 @@ public class AuthenticatorData {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuthenticatorData)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorData that = (AuthenticatorData) o;
-
-        if (flags != that.flags) return false;
-        if (signCount != that.signCount) return false;
-        if (!Arrays.equals(rpIdHash, that.rpIdHash)) return false;
-        //noinspection SimplifiableIfStatement
-        if (attestedCredentialData != null ? !attestedCredentialData.equals(that.attestedCredentialData) : that.attestedCredentialData != null)
-            return false;
-        return extensions != null ? extensions.equals(that.extensions) : that.extensions == null;
+        return flags == that.flags &&
+                signCount == that.signCount &&
+                Arrays.equals(rpIdHash, that.rpIdHash) &&
+                Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
+                Objects.equals(extensions, that.extensions);
     }
 
     /**
@@ -148,12 +145,8 @@ public class AuthenticatorData {
      */
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(rpIdHash);
-        result = 31 * result + (int) flags;
-        result = 31 * result + (int) (signCount ^ (signCount >>> 32));
-        result = 31 * result + (attestedCredentialData != null ? attestedCredentialData.hashCode() : 0);
-        result = 31 * result + (extensions != null ? extensions.hashCode() : 0);
+        int result = Objects.hash(flags, signCount, attestedCredentialData, extensions);
+        result = 31 * result + Arrays.hashCode(rpIdHash);
         return result;
     }
-
 }
