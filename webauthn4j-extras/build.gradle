@@ -44,3 +44,7 @@ dependencyManagement {
         mavenBom "org.springframework.security:spring-security-bom:${springSecurityVersion}"
     }
 }
+
+sonarqube {
+    skipProject = true
+}

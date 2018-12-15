@@ -31,3 +31,7 @@ dependencyManagement {
         mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
     }
 }
+
+sonarqube {
+    skipProject = true
+}
