@@ -24,18 +24,18 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TrustAnchorProviderBaseTest {
+public class CachingTrustAnchorProviderBaseTest {
 
     @Test
     public void test(){
-        TrustAnchorProviderBaseImpl target = new TrustAnchorProviderBaseImpl();
+        CachingTrustAnchorProviderBaseImpl target = new CachingTrustAnchorProviderBaseImpl();
 
         Set<TrustAnchor> trustAnchorsA = target.provide();
         Set<TrustAnchor> trustAnchorsB = target.provide();
         assertThat(trustAnchorsA).isEqualTo(trustAnchorsB);
     }
 
-    class TrustAnchorProviderBaseImpl extends TrustAnchorProviderBase {
+    class CachingTrustAnchorProviderBaseImpl extends CachingTrustAnchorProviderBase {
 
         @Override
         protected Set<TrustAnchor> loadTrustAnchors() {

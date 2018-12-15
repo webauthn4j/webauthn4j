@@ -23,7 +23,7 @@ import java.util.Set;
  * An abstract {@link TrustAnchorProvider}
  * Load trustAnchors at first time access and cache it.
  */
-public abstract class TrustAnchorProviderBase implements TrustAnchorProvider {
+public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvider {
 
     private Set<TrustAnchor> cachedTrustAnchors;
 
