@@ -85,12 +85,12 @@ public class AttestationCertificate {
 
     private String getValue(String name){
         String subjectDN = getCertificate().getSubjectX500Principal().getName();
-        for (Rdn rdn : getX500Name(subjectDN)) {
-            if(rdn.getType().equalsIgnoreCase(name)){
-                return (String)rdn.getValue();
-            }
-        }
-        return null;
+        return getX500Name(subjectDN)
+                .stream()
+                .filter(rdn -> rdn.getType().equalsIgnoreCase(name))
+                .findFirst()
+                .map(rdn -> (String) rdn.getValue())
+                .orElse(null);
     }
 
     @Override
