@@ -27,14 +27,6 @@ public class JsonConverter {
         }
     }
 
-    public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
-        try {
-            return jsonMapper.readValue(src, valueTypeRef);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
     public <T> T readValue(String src, TypeReference valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
