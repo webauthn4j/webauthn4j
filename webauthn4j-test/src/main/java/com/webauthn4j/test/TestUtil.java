@@ -27,12 +27,15 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
 import com.webauthn4j.util.*;
+import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.validator.RegistrationObject;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -52,6 +55,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.*;
+import java.util.function.Function;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -62,6 +66,24 @@ import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
 public class TestUtil {
 
     private TestUtil() {
+    }
+
+    public static RegistrationObject createRegistrationObject(Function<byte[], AttestationObject> attestationObjectProvider) {
+        Registry registry = new Registry();
+        CollectedClientData collectedClientData = createClientData(ClientDataType.CREATE);
+        byte[] collectedClientDataBytes = new CollectedClientDataConverter(registry).convertToBytes(collectedClientData);
+        AttestationObject attestationObject = attestationObjectProvider.apply(collectedClientDataBytes);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(registry).convertToBytes(attestationObject);
+        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(registry).convert(authenticatorData);
+        return new RegistrationObject(
+                collectedClientData,
+                collectedClientDataBytes,
+                attestationObject,
+                attestationObjectBytes,
+                authenticatorDataBytes,
+                TestUtil.createServerProperty()
+        );
     }
 
     public static AttestationObject createAttestationObjectWithFIDOU2FAttestationStatement() {
@@ -95,6 +117,19 @@ public class TestUtil {
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
         return new AttestationObject(authenticatorData, createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
+        PrivateKey privateKey = TestUtil.loadAndroidKeyAttestationPrivateKey();
+        AuthenticatorData authenticatorData = createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(new Registry()).convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+    }
+
+    private static PrivateKey loadAndroidKeyAttestationPrivateKey() {
+        throw new NotImplementedException();
     }
 
     private static byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
@@ -162,11 +197,16 @@ public class TestUtil {
 
     public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         AttestationCertificatePath certPath = load3tierTestCertPath();
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, certPath, null);
+        return new PackedAttestationStatement(algorithm, signature, certPath, null);
     }
 
     public static PackedAttestationStatement createSelfPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         return new PackedAttestationStatement(algorithm, signature, null, null);
+    }
+
+    public static AndroidKeyAttestationStatement createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
+        AttestationCertificatePath certPath = loadAndroidKeyCertPath();
+        return new AndroidKeyAttestationStatement(algorithm, signature, certPath);
     }
 
     public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {
@@ -197,6 +237,9 @@ public class TestUtil {
         return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-authenticator.crt");
     }
 
+    private static AttestationCertificatePath loadAndroidKeyCertPath() {
+        throw new NotImplementedException();
+    }
 
     public static X509Certificate loadCertificateFromClassPath(String classPath) {
         ClassPathResource resource = new ClassPathResource(classPath);
@@ -208,27 +251,66 @@ public class TestUtil {
     }
 
     public static X509Certificate loadFirefoxSWTokenAttestationCertificate() {
-        String base64Certificate = "MIIBMTCB2KADAgECAgRdWm5nMAoGCCqGSM49BAMCMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wHhcNMTcwODE5MTExMDI3WhcNMTcwODIxMTExMDI3WjAhMR8wHQYDVQQDExZGaXJlZm94IFUyRiBTb2Z0IFRva2VuMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmNdtc7TW47xJcunwo_5ZuqSeHKJDZixC3AhTy2OEnYZfLmLZn9ssfWqLmPY4E642bKRDsm6qLNfjj_z9ufejNTAKBggqhkjOPQQDAgNIADBFAiEA6SdHwFyOq1trbQA6TLxLHS11EYUYDWyA24BnsJD8TrACIEw7k4aGBMOYlT5uMXLlj4bV5jo1Svi83VOpBo5ykMvd";
-        return createCertificate(base64Certificate);
+        String base64UrlCertificate = "MIIBMTCB2KADAgECAgRdWm5nMAoGCCqGSM49BAMCMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wHhcNMTcwODE5MTExMDI3WhcNMTcwODIxMTExMDI3WjAhMR8wHQYDVQQDExZGaXJlZm94IFUyRiBTb2Z0IFRva2VuMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmNdtc7TW47xJcunwo_5ZuqSeHKJDZixC3AhTy2OEnYZfLmLZn9ssfWqLmPY4E642bKRDsm6qLNfjj_z9ufejNTAKBggqhkjOPQQDAgNIADBFAiEA6SdHwFyOq1trbQA6TLxLHS11EYUYDWyA24BnsJD8TrACIEw7k4aGBMOYlT5uMXLlj4bV5jo1Svi83VOpBo5ykMvd";
+        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
     }
 
     public static X509Certificate loadFeitianU2FTokenAttestationCertificate() {
-        String base64Certificate = "MIIBTDCB86ADAgECAgrMFgqn4TlPa3dQMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDEZUIEZJRE8gMDEwMDAeFw0xNjA0MTUxNDUwMzJaFw0yNjA0MTUxNDUwMzJaMCcxJTAjBgNVBAMTHEZUIEZJRE8gVTJGIDExNjE2MTczMDMwNTAyMTAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATG1tXh9HyGi4UJapsP3Fw8NEwRr5WEYfV5xOvP2XU4jpnJ17SEbyZTCn7rX38Ept32BPr6IaOmamqAdQvsDpNgoxcwFTATBgsrBgEEAYLlHAIBAQQEAwIEMDAKBggqhkjOPQQDAgNIADBFAiEA3wPvLOvjpbU3VCsKBjWtb5MzcX_I2p7NN_X03kyyFoUCIAxoJPinKGUxoNR_bhx3uZHtQQpwLWuaBND9y2Omhf47";
-        return createCertificate(base64Certificate);
+        String base64UrlCertificate = "MIIBTDCB86ADAgECAgrMFgqn4TlPa3dQMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDEZUIEZJRE8gMDEwMDAeFw0xNjA0MTUxNDUwMzJaFw0yNjA0MTUxNDUwMzJaMCcxJTAjBgNVBAMTHEZUIEZJRE8gVTJGIDExNjE2MTczMDMwNTAyMTAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATG1tXh9HyGi4UJapsP3Fw8NEwRr5WEYfV5xOvP2XU4jpnJ17SEbyZTCn7rX38Ept32BPr6IaOmamqAdQvsDpNgoxcwFTATBgsrBgEEAYLlHAIBAQQEAwIEMDAKBggqhkjOPQQDAgNIADBFAiEA3wPvLOvjpbU3VCsKBjWtb5MzcX_I2p7NN_X03kyyFoUCIAxoJPinKGUxoNR_bhx3uZHtQQpwLWuaBND9y2Omhf47";
+        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
     }
 
     public static X509Certificate loadYubikeyAttestationCertificate() {
-        String base64Certificate = "MIICRDCCAS6gAwIBAgIEeMDfDjALBgkqhkiG9w0BAQswLjEsMCoGA1UEAxMjWXViaWNvIFUyRiBSb290IENBIFNlcmlhbCA0NTcyMDA2MzEwIBcNMTQwODAxMDAwMDAwWhgPMjA1MDA5MDQwMDAwMDBaMCoxKDAmBgNVBAMMH1l1YmljbyBVMkYgRUUgU2VyaWFsIDIwMjU5MDU5MzQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS1uHFcg_3-DqFcRXeshY30jBdv3oedyvS4PUDTIPJvreYl_Pf1yK_YNRj4254h7Ag7GEWAxxfsSkcLlopvuj9vozswOTAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIFIDALBgkqhkiG9w0BAQsDggEBAD72q_ZKkWsL-ZSTjdyVNOBUQAJoVninLEOnq-ZdkGX_YfRRzoo67thmidGQuVCvAHpU0THu8G_ia06nuz4yt5IFpd-nYAQ0U-NK-ETDfNSoX4xcLYcOCiiyt-1EAkH9s3krIHaw4Yr6m0Mu7vwmWLoJBcQbJKk8bsi7ptVvM-jWU9fPa9UBVFWiZZdA99zFHMAxYJzQPqbN6Tmeygh2MpB2P7TI0A9WkGmhJUkAauuwaiGiFOSZmDe0KegdflbTOlSS3ToWHIKTlUCBqn7vdJw6Vj2919ujlcxHPkRpbUGRhcJDesg6wGTBy-RyJ_96G3fH1eoMNn1F9jC9mY1Zsm4=";
-        return createCertificate(base64Certificate);
+        String base64UrlCertificate = "MIICRDCCAS6gAwIBAgIEeMDfDjALBgkqhkiG9w0BAQswLjEsMCoGA1UEAxMjWXViaWNvIFUyRiBSb290IENBIFNlcmlhbCA0NTcyMDA2MzEwIBcNMTQwODAxMDAwMDAwWhgPMjA1MDA5MDQwMDAwMDBaMCoxKDAmBgNVBAMMH1l1YmljbyBVMkYgRUUgU2VyaWFsIDIwMjU5MDU5MzQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS1uHFcg_3-DqFcRXeshY30jBdv3oedyvS4PUDTIPJvreYl_Pf1yK_YNRj4254h7Ag7GEWAxxfsSkcLlopvuj9vozswOTAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIFIDALBgkqhkiG9w0BAQsDggEBAD72q_ZKkWsL-ZSTjdyVNOBUQAJoVninLEOnq-ZdkGX_YfRRzoo67thmidGQuVCvAHpU0THu8G_ia06nuz4yt5IFpd-nYAQ0U-NK-ETDfNSoX4xcLYcOCiiyt-1EAkH9s3krIHaw4Yr6m0Mu7vwmWLoJBcQbJKk8bsi7ptVvM-jWU9fPa9UBVFWiZZdA99zFHMAxYJzQPqbN6Tmeygh2MpB2P7TI0A9WkGmhJUkAauuwaiGiFOSZmDe0KegdflbTOlSS3ToWHIKTlUCBqn7vdJw6Vj2919ujlcxHPkRpbUGRhcJDesg6wGTBy-RyJ_96G3fH1eoMNn1F9jC9mY1Zsm4=";
+        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
     }
 
-    public static X509Certificate createCertificate(String base64Certificate) {
-        try {
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(Base64UrlUtil.decode(base64Certificate)));
-        } catch (CertificateException e) {
-            throw new IllegalStateException(e);
-        }
+    public static X509Certificate loadAndroidKeyAttestationCertificate(){
+        String certificate =
+        "-----BEGIN CERTIFICATE-----\n"
+        + "MIIByTCCAXCgAwIBAgIBATAKBggqhkjOPQQDAjAcMRowGAYDVQQDDBFBbmRyb2lkIE"
+        + "tleW1hc3Rl cjAgFw03MDAxMDEwMDAwMDBaGA8yMTA2MDIwNzA2MjgxNVowGjEYMBY"
+        + "GA1UEAwwPQSBLZXltYXN0 ZXIgS2V5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE"
+        + "FpsFUWID9p2QPAvtfal4MRf9vJg0tNc3 vKJwoDhhSCMm7If0FljgvmroBYQyCIbnn"
+        + "Bxh2OU9SKxI/manPwIIUqOBojCBnzALBgNVHQ8EBAMC B4AwbwYKKwYBBAHWeQIBEQ"
+        + "RhMF8CAQEKAQACAQEKAQEEBWhlbGxvBAAwDL+FPQgCBgFWDy29GDA6 oQUxAwIBAqI"
+        + "DAgEDowQCAgEApQUxAwIBBKoDAgEBv4N4AwIBA7+DeQQCAgEsv4U+AwIBAL+FPwIF "
+        + "ADAfBgNVHSMEGDAWgBQ//KzWGrE6noEguNUlHMVlux6RqTAKBggqhkjOPQQDAgNHAD"
+        + "BEAiBKzJSk 9VNauKu4dr+ZJ5jMTNlAxSI99XkKEkXSolsGSAIgCnd5T99gv3B/IqM"
+        + "CHn0yZ7Wuu/jisU0epRRo xh8otA8=\n"
+        + "-----END CERTIFICATE-----";
+        return createCertificate(certificate);
+    }
+
+    public static X509Certificate loadAndroidKeyIntermidiateCertificate(){
+        String certificate =
+        "-----BEGIN CERTIFICATE-----\n" +
+        "MIICeDCCAh6gAwIBAgICEAEwCgYIKoZIzj0EAwIwgZgxCzAJBgNVBAYTAlVTMRMwEQ"
+        +  "YDVQQIDApD YWxpZm9ybmlhMRYwFAYDVQQHDA1Nb3VudGFpbiBWaWV3MRUwEwYDVQQ"
+        +  "KDAxHb29nbGUsIEluYy4x EDAOBgNVBAsMB0FuZHJvaWQxMzAxBgNVBAMMKkFuZHJv"
+        +  "aWQgS2V5c3RvcmUgU29mdHdhcmUgQXR0 ZXN0YXRpb24gUm9vdDAeFw0xNjAxMTEwM"
+        +  "DQ2MDlaFw0yNjAxMDgwMDQ2MDlaMIGIMQswCQYDVQQG EwJVUzETMBEGA1UECAwKQ2"
+        +  "FsaWZvcm5pYTEVMBMGA1UECgwMR29vZ2xlLCBJbmMuMRAwDgYDVQQL DAdBbmRyb2l"
+        +  "kMTswOQYDVQQDDDJBbmRyb2lkIEtleXN0b3JlIFNvZnR3YXJlIEF0dGVzdGF0aW9u "
+        +  "IEludGVybWVkaWF0ZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABOueefhCY1msyy"
+        +  "qRTImGzHCt kGaTgqlzJhP+rMv4ISdMIXSXSir+pblNf2bU4GUQZjW8U7ego6ZxWD7"
+        +  "bPhGuEBSjZjBkMB0GA1Ud DgQWBBQ//KzWGrE6noEguNUlHMVlux6RqTAfBgNVHSME"
+        +  "GDAWgBTIrel3TEXDo88NFhDkeUM6IVow zzASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA"
+        +  "1UdDwEB/wQEAwIChDAKBggqhkjOPQQDAgNIADBFAiBL ipt77oK8wDOHri/AiZi03c"
+        +  "ONqycqRZ9pDMfDktQPjgIhAO7aAV229DLp1IQ7YkyUBO86fMy9Xvsi u+f+uXc/WT/"
+        +  "7\n" +
+        "-----END CERTIFICATE-----";
+        return createCertificate(certificate);
+    }
+
+
+    /**
+     * Creates {@link X509Certificate} from PEM style certificate string.
+     * @param derEncodedCertificate DER-encoded certificate. Please note it is encoded in base64 string, not base64url.
+     * @return created X509Certificate
+     */
+    public static X509Certificate createCertificate(String derEncodedCertificate) {
+        return CertificateUtil.generateX509Certificate(derEncodedCertificate.getBytes());
     }
 
     public static CollectedClientData createClientData(ClientDataType type) {

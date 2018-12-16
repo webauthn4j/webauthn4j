@@ -28,6 +28,7 @@ import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.validator.attestation.androidkey.AndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.packed.PackedAttestationStatementValidator;
@@ -49,9 +50,14 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+    private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
     private TrustAnchorProvider trustAnchorProvider = TestUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
-            Arrays.asList(noneAttestationStatementValidator, packedAttestationStatementValidator, fidoU2FAttestationStatementValidator),
+            Arrays.asList(
+                    noneAttestationStatementValidator,
+                    packedAttestationStatementValidator,
+                    fidoU2FAttestationStatementValidator,
+                    androidKeyAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorProvider),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()

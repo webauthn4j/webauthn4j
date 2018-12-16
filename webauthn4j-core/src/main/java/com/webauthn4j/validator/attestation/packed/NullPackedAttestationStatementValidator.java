@@ -21,6 +21,7 @@ import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 /**
  * Null validator for {@link PackedAttestationStatement}
@@ -28,6 +29,10 @@ import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 public class NullPackedAttestationStatementValidator implements AttestationStatementValidator {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
+        if (!supports(registrationObject)) {
+            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+        }
+
         return AttestationType.NONE;
     }
 

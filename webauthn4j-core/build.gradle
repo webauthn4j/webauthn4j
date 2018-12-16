@@ -24,6 +24,7 @@ dependencies {
     compile("org.slf4j:slf4j-api")
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+    compile("org.bouncycastle:bcpkix-jdk15on:1.60")
 
     //Test
     testCompile project(':webauthn4j-test')

@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.none;
+package com.webauthn4j.validator.attestation.androidkey;
 
+import com.webauthn4j.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
-/**
- * Validates the specified {@link AttestationStatement} is a none attestation
- */
-public class NoneAttestationStatementValidator implements AttestationStatementValidator {
-
+public class NullAndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -40,6 +36,6 @@ public class NoneAttestationStatementValidator implements AttestationStatementVa
     @Override
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return NoneAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
+        return AndroidKeyAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 }

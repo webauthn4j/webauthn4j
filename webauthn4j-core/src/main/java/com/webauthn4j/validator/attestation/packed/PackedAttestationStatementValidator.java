@@ -22,6 +22,7 @@ import com.webauthn4j.attestation.statement.AttestationType;
 import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
@@ -106,12 +107,12 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
-            Signature verifier = Signature.getInstance(algorithmIdentifier.getName());
+            Signature verifier = SignatureUtil.createSignature(algorithmIdentifier.getName());
             verifier.initVerify(publicKey);
             verifier.update(data);
 
             return verifier.verify(signature);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+        } catch ( SignatureException | InvalidKeyException | RuntimeException e) {
             return false;
         }
     }
