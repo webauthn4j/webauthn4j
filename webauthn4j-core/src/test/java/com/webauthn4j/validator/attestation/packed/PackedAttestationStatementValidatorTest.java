@@ -70,7 +70,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_ECselfAttestation_test() {
+    public void validate_with_ECSelfAttestation_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedECAttestationStatement(clientDataHash);
@@ -80,7 +80,7 @@ public class PackedAttestationStatementValidatorTest {
 
 
     @Test
-    public void validate_with_RSAselfAttestation_test() {
+    public void validate_with_RSASelfAttestation_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedRSAAttestationStatement(clientDataHash);
