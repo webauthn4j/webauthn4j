@@ -55,7 +55,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_withRSAx5c_test() throws Exception {
+    public void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
 
