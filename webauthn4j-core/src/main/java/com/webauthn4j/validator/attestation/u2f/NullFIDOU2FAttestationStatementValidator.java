@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.fido;
+package com.webauthn4j.validator.attestation.u2f;
 
 import com.webauthn4j.attestation.statement.AttestationStatement;
 import com.webauthn4j.attestation.statement.AttestationType;

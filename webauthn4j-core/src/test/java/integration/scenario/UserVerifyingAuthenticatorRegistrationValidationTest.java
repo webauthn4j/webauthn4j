@@ -28,14 +28,13 @@ import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
-import com.webauthn4j.validator.attestation.fido.FIDOU2FAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.packed.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
