@@ -20,9 +20,6 @@ package com.webauthn4j.validator;
 import com.webauthn4j.WebAuthnRegistrationContext;
 import com.webauthn4j.attestation.AttestationObject;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.client.ClientDataType;
 import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
@@ -33,9 +30,7 @@ import com.webauthn4j.extension.client.ClientExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.packed.NullPackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
@@ -45,7 +40,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrust
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.attestation.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
@@ -75,10 +70,7 @@ public class WebAuthnRegistrationContextValidator {
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
-    private final List<AttestationStatementValidator> attestationStatementValidators;
-    private final CertPathTrustworthinessValidator certPathTrustworthinessValidator;
-    private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
-    private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
+    private final AttestationValidator attestationValidator;
 
 
     // ~ Constructor
@@ -113,6 +105,21 @@ public class WebAuthnRegistrationContextValidator {
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+            Registry registry
+    ) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                new DefaultSelfAttestationTrustworthinessValidator(),
+                registry
+        );
+    }
+
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
             Registry registry
     ) {
@@ -126,25 +133,11 @@ public class WebAuthnRegistrationContextValidator {
         attestationObjectConverter = new AttestationObjectConverter(registry);
         clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
 
-        this.attestationStatementValidators = attestationStatementValidators;
-        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
-        this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
-        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
-    }
-
-    public WebAuthnRegistrationContextValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-            Registry registry
-    ) {
-        this(
+        this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
-                new DefaultSelfAttestationTrustworthinessValidator(),
-                registry
-        );
+                selfAttestationTrustworthinessValidator);
     }
 
 
@@ -246,64 +239,8 @@ public class WebAuthnRegistrationContextValidator {
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensionOutputs, authenticatorExtensionOutputs, expectedExtensionIdentifiers);
 
-
-        /// Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
-        /// of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered
-        /// WebAuthn Attestation Statement Format Identifier values is maintained in the in the IANA registry of the same
-        /// name [WebAuthn-Registries].
-
-        /// Verify that attStmt is a correct attestation statement, conveying a valid attestation signature, by using the
-        /// attestation statement format fmt’s verification procedure given attStmt, authData and the hash of the
-        /// serialized client data computed in step 7.
-
-        /// Note: Each attestation statement format specifies its own verification procedure. See §8 Defined Attestation
-        /// Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
-        AttestationType attestationType = validateAttestationStatement(registrationObject);
-
-        /// If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
-        /// ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
-        /// from a trusted source or from policy.
-        /// For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
-        /// using the aaguid in the attestedCredentialData in authData.
-        ///
-        /// Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
-
-        AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
-        switch (attestationType) {
-            // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
-            case SELF:
-                if (attestationStatement instanceof CertificateBaseAttestationStatement) {
-                    CertificateBaseAttestationStatement certificateBaseAttestationStatement =
-                            (CertificateBaseAttestationStatement) attestationStatement;
-                    selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
-                } else {
-                    throw new IllegalStateException();
-                }
-                break;
-
-            // If ECDAA was used, verify that the identifier of the ECDAA-Issuer public key used is included in the set of
-            // acceptable trust anchors obtained in step 15.
-            case ECDAA:
-                ecdaaTrustworthinessValidator.validate(attestationStatement);
-                break;
-            // Otherwise, use the X.509 certificates returned by the verification procedure to verify that
-            // the attestation public key correctly chains up to an acceptable root certificate.
-            case BASIC:
-            case ATT_CA:
-                if (attestationStatement instanceof CertificateBaseAttestationStatement) {
-                    CertificateBaseAttestationStatement certificateBaseAttestationStatement =
-                            (CertificateBaseAttestationStatement) attestationStatement;
-                    certPathTrustworthinessValidator.validate(certificateBaseAttestationStatement);
-                } else {
-                    throw new IllegalStateException();
-                }
-                break;
-            case NONE:
-                // nop
-                break;
-            default:
-                throw new NotImplementedException();
-        }
+        // Verify attestation
+        attestationValidator.validate(registrationObject);
 
         // If the attestation statement attStmt verified successfully and is found to be trustworthy,
         // then register the new credential with the account that was denoted in the options.user passed to create(),
@@ -319,14 +256,5 @@ public class WebAuthnRegistrationContextValidator {
         return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensionOutputs);
     }
 
-    private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {
-        for (AttestationStatementValidator validator : attestationStatementValidators) {
-            if (validator.supports(registrationObject)) {
-                return validator.validate(registrationObject);
-            }
-        }
-
-        throw new BadAttestationStatementException("Supplied AttestationStatement format is not configured.");
-    }
 
 }
