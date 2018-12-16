@@ -19,7 +19,6 @@ package com.webauthn4j.attestation.authenticator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.ECUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.security.spec.ECParameterSpec;
 
