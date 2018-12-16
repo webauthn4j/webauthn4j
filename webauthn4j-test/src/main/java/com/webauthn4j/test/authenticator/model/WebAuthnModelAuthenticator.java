@@ -31,6 +31,7 @@ import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.TestData;
+import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.AuthenticatorExtensionInput;
 import com.webauthn4j.test.client.*;
 import com.webauthn4j.util.KeyUtil;
@@ -251,7 +252,7 @@ public class WebAuthnModelAuthenticator {
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = calculateSignature(attestationPrivateKey, signedData);
+            signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
         }
 
         AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
@@ -348,7 +349,7 @@ public class WebAuthnModelAuthenticator {
         // The hash of the serialized client data (which potentially has a variable length) is always the last element.
         byte[] clientDataHash = getAssertionRequest.getHash();
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-        byte[] signature = calculateSignature(selectedCredential.getPrivateKey(), signedData);
+        byte[] signature = TestUtil.calculateSignature(selectedCredential.getPrivateKey(), signedData);
         // If any error occurred while generating the assertion signature,
         // return an error code equivalent to "UnknownError" and terminate the operation.
 
@@ -384,17 +385,6 @@ public class WebAuthnModelAuthenticator {
 
     public void setCountUpEnabled(boolean countUpEnabled) {
         this.countUpEnabled = countUpEnabled;
-    }
-
-    private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
-        try {
-            Signature signature = SignatureUtil.createSignature("SHA256withECDSA");
-            signature.initSign(privateKey);
-            signature.update(signedData);
-            return signature.sign();
-        } catch (InvalidKeyException | SignatureException e) {
-            throw new WebAuthnModelException("Signature calculation error", e);
-        }
     }
 
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {

@@ -27,12 +27,12 @@ import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.client.Origin;
 import com.webauthn4j.client.challenge.Challenge;
 import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
+import com.webauthn4j.util.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -44,11 +44,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
-import java.security.PrivateKey;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 
 import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
@@ -66,22 +68,55 @@ public class TestUtil {
         return new AttestationObject(createAuthenticatorData(), createFIDOU2FAttestationStatement());
     }
 
+    public static AttestationObject createAttestationObjectWithBasicPackedECAttestationStatement(byte[] clientDataHash) {
+        PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
+        AuthenticatorData authenticatorData = createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(new Registry()).convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(privateKey, signedData);
+        return new AttestationObject(authenticatorData, createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
+        KeyPair keyPair = KeyUtil.createECKeyPair();
+        EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+        AuthenticatorData authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(new Registry()).convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
+        return new AttestationObject(authenticatorData, createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+    }
+
+    public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
+        KeyPair keyPair = KeyUtil.createRSAKeyPair();
+        RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
+        AuthenticatorData authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(new Registry()).convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
+        return new AttestationObject(authenticatorData, createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
+    }
+
+    private static byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
+        return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
+    }
+
     public static AuthenticatorData createAuthenticatorData() {
         byte flags = BIT_UP | BIT_AT;
         return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData());
     }
 
-    public static AuthenticatorData createAuthenticatorData(EC2CredentialPublicKey ecCredentialPublicKey) {
+    public static AuthenticatorData createAuthenticatorData(CredentialPublicKey credentialPublicKey) {
         byte flags = BIT_UP | BIT_AT;
-        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(ecCredentialPublicKey));
+        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(credentialPublicKey));
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {
         return createAttestedCredentialData(createECCredentialPublicKey());
     }
 
-    public static AttestedCredentialData createAttestedCredentialData(EC2CredentialPublicKey ecCredentialPublicKey) {
-        return new AttestedCredentialData(new byte[16], new byte[32], ecCredentialPublicKey);
+    public static AttestedCredentialData createAttestedCredentialData(CredentialPublicKey credentialPublicKey) {
+        return new AttestedCredentialData(new byte[16], new byte[32], credentialPublicKey);
     }
 
     public static EC2CredentialPublicKey createECCredentialPublicKey() {
@@ -121,9 +156,17 @@ public class TestUtil {
     }
 
     public static PackedAttestationStatement createBasicPackedAttestationStatement() {
-        byte[] sig = new byte[32];
+        byte[] signature = new byte[32]; // dummy
+        return createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature);
+    }
+
+    public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         AttestationCertificatePath certPath = load3tierTestCertPath();
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, sig, certPath, null);
+        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, certPath, null);
+    }
+
+    public static PackedAttestationStatement createSelfPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
+        return new PackedAttestationStatement(algorithm, signature, null, null);
     }
 
     public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {
@@ -198,6 +241,10 @@ public class TestUtil {
 
     public static byte[] createClientDataJSON(ClientDataType type) {
         return new CollectedClientDataConverter(new Registry()).convertToBytes(createClientData(type));
+    }
+
+    public static byte[] createClientDataJSON(ClientDataType type, Challenge challenge) {
+        return new CollectedClientDataConverter(new Registry()).convertToBytes(createClientData(type, challenge));
     }
 
     public static Challenge createChallenge() {
@@ -280,4 +327,23 @@ public class TestUtil {
     public static Authenticator createAuthenticator() {
         return createAuthenticator(TestUtil.createAttestedCredentialData(), TestUtil.createFIDOU2FAttestationStatement());
     }
+
+
+    public static byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
+        try {
+            Signature signature;
+            if(privateKey.getAlgorithm().equals("EC")){
+                signature = SignatureUtil.getES256();
+            }
+            else {
+                signature = SignatureUtil.getRS256();
+            }
+            signature.initSign(privateKey);
+            signature.update(signedData);
+            return signature.sign();
+        } catch (InvalidKeyException | SignatureException e) {
+            throw new WebAuthnModelException("Signature calculation error", e);
+        }
+    }
+
 }

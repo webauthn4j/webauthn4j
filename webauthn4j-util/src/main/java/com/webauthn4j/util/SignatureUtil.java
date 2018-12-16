@@ -24,7 +24,18 @@ import java.security.Signature;
  */
 public class SignatureUtil {
 
+    private static Signature es256 = createSignature("SHA256withECDSA");
+    private static Signature rs256 = createSignature("SHA256withRSA");
+
     private SignatureUtil() {
+    }
+
+    public static Signature getRS256(){
+        return rs256;
+    }
+
+    public static Signature getES256(){
+        return es256;
     }
 
     public static Signature createSignature(String algorithm) {

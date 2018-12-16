@@ -29,6 +29,7 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
@@ -49,6 +50,13 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
     public RSACredentialPublicKey() {
         super();
+    }
+
+    public static RSACredentialPublicKey create(RSAPublicKey publicKey) {
+        publicKey.getPublicExponent();
+        byte[] n = publicKey.getModulus().toByteArray();
+        byte[] e = publicKey.getPublicExponent().toByteArray();
+        return new RSACredentialPublicKey(null, COSEAlgorithmIdentifier.RS256, null, null, n, e);
     }
 
     @Override
