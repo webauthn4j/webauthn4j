@@ -26,10 +26,12 @@ import java.util.List;
 public class AttestationCertificatePath extends ArrayList<X509Certificate> {
 
     public AttestationCertificatePath(List<X509Certificate> certificates) {
+        super();
         this.addAll(certificates);
     }
 
     public AttestationCertificatePath() {
+        super();
     }
 
     public CertPath createCertPath() {

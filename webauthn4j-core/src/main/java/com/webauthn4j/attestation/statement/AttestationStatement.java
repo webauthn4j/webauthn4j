@@ -29,10 +29,14 @@ import java.io.Serializable;
         @JsonSubTypes.Type(name = FIDOU2FAttestationStatement.FORMAT, value = FIDOU2FAttestationStatement.class),
         @JsonSubTypes.Type(name = PackedAttestationStatement.FORMAT, value = PackedAttestationStatement.class),
         @JsonSubTypes.Type(name = AndroidKeyAttestationStatement.FORMAT, value = AndroidKeyAttestationStatement.class),
+        @JsonSubTypes.Type(name = AndroidSafetyNetAttestationStatement.FORMAT, value = AndroidSafetyNetAttestationStatement.class),
         @JsonSubTypes.Type(name = NoneAttestationStatement.FORMAT, value = NoneAttestationStatement.class)
 })
 public interface AttestationStatement extends Serializable {
     String getFormat();
 
+    /**
+     * Validates the instance per field basis.
+     */
     void validate();
 }

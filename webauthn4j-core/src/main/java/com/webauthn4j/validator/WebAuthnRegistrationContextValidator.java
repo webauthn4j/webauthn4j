@@ -31,6 +31,8 @@ import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.androidkey.NullAndroidKeyAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.packed.NullPackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
@@ -153,8 +155,10 @@ public class WebAuthnRegistrationContextValidator {
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
                         new NullFIDOU2FAttestationStatementValidator(),
-                        new NullPackedAttestationStatementValidator())
-                ,
+                        new NullPackedAttestationStatementValidator(),
+                        new NullAndroidKeyAttestationStatementValidator(),
+                        new NullAndroidSafetyNetAttestationStatementValidator()
+                ),
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),

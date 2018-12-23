@@ -16,5 +16,58 @@
 
 package com.webauthn4j.attestation.statement;
 
-public class AndroidSafetyNetAttestationStatement {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.util.WIP;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
+
+@WIP
+@JsonIgnoreProperties(value = "format")
+@JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
+public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
+
+    public static final String FORMAT = "android-safetynet";
+
+    @JsonProperty
+    private String ver;
+
+    @JsonProperty
+    private JWS response;
+
+    /**
+     * Default constructor for Jackson deserialization
+     */
+    public AndroidSafetyNetAttestationStatement() {
+
+    }
+
+    @Override
+    public String getFormat() {
+        return FORMAT;
+    }
+
+    @Override
+    public AttestationCertificatePath getX5c() {
+        return getResponse().getHeader().getX5c();
+    }
+
+    @Override
+    public void validate() {
+        if (ver == null) {
+            throw new ConstraintViolationException("ver must not be null");
+        }
+        if (response == null) {
+            throw new ConstraintViolationException("response must not be null");
+        }
+    }
+
+    public String getVer() {
+        return ver;
+    }
+
+    public JWS getResponse() {
+        return response;
+    }
+
 }

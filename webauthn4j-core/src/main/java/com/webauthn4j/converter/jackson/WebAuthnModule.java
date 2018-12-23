@@ -19,6 +19,7 @@ package com.webauthn4j.converter.jackson;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.attestation.statement.JWS;
 import com.webauthn4j.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.client.Origin;
@@ -45,6 +46,7 @@ public class WebAuthnModule extends SimpleModule {
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
         this.addDeserializer(AuthenticatorExtensionOutput.class, new AuthenticatorExtensionOutputDeserializer());
         this.addDeserializer(ClientExtensionOutput.class, new ClientExtensionOutputDeserializer());
+        this.addDeserializer(JWS.class, new JWSDeserializer(registry));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(CertPath.class, new CertPathSerializer());
