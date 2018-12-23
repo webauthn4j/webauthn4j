@@ -52,6 +52,9 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         this.ecdaaKeyId = ecdaaKeyId;
     }
 
+    /**
+     * Default constructor for Jackson deserialization
+     */
     public PackedAttestationStatement() {
     }
 

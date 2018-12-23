@@ -16,9 +16,15 @@
 
 package com.webauthn4j.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
+@WIP
+@JsonIgnoreProperties(value = "format")
+@JsonTypeName(AndroidKeyAttestationStatement.FORMAT)
 public class AndroidKeyAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "android-key";
@@ -36,6 +42,13 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
+    }
+
+    /**
+     * Default constructor for Jackson deserialization
+     */
+    public AndroidKeyAttestationStatement(){
+
     }
 
     public COSEAlgorithmIdentifier getAlg() {
