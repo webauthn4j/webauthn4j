@@ -26,6 +26,8 @@ import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Objects;
 
 public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
@@ -73,10 +75,11 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
     }
 
     private void validateNonce(String nonce, byte[] authenticatorData, byte[] collectedClientData) {
-        ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + collectedClientData.length);
-        byte[] data = buffer.put(authenticatorData).put(collectedClientData).array();
-        String hash = Base64UrlUtil.encodeToString(MessageDigestUtil.createSHA256().digest(data));
-        if(!nonce.equals(hash)){
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientData);
+        ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
+        byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
+        byte[] hash = MessageDigestUtil.createSHA256().digest(data);
+        if(!Arrays.equals(hash, Base64.getDecoder().decode(nonce))){
             throw new BadAttestationStatementException("Nonce doesn't match");
         }
     }
