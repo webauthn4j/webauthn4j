@@ -20,13 +20,14 @@ import com.webauthn4j.util.SignatureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.Signature;
 import java.security.SignatureException;
 
-public class JWS {
+public class JWS implements Serializable {
 
-    Logger logger = LoggerFactory.getLogger(JWS.class);
+    transient Logger logger = LoggerFactory.getLogger(JWS.class);
 
     private JWSHeader header;
 

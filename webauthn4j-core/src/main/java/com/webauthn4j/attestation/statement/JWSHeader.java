@@ -18,7 +18,9 @@ package com.webauthn4j.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class JWSHeader {
+import java.io.Serializable;
+
+public class JWSHeader implements Serializable {
 
     @JsonProperty
     private String alg;
@@ -26,7 +28,9 @@ public class JWSHeader {
     @JsonProperty
     private AttestationCertificatePath x5c;
 
-    public JWSHeader(){}
+    public JWSHeader(){
+        //nop
+    }
 
     public String getAlg() {
         return alg;

@@ -18,7 +18,9 @@ package com.webauthn4j.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Response {
+import java.io.Serializable;
+
+public class Response implements Serializable {
 
     @JsonProperty
     private String nonce;
