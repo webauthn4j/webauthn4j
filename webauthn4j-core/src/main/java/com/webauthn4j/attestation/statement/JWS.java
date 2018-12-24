@@ -60,7 +60,7 @@ public class JWS {
     public boolean isValidSignature(){
         String signedData = headerString + "." + payloadString;
         try {
-            Signature signatureObj = SignatureUtil.createSignature(header.getAlg());
+            Signature signatureObj = SignatureUtil.createSignatureWithJWAIdentifier(header.getAlg());
             signatureObj.initVerify(header.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey());
             signatureObj.update(signedData.getBytes());
             return signatureObj.verify(signature);

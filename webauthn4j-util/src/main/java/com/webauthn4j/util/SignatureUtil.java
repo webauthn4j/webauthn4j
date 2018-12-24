@@ -16,6 +16,8 @@
 
 package com.webauthn4j.util;
 
+import com.webauthn4j.util.exception.NotImplementedException;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 
@@ -44,6 +46,17 @@ public class SignatureUtil {
             return Signature.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    public static Signature createSignatureWithJWAIdentifier(String jwaIdentifier){
+        switch (jwaIdentifier){
+            case "ES256":
+                return es256;
+            case "RS256":
+                return rs256;
+            default:
+                throw new NotImplementedException();
         }
     }
 }
