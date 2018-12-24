@@ -50,6 +50,7 @@ public class SignatureUtil {
     }
 
     public static Signature createSignatureWithJWAIdentifier(String jwaIdentifier){
+        AssertUtil.notNull(jwaIdentifier, "jwaIdentifier is required; it must not be null");
         switch (jwaIdentifier){
             case "ES256":
                 return es256;
