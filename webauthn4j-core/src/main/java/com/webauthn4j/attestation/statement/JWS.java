@@ -49,8 +49,16 @@ public class JWS {
         return header;
     }
 
+    public String getHeaderString() {
+        return headerString;
+    }
+
     public Response getPayload() {
         return payload;
+    }
+
+    public String getPayloadString() {
+        return payloadString;
     }
 
     public byte[] getSignature() {
