@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.attestation.androidsafetynet;
 
 import com.webauthn4j.attestation.statement.*;
-import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
@@ -27,7 +27,6 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Objects;
 
 public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
@@ -79,7 +78,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
-        if(!Arrays.equals(hash, Base64.getDecoder().decode(nonce))){
+        if(!Arrays.equals(hash, Base64Util.decode(nonce))){
             throw new BadAttestationStatementException("Nonce doesn't match");
         }
     }

@@ -20,10 +20,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.attestation.statement.JWS;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 public class JWSSerializer extends StdSerializer<JWS> {
 
@@ -33,7 +33,7 @@ public class JWSSerializer extends StdSerializer<JWS> {
 
     @Override
     public void serialize(JWS value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        String data = value.getHeaderString() + "." + value.getPayloadString() + "." + Base64.getEncoder().encodeToString(value.getSignature());
+        String data = value.getHeaderString() + "." + value.getPayloadString() + "." + Base64UrlUtil.encodeToString(value.getSignature());
         byte[] bytes = data.getBytes(StandardCharsets.UTF_8);
         gen.writeBinary(bytes);
     }
