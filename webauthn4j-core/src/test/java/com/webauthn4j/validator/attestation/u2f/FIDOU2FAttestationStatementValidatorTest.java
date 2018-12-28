@@ -16,10 +16,10 @@
 
 package com.webauthn4j.validator.attestation.u2f;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.KeyUtil;

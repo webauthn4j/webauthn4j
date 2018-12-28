@@ -16,10 +16,10 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationType;
+import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;

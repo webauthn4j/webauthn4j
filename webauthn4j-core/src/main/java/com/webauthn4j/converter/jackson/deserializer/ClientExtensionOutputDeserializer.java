@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.extension.client.*;
+import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.io.IOException;

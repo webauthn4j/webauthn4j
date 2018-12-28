@@ -16,10 +16,10 @@
 
 package com.webauthn4j.test.authenticator;
 
-import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
-import com.webauthn4j.test.client.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.test.client.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 public interface AuthenticatorAdaptor {

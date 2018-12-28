@@ -19,8 +19,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;

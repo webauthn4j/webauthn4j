@@ -16,10 +16,10 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.client.ClientDataType;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 

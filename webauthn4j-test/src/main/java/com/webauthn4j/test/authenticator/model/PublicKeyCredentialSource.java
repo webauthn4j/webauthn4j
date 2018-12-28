@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.test.client.PublicKeyCredentialType;
+import com.webauthn4j.request.PublicKeyCredentialType;
 
 import java.security.PrivateKey;
 

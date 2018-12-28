@@ -16,12 +16,12 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.statement.AndroidKeyAttestationStatement;
-import com.webauthn4j.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
+import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;

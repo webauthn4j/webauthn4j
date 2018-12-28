@@ -17,11 +17,11 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.UnsignedNumberUtil;
 

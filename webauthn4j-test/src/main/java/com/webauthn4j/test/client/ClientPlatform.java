@@ -16,27 +16,32 @@
 
 package com.webauthn4j.test.client;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.client.*;
-import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
+import com.webauthn4j.response.client.*;
+import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
-import com.webauthn4j.extension.client.SupportedExtensionsClientExtensionOutput;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.SupportedExtensionsClientExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.request.extension.client.ClientExtensionInput;
+import com.webauthn4j.request.extension.client.SupportedExtensionsClientExtensionInput;
+import com.webauthn4j.response.AuthenticatorAssertionResponse;
+import com.webauthn4j.response.AuthenticatorAttestationResponse;
+import com.webauthn4j.response.PublicKeyCredential;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

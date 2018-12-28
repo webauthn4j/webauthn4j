@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
-import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
 
 /**
  * Null validator that bypass ECDAA algorithm check

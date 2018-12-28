@@ -16,11 +16,21 @@
 
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.client.CollectedClientData;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;
-import com.webauthn4j.test.authenticator.*;
-import com.webauthn4j.test.client.*;
+import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.request.UserVerificationRequirement;
+import com.webauthn4j.request.extension.authenticator.AuthenticatorExtensionInput;
+import com.webauthn4j.request.extension.authenticator.SupportedExtensionsAuthenticatorExtensionInput;
+import com.webauthn4j.request.extension.client.ClientExtensionInput;
+import com.webauthn4j.request.extension.client.SupportedExtensionsClientExtensionInput;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.CredentialCreationResponse;
+import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.test.client.AuthenticationEmulationOption;
+import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 
@@ -89,15 +99,15 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         );
     }
 
-    private Map<String,AuthenticatorExtensionInput> convertExtensions(Map<String,ClientExtensionInput> extensions) {
-        if(extensions == null){
+    private Map<String, AuthenticatorExtensionInput> convertExtensions(Map<String, ClientExtensionInput> extensions) {
+        if (extensions == null) {
             return Collections.emptyMap();
         }
 
         Map<String, AuthenticatorExtensionInput> map = new HashMap<>();
-        for(Map.Entry<String, ClientExtensionInput> clientExtensionInputEntry : extensions.entrySet()){
+        for (Map.Entry<String, ClientExtensionInput> clientExtensionInputEntry : extensions.entrySet()) {
             String extensionIdentifier = clientExtensionInputEntry.getKey();
-            if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
+            if (extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)) {
                 SupportedExtensionsClientExtensionInput clientExtensionInput = (SupportedExtensionsClientExtensionInput) clientExtensionInputEntry.getValue();
                 map.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionInput(clientExtensionInput.getValue()));
             }

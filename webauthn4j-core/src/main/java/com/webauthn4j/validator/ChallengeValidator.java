@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;

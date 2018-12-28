@@ -17,8 +17,8 @@
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorProvider;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;

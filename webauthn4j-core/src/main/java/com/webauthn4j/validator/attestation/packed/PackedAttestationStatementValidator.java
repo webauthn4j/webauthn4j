@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator.attestation.packed;
 
-import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationType;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.exception.NotImplementedException;

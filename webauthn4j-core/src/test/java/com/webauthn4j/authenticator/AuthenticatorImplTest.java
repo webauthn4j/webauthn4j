@@ -16,8 +16,8 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 

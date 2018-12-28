@@ -17,16 +17,16 @@
 package com.webauthn4j.validator;
 
 
-import com.webauthn4j.WebAuthnRegistrationContext;
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.client.ClientDataType;
-import com.webauthn4j.client.CollectedClientData;
+import com.webauthn4j.response.WebAuthnRegistrationContext;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.ClientExtensionOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;

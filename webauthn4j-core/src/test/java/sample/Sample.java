@@ -16,11 +16,11 @@
 
 package sample;
 
-import com.webauthn4j.WebAuthnAuthenticationContext;
-import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.response.WebAuthnAuthenticationContext;
+import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.client.Origin;
-import com.webauthn4j.client.challenge.Challenge;
+import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;

@@ -16,19 +16,23 @@
 
 package integration.scenario;
 
-import com.webauthn4j.WebAuthnRegistrationContext;
+import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
-import com.webauthn4j.client.ClientDataType;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.Origin;
-import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
-import com.webauthn4j.test.authenticator.fido.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.*;
+import com.webauthn4j.request.AttestationConveyancePreference;
+import com.webauthn4j.response.AuthenticatorAttestationResponse;
+import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.u2f.FIDOU2FAttestationStatementValidator;

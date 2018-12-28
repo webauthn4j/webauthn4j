@@ -1,15 +1,15 @@
 package com.webauthn4j.validator.attestation.packed;
 
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.client.ClientDataType;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.Origin;
-import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;

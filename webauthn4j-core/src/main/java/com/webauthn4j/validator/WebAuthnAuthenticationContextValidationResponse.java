@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
 
 import java.util.Map;
 import java.util.Objects;

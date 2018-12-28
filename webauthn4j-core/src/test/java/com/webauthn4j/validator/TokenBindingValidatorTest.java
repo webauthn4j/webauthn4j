@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.client.TokenBinding;
-import com.webauthn4j.client.TokenBindingStatus;
+import com.webauthn4j.response.client.TokenBinding;
+import com.webauthn4j.response.client.TokenBindingStatus;
 import com.webauthn4j.validator.exception.TokenBindingException;
 import org.junit.Test;
 

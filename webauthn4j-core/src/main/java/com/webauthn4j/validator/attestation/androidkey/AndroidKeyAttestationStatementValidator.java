@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator.attestation.androidkey;
 
-import com.webauthn4j.attestation.statement.AndroidKeyAttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.AttestationType;
+import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;

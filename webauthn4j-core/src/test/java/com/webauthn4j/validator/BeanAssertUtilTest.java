@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.WebAuthnAuthenticationContext;
-import com.webauthn4j.WebAuthnRegistrationContext;
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.client.*;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.WebAuthnAuthenticationContext;
+import com.webauthn4j.response.WebAuthnRegistrationContext;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.client.*;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;

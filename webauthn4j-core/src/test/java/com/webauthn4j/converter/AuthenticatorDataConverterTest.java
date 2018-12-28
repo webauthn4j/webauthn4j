@@ -16,9 +16,9 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_ED;
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_ED;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

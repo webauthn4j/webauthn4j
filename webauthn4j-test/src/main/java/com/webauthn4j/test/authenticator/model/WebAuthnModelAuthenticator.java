@@ -16,37 +16,43 @@
 
 package com.webauthn4j.test.authenticator.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.EC2CredentialPublicKey;
-import com.webauthn4j.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.extension.authneticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.request.PublicKeyCredentialDescriptor;
+import com.webauthn4j.request.PublicKeyCredentialParameters;
+import com.webauthn4j.request.PublicKeyCredentialRpEntity;
+import com.webauthn4j.request.PublicKeyCredentialType;
+import com.webauthn4j.request.extension.authenticator.AuthenticatorExtensionInput;
+import com.webauthn4j.request.extension.client.SupportedExtensionsClientExtensionInput;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
-import com.webauthn4j.test.authenticator.AuthenticatorExtensionInput;
-import com.webauthn4j.test.client.*;
+import com.webauthn4j.test.client.AuthenticationEmulationOption;
+import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.*;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.*;
 
 @WIP
 public class WebAuthnModelAuthenticator {
@@ -216,9 +222,9 @@ public class WebAuthnModelAuthenticator {
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
         Map<String, AuthenticatorExtensionOutput> processedExtensions = new HashMap<>();
-        for(Map.Entry<String, AuthenticatorExtensionInput> entry : makeCredentialRequest.getExtensions().entrySet()){
+        for (Map.Entry<String, AuthenticatorExtensionInput> entry : makeCredentialRequest.getExtensions().entrySet()) {
             String extensionIdentifier = entry.getKey();
-            if(extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)){
+            if (extensionIdentifier.equals(SupportedExtensionsClientExtensionInput.ID)) {
                 processedExtensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsAuthenticatorExtensionOutput(Collections.singletonList("exts")));
             }
         }
@@ -246,7 +252,7 @@ public class WebAuthnModelAuthenticator {
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
-        byte[] signedData = getSignedData(authenticatorDataBytes ,makeCredentialRequest.getHash());
+        byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
 
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {

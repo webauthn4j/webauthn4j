@@ -16,7 +16,8 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.client.ClientDataType;
+import com.webauthn4j.response.WebAuthnAuthenticationContext;
+import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;

@@ -16,18 +16,18 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.WebAuthnAuthenticationContext;
-import com.webauthn4j.WebAuthnRegistrationContext;
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.attestation.statement.AttestationStatement;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.TokenBinding;
-import com.webauthn4j.extension.ExtensionOutput;
-import com.webauthn4j.extension.authneticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.WebAuthnAuthenticationContext;
+import com.webauthn4j.response.WebAuthnRegistrationContext;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.client.TokenBinding;
+import com.webauthn4j.response.extension.ExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;

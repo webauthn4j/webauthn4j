@@ -17,16 +17,16 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.anchor.TrustAnchorProvider;
-import com.webauthn4j.attestation.AttestationObject;
-import com.webauthn4j.attestation.authenticator.*;
-import com.webauthn4j.attestation.statement.*;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.*;
+import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
-import com.webauthn4j.client.ClientDataType;
-import com.webauthn4j.client.CollectedClientData;
-import com.webauthn4j.client.Origin;
-import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
@@ -42,14 +42,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StreamUtils;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
@@ -57,8 +54,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
 
 /**
  * A utility class for core module test

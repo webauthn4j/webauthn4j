@@ -18,10 +18,10 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.extension.Coordinates;
-import com.webauthn4j.extension.authneticator.GenericTransactionAuthorizationAuthenticatorExtensionOutput;
-import com.webauthn4j.extension.authneticator.SimpleTransactionAuthorizationAuthenticatorExtensionOutput;
-import com.webauthn4j.extension.client.*;
+import com.webauthn4j.response.extension.Coordinates;
+import com.webauthn4j.response.extension.authenticator.GenericTransactionAuthorizationAuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.SimpleTransactionAuthorizationAuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 

@@ -17,18 +17,18 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.attestation.authenticator.AbstractCredentialPublicKey;
-import com.webauthn4j.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.AbstractCredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_AT;
-import static com.webauthn4j.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**

@@ -16,8 +16,8 @@
 
 package com.webauthn4j.server;
 
-import com.webauthn4j.client.challenge.Challenge;
-import com.webauthn4j.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 

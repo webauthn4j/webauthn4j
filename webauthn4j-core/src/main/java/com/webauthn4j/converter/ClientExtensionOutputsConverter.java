@@ -18,7 +18,7 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.ClientExtensionOutput;
 import com.webauthn4j.registry.Registry;
 
 import java.util.Map;

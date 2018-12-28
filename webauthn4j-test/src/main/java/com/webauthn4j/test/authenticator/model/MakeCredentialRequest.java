@@ -16,8 +16,11 @@
 
 package com.webauthn4j.test.authenticator.model;
 
-import com.webauthn4j.test.authenticator.AuthenticatorExtensionInput;
-import com.webauthn4j.test.client.*;
+import com.webauthn4j.request.PublicKeyCredentialDescriptor;
+import com.webauthn4j.request.PublicKeyCredentialParameters;
+import com.webauthn4j.request.PublicKeyCredentialRpEntity;
+import com.webauthn4j.request.PublicKeyCredentialUserEntity;
+import com.webauthn4j.request.extension.authenticator.AuthenticatorExtensionInput;
 
 import java.util.List;
 import java.util.Map;
