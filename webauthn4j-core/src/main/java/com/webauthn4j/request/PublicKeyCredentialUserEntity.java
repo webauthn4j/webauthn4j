@@ -40,15 +40,8 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         return id;
     }
 
-    public void setId(byte[] id) {
-        this.id = id;
-    }
-
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
 }

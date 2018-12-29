@@ -16,8 +16,11 @@
 
 package integration.scenario;
 
+import com.webauthn4j.request.*;
+import com.webauthn4j.request.extension.client.ClientExtensionInput;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
@@ -29,10 +32,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.*;
-import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
-import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.u2f.FIDOU2FAttestationStatementValidator;
@@ -45,6 +45,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -69,10 +70,17 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     public void validate_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
+
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
@@ -96,10 +104,27 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     public void validate_with_direct_attestation_conveyance_preference_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
+
+        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.DIRECT,
+                extensions
+        );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
@@ -123,10 +148,15 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     public void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
 
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge);
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
@@ -144,10 +174,15 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         Challenge badChallenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(badChallenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                badChallenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
@@ -161,10 +196,14 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         Origin badOrigin = new Origin("http://bad.origin.example.net");
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
 
         clientPlatform.setOrigin(badOrigin); //bad origin
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
@@ -179,10 +218,14 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         String rpId = "example.com";
         String badRpId = "example.net";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(badRpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(badRpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
@@ -193,10 +236,14 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     public void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -214,10 +261,30 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     public void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
+
+        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.DIRECT,
+                extensions
+        );
+
+
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
         registrationEmulationOption.setSignatureOverrideEnabled(true);
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
@@ -236,10 +303,29 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         ClientPlatform clientPlatform = new ClientPlatform(phishingSiteOrigin, new FIDOU2FAuthenticatorAdaptor()); // client platform loads phishing site
         String rpId = "valid.site.example.com";
         Challenge challenge = new DefaultChallenge();
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
+
+        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.DIRECT,
+                extensions
+        );
+
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);

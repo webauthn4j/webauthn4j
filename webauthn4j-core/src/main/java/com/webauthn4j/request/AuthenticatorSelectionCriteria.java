@@ -25,27 +25,21 @@ public class AuthenticatorSelectionCriteria {
     @SuppressWarnings("UnusedAssignment")
     private UserVerificationRequirement userVerificationRequirement = UserVerificationRequirement.PREFERRED;
 
-    public AuthenticatorAttachment getAuthenticatorAttachment() {
-        return authenticatorAttachment;
+    public AuthenticatorSelectionCriteria(AuthenticatorAttachment authenticatorAttachment, boolean requireResidentKey, UserVerificationRequirement userVerificationRequirement) {
+        this.authenticatorAttachment = authenticatorAttachment;
+        this.requireResidentKey = requireResidentKey;
+        this.userVerificationRequirement = userVerificationRequirement;
     }
 
-    public void setAuthenticatorAttachment(AuthenticatorAttachment authenticatorAttachment) {
-        this.authenticatorAttachment = authenticatorAttachment;
+    public AuthenticatorAttachment getAuthenticatorAttachment() {
+        return authenticatorAttachment;
     }
 
     public boolean isRequireResidentKey() {
         return requireResidentKey;
     }
 
-    public void setRequireResidentKey(boolean requireResidentKey) {
-        this.requireResidentKey = requireResidentKey;
-    }
-
     public UserVerificationRequirement getUserVerificationRequirement() {
         return userVerificationRequirement;
-    }
-
-    public void setUserVerificationRequirement(UserVerificationRequirement userVerificationRequirement) {
-        this.userVerificationRequirement = userVerificationRequirement;
     }
 }

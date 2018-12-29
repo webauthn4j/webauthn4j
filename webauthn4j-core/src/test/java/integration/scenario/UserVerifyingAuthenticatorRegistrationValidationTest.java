@@ -71,26 +71,29 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
-        authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
-        authenticatorSelectionCriteria.setRequireResidentKey(true);
-        authenticatorSelectionCriteria.setUserVerificationRequirement(UserVerificationRequirement.REQUIRED);
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
 
-        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
-        credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
-        credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
-        credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
+        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        PublicKeyCredentialCreationOptions credentialCreationOptions
+                = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                publicKeyCredentialUserEntity,
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.NONE,
+                extensions
+        );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -115,29 +118,29 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     public void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
-        authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
-        authenticatorSelectionCriteria.setRequireResidentKey(true);
-        authenticatorSelectionCriteria.setUserVerificationRequirement(UserVerificationRequirement.REQUIRED);
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
 
-        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.DIRECT);
-        credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
-        credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
-        credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
         Map<String, ClientExtensionInput> extensions = new HashMap<>();
-
-        credentialCreationOptions.setExtensions(extensions);
+        PublicKeyCredentialCreationOptions credentialCreationOptions
+                = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                publicKeyCredentialUserEntity,
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.DIRECT,
+                extensions
+        );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -162,29 +165,31 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     public void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
-        AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
-        authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
-        authenticatorSelectionCriteria.setRequireResidentKey(true);
-        authenticatorSelectionCriteria.setUserVerificationRequirement(UserVerificationRequirement.REQUIRED);
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
 
-        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
-        credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
-        credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
-        credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
         Map<String, ClientExtensionInput> extensions = new HashMap<>();
         extensions.put(SupportedExtensionsClientExtensionInput.ID, new SupportedExtensionsClientExtensionInput(true));
-        credentialCreationOptions.setExtensions(extensions);
+
+        PublicKeyCredentialCreationOptions credentialCreationOptions
+                = new PublicKeyCredentialCreationOptions(
+                    new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                    publicKeyCredentialUserEntity,
+                    challenge,
+                    Collections.singletonList(publicKeyCredentialParameters),
+                    null,
+                    Collections.emptyList(),
+                    authenticatorSelectionCriteria,
+                    AttestationConveyancePreference.NONE,
+                    extensions
+                );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

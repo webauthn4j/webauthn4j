@@ -38,76 +38,64 @@ public class PublicKeyCredentialCreationOptions {
     private AttestationConveyancePreference attestation;
     private Map<String, ClientExtensionInput> extensions;
 
+    public PublicKeyCredentialCreationOptions(
+            PublicKeyCredentialRpEntity rp,
+            PublicKeyCredentialUserEntity user,
+            Challenge challenge,
+            List<PublicKeyCredentialParameters> pubKeyCredParams,
+            BigInteger timeout,
+            List<PublicKeyCredentialDescriptor> excludeCredentials,
+            AuthenticatorSelectionCriteria authenticatorSelection,
+            AttestationConveyancePreference attestation,
+            Map<String, ClientExtensionInput> extensions) {
+        this.rp = rp;
+        this.user = user;
+        this.challenge = challenge;
+        this.pubKeyCredParams = pubKeyCredParams;
+        this.timeout = timeout;
+        this.excludeCredentials = excludeCredentials;
+        this.authenticatorSelection = authenticatorSelection;
+        this.attestation = attestation;
+        this.extensions = extensions;
+    }
+
+    public PublicKeyCredentialCreationOptions(PublicKeyCredentialRpEntity rp, PublicKeyCredentialUserEntity user, Challenge challenge, List<PublicKeyCredentialParameters> pubKeyCredParams) {
+        this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, Collections.emptyMap());
+    }
 
     public PublicKeyCredentialRpEntity getRp() {
         return rp;
-    }
-
-    public void setRp(PublicKeyCredentialRpEntity rp) {
-        this.rp = rp;
     }
 
     public PublicKeyCredentialUserEntity getUser() {
         return user;
     }
 
-    public void setUser(PublicKeyCredentialUserEntity user) {
-        this.user = user;
-    }
-
     public Challenge getChallenge() {
         return challenge;
-    }
-
-    public void setChallenge(Challenge challenge) {
-        this.challenge = challenge;
     }
 
     public List<PublicKeyCredentialParameters> getPubKeyCredParams() {
         return pubKeyCredParams;
     }
 
-    public void setPubKeyCredParams(List<PublicKeyCredentialParameters> pubKeyCredParams) {
-        this.pubKeyCredParams = pubKeyCredParams;
-    }
-
     public BigInteger getTimeout() {
         return timeout;
-    }
-
-    public void setTimeout(BigInteger timeout) {
-        this.timeout = timeout;
     }
 
     public List<PublicKeyCredentialDescriptor> getExcludeCredentials() {
         return excludeCredentials;
     }
 
-    public void setExcludeCredentials(List<PublicKeyCredentialDescriptor> excludeCredentials) {
-        this.excludeCredentials = excludeCredentials;
-    }
-
     public AuthenticatorSelectionCriteria getAuthenticatorSelection() {
         return authenticatorSelection;
-    }
-
-    public void setAuthenticatorSelection(AuthenticatorSelectionCriteria authenticatorSelection) {
-        this.authenticatorSelection = authenticatorSelection;
     }
 
     public AttestationConveyancePreference getAttestation() {
         return attestation;
     }
 
-    public void setAttestation(AttestationConveyancePreference attestation) {
-        this.attestation = attestation;
-    }
-
     public Map<String, ClientExtensionInput> getExtensions() {
         return extensions;
-    }
-
-    public void setExtensions(Map<String, ClientExtensionInput> extensions) {
-        this.extensions = extensions;
     }
 }

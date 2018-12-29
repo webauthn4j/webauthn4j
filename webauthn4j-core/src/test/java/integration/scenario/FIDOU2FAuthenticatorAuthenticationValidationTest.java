@@ -16,9 +16,11 @@
 
 package integration.scenario;
 
+import com.webauthn4j.request.extension.client.ClientExtensionInput;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
@@ -42,6 +44,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -452,10 +455,15 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                new PublicKeyCredentialUserEntity(),
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters)
+        );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.client;
 
+import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
@@ -92,7 +93,11 @@ public class ClientPlatform {
 
         AttestationObject attestationObject = credentialCreationResponse.getAttestationObject();
         AttestationStatement attestationStatement = credentialCreationResponse.getAttestationObject().getAttestationStatement();
-        switch (publicKeyCredentialCreationOptions.getAttestation()) {
+        AttestationConveyancePreference attestationConveyancePreference = publicKeyCredentialCreationOptions.getAttestation();
+        if(attestationConveyancePreference == null){
+            attestationConveyancePreference = AttestationConveyancePreference.NONE;
+        }
+        switch (attestationConveyancePreference) {
             case DIRECT:
                 // nop
                 break;

@@ -16,6 +16,7 @@
 
 package integration.scenario;
 
+import com.webauthn4j.request.extension.client.ClientExtensionInput;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
@@ -41,6 +42,7 @@ import com.webauthn4j.validator.exception.*;
 import org.junit.Test;
 
 import java.util.Collections;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -377,26 +379,29 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
-        AuthenticatorSelectionCriteria authenticatorSelectionCriteria = new AuthenticatorSelectionCriteria();
-        authenticatorSelectionCriteria.setAuthenticatorAttachment(AuthenticatorAttachment.CROSS_PLATFORM);
-        authenticatorSelectionCriteria.setRequireResidentKey(true);
-        authenticatorSelectionCriteria.setUserVerificationRequirement(UserVerificationRequirement.REQUIRED);
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
 
-        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-        publicKeyCredentialParameters.setAlg(COSEAlgorithmIdentifier.ES256);
-        publicKeyCredentialParameters.setType(PublicKeyCredentialType.PUBLIC_KEY);
 
-        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions();
-        credentialCreationOptions.setRp(new PublicKeyCredentialRpEntity(rpId, "example.com"));
-        credentialCreationOptions.setChallenge(challenge);
-        credentialCreationOptions.setAttestation(AttestationConveyancePreference.NONE);
-        credentialCreationOptions.setAuthenticatorSelection(authenticatorSelectionCriteria);
-        credentialCreationOptions.setPubKeyCredParams(Collections.singletonList(publicKeyCredentialParameters));
-        credentialCreationOptions.setUser(publicKeyCredentialUserEntity);
+        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        PublicKeyCredentialCreationOptions credentialCreationOptions
+                = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                publicKeyCredentialUserEntity,
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.NONE,
+                extensions
+        );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
