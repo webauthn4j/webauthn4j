@@ -19,7 +19,10 @@ package com.webauthn4j.request;
 public class AuthenticatorSelectionCriteria {
 
     private AuthenticatorAttachment authenticatorAttachment;
-    private boolean requireResidentKey;
+
+    @SuppressWarnings("UnusedAssignment")
+    private boolean requireResidentKey = false;
+    @SuppressWarnings("UnusedAssignment")
     private UserVerificationRequirement userVerificationRequirement = UserVerificationRequirement.PREFERRED;
 
     public AuthenticatorAttachment getAuthenticatorAttachment() {
