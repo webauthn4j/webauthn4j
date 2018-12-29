@@ -20,10 +20,9 @@ import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.request.PublicKeyCredentialUserEntity;
-import com.webauthn4j.request.extension.authenticator.AuthenticatorExtensionInput;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 
 import java.util.List;
-import java.util.Map;
 
 public class MakeCredentialRequest {
 
@@ -35,7 +34,7 @@ public class MakeCredentialRequest {
     private boolean requireUserVerification;
     private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
-    private Map<String, AuthenticatorExtensionInput> extensions;
+    private AuthenticationExtensionsClientInputs extensions;
 
     public byte[] getHash() {
         return hash;
@@ -101,11 +100,11 @@ public class MakeCredentialRequest {
         this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
     }
 
-    public Map<String, AuthenticatorExtensionInput> getExtensions() {
+    public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(Map<String, AuthenticatorExtensionInput> extensions) {
+    public void setExtensions(AuthenticationExtensionsClientInputs extensions) {
         this.extensions = extensions;
     }
 }

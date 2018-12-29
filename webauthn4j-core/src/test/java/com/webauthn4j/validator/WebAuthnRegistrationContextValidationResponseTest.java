@@ -19,12 +19,9 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,11 +31,11 @@ public class WebAuthnRegistrationContextValidationResponseTest {
     public void equals_hashCode_test() {
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        Map<String, ClientExtensionOutput> clientExtensions = new HashMap<>();
+        AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs();
         WebAuthnRegistrationContextValidationResponse instanceA =
-                new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, clientExtensions);
+                new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);
         WebAuthnRegistrationContextValidationResponse instanceB =
-                new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, clientExtensions);
+                new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceB).hasSameHashCodeAs(instanceB);
     }

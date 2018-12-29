@@ -16,23 +16,22 @@
 
 package integration.component;
 
-import com.webauthn4j.request.extension.client.ClientExtensionInput;
+import com.webauthn4j.request.*;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
-import com.webauthn4j.test.client.*;
-import com.webauthn4j.request.*;
-import com.webauthn4j.response.AuthenticatorAttestationResponse;
+import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.Map;
 
 public class NullAttestationStatementValidatorTest {
 
@@ -54,7 +53,7 @@ public class NullAttestationStatementValidatorTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -88,7 +87,7 @@ public class NullAttestationStatementValidatorTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        Map<String, ClientExtensionInput> extensions = Collections.emptyMap();
+        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 publicKeyCredentialUserEntity,

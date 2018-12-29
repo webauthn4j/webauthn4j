@@ -16,17 +16,15 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.authenticator.SupportedExtensionsAuthenticatorExtensionOutput;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -62,9 +60,9 @@ public class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        Map<String, AuthenticatorExtensionOutput> extensionOutputMap = new HashMap<>();
+        AuthenticationExtensionsAuthenticatorOutputs extensionOutputMap = new AuthenticationExtensionsAuthenticatorOutputs();
         List<String> extension = Collections.singletonList("uvm");
-        SupportedExtensionsAuthenticatorExtensionOutput extensionOutput = new SupportedExtensionsAuthenticatorExtensionOutput(extension);
+        SupportedExtensionsExtensionAuthenticatorOutput extensionOutput = new SupportedExtensionsExtensionAuthenticatorOutput(extension);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, 0, extensionOutputMap);
 
@@ -78,7 +76,7 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getFlags()).isEqualTo(BIT_ED);
         assertThat(result.getSignCount()).isEqualTo(0);
         assertThat(result.getAttestedCredentialData()).isNull();
-        assertThat(result.getExtensions()).containsKeys(SupportedExtensionsAuthenticatorExtensionOutput.ID);
+        assertThat(result.getExtensions()).containsKeys(SupportedExtensionsExtensionAuthenticatorOutput.ID);
         assertThat(result.getExtensions()).containsValues(extensionOutput);
     }
 }

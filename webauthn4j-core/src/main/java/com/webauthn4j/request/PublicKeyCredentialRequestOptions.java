@@ -16,12 +16,11 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.request.extension.client.ClientExtensionInput;
 import com.webauthn4j.util.WIP;
 
 import java.util.List;
-import java.util.Map;
 
 @WIP
 public class PublicKeyCredentialRequestOptions {
@@ -31,14 +30,14 @@ public class PublicKeyCredentialRequestOptions {
     private String rpId;
     private List<PublicKeyCredentialDescriptor> allowCredentials;
     private UserVerificationRequirement userVerification;
-    private Map<String, ClientExtensionInput> extensions;
+    private AuthenticationExtensionsClientInputs extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
-                                             Map<String, ClientExtensionInput> extensions) {
+                                             AuthenticationExtensionsClientInputs extensions) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -67,7 +66,7 @@ public class PublicKeyCredentialRequestOptions {
         return userVerification;
     }
 
-    public Map<String, ClientExtensionInput> getExtensions() {
+    public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
     }
 }

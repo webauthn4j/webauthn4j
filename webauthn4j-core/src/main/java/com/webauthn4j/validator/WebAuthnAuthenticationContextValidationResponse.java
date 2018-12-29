@@ -18,7 +18,8 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 
 import java.util.Map;
 import java.util.Objects;
@@ -27,12 +28,15 @@ public class WebAuthnAuthenticationContextValidationResponse {
 
     private CollectedClientData collectedClientData;
     private AuthenticatorData authenticatorData;
-    private Map<String, ClientExtensionOutput> clientExtensionOutputs;
+    private AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs;
 
-    public WebAuthnAuthenticationContextValidationResponse(CollectedClientData collectedClientData, AuthenticatorData authenticatorData, Map<String, ClientExtensionOutput> clientExtensionOutputs) {
+    public WebAuthnAuthenticationContextValidationResponse(
+            CollectedClientData collectedClientData,
+            AuthenticatorData authenticatorData,
+            AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs) {
         this.collectedClientData = collectedClientData;
         this.authenticatorData = authenticatorData;
-        this.clientExtensionOutputs = clientExtensionOutputs;
+        this.authenticationExtensionsClientOutputs = authenticationExtensionsClientOutputs;
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -43,8 +47,8 @@ public class WebAuthnAuthenticationContextValidationResponse {
         return authenticatorData;
     }
 
-    public Map<String, ClientExtensionOutput> getClientExtensionOutputs() {
-        return clientExtensionOutputs;
+    public AuthenticationExtensionsClientOutputs getAuthenticationExtensionsClientOutputs() {
+        return authenticationExtensionsClientOutputs;
     }
 
     @Override
@@ -54,12 +58,12 @@ public class WebAuthnAuthenticationContextValidationResponse {
         WebAuthnAuthenticationContextValidationResponse that = (WebAuthnAuthenticationContextValidationResponse) o;
         return Objects.equals(collectedClientData, that.collectedClientData) &&
                 Objects.equals(authenticatorData, that.authenticatorData) &&
-                Objects.equals(clientExtensionOutputs, that.clientExtensionOutputs);
+                Objects.equals(authenticationExtensionsClientOutputs, that.authenticationExtensionsClientOutputs);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(collectedClientData, authenticatorData, clientExtensionOutputs);
+        return Objects.hash(collectedClientData, authenticatorData, authenticationExtensionsClientOutputs);
     }
 }

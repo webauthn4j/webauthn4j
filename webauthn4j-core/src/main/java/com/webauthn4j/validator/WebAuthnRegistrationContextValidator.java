@@ -17,17 +17,17 @@
 package com.webauthn4j.validator;
 
 
+import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.ClientExtensionOutputsConverter;
-import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
@@ -49,7 +49,6 @@ import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -64,7 +63,7 @@ public class WebAuthnRegistrationContextValidator {
 
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AttestationObjectConverter attestationObjectConverter;
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter;
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -133,7 +132,7 @@ public class WebAuthnRegistrationContextValidator {
         this.registry = registry;
         collectedClientDataConverter = new CollectedClientDataConverter(registry);
         attestationObjectConverter = new AttestationObjectConverter(registry);
-        clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,
@@ -178,12 +177,12 @@ public class WebAuthnRegistrationContextValidator {
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
-        Map<String, ClientExtensionOutput> clientExtensionOutputs =
-                clientExtensionOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
+        AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs =
+                authenticationExtensionsClientOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(attestationObject);
-        BeanAssertUtil.validateClientExtensionsOutputs(clientExtensionOutputs);
+        BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(authenticationExtensionsClientOutputs);
 
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
 
@@ -239,9 +238,9 @@ public class WebAuthnRegistrationContextValidator {
         /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
+        ExtensionsAuthenticatorOutputs extensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
-        extensionValidator.validate(clientExtensionOutputs, authenticatorExtensionOutputs, expectedExtensionIdentifiers);
+        extensionValidator.validate(authenticationExtensionsClientOutputs, extensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         // Verify attestation
         attestationValidator.validate(registrationObject);
@@ -257,7 +256,7 @@ public class WebAuthnRegistrationContextValidator {
 
         // ******* This step is up to library user *******
 
-        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensionOutputs);
+        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, authenticationExtensionsClientOutputs);
     }
 
 

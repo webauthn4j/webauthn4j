@@ -16,16 +16,13 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,11 +33,11 @@ public class WebAuthnAuthenticationContextValidationResponseTest {
         Registry registry = new Registry();
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
-        Map<String, ClientExtensionOutput> clientExtensionOutputs = new HashMap<>();
+        AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs();
         WebAuthnAuthenticationContextValidationResponse instanceA =
-                new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, clientExtensionOutputs);
+                new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, authenticationExtensionsClientOutputs);
         WebAuthnAuthenticationContextValidationResponse instanceB =
-                new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, clientExtensionOutputs);
+                new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, authenticationExtensionsClientOutputs);
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }

@@ -16,14 +16,13 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.request.extension.client.ClientExtensionInput;
 import com.webauthn4j.util.WIP;
 
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @WIP
 public class PublicKeyCredentialCreationOptions {
@@ -36,7 +35,7 @@ public class PublicKeyCredentialCreationOptions {
     private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
-    private Map<String, ClientExtensionInput> extensions;
+    private AuthenticationExtensionsClientInputs extensions;
 
     public PublicKeyCredentialCreationOptions(
             PublicKeyCredentialRpEntity rp,
@@ -47,7 +46,7 @@ public class PublicKeyCredentialCreationOptions {
             List<PublicKeyCredentialDescriptor> excludeCredentials,
             AuthenticatorSelectionCriteria authenticatorSelection,
             AttestationConveyancePreference attestation,
-            Map<String, ClientExtensionInput> extensions) {
+            AuthenticationExtensionsClientInputs extensions) {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
@@ -60,7 +59,7 @@ public class PublicKeyCredentialCreationOptions {
     }
 
     public PublicKeyCredentialCreationOptions(PublicKeyCredentialRpEntity rp, PublicKeyCredentialUserEntity user, Challenge challenge, List<PublicKeyCredentialParameters> pubKeyCredParams) {
-        this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, Collections.emptyMap());
+        this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
     }
 
     public PublicKeyCredentialRpEntity getRp() {
@@ -95,7 +94,7 @@ public class PublicKeyCredentialCreationOptions {
         return attestation;
     }
 
-    public Map<String, ClientExtensionInput> getExtensions() {
+    public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
     }
 }

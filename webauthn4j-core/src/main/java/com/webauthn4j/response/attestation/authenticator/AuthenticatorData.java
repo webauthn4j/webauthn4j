@@ -16,11 +16,9 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
 
 public class AuthenticatorData {
@@ -33,11 +31,11 @@ public class AuthenticatorData {
     private final byte flags;
     private final long signCount;
     private final AttestedCredentialData attestedCredentialData;
-    private final Map<String, AuthenticatorExtensionOutput> extensions;
+    private final AuthenticationExtensionsAuthenticatorOutputs extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
                              AttestedCredentialData attestedCredentialData,
-                             Map<String, AuthenticatorExtensionOutput> extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -51,11 +49,11 @@ public class AuthenticatorData {
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = attestedCredentialData;
-        this.extensions = Collections.emptyMap();
+        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs();
     }
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             Map<String, AuthenticatorExtensionOutput> extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -68,7 +66,7 @@ public class AuthenticatorData {
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = null;
-        this.extensions = Collections.emptyMap();
+        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -121,7 +119,7 @@ public class AuthenticatorData {
         return attestedCredentialData;
     }
 
-    public Map<String, AuthenticatorExtensionOutput> getExtensions() {
+    public AuthenticationExtensionsAuthenticatorOutputs getExtensions() {
         return extensions;
     }
 

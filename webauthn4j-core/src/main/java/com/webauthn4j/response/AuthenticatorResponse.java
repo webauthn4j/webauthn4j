@@ -19,22 +19,12 @@ package com.webauthn4j.response;
 public class AuthenticatorResponse {
 
     private byte[] clientDataJSON;
-    private String clientExtensionsJSON;
-
-    public AuthenticatorResponse(byte[] clientDataJSON, String clientExtensionsJSON) {
-        this.clientDataJSON = clientDataJSON;
-        this.clientExtensionsJSON = clientExtensionsJSON;
-    }
 
     public AuthenticatorResponse(byte[] clientDataJSON) {
-        this(clientDataJSON, null);
+        this.clientDataJSON = clientDataJSON;
     }
 
     public byte[] getClientDataJSON() {
         return clientDataJSON;
-    }
-
-    public String getClientExtensionsJSON() {
-        return clientExtensionsJSON;
     }
 }

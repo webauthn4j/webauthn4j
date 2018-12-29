@@ -16,7 +16,7 @@
 
 package integration.scenario;
 
-import com.webauthn4j.request.extension.client.ClientExtensionInput;
+import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.authenticator.Authenticator;
@@ -28,6 +28,7 @@ import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
@@ -44,7 +45,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,6 +55,9 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
+
+    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+            = new AuthenticationExtensionsClientOutputsConverter(new Registry());
 
     @Test
     public void validate_test() {
@@ -80,18 +83,20 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
+        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
-                        authenticationRequest.getClientExtensionsJSON(),
+                        clientExtensionJSON,
                         serverProperty,
                         false,
                         Collections.emptyList()
@@ -102,7 +107,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         assertThat(response.getCollectedClientData()).isNotNull();
         assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getClientExtensionOutputs()).isNotNull();
+        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
     }
 
     @Test(expected = MaliciousDataException.class)
@@ -150,7 +155,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         assertThat(response.getCollectedClientData()).isNotNull();
         assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getClientExtensionOutputs()).isNotNull();
+        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
     }
 
     @Test(expected = BadChallengeException.class)
@@ -178,14 +183,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -221,14 +226,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 null
         );
         clientPlatform.setOrigin(new Origin("https://bad.origin.example.com")); //bad origin
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -264,14 +269,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -306,14 +311,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -351,14 +356,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -393,14 +398,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         new byte[32], //bad signature
@@ -435,14 +440,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse> publicKeyCredential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = clientPlatform.get(credentialRequestOptions);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
+                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),

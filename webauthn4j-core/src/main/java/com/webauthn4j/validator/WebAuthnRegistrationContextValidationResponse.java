@@ -18,21 +18,23 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class WebAuthnRegistrationContextValidationResponse {
 
     private CollectedClientData collectedClientData;
     private AttestationObject attestationObject;
-    private Map<String, ClientExtensionOutput> clientExtensionOutputs;
+    private AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs;
 
-    public WebAuthnRegistrationContextValidationResponse(CollectedClientData collectedClientData, AttestationObject attestationObject, Map<String, ClientExtensionOutput> clientExtensionOutputs) {
+    public WebAuthnRegistrationContextValidationResponse(
+            CollectedClientData collectedClientData,
+            AttestationObject attestationObject,
+            AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs) {
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
-        this.clientExtensionOutputs = clientExtensionOutputs;
+        this.registrationExtensionsClientOutputs = registrationExtensionsClientOutputs;
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -43,8 +45,8 @@ public class WebAuthnRegistrationContextValidationResponse {
         return attestationObject;
     }
 
-    public Map<String, ClientExtensionOutput> getClientExtensionOutputs() {
-        return clientExtensionOutputs;
+    public AuthenticationExtensionsClientOutputs getRegistrationExtensionsClientOutputs() {
+        return registrationExtensionsClientOutputs;
     }
 
     @Override
@@ -54,12 +56,12 @@ public class WebAuthnRegistrationContextValidationResponse {
         WebAuthnRegistrationContextValidationResponse that = (WebAuthnRegistrationContextValidationResponse) o;
         return Objects.equals(collectedClientData, that.collectedClientData) &&
                 Objects.equals(attestationObject, that.attestationObject) &&
-                Objects.equals(clientExtensionOutputs, that.clientExtensionOutputs);
+                Objects.equals(registrationExtensionsClientOutputs, that.registrationExtensionsClientOutputs);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(collectedClientData, attestationObject, clientExtensionOutputs);
+        return Objects.hash(collectedClientData, attestationObject, registrationExtensionsClientOutputs);
     }
 }

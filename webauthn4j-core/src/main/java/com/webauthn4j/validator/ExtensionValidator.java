@@ -16,13 +16,12 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Validates clientExtensionOutputs and authenticatorExtensionOutputs
@@ -32,8 +31,8 @@ public class ExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(Map<String, ClientExtensionOutput> clientExtensionOutputs,
-                         Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs,
+    public void validate(ExtensionsClientOutputs extensionsClientOutputs,
+                         ExtensionsAuthenticatorOutputs authenticatorExtensionOutputs,
                          List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if(expectedExtensionIdentifiers == null){
@@ -43,8 +42,8 @@ public class ExtensionValidator {
             expected = expectedExtensionIdentifiers;
         }
 
-        if (clientExtensionOutputs != null) {
-            clientExtensionOutputs.keySet().forEach(identifier -> {
+        if (extensionsClientOutputs != null) {
+            extensionsClientOutputs.keySet().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
                 }

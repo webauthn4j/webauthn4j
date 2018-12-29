@@ -16,5 +16,7 @@
 
 package com.webauthn4j.request.extension.authenticator;
 
-public class AuthenticationExtensionsAuthenticatorInputs {
+import java.util.HashMap;
+
+public class AuthenticationExtensionsAuthenticatorInputs extends HashMap<String, ExtensionAuthenticatorInput> {
 }

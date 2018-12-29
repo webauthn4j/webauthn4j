@@ -16,17 +16,16 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.converter.*;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.converter.ClientExtensionOutputsConverter;
-import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
@@ -36,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -52,7 +50,7 @@ public class WebAuthnAuthenticationContextValidator {
 
     private final AuthenticatorDataConverter authenticatorDataConverter;
     private final CollectedClientDataConverter collectedClientDataConverter;
-    private final ClientExtensionOutputsConverter clientExtensionOutputsConverter;
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -74,7 +72,7 @@ public class WebAuthnAuthenticationContextValidator {
         this.registry = registry;
         this.authenticatorDataConverter = new AuthenticatorDataConverter(registry);
         this.collectedClientDataConverter  = new CollectedClientDataConverter(registry);
-        this.clientExtensionOutputsConverter = new ClientExtensionOutputsConverter(registry);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
     }
 
     // ~ Methods
@@ -94,8 +92,8 @@ public class WebAuthnAuthenticationContextValidator {
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
-        Map<String, ClientExtensionOutput> clientExtensionOutputs =
-                clientExtensionOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
+        AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs =
+                authenticationExtensionsClientOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
         ServerProperty serverProperty = authenticationContext.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);
@@ -138,9 +136,9 @@ public class WebAuthnAuthenticationContextValidator {
         // values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         // identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs = authenticatorData.getExtensions();
+        ExtensionsAuthenticatorOutputs extensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = authenticationContext.getExpectedExtensionIds();
-        extensionValidator.validate(clientExtensionOutputs, authenticatorExtensionOutputs, expectedExtensionIdentifiers);
+        extensionValidator.validate(authenticationExtensionsClientOutputs, extensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
@@ -162,7 +160,7 @@ public class WebAuthnAuthenticationContextValidator {
             }
         }
 
-        return new WebAuthnAuthenticationContextValidationResponse(collectedClientData, authenticatorData, clientExtensionOutputs);
+        return new WebAuthnAuthenticationContextValidationResponse(collectedClientData, authenticatorData, authenticationExtensionsClientOutputs);
     }
 
     public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {

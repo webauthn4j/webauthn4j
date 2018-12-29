@@ -25,13 +25,6 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     private byte[] signature;
     private byte[] userHandle;
 
-    public AuthenticatorAssertionResponse(byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle, String clientExtensionsJSON) {
-        super(clientDataJSON, clientExtensionsJSON);
-        this.authenticatorData = authenticatorData;
-        this.signature = signature;
-        this.userHandle = userHandle;
-    }
-
     public AuthenticatorAssertionResponse(byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle) {
         super(clientDataJSON);
         this.authenticatorData = authenticatorData;

@@ -17,17 +17,19 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -86,7 +88,7 @@ public class AuthenticatorDataConverter {
         long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
         AttestedCredentialData attestationData;
-        Map<String, AuthenticatorExtensionOutput> extensions;
+        AuthenticationExtensionsAuthenticatorOutputs extensions;
         if (AuthenticatorData.checkFlagAT(flags)) {
             attestationData = convertToAttestedCredentialData(byteBuffer);
         } else {
@@ -95,7 +97,7 @@ public class AuthenticatorDataConverter {
         if (AuthenticatorData.checkFlagED(flags)) {
             extensions = convertToExtensions(byteBuffer);
         } else {
-            extensions = Collections.emptyMap();
+            extensions = new AuthenticationExtensionsAuthenticatorOutputs();
         }
 
         return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
@@ -121,16 +123,16 @@ public class AuthenticatorDataConverter {
         return cborConverter.readValue(inputStream, CredentialPublicKey.class);
     }
 
-    Map<String, AuthenticatorExtensionOutput> convertToExtensions(ByteBuffer byteBuffer) {
+    AuthenticationExtensionsAuthenticatorOutputs convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
-            return Collections.emptyMap();
+            return new AuthenticationExtensionsAuthenticatorOutputs();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
-        return cborConverter.readValue(remaining, new TypeReference<Map<String, AuthenticatorExtensionOutput>>(){});
+        return cborConverter.readValue(remaining, new TypeReference<AuthenticationExtensionsAuthenticatorOutputs>(){});
     }
 
-    byte[] convert(Map<String, AuthenticatorExtensionOutput> extensions) {
+    byte[] convert(AuthenticationExtensionsAuthenticatorOutputs extensions) {
         if (extensions == null || extensions.isEmpty()) {
             return new byte[0];
         } else {

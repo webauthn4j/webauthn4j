@@ -26,9 +26,11 @@ import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
+import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -44,8 +46,8 @@ public class WebAuthnModule extends SimpleModule {
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
-        this.addDeserializer(AuthenticatorExtensionOutput.class, new AuthenticatorExtensionOutputDeserializer());
-        this.addDeserializer(ClientExtensionOutput.class, new ClientExtensionOutputDeserializer());
+        this.addDeserializer(ExtensionAuthenticatorOutput.class, new AuthenticatorExtensionOutputDeserializer());
+        this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(registry));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 

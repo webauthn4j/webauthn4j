@@ -26,14 +26,12 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.TokenBinding;
 import com.webauthn4j.response.extension.ExtensionOutput;
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-import com.webauthn4j.response.extension.client.ClientExtensionOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-
-import java.util.Map;
 
 /**
  * Per field checker utility class
@@ -141,7 +139,7 @@ class BeanAssertUtil {
         if (signCount <= 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        Map<String, AuthenticatorExtensionOutput> extensions = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs extensions = authenticatorData.getExtensions();
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
@@ -166,14 +164,14 @@ class BeanAssertUtil {
         validate(credentialPublicKey);
     }
 
-    public static void validateClientExtensionsOutputs(Map<String, ClientExtensionOutput> clientExtensionOutputs) {
-        if (clientExtensionOutputs == null) {
+    public static void validateAuthenticationExtensionsClientOutputs(AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs) {
+        if (authenticationExtensionsClientOutputs == null) {
             return;
         }
-        clientExtensionOutputs.forEach(BeanAssertUtil::validate);
+        authenticationExtensionsClientOutputs.forEach(BeanAssertUtil::validate);
     }
 
-    public static void validateAuthenticatorExtensionsOutputs(Map<String, AuthenticatorExtensionOutput> authenticatorExtensionOutputs) {
+    public static void validateAuthenticatorExtensionsOutputs(AuthenticationExtensionsAuthenticatorOutputs authenticatorExtensionOutputs) {
         if (authenticatorExtensionOutputs == null) {
             return;
         }

@@ -25,7 +25,7 @@ import java.util.List;
 public class PublicKeyCredentialDescriptor {
     private PublicKeyCredentialType type;
     private byte[] id;
-    private List<AuthenticatorTransport> transports = Collections.emptyList();
+    private List<AuthenticatorTransport> transports;
 
     public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, List<AuthenticatorTransport> transports) {
         this.type = type;

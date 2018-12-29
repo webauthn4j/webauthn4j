@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.Base64UrlUtil;
 
 public class PublicKeyCredential<T extends AuthenticatorResponse> {
@@ -23,11 +24,13 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
     private String id;
     private byte[] rawId;
     private T authenticatorResponse;
+    private AuthenticationExtensionsClientOutputs clientExtensionResults;
 
-    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse) {
+    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse, AuthenticationExtensionsClientOutputs clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.authenticatorResponse = authenticatorResponse;
+        this.clientExtensionResults = clientExtensionResults;
     }
 
     public String getType() {
@@ -44,5 +47,9 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
 
     public T getAuthenticatorResponse() {
         return authenticatorResponse;
+    }
+
+    public AuthenticationExtensionsClientOutputs getClientExtensionResults(){
+        return clientExtensionResults;
     }
 }

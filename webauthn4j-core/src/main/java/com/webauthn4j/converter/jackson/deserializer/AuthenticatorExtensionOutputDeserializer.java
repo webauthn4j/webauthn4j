@@ -25,39 +25,39 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import java.io.IOException;
 
 /**
- * Jackson Deserializer for {@link AuthenticatorExtensionOutput}
+ * Jackson Deserializer for {@link ExtensionAuthenticatorOutput}
  */
-public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<AuthenticatorExtensionOutput> {
+public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<ExtensionAuthenticatorOutput> {
 
     public AuthenticatorExtensionOutputDeserializer() {
-        super(AuthenticatorExtensionOutput.class);
+        super(ExtensionAuthenticatorOutput.class);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public AuthenticatorExtensionOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public ExtensionAuthenticatorOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         String currentName = p.getParsingContext().getCurrentName();
 
-        if (SimpleTransactionAuthorizationAuthenticatorExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, SimpleTransactionAuthorizationAuthenticatorExtensionOutput.class);
-        } else if (UserVerificationIndexAuthenticatorExtensionOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
+        if (SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID.equals(currentName)) {
+            return ctxt.readValue(p, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class);
+        } else if (UserVerificationIndexExtensionAuthenticatorOutput.ID.equals(currentName)) {
+            return ctxt.readValue(p, UserVerificationIndexExtensionAuthenticatorOutput.class);
         }
 
         String parentName = p.getParsingContext().getParent().getCurrentName();
 
         switch (parentName) {
-            case GenericTransactionAuthorizationAuthenticatorExtensionOutput.ID:
-                return ctxt.readValue(p, GenericTransactionAuthorizationAuthenticatorExtensionOutput.class);
-            case SupportedExtensionsAuthenticatorExtensionOutput.ID:
-                return ctxt.readValue(p, SupportedExtensionsAuthenticatorExtensionOutput.class);
-            case LocationAuthenticatorExtensionOutput.ID:
-                return ctxt.readValue(p, LocationAuthenticatorExtensionOutput.class);
-            case UserVerificationIndexAuthenticatorExtensionOutput.ID:
-                return ctxt.readValue(p, UserVerificationIndexAuthenticatorExtensionOutput.class);
+            case GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID:
+                return ctxt.readValue(p, GenericTransactionAuthorizationExtensionAuthenticatorOutput.class);
+            case SupportedExtensionsExtensionAuthenticatorOutput.ID:
+                return ctxt.readValue(p, SupportedExtensionsExtensionAuthenticatorOutput.class);
+            case LocationExtensionAuthenticatorOutput.ID:
+                return ctxt.readValue(p, LocationExtensionAuthenticatorOutput.class);
+            case UserVerificationIndexExtensionAuthenticatorOutput.ID:
+                return ctxt.readValue(p, UserVerificationIndexExtensionAuthenticatorOutput.class);
             default:
                 throw new NotImplementedException();
         }

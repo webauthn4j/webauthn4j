@@ -16,9 +16,5 @@
 
 package com.webauthn4j.response.extension.client;
 
-import com.webauthn4j.response.extension.authenticator.AuthenticatorExtensionOutput;
-
-import java.util.HashMap;
-
-public class AuthenticationExtensionsClientOutputs extends HashMap<String, AuthenticatorExtensionOutput> {
+public class AuthenticationExtensionsClientOutputs extends ExtensionsClientOutputs<ExtensionClientOutput> {
 }
