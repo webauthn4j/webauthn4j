@@ -16,7 +16,7 @@
 
 package com.webauthn4j.request;
 
-public class PublicKeyCredentialEntity {
+public abstract class PublicKeyCredentialEntity {
 
     private String name;
     private String icon;
