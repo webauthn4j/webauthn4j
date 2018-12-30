@@ -22,6 +22,7 @@ import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.request.PublicKeyCredentialType;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
@@ -37,6 +38,7 @@ import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -123,7 +125,11 @@ public class WebAuthnModelAuthenticator {
         }
 
         // For each descriptor of excludeCredentialDescriptorList:
-        for (PublicKeyCredentialDescriptor descriptor : makeCredentialRequest.getExcludeCredentialDescriptorList()) {
+        List<PublicKeyCredentialDescriptor> descriptors = makeCredentialRequest.getExcludeCredentialDescriptorList();
+        if(descriptors == null){
+            descriptors = Collections.emptyList();
+        }
+        for (PublicKeyCredentialDescriptor descriptor : descriptors) {
             PublicKeyCredentialSource publicKeyCredentialSource = lookup(descriptor.getId());
             // If looking up descriptor.id in this authenticator returns non-null, and the returned item's RP ID
             // and type match rpEntity.id and excludeCredentialDescriptorList.type respectively,
@@ -223,8 +229,12 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
+        AuthenticationExtensionsClientInputs extensions = makeCredentialRequest.getExtensions();
+        if(extensions == null){
+            extensions = new AuthenticationExtensionsClientInputs();
+        }
         AuthenticationExtensionsAuthenticatorOutputs processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs();
-        for (Map.Entry<String, ExtensionClientInput> entry : makeCredentialRequest.getExtensions().entrySet()) {
+        for (Map.Entry<String, ExtensionClientInput> entry : extensions.entrySet()) {
             String extensionIdentifier = entry.getKey();
             if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
                 processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
