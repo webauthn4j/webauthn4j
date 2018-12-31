@@ -16,7 +16,34 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum AuthenticatorAttachment {
-    PLATFORM,
-    CROSS_PLATFORM
+    PLATFORM("platform"),
+    CROSS_PLATFORM("cross-platform");
+
+    private String value;
+
+    AuthenticatorAttachment(String value) {
+        this.value = value;
+    }
+
+    @JsonCreator
+    public static AuthenticatorAttachment create(String value) {
+        switch (value) {
+            case "platform":
+                return PLATFORM;
+            case "cross-platform":
+                return CROSS_PLATFORM;
+            default:
+                throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
 }

@@ -16,8 +16,37 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum AuthenticatorTransport {
-    USB,
-    NFC,
-    BLE
+    USB("usb"),
+    NFC("nfc"),
+    BLE("ble");
+
+    private String value;
+
+    AuthenticatorTransport(String value) {
+        this.value = value;
+    }
+
+    @JsonCreator
+    public static AuthenticatorTransport create(String value) {
+        switch (value) {
+            case "usb":
+                return USB;
+            case "nfc":
+                return NFC;
+            case "ble":
+                return BLE;
+            default:
+                throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
 }

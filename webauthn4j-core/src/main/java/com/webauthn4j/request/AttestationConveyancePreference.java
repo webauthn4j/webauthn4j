@@ -16,8 +16,37 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum AttestationConveyancePreference {
-    NONE,
-    INDIRECT,
-    DIRECT
+    NONE("none"),
+    INDIRECT("indirect"),
+    DIRECT("direct");
+
+    private String value;
+
+    AttestationConveyancePreference(String value) {
+        this.value = value;
+    }
+
+    @JsonCreator
+    public static AttestationConveyancePreference create(String value) {
+        switch (value) {
+            case "none":
+                return NONE;
+            case "indirect":
+                return INDIRECT;
+            case "direct":
+                return DIRECT;
+            default:
+                throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
 }

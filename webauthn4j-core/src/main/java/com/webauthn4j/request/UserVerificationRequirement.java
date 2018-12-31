@@ -16,11 +16,39 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.WIP;
 
 @WIP
 public enum UserVerificationRequirement {
-    REQUIRED,
-    PREFERRED,
-    DISCOURAGED
+    REQUIRED("required"),
+    PREFERRED("preferred"),
+    DISCOURAGED("discouraged");
+
+    private String value;
+
+    UserVerificationRequirement(String value) {
+        this.value = value;
+    }
+
+    @JsonCreator
+    public static UserVerificationRequirement create(String value) {
+        switch (value) {
+            case "required":
+                return REQUIRED;
+            case "preferred":
+                return PREFERRED;
+            case "discourage":
+                return DISCOURAGED;
+            default:
+                throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonValue
+    public String getValue() {
+        return value;
+    }
+
 }
