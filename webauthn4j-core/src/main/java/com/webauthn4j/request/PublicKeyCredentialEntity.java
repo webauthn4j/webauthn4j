@@ -16,7 +16,9 @@
 
 package com.webauthn4j.request;
 
-public abstract class PublicKeyCredentialEntity {
+import java.io.Serializable;
+
+public abstract class PublicKeyCredentialEntity implements Serializable {
 
     private String name;
     private String icon;

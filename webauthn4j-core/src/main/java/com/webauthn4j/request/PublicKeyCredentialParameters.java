@@ -18,7 +18,9 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 
-public class PublicKeyCredentialParameters {
+import java.io.Serializable;
+
+public class PublicKeyCredentialParameters implements Serializable {
 
     private PublicKeyCredentialType type;
     private COSEAlgorithmIdentifier alg;
