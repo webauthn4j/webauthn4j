@@ -33,6 +33,8 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
         this.clientExtensionResults = clientExtensionResults;
     }
 
+    public PublicKeyCredential(){}
+
     public String getType() {
         return "public-key";
     }

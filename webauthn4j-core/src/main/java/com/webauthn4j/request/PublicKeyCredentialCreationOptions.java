@@ -63,6 +63,8 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
     }
 
+    public PublicKeyCredentialCreationOptions(){}
+
     public PublicKeyCredentialRpEntity getRp() {
         return rp;
     }

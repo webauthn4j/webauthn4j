@@ -34,6 +34,8 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         this.transports = transports;
     }
 
+    public PublicKeyCredentialDescriptor(){}
+
     public PublicKeyCredentialType getType() {
         return type;
     }

@@ -16,13 +16,15 @@
 
 package com.webauthn4j.response;
 
-public class AuthenticatorResponse {
+public abstract class AuthenticatorResponse {
 
     private byte[] clientDataJSON;
 
     public AuthenticatorResponse(byte[] clientDataJSON) {
         this.clientDataJSON = clientDataJSON;
     }
+
+    public AuthenticatorResponse(){}
 
     public byte[] getClientDataJSON() {
         return clientDataJSON;

@@ -32,6 +32,8 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.userHandle = userHandle;
     }
 
+    public AuthenticatorAssertionResponse(){}
+
     public byte[] getAuthenticatorData() {
         return authenticatorData;
     }
