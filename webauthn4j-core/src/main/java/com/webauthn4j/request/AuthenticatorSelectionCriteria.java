@@ -25,12 +25,12 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     @SuppressWarnings("UnusedAssignment")
     private boolean requireResidentKey = false;
     @SuppressWarnings("UnusedAssignment")
-    private UserVerificationRequirement userVerificationRequirement = UserVerificationRequirement.PREFERRED;
+    private UserVerificationRequirement userVerification = UserVerificationRequirement.PREFERRED;
 
-    public AuthenticatorSelectionCriteria(AuthenticatorAttachment authenticatorAttachment, boolean requireResidentKey, UserVerificationRequirement userVerificationRequirement) {
+    public AuthenticatorSelectionCriteria(AuthenticatorAttachment authenticatorAttachment, boolean requireResidentKey, UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
         this.requireResidentKey = requireResidentKey;
-        this.userVerificationRequirement = userVerificationRequirement;
+        this.userVerification = userVerification;
     }
 
     public AuthenticatorSelectionCriteria(){}
@@ -43,7 +43,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         return requireResidentKey;
     }
 
-    public UserVerificationRequirement getUserVerificationRequirement() {
-        return userVerificationRequirement;
+    public UserVerificationRequirement getUserVerification() {
+        return userVerification;
     }
 }

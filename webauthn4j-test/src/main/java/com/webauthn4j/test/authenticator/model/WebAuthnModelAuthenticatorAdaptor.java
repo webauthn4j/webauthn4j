@@ -21,10 +21,6 @@ import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.request.UserVerificationRequirement;
-import com.webauthn4j.request.extension.authenticator.ExtensionAuthenticatorInput;
-import com.webauthn4j.request.extension.authenticator.SupportedExtensionsExtensionAuthenticatorInput;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
@@ -33,10 +29,6 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
@@ -47,7 +39,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
-        boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerificationRequirement());
+        boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerification());
         MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest();
         makeCredentialRequest.setHash(clientDataHash);
         makeCredentialRequest.setRpEntity(publicKeyCredentialCreationOptions.getRp());
