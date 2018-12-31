@@ -56,5 +56,9 @@ public class UnsignedNumberUtil {
         return bytes;
     }
 
+    public static boolean isWithinUnsignedLong(BigInteger value){
+        return value.bitLength() <= 64 && value.compareTo(BigInteger.valueOf(0)) >= 0;
+    }
+
 
 }

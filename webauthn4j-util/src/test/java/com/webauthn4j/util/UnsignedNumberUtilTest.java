@@ -18,6 +18,7 @@ package com.webauthn4j.util;
 
 import org.junit.Test;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,5 +80,13 @@ public class UnsignedNumberUtilTest {
         byte[] bytes = UnsignedNumberUtil.toBytes(0xFFFFFFFFL);
         assertThat(bytes).hasSize(4);
         assertThat(bytes).isEqualTo(new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
+    }
+
+    @Test
+    public void isWithinUnsignedLong_test(){
+        assertThat(UnsignedNumberUtil.isWithinUnsignedLong(UnsignedNumberUtil.UNSIGNED_LONG_MAX)).isTrue();
+        assertThat(UnsignedNumberUtil.isWithinUnsignedLong(BigInteger.valueOf(0))).isTrue();
+        assertThat(UnsignedNumberUtil.isWithinUnsignedLong(new BigInteger("18446744073709551616"))).isFalse();
+        assertThat(UnsignedNumberUtil.isWithinUnsignedLong(BigInteger.valueOf(-1))).isFalse();
     }
 }
