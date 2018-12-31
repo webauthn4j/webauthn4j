@@ -18,11 +18,12 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.util.WIP;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 @WIP
-public class PublicKeyCredentialDescriptor {
+public class PublicKeyCredentialDescriptor implements Serializable {
     private PublicKeyCredentialType type;
     private byte[] id;
     private List<AuthenticatorTransport> transports;

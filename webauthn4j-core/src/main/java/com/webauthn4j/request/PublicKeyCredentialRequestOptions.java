@@ -20,10 +20,11 @@ import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInp
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.WIP;
 
+import java.io.Serializable;
 import java.util.List;
 
 @WIP
-public class PublicKeyCredentialRequestOptions {
+public class PublicKeyCredentialRequestOptions implements Serializable {
 
     private Challenge challenge;
     private long timeout;

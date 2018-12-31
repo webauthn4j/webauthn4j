@@ -16,7 +16,9 @@
 
 package com.webauthn4j.request;
 
-public class AuthenticatorSelectionCriteria {
+import java.io.Serializable;
+
+public class AuthenticatorSelectionCriteria implements Serializable {
 
     private AuthenticatorAttachment authenticatorAttachment;
 

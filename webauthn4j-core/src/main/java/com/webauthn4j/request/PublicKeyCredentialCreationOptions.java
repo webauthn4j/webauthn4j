@@ -20,12 +20,13 @@ import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInp
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.WIP;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 
 @WIP
-public class PublicKeyCredentialCreationOptions {
+public class PublicKeyCredentialCreationOptions implements Serializable {
     private PublicKeyCredentialRpEntity rp;
     private PublicKeyCredentialUserEntity user;
 
