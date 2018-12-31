@@ -16,6 +16,7 @@
 
 package com.webauthn4j.util;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
 /**
@@ -24,7 +25,9 @@ import java.nio.ByteBuffer;
 public class UnsignedNumberUtil {
 
     public static final short UNSIGNED_BYTE_MAX = 0xFF;
-    public static final long  UNSIGNED_INT_MAX = 0xFFFFFFFFL;
+    public static final int  UNSIGNED_SHORT_MAX = 0xFFFF;
+    public static final long  UNSIGNED_INT_MAX  = 0xFFFFFFFFL;
+    public static final BigInteger UNSIGNED_LONG_MAX= new BigInteger("18446744073709551615");
 
     private UnsignedNumberUtil() {
     }
