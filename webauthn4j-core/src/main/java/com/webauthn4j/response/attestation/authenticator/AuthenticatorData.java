@@ -18,10 +18,11 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticatorData {
+public class AuthenticatorData implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;
     public static final byte BIT_AT = (byte) 0b01000000;
