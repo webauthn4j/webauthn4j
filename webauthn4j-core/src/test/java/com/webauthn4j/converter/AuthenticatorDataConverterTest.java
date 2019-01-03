@@ -43,7 +43,7 @@ public class AuthenticatorDataConverterTest {
     public void convert_test() {
         //Given
         //noinspection SpellCheckingInspection
-        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
+        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
 
         //When
         AuthenticatorData result = new AuthenticatorDataConverter(registry).convert(Base64UrlUtil.decode(input));
@@ -85,7 +85,7 @@ public class AuthenticatorDataConverterTest {
     @Test(expected = DataConversionException.class)
     public void deserialize_data_with_surplus_bytes_test() {
         //noinspection SpellCheckingInspection
-        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
+        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
         byte[] data = Base64UrlUtil.decode(input);
         byte[] bytes = Arrays.concatenate(data, new byte[1]);
         //When
