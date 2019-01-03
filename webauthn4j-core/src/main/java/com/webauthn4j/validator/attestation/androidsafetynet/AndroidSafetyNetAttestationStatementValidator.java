@@ -39,6 +39,10 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         AndroidSafetyNetAttestationStatement attestationStatement =
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
+        if(attestationStatement.getX5c().isEmpty()){
+            throw new BadAttestationStatementException("No attestation certificate is found'.");
+        }
+
         /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
         //  the verification procedure is as follows:
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it
@@ -57,7 +61,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
         if(!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")){
-            throw new BadAttestationStatementException("Attestation Certificate is not issued to 'attest.android.com'.");
+            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.");
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.

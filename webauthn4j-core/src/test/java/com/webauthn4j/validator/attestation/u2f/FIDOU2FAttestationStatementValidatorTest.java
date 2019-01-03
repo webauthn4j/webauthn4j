@@ -24,6 +24,7 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
@@ -32,7 +33,6 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,16 +40,16 @@ public class FIDOU2FAttestationStatementValidatorTest {
 
     private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
-    @Test
+    @Test(expected = UnsupportedAttestationFormatException.class)
     public void validate_invalid_attestation_statement_test() {
         RegistrationObject registrationObject = mock(RegistrationObject.class);
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
         when(attestationObject.getAttestationStatement()).thenReturn(new NoneAttestationStatement());
-        assertThatThrownBy(() -> target.validate(registrationObject)).isInstanceOf(UnsupportedAttestationFormatException.class);
+        target.validate(registrationObject);
     }
 
-    @Test
+    @Test(expected = BadAttestationStatementException.class)
     public void validateAttestationStatement_test() {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
@@ -58,7 +58,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
                         TestUtil.load3tierTestIntermediateCACertificate()
                 ))
         );
-        assertThatThrownBy(() -> target.validateAttestationStatement(attestationStatement)).isInstanceOf(CertificateException.class);
+        target.validateAttestationStatement(attestationStatement);
     }
 
     @Test(expected = CertificateException.class)

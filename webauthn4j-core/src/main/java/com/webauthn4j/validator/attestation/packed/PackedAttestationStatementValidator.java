@@ -52,6 +52,10 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         byte[] signedData = getSignedData(registrationObject);
         // If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if (attestationStatement.getX5c() != null) {
+            if(attestationStatement.getX5c().isEmpty()){
+                throw new BadAttestationStatementException("No attestation certificate is found'.");
+            }
+
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
             // using the attestation public key in x5c with the algorithm specified in alg.
             if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, signedData)) {

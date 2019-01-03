@@ -23,6 +23,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
@@ -44,6 +45,10 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
 
         AndroidKeyAttestationStatement attestationStatement =
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+
+        if(attestationStatement.getX5c().isEmpty()){
+            throw new BadAttestationStatementException("No attestation certificate is found'.");
+        }
 
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
 
