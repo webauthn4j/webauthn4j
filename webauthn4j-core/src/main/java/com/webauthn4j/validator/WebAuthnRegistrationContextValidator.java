@@ -46,7 +46,6 @@ import com.webauthn4j.validator.attestation.u2f.NullFIDOU2FAttestationStatementV
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.Arrays;
 import java.util.List;

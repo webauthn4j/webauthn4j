@@ -22,26 +22,26 @@ import java.util.Arrays;
 public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    private final byte[] aaGuid;
+    private final byte[] aaguid;
 
     private final byte[] credentialId;
 
     private final CredentialPublicKey credentialPublicKey;
 
-    public AttestedCredentialData(byte[] aaGuid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
-        this.aaGuid = aaGuid;
+    public AttestedCredentialData(byte[] aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
+        this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.credentialPublicKey = credentialPublicKey;
     }
 
     public AttestedCredentialData() {
-        this.aaGuid = null;
+        this.aaguid = null;
         this.credentialId = null;
         this.credentialPublicKey = null;
     }
 
-    public byte[] getAaGuid() {
-        return aaGuid;
+    public byte[] getAaguid() {
+        return aaguid;
     }
 
     public byte[] getCredentialId() {
@@ -62,7 +62,7 @@ public class AttestedCredentialData implements Serializable {
 
         AttestedCredentialData that = (AttestedCredentialData) o;
 
-        if (!Arrays.equals(aaGuid, that.aaGuid)) return false;
+        if (!Arrays.equals(aaguid, that.aaguid)) return false;
         //noinspection SimplifiableIfStatement
         if (!Arrays.equals(credentialId, that.credentialId)) return false;
         return credentialPublicKey != null ? credentialPublicKey.equals(that.credentialPublicKey) : that.credentialPublicKey == null;
@@ -73,7 +73,7 @@ public class AttestedCredentialData implements Serializable {
      */
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(aaGuid);
+        int result = Arrays.hashCode(aaguid);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + (credentialPublicKey != null ? credentialPublicKey.hashCode() : 0);
         return result;

@@ -69,7 +69,7 @@ public class AuthenticatorDataConverter {
     private byte[] convert(AttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(attestationData.getAaGuid());
+        byteArrayOutputStream.write(attestationData.getAaguid());
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
         byteArrayOutputStream.write(attestationData.getCredentialId());
         byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));

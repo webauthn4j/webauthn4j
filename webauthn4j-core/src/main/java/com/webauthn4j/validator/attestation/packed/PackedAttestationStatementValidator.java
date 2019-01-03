@@ -67,7 +67,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
             // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
             // the value of this extension matches the aaguid in authenticatorData.
             byte[] aaguidInCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
-            byte[] aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaGuid();
+            byte[] aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (aaguidInCertificate != null && !Arrays.equals(aaguidInCertificate, aaguid)) {
                 throw new BadAttestationStatementException("Bad aaguid");
             }
