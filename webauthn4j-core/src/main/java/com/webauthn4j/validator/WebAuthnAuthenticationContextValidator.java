@@ -100,7 +100,11 @@ public class WebAuthnAuthenticationContextValidator {
         BeanAssertUtil.validate(authenticatorData);
         BeanAssertUtil.validate(serverProperty);
 
-        // Verify that the value of C.type is the string webauthn.get.
+        if(authenticatorData.getAttestedCredentialData() != null){
+            throw new MaliciousDataException("attestedCredentialData must be null on authentication");
+        }
+
+        /// Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
             throw new MaliciousDataException("Bad client data type");
         }

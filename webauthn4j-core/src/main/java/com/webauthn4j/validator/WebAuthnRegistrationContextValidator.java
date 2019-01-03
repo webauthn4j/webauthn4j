@@ -46,6 +46,7 @@ import com.webauthn4j.validator.attestation.u2f.NullFIDOU2FAttestationStatementV
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -184,6 +185,10 @@ public class WebAuthnRegistrationContextValidator {
         BeanAssertUtil.validate(attestationObject);
         BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(authenticationExtensionsClientOutputs);
 
+        if(attestationObject.getAuthenticatorData().getAttestedCredentialData() == null){
+            throw new MaliciousDataException("attestedCredentialData must not be null on registration");
+        }
+
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
 
         RegistrationObject registrationObject = new RegistrationObject(
@@ -198,7 +203,7 @@ public class WebAuthnRegistrationContextValidator {
         AuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
         ServerProperty serverProperty = registrationContext.getServerProperty();
 
-        // Verify that the value of C.type is webauthn.create.
+        /// Verify that the value of C.type is webauthn.create.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
             throw new MaliciousDataException("Bad client data type");
         }
