@@ -17,20 +17,17 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.Map;
 
 /**
  * Converter for {@link AuthenticatorData}
@@ -98,6 +95,9 @@ public class AuthenticatorDataConverter {
             extensions = convertToExtensions(byteBuffer);
         } else {
             extensions = new AuthenticationExtensionsAuthenticatorOutputs();
+        }
+        if(byteBuffer.hasRemaining()){
+            throw new DataConversionException();
         }
 
         return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);

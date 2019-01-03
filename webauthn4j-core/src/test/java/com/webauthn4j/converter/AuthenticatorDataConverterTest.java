@@ -16,11 +16,13 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.bouncycastle.util.Arrays;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -78,5 +80,15 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getAttestedCredentialData()).isNull();
         assertThat(result.getExtensions()).containsKeys(SupportedExtensionsExtensionAuthenticatorOutput.ID);
         assertThat(result.getExtensions()).containsValues(extensionOutput);
+    }
+
+    @Test(expected = DataConversionException.class)
+    public void deserialize_data_with_surplus_bytes_test() {
+        //noinspection SpellCheckingInspection
+        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRTBGAiEA77SC7T44f9E6NEEwiHBkcI3jSL70jAcvEN3lDJoFpxUCIQDxuc-Oq1UgYUxftfXu4wbsDQiTz_6cJJfe00d5t6nrNw==";
+        byte[] data = Base64UrlUtil.decode(input);
+        byte[] bytes = Arrays.concatenate(data, new byte[1]);
+        //When
+        new AuthenticatorDataConverter(registry).convert(bytes);
     }
 }
