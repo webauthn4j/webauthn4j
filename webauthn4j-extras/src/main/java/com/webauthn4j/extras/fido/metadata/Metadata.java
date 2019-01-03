@@ -16,8 +16,8 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.extras.fido.metadata.structure.MetadataStatement;
-import com.webauthn4j.extras.fido.metadata.structure.StatusReport;
+import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
+import com.webauthn4j.extras.fido.metadata.toc.StatusReport;
 
 import java.time.LocalDate;
 import java.util.List;

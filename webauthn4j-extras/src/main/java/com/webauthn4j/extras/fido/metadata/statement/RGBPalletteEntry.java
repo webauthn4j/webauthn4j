@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class CodeAccuracyDescriptor {
-
+public class RGBPalletteEntry {
     @JsonProperty
-    private Integer base;
+    private Integer r;
     @JsonProperty
-    private Integer minLength;
+    private Integer g;
     @JsonProperty
-    private Integer maxRetries;
-    @JsonProperty
-    private Integer blockSlowdown;
+    private Integer b;
 }

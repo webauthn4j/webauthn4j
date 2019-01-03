@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata;
+package com.webauthn4j.extras.fido.metadata.statement;
 
-import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
-import com.webauthn4j.util.WIP;
+import java.util.HashMap;
 
-import java.util.function.Predicate;
-
-/**
- * A functional interface for representing MetaDataTOC filtering logic.
- */
-@SuppressWarnings("WeakerAccess")
-@WIP
-public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
+public class AlternativeDescriptions extends HashMap<String,String> {
 }

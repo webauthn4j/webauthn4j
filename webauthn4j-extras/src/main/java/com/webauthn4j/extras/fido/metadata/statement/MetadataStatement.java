@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 import java.math.BigInteger;
 import java.security.cert.X509Certificate;
@@ -26,65 +24,63 @@ import java.util.List;
  * Created by ynojima on 2017/09/08.
  */
 public class MetadataStatement {
-    @JsonProperty
+    private String legalHeader;
     private String aaid;
-    @JsonProperty
-    private String title;
-    @JsonProperty
-    private String description;
-    @JsonProperty
-    private Integer authenticatorVersion;
-    @JsonProperty
-    private List<Version> upv;
-    @JsonProperty
-    private String assertionScheme;
-    @JsonProperty
-    private Integer authenticationAlgorithm;
-    @JsonProperty
-    private Integer publicKeyAlgAndEncoding;
-    @JsonProperty
-    private List<Integer> attestationTypes;
-    @JsonProperty
-    private List<List<VerificationMethodDescriptor>> userVerificationDetails;
-    @JsonProperty
-    private Integer keyProtection;
-    @JsonProperty
-    private Integer matcherProtection;
-    @JsonProperty
-    private BigInteger attachmentHint;
-    @JsonProperty
-    private Boolean isSecondFactorOnly;
-    @JsonProperty
-    private Integer tcDisplay;
-    @JsonProperty
-    private String tcDisplayContentType;
-    @JsonProperty
-    private List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
-    @JsonProperty
+    private String aaguid;
     private List<String> attestationCertificateKeyIdentifiers;
-    @JsonProperty
-    private List<X509Certificate> attestationRootCertificates;
-    @JsonProperty
-    private String icon;
-    @JsonProperty
-    private String imagePngContentType;
-    @JsonProperty
+    private AlternativeDescriptions alternativeDescriptions;
+    private Integer authenticatorVersion;
     private String protocolFamily;
+    private List<Version> upv;
+    private String assertionScheme;
+    private Integer authenticationAlgorithm;
+    private List<Integer> authenticationAlgorithms;
+    private Integer publicKeyAlgAndEncoding;
+    private List<Integer> publicKeyAlgAndEncodings;
+    private List<Integer> attestationTypes;
+    private List<VerificationMethodANDCombinations> userVerificationDetails;
+    private Integer keyProtection;
+    private Boolean isKeyRestricted;
+    private Boolean isFreshUserVerificationRequired;
+    private Integer matcherProtection;
+    private Integer cryptoStrength;
+    private String operationEnv;
+    private BigInteger attachmentHint;
+    private Boolean isSecondFactorOnly;
+    private Integer tcDisplay;
+    private String tcDisplayContentType;
+    private List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
+    private List<X509Certificate> attestationRootCertificates;
+    private List<EcdaaTrustAnchor> ecdaaTrustAnchors;
+    private String icon;
+    private List<ExtensionDescriptor> supportedExtensions;
+
+    public String getLegalHeader() {
+        return legalHeader;
+    }
 
     public String getAaid() {
         return aaid;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAaguid() {
+        return aaguid;
     }
 
-    public String getDescription() {
-        return description;
+    public List<String> getAttestationCertificateKeyIdentifiers() {
+        return attestationCertificateKeyIdentifiers;
+    }
+
+    public AlternativeDescriptions getAlternativeDescriptions() {
+        return alternativeDescriptions;
     }
 
     public Integer getAuthenticatorVersion() {
         return authenticatorVersion;
+    }
+
+    public String getProtocolFamily() {
+        return protocolFamily;
     }
 
     public List<Version> getUpv() {
@@ -99,15 +95,23 @@ public class MetadataStatement {
         return authenticationAlgorithm;
     }
 
+    public List<Integer> getAuthenticationAlgorithms() {
+        return authenticationAlgorithms;
+    }
+
     public Integer getPublicKeyAlgAndEncoding() {
         return publicKeyAlgAndEncoding;
+    }
+
+    public List<Integer> getPublicKeyAlgAndEncodings() {
+        return publicKeyAlgAndEncodings;
     }
 
     public List<Integer> getAttestationTypes() {
         return attestationTypes;
     }
 
-    public List<List<VerificationMethodDescriptor>> getUserVerificationDetails() {
+    public List<VerificationMethodANDCombinations> getUserVerificationDetails() {
         return userVerificationDetails;
     }
 
@@ -115,8 +119,24 @@ public class MetadataStatement {
         return keyProtection;
     }
 
+    public Boolean getKeyRestricted() {
+        return isKeyRestricted;
+    }
+
+    public Boolean getFreshUserVerificationRequired() {
+        return isFreshUserVerificationRequired;
+    }
+
     public Integer getMatcherProtection() {
         return matcherProtection;
+    }
+
+    public Integer getCryptoStrength() {
+        return cryptoStrength;
+    }
+
+    public String getOperationEnv() {
+        return operationEnv;
     }
 
     public BigInteger getAttachmentHint() {
@@ -139,23 +159,19 @@ public class MetadataStatement {
         return tcDisplayPNGCharacteristics;
     }
 
-    public List<String> getAttestationCertificateKeyIdentifiers() {
-        return attestationCertificateKeyIdentifiers;
-    }
-
     public List<X509Certificate> getAttestationRootCertificates() {
         return attestationRootCertificates;
+    }
+
+    public List<EcdaaTrustAnchor> getEcdaaTrustAnchors() {
+        return ecdaaTrustAnchors;
     }
 
     public String getIcon() {
         return icon;
     }
 
-    public String getImagePngContentType() {
-        return imagePngContentType;
-    }
-
-    public String getProtocolFamily() {
-        return protocolFamily;
+    public List<ExtensionDescriptor> getSupportedExtensions() {
+        return supportedExtensions;
     }
 }

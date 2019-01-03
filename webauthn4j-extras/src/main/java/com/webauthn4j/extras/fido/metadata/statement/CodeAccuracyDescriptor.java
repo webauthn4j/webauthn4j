@@ -14,28 +14,15 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 /**
- * BiometricAccuracyDescriptor
+ * Created by ynojima on 2017/09/08.
  */
-@SuppressWarnings("squid:S00116")
-public class BiometricAccuracyDescriptor {
+public class CodeAccuracyDescriptor {
 
-    @JsonProperty
-    private double FAR;
-    @JsonProperty
-    private double FRR;
-    @JsonProperty
-    private double EER;
-    @JsonProperty
-    private double FAAR;
-    @JsonProperty
-    private Integer maxReferenceDataSets;
-    @JsonProperty
+    private Integer base;
+    private Integer minLength;
     private Integer maxRetries;
-    @JsonProperty
     private Integer blockSlowdown;
 }

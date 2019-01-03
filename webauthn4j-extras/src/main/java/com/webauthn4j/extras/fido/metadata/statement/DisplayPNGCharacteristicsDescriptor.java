@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
+package com.webauthn4j.extras.fido.metadata.statement;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class RGBPalletteEntry {
-    @JsonProperty
-    private Integer r;
-    @JsonProperty
-    private Integer g;
-    @JsonProperty
-    private Integer b;
+public class DisplayPNGCharacteristicsDescriptor {
+
+    
+    private BigInteger width;
+    private BigInteger height;
+    private Short bitDepth;
+    private Short colorType;
+    private Short compression;
+    private Short filter;
+    private Short interlace;
+    private List<RGBPalletteEntry> plte;
+
+
 }

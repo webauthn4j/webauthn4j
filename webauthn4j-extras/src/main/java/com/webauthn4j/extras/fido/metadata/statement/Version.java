@@ -14,39 +14,24 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.security.cert.X509Certificate;
-import java.time.LocalDate;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class StatusReport {
+public class Version {
     @JsonProperty
-    private AuthenticatorStatus status;
+    private Integer major;
     @JsonProperty
-    private LocalDate effectiveDate;
-    @JsonProperty
-    private X509Certificate certificate;
-    @JsonProperty
-    private String url;
+    private Integer minor;
 
-    public AuthenticatorStatus getStatus() {
-        return status;
+    public Integer getMajor() {
+        return major;
     }
 
-    public LocalDate getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public X509Certificate getCertificate() {
-        return certificate;
-    }
-
-    public String getUrl() {
-        return url;
+    public Integer getMinor() {
+        return minor;
     }
 }

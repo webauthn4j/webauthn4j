@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
+package com.webauthn4j.extras.fido.metadata.toc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

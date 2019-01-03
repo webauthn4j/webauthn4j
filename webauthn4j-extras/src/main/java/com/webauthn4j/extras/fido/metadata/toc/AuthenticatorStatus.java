@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.math.BigInteger;
+package com.webauthn4j.extras.fido.metadata.toc;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class PatternAccuracyDescriptor {
-
-    @JsonProperty
-    private BigInteger minComplexity;
-    @JsonProperty
-    private Integer maxRetries;
-    @JsonProperty
-    private Integer blockSlowdown;
+public enum AuthenticatorStatus {
+    FIDO_CERTIFIED,
+    NOT_FIDO_CERTIFIED,
+    USER_VERIFICATION_BYPASS,
+    ATTESTATION_KEY_COMPROMISE,
+    USER_KEY_REMOTE_COMPROMISE,
+    USER_KEY_PHYSICAL_COMPROMISE,
+    UPDATE_AVAILABLE,
+    REVOKED
 }

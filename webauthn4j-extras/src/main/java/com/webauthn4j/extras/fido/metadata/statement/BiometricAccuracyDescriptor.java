@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata;
-
-import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
-import com.webauthn4j.util.WIP;
-
-import java.util.function.Predicate;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 /**
- * A functional interface for representing MetaDataTOC filtering logic.
+ * BiometricAccuracyDescriptor
  */
-@SuppressWarnings("WeakerAccess")
-@WIP
-public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
+@SuppressWarnings("squid:S00116")
+public class BiometricAccuracyDescriptor {
+
+    private double selfAttestedFAR;
+    private double selfAttestedFRR;
+    private Integer maxTemplate;
+    private Integer maxRetries;
+    private Integer blockSlowdown;
 }

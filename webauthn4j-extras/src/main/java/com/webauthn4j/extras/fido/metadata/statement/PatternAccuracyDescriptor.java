@@ -14,32 +14,21 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.structure;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigInteger;
-import java.util.List;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class DisplayPNGCharacteristicsDescriptor {
+public class PatternAccuracyDescriptor {
 
     @JsonProperty
-    private BigInteger width;
+    private BigInteger minComplexity;
     @JsonProperty
-    private BigInteger height;
+    private Integer maxRetries;
     @JsonProperty
-    private Short bitDepth;
-    @JsonProperty
-    private Short colorType;
-    @JsonProperty
-    private Short compression;
-    @JsonProperty
-    private Short filter;
-    @JsonProperty
-    private Short interlace;
-    @JsonProperty
-    private List<RGBPalletteEntry> plte;
+    private Integer blockSlowdown;
 }

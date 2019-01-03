@@ -14,17 +14,34 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata;
+package com.webauthn4j.extras.fido.metadata.toc;
 
-import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
-import com.webauthn4j.util.WIP;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.function.Predicate;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
- * A functional interface for representing MetaDataTOC filtering logic.
+ * Created by ynojima on 2017/09/08.
  */
-@SuppressWarnings("WeakerAccess")
-@WIP
-public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
+public class MetadataTOCPayload {
+    @JsonProperty
+    private LocalDate nextUpdate;
+    @JsonProperty
+    private Integer no;
+    @JsonProperty
+    private List<MetadataTOCPayloadEntry> entries;
+
+    public LocalDate getNextUpdate() {
+        return nextUpdate;
+    }
+
+    public Integer getNo() {
+        return no;
+    }
+
+    public List<MetadataTOCPayloadEntry> getEntries() {
+        return entries;
+    }
+
 }
