@@ -97,7 +97,7 @@ public class AuthenticatorDataConverter {
             extensions = new AuthenticationExtensionsAuthenticatorOutputs();
         }
         if(byteBuffer.hasRemaining()){
-            throw new DataConversionException();
+            throw new DataConversionException("authenticatorData has surplus data");
         }
 
         return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
