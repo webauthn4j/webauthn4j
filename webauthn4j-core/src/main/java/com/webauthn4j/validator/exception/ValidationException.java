@@ -16,10 +16,12 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.util.WebAuthnException;
+
 /**
  * An abstract exception for validation violation
  */
-public abstract class ValidationException extends RuntimeException {
+public abstract class ValidationException extends WebAuthnException {
     public ValidationException(String message, Throwable cause) {
         super(message, cause);
     }

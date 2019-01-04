@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.converter.exception;
+package com.webauthn4j.util;
 
-import com.webauthn4j.util.WebAuthnException;
-
-public class DataConversionException extends WebAuthnException {
-
-    public DataConversionException(String message, Throwable cause) {
+public class WebAuthnException extends RuntimeException {
+    public WebAuthnException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public DataConversionException(String message) {
+    public WebAuthnException(String message) {
         super(message);
     }
 
-    public DataConversionException(Throwable cause) {
+    public WebAuthnException(Throwable cause) {
         super(cause);
     }
 }
