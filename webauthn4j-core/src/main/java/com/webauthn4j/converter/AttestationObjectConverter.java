@@ -44,6 +44,9 @@ public class AttestationObjectConverter {
     // ================================================================================================
 
     public AttestationObject convert(String source) {
+        if(source == null){
+            return null;
+        }
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
     }
