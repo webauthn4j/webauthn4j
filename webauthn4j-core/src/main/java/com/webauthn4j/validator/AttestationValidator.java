@@ -75,7 +75,7 @@ public class AttestationValidator {
 
         if(attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)){
             byte[] aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if(Arrays.equals(aaguid, U2F_AAGUID)){
+            if(!Arrays.equals(aaguid, U2F_AAGUID)){
                 throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
             }
         }
