@@ -19,6 +19,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -43,7 +45,11 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
         if(str == null){
             return null;
         }
-        byte[] challenge = Base64UrlUtil.decode(str);
-        return new DefaultChallenge(challenge);
+        try{
+            return new DefaultChallenge(str);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", str, DefaultChallenge.class);
+        }
     }
 }

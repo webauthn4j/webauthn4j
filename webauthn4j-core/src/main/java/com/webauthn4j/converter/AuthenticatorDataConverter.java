@@ -27,6 +27,7 @@ import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsA
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
 /**
@@ -77,30 +78,35 @@ public class AuthenticatorDataConverter {
     }
 
     public AuthenticatorData convert(byte[] value) {
-        ByteBuffer byteBuffer = ByteBuffer.wrap(value);
+        try{
+            ByteBuffer byteBuffer = ByteBuffer.wrap(value);
 
-        byte[] rpIdHash = new byte[32];
-        byteBuffer.get(rpIdHash, 0, 32);
-        byte flags = byteBuffer.get();
-        long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
+            byte[] rpIdHash = new byte[32];
+            byteBuffer.get(rpIdHash, 0, 32);
+            byte flags = byteBuffer.get();
+            long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
-        AttestedCredentialData attestationData;
-        AuthenticationExtensionsAuthenticatorOutputs extensions;
-        if (AuthenticatorData.checkFlagAT(flags)) {
-            attestationData = convertToAttestedCredentialData(byteBuffer);
-        } else {
-            attestationData = null;
-        }
-        if (AuthenticatorData.checkFlagED(flags)) {
-            extensions = convertToExtensions(byteBuffer);
-        } else {
-            extensions = new AuthenticationExtensionsAuthenticatorOutputs();
-        }
-        if(byteBuffer.hasRemaining()){
-            throw new DataConversionException("authenticatorData has surplus data");
-        }
+            AttestedCredentialData attestationData;
+            AuthenticationExtensionsAuthenticatorOutputs extensions;
+            if (AuthenticatorData.checkFlagAT(flags)) {
+                attestationData = convertToAttestedCredentialData(byteBuffer);
+            } else {
+                attestationData = null;
+            }
+            if (AuthenticatorData.checkFlagED(flags)) {
+                extensions = convertToExtensions(byteBuffer);
+            } else {
+                extensions = new AuthenticationExtensionsAuthenticatorOutputs();
+            }
+            if(byteBuffer.hasRemaining()){
+                throw new DataConversionException("provided data does not have proper byte layout");
+            }
 
-        return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
+            return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
+
+        }catch (BufferUnderflowException e){
+            throw new DataConversionException("provided data does not have proper byte layout", e);
+        }
     }
 
     private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {

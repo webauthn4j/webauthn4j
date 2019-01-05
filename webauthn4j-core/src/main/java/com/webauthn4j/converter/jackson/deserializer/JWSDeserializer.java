@@ -19,10 +19,12 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.response.attestation.statement.JWS;
 import com.webauthn4j.response.attestation.statement.JWSHeader;
 import com.webauthn4j.response.attestation.statement.Response;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
@@ -41,20 +43,21 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
     public JWS deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         byte[] value = p.getBinaryValue();
-        String[] data = new String(value, StandardCharsets.UTF_8).split("\\.");
+        String str = new String(value, StandardCharsets.UTF_8);
+        String[] data = str.split("\\.");
+        if(data.length != 3){
+            throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
+        }
         String headerString = data[0];
         String payloadString = data[1];
         String signatureString = data[2];
-        if(data.length != 3){
-            throw new IllegalArgumentException("Invalid JWS");
-        }
         try {
             JWSHeader header = registry.getJsonMapper().readValue(Base64UrlUtil.decode(headerString), JWSHeader.class);
             Response payload = registry.getJsonMapper().readValue(Base64UrlUtil.decode(payloadString), Response.class);
             byte[] signature = Base64UrlUtil.decode(signatureString);
             return new JWS(header, headerString, payload, payloadString, signature);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid JWS", e);
+            throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
         }
     }
 }

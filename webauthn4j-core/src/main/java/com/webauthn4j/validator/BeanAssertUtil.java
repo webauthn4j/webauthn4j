@@ -117,6 +117,8 @@ class BeanAssertUtil {
         if (attestationObject.getAuthenticatorData() == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
         }
+        validate(attestationObject.getAttestationStatement());
+        validate(attestationObject.getAuthenticatorData());
     }
 
     public static void validate(AuthenticatorData authenticatorData) {

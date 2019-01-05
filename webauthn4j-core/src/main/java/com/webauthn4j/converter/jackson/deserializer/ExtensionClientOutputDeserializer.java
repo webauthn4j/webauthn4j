@@ -19,6 +19,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 
@@ -54,7 +56,7 @@ public class ExtensionClientOutputDeserializer extends StdDeserializer<Extension
                 case BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID:
                     return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.class);
                 default:
-                    throw new NotImplementedException();
+                    throw new InvalidFormatException(p, "value is out of range", currentName, ExtensionClientOutput.class);
             }
         } else {
             String parentName = p.getParsingContext().getParent().getCurrentName();
@@ -69,7 +71,7 @@ public class ExtensionClientOutputDeserializer extends StdDeserializer<Extension
                 case LocationExtensionClientOutput.ID:
                     return ctxt.readValue(p, LocationExtensionClientOutput.class);
                 default:
-                    throw new NotImplementedException();
+                    throw new InvalidFormatException(p, "value is out of range", parentName, ExtensionClientOutput.class);
             }
         }
     }

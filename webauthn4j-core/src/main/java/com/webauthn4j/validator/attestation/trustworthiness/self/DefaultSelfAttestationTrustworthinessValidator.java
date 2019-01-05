@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 
 import java.security.cert.CertificateExpiredException;
@@ -34,6 +35,10 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
         if (isSelfAttestationAllowed()) {
+            if(attestationStatement.getX5c() == null){
+                throw new ConstraintViolationException("x5c must not be null");
+            }
+
             X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
             try {
                 attestationCertificate.checkValidity();

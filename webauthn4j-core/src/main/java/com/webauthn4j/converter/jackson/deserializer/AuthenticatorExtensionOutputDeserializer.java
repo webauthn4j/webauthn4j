@@ -19,6 +19,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.response.attestation.statement.JWS;
 import com.webauthn4j.response.extension.authenticator.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 
@@ -59,7 +61,7 @@ public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<Ex
             case UserVerificationIndexExtensionAuthenticatorOutput.ID:
                 return ctxt.readValue(p, UserVerificationIndexExtensionAuthenticatorOutput.class);
             default:
-                throw new NotImplementedException();
+                throw new InvalidFormatException(p, "Invalid JWS", parentName, ExtensionAuthenticatorOutput.class);
         }
     }
 }
