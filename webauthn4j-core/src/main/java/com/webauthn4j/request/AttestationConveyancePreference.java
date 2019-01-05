@@ -32,6 +32,9 @@ public enum AttestationConveyancePreference {
 
     @JsonCreator
     public static AttestationConveyancePreference create(String value) {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "none":
                 return NONE;

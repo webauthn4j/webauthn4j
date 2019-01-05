@@ -34,6 +34,9 @@ public enum UserVerificationRequirement {
 
     @JsonCreator
     public static UserVerificationRequirement create(String value) {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "required":
                 return REQUIRED;

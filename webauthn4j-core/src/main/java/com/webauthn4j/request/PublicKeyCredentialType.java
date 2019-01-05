@@ -33,6 +33,9 @@ public enum PublicKeyCredentialType {
 
     @JsonCreator
     public static PublicKeyCredentialType create(String value) {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "public-key":
                 return PUBLIC_KEY;

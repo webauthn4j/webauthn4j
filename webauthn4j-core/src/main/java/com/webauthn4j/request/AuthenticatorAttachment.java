@@ -31,6 +31,9 @@ public enum AuthenticatorAttachment {
 
     @JsonCreator
     public static AuthenticatorAttachment create(String value) {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "platform":
                 return PLATFORM;

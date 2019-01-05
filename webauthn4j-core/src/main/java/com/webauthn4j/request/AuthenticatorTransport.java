@@ -32,6 +32,9 @@ public enum AuthenticatorTransport {
 
     @JsonCreator
     public static AuthenticatorTransport create(String value) {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "usb":
                 return USB;
