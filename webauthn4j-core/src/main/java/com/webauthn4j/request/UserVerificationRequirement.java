@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.WIP;
 
 @WIP
@@ -33,7 +34,7 @@ public enum UserVerificationRequirement {
     }
 
     @JsonCreator
-    public static UserVerificationRequirement create(String value) {
+    public static UserVerificationRequirement create(String value) throws InvalidFormatException {
         if(value == null){
             return null;
         }
@@ -45,7 +46,7 @@ public enum UserVerificationRequirement {
             case "discourage":
                 return DISCOURAGED;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
         }
     }
 

@@ -18,6 +18,8 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.util.WIP;
 
 @WIP
@@ -32,7 +34,7 @@ public enum PublicKeyCredentialType {
     }
 
     @JsonCreator
-    public static PublicKeyCredentialType create(String value) {
+    public static PublicKeyCredentialType create(String value) throws MismatchedInputException {
         if(value == null){
             return null;
         }
@@ -40,7 +42,7 @@ public enum PublicKeyCredentialType {
             case "public-key":
                 return PUBLIC_KEY;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, PublicKeyCredentialType.class);
         }
     }
 

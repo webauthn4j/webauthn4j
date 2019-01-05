@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public enum AuthenticatorTransport {
     USB("usb"),
@@ -31,7 +32,7 @@ public enum AuthenticatorTransport {
     }
 
     @JsonCreator
-    public static AuthenticatorTransport create(String value) {
+    public static AuthenticatorTransport create(String value) throws InvalidFormatException {
         if(value == null){
             return null;
         }
@@ -43,7 +44,7 @@ public enum AuthenticatorTransport {
             case "ble":
                 return BLE;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
         }
     }
 

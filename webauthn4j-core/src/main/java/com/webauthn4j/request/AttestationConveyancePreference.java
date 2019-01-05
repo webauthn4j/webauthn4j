@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public enum AttestationConveyancePreference {
     NONE("none"),
@@ -31,7 +32,7 @@ public enum AttestationConveyancePreference {
     }
 
     @JsonCreator
-    public static AttestationConveyancePreference create(String value) {
+    public static AttestationConveyancePreference create(String value) throws InvalidFormatException {
         if(value == null){
             return null;
         }
@@ -43,7 +44,7 @@ public enum AttestationConveyancePreference {
             case "direct":
                 return DIRECT;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, AttestationConveyancePreference.class);
         }
     }
 

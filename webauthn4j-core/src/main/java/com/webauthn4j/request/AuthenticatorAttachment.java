@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public enum AuthenticatorAttachment {
     PLATFORM("platform"),
@@ -30,7 +31,7 @@ public enum AuthenticatorAttachment {
     }
 
     @JsonCreator
-    public static AuthenticatorAttachment create(String value) {
+    public static AuthenticatorAttachment create(String value) throws InvalidFormatException {
         if(value == null){
             return null;
         }
@@ -40,7 +41,7 @@ public enum AuthenticatorAttachment {
             case "cross-platform":
                 return CROSS_PLATFORM;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorAttachment.class);
         }
     }
 
