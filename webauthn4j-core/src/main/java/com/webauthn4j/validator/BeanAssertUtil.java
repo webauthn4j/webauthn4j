@@ -138,7 +138,7 @@ class BeanAssertUtil {
         }
 
         long signCount = authenticatorData.getSignCount();
-        if (signCount <= 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
+        if (signCount < 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
         AuthenticationExtensionsAuthenticatorOutputs extensions = authenticatorData.getExtensions();
