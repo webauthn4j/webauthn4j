@@ -43,11 +43,17 @@ public class CollectedClientDataConverter {
     // ================================================================================================
 
     public CollectedClientData convert(String base64UrlString) {
+        if(base64UrlString == null){
+            return null;
+        }
         byte[] bytes = Base64UrlUtil.decode(base64UrlString);
         return convert(bytes);
     }
 
     public CollectedClientData convert(byte[] source) {
+        if(source == null){
+            return null;
+        }
         String jsonString = new String(source, StandardCharsets.UTF_8);
         return jsonConverter.readValue(jsonString, CollectedClientData.class);
     }
