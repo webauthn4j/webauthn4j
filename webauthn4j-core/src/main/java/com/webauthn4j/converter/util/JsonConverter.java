@@ -61,6 +61,18 @@ public class JsonConverter {
         }
     }
 
+    public <T> T readValue(InputStream src, TypeReference valueTypeRef){
+        try {
+            return jsonMapper.readValue(src, valueTypeRef);
+        }
+        catch (MismatchedInputException e){
+            throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
+        }
+        catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public byte[] writeValueAsBytes(Object value) {
         try {
             return jsonMapper.writeValueAsBytes(value);
