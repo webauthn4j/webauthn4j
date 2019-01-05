@@ -26,12 +26,18 @@ import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
 
     private GooglePlayServiceVersionValidator versionValidator = new DefaultVersionValidator();
+
+    private int forwardThreshold = 0;
+    private int backwardThreshold = 60;
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -71,6 +77,16 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
         if(!response.isCtsProfileMatch()){
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+        }
+
+        // Verify the timestampMs doesn't violate backwardThreshold
+        if(Instant.ofEpochMilli(response.getTimestampMs()).isBefore(Instant.now().minus(Duration.ofSeconds(backwardThreshold)))){
+            throw new BadAttestationStatementException("timestampMs violates backwardThreshold");
+        }
+
+        // Verify the timestampMs doesn't violate forwardThreshold
+        if(Instant.ofEpochMilli(response.getTimestampMs()).isAfter(Instant.now().plus(Duration.ofSeconds(forwardThreshold)))){
+            throw new BadAttestationStatementException("timestampMs violates forwardThreshold");
         }
 
         if(!attestationStatement.getResponse().isValidSignature()){
@@ -113,7 +129,29 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
                 throw new BadAttestationStatementException("invalid version number");
             }
         }
+    }
 
+    public int getForwardThreshold() {
+        return forwardThreshold;
+    }
 
+    public void setForwardThreshold(int forwardThreshold) {
+        this.forwardThreshold = forwardThreshold;
+    }
+
+    public int getBackwardThreshold() {
+        return backwardThreshold;
+    }
+
+    public void setBackwardThreshold(int backwardThreshold) {
+        this.backwardThreshold = backwardThreshold;
+    }
+
+    public GooglePlayServiceVersionValidator getVersionValidator() {
+        return versionValidator;
+    }
+
+    public void setVersionValidator(GooglePlayServiceVersionValidator versionValidator) {
+        this.versionValidator = versionValidator;
     }
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum COSEAlgorithmIdentifier {
+    RS1(-65535, "SHA1withRSA"),
     RS256(-257, "SHA256withRSA"),
     RS384(-258, "SHA384withRSA"),
     RS512(-259, "SHA512withRSA"),
@@ -40,6 +41,8 @@ public enum COSEAlgorithmIdentifier {
     @JsonCreator
     public static COSEAlgorithmIdentifier create(int value) throws InvalidFormatException {
         switch (value) {
+            case -65535:
+                return RS1;
             case -257:
                 return RS256;
             case -258:
