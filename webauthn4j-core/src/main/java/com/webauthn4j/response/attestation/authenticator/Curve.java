@@ -37,7 +37,10 @@ public enum Curve {
     }
 
     @JsonCreator
-    public static Curve create(int value) throws InvalidFormatException {
+    public static Curve create(Integer value) throws InvalidFormatException {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case 1:
                 return SECP256R1;

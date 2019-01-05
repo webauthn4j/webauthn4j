@@ -34,6 +34,9 @@ public enum TokenBindingStatus {
 
     @JsonCreator
     public static TokenBindingStatus create(String value) throws InvalidFormatException {
+        if(value == null){
+            return null;
+        }
         switch (value) {
             case "present":
                 return PRESENT;

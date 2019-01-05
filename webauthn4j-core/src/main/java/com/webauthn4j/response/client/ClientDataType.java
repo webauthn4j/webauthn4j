@@ -33,6 +33,9 @@ public enum ClientDataType {
 
     @JsonCreator
     public static ClientDataType create(String value) throws InvalidFormatException {
+        if(value == null){
+            return null;
+        }
         switch (value){
             case "webauthn.create":
                 return CREATE;

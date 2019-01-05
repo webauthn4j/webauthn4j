@@ -20,9 +20,11 @@ public class Registry {
     public Registry(){
         jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnModule(this));
+        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         cborMapper = new ObjectMapper(new CBORFactory());
         cborMapper.registerModule(new WebAuthnModule(this));
+        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
