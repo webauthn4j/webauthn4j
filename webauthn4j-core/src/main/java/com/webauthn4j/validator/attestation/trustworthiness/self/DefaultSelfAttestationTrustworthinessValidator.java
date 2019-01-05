@@ -17,13 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.validator.exception.CertificateException;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
-
-import java.security.cert.CertificateExpiredException;
-import java.security.cert.CertificateNotYetValidException;
-import java.security.cert.X509Certificate;
 
 /**
  * Default implementation of {@link SelfAttestationTrustworthinessValidator}
@@ -34,20 +28,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
     private boolean isSelfAttestationAllowed = true;
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
-        if (isSelfAttestationAllowed()) {
-            if(attestationStatement.getX5c() == null){
-                throw new ConstraintViolationException("x5c must not be null");
-            }
-
-            X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
-            try {
-                attestationCertificate.checkValidity();
-            } catch (CertificateExpiredException e) {
-                throw new CertificateException("Certificate expired", e);
-            } catch (CertificateNotYetValidException e) {
-                throw new CertificateException("Certificate not yet valid", e);
-            }
-        } else {
+        if (!isSelfAttestationAllowed()) {
             throw new SelfAttestationProhibitedException("SELF attestations is prohibited by configuration");
         }
     }

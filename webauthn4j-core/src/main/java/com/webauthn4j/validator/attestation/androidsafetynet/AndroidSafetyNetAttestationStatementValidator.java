@@ -30,6 +30,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
+
+    private GooglePlayServiceVersionValidator versionValidator = new DefaultVersionValidator();
+
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -49,6 +52,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         //  to extract the contained fields.
 
         /// Verify that response is a valid SafetyNet response of version ver.
+        versionValidator.validate(attestationStatement.getVer());
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
         Response response = attestationStatement.getResponse().getPayload();
@@ -91,5 +95,25 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return AndroidSafetyNetAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
+    }
+
+    private class DefaultVersionValidator implements GooglePlayServiceVersionValidator {
+
+        private int minimalVersion = 0;
+
+        @Override
+        public void validate(String version) {
+            try{
+                int versionNumber = Integer.parseInt(version);
+                if(versionNumber < minimalVersion){
+                    throw new BadAttestationStatementException("version number doesn't confirm minimal requirement");
+                }
+            }
+            catch (NumberFormatException e){
+                throw new BadAttestationStatementException("invalid version number");
+            }
+        }
+
+
     }
 }

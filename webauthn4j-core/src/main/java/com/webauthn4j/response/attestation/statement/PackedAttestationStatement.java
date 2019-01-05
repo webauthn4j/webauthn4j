@@ -86,9 +86,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         if(alg == null){
             throw new ConstraintViolationException("alg must not be null");
         }
-        if (x5c == null && ecdaaKeyId == null) {
-            throw new ConstraintViolationException("x5c or ecdaaKeyId must not be null");
-        }
     }
 
     @Override
