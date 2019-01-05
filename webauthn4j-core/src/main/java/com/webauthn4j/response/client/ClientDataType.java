@@ -18,6 +18,8 @@ package com.webauthn4j.response.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum ClientDataType {
     CREATE("webauthn.create"),
@@ -30,14 +32,14 @@ public enum ClientDataType {
     }
 
     @JsonCreator
-    public static ClientDataType create(String value){
+    public static ClientDataType create(String value) throws InvalidFormatException {
         switch (value){
             case "webauthn.create":
                 return CREATE;
             case "webauthn.get":
                 return GET;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
         }
     }
 

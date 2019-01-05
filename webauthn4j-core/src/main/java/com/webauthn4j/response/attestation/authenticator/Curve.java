@@ -18,6 +18,8 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.request.AuthenticatorAttachment;
 import com.webauthn4j.util.ECUtil;
 
 import java.security.spec.ECParameterSpec;
@@ -35,7 +37,7 @@ public enum Curve {
     }
 
     @JsonCreator
-    public static Curve create(int value) {
+    public static Curve create(int value) throws InvalidFormatException {
         switch (value) {
             case 1:
                 return SECP256R1;
@@ -44,7 +46,7 @@ public enum Curve {
             case 3:
                 return SECP521R1;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidFormatException(null, "value is out of range", value, Curve.class);
         }
     }
 

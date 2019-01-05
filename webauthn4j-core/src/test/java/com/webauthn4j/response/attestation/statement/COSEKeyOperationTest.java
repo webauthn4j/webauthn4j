@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +26,7 @@ public class COSEKeyOperationTest {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    public void create_test() {
+    public void create_test() throws InvalidFormatException {
 
         assertThat(COSEKeyOperation.create(1)).isEqualTo(COSEKeyOperation.SIGN);
         assertThat(COSEKeyOperation.create(2)).isEqualTo(COSEKeyOperation.VERIFY);
@@ -38,8 +39,8 @@ public class COSEKeyOperationTest {
         assertThat(COSEKeyOperation.create(9)).isEqualTo(COSEKeyOperation.MAC_CREATE);
         assertThat(COSEKeyOperation.create(10)).isEqualTo(COSEKeyOperation.MAC_VERIFY);
 
-        assertThatThrownBy(() -> COSEKeyOperation.create(0)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> COSEKeyOperation.create(11)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> COSEKeyOperation.create(0)).isInstanceOf(InvalidFormatException.class);
+        assertThatThrownBy(() -> COSEKeyOperation.create(11)).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test

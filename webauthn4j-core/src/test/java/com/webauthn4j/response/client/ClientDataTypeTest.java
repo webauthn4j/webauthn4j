@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.client;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ClientDataTypeTest {
 
     @Test
-    public void create_test(){
+    public void create_test() throws InvalidFormatException {
         assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE);
         assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET);
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()->ClientDataType.create("invalid")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()->ClientDataType.create("invalid")).isInstanceOf(InvalidFormatException.class);
     }
 }

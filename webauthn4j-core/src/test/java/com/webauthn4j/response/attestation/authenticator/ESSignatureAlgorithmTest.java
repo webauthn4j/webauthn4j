@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class ESSignatureAlgorithmTest {
 
     @Test
-    public void create_test() {
+    public void create_test() throws InvalidFormatException {
         assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256);
         assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384);
         assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512);
@@ -34,7 +35,7 @@ public class ESSignatureAlgorithmTest {
     @Test
     public void create_with_invalid_value_test() {
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(() -> COSEAlgorithmIdentifier.create(0)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> COSEAlgorithmIdentifier.create(0)).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test

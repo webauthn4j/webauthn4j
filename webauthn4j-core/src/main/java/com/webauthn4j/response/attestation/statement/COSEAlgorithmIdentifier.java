@@ -18,6 +18,8 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum COSEAlgorithmIdentifier {
     RS256(-257, "SHA256withRSA"),
@@ -36,7 +38,7 @@ public enum COSEAlgorithmIdentifier {
     }
 
     @JsonCreator
-    public static COSEAlgorithmIdentifier create(int value) {
+    public static COSEAlgorithmIdentifier create(int value) throws InvalidFormatException {
         switch (value) {
             case -257:
                 return RS256;
@@ -51,7 +53,7 @@ public enum COSEAlgorithmIdentifier {
             case -36:
                 return ES512;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
         }
     }
 

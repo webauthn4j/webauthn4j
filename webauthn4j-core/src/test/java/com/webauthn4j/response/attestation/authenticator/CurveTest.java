@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
 import org.junit.Test;
 
@@ -25,12 +26,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class CurveTest {
 
     @Test
-    public void create_test(){
+    public void create_test() throws InvalidFormatException {
         assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1);
         assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1);
         assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1);
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()-> Curve.create(4)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()-> Curve.create(4)).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test

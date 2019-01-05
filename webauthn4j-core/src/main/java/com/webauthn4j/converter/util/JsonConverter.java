@@ -1,5 +1,6 @@
 package com.webauthn4j.converter.util;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,10 +29,9 @@ public class JsonConverter {
         try {
             return (T)jsonMapper.readValue(src, valueType);
         }
-        catch (MismatchedInputException e){
+        catch (MismatchedInputException | JsonParseException e){
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -41,7 +41,7 @@ public class JsonConverter {
         try {
             return (T)jsonMapper.readValue(src, valueType);
         }
-        catch (MismatchedInputException e){
+        catch (MismatchedInputException | JsonParseException e){
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
         catch (IOException e) {
@@ -53,7 +53,7 @@ public class JsonConverter {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         }
-        catch (MismatchedInputException e){
+        catch (MismatchedInputException | JsonParseException e){
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
         catch (IOException e) {
@@ -65,7 +65,7 @@ public class JsonConverter {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         }
-        catch (MismatchedInputException e){
+        catch (MismatchedInputException | JsonParseException e){
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         }
         catch (IOException e) {
@@ -77,9 +77,6 @@ public class JsonConverter {
         try {
             return jsonMapper.writeValueAsBytes(value);
         }
-        catch (MismatchedInputException e){
-            throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
         catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
@@ -88,9 +85,6 @@ public class JsonConverter {
     public String writeValueAsString(Object value) {
         try {
             return jsonMapper.writeValueAsString(value);
-        }
-        catch (MismatchedInputException e){
-            throw new DataConversionException("Input data does not match expected form", e);
         }
         catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);

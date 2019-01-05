@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class COSEKeyTypeTest {
 
     @Test
-    public void create_test(){
+    public void create_test() throws InvalidFormatException {
         assertThat(COSEKeyType.create(0)).isEqualTo(COSEKeyType.RESERVED);
         assertThat(COSEKeyType.create(1)).isEqualTo(COSEKeyType.OKP);
         assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2);
@@ -32,6 +33,6 @@ public class COSEKeyTypeTest {
         assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC);
 
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()->COSEKeyType.create(-1)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()->COSEKeyType.create(-1)).isInstanceOf(InvalidFormatException.class);
     }
 }

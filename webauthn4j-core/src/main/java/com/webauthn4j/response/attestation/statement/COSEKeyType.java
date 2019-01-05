@@ -18,6 +18,8 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum COSEKeyType {
     OKP(1), // https://tools.ietf.org/html/rfc8152#section-13
@@ -33,7 +35,7 @@ public enum COSEKeyType {
     }
 
     @JsonCreator
-    public static COSEKeyType create(int value) {
+    public static COSEKeyType create(int value) throws InvalidFormatException {
         switch (value) {
             case 1:
                 return OKP;
@@ -46,7 +48,7 @@ public enum COSEKeyType {
             case 0:
                 return RESERVED;
             default:
-                throw new IllegalArgumentException("value is out of range");
+                throw new InvalidFormatException(null, "value is out of range", value, COSEKeyType.class);
         }
     }
 

@@ -18,6 +18,8 @@ package com.webauthn4j.response.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum TokenBindingStatus {
     PRESENT("present"),
@@ -31,7 +33,7 @@ public enum TokenBindingStatus {
     }
 
     @JsonCreator
-    public static TokenBindingStatus create(String value) {
+    public static TokenBindingStatus create(String value) throws InvalidFormatException {
         switch (value) {
             case "present":
                 return PRESENT;
@@ -40,7 +42,7 @@ public enum TokenBindingStatus {
             case "not-supported":
                 return NOT_SUPPORTED;
             default:
-                throw new IllegalArgumentException();
+                throw new InvalidFormatException(null, "value is out of range", value, TokenBindingStatus.class);
         }
     }
 

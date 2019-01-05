@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class JsonConverterTest {
         converter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test(expected = DataConversionException.class)
     public void readValue_with_invalid_json_test(){
         converter.readValue("{value:\"dummy\"}", ConverterTestDto.class);
     }
@@ -44,7 +45,7 @@ public class JsonConverterTest {
         converter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>(){});
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test(expected = DataConversionException.class)
     public void readValue_with_invalid_json_and_TypeReference_test(){
         converter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>(){});
     }

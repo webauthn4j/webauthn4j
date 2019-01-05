@@ -16,19 +16,20 @@
 
 package com.webauthn4j.response.client;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenBindingStatusTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void create_with_illegal_value_test() {
+    @Test(expected = InvalidFormatException.class)
+    public void create_with_illegal_value_test() throws InvalidFormatException {
         TokenBindingStatus.create("illegal");
     }
 
     @Test
-    public void create_test() {
+    public void create_test() throws InvalidFormatException {
         TokenBindingStatus status = TokenBindingStatus.create("supported");
         assertThat(status).isEqualTo(TokenBindingStatus.SUPPORTED);
     }
