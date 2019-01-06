@@ -17,6 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 
 /**
@@ -30,6 +31,10 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
         if (!isSelfAttestationAllowed()) {
             throw new SelfAttestationProhibitedException("SELF attestations is prohibited by configuration");
+        }
+
+        if(attestationStatement.getX5c() != null){
+            throw new BadAttestationStatementException("SELF attestation must not have x5c.");
         }
     }
 
