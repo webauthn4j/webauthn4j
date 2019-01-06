@@ -7,7 +7,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -53,6 +55,17 @@ public class CborConverter {
     public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
+        }
+        catch (MismatchedInputException | JsonParseException e){
+            throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public AuthenticationExtensionsAuthenticatorOutputs readValue(InputStream inputStream, TypeReference<AuthenticationExtensionsAuthenticatorOutputs> typeReference) {
+        try {
+            return cborMapper.readValue(inputStream, typeReference);
         }
         catch (MismatchedInputException | JsonParseException e){
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);

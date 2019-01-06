@@ -21,6 +21,7 @@ import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
+import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.bouncycastle.util.Arrays;
 import org.junit.Test;

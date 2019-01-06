@@ -255,7 +255,7 @@ public class WebAuthnModelAuthenticator {
         byte flag = BIT_AT;
         if (userConsent) flag |= BIT_UP;
         if (userVerification) flag |= BIT_UV;
-        if (processedExtensions.isEmpty()) flag |= BIT_ED;
+        if (!processedExtensions.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
 

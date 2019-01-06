@@ -16,8 +16,9 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
+import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
@@ -118,24 +119,30 @@ public class AuthenticatorDataConverter {
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        CredentialPublicKey credentialPublicKey = convertToCredentialPublicKey(byteArrayInputStream);
+        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
+        CredentialPublicKey credentialPublicKey = credentialPublicKeyEnvelope.getCredentialPublicKey();
         AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
-        int extensionsBufferLength = byteArrayInputStream.available();
+        int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
         return attestationData;
     }
 
-    private CredentialPublicKey convertToCredentialPublicKey(InputStream inputStream) {
-        return cborConverter.readValue(inputStream, CredentialPublicKey.class);
+    private CredentialPublicKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
+        return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
     }
 
-    AuthenticationExtensionsAuthenticatorOutputs convertToExtensions(ByteBuffer byteBuffer) {
+    private AuthenticationExtensionsAuthenticatorOutputs convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
-        return cborConverter.readValue(remaining, new TypeReference<AuthenticationExtensionsAuthenticatorOutputs>(){});
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
+        AuthenticationExtensionsAuthenticatorOutputsEnvelope envelope =
+                cborConverter.readValue(byteArrayInputStream, AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
+        int leftoverLength = remaining.length - envelope.getLength();
+        byteBuffer.position(byteBuffer.position() - leftoverLength);
+        return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
     byte[] convert(AuthenticationExtensionsAuthenticatorOutputs extensions) {

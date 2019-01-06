@@ -17,6 +17,9 @@
 package com.webauthn4j.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.webauthn4j.converter.jackson.deserializer.*;
+import com.webauthn4j.converter.jackson.serializer.*;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.response.attestation.statement.JWS;
@@ -24,13 +27,8 @@ import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.converter.jackson.deserializer.*;
-import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
-import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -43,8 +41,10 @@ public class WebAuthnModule extends SimpleModule {
     public WebAuthnModule(Registry registry) {
         super("WebAuthnModule");
 
+        this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
+        this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new AuthenticatorExtensionOutputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
