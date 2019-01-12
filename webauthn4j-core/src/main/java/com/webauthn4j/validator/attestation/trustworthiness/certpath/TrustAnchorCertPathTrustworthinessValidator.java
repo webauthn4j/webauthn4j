@@ -36,6 +36,7 @@ public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrus
     private final TrustAnchorProvider trustAnchorProvider;
 
     private boolean isRevocationCheckEnabled = false;
+    private boolean fullChainProhibited = false;
 
     public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorProvider trustAnchorProvider) {
         AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider must not be null");
@@ -60,12 +61,16 @@ public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrus
             certPathParameters.setRevocationEnabled(false);
         }
 
+        PKIXCertPathValidatorResult result;
         try {
-            certPathValidator.validate(certPath, certPathParameters);
+             result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
             throw new CertificateException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
             throw new CertificateException("invalid cert path", e);
+        }
+        if(fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())){
+            throw new CertificateException("certpath contains full chain");
         }
     }
 
@@ -75,5 +80,13 @@ public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrus
 
     public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
         isRevocationCheckEnabled = revocationCheckEnabled;
+    }
+
+    public boolean isFullChainProhibited() {
+        return fullChainProhibited;
+    }
+
+    public void setFullChainProhibited(boolean fullChainProhibited) {
+        this.fullChainProhibited = fullChainProhibited;
     }
 }
