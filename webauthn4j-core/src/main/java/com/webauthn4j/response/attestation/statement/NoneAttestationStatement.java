@@ -16,15 +16,23 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(NoneAttestationStatement.FORMAT)
 public class NoneAttestationStatement implements AttestationStatement {
 
     public static final String FORMAT = "none";
+
+    @JsonIgnore
+    private transient Map<String, Object> unknownProperties = new HashMap<>();
 
     @JsonIgnore
     @Override
@@ -34,7 +42,14 @@ public class NoneAttestationStatement implements AttestationStatement {
 
     @Override
     public void validate() {
-        // nop
+        if(!unknownProperties.isEmpty()){
+            throw new BadAttestationStatementException("Unknown property is set.");
+        }
+    }
+
+    @JsonAnySetter
+    public void addUnknownProperty(String name, Object value) {
+        unknownProperties.put(name, value);
     }
 
 }
