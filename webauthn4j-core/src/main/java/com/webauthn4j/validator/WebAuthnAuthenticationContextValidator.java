@@ -129,7 +129,7 @@ public class WebAuthnAuthenticationContextValidator {
             throw new UserNotVerifiedException("User not verified");
         }
 
-        // If user verification is not required for this assertion, verify that the User Present bit of the flags in aData is set.
+        /// Verify that the User Present bit of the flags in authData is set.
         if (!authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
