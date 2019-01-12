@@ -29,9 +29,9 @@ import java.io.IOException;
 /**
  * Jackson Deserializer for {@link ExtensionAuthenticatorOutput}
  */
-public class AuthenticatorExtensionOutputDeserializer extends StdDeserializer<ExtensionAuthenticatorOutput> {
+public class ExtensionAuthenticatorOutputDeserializer extends StdDeserializer<ExtensionAuthenticatorOutput> {
 
-    public AuthenticatorExtensionOutputDeserializer() {
+    public ExtensionAuthenticatorOutputDeserializer() {
         super(ExtensionAuthenticatorOutput.class);
     }
 

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.response.client.Origin;
@@ -44,7 +45,7 @@ public class WebAuthnModule extends SimpleModule {
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
-        this.addDeserializer(ExtensionAuthenticatorOutput.class, new AuthenticatorExtensionOutputDeserializer());
+        this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(registry));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -61,6 +62,8 @@ public class WebAuthnModule extends SimpleModule {
         this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidSafetyNetAttestationStatement.class, AndroidSafetyNetAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
+
+        this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
 
     }
 

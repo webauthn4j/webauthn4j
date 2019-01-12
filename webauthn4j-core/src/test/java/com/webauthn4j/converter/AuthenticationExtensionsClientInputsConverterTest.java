@@ -33,7 +33,7 @@ public class AuthenticationExtensionsClientInputsConverterTest {
 
     @Test
     public void convert_test(){
-//        String source = "{\"appid\":\"\"}";
-//        AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        String source = "{\"appid\":\"\"}";
+        AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
     }
 }
