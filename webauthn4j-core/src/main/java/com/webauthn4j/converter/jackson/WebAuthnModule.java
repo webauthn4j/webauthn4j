@@ -16,15 +16,13 @@
 
 package com.webauthn4j.converter.jackson;
 
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.response.attestation.statement.JWS;
-import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
@@ -58,9 +56,11 @@ public class WebAuthnModule extends SimpleModule {
         this.addSerializer(JWS.class, new JWSSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
-        this.registerSubtypes(FIDOU2FAttestationStatement.class);
-        this.registerSubtypes(PackedAttestationStatement.class);
-        this.registerSubtypes(NoneAttestationStatement.class);
+        this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(AndroidSafetyNetAttestationStatement.class, AndroidSafetyNetAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
     }
 

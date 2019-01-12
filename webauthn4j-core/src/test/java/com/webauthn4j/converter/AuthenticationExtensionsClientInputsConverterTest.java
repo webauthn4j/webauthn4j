@@ -17,15 +17,23 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthenticationExtensionsClientInputsConverterTest {
 
+    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(new Registry());
+
     @Test
     public void convertToString_test(){
-        AuthenticationExtensionsClientInputsConverter registrationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(new Registry());
-        assertThat(registrationExtensionsClientInputsConverter.convertToString(null)).isNull();
+        assertThat(authenticationExtensionsClientInputsConverter.convertToString(null)).isNull();
+    }
+
+    @Test
+    public void convert_test(){
+//        String source = "{\"appid\":\"\"}";
+//        AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
     }
 }
