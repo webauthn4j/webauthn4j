@@ -17,15 +17,19 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.extension.client.*;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Jackson Deserializer for {@link ExtensionClientOutput}
@@ -42,25 +46,21 @@ public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionC
     @Override
     public ExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
-        String currentName = p.getParsingContext().getCurrentName();
+        String name = p.getParsingContext().getCurrentName();
+        if(name == null){
+            name = p.getParsingContext().getParent().getCurrentName();
+        }
 
-        if (currentName != null) {
-            switch (currentName) {
-                case FIDOAppIDExtensionClientInput.ID:
-                    return ctxt.readValue(p, FIDOAppIDExtensionClientInput.class);
-                default:
-                    throw new InvalidFormatException(p, "value is out of range", currentName, ExtensionClientInput.class);
-            }
-        } else {
-            String parentName = p.getParsingContext().getParent().getCurrentName();
+        DeserializationConfig config = ctxt.getConfig();
+        AnnotatedClass annotatedClass = AnnotatedClassResolver.resolveWithoutSuperTypes(config, ExtensionClientInput.class);
+        Collection<NamedType> namedTypes = config.getSubtypeResolver().collectAndResolveSubtypesByClass(config, annotatedClass);
 
-            switch (parentName) {
-                case SupportedExtensionsExtensionClientInput.ID:
-                    return ctxt.readValue(p, SupportedExtensionsExtensionClientInput.class);
-
-                default:
-                    throw new InvalidFormatException(p, "value is out of range", parentName, ExtensionClientInput.class);
+        for (NamedType namedType : namedTypes){
+            if(Objects.equals(namedType.getName(), name)){
+                return (ExtensionClientInput)ctxt.readValue(p, namedType.getType());
             }
         }
+
+        throw new InvalidFormatException(p, "value is out of range", name, ExtensionClientInput.class);
     }
 }

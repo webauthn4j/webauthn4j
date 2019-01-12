@@ -17,14 +17,18 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import com.webauthn4j.response.extension.client.*;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Jackson Deserializer for {@link ExtensionClientOutput}
@@ -41,38 +45,22 @@ public class ExtensionClientOutputDeserializer extends StdDeserializer<Extension
     @Override
     public ExtensionClientOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
-        String currentName = p.getParsingContext().getCurrentName();
+        String name = p.getParsingContext().getCurrentName();
+        if(name == null){
+            name = p.getParsingContext().getParent().getCurrentName();
+        }
 
-        if (currentName != null) {
-            switch (currentName) {
-                case FIDOAppIDExtensionClientOutput.ID:
-                    return ctxt.readValue(p, FIDOAppIDExtensionClientOutput.class);
-                case UserVerificationIndexExtensionClientOutput.ID:
-                    return ctxt.readValue(p, UserVerificationIndexExtensionClientOutput.class);
-                case SimpleTransactionAuthorizationExtensionClientOutput.ID:
-                    return ctxt.readValue(p, SimpleTransactionAuthorizationExtensionClientOutput.class);
-                case AuthenticatorSelectionExtensionClientOutput.ID:
-                    return ctxt.readValue(p, AuthenticatorSelectionExtensionClientOutput.class);
-                case BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID:
-                    return ctxt.readValue(p, BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.class);
-                default:
-                    throw new InvalidFormatException(p, "value is out of range", currentName, ExtensionClientOutput.class);
-            }
-        } else {
-            String parentName = p.getParsingContext().getParent().getCurrentName();
+        DeserializationConfig config = ctxt.getConfig();
+        AnnotatedClass annotatedClass = AnnotatedClassResolver.resolveWithoutSuperTypes(config, ExtensionClientOutput.class);
+        Collection<NamedType> namedTypes = config.getSubtypeResolver().collectAndResolveSubtypesByClass(config, annotatedClass);
 
-            switch (parentName) {
-                case GenericTransactionAuthorizationExtensionClientOutput.ID:
-                    return ctxt.readValue(p, GenericTransactionAuthorizationExtensionClientOutput.class);
-                case SupportedExtensionsExtensionClientOutput.ID:
-                    return ctxt.readValue(p, SupportedExtensionsExtensionClientOutput.class);
-                case UserVerificationIndexExtensionClientOutput.ID:
-                    return ctxt.readValue(p, UserVerificationIndexExtensionClientOutput.class);
-                case LocationExtensionClientOutput.ID:
-                    return ctxt.readValue(p, LocationExtensionClientOutput.class);
-                default:
-                    throw new InvalidFormatException(p, "value is out of range", parentName, ExtensionClientOutput.class);
+        for (NamedType namedType : namedTypes){
+            if(Objects.equals(namedType.getName(), name)){
+                return (ExtensionClientOutput)ctxt.readValue(p, namedType.getType());
             }
         }
+
+        throw new InvalidFormatException(p, "value is out of range", name, ExtensionClientOutput.class);
+
     }
 }

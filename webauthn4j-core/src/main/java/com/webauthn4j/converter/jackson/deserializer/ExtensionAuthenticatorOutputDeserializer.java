@@ -17,14 +17,18 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.response.attestation.statement.JWS;
-import com.webauthn4j.response.extension.authenticator.*;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
+import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Jackson Deserializer for {@link ExtensionAuthenticatorOutput}
@@ -41,27 +45,21 @@ public class ExtensionAuthenticatorOutputDeserializer extends StdDeserializer<Ex
     @Override
     public ExtensionAuthenticatorOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
-        String currentName = p.getParsingContext().getCurrentName();
-
-        if (SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class);
-        } else if (UserVerificationIndexExtensionAuthenticatorOutput.ID.equals(currentName)) {
-            return ctxt.readValue(p, UserVerificationIndexExtensionAuthenticatorOutput.class);
+        String name = p.getParsingContext().getCurrentName();
+        if(name == null){
+            name = p.getParsingContext().getParent().getCurrentName();
         }
 
-        String parentName = p.getParsingContext().getParent().getCurrentName();
+        DeserializationConfig config = ctxt.getConfig();
+        AnnotatedClass annotatedClass = AnnotatedClassResolver.resolveWithoutSuperTypes(config, ExtensionAuthenticatorOutput.class);
+        Collection<NamedType> namedTypes = config.getSubtypeResolver().collectAndResolveSubtypesByClass(config, annotatedClass);
 
-        switch (parentName) {
-            case GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID:
-                return ctxt.readValue(p, GenericTransactionAuthorizationExtensionAuthenticatorOutput.class);
-            case SupportedExtensionsExtensionAuthenticatorOutput.ID:
-                return ctxt.readValue(p, SupportedExtensionsExtensionAuthenticatorOutput.class);
-            case LocationExtensionAuthenticatorOutput.ID:
-                return ctxt.readValue(p, LocationExtensionAuthenticatorOutput.class);
-            case UserVerificationIndexExtensionAuthenticatorOutput.ID:
-                return ctxt.readValue(p, UserVerificationIndexExtensionAuthenticatorOutput.class);
-            default:
-                throw new InvalidFormatException(p, "Invalid JWS", parentName, ExtensionAuthenticatorOutput.class);
+        for (NamedType namedType : namedTypes){
+            if(Objects.equals(namedType.getName(), name)){
+                return (ExtensionAuthenticatorOutput)ctxt.readValue(p, namedType.getType());
+            }
         }
+
+        throw new InvalidFormatException(p, "value is out of range", name, ExtensionAuthenticatorOutput.class);
     }
 }

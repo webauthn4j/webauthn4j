@@ -23,12 +23,13 @@ import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
+import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
+import com.webauthn4j.response.extension.authenticator.*;
+import com.webauthn4j.response.extension.client.*;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -66,6 +67,22 @@ public class WebAuthnModule extends SimpleModule {
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
+        this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientInput.class, SupportedExtensionsExtensionClientInput.ID));
+
+        this.registerSubtypes(new NamedType(AuthenticatorSelectionExtensionClientOutput.class, AuthenticatorSelectionExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.class, BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientOutput.class, FIDOAppIDExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionClientOutput.class, GenericTransactionAuthorizationExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(LocationExtensionClientOutput.class, LocationExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionClientOutput.class, SimpleTransactionAuthorizationExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientOutput.class, SupportedExtensionsExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(UserVerificationIndexExtensionClientOutput.class, UserVerificationIndexExtensionClientOutput.ID));
+
+        this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionAuthenticatorOutput.class, GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID));
+        this.registerSubtypes(new NamedType(LocationExtensionAuthenticatorOutput.class, LocationExtensionAuthenticatorOutput.ID));
+        this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID));
+        this.registerSubtypes(new NamedType(SupportedExtensionsExtensionAuthenticatorOutput.class, SupportedExtensionsExtensionAuthenticatorOutput.ID));
+        this.registerSubtypes(new NamedType(UserVerificationIndexExtensionAuthenticatorOutput.class, UserVerificationIndexExtensionAuthenticatorOutput.ID));
 
     }
 
