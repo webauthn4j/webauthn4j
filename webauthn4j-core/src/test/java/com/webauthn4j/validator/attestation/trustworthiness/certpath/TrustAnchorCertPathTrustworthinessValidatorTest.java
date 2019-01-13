@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.anchor.TrustAnchorResolver;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.test.TestUtil;
@@ -24,7 +24,6 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.Test;
 
-import java.security.cert.CertPath;
 import java.security.cert.TrustAnchor;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,18 +34,19 @@ import static org.mockito.Mockito.when;
 
 public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
-    private TrustAnchorProvider trustAnchorProvider = mock(TrustAnchorProvider.class);
-    private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorProvider);
+    private TrustAnchorResolver trustAnchorResolver = mock(TrustAnchorResolver.class);
+    private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorResolver);
+    private byte[] aaguid = new byte[16];
 
     @Test
     public void validate_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load2tierTestRootCACertificate()));
-        when(trustAnchorProvider.provide()).thenReturn(trustAnchors);
+        when(trustAnchorResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
-        target.validate(attestationStatement);
+        target.validate(aaguid, attestationStatement);
     }
 
     @Test(expected = CertificateException.class)
@@ -54,7 +54,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load3tierTestRootCACertificate()));
-        when(trustAnchorProvider.provide()).thenReturn(trustAnchors);
+        when(trustAnchorResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
         AttestationCertificatePath attestationCertificatePath
                 = new AttestationCertificatePath(Arrays.asList(
@@ -64,7 +64,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
-        target.validate(attestationStatement);
+        target.validate(aaguid, attestationStatement);
     }
 
 }

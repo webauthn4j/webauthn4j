@@ -27,10 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
@@ -43,12 +40,12 @@ public class KeyStoreFileTrustAnchorProvider extends CachingTrustAnchorProviderB
     private String password;
 
     /**
-     * retrieve {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
+     * provide aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
      *
-     * @return {@link TrustAnchor} {@link Set}
+     * @return aaguid {@link TrustAnchor} {@link Set} map
      */
     @Override
-    public Set<TrustAnchor> loadTrustAnchors() {
+    protected Map<byte[], Set<TrustAnchor>> loadTrustAnchors() {
         Path keystore = getKeyStore();
         try (InputStream inputStream = Files.newInputStream(keystore)) {
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());
@@ -58,7 +55,7 @@ public class KeyStoreFileTrustAnchorProvider extends CachingTrustAnchorProviderB
                 X509Certificate certificate = (X509Certificate) keyStoreObject.getCertificate(alias);
                 trustAnchors.add(new TrustAnchor(certificate, null));
             }
-            return trustAnchors;
+            return Collections.singletonMap(null, trustAnchors);
         } catch (java.security.KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
             throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }

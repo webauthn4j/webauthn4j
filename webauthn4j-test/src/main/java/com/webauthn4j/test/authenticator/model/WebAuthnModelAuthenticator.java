@@ -177,7 +177,7 @@ public class WebAuthnModelAuthenticator {
             throw new NotAllowedException("User is not verified.");
         }
         if (makeCredentialRequest.isRequireUserPresence() && !userConsent) {
-            throw new NotAllowedException("User doesn't provide consent.");
+            throw new NotAllowedException("User doesn't resolve consent.");
         }
 
         // Once user consent has been obtained, generate a new credential object:

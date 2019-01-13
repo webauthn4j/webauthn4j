@@ -54,7 +54,7 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
     }
 
     @Override
-    public void validate(CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
         Metadata metadata = findMetadata(attestationStatement);
         if (metadata == null) {
             throw new CertificateException("metadata not found");

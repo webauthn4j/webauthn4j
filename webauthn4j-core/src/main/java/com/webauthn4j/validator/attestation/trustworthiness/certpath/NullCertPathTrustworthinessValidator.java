@@ -23,7 +23,7 @@ import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationS
  */
 public class NullCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
     @Override
-    public void validate(CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
         // nop
     }
 }

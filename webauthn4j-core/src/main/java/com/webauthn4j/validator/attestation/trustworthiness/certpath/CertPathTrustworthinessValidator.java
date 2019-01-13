@@ -24,5 +24,5 @@ import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationS
  */
 public interface CertPathTrustworthinessValidator {
 
-    void validate(CertificateBaseAttestationStatement attestationStatement);
+    void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement);
 }

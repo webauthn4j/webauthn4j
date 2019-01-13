@@ -114,7 +114,8 @@ public class AttestationValidator {
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
-                    certPathTrustworthinessValidator.validate(certificateBaseAttestationStatement);
+                    byte[] aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+                    certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement);
                 } else {
                     throw new IllegalStateException();
                 }

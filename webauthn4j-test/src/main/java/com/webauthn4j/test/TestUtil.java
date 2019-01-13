@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.anchor.TrustAnchorResolver;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.*;
 import com.webauthn4j.response.attestation.statement.*;
@@ -371,16 +371,16 @@ public class TestUtil {
         return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getSignCount());
     }
 
-    public static TrustAnchorProvider createTrustAnchorProviderWith2tierTestRootCACertificate() {
-        return () -> {
+    public static TrustAnchorResolver createTrustAnchorProviderWith2tierTestRootCACertificate() {
+        return (aaguid) -> {
             Set<TrustAnchor> set = new HashSet<>();
             set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
             return set;
         };
     }
 
-    public static TrustAnchorProvider createTrustAnchorProviderWith3tierTestRootCACertificate() {
-        return () -> {
+    public static TrustAnchorResolver createTrustAnchorProviderWith3tierTestRootCACertificate() {
+        return (aaguid) -> {
             Set<TrustAnchor> set = new HashSet<>();
             set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
             return set;

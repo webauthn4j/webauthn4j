@@ -16,14 +16,14 @@
 
 package com.webauthn4j.extras.fido.metadata.statement;
 
-import com.webauthn4j.anchor.CachingTrustAnchorProviderBase;
+import com.webauthn4j.anchor.TrustAnchorProvider;
 
+import java.nio.ByteBuffer;
 import java.security.cert.TrustAnchor;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class MetadataStatementTrustAnchorProvider extends CachingTrustAnchorProviderBase {
+public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider {
 
     private MetadataStatementProvider metadataStatementProvider;
 
@@ -32,12 +32,26 @@ public class MetadataStatementTrustAnchorProvider extends CachingTrustAnchorProv
     }
 
     @Override
-    protected Set<TrustAnchor> loadTrustAnchors() {
+    public Map<byte[], Set<TrustAnchor>> provide() {
         List<MetadataStatement> metadataStatements = metadataStatementProvider.provide();
-        return metadataStatements.stream()
-                .flatMap(metadataStatement ->
-                        metadataStatement.getAttestationRootCertificates().stream()
-                                .map(certificate -> new TrustAnchor(certificate,null)))
-                .collect(Collectors.toSet());
+
+        Map<byte[], Set<TrustAnchor>> result = new HashMap<>();
+        metadataStatements.forEach(metadataStatement -> {
+            String aaguidStr = metadataStatement.getAaguid();
+            byte[] aaguid = aaguidStr == null ? null : convertUUID2Bytes(UUID.fromString(aaguidStr));
+            Set<TrustAnchor> set = result.computeIfAbsent(aaguid, k -> new HashSet<>());
+            Set<TrustAnchor> trustAnchors =
+                    metadataStatement.getAttestationRootCertificates().stream()
+                            .map(x509Certificate -> new TrustAnchor(x509Certificate, null))
+                            .collect(Collectors.toSet());
+            set.addAll(trustAnchors);
+        });
+        return result;
+    }
+
+    private static byte[] convertUUID2Bytes(UUID uuid) {
+        long hi = uuid.getMostSignificantBits();
+        long lo = uuid.getLeastSignificantBits();
+        return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
     }
 }

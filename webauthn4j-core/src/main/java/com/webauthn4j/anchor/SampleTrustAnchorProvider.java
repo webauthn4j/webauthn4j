@@ -4,10 +4,7 @@ import com.webauthn4j.util.CertificateUtil;
 
 import java.io.InputStream;
 import java.security.cert.TrustAnchor;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * NOT FOR PRODUCTION USE
@@ -21,7 +18,7 @@ public class SampleTrustAnchorProvider extends CachingTrustAnchorProviderBase {
     }
 
     @Override
-    protected Set<TrustAnchor> loadTrustAnchors() {
+    protected Map<byte[], Set<TrustAnchor>> loadTrustAnchors() {
         Set<TrustAnchor> set = new HashSet<>();
         for(String classPath : classPaths){
             InputStream inputStream = this.getClass().getClassLoader()
@@ -29,7 +26,7 @@ public class SampleTrustAnchorProvider extends CachingTrustAnchorProviderBase {
             TrustAnchor trustAnchor = new TrustAnchor(CertificateUtil.generateX509Certificate(inputStream), null);
             set.add(trustAnchor);
         }
-        return set;
+        return Collections.singletonMap(null, set);
     }
 
 }

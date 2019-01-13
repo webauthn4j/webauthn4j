@@ -17,16 +17,18 @@
 package com.webauthn4j.anchor;
 
 import java.security.cert.TrustAnchor;
-import java.util.Map;
 import java.util.Set;
 
-public interface TrustAnchorProvider {
+/**
+ * Provides {@link TrustAnchor} {@link Set}.
+ */
+public interface TrustAnchorResolver {
 
     /**
-     * Provides aaguid {@link TrustAnchor} {@link Set} map
-     * TrustAnchors registered for null key is used for all authenticators
+     * Resolve {@link TrustAnchor} {@link Set} from aaguid.
      *
-     * @return aaguid {@link TrustAnchor} {@link Set} map
+     * @param aaguid aaguid for authenticator
+     * @return {@link TrustAnchor} {@link Set}.
      */
-    Map<byte[], Set<TrustAnchor>> provide();
+    Set<TrustAnchor> resolve(byte[] aaguid);
 }

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.anchor.TrustAnchorResolver;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
@@ -33,20 +33,20 @@ import java.util.Set;
  */
 public class TrustAnchorCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 
-    private final TrustAnchorProvider trustAnchorProvider;
+    private final TrustAnchorResolver trustAnchorResolver;
 
     private boolean isRevocationCheckEnabled = false;
     private boolean fullChainProhibited = false;
 
-    public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorProvider trustAnchorProvider) {
-        AssertUtil.notNull(trustAnchorProvider, "trustAnchorProvider must not be null");
-        this.trustAnchorProvider = trustAnchorProvider;
+    public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorResolver trustAnchorResolver) {
+        AssertUtil.notNull(trustAnchorResolver, "trustAnchorResolver must not be null");
+        this.trustAnchorResolver = trustAnchorResolver;
     }
 
-    public void validate(CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
-        Set<TrustAnchor> trustAnchors = trustAnchorProvider.provide();
+        Set<TrustAnchor> trustAnchors = trustAnchorResolver.resolve(aaguid);
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);

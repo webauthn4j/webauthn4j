@@ -17,31 +17,25 @@
 package com.webauthn4j.anchor;
 
 import java.security.cert.TrustAnchor;
+import java.util.Map;
 import java.util.Set;
 
-/**
- * An abstract {@link TrustAnchorProvider}
- * Load trustAnchors at first time access and cache it.
- */
-public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvider {
+public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvider{
 
-    private Set<TrustAnchor> cachedTrustAnchors;
+    private Map<byte[], Set<TrustAnchor>> cachedTrustAnchors;
 
     /**
-     * {@inheritDoc}
+     * provide aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
+     *
+     * @return aaguid {@link TrustAnchor} {@link Set} map
      */
     @Override
-    public Set<TrustAnchor> provide() {
-
-        if (cachedTrustAnchors != null) {
-            return cachedTrustAnchors;
+    public Map<byte[], Set<TrustAnchor>> provide() {
+        if(cachedTrustAnchors == null){
+            cachedTrustAnchors = loadTrustAnchors();
         }
-
-        this.cachedTrustAnchors = loadTrustAnchors();
-
         return cachedTrustAnchors;
     }
 
-    protected abstract Set<TrustAnchor> loadTrustAnchors();
-
+    protected abstract Map<byte[], Set<TrustAnchor>> loadTrustAnchors();
 }
