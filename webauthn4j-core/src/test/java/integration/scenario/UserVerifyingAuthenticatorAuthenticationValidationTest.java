@@ -87,7 +87,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -138,7 +137,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -184,7 +182,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -222,7 +219,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -260,7 +256,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -300,7 +295,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -339,7 +333,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -376,7 +369,6 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),

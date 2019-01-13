@@ -92,7 +92,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -142,7 +141,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        publicKeyCredential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -190,7 +188,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -233,7 +230,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -276,7 +272,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -318,7 +313,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -363,7 +357,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),
@@ -405,7 +398,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         new byte[32], //bad signature
@@ -447,7 +439,6 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getSignature(),

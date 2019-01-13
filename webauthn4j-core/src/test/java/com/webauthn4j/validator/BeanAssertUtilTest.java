@@ -33,7 +33,6 @@ public class BeanAssertUtilTest {
     @Test
     public void validate_WebAuthnAuthenticationContext_test(){
         WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                new byte[32],
                 new byte[512],
                 new byte[512],
                 new byte[32],
@@ -51,24 +50,8 @@ public class BeanAssertUtilTest {
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_WebAuthnAuthenticationContext_with_credentialId_null_test(){
-        WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                null,
-                new byte[512],
-                new byte[512],
-                new byte[32],
-                null,
-                mock(ServerProperty.class),
-                true,
-                null
-        );
-        BeanAssertUtil.validate(authenticationContext);
-    }
-
-    @Test(expected = ConstraintViolationException.class)
     public void validate_WebAuthnAuthenticationContext_with_clientDataJSON_null_test(){
         WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                new byte[32],
                 null,
                 new byte[512],
                 new byte[32],
@@ -83,7 +66,6 @@ public class BeanAssertUtilTest {
     @Test(expected = ConstraintViolationException.class)
     public void validate_WebAuthnAuthenticationContext_with_authenticatorData_null_test(){
         WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                new byte[32],
                 new byte[512],
                 null,
                 new byte[32],
@@ -98,7 +80,6 @@ public class BeanAssertUtilTest {
     @Test(expected = ConstraintViolationException.class)
     public void validate_WebAuthnAuthenticationContext_with_signature_null_test(){
         WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                new byte[32],
                 new byte[512],
                 new byte[512],
                 null,
@@ -113,7 +94,6 @@ public class BeanAssertUtilTest {
     @Test(expected = ConstraintViolationException.class)
     public void validate_WebAuthnAuthenticationContext_with_serverProperty_null_test(){
         WebAuthnAuthenticationContext authenticationContext = new WebAuthnAuthenticationContext(
-                new byte[32],
                 new byte[512],
                 new byte[512],
                 new byte[32],

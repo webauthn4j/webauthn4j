@@ -36,14 +36,12 @@ public class WebAuthnAuthenticationContextTest {
     @Test
     public void getter_test() {
 
-        byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter(registry).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty, false);
-        assertThat(target.getCredentialId()).isEqualTo(credentialId);
+                collectedClientData, authenticatorData, signature, serverProperty, false);
         assertThat(target.getClientDataJSON()).isEqualTo(collectedClientData);
         assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData);
         assertThat(target.getSignature()).isEqualTo(signature);
@@ -53,15 +51,14 @@ public class WebAuthnAuthenticationContextTest {
 
     @Test
     public void equals_hashCode_test() {
-        byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter(registry).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
+                collectedClientData, authenticatorData, signature, serverProperty, true);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
+                collectedClientData, authenticatorData, signature, serverProperty, true);
 
         assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB);
         assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB);

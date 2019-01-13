@@ -49,9 +49,6 @@ class BeanAssertUtil {
         if(webAuthnAuthenticationContext == null){
             throw new ConstraintViolationException("webAuthnAuthenticationContext must not be null");
         }
-        if (webAuthnAuthenticationContext.getCredentialId() == null) {
-            throw new ConstraintViolationException("credentialId must not be null");
-        }
         if (webAuthnAuthenticationContext.getClientDataJSON() == null) {
             throw new ConstraintViolationException("clientDataJSON must not be null");
         }

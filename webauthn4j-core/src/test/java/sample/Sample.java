@@ -49,7 +49,6 @@ public class Sample {
 
     public void authenticationValidationSample() {
         // Client properties
-        byte[] credentialId = null /* set credentialId */;
         byte[] clientDataJSON = null /* set clientDataJSON */;
         byte[] authenticatorData = null /* set authenticatorData */;
         byte[] signature = null /* set signature */;
@@ -63,7 +62,6 @@ public class Sample {
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
-                        credentialId,
                         clientDataJSON,
                         authenticatorData,
                         signature,

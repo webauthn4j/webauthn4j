@@ -31,13 +31,11 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
     //~ Instance fields ================================================================================================
 
     // user inputs
-    private final byte[] credentialId;
     private final byte[] authenticatorData;
     private final byte[] signature;
 
     @SuppressWarnings("squid:S00107")
-    public WebAuthnAuthenticationContext(byte[] credentialId,
-                                         byte[] clientDataJSON,
+    public WebAuthnAuthenticationContext(byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
                                          String clientExtensionsJSON,
@@ -53,20 +51,17 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                 expectedExtensionIds
         );
 
-        this.credentialId = credentialId;
         this.signature = signature;
         this.authenticatorData = authenticatorData;
     }
 
-    public WebAuthnAuthenticationContext(byte[] credentialId,
-                                         byte[] clientDataJSON,
+    public WebAuthnAuthenticationContext(byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired
     ) {
         this(
-                credentialId,
                 clientDataJSON,
                 authenticatorData,
                 signature,
@@ -75,10 +70,6 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                 userVerificationRequired,
                 Collections.emptyList()
         );
-    }
-
-    public byte[] getCredentialId() {
-        return credentialId;
     }
 
     public byte[] getAuthenticatorData() {
