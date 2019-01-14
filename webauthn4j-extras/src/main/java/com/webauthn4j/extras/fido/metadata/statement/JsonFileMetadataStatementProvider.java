@@ -44,11 +44,24 @@ public class JsonFileMetadataStatementProvider implements MetadataStatementProvi
     @Override
     public Map<AAGUID, List<MetadataStatement>> provide() {
         if(cachedMetadataStatements == null){
-            cachedMetadataStatements = paths.stream()
+            cachedMetadataStatements =
+                    paths.stream()
                     .map(this::readJsonFile)
-                    .collect(Collectors.groupingBy(item -> new AAGUID(item.getAaguid())));
+                    .collect(Collectors.groupingBy(this::extractAAGUID));
         }
         return cachedMetadataStatements;
+    }
+
+    private AAGUID extractAAGUID(MetadataStatement metadataStatement){
+        switch (metadataStatement.getProtocolFamily()){
+            case "fido2":
+                return new AAGUID(metadataStatement.getAaguid());
+            case "u2f":
+                return AAGUID.ZERO;
+            case "uaf":
+            default:
+                return AAGUID.NULL;
+        }
     }
 
     MetadataStatement readJsonFile(Path path){
