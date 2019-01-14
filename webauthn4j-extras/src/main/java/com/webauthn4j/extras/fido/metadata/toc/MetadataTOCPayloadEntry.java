@@ -17,6 +17,7 @@
 package com.webauthn4j.extras.fido.metadata.toc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.WIP;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -25,23 +26,40 @@ import java.util.List;
 /**
  * Created by ynojima on 2017/09/08.
  */
+@WIP
 public class MetadataTOCPayloadEntry {
 
     @JsonProperty
     private String aaid;
     @JsonProperty
+    private String aaguid;
+    @JsonProperty
+    private List<String> attestationCertificateKeyIdentifiers;
+    @JsonProperty
     private String hash;
     @JsonProperty
     private URI url;
+    @JsonProperty
+    private List<BiometricStatusReport> biometricStatusReports;
     @JsonProperty
     private List<StatusReport> statusReports;
     @JsonProperty
     private LocalDate timeOfLastStatusChange;
     @JsonProperty
-    private List<String> attestationCertificateKeyIdentifiers;
+    private String rogueListURL;
+    @JsonProperty
+    private String rogueListHash;
 
     public String getAaid() {
         return aaid;
+    }
+
+    public String getAaguid() {
+        return aaguid;
+    }
+
+    public List<String> getAttestationCertificateKeyIdentifiers() {
+        return attestationCertificateKeyIdentifiers;
     }
 
     public String getHash() {
@@ -52,6 +70,10 @@ public class MetadataTOCPayloadEntry {
         return url;
     }
 
+    public List<BiometricStatusReport> getBiometricStatusReports() {
+        return biometricStatusReports;
+    }
+
     public List<StatusReport> getStatusReports() {
         return statusReports;
     }
@@ -60,7 +82,11 @@ public class MetadataTOCPayloadEntry {
         return timeOfLastStatusChange;
     }
 
-    public List<String> getAttestationCertificateKeyIdentifiers() {
-        return attestationCertificateKeyIdentifiers;
+    public String getRogueListURL() {
+        return rogueListURL;
+    }
+
+    public String getRogueListHash() {
+        return rogueListHash;
     }
 }

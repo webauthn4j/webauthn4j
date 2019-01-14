@@ -29,21 +29,21 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 
 /**
- * Test for FIDOMetadataServiceClient
+ * Test for FIDOMDSClient
  */
 
-public class FIDOMetadataServiceClientIntegrationTest {
+public class FIDOMDSClientIntegrationTest {
 
     private Registry registry = new Registry();
 
-    private FIDOMetadataServiceClient target;
+    private FIDOMDSClient target;
 
     @Before
     public void setup() {
         HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         RestTemplate restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
         ResourceLoader resourceLoader = new DefaultResourceLoader();
-        target = new FIDOMetadataServiceClient(registry, restTemplate, resourceLoader);
+        target = new FIDOMDSClient(registry, restTemplate, resourceLoader);
     }
 
     @Test

@@ -39,7 +39,7 @@ import java.text.ParseException;
  * Client for FIDO Metadata Service
  */
 @WIP
-public class FIDOMetadataServiceClient {
+public class FIDOMDSClient {
 
     RestTemplate restTemplate;
 
@@ -51,7 +51,7 @@ public class FIDOMetadataServiceClient {
 
     private String fidoMetadataServiceEndpoint;
 
-    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
+    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
         this.restTemplate = restTemplate;
         this.jwsVerifier = jwsVerifier;
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
@@ -60,11 +60,11 @@ public class FIDOMetadataServiceClient {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier) {
+    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier) {
         this(registry, restTemplate, jwsVerifier, DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT);
     }
 
-    public FIDOMetadataServiceClient(Registry registry, RestTemplate restTemplate, ResourceLoader resourceLoader) {
+    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, ResourceLoader resourceLoader) {
         this(registry, restTemplate, new CertPathJWSVerifier(resourceLoader));
     }
 

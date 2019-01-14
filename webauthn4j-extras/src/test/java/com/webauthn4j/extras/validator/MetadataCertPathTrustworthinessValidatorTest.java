@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.validator;
 
-import java.util.List;
-import java.util.Map;
+import org.junit.Test;
 
-public interface MetadataStatementProvider {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    Map<byte[], List<MetadataStatement>> provide();
+/**
+ * Created by ynojima on 2017/09/24.
+ */
+public class MetadataCertPathTrustworthinessValidatorTest {
+
+    public MetadataCertPathTrustworthinessValidator target = new MetadataCertPathTrustworthinessValidator(null);
+
+    @Test
+    public void test(){}
+
+
 }

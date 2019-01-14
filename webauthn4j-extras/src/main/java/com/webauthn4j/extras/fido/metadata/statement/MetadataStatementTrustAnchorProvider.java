@@ -18,10 +18,12 @@ package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.anchor.TrustAnchorProvider;
 
-import java.nio.ByteBuffer;
 import java.security.cert.TrustAnchor;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider {
 
@@ -33,25 +35,16 @@ public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider
 
     @Override
     public Map<byte[], Set<TrustAnchor>> provide() {
-        List<MetadataStatement> metadataStatements = metadataStatementProvider.provide();
+        Map<byte[], List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
 
-        Map<byte[], Set<TrustAnchor>> result = new HashMap<>();
-        metadataStatements.forEach(metadataStatement -> {
-            String aaguidStr = metadataStatement.getAaguid();
-            byte[] aaguid = aaguidStr == null ? null : convertUUID2Bytes(UUID.fromString(aaguidStr));
-            Set<TrustAnchor> set = result.computeIfAbsent(aaguid, k -> new HashSet<>());
-            Set<TrustAnchor> trustAnchors =
-                    metadataStatement.getAttestationRootCertificates().stream()
-                            .map(x509Certificate -> new TrustAnchor(x509Certificate, null))
-                            .collect(Collectors.toSet());
-            set.addAll(trustAnchors);
-        });
-        return result;
+        return metadataStatements.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().stream().flatMap(this::extractTrustAnchors).collect(Collectors.toSet())));
+
     }
 
-    private static byte[] convertUUID2Bytes(UUID uuid) {
-        long hi = uuid.getMostSignificantBits();
-        long lo = uuid.getLeastSignificantBits();
-        return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
+    private Stream<TrustAnchor> extractTrustAnchors(MetadataStatement metadataStatement){
+        return metadataStatement.getAttestationRootCertificates().stream()
+                .map(certificate -> new TrustAnchor(certificate, null));
     }
+
 }

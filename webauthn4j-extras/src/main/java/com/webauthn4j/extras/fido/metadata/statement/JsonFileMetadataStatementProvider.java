@@ -17,6 +17,7 @@
 package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.util.UUIDUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,20 +26,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonFileMetadataStatementProvider implements MetadataStatementProvider {
 
     private Registry registry;
     private List<Path> paths = Collections.emptyList();
+    private Map<byte[], List<MetadataStatement>> cachedMetadataStatements;
 
     public JsonFileMetadataStatementProvider(Registry registry) {
         this.registry = registry;
     }
 
     @Override
-    public List<MetadataStatement> provide() {
-        return paths.stream().map(this::readJsonFile).collect(Collectors.toList());
+    public Map<byte[], List<MetadataStatement>> provide() {
+        if(cachedMetadataStatements == null){
+            cachedMetadataStatements = paths.stream()
+                    .map(this::readJsonFile)
+                    .collect(Collectors.groupingBy(item -> UUIDUtil.convertUUIDToBytes(UUIDUtil.fromString(item.getAaguid()))));
+        }
+        return cachedMetadataStatements;
     }
 
     MetadataStatement readJsonFile(Path path){

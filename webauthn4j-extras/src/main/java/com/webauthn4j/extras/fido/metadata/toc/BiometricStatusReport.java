@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata.toc;
 
-import java.util.List;
-import java.util.Map;
+import com.webauthn4j.util.WIP;
 
-public interface MetadataStatementProvider {
+import java.math.BigInteger;
 
-    Map<byte[], List<MetadataStatement>> provide();
+@WIP
+public class BiometricStatusReport {
+    private Integer certLevel;
+    private BigInteger modality;
+    private String effectiveData;
+    private String certificationDescriptor;
+    private String certificateNumber;
+    private String certificationPolicyVersion;
+    private String certificationRequirementsVersion;
 }

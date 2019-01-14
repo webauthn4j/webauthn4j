@@ -17,9 +17,8 @@
 package com.webauthn4j.extras.fido.metadata.statement;
 
 import java.util.List;
-import java.util.Map;
 
-public interface MetadataStatementProvider {
+public interface MetadataStatementResolver {
 
-    Map<byte[], List<MetadataStatement>> provide();
+    List<MetadataStatement> resolve(byte[] aaguid);
 }

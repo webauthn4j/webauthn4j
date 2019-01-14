@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
-import java.util.List;
-import java.util.Map;
+public interface MetadataResolver {
 
-public interface MetadataStatementProvider {
-
-    Map<byte[], List<MetadataStatement>> provide();
+    Metadata resolve(byte[] aaguid);
 }

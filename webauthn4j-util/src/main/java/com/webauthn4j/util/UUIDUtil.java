@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.util;
 
-import java.util.List;
-import java.util.Map;
+import java.nio.ByteBuffer;
+import java.util.UUID;
 
-public interface MetadataStatementProvider {
+public class UUIDUtil {
 
-    Map<byte[], List<MetadataStatement>> provide();
+    private UUIDUtil(){}
+
+    public static UUID fromString(String value){
+        return UUID.fromString(value);
+    }
+
+    public static byte[] convertUUIDToBytes(UUID uuid) {
+        long hi = uuid.getMostSignificantBits();
+        long lo = uuid.getLeastSignificantBits();
+        return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
+    }
 }

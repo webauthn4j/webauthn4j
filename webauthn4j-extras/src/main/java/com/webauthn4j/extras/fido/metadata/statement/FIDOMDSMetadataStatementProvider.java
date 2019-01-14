@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.validator;
+package com.webauthn4j.extras.fido.metadata.statement;
 
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.extras.fido.metadata.FIDOMetadataServiceClient;
+import com.webauthn4j.extras.fido.metadata.FIDOMDSClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
-import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayload;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.util.exception.NotImplementedException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -37,43 +35,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * FIDOMetadataServiceCertPathTrustworthinessValidator
- */
 @WIP
-public class FIDOMetadataServiceCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
+public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvider {
 
-    private FIDOMetadataServiceClient fidoMetadataServiceClient;
+    private FIDOMDSClient fidoMDSClient;
 
     Map<TrustAnchor, Metadata> cachedMetadataMap;
     LocalDate nextUpdate;
     LocalDateTime lastRefresh;
 
-    public FIDOMetadataServiceCertPathTrustworthinessValidator(FIDOMetadataServiceClient fidoMetadataServiceClient) {
-        this.fidoMetadataServiceClient = fidoMetadataServiceClient;
+    public FIDOMDSMetadataStatementProvider(FIDOMDSClient fidoMDSClient) {
+        this.fidoMDSClient = fidoMDSClient;
     }
 
     @Override
-    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
-        Metadata metadata = findMetadata(attestationStatement);
-        if (metadata == null) {
-            throw new CertificateException("metadata not found");
-        }
-        metadata.getStatusReports().forEach(report -> {
-            switch (report.getStatus()) {
-                case FIDO_CERTIFIED:
-                case UPDATE_AVAILABLE:
-                case NOT_FIDO_CERTIFIED:
-                    return;
-                case ATTESTATION_KEY_COMPROMISE:
-                case USER_VERIFICATION_BYPASS:
-                case USER_KEY_REMOTE_COMPROMISE:
-                case USER_KEY_PHYSICAL_COMPROMISE:
-                case REVOKED:
-                default:
-                    throw new CertificateException(String.format("error response from metadata service: %s", report.getStatus()));
-            }
-        });
+    public Map<byte[], List<MetadataStatement>> provide() {
+        MetadataTOCPayload toc = fidoMDSClient.retrieveMetadataTOC();
+        throw new NotImplementedException();
     }
 
     Metadata findMetadata(CertificateBaseAttestationStatement attestationStatement) {
@@ -110,13 +88,13 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
     }
 
     Map<TrustAnchor, Metadata> refreshMetadataMap() {
-        MetadataTOCPayload metadataTOC = fidoMetadataServiceClient.retrieveMetadataTOC();
+        MetadataTOCPayload metadataTOC = fidoMDSClient.retrieveMetadataTOC();
         List<MetadataTOCPayloadEntry> entries = metadataTOC.getEntries();
 
         Map<TrustAnchor, Metadata> metadataMap = new HashMap<>();
 
         for (MetadataTOCPayloadEntry entry : entries) {
-            MetadataStatement metadataStatement = fidoMetadataServiceClient.retrieveMetadataStatement(entry.getUrl());
+            MetadataStatement metadataStatement = fidoMDSClient.retrieveMetadataStatement(entry.getUrl());
             Metadata metadata = new Metadata();
             metadata.setAaid(entry.getAaid());
             metadata.setHash(entry.getHash());
@@ -132,6 +110,4 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidator implements Cert
         lastRefresh = LocalDateTime.now();
         return metadataMap;
     }
-
-
 }

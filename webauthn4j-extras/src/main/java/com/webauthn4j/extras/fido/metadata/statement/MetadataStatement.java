@@ -37,7 +37,7 @@ public class MetadataStatement {
     private List<Integer> authenticationAlgorithms;
     private Integer publicKeyAlgAndEncoding;
     private List<Integer> publicKeyAlgAndEncodings;
-    private List<Integer> attestationTypes;
+    private List<AttestationType> attestationTypes;
     private List<VerificationMethodANDCombinations> userVerificationDetails;
     private Integer keyProtection;
     private Boolean isKeyRestricted;
@@ -107,7 +107,7 @@ public class MetadataStatement {
         return publicKeyAlgAndEncodings;
     }
 
-    public List<Integer> getAttestationTypes() {
+    public List<AttestationType> getAttestationTypes() {
         return attestationTypes;
     }
 

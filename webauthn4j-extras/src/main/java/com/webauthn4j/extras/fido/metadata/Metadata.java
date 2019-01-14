@@ -18,6 +18,7 @@ package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.toc.StatusReport;
+import com.webauthn4j.util.WIP;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,13 +26,15 @@ import java.util.List;
 /**
  * Created by ynojima on 2017/09/24.
  */
+@WIP
 public class Metadata {
 
     private String aaid;
+    private String aaguid;
+    private List<String> attestationCertificateKeyIdentifiers;
     private String hash;
     private List<StatusReport> statusReports;
     private LocalDate timeOfLastStatusChange;
-    private List<String> attestationCertificateKeyIdentifiers;
     private MetadataStatement metadataStatement;
 
     public String getAaid() {
@@ -40,6 +43,22 @@ public class Metadata {
 
     public void setAaid(String aaid) {
         this.aaid = aaid;
+    }
+
+    public String getAaguid() {
+        return aaguid;
+    }
+
+    public void setAaguid(String aaguid) {
+        this.aaguid = aaguid;
+    }
+
+    public List<String> getAttestationCertificateKeyIdentifiers() {
+        return attestationCertificateKeyIdentifiers;
+    }
+
+    public void setAttestationCertificateKeyIdentifiers(List<String> attestationCertificateKeyIdentifiers) {
+        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
     }
 
     public String getHash() {
@@ -64,14 +83,6 @@ public class Metadata {
 
     public void setTimeOfLastStatusChange(LocalDate timeOfLastStatusChange) {
         this.timeOfLastStatusChange = timeOfLastStatusChange;
-    }
-
-    public List<String> getAttestationCertificateKeyIdentifiers() {
-        return attestationCertificateKeyIdentifiers;
-    }
-
-    public void setAttestationCertificateKeyIdentifiers(List<String> attestationCertificateKeyIdentifiers) {
-        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
     }
 
     public MetadataStatement getMetadataStatement() {

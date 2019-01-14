@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.validator;
+package com.webauthn4j.extras.fido.metadata.statement;
 
 import org.junit.Test;
 
@@ -24,12 +24,9 @@ import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by ynojima on 2017/09/24.
- */
-public class FIDOMetadataServiceCertPathTrustworthinessValidatorTest {
+public class FIDOMDSMetadataStatementProviderTest {
 
-    public FIDOMetadataServiceCertPathTrustworthinessValidator target = new FIDOMetadataServiceCertPathTrustworthinessValidator(null);
+    private FIDOMDSMetadataStatementProvider target = new FIDOMDSMetadataStatementProvider(null);
 
     @Test
     public void needsRefresh_test_with_cache_null() {
@@ -63,6 +60,4 @@ public class FIDOMetadataServiceCertPathTrustworthinessValidatorTest {
 
         assertThat(target.needsRefresh()).isTrue();
     }
-
-
 }
