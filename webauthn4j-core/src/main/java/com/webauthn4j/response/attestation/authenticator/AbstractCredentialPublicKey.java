@@ -74,7 +74,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
 
     @JsonIgnore
     private String getAlgorithmName() {
-        return algorithm.getName();
+        return algorithm.getJcaName();
     }
 
     @Override

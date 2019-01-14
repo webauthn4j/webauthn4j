@@ -16,8 +16,6 @@
 
 package com.webauthn4j.util;
 
-import com.webauthn4j.util.exception.NotImplementedException;
-
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 
@@ -26,18 +24,18 @@ import java.security.Signature;
  */
 public class SignatureUtil {
 
-    private static Signature es256 = createSignature("SHA256withECDSA");
-    private static Signature rs256 = createSignature("SHA256withRSA");
+    private static Signature ES256 = createSignature("SHA256withECDSA");
+    private static Signature RS256 = createSignature("SHA256withRSA");
 
     private SignatureUtil() {
     }
 
     public static Signature getRS256(){
-        return rs256;
+        return RS256;
     }
 
     public static Signature getES256(){
-        return es256;
+        return ES256;
     }
 
     public static Signature createSignature(String algorithm) {
@@ -49,15 +47,4 @@ public class SignatureUtil {
         }
     }
 
-    public static Signature createSignatureWithJWAIdentifier(String jwaIdentifier){
-        AssertUtil.notNull(jwaIdentifier, "jwaIdentifier is required; it must not be null");
-        switch (jwaIdentifier){
-            case "ES256":
-                return es256;
-            case "RS256":
-                return rs256;
-            default:
-                throw new NotImplementedException();
-        }
-    }
 }

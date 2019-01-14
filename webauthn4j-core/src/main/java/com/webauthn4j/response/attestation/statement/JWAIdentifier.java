@@ -20,49 +20,49 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-public enum COSEAlgorithmIdentifier {
-    RS1(-65535, "SHA1withRSA"),
-    RS256(-257, "SHA256withRSA"),
-    RS384(-258, "SHA384withRSA"),
-    RS512(-259, "SHA512withRSA"),
-    ES256(-7, "SHA256withECDSA"),
-    ES384(-35, "SHA384withECDSA"),
-    ES512(-36, "SHA512withECDSA");
+public enum JWAIdentifier {
+    RS1("RS1", "SHA1withRSA"),
+    RS256("RS256", "SHA256withRSA"),
+    RS384("RS384", "SHA384withRSA"),
+    RS512("RS512", "SHA512withRSA"),
+    ES256("ES256", "SHA256withECDSA"),
+    ES384("ES384", "SHA384withECDSA"),
+    ES512("ES512", "SHA512withECDSA");
 
-    private final long value;
+    private final String name;
     private final String jcaName;
 
-    COSEAlgorithmIdentifier(long value, String jcaName) {
-        this.value = value;
+    JWAIdentifier(String name, String jcaName) {
+        this.name = name;
         this.jcaName = jcaName;
     }
 
     @JsonCreator
-    public static COSEAlgorithmIdentifier create(int value) throws InvalidFormatException {
+    public static JWAIdentifier create(String value) throws InvalidFormatException {
         switch (value) {
-            case -65535:
-                return RS1;
-            case -257:
-                return RS256;
-            case -258:
-                return RS384;
-            case -259:
-                return RS512;
-            case -7:
+            case "ES256":
                 return ES256;
-            case -35:
+            case "ES384":
                 return ES384;
-            case -36:
+            case "ES512":
                 return ES512;
+            case "RS1":
+                return RS1;
+            case "RS256":
+                return RS256;
+            case "RS384":
+                return RS384;
+            case "RS512":
+                return RS512;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+                throw new InvalidFormatException(null, "name is out of range", value, JWAIdentifier.class);
         }
     }
 
 
     @JsonValue
-    public long getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
 
     public String getJcaName() {

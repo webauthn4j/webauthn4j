@@ -83,7 +83,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
-            Signature verifier = SignatureUtil.createSignatureWithJWAIdentifier(attestationStatement.getAlg().getName());
+            Signature verifier = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
             verifier.initVerify(publicKey);
             verifier.update(signedData);
             if (verifier.verify(signature)) {

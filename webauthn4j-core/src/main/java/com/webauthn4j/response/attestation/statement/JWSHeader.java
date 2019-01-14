@@ -23,7 +23,7 @@ import java.io.Serializable;
 public class JWSHeader implements Serializable {
 
     @JsonProperty
-    private String alg;
+    private JWAIdentifier alg;
 
     @JsonProperty
     private AttestationCertificatePath x5c;
@@ -32,7 +32,7 @@ public class JWSHeader implements Serializable {
         //nop
     }
 
-    public String getAlg() {
+    public JWAIdentifier getAlg() {
         return alg;
     }
 

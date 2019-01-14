@@ -35,9 +35,7 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.security.*;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Validates the specified {@link AttestationStatement} is a valid packed attestation
@@ -116,7 +114,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
-            Signature verifier = SignatureUtil.createSignature(algorithmIdentifier.getName());
+            Signature verifier = SignatureUtil.createSignature(algorithmIdentifier.getJcaName());
             verifier.initVerify(publicKey);
             verifier.update(data);
 
