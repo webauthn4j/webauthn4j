@@ -23,6 +23,7 @@ import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
@@ -73,9 +74,9 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
 
-        UUID aaGuid = UUIDUtil.fromBytes(new byte[16]); // zero-filled 16bytes(128bits) array
+        AAGUID aaguid = AAGUID.ZERO; // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =
-                new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
+                new AttestedCredentialData(aaguid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData);

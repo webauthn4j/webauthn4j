@@ -16,10 +16,11 @@
 
 package com.webauthn4j.extras.fido.metadata.statement;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 import java.util.List;
-import java.util.UUID;
 
 public interface MetadataStatementResolver {
 
-    List<MetadataStatement> resolve(UUID aaguid);
+    List<MetadataStatement> resolve(AAGUID aaguid);
 }

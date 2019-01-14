@@ -17,12 +17,12 @@
 package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.anchor.TrustAnchorProvider;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
 import java.security.cert.TrustAnchor;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,8 +35,8 @@ public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider
     }
 
     @Override
-    public Map<UUID, Set<TrustAnchor>> provide() {
-        Map<UUID, List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
+    public Map<AAGUID, Set<TrustAnchor>> provide() {
+        Map<AAGUID, List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
 
         return metadataStatements.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().stream().flatMap(this::extractTrustAnchors).collect(Collectors.toSet())));

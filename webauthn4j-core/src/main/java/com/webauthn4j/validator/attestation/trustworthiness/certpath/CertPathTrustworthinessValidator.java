@@ -16,15 +16,14 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
-
-import java.util.UUID;
 
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness
  */
 public interface CertPathTrustworthinessValidator {
 
-    void validate(UUID aaguid, CertificateBaseAttestationStatement attestationStatement);
+    void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement);
 }

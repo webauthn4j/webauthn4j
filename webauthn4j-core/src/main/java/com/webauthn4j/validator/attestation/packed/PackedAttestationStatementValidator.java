@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.attestation.packed;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
@@ -70,9 +71,9 @@ public class PackedAttestationStatementValidator implements AttestationStatement
             // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
             // the value of this extension matches the aaguid in authenticatorData.
             byte[] aaguidInCertificateBytes = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
-            UUID aaguidInCertificate = aaguidInCertificateBytes == null ? null : UUIDUtil.fromBytes(aaguidInCertificateBytes);
-            UUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if (aaguidInCertificate != null && !Objects.equals(aaguidInCertificate, aaguid)) {
+            AAGUID aaguidInCertificate = aaguidInCertificateBytes == null ? AAGUID.NULL : new AAGUID(UUIDUtil.fromBytes(aaguidInCertificateBytes));
+            AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
+            if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
                 throw new BadAttestationStatementException("Bad aaguid");
             }
 

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class KeyStoreFileTrustAnchorProvider extends CachingTrustAnchorProviderB
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */
     @Override
-    protected Map<UUID, Set<TrustAnchor>> loadTrustAnchors() {
+    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         Path keystore = getKeyStore();
         try (InputStream inputStream = Files.newInputStream(keystore)) {
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());

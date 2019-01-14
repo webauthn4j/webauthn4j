@@ -26,10 +26,7 @@ import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInp
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.*;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
@@ -59,7 +56,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 @WIP
 public class WebAuthnModelAuthenticator {
 
-    UUID aaguid;
+    AAGUID aaguid;
     private PrivateKey attestationPrivateKey;
     private AttestationCertificatePath attestationCertificatePath;
     private boolean capableOfUserVerification;
@@ -69,7 +66,7 @@ public class WebAuthnModelAuthenticator {
 
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(new Registry()); // TODO: inject registry from constructor
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, UUID aaguid, int counter) {
+    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationCertificatePath = attestationCertificatePath;
         this.capableOfUserVerification = capableOfUserVerification;
@@ -83,7 +80,7 @@ public class WebAuthnModelAuthenticator {
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH,
                 true,
-                UUIDUtil.fromBytes(new byte[16]),
+                AAGUID.ZERO,
                 0
         );
     }

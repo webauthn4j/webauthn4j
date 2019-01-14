@@ -16,9 +16,10 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 import java.security.cert.TrustAnchor;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Provides {@link TrustAnchor} {@link Set}.
@@ -31,5 +32,5 @@ public interface TrustAnchorResolver {
      * @param aaguid aaguid for authenticator
      * @return {@link TrustAnchor} {@link Set}.
      */
-    Set<TrustAnchor> resolve(UUID aaguid);
+    Set<TrustAnchor> resolve(AAGUID aaguid);
 }

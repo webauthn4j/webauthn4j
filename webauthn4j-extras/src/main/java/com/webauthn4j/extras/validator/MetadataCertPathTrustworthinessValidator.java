@@ -18,6 +18,7 @@ package com.webauthn4j.extras.validator;
 
 import com.webauthn4j.extras.fido.metadata.Metadata;
 import com.webauthn4j.extras.fido.metadata.MetadataResolver;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
@@ -25,7 +26,6 @@ import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -41,7 +41,7 @@ public class MetadataCertPathTrustworthinessValidator extends CertPathTrustworth
     }
 
     @Override
-    public void validate(UUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         Metadata metadata = metadataResolver.resolve(aaguid);
         if (metadata == null) {
             throw new CertificateException("metadata not found");
@@ -65,7 +65,7 @@ public class MetadataCertPathTrustworthinessValidator extends CertPathTrustworth
     }
 
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(UUID aaguid) {
+    protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
         return metadataResolver.resolve(aaguid).getMetadataStatement().getAttestationRootCertificates().stream()
                 .map(certificate -> new TrustAnchor(certificate, null))
                 .collect(Collectors.toSet());

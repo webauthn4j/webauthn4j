@@ -20,6 +20,7 @@ import com.webauthn4j.extras.fido.metadata.FIDOMDSClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayload;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.CertificateUtil;
@@ -46,7 +47,7 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     }
 
     @Override
-    public Map<UUID, List<MetadataStatement>> provide() {
+    public Map<AAGUID, List<MetadataStatement>> provide() {
         MetadataTOCPayload toc = fidoMDSClient.retrieveMetadataTOC();
         throw new NotImplementedException();
     }

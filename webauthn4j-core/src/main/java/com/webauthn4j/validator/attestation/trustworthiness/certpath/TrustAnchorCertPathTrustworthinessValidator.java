@@ -17,12 +17,12 @@
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness based on {@link TrustAnchor}
@@ -37,7 +37,7 @@ public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustwo
     }
 
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(UUID aaguid) {
+    protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
         return trustAnchorResolver.resolve(aaguid);
     }
 }

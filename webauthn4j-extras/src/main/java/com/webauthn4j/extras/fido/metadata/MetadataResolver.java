@@ -16,9 +16,10 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import java.util.UUID;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 
 public interface MetadataResolver {
 
-    Metadata resolve(UUID aaguid);
+    Metadata resolve(AAGUID aaguid);
 }

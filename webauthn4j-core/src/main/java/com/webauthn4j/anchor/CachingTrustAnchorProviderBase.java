@@ -16,6 +16,8 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +25,7 @@ import java.util.UUID;
 
 public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvider{
 
-    private Map<UUID, Set<TrustAnchor>> cachedTrustAnchors;
+    private Map<AAGUID, Set<TrustAnchor>> cachedTrustAnchors;
 
     /**
      * provide aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
@@ -31,12 +33,12 @@ public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvi
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */
     @Override
-    public Map<UUID, Set<TrustAnchor>> provide() {
+    public Map<AAGUID, Set<TrustAnchor>> provide() {
         if(cachedTrustAnchors == null){
             cachedTrustAnchors = loadTrustAnchors();
         }
         return cachedTrustAnchors;
     }
 
-    protected abstract Map<UUID, Set<TrustAnchor>> loadTrustAnchors();
+    protected abstract Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();
 }

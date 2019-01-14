@@ -17,11 +17,11 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
@@ -30,14 +30,12 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AttestationValidator {
 
-    private static final UUID U2F_AAGUID = UUIDUtil.fromBytes(new byte[16]);
+    private static final AAGUID U2F_AAGUID = AAGUID.ZERO;
 
     private final List<AttestationStatementValidator> attestationStatementValidators;
 
@@ -77,7 +75,7 @@ public class AttestationValidator {
 
 
         if(attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)){
-            UUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+            AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if(!Objects.equals(aaguid, U2F_AAGUID)){
                 throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
             }
@@ -117,7 +115,7 @@ public class AttestationValidator {
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
-                    UUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+                    AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
                     certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement);
                 } else {
                     throw new IllegalStateException();

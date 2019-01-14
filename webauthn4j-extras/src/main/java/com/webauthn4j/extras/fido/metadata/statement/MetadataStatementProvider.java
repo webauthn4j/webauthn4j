@@ -16,11 +16,12 @@
 
 package com.webauthn4j.extras.fido.metadata.statement;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public interface MetadataStatementProvider {
 
-    Map<UUID, List<MetadataStatement>> provide();
+    Map<AAGUID, List<MetadataStatement>> provide();
 }

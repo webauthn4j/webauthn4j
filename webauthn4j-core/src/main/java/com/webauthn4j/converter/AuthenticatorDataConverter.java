@@ -21,6 +21,7 @@ import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAut
 import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
@@ -73,7 +74,7 @@ public class AuthenticatorDataConverter {
     private byte[] convert(AttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(UUIDUtil.convertUUIDToBytes(attestationData.getAaguid()));
+        byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
         byteArrayOutputStream.write(attestationData.getCredentialId());
         byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
@@ -115,7 +116,7 @@ public class AuthenticatorDataConverter {
     private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
         byte[] aaguidBytes = new byte[16];
         byteBuffer.get(aaguidBytes, 0, 16);
-        UUID aaguid = UUIDUtil.fromBytes(aaguidBytes);
+        AAGUID aaguid = new AAGUID(aaguidBytes);
         int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
         byte[] credentialId = new byte[length];
         byteBuffer.get(credentialId, 0, length);

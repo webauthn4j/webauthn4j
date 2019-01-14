@@ -17,6 +17,7 @@
 package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.UUIDUtil;
 
 import java.io.IOException;
@@ -34,18 +35,18 @@ public class JsonFileMetadataStatementProvider implements MetadataStatementProvi
 
     private Registry registry;
     private List<Path> paths = Collections.emptyList();
-    private Map<UUID, List<MetadataStatement>> cachedMetadataStatements;
+    private Map<AAGUID, List<MetadataStatement>> cachedMetadataStatements;
 
     public JsonFileMetadataStatementProvider(Registry registry) {
         this.registry = registry;
     }
 
     @Override
-    public Map<UUID, List<MetadataStatement>> provide() {
+    public Map<AAGUID, List<MetadataStatement>> provide() {
         if(cachedMetadataStatements == null){
             cachedMetadataStatements = paths.stream()
                     .map(this::readJsonFile)
-                    .collect(Collectors.groupingBy(item -> UUIDUtil.fromString(item.getAaguid())));
+                    .collect(Collectors.groupingBy(item -> new AAGUID(item.getAaguid())));
         }
         return cachedMetadataStatements;
     }

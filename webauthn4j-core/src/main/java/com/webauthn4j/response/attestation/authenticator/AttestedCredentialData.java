@@ -25,13 +25,13 @@ import java.util.UUID;
 public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    private final UUID aaguid;
+    private final AAGUID aaguid;
 
     private final byte[] credentialId;
 
     private final CredentialPublicKey credentialPublicKey;
 
-    public AttestedCredentialData(UUID aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
+    public AttestedCredentialData(AAGUID aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
         this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.credentialPublicKey = credentialPublicKey;
@@ -43,7 +43,7 @@ public class AttestedCredentialData implements Serializable {
         this.credentialPublicKey = null;
     }
 
-    public UUID getAaguid() {
+    public AAGUID getAaguid() {
         return aaguid;
     }
 

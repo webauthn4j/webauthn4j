@@ -17,6 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.test.TestUtil;
@@ -38,7 +39,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
     private TrustAnchorResolver trustAnchorResolver = mock(TrustAnchorResolver.class);
     private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorResolver);
-    private UUID aaguid = UUIDUtil.fromBytes(new byte[16]);
+    private AAGUID aaguid = AAGUID.ZERO;
 
     @Test
     public void validate_test() {

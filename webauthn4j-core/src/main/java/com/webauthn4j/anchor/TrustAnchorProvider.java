@@ -16,10 +16,11 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+
 import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public interface TrustAnchorProvider {
 
@@ -29,5 +30,5 @@ public interface TrustAnchorProvider {
      *
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */
-    Map<UUID, Set<TrustAnchor>> provide();
+    Map<AAGUID, Set<TrustAnchor>> provide();
 }

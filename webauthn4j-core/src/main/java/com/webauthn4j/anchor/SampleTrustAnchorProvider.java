@@ -1,5 +1,6 @@
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class SampleTrustAnchorProvider extends CachingTrustAnchorProviderBase {
     }
 
     @Override
-    protected Map<UUID, Set<TrustAnchor>> loadTrustAnchors() {
+    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         Set<TrustAnchor> set = new HashSet<>();
         for(String classPath : classPaths){
             InputStream inputStream = this.getClass().getClassLoader()

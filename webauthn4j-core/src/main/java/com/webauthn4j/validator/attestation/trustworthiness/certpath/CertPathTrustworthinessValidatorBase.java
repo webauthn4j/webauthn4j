@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
@@ -24,14 +25,13 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.UUID;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator{
 
     private boolean isRevocationCheckEnabled = false;
     private boolean fullChainProhibited = false;
 
-    public void validate(UUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
@@ -62,7 +62,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         }
     }
 
-    protected abstract Set<TrustAnchor> resolveTrustAnchors(UUID aaguid);
+    protected abstract Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid);
 
     public boolean isRevocationCheckEnabled() {
         return isRevocationCheckEnabled;

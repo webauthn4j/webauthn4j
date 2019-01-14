@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
@@ -149,7 +150,7 @@ class BeanAssertUtil {
 
     public static void validate(AttestedCredentialData attestedCredentialData) {
 
-        UUID aaGuid = attestedCredentialData.getAaguid();
+        AAGUID aaGuid = attestedCredentialData.getAaguid();
         if (aaGuid == null) {
             throw new ConstraintViolationException("aaGuid must not be null");
         }

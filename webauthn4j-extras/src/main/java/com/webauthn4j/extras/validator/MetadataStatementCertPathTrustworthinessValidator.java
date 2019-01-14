@@ -16,12 +16,17 @@
 
 package com.webauthn4j.extras.validator;
 
+import com.webauthn4j.extras.fido.metadata.statement.AttestationType;
+import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.statement.MetadataStatementResolver;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.security.cert.TrustAnchor;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MetadataStatementCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
@@ -32,13 +37,22 @@ public class MetadataStatementCertPathTrustworthinessValidator extends CertPathT
         this.metadataStatementResolver = metadataStatementResolver;
     }
 
+    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
+        List<MetadataStatement> metadataStatements = metadataStatementResolver.resolve(aaguid);
+        boolean isSurrogate = metadataStatements.stream().flatMap(item -> item.getAttestationTypes().stream()).allMatch( type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
+        if(isSurrogate && attestationStatement.getX5c() != null){
+            throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
+        }
+        super.validate(aaguid, attestationStatement);
+    }
+
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(UUID aaguid) {
+    protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
         return metadataStatementResolver.resolve(aaguid).stream()
-                .flatMap(item ->
-                        item.getAttestationRootCertificates().stream()
-                        .map(certificate -> new TrustAnchor(certificate, null)))
-                        .collect(Collectors.toSet()
+                    .flatMap(metadataStatement ->
+                            metadataStatement.getAttestationRootCertificates().stream()
+                                    .map(certificate -> new TrustAnchor(certificate, null)))
+                    .collect(Collectors.toSet()
                 );
     }
 }

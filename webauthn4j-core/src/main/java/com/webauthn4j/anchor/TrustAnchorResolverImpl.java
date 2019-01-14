@@ -16,6 +16,7 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
 import java.security.cert.TrustAnchor;
@@ -33,13 +34,13 @@ public class TrustAnchorResolverImpl implements TrustAnchorResolver {
      * {@inheritDoc}
      */
     @Override
-    public Set<TrustAnchor> resolve(UUID aaguid) {
+    public Set<TrustAnchor> resolve(AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<UUID, Set<TrustAnchor>> trustAnchors = trustAnchorProvider.provide();
+        Map<AAGUID, Set<TrustAnchor>> trustAnchors = trustAnchorProvider.provide();
 
         HashSet<TrustAnchor> set = new HashSet<>();
-        set.addAll(trustAnchors.getOrDefault(null, Collections.emptySet()));
+        set.addAll(trustAnchors.getOrDefault(AAGUID.NULL, Collections.emptySet()));
         set.addAll(trustAnchors.getOrDefault(aaguid, Collections.emptySet()));
         return set;
     }
