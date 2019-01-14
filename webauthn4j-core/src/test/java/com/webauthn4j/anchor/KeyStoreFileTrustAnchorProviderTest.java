@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,7 +38,7 @@ public class KeyStoreFileTrustAnchorProviderTest {
         target.setKeyStore(path);
         target.setPassword("password");
 
-        Map<byte[], Set<TrustAnchor>> trustAnchors = target.provide();
+        Map<UUID, Set<TrustAnchor>> trustAnchors = target.provide();
         assertThat(trustAnchors).isNotEmpty();
     }
 

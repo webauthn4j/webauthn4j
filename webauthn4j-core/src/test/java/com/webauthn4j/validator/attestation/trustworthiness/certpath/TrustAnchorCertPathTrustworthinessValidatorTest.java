@@ -21,6 +21,7 @@ import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ import java.security.cert.TrustAnchor;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,7 +38,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
     private TrustAnchorResolver trustAnchorResolver = mock(TrustAnchorResolver.class);
     private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorResolver);
-    private byte[] aaguid = new byte[16];
+    private UUID aaguid = UUIDUtil.fromBytes(new byte[16]);
 
     @Test
     public void validate_test() {

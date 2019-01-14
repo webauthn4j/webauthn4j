@@ -22,10 +22,12 @@ import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.util.UUIDUtil;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -45,13 +47,13 @@ public class AuthenticatorDataSerializerTest {
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
         AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey();
 
-        byte[] aaGuid = new byte[16];
+        UUID aaguid = UUIDUtil.fromBytes(new byte[16]);
 
         byte[] rpIdHash = new byte[32];
         byte flags = (byte) (BIT_UP | BIT_AT);
         long counter = 325;
 
-        AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
         AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, counter, attestationData);
 
         //Given
@@ -66,7 +68,7 @@ public class AuthenticatorDataSerializerTest {
         assertThat(deserialized.getFlags()).isEqualTo(flags);
         assertThat(deserialized.getSignCount()).isEqualTo(counter);
         assertThat(deserialized.getAttestedCredentialData()).isNotNull();
-        assertThat(deserialized.getAttestedCredentialData().getAaguid()).isEqualTo(aaGuid);
+        assertThat(deserialized.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid);
         assertThat(deserialized.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId);
         assertThat(deserialized.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
         assertThat(deserialized.getExtensions().isEmpty()).isTrue();

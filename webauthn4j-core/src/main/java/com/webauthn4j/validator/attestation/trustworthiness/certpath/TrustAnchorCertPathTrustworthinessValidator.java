@@ -22,6 +22,7 @@ import com.webauthn4j.util.AssertUtil;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness based on {@link TrustAnchor}
@@ -36,7 +37,7 @@ public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustwo
     }
 
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(byte[] aaguid) {
+    protected Set<TrustAnchor> resolveTrustAnchors(UUID aaguid) {
         return trustAnchorResolver.resolve(aaguid);
     }
 }

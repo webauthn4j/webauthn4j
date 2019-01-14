@@ -30,10 +30,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @WIP
 public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvider {
@@ -49,7 +46,7 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     }
 
     @Override
-    public Map<byte[], List<MetadataStatement>> provide() {
+    public Map<UUID, List<MetadataStatement>> provide() {
         MetadataTOCPayload toc = fidoMDSClient.retrieveMetadataTOC();
         throw new NotImplementedException();
     }

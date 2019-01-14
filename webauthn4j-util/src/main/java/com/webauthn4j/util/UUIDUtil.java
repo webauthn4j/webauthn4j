@@ -32,4 +32,11 @@ public class UUIDUtil {
         long lo = uuid.getLeastSignificantBits();
         return ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
     }
+
+    public static UUID fromBytes(byte[] bytes) {
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        long hi = bb.getLong();
+        long lo = bb.getLong();
+        return new UUID(hi, lo);
+    }
 }

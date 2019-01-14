@@ -24,7 +24,6 @@ import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
@@ -36,15 +35,14 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.RegistrationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
@@ -61,7 +59,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 @WIP
 public class WebAuthnModelAuthenticator {
 
-    byte[] aaGuid;
+    UUID aaguid;
     private PrivateKey attestationPrivateKey;
     private AttestationCertificatePath attestationCertificatePath;
     private boolean capableOfUserVerification;
@@ -71,11 +69,11 @@ public class WebAuthnModelAuthenticator {
 
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(new Registry()); // TODO: inject registry from constructor
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, byte[] aaGuid, int counter) {
+    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, UUID aaguid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;
         this.attestationCertificatePath = attestationCertificatePath;
         this.capableOfUserVerification = capableOfUserVerification;
-        this.aaGuid = aaGuid;
+        this.aaguid = aaguid;
         this.counter = counter;
         this.credentialMap = new HashMap<>();
     }
@@ -85,7 +83,7 @@ public class WebAuthnModelAuthenticator {
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
                 TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH,
                 true,
-                new byte[16],
+                UUIDUtil.fromBytes(new byte[16]),
                 0
         );
     }
@@ -257,7 +255,7 @@ public class WebAuthnModelAuthenticator {
         if (userVerification) flag |= BIT_UV;
         if (!processedExtensions.isEmpty()) flag |= BIT_ED;
 
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.

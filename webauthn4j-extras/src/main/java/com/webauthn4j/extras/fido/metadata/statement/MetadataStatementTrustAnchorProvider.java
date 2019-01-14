@@ -22,6 +22,7 @@ import java.security.cert.TrustAnchor;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,8 +35,8 @@ public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider
     }
 
     @Override
-    public Map<byte[], Set<TrustAnchor>> provide() {
-        Map<byte[], List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
+    public Map<UUID, Set<TrustAnchor>> provide() {
+        Map<UUID, List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
 
         return metadataStatements.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, item -> item.getValue().stream().flatMap(this::extractTrustAnchors).collect(Collectors.toSet())));

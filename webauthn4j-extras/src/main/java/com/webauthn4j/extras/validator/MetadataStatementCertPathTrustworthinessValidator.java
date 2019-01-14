@@ -21,6 +21,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTru
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class MetadataStatementCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
@@ -32,7 +33,7 @@ public class MetadataStatementCertPathTrustworthinessValidator extends CertPathT
     }
 
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(byte[] aaguid) {
+    protected Set<TrustAnchor> resolveTrustAnchors(UUID aaguid) {
         return metadataStatementResolver.resolve(aaguid).stream()
                 .flatMap(item ->
                         item.getAttestationRootCertificates().stream()

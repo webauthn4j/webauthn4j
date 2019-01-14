@@ -27,24 +27,25 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class JsonFileMetadataStatementProvider implements MetadataStatementProvider {
 
     private Registry registry;
     private List<Path> paths = Collections.emptyList();
-    private Map<byte[], List<MetadataStatement>> cachedMetadataStatements;
+    private Map<UUID, List<MetadataStatement>> cachedMetadataStatements;
 
     public JsonFileMetadataStatementProvider(Registry registry) {
         this.registry = registry;
     }
 
     @Override
-    public Map<byte[], List<MetadataStatement>> provide() {
+    public Map<UUID, List<MetadataStatement>> provide() {
         if(cachedMetadataStatements == null){
             cachedMetadataStatements = paths.stream()
                     .map(this::readJsonFile)
-                    .collect(Collectors.groupingBy(item -> UUIDUtil.convertUUIDToBytes(UUIDUtil.fromString(item.getAaguid()))));
+                    .collect(Collectors.groupingBy(item -> UUIDUtil.fromString(item.getAaguid())));
         }
         return cachedMetadataStatements;
     }

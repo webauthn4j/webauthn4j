@@ -19,15 +19,9 @@ package com.webauthn4j.anchor;
 import com.webauthn4j.util.AssertUtil;
 
 import java.security.cert.TrustAnchor;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TrustAnchorResolverImpl implements TrustAnchorResolver {
-
-    @SuppressWarnings("MismatchedReadAndWriteOfArray")
-    private static final byte[] ZERO_AAGUID = new byte[16];
 
     private TrustAnchorProvider trustAnchorProvider;
 
@@ -39,10 +33,10 @@ public class TrustAnchorResolverImpl implements TrustAnchorResolver {
      * {@inheritDoc}
      */
     @Override
-    public Set<TrustAnchor> resolve(byte[] aaguid) {
+    public Set<TrustAnchor> resolve(UUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<byte[], Set<TrustAnchor>> trustAnchors = trustAnchorProvider.provide();
+        Map<UUID, Set<TrustAnchor>> trustAnchors = trustAnchorProvider.provide();
 
         HashSet<TrustAnchor> set = new HashSet<>();
         set.addAll(trustAnchors.getOrDefault(null, Collections.emptySet()));

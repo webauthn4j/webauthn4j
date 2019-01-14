@@ -17,18 +17,21 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.UUID;
 
 public class AttestedCredentialData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    private final byte[] aaguid;
+    private final UUID aaguid;
 
     private final byte[] credentialId;
 
     private final CredentialPublicKey credentialPublicKey;
 
-    public AttestedCredentialData(byte[] aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
+    public AttestedCredentialData(UUID aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
         this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.credentialPublicKey = credentialPublicKey;
@@ -40,7 +43,7 @@ public class AttestedCredentialData implements Serializable {
         this.credentialPublicKey = null;
     }
 
-    public byte[] getAaguid() {
+    public UUID getAaguid() {
         return aaguid;
     }
 
@@ -52,30 +55,21 @@ public class AttestedCredentialData implements Serializable {
         return credentialPublicKey;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AttestedCredentialData)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         AttestedCredentialData that = (AttestedCredentialData) o;
-
-        if (!Arrays.equals(aaguid, that.aaguid)) return false;
-        //noinspection SimplifiableIfStatement
-        if (!Arrays.equals(credentialId, that.credentialId)) return false;
-        return credentialPublicKey != null ? credentialPublicKey.equals(that.credentialPublicKey) : that.credentialPublicKey == null;
+        return Objects.equals(aaguid, that.aaguid) &&
+                Arrays.equals(credentialId, that.credentialId) &&
+                Objects.equals(credentialPublicKey, that.credentialPublicKey);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(aaguid);
+
+        int result = Objects.hash(aaguid, credentialPublicKey);
         result = 31 * result + Arrays.hashCode(credentialId);
-        result = 31 * result + (credentialPublicKey != null ? credentialPublicKey.hashCode() : 0);
         return result;
     }
 }

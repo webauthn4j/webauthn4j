@@ -18,8 +18,9 @@ package com.webauthn4j.extras.fido.metadata.statement;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface MetadataStatementProvider {
 
-    Map<byte[], List<MetadataStatement>> provide();
+    Map<UUID, List<MetadataStatement>> provide();
 }

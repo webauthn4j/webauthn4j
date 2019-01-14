@@ -33,6 +33,8 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
+import java.util.UUID;
+
 /**
  * Per field checker utility class
  */
@@ -147,12 +149,9 @@ class BeanAssertUtil {
 
     public static void validate(AttestedCredentialData attestedCredentialData) {
 
-        byte[] aaGuid = attestedCredentialData.getAaguid();
+        UUID aaGuid = attestedCredentialData.getAaguid();
         if (aaGuid == null) {
             throw new ConstraintViolationException("aaGuid must not be null");
-        }
-        if (aaGuid.length != 16) {
-            throw new ConstraintViolationException("aaGuid must not be 16 bytes length");
         }
 
         if (attestedCredentialData.getCredentialId() == null) {

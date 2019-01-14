@@ -18,7 +18,7 @@ public class SampleTrustAnchorProvider extends CachingTrustAnchorProviderBase {
     }
 
     @Override
-    protected Map<byte[], Set<TrustAnchor>> loadTrustAnchors() {
+    protected Map<UUID, Set<TrustAnchor>> loadTrustAnchors() {
         Set<TrustAnchor> set = new HashSet<>();
         for(String classPath : classPaths){
             InputStream inputStream = this.getClass().getClassLoader()

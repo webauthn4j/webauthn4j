@@ -23,6 +23,7 @@ import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
+import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
@@ -34,6 +35,8 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Validates the specified {@link AttestationStatement} is a valid packed attestation
@@ -66,9 +69,10 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
             // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
             // the value of this extension matches the aaguid in authenticatorData.
-            byte[] aaguidInCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
-            byte[] aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if (aaguidInCertificate != null && !Arrays.equals(aaguidInCertificate, aaguid)) {
+            byte[] aaguidInCertificateBytes = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
+            UUID aaguidInCertificate = aaguidInCertificateBytes == null ? null : UUIDUtil.fromBytes(aaguidInCertificateBytes);
+            UUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
+            if (aaguidInCertificate != null && !Objects.equals(aaguidInCertificate, aaguid)) {
                 throw new BadAttestationStatementException("Bad aaguid");
             }
 

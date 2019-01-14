@@ -16,6 +16,7 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.util.UUIDUtil;
 import org.junit.Test;
 
 import java.security.cert.TrustAnchor;
@@ -29,8 +30,8 @@ public class TrustAnchorResolverImplTest {
     public void test(){
         TrustAnchorResolverImpl target = new TrustAnchorResolverImpl(new SampleTrustAnchorProvider());
 
-        Set<TrustAnchor> trustAnchorsA = target.resolve(new byte[16]);
-        Set<TrustAnchor> trustAnchorsB = target.resolve(new byte[16]);
+        Set<TrustAnchor> trustAnchorsA = target.resolve(UUIDUtil.fromBytes(new byte[16]));
+        Set<TrustAnchor> trustAnchorsB = target.resolve(UUIDUtil.fromBytes(new byte[16]));
         assertThat(trustAnchorsA).isEqualTo(trustAnchorsB);
     }
 

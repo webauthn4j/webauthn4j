@@ -36,11 +36,13 @@ import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.UUIDUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -71,7 +73,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
 
-        byte[] aaGuid = new byte[16]; // zero-filled 16bytes(128bits) array
+        UUID aaGuid = UUIDUtil.fromBytes(new byte[16]); // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =
                 new AttestedCredentialData(aaGuid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
 

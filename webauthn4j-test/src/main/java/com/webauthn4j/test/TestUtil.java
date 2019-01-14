@@ -148,7 +148,7 @@ public class TestUtil {
     }
 
     public static AttestedCredentialData createAttestedCredentialData(CredentialPublicKey credentialPublicKey) {
-        return new AttestedCredentialData(new byte[16], new byte[32], credentialPublicKey);
+        return new AttestedCredentialData(UUIDUtil.fromBytes(new byte[16]), new byte[32], credentialPublicKey);
     }
 
     public static EC2CredentialPublicKey createECCredentialPublicKey() {

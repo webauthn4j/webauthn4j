@@ -24,13 +24,14 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.UUID;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator{
 
     private boolean isRevocationCheckEnabled = false;
     private boolean fullChainProhibited = false;
 
-    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(UUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
@@ -61,7 +62,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         }
     }
 
-    protected abstract Set<TrustAnchor> resolveTrustAnchors(byte[] aaguid);
+    protected abstract Set<TrustAnchor> resolveTrustAnchors(UUID aaguid);
 
     public boolean isRevocationCheckEnabled() {
         return isRevocationCheckEnabled;

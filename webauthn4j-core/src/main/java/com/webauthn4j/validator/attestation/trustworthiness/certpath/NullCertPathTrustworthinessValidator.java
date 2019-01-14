@@ -18,12 +18,14 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 
+import java.util.UUID;
+
 /**
  * Null validator that bypass x5c trustworthiness check
  */
 public class NullCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
     @Override
-    public void validate(byte[] aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(UUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         // nop
     }
 }

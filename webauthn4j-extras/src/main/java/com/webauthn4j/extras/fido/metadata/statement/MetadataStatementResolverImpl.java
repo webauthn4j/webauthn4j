@@ -18,7 +18,6 @@ package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.util.AssertUtil;
 
-import java.security.cert.TrustAnchor;
 import java.util.*;
 
 public class MetadataStatementResolverImpl implements MetadataStatementResolver {
@@ -30,10 +29,10 @@ public class MetadataStatementResolverImpl implements MetadataStatementResolver 
     }
 
     @Override
-    public List<MetadataStatement> resolve(byte[] aaguid) {
+    public List<MetadataStatement> resolve(UUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<byte[], List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
+        Map<UUID, List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
 
         ArrayList<MetadataStatement> list = new ArrayList<>();
         list.addAll(metadataStatements.getOrDefault(null, Collections.emptyList()));

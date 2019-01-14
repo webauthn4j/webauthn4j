@@ -25,11 +25,13 @@ import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.util.UUID;
 
 /**
  * Converter for {@link AuthenticatorData}
@@ -71,7 +73,7 @@ public class AuthenticatorDataConverter {
     private byte[] convert(AttestedCredentialData attestationData) throws IOException {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(attestationData.getAaguid());
+        byteArrayOutputStream.write(UUIDUtil.convertUUIDToBytes(attestationData.getAaguid()));
         byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
         byteArrayOutputStream.write(attestationData.getCredentialId());
         byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
@@ -111,8 +113,9 @@ public class AuthenticatorDataConverter {
     }
 
     private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
-        byte[] aaGuid = new byte[16];
-        byteBuffer.get(aaGuid, 0, 16);
+        byte[] aaguidBytes = new byte[16];
+        byteBuffer.get(aaguidBytes, 0, 16);
+        UUID aaguid = UUIDUtil.fromBytes(aaguidBytes);
         int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
         byte[] credentialId = new byte[length];
         byteBuffer.get(credentialId, 0, length);
@@ -121,7 +124,7 @@ public class AuthenticatorDataConverter {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
         CredentialPublicKey credentialPublicKey = credentialPublicKeyEnvelope.getCredentialPublicKey();
-        AttestedCredentialData attestationData = new AttestedCredentialData(aaGuid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
         int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
         return attestationData;
