@@ -39,7 +39,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
      * Default constructor for Jackson deserialization
      */
     public AndroidSafetyNetAttestationStatement() {
-
+        //nop
     }
 
     @Override

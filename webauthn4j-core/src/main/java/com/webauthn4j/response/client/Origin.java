@@ -31,6 +31,7 @@ public class Origin implements Serializable {
 
     private static final String SCHEME_HTTPS = "https";
     private static final String SCHEME_HTTP = "http";
+    private static final String SCHEME_ERROR_MESSAGE = "scheme must be 'http' or 'https'";
 
     private String scheme;
     private String host;
@@ -38,7 +39,7 @@ public class Origin implements Serializable {
 
     public Origin(String scheme, String host, int port) {
         if (!Objects.equals(SCHEME_HTTPS, scheme) && !Objects.equals(SCHEME_HTTP, scheme)) {
-            throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+            throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
         }
 
         this.scheme = scheme;
@@ -54,7 +55,7 @@ public class Origin implements Serializable {
 
         if (originPort == -1) {
             if (this.scheme == null) {
-                throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+                throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
             }
             switch (this.scheme) {
                 case SCHEME_HTTPS:
@@ -64,7 +65,7 @@ public class Origin implements Serializable {
                     originPort = 80;
                     break;
                 default:
-                    throw new IllegalArgumentException("scheme must be 'http' or 'https'");
+                    throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
             }
         }
         this.port = originPort;

@@ -18,10 +18,11 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.util.UUIDUtil;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AAGUID {
+public class AAGUID implements Serializable {
 
     public static final AAGUID ZERO = new AAGUID(new byte[16]);
     public static final AAGUID NULL = new AAGUID((UUID) null);
