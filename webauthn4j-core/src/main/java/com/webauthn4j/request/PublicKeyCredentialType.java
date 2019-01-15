@@ -38,11 +38,10 @@ public enum PublicKeyCredentialType {
         if (value == null) {
             return null;
         }
-        switch (value) {
-            case "public-key":
-                return PUBLIC_KEY;
-            default:
-                throw new InvalidFormatException(null, "value is out of range", value, PublicKeyCredentialType.class);
+        if ("public-key".equals(value)) {
+            return PUBLIC_KEY;
+        } else {
+            throw new InvalidFormatException(null, "value is out of range", value, PublicKeyCredentialType.class);
         }
     }
 
