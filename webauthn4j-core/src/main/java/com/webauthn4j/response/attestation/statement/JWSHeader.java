@@ -28,7 +28,7 @@ public class JWSHeader implements Serializable {
     @JsonProperty
     private AttestationCertificatePath x5c;
 
-    public JWSHeader(){
+    public JWSHeader() {
         //nop
     }
 

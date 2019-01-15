@@ -29,7 +29,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputsConverter(Registry registry){
+    public AuthenticationExtensionsClientInputsConverter(Registry registry) {
         jsonConverter = new JsonConverter(registry.getJsonMapper());
     }
 

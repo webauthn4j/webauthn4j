@@ -110,13 +110,13 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
-                    registrationRequest.getClientDataJSON(),
-                    registrationRequest.getAttestationObject(),
-                    clientExtensionJSON,
-                    serverProperty,
-                    false,
-                    Collections.emptyList()
-                );
+                registrationRequest.getClientDataJSON(),
+                registrationRequest.getAttestationObject(),
+                clientExtensionJSON,
+                serverProperty,
+                false,
+                Collections.emptyList()
+        );
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 
@@ -194,16 +194,16 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
-                    new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                    publicKeyCredentialUserEntity,
-                    challenge,
-                    Collections.singletonList(publicKeyCredentialParameters),
-                    null,
-                    Collections.emptyList(),
-                    authenticatorSelectionCriteria,
-                    AttestationConveyancePreference.NONE,
-                    extensions
-                );
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                publicKeyCredentialUserEntity,
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.NONE,
+                extensions
+        );
 
         PublicKeyCredential<AuthenticatorAttestationResponse> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();

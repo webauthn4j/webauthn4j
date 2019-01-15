@@ -33,7 +33,7 @@ public enum AttestationConveyancePreference {
 
     @JsonCreator
     public static AttestationConveyancePreference create(String value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

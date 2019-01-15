@@ -17,13 +17,13 @@
 <releaseinfo>{revnumber}</releaseinfo>
 <productname>WebAuthn4J</productname>
 <authorgroup>
-    <author>
-        <firstname>Yoshikazu</firstname>
-        <surname>Nojima</surname>
-    </author>
+<author>
+    <firstname>Yoshikazu</firstname>
+    <surname>Nojima</surname>
+</author>
 </authorgroup>
 
 <copyright>
-    <year>2018</year>
-    <holder>Yoshikazu Nojima</holder>
+<year>2018</year>
+<holder>Yoshikazu Nojima</holder>
 </copyright>

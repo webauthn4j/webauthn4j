@@ -22,7 +22,7 @@ include 'webauthn4j-util'
 rootProject.name = 'webauthn4j'
 
 rootProject.children.each { project ->
-	if(!project.name.startsWith("webauthn4j")){
-		project.name = "spring-security-webauthn-${project.name}"
-	}
+    if (!project.name.startsWith("webauthn4j")) {
+        project.name = "spring-security-webauthn-${project.name}"
+    }
 }

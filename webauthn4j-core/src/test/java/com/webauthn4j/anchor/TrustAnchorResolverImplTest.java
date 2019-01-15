@@ -17,7 +17,6 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.util.UUIDUtil;
 import org.junit.Test;
 
 import java.security.cert.TrustAnchor;
@@ -28,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TrustAnchorResolverImplTest {
 
     @Test
-    public void test(){
+    public void test() {
         TrustAnchorResolverImpl target = new TrustAnchorResolverImpl(new SampleTrustAnchorProvider());
 
         Set<TrustAnchor> trustAnchorsA = target.resolve(AAGUID.ZERO);

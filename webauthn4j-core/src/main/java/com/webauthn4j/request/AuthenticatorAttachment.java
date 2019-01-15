@@ -32,7 +32,7 @@ public enum AuthenticatorAttachment {
 
     @JsonCreator
     public static AuthenticatorAttachment create(String value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

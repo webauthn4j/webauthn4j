@@ -35,7 +35,7 @@ public enum PublicKeyCredentialType {
 
     @JsonCreator
     public static PublicKeyCredentialType create(String value) throws MismatchedInputException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

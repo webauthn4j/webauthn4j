@@ -57,13 +57,13 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         RSACredentialPublicKey target = TestUtil.createRSCredentialPublicKey();
         target.validate();
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_null_algorithm_test(){
+    public void validate_with_null_algorithm_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
@@ -77,7 +77,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_null_n_test(){
+    public void validate_with_null_n_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
@@ -91,7 +91,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_null_e_test(){
+    public void validate_with_null_e_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,

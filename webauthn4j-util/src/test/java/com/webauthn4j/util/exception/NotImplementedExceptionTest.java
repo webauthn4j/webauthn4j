@@ -21,7 +21,7 @@ import org.junit.Test;
 public class NotImplementedExceptionTest {
 
     @Test(expected = NotImplementedException.class)
-    public void constructor_test(){
+    public void constructor_test() {
         throw new NotImplementedException();
     }
 }

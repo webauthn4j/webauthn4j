@@ -26,13 +26,13 @@ import java.security.spec.*;
  */
 public class ECUtil {
 
-    private ECUtil(){}
-
     public static final ECParameterSpec P_256_SPEC = createECParameterSpec("secp256r1");
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
     public static final ECParameterSpec P_521_SPEC = createECParameterSpec("secp521r1");
+    private ECUtil() {
+    }
 
-    public static PublicKey createPublicKey(ECPublicKeySpec ecPublicKeySpec){
+    public static PublicKey createPublicKey(ECPublicKeySpec ecPublicKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("EC");
             return factory.generatePublic(ecPublicKeySpec);
@@ -41,7 +41,7 @@ public class ECUtil {
         }
     }
 
-    private static ECParameterSpec createECParameterSpec(String name){
+    private static ECParameterSpec createECParameterSpec(String name) {
         try {
             AlgorithmParameters parameters;
             parameters = AlgorithmParameters.getInstance("EC", "SunEC");

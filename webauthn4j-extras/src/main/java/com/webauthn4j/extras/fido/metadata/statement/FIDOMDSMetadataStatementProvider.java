@@ -31,16 +31,18 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @WIP
 public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvider {
 
-    private FIDOMDSClient fidoMDSClient;
-
     Map<TrustAnchor, Metadata> cachedMetadataMap;
     LocalDate nextUpdate;
     LocalDateTime lastRefresh;
+    private FIDOMDSClient fidoMDSClient;
 
     public FIDOMDSMetadataStatementProvider(FIDOMDSClient fidoMDSClient) {
         this.fidoMDSClient = fidoMDSClient;

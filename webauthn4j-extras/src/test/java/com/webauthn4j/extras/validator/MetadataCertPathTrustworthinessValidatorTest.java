@@ -18,8 +18,6 @@ package com.webauthn4j.extras.validator;
 
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 /**
  * Created by ynojima on 2017/09/24.
  */
@@ -28,7 +26,8 @@ public class MetadataCertPathTrustworthinessValidatorTest {
     public MetadataCertPathTrustworthinessValidator target = new MetadataCertPathTrustworthinessValidator(null);
 
     @Test
-    public void test(){}
+    public void test() {
+    }
 
 
 }

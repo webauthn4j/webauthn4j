@@ -35,7 +35,7 @@ public class CredentialPublicKeyEnvelopeDeserializer extends StdDeserializer<Cre
     @Override
     public CredentialPublicKeyEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         CredentialPublicKey credentialPublicKey = ctxt.readValue(p, CredentialPublicKey.class);
-        int length = (int)p.getCurrentLocation().getByteOffset();
+        int length = (int) p.getCurrentLocation().getByteOffset();
         return new CredentialPublicKeyEnvelope(credentialPublicKey, length);
     }
 }

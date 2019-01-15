@@ -23,7 +23,7 @@ import java.util.List;
 
 public class SupportedExtensionsExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<List<String>>
-        implements RegistrationExtensionAuthenticatorOutput<List<String>>{
+        implements RegistrationExtensionAuthenticatorOutput<List<String>> {
 
     public static final String ID = "exts";
 

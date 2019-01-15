@@ -27,12 +27,12 @@ public class AuthenticationExtensionsClientInputsConverterTest {
     private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(new Registry());
 
     @Test
-    public void convertToString_test(){
+    public void convertToString_test() {
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(null)).isNull();
     }
 
     @Test
-    public void convert_test(){
+    public void convert_test() {
         String source = "{\"appid\":\"\"}";
         AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
     }

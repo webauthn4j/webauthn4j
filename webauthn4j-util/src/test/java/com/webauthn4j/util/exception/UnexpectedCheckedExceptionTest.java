@@ -21,7 +21,7 @@ import org.junit.Test;
 public class UnexpectedCheckedExceptionTest {
 
     @Test(expected = UnexpectedCheckedException.class)
-    public void constructor_test(){
+    public void constructor_test() {
         throw new UnexpectedCheckedException(new Exception());
     }
 }

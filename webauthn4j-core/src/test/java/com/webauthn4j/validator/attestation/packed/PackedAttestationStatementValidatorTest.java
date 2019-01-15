@@ -1,5 +1,9 @@
 package com.webauthn4j.validator.attestation.packed;
 
+import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
@@ -10,10 +14,6 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -44,6 +44,40 @@ public class PackedAttestationStatementValidatorTest {
     private String rpId = "localhost";
     private String challengeString = "KG8gySc5IaMvPQOWJz93R4OQQb3mdGjQwkQ89_HPe-E";
     private byte[] tokenBindingId = null;
+
+    private static AttestationCertificatePath generateCertPath(KeyPair pair, String signAlgo) {
+        try {
+
+
+            X500Name owner = new X500Name("C=ORG, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
+
+            Date from = new Date();
+            Date to = new Date(from.getTime() + TimeUnit.DAYS.toMillis(1));
+            CertificateValidity interval = new CertificateValidity(from, to);
+            BigInteger sn = new BigInteger(64, new SecureRandom());
+
+            X509CertInfo info = new X509CertInfo();
+            info.set(X509CertInfo.VALIDITY, interval);
+            info.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(sn));
+            info.set(X509CertInfo.SUBJECT, owner);
+            info.set(X509CertInfo.ISSUER, owner);
+            info.set(X509CertInfo.KEY, new CertificateX509Key(pair.getPublic()));
+            info.set(X509CertInfo.VERSION, new CertificateVersion(CertificateVersion.V3));
+            AlgorithmId algo = new AlgorithmId(AlgorithmId.md5WithRSAEncryption_oid);
+            info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(algo));
+
+            // Sign the cert to identify the algorithm that's used.
+            X509CertImpl x509 = new X509CertImpl(info);
+            x509.sign(pair.getPrivate(), signAlgo);
+
+
+            return new AttestationCertificatePath(Collections.singletonList(x509));
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
+
+
+    }
 
     @Test
     public void validate_with_ECx5c_test() {
@@ -78,7 +112,6 @@ public class PackedAttestationStatementValidatorTest {
         validate(clientData, attestationObject);
     }
 
-
     @Test
     public void validate_with_RSASelfAttestation_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
@@ -104,7 +137,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test(expected = UnsupportedAttestationFormatException.class)
-    public void validate_with_invalid_AttestationStatement_test(){
+    public void validate_with_invalid_AttestationStatement_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         validate(clientData, attestationObject);
@@ -151,39 +184,5 @@ public class PackedAttestationStatementValidatorTest {
         sig.initSign(keyPair.getPrivate());
         sig.update(signedData);
         return sig.sign();
-    }
-
-    private static AttestationCertificatePath generateCertPath(KeyPair pair, String signAlgo) {
-        try {
-
-
-            X500Name owner = new X500Name("C=ORG, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
-
-            Date from = new Date();
-            Date to = new Date(from.getTime() + TimeUnit.DAYS.toMillis(1));
-            CertificateValidity interval = new CertificateValidity(from, to);
-            BigInteger sn = new BigInteger(64, new SecureRandom());
-
-            X509CertInfo info = new X509CertInfo();
-            info.set(X509CertInfo.VALIDITY, interval);
-            info.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(sn));
-            info.set(X509CertInfo.SUBJECT, owner);
-            info.set(X509CertInfo.ISSUER, owner);
-            info.set(X509CertInfo.KEY, new CertificateX509Key(pair.getPublic()));
-            info.set(X509CertInfo.VERSION, new CertificateVersion(CertificateVersion.V3));
-            AlgorithmId algo = new AlgorithmId(AlgorithmId.md5WithRSAEncryption_oid);
-            info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(algo));
-
-            // Sign the cert to identify the algorithm that's used.
-            X509CertImpl x509 = new X509CertImpl(info);
-            x509.sign(pair.getPrivate(), signAlgo);
-
-
-            return new AttestationCertificatePath(Collections.singletonList(x509));
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
-
-
     }
 }

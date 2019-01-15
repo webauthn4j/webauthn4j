@@ -16,7 +16,6 @@
 
 package com.webauthn4j.response.client.challenge;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 

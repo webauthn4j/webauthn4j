@@ -21,7 +21,7 @@ import com.webauthn4j.response.extension.AbstractExtensionOutput;
 
 public class SimpleTransactionAuthorizationExtensionClientOutput
         extends AbstractExtensionOutput<String>
-        implements AuthenticationExtensionClientOutput<String>{
+        implements AuthenticationExtensionClientOutput<String> {
 
     public static final String ID = "txAuthSimple";
 

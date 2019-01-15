@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CollectedClientDataTest {
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         Challenge challenge = TestUtil.createChallenge();
         CollectedClientData collectedClientDataA = TestUtil.createClientData(ClientDataType.GET, challenge);
         CollectedClientData collectedClientDataB = TestUtil.createClientData(ClientDataType.GET, challenge);

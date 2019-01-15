@@ -18,7 +18,6 @@ package com.webauthn4j.extras.fido.metadata.statement;
 
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.util.UUIDUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +27,6 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class JsonFileMetadataStatementProvider implements MetadataStatementProvider {
@@ -43,17 +41,17 @@ public class JsonFileMetadataStatementProvider implements MetadataStatementProvi
 
     @Override
     public Map<AAGUID, List<MetadataStatement>> provide() {
-        if(cachedMetadataStatements == null){
+        if (cachedMetadataStatements == null) {
             cachedMetadataStatements =
                     paths.stream()
-                    .map(this::readJsonFile)
-                    .collect(Collectors.groupingBy(this::extractAAGUID));
+                            .map(this::readJsonFile)
+                            .collect(Collectors.groupingBy(this::extractAAGUID));
         }
         return cachedMetadataStatements;
     }
 
-    private AAGUID extractAAGUID(MetadataStatement metadataStatement){
-        switch (metadataStatement.getProtocolFamily()){
+    private AAGUID extractAAGUID(MetadataStatement metadataStatement) {
+        switch (metadataStatement.getProtocolFamily()) {
             case "fido2":
                 return new AAGUID(metadataStatement.getAaguid());
             case "u2f":
@@ -64,10 +62,10 @@ public class JsonFileMetadataStatementProvider implements MetadataStatementProvi
         }
     }
 
-    MetadataStatement readJsonFile(Path path){
-        try(InputStream inputStream = Files.newInputStream(path)){
+    MetadataStatement readJsonFile(Path path) {
+        try (InputStream inputStream = Files.newInputStream(path)) {
             return registry.getJsonMapper().readValue(inputStream, MetadataStatement.class);
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException("Failed to load a metadata statement json file", e);
         }
     }

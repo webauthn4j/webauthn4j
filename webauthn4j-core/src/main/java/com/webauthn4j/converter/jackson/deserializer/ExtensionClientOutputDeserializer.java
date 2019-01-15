@@ -46,7 +46,7 @@ public class ExtensionClientOutputDeserializer extends StdDeserializer<Extension
     public ExtensionClientOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         String name = p.getParsingContext().getCurrentName();
-        if(name == null){
+        if (name == null) {
             name = p.getParsingContext().getParent().getCurrentName();
         }
 
@@ -54,9 +54,9 @@ public class ExtensionClientOutputDeserializer extends StdDeserializer<Extension
         AnnotatedClass annotatedClass = AnnotatedClassResolver.resolveWithoutSuperTypes(config, ExtensionClientOutput.class);
         Collection<NamedType> namedTypes = config.getSubtypeResolver().collectAndResolveSubtypesByClass(config, annotatedClass);
 
-        for (NamedType namedType : namedTypes){
-            if(Objects.equals(namedType.getName(), name)){
-                return (ExtensionClientOutput)ctxt.readValue(p, namedType.getType());
+        for (NamedType namedType : namedTypes) {
+            if (Objects.equals(namedType.getName(), name)) {
+                return (ExtensionClientOutput) ctxt.readValue(p, namedType.getType());
             }
         }
 

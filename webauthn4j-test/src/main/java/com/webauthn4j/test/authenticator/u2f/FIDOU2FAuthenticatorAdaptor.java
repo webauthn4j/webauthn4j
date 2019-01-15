@@ -37,13 +37,11 @@ import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.UUIDUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;

@@ -30,7 +30,8 @@ public class PublicKeyCredentialParameters implements Serializable {
         this.alg = alg;
     }
 
-    public PublicKeyCredentialParameters(){}
+    public PublicKeyCredentialParameters() {
+    }
 
     public PublicKeyCredentialType getType() {
         return type;

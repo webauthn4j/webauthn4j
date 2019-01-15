@@ -33,7 +33,7 @@ public enum AuthenticatorTransport {
 
     @JsonCreator
     public static AuthenticatorTransport create(String value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

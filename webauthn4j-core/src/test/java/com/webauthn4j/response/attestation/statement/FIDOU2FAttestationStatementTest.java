@@ -87,26 +87,26 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         FIDOU2FAttestationStatement instance = TestUtil.createFIDOU2FAttestationStatement();
         instance.validate();
     }
 
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_null_x5c_test(){
+    public void validate_with_null_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(null, new byte[0]);
         instance.validate();
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_empty_x5c_test(){
+    public void validate_with_empty_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
         instance.validate();
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_two_certificates_x5c_test(){
+    public void validate_with_two_certificates_x5c_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         new AttestationCertificatePath(Arrays.asList(mock(X509Certificate.class), mock(X509Certificate.class))),
@@ -116,7 +116,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test(expected = ConstraintViolationException.class)
-    public void validate_with_null_signature_test(){
+    public void validate_with_null_signature_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         TestUtil.create2tierTestAuthenticatorCertPath(),

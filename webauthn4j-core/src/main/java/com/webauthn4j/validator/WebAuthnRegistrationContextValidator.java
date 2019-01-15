@@ -184,7 +184,7 @@ public class WebAuthnRegistrationContextValidator {
         BeanAssertUtil.validate(attestationObject);
         BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(authenticationExtensionsClientOutputs);
 
-        if(attestationObject.getAuthenticatorData().getAttestedCredentialData() == null){
+        if (attestationObject.getAuthenticatorData().getAttestedCredentialData() == null) {
             throw new MaliciousDataException("attestedCredentialData must not be null on registration");
         }
 

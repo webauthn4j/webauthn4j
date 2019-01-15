@@ -83,7 +83,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void isWithinUnsignedLong_test(){
+    public void isWithinUnsignedLong_test() {
         assertThat(UnsignedNumberUtil.isWithinUnsignedLong(UnsignedNumberUtil.UNSIGNED_LONG_MAX)).isTrue();
         assertThat(UnsignedNumberUtil.isWithinUnsignedLong(BigInteger.valueOf(0))).isTrue();
         assertThat(UnsignedNumberUtil.isWithinUnsignedLong(new BigInteger("18446744073709551616"))).isFalse();

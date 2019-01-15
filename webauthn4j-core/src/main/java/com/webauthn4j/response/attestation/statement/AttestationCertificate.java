@@ -36,6 +36,14 @@ public class AttestationCertificate {
         this.certificate = certificate;
     }
 
+    static List<Rdn> getX500Name(String subjectDN) {
+        try {
+            return new LdapName(subjectDN).getRdns();
+        } catch (InvalidNameException e) {
+            throw new CertificateException("invalid subjectDN: " + subjectDN);
+        }
+    }
+
     public X509Certificate getCertificate() {
         return certificate;
     }
@@ -83,7 +91,7 @@ public class AttestationCertificate {
         }
     }
 
-    private String getValue(String name){
+    private String getValue(String name) {
         String subjectDN = getCertificate().getSubjectX500Principal().getName();
         return getX500Name(subjectDN)
                 .stream()
@@ -105,13 +113,5 @@ public class AttestationCertificate {
     public int hashCode() {
 
         return Objects.hash(certificate);
-    }
-
-    static List<Rdn> getX500Name(String subjectDN) {
-        try {
-            return new LdapName(subjectDN).getRdns();
-        } catch (InvalidNameException e) {
-            throw new CertificateException("invalid subjectDN: " + subjectDN);
-        }
     }
 }

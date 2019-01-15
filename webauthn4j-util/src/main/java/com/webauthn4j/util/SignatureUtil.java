@@ -30,11 +30,11 @@ public class SignatureUtil {
     private SignatureUtil() {
     }
 
-    public static Signature getRS256(){
+    public static Signature getRS256() {
         return RS256;
     }
 
-    public static Signature getES256(){
+    public static Signature getES256() {
         return ES256;
     }
 

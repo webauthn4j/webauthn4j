@@ -19,7 +19,6 @@ package com.webauthn4j.response.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.request.AuthenticatorAttachment;
 
 public enum ClientDataType {
     CREATE("webauthn.create"),
@@ -27,16 +26,16 @@ public enum ClientDataType {
 
     private String value;
 
-    ClientDataType(String value){
+    ClientDataType(String value) {
         this.value = value;
     }
 
     @JsonCreator
     public static ClientDataType create(String value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
-        switch (value){
+        switch (value) {
             case "webauthn.create":
                 return CREATE;
             case "webauthn.get":

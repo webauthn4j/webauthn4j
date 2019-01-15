@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -28,24 +27,21 @@ public class CborConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T readValue(byte[] src, Class valueType){
+    public <T> T readValue(byte[] src, Class valueType) {
         try {
-            return (T)cborMapper.readValue(src, valueType);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+            return (T) cborMapper.readValue(src, valueType);
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T readValue(InputStream src, Class valueType){
+    public <T> T readValue(InputStream src, Class valueType) {
         try {
-            return (T)cborMapper.readValue(src, valueType);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+            return (T) cborMapper.readValue(src, valueType);
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -55,8 +51,7 @@ public class CborConverter {
     public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -66,30 +61,27 @@ public class CborConverter {
     public AuthenticationExtensionsAuthenticatorOutputs readValue(InputStream inputStream, TypeReference<AuthenticationExtensionsAuthenticatorOutputs> typeReference) {
         try {
             return cborMapper.readValue(inputStream, typeReference);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public JsonNode readTree(byte[] bytes){
+    public JsonNode readTree(byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public byte[] writeValueAsBytes(Object value){
+    public byte[] writeValueAsBytes(Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
     }

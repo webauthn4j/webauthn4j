@@ -25,7 +25,7 @@ import java.io.IOException;
 
 public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope> {
 
-    public AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer(){
+    public AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer() {
         super(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
     }
 
@@ -35,7 +35,7 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
     @Override
     public AuthenticationExtensionsAuthenticatorOutputsEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         AuthenticationExtensionsAuthenticatorOutputs authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, AuthenticationExtensionsAuthenticatorOutputs.class);
-        int length = (int)p.getCurrentLocation().getByteOffset();
+        int length = (int) p.getCurrentLocation().getByteOffset();
         return new AuthenticationExtensionsAuthenticatorOutputsEnvelope(authenticationExtensionsAuthenticatorOutputs, length);
     }
 }

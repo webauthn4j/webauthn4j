@@ -25,9 +25,9 @@ import java.nio.ByteBuffer;
 public class UnsignedNumberUtil {
 
     public static final short UNSIGNED_BYTE_MAX = 0xFF;
-    public static final int  UNSIGNED_SHORT_MAX = 0xFFFF;
-    public static final long  UNSIGNED_INT_MAX  = 0xFFFFFFFFL;
-    public static final BigInteger UNSIGNED_LONG_MAX= new BigInteger("18446744073709551615");
+    public static final int UNSIGNED_SHORT_MAX = 0xFFFF;
+    public static final long UNSIGNED_INT_MAX = 0xFFFFFFFFL;
+    public static final BigInteger UNSIGNED_LONG_MAX = new BigInteger("18446744073709551615");
 
     private UnsignedNumberUtil() {
     }
@@ -56,7 +56,7 @@ public class UnsignedNumberUtil {
         return bytes;
     }
 
-    public static boolean isWithinUnsignedLong(BigInteger value){
+    public static boolean isWithinUnsignedLong(BigInteger value) {
         return value.bitLength() <= 64 && value.compareTo(BigInteger.valueOf(0)) >= 0;
     }
 

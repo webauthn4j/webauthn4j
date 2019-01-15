@@ -47,7 +47,7 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
     /**
      * Default constructor for Jackson deserialization
      */
-    public AndroidKeyAttestationStatement(){
+    public AndroidKeyAttestationStatement() {
 
     }
 

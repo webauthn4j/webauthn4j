@@ -46,7 +46,7 @@ public class ExtensionAuthenticatorOutputDeserializer extends StdDeserializer<Ex
     public ExtensionAuthenticatorOutput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         String name = p.getParsingContext().getCurrentName();
-        if(name == null){
+        if (name == null) {
             name = p.getParsingContext().getParent().getCurrentName();
         }
 
@@ -54,9 +54,9 @@ public class ExtensionAuthenticatorOutputDeserializer extends StdDeserializer<Ex
         AnnotatedClass annotatedClass = AnnotatedClassResolver.resolveWithoutSuperTypes(config, ExtensionAuthenticatorOutput.class);
         Collection<NamedType> namedTypes = config.getSubtypeResolver().collectAndResolveSubtypesByClass(config, annotatedClass);
 
-        for (NamedType namedType : namedTypes){
-            if(Objects.equals(namedType.getName(), name)){
-                return (ExtensionAuthenticatorOutput)ctxt.readValue(p, namedType.getType());
+        for (NamedType namedType : namedTypes) {
+            if (Objects.equals(namedType.getName(), name)) {
+                return (ExtensionAuthenticatorOutput) ctxt.readValue(p, namedType.getType());
             }
         }
 

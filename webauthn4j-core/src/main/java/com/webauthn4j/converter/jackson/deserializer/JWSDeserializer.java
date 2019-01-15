@@ -20,11 +20,10 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.statement.JWS;
 import com.webauthn4j.response.attestation.statement.JWSHeader;
 import com.webauthn4j.response.attestation.statement.Response;
-import com.webauthn4j.registry.Registry;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);
         String[] data = str.split("\\.");
-        if(data.length != 3){
+        if (data.length != 3) {
             throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
         }
         String headerString = data[0];

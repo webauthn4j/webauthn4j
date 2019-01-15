@@ -18,5 +18,5 @@ package com.webauthn4j.extras.fido.metadata.statement;
 
 import java.util.HashMap;
 
-public class AlternativeDescriptions extends HashMap<String,String> {
+public class AlternativeDescriptions extends HashMap<String, String> {
 }

@@ -17,9 +17,8 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.response.attestation.authenticator.*;
 import com.webauthn4j.registry.Registry;
-import com.webauthn4j.util.UUIDUtil;
+import com.webauthn4j.response.attestation.authenticator.*;
 import org.junit.Test;
 
 import java.io.IOException;

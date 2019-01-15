@@ -25,7 +25,7 @@ import java.util.Objects;
 
 public class GenericTransactionAuthorizationExtensionClientOutput
         extends AbstractExtensionOutput<GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg>
-        implements AuthenticationExtensionClientOutput<GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg>{
+        implements AuthenticationExtensionClientOutput<GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg> {
 
     public static final String ID = "txAuthGeneric";
 

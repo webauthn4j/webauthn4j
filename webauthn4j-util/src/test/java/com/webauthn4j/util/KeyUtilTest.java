@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class KeyUtilTest {
 
     @Test
-    public void createKeyPair_test(){
+    public void createKeyPair_test() {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         assertThat(keyPair).isNotNull();
     }

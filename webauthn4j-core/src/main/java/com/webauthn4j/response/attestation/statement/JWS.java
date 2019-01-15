@@ -66,7 +66,7 @@ public class JWS implements Serializable {
         return signature;
     }
 
-    public boolean isValidSignature(){
+    public boolean isValidSignature() {
         String signedData = headerString + "." + payloadString;
         try {
             Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());

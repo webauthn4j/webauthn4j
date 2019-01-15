@@ -39,8 +39,8 @@ public class MetadataStatementCertPathTrustworthinessValidator extends CertPathT
 
     public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         List<MetadataStatement> metadataStatements = metadataStatementResolver.resolve(aaguid);
-        boolean isSurrogate = metadataStatements.stream().flatMap(item -> item.getAttestationTypes().stream()).allMatch( type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
-        if(isSurrogate && attestationStatement.getX5c() != null){
+        boolean isSurrogate = metadataStatements.stream().flatMap(item -> item.getAttestationTypes().stream()).allMatch(type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
+        if (isSurrogate && attestationStatement.getX5c() != null) {
             throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
         }
         super.validate(aaguid, attestationStatement);
@@ -49,10 +49,10 @@ public class MetadataStatementCertPathTrustworthinessValidator extends CertPathT
     @Override
     protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
         return metadataStatementResolver.resolve(aaguid).stream()
-                    .flatMap(metadataStatement ->
-                            metadataStatement.getAttestationRootCertificates().stream()
-                                    .map(certificate -> new TrustAnchor(certificate, null)))
-                    .collect(Collectors.toSet()
+                .flatMap(metadataStatement ->
+                        metadataStatement.getAttestationRootCertificates().stream()
+                                .map(certificate -> new TrustAnchor(certificate, null)))
+                .collect(Collectors.toSet()
                 );
     }
 }

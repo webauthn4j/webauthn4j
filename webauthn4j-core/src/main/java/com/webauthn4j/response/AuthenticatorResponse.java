@@ -24,7 +24,8 @@ public abstract class AuthenticatorResponse {
         this.clientDataJSON = clientDataJSON;
     }
 
-    public AuthenticatorResponse(){}
+    public AuthenticatorResponse() {
+    }
 
     public byte[] getClientDataJSON() {
         return clientDataJSON;

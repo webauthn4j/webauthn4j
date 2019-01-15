@@ -21,9 +21,10 @@ import java.util.UUID;
 
 public class UUIDUtil {
 
-    private UUIDUtil(){}
+    private UUIDUtil() {
+    }
 
-    public static UUID fromString(String value){
+    public static UUID fromString(String value) {
         return UUID.fromString(value);
     }
 

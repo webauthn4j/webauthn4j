@@ -28,5 +28,7 @@ public class BadOriginException extends ValidationException {
         super(message);
     }
 
-    public BadOriginException(Throwable cause){ super(cause);}
+    public BadOriginException(Throwable cause) {
+        super(cause);
+    }
 }

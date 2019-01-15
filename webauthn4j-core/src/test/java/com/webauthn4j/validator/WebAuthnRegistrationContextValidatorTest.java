@@ -22,7 +22,7 @@ import org.junit.Test;
 public class WebAuthnRegistrationContextValidatorTest {
 
     @Test
-    public void test(){
+    public void test() {
 
     }
 }

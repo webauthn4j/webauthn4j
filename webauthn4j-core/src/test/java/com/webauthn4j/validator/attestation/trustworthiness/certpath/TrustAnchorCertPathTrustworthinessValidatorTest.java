@@ -22,7 +22,6 @@ import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.Test;
 
@@ -30,7 +29,6 @@ import java.security.cert.TrustAnchor;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -61,9 +59,9 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
         AttestationCertificatePath attestationCertificatePath
                 = new AttestationCertificatePath(Arrays.asList(
-                        TestUtil.load3tierTestAuthenticatorAttestationCertificate(),
-                        TestUtil.load3tierTestIntermediateCACertificate(),
-                        TestUtil.load3tierTestRootCACertificate()));
+                TestUtil.load3tierTestAuthenticatorAttestationCertificate(),
+                TestUtil.load3tierTestIntermediateCACertificate(),
+                TestUtil.load3tierTestRootCACertificate()));
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);

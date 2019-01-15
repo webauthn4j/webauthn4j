@@ -39,7 +39,6 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
@@ -121,7 +120,7 @@ public class WebAuthnModelAuthenticator {
 
         // For each descriptor of excludeCredentialDescriptorList:
         List<PublicKeyCredentialDescriptor> descriptors = makeCredentialRequest.getExcludeCredentialDescriptorList();
-        if(descriptors == null){
+        if (descriptors == null) {
             descriptors = Collections.emptyList();
         }
         for (PublicKeyCredentialDescriptor descriptor : descriptors) {
@@ -225,7 +224,7 @@ public class WebAuthnModelAuthenticator {
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
         AuthenticationExtensionsClientInputs extensions = makeCredentialRequest.getExtensions();
-        if(extensions == null){
+        if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
         }
         AuthenticationExtensionsAuthenticatorOutputs processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs();

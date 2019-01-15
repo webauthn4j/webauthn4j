@@ -34,15 +34,15 @@ public class CertificateUtil {
 
     private static CertificateFactory certificateFactory;
 
-    private CertificateUtil() {
-    }
-
     static {
         try {
             certificateFactory = CertificateFactory.getInstance("X.509");
         } catch (CertificateException e) {
             throw new UnexpectedCheckedException(e);
         }
+    }
+
+    private CertificateUtil() {
     }
 
     public static CertPathValidator createCertPathValidator() {
@@ -70,8 +70,8 @@ public class CertificateUtil {
         }
     }
 
-    public static Set<TrustAnchor> generateTrustAnchors(List<X509Certificate> certificates){
-        return certificates.stream().map( certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
+    public static Set<TrustAnchor> generateTrustAnchors(List<X509Certificate> certificates) {
+        return certificates.stream().map(certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
 
     public static CertPath generateCertPath(List<Certificate> certificates) {

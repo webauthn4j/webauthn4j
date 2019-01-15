@@ -26,7 +26,7 @@ import java.security.cert.*;
 import java.util.EnumSet;
 import java.util.Set;
 
-public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator{
+public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator {
 
     private boolean isRevocationCheckEnabled = false;
     private boolean fullChainProhibited = false;
@@ -57,7 +57,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         } catch (CertPathValidatorException e) {
             throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
         }
-        if(fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())){
+        if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
             throw new CertificateException("certpath contains full chain");
         }
     }

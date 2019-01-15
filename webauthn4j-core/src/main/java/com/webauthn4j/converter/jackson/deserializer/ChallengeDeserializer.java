@@ -20,10 +20,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
 
@@ -42,13 +40,12 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
     @Override
     public Challenge deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String str = p.getValueAsString();
-        if(str == null){
+        if (str == null) {
             return null;
         }
-        try{
+        try {
             return new DefaultChallenge(str);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", str, DefaultChallenge.class);
         }
     }

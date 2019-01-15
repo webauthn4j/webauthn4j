@@ -43,7 +43,7 @@ public class MetadataStatementTrustAnchorProvider implements TrustAnchorProvider
 
     }
 
-    private Stream<TrustAnchor> extractTrustAnchors(MetadataStatement metadataStatement){
+    private Stream<TrustAnchor> extractTrustAnchors(MetadataStatement metadataStatement) {
         return metadataStatement.getAttestationRootCertificates().stream()
                 .map(certificate -> new TrustAnchor(certificate, null));
     }

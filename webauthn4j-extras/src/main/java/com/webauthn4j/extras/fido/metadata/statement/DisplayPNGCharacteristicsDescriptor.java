@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class DisplayPNGCharacteristicsDescriptor {
 
-    
+
     private BigInteger width;
     private BigInteger height;
     private Short bitDepth;

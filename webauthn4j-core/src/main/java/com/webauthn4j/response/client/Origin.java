@@ -19,7 +19,6 @@ package com.webauthn4j.response.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.response.attestation.authenticator.Curve;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -54,7 +53,7 @@ public class Origin implements Serializable {
         int originPort = uri.getPort();
 
         if (originPort == -1) {
-            if(this.scheme == null){
+            if (this.scheme == null) {
                 throw new IllegalArgumentException("scheme must be 'http' or 'https'");
             }
             switch (this.scheme) {
@@ -75,8 +74,7 @@ public class Origin implements Serializable {
     public static Origin create(String value) throws InvalidFormatException {
         try {
             return new Origin(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, Origin.class);
         }
     }

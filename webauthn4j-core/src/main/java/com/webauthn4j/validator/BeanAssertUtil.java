@@ -34,8 +34,6 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-import java.util.UUID;
-
 /**
  * Per field checker utility class
  */
@@ -49,7 +47,7 @@ class BeanAssertUtil {
 
     public static void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
 
-        if(webAuthnAuthenticationContext == null){
+        if (webAuthnAuthenticationContext == null) {
             throw new ConstraintViolationException("webAuthnAuthenticationContext must not be null");
         }
         if (webAuthnAuthenticationContext.getCredentialId() == null) {
@@ -71,7 +69,7 @@ class BeanAssertUtil {
 
     public static void validate(WebAuthnRegistrationContext webAuthnRegistrationContext) {
 
-        if(webAuthnRegistrationContext == null){
+        if (webAuthnRegistrationContext == null) {
             throw new ConstraintViolationException("webAuthnRegistrationContext must not be null");
         }
         if (webAuthnRegistrationContext.getAttestationObject() == null) {
@@ -86,7 +84,7 @@ class BeanAssertUtil {
     }
 
     public static void validate(CollectedClientData collectedClientData) {
-        if(collectedClientData == null){
+        if (collectedClientData == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
         if (collectedClientData.getType() == null) {
@@ -111,7 +109,7 @@ class BeanAssertUtil {
     }
 
     public static void validate(AttestationObject attestationObject) {
-        if(attestationObject == null){
+        if (attestationObject == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
         if (attestationObject.getAttestationStatement() == null) {

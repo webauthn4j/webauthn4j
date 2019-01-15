@@ -29,6 +29,6 @@ public class ClientDataTypeTest {
         assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE);
         assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET);
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()->ClientDataType.create("invalid")).isInstanceOf(InvalidFormatException.class);
+        assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(InvalidFormatException.class);
     }
 }

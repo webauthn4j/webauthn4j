@@ -29,9 +29,10 @@ import java.security.spec.RSAKeyGenParameterSpec;
  */
 public class KeyUtil {
 
-    private KeyUtil(){}
+    private KeyUtil() {
+    }
 
-    public static PrivateKey loadECPrivateKey(byte[] bytes){
+    public static PrivateKey loadECPrivateKey(byte[] bytes) {
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(bytes);
         KeyFactory keyFactory;
         try {
@@ -42,7 +43,7 @@ public class KeyUtil {
         }
     }
 
-    public static KeyPairGenerator createECKeyPairGenerator(){
+    public static KeyPairGenerator createECKeyPairGenerator() {
         try {
             return KeyPairGenerator.getInstance("EC");
         } catch (NoSuchAlgorithmException e) {
@@ -50,15 +51,14 @@ public class KeyUtil {
         }
     }
 
-    public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec){
+    public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createECKeyPairGenerator();
         SecureRandom random = null;
         try {
-            if(seed!=null){
+            if (seed != null) {
                 random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
                 random.setSeed(seed);
-            }
-            else {
+            } else {
                 random = SecureRandom.getInstanceStrong();
             }
             keyPairGenerator.initialize(ecParameterSpec, random);
@@ -72,11 +72,11 @@ public class KeyUtil {
         return createECKeyPair(seed, ECUtil.P_256_SPEC);
     }
 
-    public static KeyPair createECKeyPair(ECParameterSpec ecParameterSpec){
+    public static KeyPair createECKeyPair(ECParameterSpec ecParameterSpec) {
         return createECKeyPair(null, ecParameterSpec);
     }
 
-    public static KeyPair createECKeyPair(){
+    public static KeyPair createECKeyPair() {
         return createECKeyPair((byte[]) null);
     }
 

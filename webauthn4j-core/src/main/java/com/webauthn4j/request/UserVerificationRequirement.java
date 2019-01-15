@@ -35,7 +35,7 @@ public enum UserVerificationRequirement {
 
     @JsonCreator
     public static UserVerificationRequirement create(String value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

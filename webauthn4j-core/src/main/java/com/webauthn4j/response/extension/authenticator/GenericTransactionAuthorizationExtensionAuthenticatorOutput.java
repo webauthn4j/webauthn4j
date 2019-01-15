@@ -21,7 +21,7 @@ import com.webauthn4j.response.extension.AbstractExtensionOutput;
 
 public class GenericTransactionAuthorizationExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<byte[]>
-        implements AuthenticationExtensionAuthenticatorOutput<byte[]>{
+        implements AuthenticationExtensionAuthenticatorOutput<byte[]> {
 
     public static final String ID = "txAuthGeneric";
 

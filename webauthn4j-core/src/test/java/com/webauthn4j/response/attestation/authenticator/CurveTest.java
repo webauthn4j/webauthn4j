@@ -31,11 +31,11 @@ public class CurveTest {
         assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1);
         assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1);
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()-> Curve.create(4)).isInstanceOf(InvalidFormatException.class);
+        assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(InvalidFormatException.class);
     }
 
     @Test
-    public void getECParameterSpec_test(){
+    public void getECParameterSpec_test() {
         assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC);
         assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC);
         assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC);

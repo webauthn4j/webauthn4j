@@ -27,7 +27,7 @@ public class PubArea {
     private Object parameters;
     private Object unique;
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         throw new NotImplementedException();
     }
 }

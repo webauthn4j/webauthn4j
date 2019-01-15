@@ -17,10 +17,8 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.UUID;
 
 public class AttestedCredentialData implements Serializable {
 

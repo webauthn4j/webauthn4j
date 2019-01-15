@@ -19,7 +19,6 @@ package com.webauthn4j.response.attestation.authenticator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.request.AuthenticatorAttachment;
 import com.webauthn4j.util.ECUtil;
 
 import java.security.spec.ECParameterSpec;
@@ -38,7 +37,7 @@ public enum Curve {
 
     @JsonCreator
     public static Curve create(Integer value) throws InvalidFormatException {
-        if(value == null){
+        if (value == null) {
             return null;
         }
         switch (value) {

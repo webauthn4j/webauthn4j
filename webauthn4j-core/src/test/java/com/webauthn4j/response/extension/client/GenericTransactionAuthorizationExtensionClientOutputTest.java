@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GenericTransactionAuthorizationExtensionClientOutputTest {
 
     @Test
-    public void test(){
+    public void test() {
         GenericTransactionAuthorizationExtensionClientOutput target
                 = new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg());
         assertThat(target.getIdentifier()).isEqualTo(GenericTransactionAuthorizationExtensionClientOutput.ID);
@@ -36,8 +36,9 @@ public class GenericTransactionAuthorizationExtensionClientOutputTest {
         assertThat(target.getContentType()).isEqualTo("type");
         assertThat(target.getContent()).isEqualTo(new byte[32]);
     }
+
     @Test
-    public void TxAuthnGenericArg_equals_hashCode_test(){
+    public void TxAuthnGenericArg_equals_hashCode_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceA = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceB = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
 

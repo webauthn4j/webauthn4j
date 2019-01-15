@@ -94,12 +94,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
-                    registrationRequest.getClientDataJSON(),
-                    registrationRequest.getAttestationObject(),
-                    clientExtensionJSON,
-                    serverProperty,
-                    false,
-                    Collections.emptyList()
+                registrationRequest.getClientDataJSON(),
+                registrationRequest.getAttestationObject(),
+                clientExtensionJSON,
+                serverProperty,
+                false,
+                Collections.emptyList()
         );
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
@@ -141,13 +141,13 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
-                    registrationRequest.getClientDataJSON(),
-                    registrationRequest.getAttestationObject(),
-                    clientExtensionJSON,
-                    serverProperty,
-                    false,
-                    Collections.emptyList()
-                );
+                registrationRequest.getClientDataJSON(),
+                registrationRequest.getAttestationObject(),
+                clientExtensionJSON,
+                serverProperty,
+                false,
+                Collections.emptyList()
+        );
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 

@@ -19,9 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class WebAuthnAuthenticationContextValidationResponse {

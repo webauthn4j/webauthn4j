@@ -46,7 +46,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         AndroidKeyAttestationStatement attestationStatement =
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        if(attestationStatement.getX5c().isEmpty()){
+        if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found'.");
         }
 
@@ -58,7 +58,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         /// Verify that the public key in the first certificate in x5c matches the credentialPublicKey in the attestedCredentialData in authenticatorData.
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
-        if(!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)){
+        if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
         }
 
@@ -90,7 +90,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
                 return;
             }
             throw new BadSignatureException("Bad signature");
-        } catch ( SignatureException | InvalidKeyException e) {
+        } catch (SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("Bad signature", e);
         }
     }

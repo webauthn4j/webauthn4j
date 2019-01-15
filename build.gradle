@@ -26,7 +26,7 @@ buildscript {
 
 }
 
-plugins{
+plugins {
     id "org.sonarqube" version "2.6.2"
     id 'nebula.provided-base' version '3.0.3'
     id 'org.asciidoctor.convert' version "1.5.2"
@@ -38,7 +38,7 @@ allprojects {
     version "${webauthn4jVersion}"
 }
 
-subprojects{
+subprojects {
     apply plugin: 'java'
     apply plugin: 'nebula.provided-base'
     apply plugin: "io.spring.dependency-management"
@@ -136,7 +136,7 @@ subprojects{
 
     bintray {
         user = bintrayUser
-        key  = bintrayToken
+        key = bintrayToken
         configurations = ['archives']
         publish = false
         dryRun = false
@@ -170,22 +170,22 @@ asciidoctor {
     sourceDir = file("docs/src/reference/asciidoc")
 //  backends = ['docbook5']
     resources {
-        from(sourceDir){
+        from(sourceDir) {
             include '*/images/**'
         }
     }
     options eruby: 'erubis'
 
     //noinspection GroovyAssignabilityCheck
-    attributes  docinfo: '',
-                copycss : '',
-                icons : 'font',
-                'source-highlighter': 'prettify',
-                sectanchors : '',
-                toc2: '',
-                idprefix: '',
-                idseparator: '-',
-                doctype: 'book',
-                numbered: '',
-                revnumber : "${webauthn4jVersion}"
+    attributes docinfo: '',
+            copycss: '',
+            icons: 'font',
+            'source-highlighter': 'prettify',
+            sectanchors: '',
+            toc2: '',
+            idprefix: '',
+            idseparator: '-',
+            doctype: 'book',
+            numbered: '',
+            revnumber: "${webauthn4jVersion}"
 }

@@ -33,7 +33,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
             throw new SelfAttestationProhibitedException("SELF attestations is prohibited by configuration");
         }
 
-        if(attestationStatement.getX5c() != null){
+        if (attestationStatement.getX5c() != null) {
             throw new BadAttestationStatementException("SELF attestation must not have x5c.");
         }
     }

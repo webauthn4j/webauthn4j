@@ -19,7 +19,10 @@ package com.webauthn4j.extras.fido.metadata.statement;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class MetadataStatementResolverImpl implements MetadataStatementResolver {
 

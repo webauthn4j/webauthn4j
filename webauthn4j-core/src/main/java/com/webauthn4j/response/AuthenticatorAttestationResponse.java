@@ -29,7 +29,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         this.attestationObject = attestationObject;
     }
 
-    public AuthenticatorAttestationResponse(){}
+    public AuthenticatorAttestationResponse() {
+    }
 
     public byte[] getAttestationObject() {
         return attestationObject;

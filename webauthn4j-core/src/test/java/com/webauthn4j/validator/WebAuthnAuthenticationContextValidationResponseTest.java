@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WebAuthnAuthenticationContextValidationResponseTest {
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         Registry registry = new Registry();
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();

@@ -33,6 +33,6 @@ public class COSEKeyTypeTest {
         assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC);
 
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(()->COSEKeyType.create(-1)).isInstanceOf(InvalidFormatException.class);
+        assertThatThrownBy(() -> COSEKeyType.create(-1)).isInstanceOf(InvalidFormatException.class);
     }
 }

@@ -11,14 +11,14 @@ public class KeyDescriptionValidatorTest {
     private KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, true);
     }
 
     @Test
-    public void validate_with_teeEnforcedOnly_true_test(){
+    public void validate_with_teeEnforcedOnly_true_test() {
         X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, true);

@@ -21,13 +21,15 @@ import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.spec.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPublicKeySpec;
 
 public class RSAUtil {
 
-    private RSAUtil(){}
+    private RSAUtil() {
+    }
 
-    public static PublicKey createPublicKey(RSAPublicKeySpec rsaPublicKeySpec){
+    public static PublicKey createPublicKey(RSAPublicKeySpec rsaPublicKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(rsaPublicKeySpec);

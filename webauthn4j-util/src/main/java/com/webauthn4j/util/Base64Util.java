@@ -26,21 +26,22 @@ public class Base64Util {
     private static java.util.Base64.Decoder decoder = Base64.getDecoder();
     private static java.util.Base64.Encoder encoder = Base64.getEncoder().withoutPadding();
 
-    private Base64Util(){}
+    private Base64Util() {
+    }
 
-    public static byte[] decode(String source){
+    public static byte[] decode(String source) {
         return decoder.decode(source);
     }
 
-    public static byte[] decode(byte[] source){
+    public static byte[] decode(byte[] source) {
         return decoder.decode(source);
     }
 
-    public static byte[] encode(byte[] source){
+    public static byte[] encode(byte[] source) {
         return encoder.encode(source);
     }
 
-    public static String encodeToString(byte[] source){
+    public static String encodeToString(byte[] source) {
         return encoder.encodeToString(source);
     }
 }

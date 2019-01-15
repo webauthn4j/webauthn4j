@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FIDOAppIDExtensionClientOutputTest {
 
     @Test
-    public void test(){
+    public void test() {
         FIDOAppIDExtensionClientOutput target = new FIDOAppIDExtensionClientOutput(true);
         assertThat(target.getIdentifier()).isEqualTo(FIDOAppIDExtensionClientOutput.ID);
     }

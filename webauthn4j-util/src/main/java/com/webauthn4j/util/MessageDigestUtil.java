@@ -45,7 +45,7 @@ public class MessageDigestUtil {
         }
     }
 
-    public static MessageDigest createSHA256(){
+    public static MessageDigest createSHA256() {
         return createMessageDigest("SHA-256");
     }
 

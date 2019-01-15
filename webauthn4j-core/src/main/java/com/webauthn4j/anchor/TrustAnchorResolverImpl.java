@@ -20,7 +20,10 @@ import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
 import java.security.cert.TrustAnchor;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TrustAnchorResolverImpl implements TrustAnchorResolver {
 

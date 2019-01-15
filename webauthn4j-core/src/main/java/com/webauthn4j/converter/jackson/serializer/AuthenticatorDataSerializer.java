@@ -19,9 +19,9 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 
 import java.io.IOException;
 

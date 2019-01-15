@@ -41,14 +41,10 @@ import java.text.ParseException;
 @WIP
 public class FIDOMDSClient {
 
-    RestTemplate restTemplate;
-
-    JWSVerifier jwsVerifier;
-
-    ObjectMapper objectMapper;
-
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds.fidoalliance.org/";
-
+    RestTemplate restTemplate;
+    JWSVerifier jwsVerifier;
+    ObjectMapper objectMapper;
     private String fidoMetadataServiceEndpoint;
 
     public FIDOMDSClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {

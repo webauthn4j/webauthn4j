@@ -16,16 +16,17 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.converter.*;
+import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.MaliciousDataException;
@@ -64,14 +65,14 @@ public class WebAuthnAuthenticationContextValidator {
     // ~ Constructor
     // ========================================================================================================
 
-    public WebAuthnAuthenticationContextValidator(){
+    public WebAuthnAuthenticationContextValidator() {
         this(new Registry());
     }
 
-    public WebAuthnAuthenticationContextValidator(Registry registry){
+    public WebAuthnAuthenticationContextValidator(Registry registry) {
         this.registry = registry;
         this.authenticatorDataConverter = new AuthenticatorDataConverter(registry);
-        this.collectedClientDataConverter  = new CollectedClientDataConverter(registry);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(registry);
         this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
     }
 
@@ -100,7 +101,7 @@ public class WebAuthnAuthenticationContextValidator {
         BeanAssertUtil.validate(authenticatorData);
         BeanAssertUtil.validate(serverProperty);
 
-        if(authenticatorData.getAttestedCredentialData() != null){
+        if (authenticatorData.getAttestedCredentialData() != null) {
             throw new MaliciousDataException("attestedCredentialData must be null on authentication");
         }
 

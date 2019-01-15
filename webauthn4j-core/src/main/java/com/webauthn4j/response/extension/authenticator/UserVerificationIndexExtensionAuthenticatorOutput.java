@@ -21,7 +21,7 @@ import com.webauthn4j.response.extension.AbstractExtensionOutput;
 
 public class UserVerificationIndexExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<byte[]>
-        implements RegistrationExtensionAuthenticatorOutput<byte[]>, AuthenticationExtensionAuthenticatorOutput<byte[]>{
+        implements RegistrationExtensionAuthenticatorOutput<byte[]>, AuthenticationExtensionAuthenticatorOutput<byte[]> {
 
     public static final String ID = "uvi";
 

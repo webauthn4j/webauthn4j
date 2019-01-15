@@ -47,7 +47,8 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         this.extensions = extensions;
     }
 
-    public PublicKeyCredentialRequestOptions(){}
+    public PublicKeyCredentialRequestOptions() {
+    }
 
     public Challenge getChallenge() {
         return challenge;

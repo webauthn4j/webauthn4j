@@ -20,7 +20,7 @@ import com.webauthn4j.response.extension.AbstractExtensionOutput;
 
 public class FIDOAppIDExtensionClientOutput
         extends AbstractExtensionOutput<Boolean>
-        implements AuthenticationExtensionClientOutput<Boolean>{
+        implements AuthenticationExtensionClientOutput<Boolean> {
 
     public static final String ID = "appid";
 

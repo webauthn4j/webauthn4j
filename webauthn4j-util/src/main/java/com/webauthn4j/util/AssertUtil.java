@@ -20,25 +20,27 @@ import java.util.Collection;
 
 /**
  * Assertion utility class that assists in validating arguments.
- *
+ * <p>
  * Members are copied from org.springframework.util.Assert class
- *
+ * <p>
  * Original Assert class authors:
  * Keith Donald
  * Juergen Hoeller
  * Sam Brannen
  * Colin Sampaleanu
  * Rob Harrop
-*/
+ */
 public class AssertUtil {
 
-    private AssertUtil(){}
+    private AssertUtil() {
+    }
 
 
     /**
      * Assert that an object is not {@code null}.
      * <pre class="code">Assert.notNull(clazz, "The class must not be null");</pre>
-     * @param object the object to check
+     *
+     * @param object  the object to check
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object is {@code null}
      */
@@ -52,7 +54,8 @@ public class AssertUtil {
      * Assert that an array contains elements; that is, it must not be
      * {@code null} and must contain at least one element.
      * <pre class="code">Assert.notEmpty(array, "The array must contain elements");</pre>
-     * @param array the array to check
+     *
+     * @param array   the array to check
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object array is {@code null} or contains no elements
      */
@@ -66,10 +69,11 @@ public class AssertUtil {
      * Assert that a collection contains elements; that is, it must not be
      * {@code null} and must contain at least one element.
      * <pre class="code">Assert.notEmpty(collection, "Collection must contain elements");</pre>
+     *
      * @param collection the collection to check
-     * @param message the exception message to use if the assertion fails
+     * @param message    the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the collection is {@code null} or
-     * contains no elements
+     *                                  contains no elements
      */
     public static void notEmpty(Collection<?> collection, String message) {
         if (collection == null || collection.isEmpty()) {

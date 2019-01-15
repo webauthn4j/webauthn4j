@@ -17,8 +17,8 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.client.CollectedClientData;
 import org.junit.Test;
 
 import java.io.IOException;

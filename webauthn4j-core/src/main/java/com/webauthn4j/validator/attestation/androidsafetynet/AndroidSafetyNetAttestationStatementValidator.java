@@ -28,7 +28,6 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -48,7 +47,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         AndroidSafetyNetAttestationStatement attestationStatement =
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        if(attestationStatement.getX5c().isEmpty()){
+        if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found'.");
         }
 
@@ -70,26 +69,26 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         /// Let attestationCert be the attestation certificate.
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
-        if(!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")){
+        if (!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")) {
             throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.");
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
-        if(!response.isCtsProfileMatch()){
+        if (!response.isCtsProfileMatch()) {
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
-        if(Instant.ofEpochMilli(response.getTimestampMs()).isBefore(Instant.now().minus(Duration.ofSeconds(backwardThreshold)))){
+        if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(Instant.now().minus(Duration.ofSeconds(backwardThreshold)))) {
             throw new BadAttestationStatementException("timestampMs violates backwardThreshold");
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
-        if(Instant.ofEpochMilli(response.getTimestampMs()).isAfter(Instant.now().plus(Duration.ofSeconds(forwardThreshold)))){
+        if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(Instant.now().plus(Duration.ofSeconds(forwardThreshold)))) {
             throw new BadAttestationStatementException("timestampMs violates forwardThreshold");
         }
 
-        if(!attestationStatement.getResponse().isValidSignature()){
+        if (!attestationStatement.getResponse().isValidSignature()) {
             throw new BadSignatureException("Bad signature");
         }
 
@@ -102,7 +101,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
-        if(!Arrays.equals(hash, Base64Util.decode(nonce))){
+        if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
             throw new BadAttestationStatementException("Nonce doesn't match");
         }
     }
@@ -111,24 +110,6 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return AndroidSafetyNetAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
-    }
-
-    private class DefaultVersionValidator implements GooglePlayServiceVersionValidator {
-
-        private int minimalVersion = 0;
-
-        @Override
-        public void validate(String version) {
-            try{
-                int versionNumber = Integer.parseInt(version);
-                if(versionNumber < minimalVersion){
-                    throw new BadAttestationStatementException("version number doesn't confirm minimal requirement");
-                }
-            }
-            catch (NumberFormatException e){
-                throw new BadAttestationStatementException("invalid version number");
-            }
-        }
     }
 
     public int getForwardThreshold() {
@@ -153,5 +134,22 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
 
     public void setVersionValidator(GooglePlayServiceVersionValidator versionValidator) {
         this.versionValidator = versionValidator;
+    }
+
+    private class DefaultVersionValidator implements GooglePlayServiceVersionValidator {
+
+        private int minimalVersion = 0;
+
+        @Override
+        public void validate(String version) {
+            try {
+                int versionNumber = Integer.parseInt(version);
+                if (versionNumber < minimalVersion) {
+                    throw new BadAttestationStatementException("version number doesn't confirm minimal requirement");
+                }
+            } catch (NumberFormatException e) {
+                throw new BadAttestationStatementException("invalid version number");
+            }
+        }
     }
 }

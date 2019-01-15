@@ -26,7 +26,7 @@ public class CborConverterTest {
 
     @Ignore
     @Test
-    public void dummy(){
+    public void dummy() {
 
     }
 

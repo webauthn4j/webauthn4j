@@ -31,27 +31,29 @@ public class JsonConverterTest {
     private JsonConverter converter = new JsonConverter(new Registry().getJsonMapper());
 
     @Test
-    public void readValue_test(){
+    public void readValue_test() {
         converter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
     }
 
     @Test(expected = DataConversionException.class)
-    public void readValue_with_invalid_json_test(){
+    public void readValue_with_invalid_json_test() {
         converter.readValue("{value:\"dummy\"}", ConverterTestDto.class);
     }
 
     @Test
-    public void readValue_with_TypeReference_test(){
-        converter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>(){});
+    public void readValue_with_TypeReference_test() {
+        converter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
+        });
     }
 
     @Test(expected = DataConversionException.class)
-    public void readValue_with_invalid_json_and_TypeReference_test(){
-        converter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>(){});
+    public void readValue_with_invalid_json_and_TypeReference_test() {
+        converter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>() {
+        });
     }
 
     @Test
-    public void writeValueAsString_test(){
+    public void writeValueAsString_test() {
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
         String str = converter.writeValueAsString(converterTestDto);
@@ -59,14 +61,14 @@ public class JsonConverterTest {
     }
 
     @Test(expected = UncheckedIOException.class)
-    public void writeValueAsString_with_invalid_dto_test(){
+    public void writeValueAsString_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
         converter.writeValueAsString(converterTestInvalidDto);
     }
 
     @Test
-    public void writeValueAsBytes_test(){
+    public void writeValueAsBytes_test() {
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
         byte[] bytes = converter.writeValueAsBytes(converterTestDto);
@@ -74,7 +76,7 @@ public class JsonConverterTest {
     }
 
     @Test(expected = UncheckedIOException.class)
-    public void writeValueAsBytes_with_invalid_dto_test(){
+    public void writeValueAsBytes_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
         converter.writeValueAsBytes(converterTestInvalidDto);

@@ -42,7 +42,7 @@ public class NoneAttestationStatement implements AttestationStatement {
 
     @Override
     public void validate() {
-        if(!unknownProperties.isEmpty()){
+        if (!unknownProperties.isEmpty()) {
             throw new BadAttestationStatementException("Unknown property is set.");
         }
     }

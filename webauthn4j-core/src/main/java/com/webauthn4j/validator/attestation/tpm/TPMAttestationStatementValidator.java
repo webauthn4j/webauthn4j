@@ -33,7 +33,6 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         }
 
 
-
         throw new NotImplementedException();
         //return AttestationType.ATT_CA;
     }

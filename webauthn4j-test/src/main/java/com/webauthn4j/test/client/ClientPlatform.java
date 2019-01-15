@@ -16,9 +16,17 @@
 
 package com.webauthn4j.test.client;
 
-import com.webauthn4j.converter.*;
+import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.AttestationConveyancePreference;
+import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.response.AuthenticatorAssertionResponse;
+import com.webauthn4j.response.AuthenticatorAttestationResponse;
+import com.webauthn4j.response.PublicKeyCredential;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
@@ -26,17 +34,10 @@ import com.webauthn4j.response.client.*;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClientOutput;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
-import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.AuthenticatorAssertionResponse;
-import com.webauthn4j.response.AuthenticatorAttestationResponse;
-import com.webauthn4j.response.PublicKeyCredential;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
@@ -89,7 +90,7 @@ public class ClientPlatform {
         AttestationObject attestationObject = credentialCreationResponse.getAttestationObject();
         AttestationStatement attestationStatement = credentialCreationResponse.getAttestationObject().getAttestationStatement();
         AttestationConveyancePreference attestationConveyancePreference = publicKeyCredentialCreationOptions.getAttestation();
-        if(attestationConveyancePreference == null){
+        if (attestationConveyancePreference == null) {
             attestationConveyancePreference = AttestationConveyancePreference.NONE;
         }
         switch (attestationConveyancePreference) {
@@ -119,16 +120,16 @@ public class ClientPlatform {
 
     private AuthenticationExtensionsClientOutputs processRegistrationExtensions(AuthenticationExtensionsClientInputs extensions) {
 
-        if(extensions == null){
+        if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
         }
 
         AuthenticationExtensionsClientOutputs map = new AuthenticationExtensionsClientOutputs();
         extensions.forEach((key, value) -> {
-            switch (key){
+            switch (key) {
                 case SupportedExtensionsExtensionClientInput.ID:
-                    SupportedExtensionsExtensionClientInput clientExtensionInput = (SupportedExtensionsExtensionClientInput)value;
-                    if(clientExtensionInput.getValue()){
+                    SupportedExtensionsExtensionClientInput clientExtensionInput = (SupportedExtensionsExtensionClientInput) value;
+                    if (clientExtensionInput.getValue()) {
                         map.put(key, new SupportedExtensionsExtensionClientOutput(Collections.singletonList(SupportedExtensionsExtensionClientInput.ID)));
                     }
                     break;
@@ -139,13 +140,13 @@ public class ClientPlatform {
 
     private AuthenticationExtensionsClientOutputs processAuthenticationExtensions(AuthenticationExtensionsClientInputs extensions) {
 
-        if(extensions == null){
+        if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
         }
 
         AuthenticationExtensionsClientOutputs map = new AuthenticationExtensionsClientOutputs();
         extensions.forEach((key, value) -> {
-            switch (key){
+            switch (key) {
                 //TODO
             }
         });
@@ -176,10 +177,10 @@ public class ClientPlatform {
             return new PublicKeyCredential<>(
                     credentialId,
                     new AuthenticatorAssertionResponse(
-                        credentialRequestResponse.getCollectedClientDataBytes(),
-                        credentialRequestResponse.getAuthenticatorDataBytes(),
-                        credentialRequestResponse.getSignature(),
-                        credentialRequestResponse.getUserHandle()
+                            credentialRequestResponse.getCollectedClientDataBytes(),
+                            credentialRequestResponse.getAuthenticatorDataBytes(),
+                            credentialRequestResponse.getSignature(),
+                            credentialRequestResponse.getUserHandle()
                     ),
                     clientExtensions
             );

@@ -26,13 +26,11 @@ import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
-import java.util.UUID;
 
 /**
  * Converter for {@link AuthenticatorData}
@@ -46,7 +44,7 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticatorDataConverter(Registry registry){
+    public AuthenticatorDataConverter(Registry registry) {
         cborConverter = new CborConverter(registry.getCborMapper());
     }
 
@@ -82,7 +80,7 @@ public class AuthenticatorDataConverter {
     }
 
     public AuthenticatorData convert(byte[] value) {
-        try{
+        try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(value);
 
             byte[] rpIdHash = new byte[32];
@@ -102,13 +100,13 @@ public class AuthenticatorDataConverter {
             } else {
                 extensions = new AuthenticationExtensionsAuthenticatorOutputs();
             }
-            if(byteBuffer.hasRemaining()){
+            if (byteBuffer.hasRemaining()) {
                 throw new DataConversionException("provided data does not have proper byte layout");
             }
 
             return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
 
-        }catch (BufferUnderflowException e){
+        } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
     }

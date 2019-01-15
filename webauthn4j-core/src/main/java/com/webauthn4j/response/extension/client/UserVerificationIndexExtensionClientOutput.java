@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 public class UserVerificationIndexExtensionClientOutput
         extends AbstractExtensionOutput<byte[]>
-        implements RegistrationExtensionClientOutput<byte[]>, AuthenticationExtensionClientOutput<byte[]>{
+        implements RegistrationExtensionClientOutput<byte[]>, AuthenticationExtensionClientOutput<byte[]> {
 
     public static final String ID = "uvi";
 
@@ -42,7 +42,7 @@ public class UserVerificationIndexExtensionClientOutput
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractExtensionOutput that = (AbstractExtensionOutput) o;
-        return Arrays.equals(this.getValue(), (byte[])that.getValue());
+        return Arrays.equals(this.getValue(), (byte[]) that.getValue());
     }
 
     @Override

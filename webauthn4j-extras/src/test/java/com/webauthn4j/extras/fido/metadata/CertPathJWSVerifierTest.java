@@ -28,8 +28,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.text.ParseException;
 
 /**
  * Test for CertPathJWSVerifier

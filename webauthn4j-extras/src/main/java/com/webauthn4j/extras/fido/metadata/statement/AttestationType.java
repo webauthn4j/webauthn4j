@@ -25,8 +25,8 @@ public enum AttestationType {
 
     ATTESTATION_BASIC_FULL(0x3E07),
     ATTESTATION_BASIC_SURROGATE(0x3E08),
-    ATTESTATION_ECDAA (0x3E09),
-    ATTESTATION_ATTCA (0x3E0A);
+    ATTESTATION_ECDAA(0x3E09),
+    ATTESTATION_ATTCA(0x3E0A);
 
     private final int value;
 
@@ -36,7 +36,7 @@ public enum AttestationType {
 
     @JsonCreator
     public static AttestationType create(int value) throws InvalidFormatException {
-        if(value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0){
+        if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
         }
 

@@ -21,7 +21,7 @@ import org.junit.Test;
 public class NoneAttestationStatementTest {
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         NoneAttestationStatement noneAttestationStatement = new NoneAttestationStatement();
         noneAttestationStatement.validate();
     }

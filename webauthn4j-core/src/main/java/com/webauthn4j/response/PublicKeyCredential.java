@@ -33,7 +33,8 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
         this.clientExtensionResults = clientExtensionResults;
     }
 
-    public PublicKeyCredential(){}
+    public PublicKeyCredential() {
+    }
 
     public String getType() {
         return "public-key";
@@ -51,7 +52,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
         return authenticatorResponse;
     }
 
-    public AuthenticationExtensionsClientOutputs getClientExtensionResults(){
+    public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
         return clientExtensionResults;
     }
 }

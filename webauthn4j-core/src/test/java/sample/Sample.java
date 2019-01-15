@@ -16,9 +16,9 @@
 
 package sample;
 
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
-import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;

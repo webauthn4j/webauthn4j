@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ServerPropertyTest {
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         Challenge challenge = new DefaultChallenge();
         ServerProperty serverPropertyA = TestUtil.createServerProperty(challenge);
         ServerProperty serverPropertyB = TestUtil.createServerProperty(challenge);

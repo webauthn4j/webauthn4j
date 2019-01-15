@@ -16,11 +16,11 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 

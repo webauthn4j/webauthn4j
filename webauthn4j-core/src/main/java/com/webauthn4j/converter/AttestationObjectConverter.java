@@ -16,9 +16,9 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class AttestationObjectConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AttestationObjectConverter(Registry registry){
+    public AttestationObjectConverter(Registry registry) {
         cborConverter = new CborConverter(registry.getCborMapper());
     }
 
@@ -44,7 +44,7 @@ public class AttestationObjectConverter {
     // ================================================================================================
 
     public AttestationObject convert(String source) {
-        if(source == null){
+        if (source == null) {
             return null;
         }
         byte[] value = Base64UrlUtil.decode(source);

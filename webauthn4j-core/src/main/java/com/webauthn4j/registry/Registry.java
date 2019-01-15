@@ -7,7 +7,7 @@ import com.webauthn4j.converter.jackson.WebAuthnModule;
 
 /**
  * External processor registry
- *
+ * <p>
  * ObjectMapper instance can be injected with this registry
  */
 public class Registry {
@@ -17,7 +17,7 @@ public class Registry {
 
     // TODO: Hold ExtensionConverter, ExtensionValidator
 
-    public Registry(){
+    public Registry() {
         jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnModule(this));
         jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
@@ -35,6 +35,7 @@ public class Registry {
 
     /**
      * Returns registered jsonMapper
+     *
      * @return jsonMapper
      */
     public ObjectMapper getJsonMapper() {
@@ -43,6 +44,7 @@ public class Registry {
 
     /**
      * Returns registered cborMapper
+     *
      * @return cborMapper
      */
     public ObjectMapper getCborMapper() {

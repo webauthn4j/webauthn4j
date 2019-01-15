@@ -33,7 +33,8 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         this.userVerification = userVerification;
     }
 
-    public AuthenticatorSelectionCriteria(){}
+    public AuthenticatorSelectionCriteria() {
+    }
 
     public AuthenticatorAttachment getAuthenticatorAttachment() {
         return authenticatorAttachment;

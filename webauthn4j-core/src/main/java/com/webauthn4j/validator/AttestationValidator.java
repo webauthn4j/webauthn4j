@@ -48,7 +48,7 @@ public class AttestationValidator {
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
-    ){
+    ) {
         this.attestationStatementValidators = attestationStatementValidators;
 
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
@@ -56,7 +56,7 @@ public class AttestationValidator {
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
 
-    public void validate(RegistrationObject registrationObject){
+    public void validate(RegistrationObject registrationObject) {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
@@ -74,9 +74,9 @@ public class AttestationValidator {
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
 
-        if(attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)){
+        if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if(!Objects.equals(aaguid, U2F_AAGUID)){
+            if (!Objects.equals(aaguid, U2F_AAGUID)) {
                 throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
             }
         }

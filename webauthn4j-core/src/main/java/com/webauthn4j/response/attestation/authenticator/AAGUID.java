@@ -24,7 +24,7 @@ import java.util.UUID;
 public class AAGUID {
 
     public static final AAGUID ZERO = new AAGUID(new byte[16]);
-    public static final AAGUID NULL = new AAGUID((UUID)null);
+    public static final AAGUID NULL = new AAGUID((UUID) null);
 
     private final UUID value;
 
@@ -44,7 +44,7 @@ public class AAGUID {
         return value;
     }
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         return UUIDUtil.convertUUIDToBytes(value);
     }
 

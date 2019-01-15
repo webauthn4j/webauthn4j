@@ -19,7 +19,6 @@ package com.webauthn4j.response.extension.authenticator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.response.extension.AbstractExtensionOutput;
 import com.webauthn4j.response.extension.Coordinates;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 
 public class LocationExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<Coordinates>

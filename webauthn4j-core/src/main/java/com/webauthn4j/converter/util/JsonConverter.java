@@ -20,16 +20,15 @@ public class JsonConverter {
 
     private final ObjectMapper jsonMapper;
 
-    public JsonConverter(ObjectMapper jsonMapper){
+    public JsonConverter(ObjectMapper jsonMapper) {
         this.jsonMapper = jsonMapper;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T readValue(String src, Class valueType){
+    public <T> T readValue(String src, Class valueType) {
         try {
-            return (T)jsonMapper.readValue(src, valueType);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+            return (T) jsonMapper.readValue(src, valueType);
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -37,14 +36,12 @@ public class JsonConverter {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T readValue(InputStream src, Class valueType){
+    public <T> T readValue(InputStream src, Class valueType) {
         try {
-            return (T)jsonMapper.readValue(src, valueType);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+            return (T) jsonMapper.readValue(src, valueType);
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -52,23 +49,19 @@ public class JsonConverter {
     public <T> T readValue(String src, TypeReference valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public <T> T readValue(InputStream src, TypeReference valueTypeRef){
+    public <T> T readValue(InputStream src, TypeReference valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
-        }
-        catch (MismatchedInputException | JsonParseException e){
+        } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -76,8 +69,7 @@ public class JsonConverter {
     public byte[] writeValueAsBytes(Object value) {
         try {
             return jsonMapper.writeValueAsBytes(value);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -85,8 +77,7 @@ public class JsonConverter {
     public String writeValueAsString(Object value) {
         try {
             return jsonMapper.writeValueAsString(value);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
     }

@@ -29,5 +29,7 @@ public class BadAttestationStatementException extends ValidationException {
         super(message);
     }
 
-    public BadAttestationStatementException(Throwable cause){ super(cause);}
+    public BadAttestationStatementException(Throwable cause) {
+        super(cause);
+    }
 }

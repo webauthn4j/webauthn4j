@@ -83,7 +83,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public void validate() {
-        if(alg == null){
+        if (alg == null) {
             throw new ConstraintViolationException("alg must not be null");
         }
     }

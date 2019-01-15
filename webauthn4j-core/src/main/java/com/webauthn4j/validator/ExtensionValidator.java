@@ -35,10 +35,9 @@ public class ExtensionValidator {
                          ExtensionsAuthenticatorOutputs authenticatorExtensionOutputs,
                          List<String> expectedExtensionIdentifiers) {
         List<String> expected;
-        if(expectedExtensionIdentifiers == null){
+        if (expectedExtensionIdentifiers == null) {
             expected = Collections.emptyList();
-        }
-        else {
+        } else {
             expected = expectedExtensionIdentifiers;
         }
 

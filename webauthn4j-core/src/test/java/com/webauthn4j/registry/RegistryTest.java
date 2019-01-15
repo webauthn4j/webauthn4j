@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RegistryTest {
 
     @Test
-    public void constructor_test(){
+    public void constructor_test() {
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new ObjectMapper();
         Registry registry = new Registry(jsonMapper, cborMapper);

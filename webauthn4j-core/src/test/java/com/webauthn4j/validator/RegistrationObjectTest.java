@@ -16,14 +16,14 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.client.ClientDataType;
-import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RegistrationObjectTest {
 
     @Test
-    public void test(){
+    public void test() {
         Registry registry = new Registry();
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(registry).convertToBytes(clientData);

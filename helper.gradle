@@ -1,11 +1,9 @@
 def getVariable(String envName, String propertyName) {
     if (envName != null && System.getenv(envName) != null && !System.getenv(envName).isEmpty()) {
         return System.getenv(envName)
-    }
-    else if (propertyName != null && project.hasProperty(propertyName)) {
+    } else if (propertyName != null && project.hasProperty(propertyName)) {
         return project.property(propertyName)
-    }
-    else {
+    } else {
         return null
     }
 }

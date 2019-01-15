@@ -19,7 +19,6 @@ package com.webauthn4j.request;
 import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 @WIP
@@ -34,7 +33,8 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         this.transports = transports;
     }
 
-    public PublicKeyCredentialDescriptor(){}
+    public PublicKeyCredentialDescriptor() {
+    }
 
     public PublicKeyCredentialType getType() {
         return type;
