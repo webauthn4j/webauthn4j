@@ -45,7 +45,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         makeCredentialRequest.setRpEntity(publicKeyCredentialCreationOptions.getRp());
         makeCredentialRequest.setUserEntity(publicKeyCredentialCreationOptions.getUser());
         makeCredentialRequest.setRequireResidentKey(publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey());
-        makeCredentialRequest.setRequireUserPresence(!requireUserVerification);
+        makeCredentialRequest.setRequireUserPresence(true);
         makeCredentialRequest.setRequireUserVerification(requireUserVerification);
         makeCredentialRequest.setCredTypesAndPublicKeyAlgs(publicKeyCredentialCreationOptions.getPubKeyCredParams());
         makeCredentialRequest.setExcludeCredentialDescriptorList(publicKeyCredentialCreationOptions.getExcludeCredentials());
@@ -76,7 +76,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         getAssertionRequest.setRpId(publicKeyCredentialRequestOptions.getRpId());
         getAssertionRequest.setHash(clientDataHash);
         getAssertionRequest.setAllowCredentialDescriptorList(publicKeyCredentialRequestOptions.getAllowCredentials());
-        getAssertionRequest.setRequireUserPresence(!requireUserVerification);
+        getAssertionRequest.setRequireUserPresence(true);
         getAssertionRequest.setRequireUserVerification(requireUserVerification);
         getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
 

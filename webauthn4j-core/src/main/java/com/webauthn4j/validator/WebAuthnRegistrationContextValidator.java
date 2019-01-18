@@ -232,7 +232,7 @@ public class WebAuthnRegistrationContextValidator {
         }
 
         /// Verify that the User Present bit of the flags in authData is set.
-        if (!registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
+        if (registrationContext.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
 

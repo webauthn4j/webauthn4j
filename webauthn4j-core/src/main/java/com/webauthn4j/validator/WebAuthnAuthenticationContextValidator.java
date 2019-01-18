@@ -131,7 +131,7 @@ public class WebAuthnAuthenticationContextValidator {
         }
 
         /// Verify that the User Present bit of the flags in authData is set.
-        if (!authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUP()) {
+        if (authenticationContext.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("User not present");
         }
 

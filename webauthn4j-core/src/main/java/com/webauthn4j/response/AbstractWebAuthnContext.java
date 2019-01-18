@@ -39,6 +39,7 @@ abstract class AbstractWebAuthnContext {
 
     // verification condition
     private boolean userVerificationRequired;
+    private boolean userPresenceRequired;
     private List<String> expectedExtensionIds;
 
     public AbstractWebAuthnContext(
@@ -46,11 +47,13 @@ abstract class AbstractWebAuthnContext {
             String clientExtensionsJSON,
             ServerProperty serverProperty,
             boolean userVerificationRequired,
+            boolean userPresenceRequired,
             List<String> expectedExtensionIds) {
         this.clientDataJSON = clientDataJSON;
         this.clientExtensionsJSON = clientExtensionsJSON;
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
+        this.userPresenceRequired = userPresenceRequired;
         this.expectedExtensionIds = expectedExtensionIds;
     }
 
@@ -70,6 +73,10 @@ abstract class AbstractWebAuthnContext {
         return userVerificationRequired;
     }
 
+    public boolean isUserPresenceRequired() {
+        return userPresenceRequired;
+    }
+
     public List<String> getExpectedExtensionIds() {
         return expectedExtensionIds;
     }
@@ -80,6 +87,7 @@ abstract class AbstractWebAuthnContext {
         if (o == null || getClass() != o.getClass()) return false;
         AbstractWebAuthnContext that = (AbstractWebAuthnContext) o;
         return userVerificationRequired == that.userVerificationRequired &&
+                userPresenceRequired == that.userPresenceRequired &&
                 Arrays.equals(clientDataJSON, that.clientDataJSON) &&
                 Objects.equals(clientExtensionsJSON, that.clientExtensionsJSON) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
@@ -89,7 +97,7 @@ abstract class AbstractWebAuthnContext {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(clientExtensionsJSON, serverProperty, userVerificationRequired, expectedExtensionIds);
+        int result = Objects.hash(clientExtensionsJSON, serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
         result = 31 * result + Arrays.hashCode(clientDataJSON);
         return result;
     }
