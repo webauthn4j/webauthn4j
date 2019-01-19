@@ -38,6 +38,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        certPathParameters.setPolicyQualifiersRejected(false); // As policy qualifiers are checked manually in attestation statement validator, it is turned off
 
         if (isRevocationCheckEnabled()) {
             //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.
