@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator.attestation.tpm;
 
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -30,10 +32,15 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.security.cert.CertificateParsingException;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Objects;
 
 @WIP
 public class TPMAttestationStatementValidator implements AttestationStatementValidator {
+
+    private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -48,8 +55,9 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
 
         /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
 
+        AuthenticatorData authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
         PublicKey publicKeyInAuthData =
-                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
+                authenticatorData.getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
         // TODO
 
         TPMSAttest certInfo = attestationStatement.getCertInfo();
@@ -64,7 +72,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         }
 
         /// Verify that type is set to TPM_ST_ATTEST_CERTIFY.
-        if(certInfo.getType() == TPMISTAttest.TPM_ST_ATTEST_CERTIFY){
+        if(certInfo.getType() != TPMISTAttest.TPM_ST_ATTEST_CERTIFY){
             throw new BadAttestationStatementException("type must be TPM_ST_ATTEST_CERTIFY");
         }
 
@@ -85,14 +93,20 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         /// i.e., qualifiedSigner, clockInfo and firmwareVersion are ignored. These fields MAY be used as an input to risk engines.
 
         /// If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
-
         if(attestationStatement.getX5c() != null){
             /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
             //TODO
             /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
+            X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
+            verifyAikCert(aikCert);
+
             //TODO
             /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
-            //TODO
+            byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+            if(aaguidBytes !=null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())){
+                throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
+            }
+
             /// If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
             return AttestationType.ATT_CA;
         }
@@ -116,5 +130,30 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
+    }
+
+    private void verifyAikCert(X509Certificate certificate){
+        try {
+            /// TPM attestation certificate MUST have the following fields/extensions:
+            /// Version MUST be set to 3.
+            if(!Objects.equals(certificate.getVersion(), 3)){
+                throw new BadAttestationStatementException("x5c must be version 3.");
+            }
+            /// Subject field MUST be set to empty.
+            if(!certificate.getSubjectDN().getName().isEmpty()){
+                throw new BadAttestationStatementException("x5c subject field MUST be set to empty");
+            }
+            /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
+            //TODO
+            certificate.getSubjectAlternativeNames();
+            //The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
+            //TODO
+            //The Basic Constraints extension MUST have the CA component set to false.
+            //TODO
+            //An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
+            //TODO
+        } catch (CertificateParsingException e) {
+            throw new BadAttestationStatementException("Failed to parse attestation certificate", e);
+        }
     }
 }

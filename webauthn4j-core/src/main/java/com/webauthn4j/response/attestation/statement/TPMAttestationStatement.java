@@ -42,6 +42,29 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     @JsonProperty
     private TPMTPublic pubArea;
 
+    public TPMAttestationStatement(String ver, COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] ecdaaKeyId, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
+        this.ver = ver;
+        this.alg = alg;
+        this.x5c = x5c;
+        this.ecdaaKeyId = ecdaaKeyId;
+        this.sig = sig;
+        this.certInfo = certInfo;
+        this.pubArea = pubArea;
+    }
+
+    public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] ecdaaKeyId, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
+        this.ver = VERSION_2_0;
+        this.alg = alg;
+        this.x5c = x5c;
+        this.ecdaaKeyId = ecdaaKeyId;
+        this.sig = sig;
+        this.certInfo = certInfo;
+        this.pubArea = pubArea;
+    }
+
+
+    public TPMAttestationStatement(){}
+
     public String getVer() {
         return ver;
     }

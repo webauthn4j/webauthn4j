@@ -34,7 +34,12 @@ public class AAGUID implements Serializable {
     }
 
     public AAGUID(byte[] value) {
-        this.value = UUIDUtil.fromBytes(value);
+        if(value == null){
+            this.value = null;
+        }
+        else {
+            this.value = UUIDUtil.fromBytes(value);
+        }
     }
 
     public AAGUID(String value) {
