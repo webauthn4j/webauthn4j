@@ -24,7 +24,9 @@ import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
 
@@ -34,23 +36,26 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
 
     @Override
     public void serialize(TPMTPublic value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         TPMIAlgPublic type = value.getType();
         int typeValue = type.getValue();
-        gen.writeBinary(UnsignedNumberUtil.toBytes(typeValue));
+        stream.write(UnsignedNumberUtil.toBytes(typeValue));
         int nameAlgValue = value.getNameAlg();
-        gen.writeBinary(UnsignedNumberUtil.toBytes(nameAlgValue));
-        gen.writeBinary(serializeTPMAObject(value.getObjectAttributes()));
-        writeSizedArray(gen, value.getAuthPolicy());
-        gen.writeBinary(serializeTPMUPublicParms(value.getParameters()));
-        writeSizedArray(gen, serializeTPMUPublicId(value.getUnique()));
+        stream.write(UnsignedNumberUtil.toBytes(nameAlgValue));
+        stream.write(serializeTPMAObject(value.getObjectAttributes()));
+        writeSizedArray(value.getAuthPolicy(), stream);
+        stream.write(serializeTPMUPublicParms(value.getParameters()));
+        writeSizedArray(serializeTPMUPublicId(value.getUnique()), stream);
+
+        gen.writeBinary(stream.toByteArray());
     }
 
-    private void writeSizedArray(JsonGenerator gen, byte[] value) throws IOException {
+    private void writeSizedArray(byte[] value, OutputStream stream) throws IOException {
         if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
             throw new DataConversionException("too large data to write");
         }
-        gen.writeBinary(UnsignedNumberUtil.toBytes(value.length));
-        gen.writeBinary(value);
+        stream.write(UnsignedNumberUtil.toBytes(value.length));
+        stream.write(value);
     }
 
     private byte[] serializeTPMAObject(TPMAObject objectAttributes){

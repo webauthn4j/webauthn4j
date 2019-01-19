@@ -27,7 +27,9 @@ import com.webauthn4j.response.attestation.statement.TPMUAttest;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
@@ -37,41 +39,33 @@ public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
 
     @Override
     public void serialize(TPMSAttest value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeBinary(value.getMagic().getValue());
-        gen.writeBinary(value.getType().getValue());
-        writeSizedArray(gen, value.getQualifiedSigner());
-        writeSizedArray(gen, value.getExtraData());
-        writeSizedArray(gen, serializeTPMSClockInfo(value.getClockInfo()));
-        gen.writeBinary(UnsignedNumberUtil.toBytes(value.getFirmwareVersion()));
-        gen.writeBinary(serializeTPMUAttest(value.getAttested()));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        stream.write(value.getMagic().getValue());
+        stream.write(value.getType().getValue());
+        stream.write(value.getQualifiedSigner());
+        stream.write(value.getExtraData());
+        writeTPMSClockInfo(value.getClockInfo(), stream);
+        stream.write(UnsignedNumberUtil.toBytes(value.getFirmwareVersion()));
+        writeTPMUAttest(value.getAttested(), stream);
+
+        gen.writeBinary(stream.toByteArray());
     }
 
-    private void writeSizedArray(JsonGenerator gen, byte[] value) throws IOException {
-        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
-            throw new DataConversionException("too large data to write");
-        }
-        gen.writeBinary(UnsignedNumberUtil.toBytes(value.length));
-        gen.writeBinary(value);
+    private void writeTPMSClockInfo(TPMSClockInfo clockInfo, OutputStream stream) throws IOException {
+        stream.write(UnsignedNumberUtil.toBytes(clockInfo.getClock()));
+        stream.write(UnsignedNumberUtil.toBytes(clockInfo.getResetCount()));
+        stream.write(UnsignedNumberUtil.toBytes(clockInfo.getRestartCount()));
+        stream.write(clockInfo.isSafe() ? (byte)0x01 : (byte)0x00);
     }
 
-    private byte[] serializeTPMSClockInfo(TPMSClockInfo clockInfo){
-        ByteBuffer buffer = ByteBuffer.allocate(0);
-        buffer.put(UnsignedNumberUtil.toBytes(clockInfo.getClock()));
-        buffer.put(UnsignedNumberUtil.toBytes(clockInfo.getResetCount()));
-        buffer.put(UnsignedNumberUtil.toBytes(clockInfo.getRestartCount()));
-        buffer.put(clockInfo.isSafe() ? (byte)0x01 : (byte)0x00);
-        return buffer.array();
-    }
-
-    private byte[] serializeTPMUAttest(TPMUAttest attested){
+    private void writeTPMUAttest(TPMUAttest attested, OutputStream stream) throws IOException {
         if(attested instanceof TPMSCertifyInfo){
             TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo)attested;
-            ByteBuffer buffer = ByteBuffer.allocate(0);
-            buffer.put(UnsignedNumberUtil.toBytes(certifyInfo.getName().length));
-            buffer.put(certifyInfo.getName());
-            buffer.put(UnsignedNumberUtil.toBytes(certifyInfo.getQualifiedName().length));
-            buffer.put(certifyInfo.getQualifiedName());
-            return buffer.array();
+
+            stream.write(UnsignedNumberUtil.toBytes(certifyInfo.getName().length));
+            stream.write(certifyInfo.getName());
+            stream.write(UnsignedNumberUtil.toBytes(certifyInfo.getQualifiedName().length));
+            stream.write(certifyInfo.getQualifiedName());
         }
         else {
             throw new NotImplementedException();

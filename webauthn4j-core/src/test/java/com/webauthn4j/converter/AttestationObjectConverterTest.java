@@ -73,7 +73,7 @@ public class AttestationObjectConverterTest {
         byte[] source = Base64UrlUtil.decode(value);
         AttestationObject attestationObject = target.convert(source);
         assertThat(attestationObject.getAttestationStatement()).isInstanceOf(TPMAttestationStatement.class);
-        //target.convertToBytes(attestationObject); //TODO
+        target.convertToBytes(attestationObject);
     }
 
 

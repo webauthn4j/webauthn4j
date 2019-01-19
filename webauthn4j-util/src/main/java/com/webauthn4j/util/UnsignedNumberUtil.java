@@ -69,13 +69,10 @@ public class UnsignedNumberUtil {
         if(!isWithinUnsignedLong(unsignedLongValue)){
             throw new IllegalArgumentException("argument is out of range");
         }
-        if(unsignedLongValue.equals(UNSIGNED_LONG_MAX)){
-            return new byte[]{(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
-        }
         byte[] bytes = unsignedLongValue.toByteArray();
         byte[] buffer = new byte[8];
         int offset = (8-bytes.length);
-        for (int i=offset;i<8;i++){
+        for (int i=Math.max(0, offset);i<8;i++){
             buffer[i] = bytes[i-offset];
         }
         return buffer;
