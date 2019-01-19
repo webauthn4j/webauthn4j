@@ -22,9 +22,9 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.bouncycastle.util.Arrays;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -87,7 +87,7 @@ public class AuthenticatorDataConverterTest {
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
         byte[] data = Base64UrlUtil.decode(input);
-        byte[] bytes = Arrays.concatenate(data, new byte[1]);
+        byte[] bytes = Arrays.copyOf(data, data.length + 1);
         //When
         new AuthenticatorDataConverter(registry).convert(bytes);
     }
