@@ -16,8 +16,11 @@
 
 package com.webauthn4j.util;
 
+import com.webauthn4j.util.exception.NotImplementedException;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * A Utility class for unsigned number
@@ -60,6 +63,22 @@ public class UnsignedNumberUtil {
         bytes[1] = (byte) (0x000000ff & (uintValue >>> 16));
         bytes[0] = (byte) (0x000000ff & (uintValue >>> 24));
         return bytes;
+    }
+
+    public static byte[] toBytes(BigInteger unsignedLongValue) {
+        if(!isWithinUnsignedLong(unsignedLongValue)){
+            throw new IllegalArgumentException("argument is out of range");
+        }
+        if(unsignedLongValue.equals(UNSIGNED_LONG_MAX)){
+            return new byte[]{(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
+        }
+        byte[] bytes = unsignedLongValue.toByteArray();
+        byte[] buffer = new byte[8];
+        int offset = (8-bytes.length);
+        for (int i=offset;i<8;i++){
+            buffer[i] = bytes[i-offset];
+        }
+        return buffer;
     }
 
     public static boolean isWithinUnsignedLong(BigInteger value) {

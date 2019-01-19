@@ -83,17 +83,29 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void toBytes_test1() {
+    public void toBytes_long_1_test1() {
         byte[] bytes = UnsignedNumberUtil.toBytes(0x00000001L);
         assertThat(bytes).hasSize(4);
         assertThat(bytes).isEqualTo(new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01});
     }
 
     @Test
-    public void toBytes_test2() {
+    public void toBytes_long_uint_max_test2() {
         byte[] bytes = UnsignedNumberUtil.toBytes(0xFFFFFFFFL);
         assertThat(bytes).hasSize(4);
         assertThat(bytes).isEqualTo(new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
+    }
+
+    @Test
+    public void toBytes_ulong_max_test() {
+        byte[] bytes = UnsignedNumberUtil.toBytes(UnsignedNumberUtil.UNSIGNED_LONG_MAX);
+        assertThat(bytes).isEqualTo(new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
+    }
+
+    @Test
+    public void toBytes_BigInteger_uint_max_test() {
+        byte[] bytes = UnsignedNumberUtil.toBytes(BigInteger.valueOf(UnsignedNumberUtil.UNSIGNED_INT_MAX));
+        assertThat(bytes).isEqualTo(new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
     }
 
     @Test

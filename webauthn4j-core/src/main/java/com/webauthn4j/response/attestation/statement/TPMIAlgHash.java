@@ -16,5 +16,5 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-public class TPMIAlgHash {
+public enum TPMIAlgHash {
 }

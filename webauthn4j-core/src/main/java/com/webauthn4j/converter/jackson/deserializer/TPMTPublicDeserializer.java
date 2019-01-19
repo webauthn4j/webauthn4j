@@ -51,7 +51,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
             throw new InvalidFormatException(p, "input byte array contains surplus data", value, TPMTPublic.class);
         }
 
-        return new TPMTPublic(type, null, objectAttributes, authPolicy, parameters, unique);
+        return new TPMTPublic(type, nameAlgValue, objectAttributes, authPolicy, parameters, unique);
     }
 
     private TPMAObject extractTPMAObject(ByteBuffer buffer){

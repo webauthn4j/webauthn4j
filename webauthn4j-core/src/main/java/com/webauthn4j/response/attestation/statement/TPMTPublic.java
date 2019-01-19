@@ -22,13 +22,13 @@ import java.util.Objects;
 public class TPMTPublic {
 
     private TPMIAlgPublic type;
-    private TPMIAlgHash nameAlg;
+    private int nameAlg;
     private TPMAObject objectAttributes;
     private byte[] authPolicy;
     private TPMUPublicParms parameters;
     private TPMUPublicId unique;
 
-    public TPMTPublic(TPMIAlgPublic type, TPMIAlgHash nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
+    public TPMTPublic(TPMIAlgPublic type, int nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
         this.type = type;
         this.nameAlg = nameAlg;
         this.objectAttributes = objectAttributes;
@@ -41,7 +41,7 @@ public class TPMTPublic {
         return type;
     }
 
-    public TPMIAlgHash getNameAlg() {
+    public int getNameAlg() {
         return nameAlg;
     }
 

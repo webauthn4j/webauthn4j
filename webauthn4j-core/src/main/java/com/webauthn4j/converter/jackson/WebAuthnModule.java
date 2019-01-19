@@ -60,6 +60,8 @@ public class WebAuthnModule extends SimpleModule {
         this.addSerializer(Origin.class, new OriginSerializer());
         this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(registry));
         this.addSerializer(JWS.class, new JWSSerializer());
+        this.addSerializer(TPMSAttest.class, new TPMSAttestSerializer());
+        this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
