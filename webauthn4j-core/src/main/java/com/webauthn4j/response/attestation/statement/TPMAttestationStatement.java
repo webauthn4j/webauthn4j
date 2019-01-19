@@ -16,21 +16,59 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonIgnoreProperties(value = "format")
+@JsonTypeName(TPMAttestationStatement.FORMAT)
 public class TPMAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "tpm";
+    public static final String VERSION_2_0 = "2.0";
 
+    @JsonProperty
+    private String ver;
+    @JsonProperty
     private COSEAlgorithmIdentifier alg;
+    @JsonProperty
     private AttestationCertificatePath x5c;
+    @JsonProperty
     private byte[] ecdaaKeyId;
+    @JsonProperty
     private byte[] sig;
-    private CertInfo certInfo;
-    private PubArea pubArea;
+    @JsonProperty
+    private TPMSAttest certInfo;
+    @JsonProperty
+    private TPMTPublic pubArea;
 
+    public String getVer() {
+        return ver;
+    }
+
+    public COSEAlgorithmIdentifier getAlg() {
+        return alg;
+    }
 
     @Override
     public AttestationCertificatePath getX5c() {
-        return null;
+        return x5c;
+    }
+
+    public byte[] getEcdaaKeyId() {
+        return ecdaaKeyId;
+    }
+
+    public byte[] getSig() {
+        return sig;
+    }
+
+    public TPMSAttest getCertInfo() {
+        return certInfo;
+    }
+
+    public TPMTPublic getPubArea() {
+        return pubArea;
     }
 
     @Override

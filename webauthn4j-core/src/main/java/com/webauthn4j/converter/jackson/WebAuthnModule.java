@@ -51,6 +51,8 @@ public class WebAuthnModule extends SimpleModule {
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(registry));
+        this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
+        this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(CertPath.class, new CertPathSerializer());
@@ -64,6 +66,7 @@ public class WebAuthnModule extends SimpleModule {
         this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidSafetyNetAttestationStatement.class, AndroidSafetyNetAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(TPMAttestationStatement.class, TPMAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));

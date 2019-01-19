@@ -21,20 +21,22 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public enum COSEAlgorithmIdentifier {
-    RS1(-65535, "SHA1withRSA"),
-    RS256(-257, "SHA256withRSA"),
-    RS384(-258, "SHA384withRSA"),
-    RS512(-259, "SHA512withRSA"),
-    ES256(-7, "SHA256withECDSA"),
-    ES384(-35, "SHA384withECDSA"),
-    ES512(-36, "SHA512withECDSA");
+    RS1(-65535, "SHA1withRSA", "SHA-1"),
+    RS256(-257, "SHA256withRSA", "SHA-256"),
+    RS384(-258, "SHA384withRSA", "SHA-384"),
+    RS512(-259, "SHA512withRSA", "SHA-512"),
+    ES256(-7, "SHA256withECDSA", "SHA-256"),
+    ES384(-35, "SHA384withECDSA", "SHA-384"),
+    ES512(-36, "SHA512withECDSA", "SHA-512");
 
     private final long value;
     private final String jcaName;
+    private final String messageDigestJcaName;
 
-    COSEAlgorithmIdentifier(long value, String jcaName) {
+    COSEAlgorithmIdentifier(long value, String jcaName, String messageDigestJcaName) {
         this.value = value;
         this.jcaName = jcaName;
+        this.messageDigestJcaName = messageDigestJcaName;
     }
 
     @JsonCreator
@@ -67,5 +69,9 @@ public enum COSEAlgorithmIdentifier {
 
     public String getJcaName() {
         return jcaName;
+    }
+
+    public String getMessageDigestJcaName() {
+        return messageDigestJcaName;
     }
 }

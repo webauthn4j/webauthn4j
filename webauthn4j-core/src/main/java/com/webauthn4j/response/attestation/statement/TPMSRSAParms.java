@@ -16,18 +16,17 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.webauthn4j.util.exception.NotImplementedException;
+public class TPMSRSAParms implements TPMUPublicParms {
 
-public class PubArea {
+    private byte[] symmetric;
+    private byte[] scheme;
+    private byte[] keyBits;
+    private byte[] exponent;
 
-    private Object type;
-    private Object nameAlg;
-    private Object objectAttributes;
-    private Object authPolicy;
-    private Object parameters;
-    private Object unique;
-
-    public byte[] getBytes() {
-        throw new NotImplementedException();
+    public TPMSRSAParms(byte[] symmetric, byte[] scheme, byte[] keyBits, byte[] exponent) {
+        this.symmetric = symmetric;
+        this.scheme = scheme;
+        this.keyBits = keyBits;
+        this.exponent = exponent;
     }
 }

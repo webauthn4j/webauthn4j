@@ -33,11 +33,17 @@ public class UnsignedNumberUtil {
     }
 
     public static int getUnsignedShort(ByteBuffer byteBuffer) {
-        return (int) byteBuffer.getShort() & 0xffff;
+        return Short.toUnsignedInt(byteBuffer.getShort());
     }
 
     public static long getUnsignedInt(ByteBuffer byteBuffer) {
-        return (long) byteBuffer.getInt() & 0xffffffffL;
+        return Integer.toUnsignedLong(byteBuffer.getInt());
+    }
+
+    public static BigInteger getUnsignedLong(ByteBuffer byteBuffer) {
+        byte[] buffer = new byte[8];
+        byteBuffer.get(buffer);
+        return new BigInteger(1, buffer);
     }
 
     public static byte[] toBytes(int ushortValue) {

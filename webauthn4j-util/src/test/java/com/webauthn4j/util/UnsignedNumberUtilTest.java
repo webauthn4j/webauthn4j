@@ -69,6 +69,20 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
+    public void getUnsignedLong_form_UNSIGNED_LONG_MAX_test(){
+        byte[] bytes = new byte[8];
+        bytes[0] = (byte) 0xFF;
+        bytes[1] = (byte) 0xFF;
+        bytes[2] = (byte) 0xFF;
+        bytes[3] = (byte) 0xFF;
+        bytes[4] = (byte) 0xFF;
+        bytes[5] = (byte) 0xFF;
+        bytes[6] = (byte) 0xFF;
+        bytes[7] = (byte) 0xFF;
+        assertThat(UnsignedNumberUtil.getUnsignedLong(ByteBuffer.wrap(bytes))).isEqualTo(UnsignedNumberUtil.UNSIGNED_LONG_MAX);
+    }
+
+    @Test
     public void toBytes_test1() {
         byte[] bytes = UnsignedNumberUtil.toBytes(0x00000001L);
         assertThat(bytes).hasSize(4);
