@@ -16,5 +16,45 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import java.nio.ByteBuffer;
+
 public class TPMSECCParms implements TPMUPublicParms {
+
+    private byte[] symmetric;
+    private byte[] scheme;
+    private byte[] curveId;
+    private byte[] kdf;
+
+    public TPMSECCParms(byte[] symmetric, byte[] scheme, byte[] curveId, byte[] kdf) {
+        this.symmetric = symmetric;
+        this.scheme = scheme;
+        this.curveId = curveId;
+        this.kdf = kdf;
+    }
+
+    public byte[] getSymmetric() {
+        return symmetric;
+    }
+
+    public byte[] getScheme() {
+        return scheme;
+    }
+
+    public byte[] getCurveId() {
+        return curveId;
+    }
+
+    public byte[] getKdf() {
+        return kdf;
+    }
+
+    @Override
+    public byte[] getBytes() {
+        return ByteBuffer.allocate(8)
+                .put(symmetric)
+                .put(scheme)
+                .put(curveId)
+                .put(kdf)
+                .array();
+    }
 }

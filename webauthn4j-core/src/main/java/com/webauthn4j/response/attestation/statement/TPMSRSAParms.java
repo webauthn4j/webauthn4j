@@ -16,6 +16,8 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import java.nio.ByteBuffer;
+
 public class TPMSRSAParms implements TPMUPublicParms {
 
     private byte[] symmetric;
@@ -28,5 +30,30 @@ public class TPMSRSAParms implements TPMUPublicParms {
         this.scheme = scheme;
         this.keyBits = keyBits;
         this.exponent = exponent;
+    }
+
+    public byte[] getSymmetric() {
+        return symmetric;
+    }
+
+    public byte[] getScheme() {
+        return scheme;
+    }
+
+    public byte[] getKeyBits() {
+        return keyBits;
+    }
+
+    public byte[] getExponent() {
+        return exponent;
+    }
+
+    public byte[] getBytes() {
+        return ByteBuffer.allocate(10)
+                .put(symmetric)
+                .put(scheme)
+                .put(keyBits)
+                .put(exponent)
+                .array();
     }
 }

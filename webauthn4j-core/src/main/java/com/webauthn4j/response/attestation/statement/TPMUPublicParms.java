@@ -19,4 +19,5 @@ package com.webauthn4j.response.attestation.statement;
 import java.io.Serializable;
 
 public interface TPMUPublicParms extends Serializable {
+    byte[] getBytes();
 }

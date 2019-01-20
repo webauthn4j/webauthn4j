@@ -42,26 +42,24 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
         stream.write(UnsignedNumberUtil.toBytes(typeValue));
         int nameAlgValue = value.getNameAlg();
         stream.write(UnsignedNumberUtil.toBytes(nameAlgValue));
-        stream.write(serializeTPMAObject(value.getObjectAttributes()));
+        writeTPMAObject(value.getObjectAttributes(), stream);
         writeSizedArray(value.getAuthPolicy(), stream);
-        stream.write(serializeTPMUPublicParms(value.getParameters()));
+        writeTPMUPublicParms(value.getParameters(), stream);
         writeTPMUPublicId(value.getUnique(), stream);
 
         gen.writeBinary(stream.toByteArray());
     }
 
-
-
-    private byte[] serializeTPMAObject(TPMAObject objectAttributes){
-        return new byte[4]; //TODO
+    private void writeTPMAObject(TPMAObject objectAttributes, OutputStream stream) throws IOException {
+        stream.write(objectAttributes.getBytes());
     }
 
-    private byte[] serializeTPMUPublicParms(TPMUPublicParms parameters){
+    private void writeTPMUPublicParms(TPMUPublicParms parameters, OutputStream stream) throws IOException {
         if(parameters instanceof TPMSRSAParms){
-            return new byte[10]; //TODO
+            stream.write(parameters.getBytes());
         }
         else if(parameters instanceof TPMSECCParms){
-            return new byte[8]; //TODO
+            stream.write(parameters.getBytes());
         }
         else {
             throw new NotImplementedException();

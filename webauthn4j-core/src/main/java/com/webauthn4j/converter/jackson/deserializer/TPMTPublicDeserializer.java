@@ -55,9 +55,8 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
     }
 
     private TPMAObject extractTPMAObject(ByteBuffer buffer){
-        byte[] attributesBytes = new byte[4];
-        buffer.get(attributesBytes);
-        return null;
+        int value = buffer.getInt();
+        return new TPMAObject(value);
     }
 
     private TPMUPublicParms extractTPMUPublicParms(TPMIAlgPublic type, ByteBuffer buffer){
@@ -92,7 +91,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         buffer.get(curveId);
         byte[] kdf = new byte[2];
         buffer.get(kdf);
-        return new TPMSECCParms();
+        return new TPMSECCParms(symmetric, scheme, curveId, kdf);
     }
 
     private TPMUPublicId extractTPMUPublicId(TPMIAlgPublic type, ByteBuffer buffer){
