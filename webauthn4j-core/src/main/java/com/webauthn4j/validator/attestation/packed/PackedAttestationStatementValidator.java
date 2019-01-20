@@ -42,6 +42,8 @@ import java.util.Objects;
  */
 public class PackedAttestationStatementValidator implements AttestationStatementValidator {
 
+    private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
+
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -54,55 +56,67 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
         // If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if (attestationStatement.getX5c() != null) {
-            if (attestationStatement.getX5c().isEmpty()) {
-                throw new BadAttestationStatementException("No attestation certificate is found'.");
-            }
-
-            // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
-            // using the attestation public key in x5c with the algorithm specified in alg.
-            if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
-                throw new BadSignatureException("Bad signature");
-            }
-            // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
-            attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
-
-            // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
-            // the value of this extension matches the aaguid in authenticatorData.
-            byte[] aaguidInCertificateBytes = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.3.6.1.4.1.45724.1.1.4");
-            AAGUID aaguidInCertificate = aaguidInCertificateBytes == null ? AAGUID.NULL : new AAGUID(UUIDUtil.fromBytes(aaguidInCertificateBytes));
-            AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
-                throw new BadAttestationStatementException("Bad aaguid");
-            }
-
-            // If successful, return attestation type BASIC and attestation trust path x5c.
-            return AttestationType.BASIC;
+            return validateX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
         // If ecdaaKeyId is present, then the attestation type is ECDAA. In this case:
         else if (attestationStatement.getEcdaaKeyId() != null) {
-            // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
-            // using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).
-            // TODO
-            throw new NotImplementedException();
-            // If successful, return attestation type ECDAA and attestation trust path ecdaaKeyId.
-            // return AttestationType.ECDAA;
+            return validateEcdaaKeyId();
         }
         // If neither x5c nor ecdaaKeyId is present, self attestation is in use.
         else {
-            CredentialPublicKey credentialPublicKey =
-                    registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
-            // Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
-            COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = credentialPublicKey.getAlgorithm();
-            if (!alg.equals(credentialPublicKeyAlgorithm)) {
-                throw new BadAlgorithmException("Algorithm doesn't match");
-            }
-            // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
-            if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, attrToBeSigned)) {
-                throw new BadSignatureException("Bad signature");
-            }
-            // If successful, return attestation type Self and empty attestation trust path.
-            return AttestationType.SELF;
+            return validateSelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
+    }
+
+    private AttestationType validateX5c(RegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+        if (attestationStatement.getX5c().isEmpty()) {
+            throw new BadAttestationStatementException("No attestation certificate is found'.");
+        }
+
+        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
+        // using the attestation public key in x5c with the algorithm specified in alg.
+        if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
+            throw new BadSignatureException("Bad signature");
+        }
+        // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
+        attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
+
+        // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
+        // the value of this extension matches the aaguid in authenticatorData.
+        byte[] aaguidInCertificateBytes = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+        AAGUID aaguidInCertificate = aaguidInCertificateBytes == null ? AAGUID.NULL : new AAGUID(UUIDUtil.fromBytes(aaguidInCertificateBytes));
+        AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
+        if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
+            throw new BadAttestationStatementException("Bad aaguid");
+        }
+
+        // If successful, return attestation type BASIC and attestation trust path x5c.
+        return AttestationType.BASIC;
+    }
+
+    private AttestationType validateEcdaaKeyId() {
+        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
+        // using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).
+        // TODO
+        throw new NotImplementedException();
+        // If successful, return attestation type ECDAA and attestation trust path ecdaaKeyId.
+        // return AttestationType.ECDAA;
+    }
+
+    private AttestationType validateSelfAttestation(RegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+        CredentialPublicKey credentialPublicKey =
+                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
+        // Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
+        COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = credentialPublicKey.getAlgorithm();
+        if (!alg.equals(credentialPublicKeyAlgorithm)) {
+            throw new BadAlgorithmException("Algorithm doesn't match");
+        }
+        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
+        if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, attrToBeSigned)) {
+            throw new BadSignatureException("Bad signature");
+        }
+        // If successful, return attestation type Self and empty attestation trust path.
+        return AttestationType.SELF;
     }
 
     @Override

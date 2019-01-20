@@ -22,22 +22,14 @@ import java.util.Objects;
 
 public class TPMAObject implements Serializable {
 
-    private static final int RFU_0                     = 0b00000000000000000000000000000001;
     public  static final int FIXED_TPM_BIT             = 0b00000000000000000000000000000010;
     public  static final int ST_CLEAR_BIT              = 0b00000000000000000000000000000100;
-    private static final int RFU_3                     = 0b00000000000000000000000000001000;
     public  static final int FIXED_PARENT_BIT          = 0b00000000000000000000000000010000;
     public  static final int SENSITIVE_DATA_ORIGIN_BIT = 0b00000000000000000000000000100000;
     public  static final int USER_WITH_AUTH_BIT        = 0b00000000000000000000000001000000;
     public  static final int ADMIN_WITH_POLICY_BIT     = 0b00000000000000000000000010000000;
-    private static final int RFU_8                     = 0b00000000000000000000000100000000;
-    private static final int RFU_9                     = 0b00000000000000000000001000000000;
     public  static final int NO_DA_BIT                 = 0b00000000000000000000010000000000;
     public  static final int ENCRYPTED_DUPLICATION_BIT = 0b00000000000000000000100000000000;
-    private static final int RFU_12                    = 0b00000000000000000001000000000000;
-    private static final int RFU_13                    = 0b00000000000000000010000000000000;
-    private static final int RFU_14                    = 0b00000000000000000100000000000000;
-    private static final int RFU_15                    = 0b00000000000000001000000000000000;
     public  static final int RESTRICTED_BIT            = 0b00000000000000010000000000000000;
     public  static final int DECRYPT_BIT               = 0b00000000000000100000000000000000;
     public  static final int SIGN_ENCRYPT_BIT          = 0b00000000000001000000000000000000;
@@ -79,6 +71,18 @@ public class TPMAObject implements Serializable {
 
     public boolean isEncryptedDuplication(){
         return (value & ENCRYPTED_DUPLICATION_BIT) != 0;
+    }
+
+    public boolean isRestricted(){
+        return (value & RESTRICTED_BIT) != 0;
+    }
+
+    public boolean isDecrypt(){
+        return (value & DECRYPT_BIT) != 0;
+    }
+
+    public boolean isSignEncrypt(){
+        return (value & SIGN_ENCRYPT_BIT) != 0;
     }
 
     public byte[] getBytes() {

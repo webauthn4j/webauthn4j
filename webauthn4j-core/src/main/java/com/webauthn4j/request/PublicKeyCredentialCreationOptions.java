@@ -38,6 +38,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private AttestationConveyancePreference attestation;
     private AuthenticationExtensionsClientInputs extensions;
 
+    @SuppressWarnings("squid:S00107")
     public PublicKeyCredentialCreationOptions(
             PublicKeyCredentialRpEntity rp,
             PublicKeyCredentialUserEntity user,

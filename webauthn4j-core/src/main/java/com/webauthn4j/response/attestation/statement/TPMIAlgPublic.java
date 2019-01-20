@@ -64,6 +64,7 @@ public enum  TPMIAlgPublic {
     }
 
     @JsonCreator
+    @SuppressWarnings("squid:S3776")
     public static TPMIAlgPublic create(int value) throws InvalidFormatException {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
