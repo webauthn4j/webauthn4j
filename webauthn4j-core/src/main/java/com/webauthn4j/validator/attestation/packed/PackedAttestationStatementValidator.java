@@ -51,7 +51,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         PackedAttestationStatement attestationStatement = (PackedAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         byte[] sig = attestationStatement.getSig();
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        byte[] signedData = getSignedData(registrationObject);
+        byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
         // If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if (attestationStatement.getX5c() != null) {
             if (attestationStatement.getX5c().isEmpty()) {
@@ -60,7 +60,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
             // using the attestation public key in x5c with the algorithm specified in alg.
-            if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, signedData)) {
+            if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
                 throw new BadSignatureException("Bad signature");
             }
             // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
@@ -97,7 +97,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
                 throw new BadAlgorithmException("Algorithm doesn't match");
             }
             // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
-            if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, signedData)) {
+            if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, attrToBeSigned)) {
                 throw new BadSignatureException("Bad signature");
             }
             // If successful, return attestation type Self and empty attestation trust path.
@@ -124,7 +124,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         }
     }
 
-    private byte[] getSignedData(RegistrationObject registrationObject) {
+    private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());

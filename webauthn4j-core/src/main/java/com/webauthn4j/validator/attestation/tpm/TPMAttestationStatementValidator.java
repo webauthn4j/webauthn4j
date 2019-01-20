@@ -27,11 +27,14 @@ import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -51,16 +54,15 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
             throw new BadAttestationStatementException("TPM version is not supported");
         }
 
-        /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
-
-        AuthenticatorData authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
-        PublicKey publicKeyInAuthData =
-                authenticatorData.getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
-        // TODO
-
         TPMSAttest certInfo = attestationStatement.getCertInfo();
         TPMTPublic pubArea = attestationStatement.getPubArea();
+        AuthenticatorData authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
+
+        /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
+        validatePublicKeyEquality(pubArea, authenticatorData);
+
         /// Concatenate authenticatorData and clientDataHash to form attToBeSigned.
+        byte[] attToBeSigned = getAttToBeSigned(registrationObject);
 
         /// Validate that certInfo is valid:
 
@@ -75,8 +77,8 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         }
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
-        byte[] signedData = getSignedData(registrationObject, attestationStatement.getAlg());
-        if(Arrays.equals(certInfo.getExtraData(), signedData)){
+        byte[] hash = MessageDigestUtil.createMessageDigest(attestationStatement.getAlg().getMessageDigestJcaName()).digest(attToBeSigned);
+        if(!Arrays.equals(certInfo.getExtraData(), hash)){
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
         }
 
@@ -117,18 +119,37 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         throw new BadAttestationStatementException("x5c or ecdaaKeyId must be present");
     }
 
+    private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData authenticatorData) {
+        PublicKey publicKeyInAuthData =
+                authenticatorData.getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
+        TPMUPublicId publicKeyInPubArea = pubArea.getUnique();
+
+        if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_RSA && publicKeyInPubArea instanceof RSAParam){
+            RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKeyInAuthData;
+            TPMSRSAParms parms = (TPMSRSAParms)pubArea.getParameters(); //TODO
+            RSAParam rsaParam = (RSAParam) publicKeyInPubArea;
+            if (rsaPublicKey.getModulus().equals(new BigInteger(1, rsaParam.getN()))) {
+                return;
+            }
+        }
+        else if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECC && publicKeyInPubArea instanceof ECCParam){
+            ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
+            TPMSECCParms parms = (TPMSECCParms)pubArea.getParameters(); //TODO
+            ECCParam eccParam = (ECCParam) publicKeyInPubArea;
+            if (ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccParam.getX())) &&
+                    ecPublicKey.getW().getAffineY().equals(new BigInteger(1, eccParam.getY()))) {
+                return;
+            }
+        }
+        throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
+    }
+
     @Override
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         return TPMAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
-    private byte[] getSignedData(RegistrationObject registrationObject, COSEAlgorithmIdentifier alg) {
-        MessageDigest messageDigest = MessageDigestUtil.createMessageDigest(alg.getMessageDigestJcaName());
-        byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
-        return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-    }
 
     private void verifyAikCert(X509Certificate certificate){
         try {
@@ -153,5 +174,12 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         } catch (CertificateParsingException e) {
             throw new BadAttestationStatementException("Failed to parse attestation certificate", e);
         }
+    }
+
+    private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
+        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+        byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
+        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
+        return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 }
