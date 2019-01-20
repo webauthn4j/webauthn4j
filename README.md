@@ -10,6 +10,14 @@ A portable Java library for WebAuthn assertion and attestation verification
 
 **This library hasn't reached version 1. Design may change.**
 
+### Supported Attestation statement format
+
+* Packed attestation
+* FIDO U2F attestation
+* Android Key attestation
+* Android SafetyNet attestation
+* None attestation
+
 ## Documentation
 
 You can find out more details from the [reference](https://webauthn4j.github.io/webauthn4j/en/).
