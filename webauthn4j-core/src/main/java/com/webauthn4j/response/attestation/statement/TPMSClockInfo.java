@@ -16,10 +16,11 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
-public class TPMSClockInfo {
+public class TPMSClockInfo implements Serializable {
 
     private BigInteger clock;
     private long resetCount;

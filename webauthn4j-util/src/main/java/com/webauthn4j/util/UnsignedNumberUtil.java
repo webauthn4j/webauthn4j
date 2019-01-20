@@ -16,11 +16,8 @@
 
 package com.webauthn4j.util;
 
-import com.webauthn4j.util.exception.NotImplementedException;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 /**
  * A Utility class for unsigned number
@@ -31,6 +28,8 @@ public class UnsignedNumberUtil {
     public static final int UNSIGNED_SHORT_MAX = 0xFFFF;
     public static final long UNSIGNED_INT_MAX = 0xFFFFFFFFL;
     public static final BigInteger UNSIGNED_LONG_MAX = new BigInteger("18446744073709551615");
+
+    private static final String OUT_OF_RANGE_ERROR = "argument is out of range";
 
     private UnsignedNumberUtil() {
     }
@@ -50,6 +49,9 @@ public class UnsignedNumberUtil {
     }
 
     public static byte[] toBytes(int ushortValue) {
+        if(!isWithinUnsignedShort(ushortValue)){
+            throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
+        }
         byte[] bytes = new byte[2];
         bytes[1] = (byte) (0x00ff & (ushortValue));
         bytes[0] = (byte) (0x00ff & (ushortValue >>> 8));
@@ -57,6 +59,9 @@ public class UnsignedNumberUtil {
     }
 
     public static byte[] toBytes(long uintValue) {
+        if(!isWithinUnsignedInt(uintValue)){
+            throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
+        }
         byte[] bytes = new byte[4];
         bytes[3] = (byte) (0x000000ff & (uintValue));
         bytes[2] = (byte) (0x000000ff & (uintValue >>> 8));
@@ -67,7 +72,7 @@ public class UnsignedNumberUtil {
 
     public static byte[] toBytes(BigInteger unsignedLongValue) {
         if(!isWithinUnsignedLong(unsignedLongValue)){
-            throw new IllegalArgumentException("argument is out of range");
+            throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
         byte[] bytes = unsignedLongValue.toByteArray();
         byte[] buffer = new byte[8];
@@ -76,6 +81,14 @@ public class UnsignedNumberUtil {
             buffer[i] = bytes[i-offset];
         }
         return buffer;
+    }
+
+    public static boolean isWithinUnsignedShort(int value) {
+        return value <= UNSIGNED_SHORT_MAX && value >= 0;
+    }
+
+    public static boolean isWithinUnsignedInt(long value) {
+        return value <= UNSIGNED_INT_MAX && value >= 0;
     }
 
     public static boolean isWithinUnsignedLong(BigInteger value) {

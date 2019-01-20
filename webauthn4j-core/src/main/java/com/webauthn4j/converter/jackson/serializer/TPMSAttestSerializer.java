@@ -30,7 +30,6 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
 
 public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
     public TPMSAttestSerializer() {
@@ -42,8 +41,8 @@ public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         stream.write(value.getMagic().getValue());
         stream.write(value.getType().getValue());
-        stream.write(value.getQualifiedSigner());
-        stream.write(value.getExtraData());
+        writeSizedArray(value.getQualifiedSigner(), stream);
+        writeSizedArray(value.getExtraData(), stream);
         writeTPMSClockInfo(value.getClockInfo(), stream);
         stream.write(UnsignedNumberUtil.toBytes(value.getFirmwareVersion()));
         writeTPMUAttest(value.getAttested(), stream);
@@ -62,13 +61,19 @@ public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
         if(attested instanceof TPMSCertifyInfo){
             TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo)attested;
 
-            stream.write(UnsignedNumberUtil.toBytes(certifyInfo.getName().length));
-            stream.write(certifyInfo.getName());
-            stream.write(UnsignedNumberUtil.toBytes(certifyInfo.getQualifiedName().length));
-            stream.write(certifyInfo.getQualifiedName());
+            writeSizedArray(certifyInfo.getName(), stream);
+            writeSizedArray(certifyInfo.getQualifiedName(), stream);
         }
         else {
             throw new NotImplementedException();
         }
+    }
+
+    private void writeSizedArray(byte[] value, OutputStream stream) throws IOException {
+        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
+            throw new DataConversionException("too large data to write");
+        }
+        stream.write(UnsignedNumberUtil.toBytes(value.length));
+        stream.write(value);
     }
 }

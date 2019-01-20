@@ -46,7 +46,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         byte[] authPolicy = new byte[authPolicySize];
         buffer.get(authPolicy);
         TPMUPublicParms parameters = extractTPMUPublicParms(type, buffer);
-        TPMUPublicId unique = extractTPMUPublicId(buffer);
+        TPMUPublicId unique = extractTPMUPublicId(type, buffer);
         if(buffer.remaining() > 0){
             throw new InvalidFormatException(p, "input byte array contains surplus data", value, TPMTPublic.class);
         }
@@ -95,10 +95,26 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMSECCParms();
     }
 
-    private TPMUPublicId extractTPMUPublicId(ByteBuffer buffer){
-        int uniqueSize = UnsignedNumberUtil.getUnsignedShort(buffer);
-        byte[] unique = new byte[uniqueSize];
-        buffer.get(unique);
-        return null;
+    private TPMUPublicId extractTPMUPublicId(TPMIAlgPublic type, ByteBuffer buffer){
+        if(type == TPMIAlgPublic.TPM_ALG_RSA){
+            int nSize = UnsignedNumberUtil.getUnsignedShort(buffer);
+            byte[] n = new byte[nSize];
+            buffer.get(n);
+            return new RSAParam(n);
+        }
+        else if(type == TPMIAlgPublic.TPM_ALG_ECC) {
+            int xSize = UnsignedNumberUtil.getUnsignedShort(buffer);
+            byte[] x = new byte[xSize];
+            buffer.get(x);
+            int ySize = UnsignedNumberUtil.getUnsignedShort(buffer);
+            byte[] y = new byte[ySize];
+            buffer.get(y);
+            return new ECCParam(x, y);
+        }
+        else {
+            throw new NotImplementedException();
+        }
     }
+
+
 }

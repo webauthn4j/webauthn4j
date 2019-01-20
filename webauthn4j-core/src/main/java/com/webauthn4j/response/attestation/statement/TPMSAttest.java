@@ -16,11 +16,12 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMSAttest {
+public class TPMSAttest implements Serializable {
 
     private TPMGenerated magic;
     private TPMISTAttest type;

@@ -16,10 +16,11 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMTPublic {
+public class TPMTPublic implements Serializable {
 
     private TPMIAlgPublic type;
     private int nameAlg;

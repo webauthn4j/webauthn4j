@@ -16,7 +16,30 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import java.io.Serializable;
+import java.util.Arrays;
 
-public interface TPMUAttest extends Serializable {
+public class RSAParam implements TPMUPublicId {
+
+    private byte[] n;
+
+    public RSAParam(byte[] n) {
+        this.n = n;
+    }
+
+    public byte[] getN() {
+        return n;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RSAParam rsaParam = (RSAParam) o;
+        return Arrays.equals(n, rsaParam.n);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(n);
+    }
 }

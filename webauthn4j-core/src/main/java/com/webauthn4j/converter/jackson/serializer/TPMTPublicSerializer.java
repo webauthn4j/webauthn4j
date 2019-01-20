@@ -45,18 +45,12 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
         stream.write(serializeTPMAObject(value.getObjectAttributes()));
         writeSizedArray(value.getAuthPolicy(), stream);
         stream.write(serializeTPMUPublicParms(value.getParameters()));
-        writeSizedArray(serializeTPMUPublicId(value.getUnique()), stream);
+        writeTPMUPublicId(value.getUnique(), stream);
 
         gen.writeBinary(stream.toByteArray());
     }
 
-    private void writeSizedArray(byte[] value, OutputStream stream) throws IOException {
-        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
-            throw new DataConversionException("too large data to write");
-        }
-        stream.write(UnsignedNumberUtil.toBytes(value.length));
-        stream.write(value);
-    }
+
 
     private byte[] serializeTPMAObject(TPMAObject objectAttributes){
         return new byte[4]; //TODO
@@ -74,8 +68,30 @@ public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
         }
     }
 
-    private byte[] serializeTPMUPublicId(TPMUPublicId unique){
-        return new byte[0]; //TODO
+    private void writeTPMUPublicId(TPMUPublicId unique, OutputStream stream) throws IOException {
+        if(unique instanceof RSAParam){
+            RSAParam rsaParam = (RSAParam) unique;
+            stream.write(UnsignedNumberUtil.toBytes(rsaParam.getN().length));
+            stream.write(rsaParam.getN());
+        }
+        else if(unique instanceof ECCParam){
+            ECCParam eccParam = (ECCParam) unique;
+            stream.write(UnsignedNumberUtil.toBytes(eccParam.getX().length));
+            stream.write(eccParam.getX());
+            stream.write(UnsignedNumberUtil.toBytes(eccParam.getY().length));
+            stream.write(eccParam.getY());
+        }
+        else {
+            throw new NotImplementedException();
+        }
+    }
+
+    private void writeSizedArray(byte[] value, OutputStream stream) throws IOException {
+        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
+            throw new DataConversionException("too large data to write");
+        }
+        stream.write(UnsignedNumberUtil.toBytes(value.length));
+        stream.write(value);
     }
 
 }

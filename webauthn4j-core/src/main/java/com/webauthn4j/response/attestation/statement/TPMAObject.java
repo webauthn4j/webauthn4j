@@ -16,5 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-public class TPMAObject {
+import java.io.Serializable;
+
+public class TPMAObject implements Serializable {
 }

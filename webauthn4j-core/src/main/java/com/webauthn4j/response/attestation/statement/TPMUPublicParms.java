@@ -16,5 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-public interface TPMUPublicParms {
+import java.io.Serializable;
+
+public interface TPMUPublicParms extends Serializable {
 }
