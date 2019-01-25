@@ -16,7 +16,12 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
@@ -67,6 +72,23 @@ public class TPMSAttest implements Serializable {
 
     public TPMUAttest getAttested() {
         return attested;
+    }
+
+    public byte[] getBytes(){
+        try{
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            stream.write(getMagic().getValue());
+            stream.write(getType().getValue());
+            TPMUtil.writeSizedArray(stream, getQualifiedSigner());
+            TPMUtil.writeSizedArray(stream, getExtraData());
+            stream.write(getClockInfo().getBytes());
+            stream.write(UnsignedNumberUtil.toBytes(getFirmwareVersion()));
+            stream.write(getAttested().getBytes());
+            return stream.toByteArray();
+        }
+        catch (IOException e){
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Override

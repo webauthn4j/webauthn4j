@@ -27,7 +27,7 @@ public abstract class CachingTrustAnchorProviderBase implements TrustAnchorProvi
     private Map<AAGUID, Set<TrustAnchor>> cachedTrustAnchors;
 
     /**
-     * provide aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
+     * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
      *
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */

@@ -41,7 +41,7 @@ public class KeyStoreFileTrustAnchorProvider extends CachingTrustAnchorProviderB
     private String password;
 
     /**
-     * provide aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
+     * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
      *
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */

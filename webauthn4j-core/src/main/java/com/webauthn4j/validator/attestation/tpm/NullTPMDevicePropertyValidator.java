@@ -14,24 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.converter.jackson.serializer;
+package com.webauthn4j.validator.attestation.tpm;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.response.attestation.statement.TPMTPublic;
-
-import java.io.IOException;
-
-public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
-
-    public TPMTPublicSerializer() {
-        super(TPMTPublic.class);
-    }
-
+public class NullTPMDevicePropertyValidator implements TPMDevicePropertyValidator {
     @Override
-    public void serialize(TPMTPublic value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeBinary(value.getBytes());
+    public void validate(TPMDeviceProperty tpmDeviceProperty) {
+        //nop
     }
-
 }

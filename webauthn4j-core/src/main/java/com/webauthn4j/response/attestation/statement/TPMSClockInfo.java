@@ -16,8 +16,11 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.UnsignedNumberUtil;
+
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.util.Objects;
 
 public class TPMSClockInfo implements Serializable {
@@ -65,5 +68,14 @@ public class TPMSClockInfo implements Serializable {
     public int hashCode() {
 
         return Objects.hash(clock, resetCount, restartCount, safe);
+    }
+
+    public byte[] getBytes() {
+        ByteBuffer buffer = ByteBuffer.allocate(17);
+        buffer.put(UnsignedNumberUtil.toBytes(getClock()));
+        buffer.put(UnsignedNumberUtil.toBytes(getResetCount()));
+        buffer.put(UnsignedNumberUtil.toBytes(getRestartCount()));
+        buffer.put(isSafe() ? (byte)0x01 : (byte)0x00);
+        return buffer.array();
     }
 }

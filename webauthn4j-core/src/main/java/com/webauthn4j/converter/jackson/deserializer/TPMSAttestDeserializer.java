@@ -68,18 +68,23 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSClockInfo(clock, resetCount, restartCount, safe);
     }
 
-    private TPMUAttest extractTPMUAttest(TPMISTAttest type, ByteBuffer buffer){
+    private TPMUAttest extractTPMUAttest(TPMISTAttest type, ByteBuffer buffer) throws InvalidFormatException {
         if(type != TPMISTAttest.TPM_ST_ATTEST_CERTIFY){
             throw new NotImplementedException();
         }
 
         int nameSize = UnsignedNumberUtil.getUnsignedShort(buffer);
-        byte[] name = new byte[nameSize];
-        buffer.get(name);
+        TPMTHA name = extractTPMTHA(buffer, nameSize - 2);
         int qualifiedNameSize = UnsignedNumberUtil.getUnsignedShort(buffer);
-        byte[] qualifiedName = new byte[qualifiedNameSize];
-        buffer.get(qualifiedName);
+        TPMTHA qualifiedName = extractTPMTHA(buffer, qualifiedNameSize - 2);
 
         return new TPMSCertifyInfo(name, qualifiedName);
+    }
+
+    private TPMTHA extractTPMTHA(ByteBuffer buffer, int digestLength) throws InvalidFormatException {
+        TPMIAlgHash hashAlg = TPMIAlgHash.create(UnsignedNumberUtil.getUnsignedShort(buffer));
+        byte[] digest = new byte[digestLength];
+        buffer.get(digest);
+        return new TPMTHA(hashAlg, digest);
     }
 }

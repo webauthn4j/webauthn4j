@@ -16,24 +16,39 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.Objects;
 
 public class TPMSCertifyInfo implements TPMUAttest {
 
-    private byte[] name;
-    private byte[] qualifiedName;
+    private TPMTHA name;
+    private TPMTHA qualifiedName;
 
-    public TPMSCertifyInfo(byte[] name, byte[] qualifiedName) {
+    public TPMSCertifyInfo(TPMTHA name, TPMTHA qualifiedName) {
         this.name = name;
         this.qualifiedName = qualifiedName;
     }
 
-    public byte[] getName() {
+    public TPMTHA getName() {
         return name;
     }
 
-    public byte[] getQualifiedName() {
+    public TPMTHA getQualifiedName() {
         return qualifiedName;
+    }
+
+    @Override
+    public byte[] getBytes() {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            TPMUtil.writeSizedArray(outputStream, name.getBytes());
+            TPMUtil.writeSizedArray(outputStream, qualifiedName.getBytes());
+            return outputStream.toByteArray();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Override
@@ -41,15 +56,13 @@ public class TPMSCertifyInfo implements TPMUAttest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMSCertifyInfo that = (TPMSCertifyInfo) o;
-        return Arrays.equals(name, that.name) &&
-                Arrays.equals(qualifiedName, that.qualifiedName);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(qualifiedName, that.qualifiedName);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Arrays.hashCode(name);
-        result = 31 * result + Arrays.hashCode(qualifiedName);
-        return result;
+        return Objects.hash(name, qualifiedName);
     }
 }

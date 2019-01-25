@@ -17,15 +17,17 @@
 package com.webauthn4j.response.attestation.statement;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class TPMSECCParms implements TPMUPublicParms {
 
     private byte[] symmetric;
     private byte[] scheme;
-    private byte[] curveId;
+    private TPMEccCurve curveId;
     private byte[] kdf;
 
-    public TPMSECCParms(byte[] symmetric, byte[] scheme, byte[] curveId, byte[] kdf) {
+    public TPMSECCParms(byte[] symmetric, byte[] scheme, TPMEccCurve curveId, byte[] kdf) {
         this.symmetric = symmetric;
         this.scheme = scheme;
         this.curveId = curveId;
@@ -40,7 +42,7 @@ public class TPMSECCParms implements TPMUPublicParms {
         return scheme;
     }
 
-    public byte[] getCurveId() {
+    public TPMEccCurve getCurveId() {
         return curveId;
     }
 
@@ -53,8 +55,29 @@ public class TPMSECCParms implements TPMUPublicParms {
         return ByteBuffer.allocate(8)
                 .put(symmetric)
                 .put(scheme)
-                .put(curveId)
+                .put(curveId.getBytes())
                 .put(kdf)
                 .array();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TPMSECCParms that = (TPMSECCParms) o;
+        return Arrays.equals(symmetric, that.symmetric) &&
+                Arrays.equals(scheme, that.scheme) &&
+                curveId == that.curveId &&
+                Arrays.equals(kdf, that.kdf);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(curveId);
+        result = 31 * result + Arrays.hashCode(symmetric);
+        result = 31 * result + Arrays.hashCode(scheme);
+        result = 31 * result + Arrays.hashCode(kdf);
+        return result;
     }
 }

@@ -16,20 +16,25 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class TPMTPublic implements Serializable {
 
     private TPMIAlgPublic type;
-    private int nameAlg;
+    private TPMIAlgHash nameAlg;
     private TPMAObject objectAttributes;
     private byte[] authPolicy;
     private TPMUPublicParms parameters;
     private TPMUPublicId unique;
 
-    public TPMTPublic(TPMIAlgPublic type, int nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
+    public TPMTPublic(TPMIAlgPublic type, TPMIAlgHash nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
         this.type = type;
         this.nameAlg = nameAlg;
         this.objectAttributes = objectAttributes;
@@ -42,7 +47,7 @@ public class TPMTPublic implements Serializable {
         return type;
     }
 
-    public int getNameAlg() {
+    public TPMIAlgHash getNameAlg() {
         return nameAlg;
     }
 
@@ -62,13 +67,30 @@ public class TPMTPublic implements Serializable {
         return unique;
     }
 
+    public byte[] getBytes() {
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            int typeValue = type.getValue();
+            stream.write(UnsignedNumberUtil.toBytes(typeValue));
+            int nameAlgValue = getNameAlg().getValue();
+            stream.write(UnsignedNumberUtil.toBytes(nameAlgValue));
+            stream.write(getObjectAttributes().getBytes());
+            TPMUtil.writeSizedArray(stream, getAuthPolicy());
+            stream.write(getParameters().getBytes());
+            stream.write(getUnique().getBytes());
+            return stream.toByteArray();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMTPublic that = (TPMTPublic) o;
-        return Objects.equals(type, that.type) &&
-                Objects.equals(nameAlg, that.nameAlg) &&
+        return type == that.type &&
+                nameAlg == that.nameAlg &&
                 Objects.equals(objectAttributes, that.objectAttributes) &&
                 Arrays.equals(authPolicy, that.authPolicy) &&
                 Objects.equals(parameters, that.parameters) &&

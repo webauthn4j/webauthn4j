@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(TPMAttestationStatement.FORMAT)
 public class TPMAttestationStatement implements CertificateBaseAttestationStatement {
@@ -102,5 +105,28 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     @Override
     public void validate() {
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TPMAttestationStatement that = (TPMAttestationStatement) o;
+        return Objects.equals(ver, that.ver) &&
+                alg == that.alg &&
+                Objects.equals(x5c, that.x5c) &&
+                Arrays.equals(ecdaaKeyId, that.ecdaaKeyId) &&
+                Arrays.equals(sig, that.sig) &&
+                Objects.equals(certInfo, that.certInfo) &&
+                Objects.equals(pubArea, that.pubArea);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(ver, alg, x5c, certInfo, pubArea);
+        result = 31 * result + Arrays.hashCode(ecdaaKeyId);
+        result = 31 * result + Arrays.hashCode(sig);
+        return result;
     }
 }

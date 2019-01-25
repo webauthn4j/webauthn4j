@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
+import java.util.Objects;
+
 @WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
@@ -70,4 +72,18 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         return response;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AndroidSafetyNetAttestationStatement that = (AndroidSafetyNetAttestationStatement) o;
+        return Objects.equals(ver, that.ver) &&
+                Objects.equals(response, that.response);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(ver, response);
+    }
 }

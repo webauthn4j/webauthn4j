@@ -18,30 +18,38 @@ package com.webauthn4j.validator.attestation.tpm;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.response.attestation.authenticator.Curve;
 import com.webauthn4j.response.attestation.statement.*;
-import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.WIP;
+import com.webauthn4j.util.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
+import org.apache.kerby.asn1.type.Asn1Utf8String;
 
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapName;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.EllipticCurve;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @WIP
 public class TPMAttestationStatementValidator implements AttestationStatementValidator {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
+
+    private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -86,21 +94,39 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         /// whose name field contains a valid Name for pubArea, as computed using the algorithm in the nameAlg field of
         /// pubArea using the procedure specified in [TPMv2-Part1] section 16.
         TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo) certInfo.getAttested();
-        certifyInfo.getName();
-        //TODO
+        TPMIAlgHash alg = certifyInfo.getName().getHashAlg();
+        String algJcaName;
+        algJcaName = getAlgJcaName(alg);
+
+        byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
+        if(!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())){
+            throw new BadAttestationStatementException("hash of attested doesn't match with name field of certifyInfo");
+        }
 
         /// Note that the remaining fields in the "Standard Attestation Structure" [TPMv2-Part1] section 31.2,
         /// i.e., qualifiedSigner, clockInfo and firmwareVersion are ignored. These fields MAY be used as an input to risk engines.
 
         /// If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if(attestationStatement.getX5c() != null){
-            /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-            //TODO
-            /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
             X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
-            verifyAikCert(aikCert);
 
-            //TODO
+            /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
+            Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
+            try {
+                certInfoSignature.initVerify(aikCert.getPublicKey());
+                certInfoSignature.update(certInfo.getBytes());
+                if(!certInfoSignature.verify(attestationStatement.getSig())){
+                    throw new BadAttestationStatementException("hash of certInfo doesn't match with sig");
+                }
+            } catch (SignatureException e) {
+                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig", e);
+            } catch (InvalidKeyException e) {
+                throw new BadAttestationStatementException("invalid publicKey", e);
+            }
+
+            /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
+            validateAikCert(aikCert);
+
             /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
             byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
             if(aaguidBytes !=null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())){
@@ -119,29 +145,78 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         throw new BadAttestationStatementException("x5c or ecdaaKeyId must be present");
     }
 
+    private String getAlgJcaName(TPMIAlgHash alg) {
+        String algJcaName;
+        switch (alg){
+            case TPM_ALG_SHA1:
+                algJcaName = "SHA-1";
+                break;
+            case TPM_ALG_SHA256:
+                algJcaName = "SHA-256";
+                break;
+            case TPM_ALG_SHA384:
+                algJcaName = "SHA-386";
+                break;
+            case TPM_ALG_SHA512:
+                algJcaName = "SHA-512";
+                break;
+            default:
+                throw new BadAttestationStatementException("nameAlg '" + alg.name() + "' is not supported.");
+        }
+        return algJcaName;
+    }
+
+    public TPMDevicePropertyValidator getTpmDevicePropertyValidator() {
+        return tpmDevicePropertyValidator;
+    }
+
+    public void setTpmDevicePropertyValidator(TPMDevicePropertyValidator tpmDevicePropertyValidator) {
+        this.tpmDevicePropertyValidator = tpmDevicePropertyValidator;
+    }
+
     private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData authenticatorData) {
         PublicKey publicKeyInAuthData =
                 authenticatorData.getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
         TPMUPublicId publicKeyInPubArea = pubArea.getUnique();
 
-        if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_RSA && publicKeyInPubArea instanceof RSAParam){
+        if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_RSA && publicKeyInPubArea instanceof RSAUnique){
             RSAPublicKey rsaPublicKey = (RSAPublicKey) publicKeyInAuthData;
-            TPMSRSAParms parms = (TPMSRSAParms)pubArea.getParameters(); //TODO
-            RSAParam rsaParam = (RSAParam) publicKeyInPubArea;
-            if (rsaPublicKey.getModulus().equals(new BigInteger(1, rsaParam.getN()))) {
+            TPMSRSAParms parms = (TPMSRSAParms)pubArea.getParameters();
+            RSAUnique rsaUnique = (RSAUnique) publicKeyInPubArea;
+            long exponent = UnsignedNumberUtil.getUnsignedInt(parms.getExponent());
+            if(exponent == 0){
+                exponent = 65537; // 2^16 + 1
+            }
+            if (rsaPublicKey.getModulus().equals(new BigInteger(1, rsaUnique.getN())) &&
+                rsaPublicKey.getPublicExponent().equals(BigInteger.valueOf(exponent))) {
                 return;
             }
         }
-        else if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECC && publicKeyInPubArea instanceof ECCParam){
+        else if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECC && publicKeyInPubArea instanceof ECCUnique){
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
-            TPMSECCParms parms = (TPMSECCParms)pubArea.getParameters(); //TODO
-            ECCParam eccParam = (ECCParam) publicKeyInPubArea;
-            if (ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccParam.getX())) &&
-                    ecPublicKey.getW().getAffineY().equals(new BigInteger(1, eccParam.getY()))) {
+            TPMSECCParms parms = (TPMSECCParms)pubArea.getParameters();
+            EllipticCurve curveInParms = getCurveFromTPMEccCurve(parms.getCurveId());
+            ECCUnique eccUnique = (ECCUnique) publicKeyInPubArea;
+            if (ecPublicKey.getParams().getCurve().equals(curveInParms) &&
+                ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccUnique.getX())) &&
+                ecPublicKey.getW().getAffineY().equals(new BigInteger(1, eccUnique.getY()))) {
                 return;
             }
         }
         throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
+    }
+
+    private EllipticCurve getCurveFromTPMEccCurve(TPMEccCurve curveId) {
+        switch (curveId){
+            case TPM_ECC_NIST_P256:
+                return ECUtil.P_256_SPEC.getCurve();
+            case TPM_ECC_NIST_P384:
+                return ECUtil.P_384_SPEC.getCurve();
+            case TPM_ECC_NIST_P521:
+                return ECUtil.P_521_SPEC.getCurve();
+            default:
+                throw new NotImplementedException();
+        }
     }
 
     @Override
@@ -151,7 +226,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
     }
 
 
-    private void verifyAikCert(X509Certificate certificate){
+    private void validateAikCert(X509Certificate certificate){
         try {
             /// TPM attestation certificate MUST have the following fields/extensions:
             /// Version MUST be set to 3.
@@ -163,17 +238,55 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
                 throw new BadAttestationStatementException("x5c subject field MUST be set to empty");
             }
             /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
-            //TODO
-            certificate.getSubjectAlternativeNames();
-            //The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
-            //TODO
-            //The Basic Constraints extension MUST have the CA component set to false.
-            //TODO
-            //An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
-            //TODO
+            validateSubjectAlternativeName(certificate);
+            /// The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
+            if(!certificate.getExtendedKeyUsage().contains("2.23.133.8.3")){
+                throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID");
+            }
+            /// The Basic Constraints extension MUST have the CA component set to false.
+            if(certificate.getBasicConstraints() != -1){
+                throw new BadAttestationStatementException("The Basic Constraints extension of attestation certificate must have the CA component set to false");
+            }
+            /// An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point
+            /// extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available
+            /// through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
+
         } catch (CertificateParsingException e) {
             throw new BadAttestationStatementException("Failed to parse attestation certificate", e);
         }
+    }
+
+    private void validateSubjectAlternativeName(X509Certificate certificate) throws CertificateParsingException {
+
+        try{
+            for(List entry : certificate.getSubjectAlternativeNames()){
+                if(entry.get(0).equals(4)){
+                    LdapName directoryName = new LdapName((String) entry.get(1));
+                    directoryName.getRdns();
+                    byte[] manufacturerAttr = (byte[])directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
+                    byte[] partNumberAttr = (byte[])directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.2").get();
+                    byte[] firmwareVersionAttr = (byte[])directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.3").get();
+
+                    if(manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null){
+                        Asn1Utf8String manufacturerUtf8String = new Asn1Utf8String();
+                        manufacturerUtf8String.decode(manufacturerAttr);
+                        Asn1Utf8String partNumberUtf8String = new Asn1Utf8String();
+                        partNumberUtf8String.decode(partNumberAttr);
+                        Asn1Utf8String firmwareVersionUtf8String = new Asn1Utf8String();
+                        firmwareVersionUtf8String.decode(firmwareVersionAttr);
+
+                        String manufacturer = manufacturerUtf8String.getValue();
+                        String partNumber = partNumberUtf8String.getValue();
+                        String firmwareVersion = firmwareVersionUtf8String.getValue();
+                        tpmDevicePropertyValidator.validate(new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion));
+                        return;
+                    }
+                }
+            }
+        } catch (NamingException | IOException | RuntimeException e) {
+            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate dosn't contain TPM device property", e);
+        }
+        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate dosn't contain TPM device property");
     }
 
     private byte[] getAttToBeSigned(RegistrationObject registrationObject) {

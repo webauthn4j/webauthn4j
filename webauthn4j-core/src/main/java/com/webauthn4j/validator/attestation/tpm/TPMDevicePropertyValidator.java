@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.attestation.statement;
+package com.webauthn4j.validator.attestation.tpm;
 
-import java.io.Serializable;
+public interface TPMDevicePropertyValidator {
 
-public interface TPMUPublicId extends Serializable {
-
-    byte[] getBytes();
+    void validate(TPMDeviceProperty tpmDeviceProperty);
 }

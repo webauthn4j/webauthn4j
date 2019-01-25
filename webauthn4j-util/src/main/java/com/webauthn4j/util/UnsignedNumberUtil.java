@@ -38,8 +38,22 @@ public class UnsignedNumberUtil {
         return Short.toUnsignedInt(byteBuffer.getShort());
     }
 
+    public static int getUnsignedShort(byte[] bytes) {
+        if(bytes.length != 2){
+            throw new IllegalArgumentException("byte array must be 2 bytes");
+        }
+        return getUnsignedShort(ByteBuffer.wrap(bytes));
+    }
+
     public static long getUnsignedInt(ByteBuffer byteBuffer) {
         return Integer.toUnsignedLong(byteBuffer.getInt());
+    }
+
+    public static long getUnsignedInt(byte[] bytes) {
+        if(bytes.length != 4){
+            throw new IllegalArgumentException("byte array must be 4 bytes");
+        }
+        return getUnsignedInt(ByteBuffer.wrap(bytes));
     }
 
     public static BigInteger getUnsignedLong(ByteBuffer byteBuffer) {
@@ -94,6 +108,5 @@ public class UnsignedNumberUtil {
     public static boolean isWithinUnsignedLong(BigInteger value) {
         return value.bitLength() <= 64 && value.compareTo(BigInteger.valueOf(0)) >= 0;
     }
-
 
 }

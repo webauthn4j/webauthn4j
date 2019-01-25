@@ -22,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 @WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(AndroidKeyAttestationStatement.FORMAT)
@@ -80,5 +83,23 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         if (x5c == null) {
             throw new ConstraintViolationException("x5c must not be null");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AndroidKeyAttestationStatement that = (AndroidKeyAttestationStatement) o;
+        return alg == that.alg &&
+                Arrays.equals(sig, that.sig) &&
+                Objects.equals(x5c, that.x5c);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(alg, x5c);
+        result = 31 * result + Arrays.hashCode(sig);
+        return result;
     }
 }

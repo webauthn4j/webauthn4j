@@ -16,40 +16,51 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Objects;
 
-public class ECCParam implements TPMUPublicId {
+public class TPMTHA {
 
-    private byte[] x;
-    private byte[] y;
+    private TPMIAlgHash hashAlg;
+    private byte[] digest;
 
-    public ECCParam(byte[] x, byte[] y) {
-        this.x = x;
-        this.y = y;
+    public TPMTHA(TPMIAlgHash hashAlg, byte[] digest) {
+        this.hashAlg = hashAlg;
+        this.digest = digest;
     }
 
-    public byte[] getX() {
-        return x;
+    public TPMIAlgHash getHashAlg() {
+        return hashAlg;
     }
 
-    public byte[] getY() {
-        return y;
+    public byte[] getDigest() {
+        return digest;
+    }
+
+    public byte[] getBytes(){
+        ByteBuffer buffer = ByteBuffer.allocate(2 + digest.length);
+        buffer.put(UnsignedNumberUtil.toBytes(hashAlg.getValue()));
+        buffer.put(digest);
+        return buffer.array();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ECCParam eccParam = (ECCParam) o;
-        return Arrays.equals(x, eccParam.x) &&
-                Arrays.equals(y, eccParam.y);
+        TPMTHA tpmtha = (TPMTHA) o;
+        return hashAlg == tpmtha.hashAlg &&
+                Arrays.equals(digest, tpmtha.digest);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Arrays.hashCode(x);
-        result = 31 * result + Arrays.hashCode(y);
+        int result = Objects.hash(hashAlg);
+        result = 31 * result + Arrays.hashCode(digest);
         return result;
     }
 }

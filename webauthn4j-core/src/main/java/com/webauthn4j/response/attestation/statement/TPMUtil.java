@@ -16,30 +16,21 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import java.util.Arrays;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.util.UnsignedNumberUtil;
 
-public class RSAParam implements TPMUPublicId {
+import java.io.IOException;
+import java.io.OutputStream;
 
-    private byte[] n;
+public class TPMUtil {
 
-    public RSAParam(byte[] n) {
-        this.n = n;
-    }
+    private TPMUtil(){}
 
-    public byte[] getN() {
-        return n;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RSAParam rsaParam = (RSAParam) o;
-        return Arrays.equals(n, rsaParam.n);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(n);
+    public static void writeSizedArray(OutputStream stream, byte[] value) throws IOException {
+        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
+            throw new DataConversionException("too large data to write");
+        }
+        stream.write(UnsignedNumberUtil.toBytes(value.length));
+        stream.write(value);
     }
 }
