@@ -16,19 +16,32 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.nimbusds.jose.JWSObject;
-import com.webauthn4j.util.WIP;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.net.URI;
 
 /**
- * Verifier for JWS (Json Web Signature)
+ * Test for SimpleFIDOMDSClient
  */
-@WIP
-public interface JWSVerifier {
+public class SimpleFIDOMDSClientIntegrationTest {
 
-    /**
-     * Verify {@link JWSObject}
-     *
-     * @param jws verification target
-     */
-    void verify(JWSObject jws);
+    private SimpleFIDOMDSClient target;
+
+    @Before
+    public void setup() {
+        target = new SimpleFIDOMDSClient();
+    }
+
+    @Test
+    public void retrieveMetadataTOC_test() {
+        String metadataTOC = target.fetchMetadataTOC();
+
+    }
+
+    @Test
+    public void retrieveMetadataStatement_test() throws Exception {
+        URI uri = new URI("https://mds.fidoalliance.org/metadata/4e4e%23400a");
+        String metadataStatement = target.fetchMetadataStatement(uri);
+    }
 }

@@ -25,7 +25,6 @@ dependencies {
     compile("com.nimbusds:nimbus-jose-jwt:${nimbusJoseJwtVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
-    compile("org.apache.httpcomponents:httpclient")
     compile("org.springframework:spring-web")
 
     //Test

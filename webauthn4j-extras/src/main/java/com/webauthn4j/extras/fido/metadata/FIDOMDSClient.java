@@ -16,94 +16,14 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.nimbusds.jwt.JWTParser;
-import com.nimbusds.jwt.SignedJWT;
-import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
-import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayload;
-import com.webauthn4j.registry.Registry;
-import com.webauthn4j.util.WIP;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.Base64Utils;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 
 /**
  * Client for FIDO Metadata Service
  */
-@WIP
-public class FIDOMDSClient {
+public interface FIDOMDSClient {
 
-    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds.fidoalliance.org/";
-    RestTemplate restTemplate;
-    JWSVerifier jwsVerifier;
-    ObjectMapper objectMapper;
-    private String fidoMetadataServiceEndpoint;
-
-    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier, String fidoMetadataServiceEndpoint) {
-        this.restTemplate = restTemplate;
-        this.jwsVerifier = jwsVerifier;
-        this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
-
-        objectMapper = registry.getJsonMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-    }
-
-    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, JWSVerifier jwsVerifier) {
-        this(registry, restTemplate, jwsVerifier, DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT);
-    }
-
-    public FIDOMDSClient(Registry registry, RestTemplate restTemplate, ResourceLoader resourceLoader) {
-        this(registry, restTemplate, new CertPathJWSVerifier(resourceLoader));
-    }
-
-    public MetadataTOCPayload retrieveMetadataTOC() {
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(fidoMetadataServiceEndpoint, String.class);
-        SignedJWT jwt;
-        try {
-            jwt = (SignedJWT) JWTParser.parse(responseEntity.getBody());
-        } catch (ParseException e) {
-            throw new IllegalStateException(e);
-        }
-
-        //Verify JWS Signature
-        jwsVerifier.verify(jwt);
-
-        String payloadString = jwt.getPayload().toString();
-        MetadataTOCPayload payload;
-        try {
-            payload = objectMapper.readValue(payloadString, MetadataTOCPayload.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-        return payload;
-    }
-
-    public MetadataStatement retrieveMetadataStatement(URI uri) {
-        ResponseEntity<String> responseEntity;
-        responseEntity = restTemplate.getForEntity(uri, String.class);
-        String decoded = new String(Base64Utils.decodeFromString(responseEntity.getBody()), StandardCharsets.UTF_8);
-        try {
-            return objectMapper.readValue(decoded, MetadataStatement.class);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public String getFidoMetadataServiceEndpoint() {
-        return fidoMetadataServiceEndpoint;
-    }
-
-    public void setFidoMetadataServiceEndpoint(String fidoMetadataServiceEndpoint) {
-        this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
-    }
-
+    String fetchMetadataTOC();
+    String fetchMetadataStatement(URI uri);
 
 }

@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata;
+package com.webauthn4j.extras.fido.metadata.exception;
 
-import com.nimbusds.jose.JWSObject;
-import com.webauthn4j.util.WIP;
+public class MDSException extends RuntimeException {
+    public MDSException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-/**
- * A JWSVerifier but does nothing
- */
-@WIP
-public class NullJWSVerifier implements JWSVerifier {
+    public MDSException(String message) {
+        super(message);
+    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void verify(JWSObject jws) {
-        //nop
+    public MDSException(Throwable cause) {
+        super(cause);
     }
 }

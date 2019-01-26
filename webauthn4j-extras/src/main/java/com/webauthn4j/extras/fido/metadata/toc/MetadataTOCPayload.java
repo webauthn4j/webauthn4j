@@ -19,6 +19,8 @@ package com.webauthn4j.extras.fido.metadata.toc;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -26,13 +28,13 @@ import java.util.List;
  */
 public class MetadataTOCPayload {
     @JsonProperty
-    private LocalDate nextUpdate;
+    private OffsetDateTime nextUpdate;
     @JsonProperty
     private Integer no;
     @JsonProperty
     private List<MetadataTOCPayloadEntry> entries;
 
-    public LocalDate getNextUpdate() {
+    public OffsetDateTime getNextUpdate() {
         return nextUpdate;
     }
 

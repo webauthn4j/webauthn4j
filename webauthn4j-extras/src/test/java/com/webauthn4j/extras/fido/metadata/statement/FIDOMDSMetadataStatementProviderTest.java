@@ -16,17 +16,22 @@
 
 package com.webauthn4j.extras.fido.metadata.statement;
 
+import com.webauthn4j.extras.fido.metadata.SimpleFIDOMDSClient;
+import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FIDOMDSMetadataStatementProviderTest {
 
-    private FIDOMDSMetadataStatementProvider target = new FIDOMDSMetadataStatementProvider(null);
+    private FIDOMDSMetadataStatementProvider target = new FIDOMDSMetadataStatementProvider(new Registry(), new SimpleFIDOMDSClient());
+    private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
 
     @Test
     public void needsRefresh_test_with_cache_null() {
@@ -37,8 +42,8 @@ public class FIDOMDSMetadataStatementProviderTest {
     @Test
     public void needsRefresh_test_with_future_nextUpdate() {
         target.cachedMetadataMap = new HashMap<>();
-        target.nextUpdate = LocalDate.now().plusDays(1);
-        target.lastRefresh = LocalDateTime.now().minusWeeks(1);
+        target.nextUpdate = now.plusDays(1);
+        target.lastRefresh = now.minusWeeks(1);
 
         assertThat(target.needsRefresh()).isFalse();
     }
@@ -46,8 +51,8 @@ public class FIDOMDSMetadataStatementProviderTest {
     @Test
     public void needsRefresh_test_with_equal_nextUpdate_and_lastRefresh_within_one_hour() {
         target.cachedMetadataMap = new HashMap<>();
-        target.nextUpdate = LocalDate.now();
-        target.lastRefresh = LocalDateTime.now().minusMinutes(59);
+        target.nextUpdate = now;
+        target.lastRefresh = now.minusMinutes(59);
 
         assertThat(target.needsRefresh()).isFalse();
     }
@@ -55,8 +60,8 @@ public class FIDOMDSMetadataStatementProviderTest {
     @Test
     public void needsRefresh_test_with_past_nextUpdate() {
         target.cachedMetadataMap = new HashMap<>();
-        target.nextUpdate = LocalDate.now().minusDays(1);
-        target.lastRefresh = LocalDateTime.now().minusWeeks(1);
+        target.nextUpdate = now.minusDays(1);
+        target.lastRefresh = now.minusWeeks(1);
 
         assertThat(target.needsRefresh()).isTrue();
     }

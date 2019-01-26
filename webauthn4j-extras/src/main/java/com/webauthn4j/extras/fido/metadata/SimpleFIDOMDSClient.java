@@ -16,15 +16,17 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
-import com.webauthn4j.util.WIP;
+import java.net.URI;
 
-import java.util.function.Predicate;
+public class SimpleFIDOMDSClient implements FIDOMDSClient {
 
-/**
- * A functional interface for representing MetaDataTOC filtering logic.
- */
-@SuppressWarnings("WeakerAccess")
-@WIP
-public interface MetadataTOCFilter extends Predicate<MetadataTOCPayloadEntry> {
+    @Override
+    public String fetchMetadataTOC() {
+        return null;
+    }
+
+    @Override
+    public String fetchMetadataStatement(URI uri) {
+        return null;
+    }
 }

@@ -18,6 +18,7 @@ package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.toc.StatusReport;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.WIP;
 
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ import java.util.List;
 public class Metadata {
 
     private String aaid;
-    private String aaguid;
+    private AAGUID aaguid;
     private List<String> attestationCertificateKeyIdentifiers;
     private String hash;
     private List<StatusReport> statusReports;
@@ -45,11 +46,11 @@ public class Metadata {
         this.aaid = aaid;
     }
 
-    public String getAaguid() {
+    public AAGUID getAaguid() {
         return aaguid;
     }
 
-    public void setAaguid(String aaguid) {
+    public void setAaguid(AAGUID aaguid) {
         this.aaguid = aaguid;
     }
 
