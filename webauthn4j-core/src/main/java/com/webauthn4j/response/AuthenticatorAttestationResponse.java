@@ -23,6 +23,9 @@ import java.util.Arrays;
 @WIP
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private byte[] attestationObject;
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,

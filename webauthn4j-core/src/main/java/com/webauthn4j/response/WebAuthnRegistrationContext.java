@@ -27,7 +27,9 @@ import java.util.List;
  */
 public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
-    // client property
+    // ~ Instance fields
+    // ================================================================================================
+
     private final byte[] attestationObject;
 
     public WebAuthnRegistrationContext(byte[] clientDataJSON,

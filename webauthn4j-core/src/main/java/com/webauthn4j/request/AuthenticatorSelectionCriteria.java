@@ -20,6 +20,9 @@ import java.io.Serializable;
 
 public class AuthenticatorSelectionCriteria implements Serializable {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private AuthenticatorAttachment authenticatorAttachment;
 
     @SuppressWarnings("UnusedAssignment")

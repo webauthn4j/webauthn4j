@@ -148,9 +148,9 @@ class BeanAssertUtil {
 
     public static void validate(AttestedCredentialData attestedCredentialData) {
 
-        AAGUID aaGuid = attestedCredentialData.getAaguid();
-        if (aaGuid == null) {
-            throw new ConstraintViolationException("aaGuid must not be null");
+        AAGUID aaguid = attestedCredentialData.getAaguid();
+        if (aaguid == null) {
+            throw new ConstraintViolationException("aaguid must not be null");
         }
 
         if (attestedCredentialData.getCredentialId() == null) {

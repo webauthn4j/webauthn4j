@@ -18,6 +18,9 @@ package com.webauthn4j.response;
 
 public abstract class AuthenticatorResponse {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private byte[] clientDataJSON;
 
     public AuthenticatorResponse(byte[] clientDataJSON) {

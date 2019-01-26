@@ -28,7 +28,8 @@ import java.util.Objects;
  */
 abstract class AbstractWebAuthnContext {
 
-    //~ Instance fields ================================================================================================
+    // ~ Instance fields
+    // ================================================================================================
 
     // user inputs
     private final byte[] clientDataJSON;

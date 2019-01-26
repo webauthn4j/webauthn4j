@@ -23,6 +23,9 @@ import java.util.Arrays;
 @WIP
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private byte[] authenticatorData;
     private byte[] signature;
     private byte[] userHandle;

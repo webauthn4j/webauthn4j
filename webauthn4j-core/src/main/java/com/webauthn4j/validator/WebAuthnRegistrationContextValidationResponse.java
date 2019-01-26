@@ -22,6 +22,9 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOu
 
 import java.util.Objects;
 
+/**
+ * Envelope class for WebAuthnRegistrationContext validation result
+ */
 public class WebAuthnRegistrationContextValidationResponse {
 
     // ~ Instance fields

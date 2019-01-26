@@ -28,7 +28,8 @@ import java.util.List;
  */
 public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
 
-    //~ Instance fields ================================================================================================
+    // ~ Instance fields
+    // ================================================================================================
 
     // user inputs
     private final byte[] credentialId;

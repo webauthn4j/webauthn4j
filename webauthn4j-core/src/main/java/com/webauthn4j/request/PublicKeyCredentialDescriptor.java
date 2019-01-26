@@ -23,6 +23,10 @@ import java.util.List;
 
 @WIP
 public class PublicKeyCredentialDescriptor implements Serializable {
+
+    // ~ Instance fields
+    // ================================================================================================
+
     private PublicKeyCredentialType type;
     private byte[] id;
     private List<AuthenticatorTransport> transports;

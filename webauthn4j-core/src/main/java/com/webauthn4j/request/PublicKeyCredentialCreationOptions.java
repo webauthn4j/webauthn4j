@@ -27,6 +27,10 @@ import java.util.List;
 
 @WIP
 public class PublicKeyCredentialCreationOptions implements Serializable {
+
+    // ~ Instance fields
+    // ================================================================================================
+
     private PublicKeyCredentialRpEntity rp;
     private PublicKeyCredentialUserEntity user;
 

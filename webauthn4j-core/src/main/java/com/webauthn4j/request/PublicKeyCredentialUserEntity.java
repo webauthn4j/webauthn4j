@@ -17,6 +17,10 @@
 package com.webauthn4j.request;
 
 public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
+
+    // ~ Instance fields
+    // ================================================================================================
+
     private byte[] id;
     private String displayName;
 

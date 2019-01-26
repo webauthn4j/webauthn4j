@@ -22,6 +22,9 @@ import java.io.Serializable;
 
 public class PublicKeyCredentialParameters implements Serializable {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private PublicKeyCredentialType type;
     private COSEAlgorithmIdentifier alg;
 

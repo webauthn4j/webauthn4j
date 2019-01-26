@@ -26,6 +26,9 @@ import java.util.List;
 @WIP
 public class PublicKeyCredentialRequestOptions implements Serializable {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private Challenge challenge;
     private long timeout;
     private String rpId;
