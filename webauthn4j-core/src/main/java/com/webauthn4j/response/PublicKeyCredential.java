@@ -20,6 +20,9 @@ import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.Base64UrlUtil;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class PublicKeyCredential<T extends AuthenticatorResponse> {
 
     private String id;
@@ -58,5 +61,24 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
 
     public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
         return clientExtensionResults;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredential<?> that = (PublicKeyCredential<?>) o;
+        return Objects.equals(id, that.id) &&
+                Arrays.equals(rawId, that.rawId) &&
+                Objects.equals(authenticatorResponse, that.authenticatorResponse) &&
+                Objects.equals(clientExtensionResults, that.clientExtensionResults);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(id, authenticatorResponse, clientExtensionResults);
+        result = 31 * result + Arrays.hashCode(rawId);
+        return result;
     }
 }

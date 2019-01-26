@@ -18,6 +18,8 @@ package com.webauthn4j.response;
 
 import com.webauthn4j.util.WIP;
 
+import java.util.Arrays;
+
 @WIP
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
@@ -39,4 +41,16 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         return attestationObject;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticatorAttestationResponse that = (AuthenticatorAttestationResponse) o;
+        return Arrays.equals(attestationObject, that.attestationObject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(attestationObject);
+    }
 }

@@ -94,20 +94,4 @@ public class CertificateUtil {
         }
     }
 
-    public static boolean isSelfSigned(X509Certificate certificate) {
-        Signature signature = SignatureUtil.createSignature(certificate.getSigAlgName());
-        try {
-            signature.initVerify(certificate.getPublicKey());
-        } catch (InvalidKeyException e) {
-            return false;
-        }
-        try {
-            signature.update(certificate.getPublicKey().getEncoded());
-            signature.verify(certificate.getSignature());
-        } catch (SignatureException e) {
-            return false;
-        }
-        return true;
-    }
-
 }

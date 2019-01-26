@@ -47,6 +47,21 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
+    public void getUnsignedShort_test3(){
+        byte[] bytes = new byte[2];
+        bytes[0] = 0x00;
+        bytes[1] = 0x01;
+        int result = UnsignedNumberUtil.getUnsignedShort(bytes);
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getUnsignedShort_test4(){
+        byte[] bytes = new byte[4];
+        UnsignedNumberUtil.getUnsignedShort(bytes);
+    }
+
+    @Test
     public void getUnsignedInt_test1() {
         byte[] bytes = new byte[4];
         bytes[0] = 0x00;
@@ -67,6 +82,44 @@ public class UnsignedNumberUtilTest {
         long result = UnsignedNumberUtil.getUnsignedInt(ByteBuffer.wrap(bytes));
         assertThat(result).isEqualTo(0x00000000FFFFFFFFL);
     }
+
+    @Test
+    public void getUnsignedInt_test3() {
+        byte[] bytes = new byte[4];
+        bytes[0] = (byte) 0xFF;
+        bytes[1] = (byte) 0xFF;
+        bytes[2] = (byte) 0xFF;
+        bytes[3] = (byte) 0xFF;
+        long result = UnsignedNumberUtil.getUnsignedInt(bytes);
+        assertThat(result).isEqualTo(0x00000000FFFFFFFFL);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getUnsignedInt_test4() {
+        byte[] bytes = new byte[8];
+        UnsignedNumberUtil.getUnsignedInt(bytes);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void toBytes_test1(){
+        UnsignedNumberUtil.toBytes((short)-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void toBytes_test2(){
+        UnsignedNumberUtil.toBytes(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void toBytes_test3(){
+        UnsignedNumberUtil.toBytes((long)-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void toBytes_test4(){
+        UnsignedNumberUtil.toBytes(BigInteger.valueOf(-1));
+    }
+
 
     @Test
     public void getUnsignedLong_form_UNSIGNED_LONG_MAX_test(){
