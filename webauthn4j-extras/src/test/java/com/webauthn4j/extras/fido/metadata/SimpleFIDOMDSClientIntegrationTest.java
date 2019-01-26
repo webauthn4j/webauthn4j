@@ -21,6 +21,8 @@ import org.junit.Test;
 
 import java.net.URI;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Test for SimpleFIDOMDSClient
  */
@@ -36,12 +38,13 @@ public class SimpleFIDOMDSClientIntegrationTest {
     @Test
     public void retrieveMetadataTOC_test() {
         String metadataTOC = target.fetchMetadataTOC();
-
+        assertThat(metadataTOC).isNotNull();
     }
 
     @Test
-    public void retrieveMetadataStatement_test() throws Exception {
-        URI uri = new URI("https://mds.fidoalliance.org/metadata/4e4e%23400a");
-        String metadataStatement = target.fetchMetadataStatement(uri);
+    public void retrieveMetadataStatement_test() {
+        String url = "https://mds.fidoalliance.org/metadata/4e4e%23400a";
+        String metadataStatement = target.fetchMetadataStatement(url);
+        assertThat(metadataStatement).isNotNull();
     }
 }

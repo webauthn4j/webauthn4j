@@ -17,6 +17,10 @@
 package com.webauthn4j.extras.fido.metadata.toc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
@@ -27,6 +31,9 @@ import java.time.LocalDate;
 public class StatusReport {
     @JsonProperty
     private AuthenticatorStatus status;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
     private LocalDate effectiveDate;
     @JsonProperty

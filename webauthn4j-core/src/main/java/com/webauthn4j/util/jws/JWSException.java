@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata;
+package com.webauthn4j.util.jws;
 
-/**
- * Client for FIDO Metadata Service
- */
-public interface FIDOMDSClient {
+public class JWSException extends RuntimeException {
+    public JWSException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    String fetchMetadataTOC();
-    String fetchMetadataStatement(String uri);
+    public JWSException(String message) {
+        super(message);
+    }
 
+    public JWSException(Throwable cause) {
+        super(cause);
+    }
 }

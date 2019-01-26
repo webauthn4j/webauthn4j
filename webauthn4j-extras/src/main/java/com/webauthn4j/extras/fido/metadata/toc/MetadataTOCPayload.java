@@ -16,25 +16,50 @@
 
 package com.webauthn4j.extras.fido.metadata.toc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
 public class MetadataTOCPayload {
+
     @JsonProperty
-    private OffsetDateTime nextUpdate;
+    private String legalHeader;
+
     @JsonProperty
     private Integer no;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonProperty
+    private LocalDate nextUpdate;
+
     @JsonProperty
     private List<MetadataTOCPayloadEntry> entries;
 
-    public OffsetDateTime getNextUpdate() {
+    public MetadataTOCPayload(String legalHeader, Integer no, LocalDate nextUpdate, List<MetadataTOCPayloadEntry> entries) {
+        this.legalHeader = legalHeader;
+        this.no = no;
+        this.nextUpdate = nextUpdate;
+        this.entries = entries;
+    }
+
+    public MetadataTOCPayload(){}
+
+    public String getLegalHeader() {
+        return legalHeader;
+    }
+
+    public LocalDate getNextUpdate() {
         return nextUpdate;
     }
 

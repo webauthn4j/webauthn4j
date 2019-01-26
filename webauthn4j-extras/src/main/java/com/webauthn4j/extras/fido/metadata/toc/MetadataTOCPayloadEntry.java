@@ -17,6 +17,10 @@
 package com.webauthn4j.extras.fido.metadata.toc;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.webauthn4j.util.WIP;
 
 import java.net.URI;
@@ -43,6 +47,9 @@ public class MetadataTOCPayloadEntry {
     private List<BiometricStatusReport> biometricStatusReports;
     @JsonProperty
     private List<StatusReport> statusReports;
+
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
     private LocalDate timeOfLastStatusChange;
     @JsonProperty

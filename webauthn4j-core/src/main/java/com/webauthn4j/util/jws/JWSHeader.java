@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.attestation.statement;
+package com.webauthn4j.util.jws;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 
 import java.io.Serializable;
 

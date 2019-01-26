@@ -16,12 +16,6 @@
 
 package com.webauthn4j.extras.fido.metadata.statement;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.ECDSAVerifier;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jwt.JWTParser;
-import com.nimbusds.jwt.SignedJWT;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.extras.fido.metadata.FIDOMDSClient;
 import com.webauthn4j.extras.fido.metadata.Metadata;
@@ -29,26 +23,25 @@ import com.webauthn4j.extras.fido.metadata.exception.MDSException;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayload;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.util.jws.JWSHeader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.PublicKey;
-import java.security.cert.TrustAnchor;
-import java.security.cert.X509Certificate;
-import java.security.interfaces.ECPublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.text.ParseException;
+import java.security.cert.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @WIP
@@ -61,20 +54,20 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
 
-    private PublicKey publicKey;
+    private TrustAnchor trustAnchor;
 
-    public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient, PublicKey publicKey) {
+    public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient, X509Certificate rootCertificate) {
         this.jsonConverter = new JsonConverter(registry.getJsonMapper());
         this.fidoMDSClient = fidoMDSClient;
-        this.publicKey = publicKey;
+        this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
     public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient, Path path) {
-        this(registry, fidoMDSClient, loadPublicKeyFromPath(path));
+        this(registry, fidoMDSClient, loadRootCertificateFromPath(path));
     }
 
     public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient) {
-        this(registry, fidoMDSClient, loadPublicKeyFromEmbeddedCertificate());
+        this(registry, fidoMDSClient, loadEmbeddedCertificate());
     }
 
     @Override
@@ -109,66 +102,75 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
         })
         .collect(Collectors.groupingBy(Metadata::getAaguid));
 
-        nextUpdate = tocPayload.getNextUpdate();
+        nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
         lastRefresh = OffsetDateTime.now(ZoneOffset.UTC);
     }
 
     boolean needsRefresh() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        return cachedMetadataMap == null || (!nextUpdate.isAfter(now) && lastRefresh.isBefore(now.minusHours(1)));
+        return cachedMetadataMap == null || (nextUpdate.isBefore(now) && lastRefresh.isBefore(now.minusHours(1)));
     }
 
-    private MetadataTOCPayload fetchMetadataTOCPayload(){
+    MetadataTOCPayload fetchMetadataTOCPayload(){
         String toc = fidoMDSClient.fetchMetadataTOC();
 
-        SignedJWT jwt;
-        try {
-            jwt = (SignedJWT) JWTParser.parse(toc);
-        } catch (ParseException e) {
-            throw new MDSException(e);
+        JWS<MetadataTOCPayload> jws = parseJWS(toc);
+        if(!jws.isValidSignature()){
+            throw new MDSException("invalid signature");
         }
+        validateCertPath(jws);
+        return jws.getPayload();
+    }
 
+    private void validateCertPath(JWS<MetadataTOCPayload> jws) {
+        Set<TrustAnchor> trustAnchors = Collections.singleton(trustAnchor);
+        CertPath certPath = jws.getHeader().getX5c().createCertPath();
 
-        JWSVerifier jwsVerifier;
+        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        certPathParameters.setRevocationEnabled(false);
+
         try {
-            if(publicKey instanceof ECPublicKey){
-                jwsVerifier = new ECDSAVerifier((ECPublicKey) publicKey);
-            }
-            else if(publicKey instanceof RSAPublicKey){
-                jwsVerifier = new RSASSAVerifier((RSAPublicKey) publicKey);
-            }
-            else {
-                throw new NotImplementedException();
-            }
-            jwt.verify(jwsVerifier);
-        } catch (JOSEException e) {
-            throw new MDSException(e);
+            certPathValidator.validate(certPath, certPathParameters);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new MDSException("invalid algorithm parameter", e);
+        } catch (CertPathValidatorException e) {
+            throw new MDSException("invalid cert path", e);
         }
-
-        String payloadString = jwt.getPayload().toString();
-        return jsonConverter.readValue(payloadString, MetadataTOCPayload.class);
     }
 
     private MetadataStatement fetchMetadataStatement(URI uri) {
-        String metadataStatementStr = fidoMDSClient.fetchMetadataStatement(uri);
+        String metadataStatementStr = fidoMDSClient.fetchMetadataStatement(uri.toString());
         return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
     }
 
-    private static PublicKey loadPublicKeyFromPath(Path path) {
+    private JWS<MetadataTOCPayload> parseJWS(String value){
+        String[] data = value.split("\\.");
+        if (data.length != 3) {
+            throw new IllegalArgumentException("Invalid JWS");
+        }
+        String headerString = data[0];
+        String payloadString = data[1];
+        String signatureString = data[2];
+        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString), StandardCharsets.UTF_8), JWSHeader.class);
+        MetadataTOCPayload payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString), StandardCharsets.UTF_8), MetadataTOCPayload.class);
+        byte[] signature = Base64UrlUtil.decode(signatureString);
+        return new JWS<>(header, headerString, payload, payloadString, signature);
+    }
+
+    private static X509Certificate loadRootCertificateFromPath(Path path) {
         try {
             InputStream inputStream = Files.newInputStream(path);
-            X509Certificate certificate = CertificateUtil.generateX509Certificate(inputStream);
-            return certificate.getPublicKey();
+            return CertificateUtil.generateX509Certificate(inputStream);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    private static PublicKey loadPublicKeyFromEmbeddedCertificate() {
+    private static X509Certificate loadEmbeddedCertificate() {
         InputStream inputStream = FIDOMDSMetadataStatementProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
-        X509Certificate certificate = CertificateUtil.generateX509Certificate(inputStream);
-        return certificate.getPublicKey();
+        return CertificateUtil.generateX509Certificate(inputStream);
     }
 
 }

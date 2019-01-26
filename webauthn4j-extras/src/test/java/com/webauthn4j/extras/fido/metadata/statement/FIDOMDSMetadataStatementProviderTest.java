@@ -20,8 +20,6 @@ import com.webauthn4j.extras.fido.metadata.SimpleFIDOMDSClient;
 import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -64,5 +62,10 @@ public class FIDOMDSMetadataStatementProviderTest {
         target.lastRefresh = now.minusWeeks(1);
 
         assertThat(target.needsRefresh()).isTrue();
+    }
+
+    @Test
+    public void fetchMetadataTOCPayload_test(){
+        target.fetchMetadataTOCPayload();
     }
 }

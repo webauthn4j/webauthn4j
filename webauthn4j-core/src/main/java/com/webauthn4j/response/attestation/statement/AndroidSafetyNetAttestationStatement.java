@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.WIP;
+import com.webauthn4j.util.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     private String ver;
 
     @JsonProperty
-    private JWS response;
+    private JWS<Response> response;
 
     /**
      * Default constructor for Jackson deserialization
@@ -68,7 +69,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         return ver;
     }
 
-    public JWS getResponse() {
+    public JWS<Response> getResponse() {
         return response;
     }
 

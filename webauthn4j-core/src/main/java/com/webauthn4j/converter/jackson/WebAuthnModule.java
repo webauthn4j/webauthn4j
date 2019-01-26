@@ -30,6 +30,7 @@ import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.extension.authenticator.*;
 import com.webauthn4j.response.extension.client.*;
+import com.webauthn4j.util.jws.JWS;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;

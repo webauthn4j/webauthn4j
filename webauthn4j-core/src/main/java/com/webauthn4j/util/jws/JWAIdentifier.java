@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.attestation.statement;
+package com.webauthn4j.util.jws;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

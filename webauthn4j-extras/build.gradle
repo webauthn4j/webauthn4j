@@ -22,7 +22,6 @@ description = "WebAuthn4J Extras library"
 dependencies {
     compile project(':webauthn4j-core')
 
-    compile("com.nimbusds:nimbus-jose-jwt:${nimbusJoseJwtVersion}")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     //Test

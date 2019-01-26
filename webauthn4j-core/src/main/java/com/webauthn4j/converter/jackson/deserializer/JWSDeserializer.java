@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.registry.Registry;
-import com.webauthn4j.response.attestation.statement.JWS;
-import com.webauthn4j.response.attestation.statement.JWSHeader;
+import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.util.jws.JWSHeader;
 import com.webauthn4j.response.attestation.statement.Response;
 import com.webauthn4j.util.Base64UrlUtil;
 

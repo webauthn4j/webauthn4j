@@ -16,17 +16,54 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import java.net.URI;
+import com.webauthn4j.extras.fido.metadata.exception.MDSException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class SimpleFIDOMDSClient implements FIDOMDSClient {
 
+    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/?token=f4ec4c72be3fa7932c7556fc59f50ffff07ca29dd5934b8d";
+
+    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+
     @Override
     public String fetchMetadataTOC() {
-        return null;
+        return fetch(fidoMetadataServiceEndpoint);
     }
 
     @Override
-    public String fetchMetadataStatement(URI uri) {
-        return null;
+    public String fetchMetadataStatement(String url) {
+        return fetch(url);
+    }
+
+    private String fetch(String url){
+        try {
+            URL fetchUrl = new URL(url);
+            HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            int status = urlConnection.getResponseCode();
+
+            if (status == HttpURLConnection.HTTP_OK) {
+                InputStream inputStream = urlConnection.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(inputStream);
+                ByteArrayOutputStream buf = new ByteArrayOutputStream();
+                int result = bis.read();
+                while(result != -1) {
+                    buf.write((byte) result);
+                    result = bis.read();
+                }
+                return buf.toString("UTF-8");
+            }
+            throw new MDSException("failed to fetch " + url);
+        } catch (IOException e) {
+            throw new MDSException("failed to fetch " + url, e);
+        }
     }
 }

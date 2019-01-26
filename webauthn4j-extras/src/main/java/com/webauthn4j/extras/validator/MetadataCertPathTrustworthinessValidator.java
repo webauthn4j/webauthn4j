@@ -49,8 +49,15 @@ public class MetadataCertPathTrustworthinessValidator extends CertPathTrustworth
         metadata.getStatusReports().forEach(report -> {
             switch (report.getStatus()) {
                 case FIDO_CERTIFIED:
+                case FIDO_CERTIFIED_L1:
+                case FIDO_CERTIFIED_L1_PLUS:
+                case FIDO_CERTIFIED_L2:
+                case FIDO_CERTIFIED_L2_PLUS:
+                case FIDO_CERTIFIED_L3:
+                case FIDO_CERTIFIED_L3_PLUS:
                 case UPDATE_AVAILABLE:
                 case NOT_FIDO_CERTIFIED:
+                case SELF_ASSERTION_SUBMITTED:
                     return;
                 case ATTESTATION_KEY_COMPROMISE:
                 case USER_VERIFICATION_BYPASS:
