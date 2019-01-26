@@ -20,6 +20,7 @@ import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.Base64UrlUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
  */
-public class PublicKeyCredential<T extends AuthenticatorResponse> {
+public class PublicKeyCredential<T extends AuthenticatorResponse> implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================

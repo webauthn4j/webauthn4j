@@ -18,6 +18,7 @@ package com.webauthn4j.response;
 
 import com.webauthn4j.server.ServerProperty;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ import java.util.Objects;
 /**
  * WebAuthn abstract base context
  */
-abstract class AbstractWebAuthnContext {
+abstract class AbstractWebAuthnContext implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================

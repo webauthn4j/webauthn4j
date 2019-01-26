@@ -45,6 +45,12 @@ public class CollectedClientDataConverterTest {
     }
 
     @Test
+    public void convert_null_test() {
+        assertThat(target.convert((String) null)).isNull();
+        assertThat(target.convert((byte[]) null)).isNull();
+    }
+
+    @Test
     public void convert_clientDataBase64UrlString_with_new_keys_test() {
         //noinspection SpellCheckingInspection
         String clientDataJson = "{\"challenge\":\"Tgup0LZZQKinvtQcZFYdRw\",\"new_keys_may_be_added_here\":\"do not compare clientDataJSON against a template. See https://goo.gl/yabPex\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.create\"}";

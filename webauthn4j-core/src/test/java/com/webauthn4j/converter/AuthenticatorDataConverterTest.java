@@ -57,6 +57,16 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getExtensions()).isEmpty();
     }
 
+    @Test(expected = DataConversionException.class)
+    public void convert_too_short_data_test() {
+        //Given
+        //noinspection SpellCheckingInspection
+        String input = "SZYN5YgOjGh0NBcP";
+
+        //When
+        new AuthenticatorDataConverter(registry).convert(Base64UrlUtil.decode(input));
+    }
+
     @Test
     public void serialize_deserialize_test() {
         //Given

@@ -21,12 +21,13 @@ import com.webauthn4j.validator.exception.CertificateException;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
+import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Objects;
 
 
-public class AttestationCertificate {
+public class AttestationCertificate implements Serializable {
 
     private static final int CERTIFICATE_VERSION_3 = 3;
     private static final int NON_CA = -1;

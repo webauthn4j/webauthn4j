@@ -18,6 +18,7 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,8 +27,21 @@ public class AuthenticationExtensionsClientInputsConverterTest {
 
     private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(new Registry());
 
+
+    @Test
+    public void convert_null_test() {
+        assertThat(authenticationExtensionsClientInputsConverter.convert(null)).isNull();
+    }
+
     @Test
     public void convertToString_test() {
+        AuthenticationExtensionsClientInputs clientInputs = new AuthenticationExtensionsClientInputs();
+        clientInputs.put(FIDOAppIDExtensionClientInput.ID, new FIDOAppIDExtensionClientInput("test"));
+        assertThat(authenticationExtensionsClientInputsConverter.convertToString(clientInputs)).isEqualTo("{\"appid\":\"test\"}");
+    }
+
+    @Test
+    public void convertToString_null_test() {
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(null)).isNull();
     }
 

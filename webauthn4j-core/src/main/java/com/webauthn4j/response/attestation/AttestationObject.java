@@ -24,7 +24,7 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class AttestationObject {
+public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")

@@ -16,7 +16,9 @@
 
 package com.webauthn4j.response;
 
-public abstract class AuthenticatorResponse {
+import java.io.Serializable;
+
+abstract class AuthenticatorResponse implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================
@@ -26,14 +28,14 @@ public abstract class AuthenticatorResponse {
     // ~ Constructor
     // ========================================================================================================
 
-    public AuthenticatorResponse(byte[] clientDataJSON) {
+    AuthenticatorResponse(byte[] clientDataJSON) {
         this.clientDataJSON = clientDataJSON;
     }
 
     /**
      * default constructor for jackson deserialization
      */
-    public AuthenticatorResponse() {
+    AuthenticatorResponse() {
     }
 
     public byte[] getClientDataJSON() {

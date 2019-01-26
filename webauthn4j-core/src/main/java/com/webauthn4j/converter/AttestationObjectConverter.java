@@ -52,6 +52,9 @@ public class AttestationObjectConverter {
     }
 
     public AttestationObject convert(byte[] source) {
+        if (source == null) {
+            return null;
+        }
         return cborConverter.readValue(source, AttestationObject.class);
     }
 
