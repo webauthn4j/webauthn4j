@@ -20,6 +20,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+/**
+ * This enumeration’s values describe authenticators' attachment modalities. Relying Parties use this for two purposes:
+ * <ul>
+ *     <li>to express a preferred authenticator attachment modality when calling navigator.credentials.create()
+ *     to create a credential, and</li>
+ *     <li>to inform the client of the Relying Party's best belief about how to locate the managing authenticators of
+ *     the credentials listed in allowCredentials when calling navigator.credentials.get().</li>
+ * </ul>
+ *
+ * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#attachment">
+ * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
+ */
 public enum AuthenticatorAttachment {
     PLATFORM("platform"),
     CROSS_PLATFORM("cross-platform");
