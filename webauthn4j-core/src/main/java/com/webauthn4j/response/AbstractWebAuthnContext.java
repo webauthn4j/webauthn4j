@@ -46,7 +46,7 @@ abstract class AbstractWebAuthnContext {
     // ~ Constructor
     // ========================================================================================================
 
-    public AbstractWebAuthnContext(
+    AbstractWebAuthnContext(
             byte[] clientDataJSON,
             String clientExtensionsJSON,
             ServerProperty serverProperty,

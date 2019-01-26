@@ -43,6 +43,7 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     /**
      * default constructor for jackson deserialization
      */
+    @SuppressWarnings("unused")
     public AuthenticatorAssertionResponse() {
     }
 
