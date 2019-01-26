@@ -10,7 +10,7 @@ Web Authenticationは、W3Cで仕様策定が進められている、Webアプ�
 
 === WebAuthn4Jとは
 
-Web Authentication仕様に基づくアサーションの検証を行うためのポータブルなJavaライブラリです。
+Web Authentication仕様に基づくサーバーサイド検証を行うためのポータブルなJavaライブラリです。
 元々はSpring Security WebAuthnの一部として開発を進めていましたが、より多くのアプリケーションに対してWeb Authentication仕様に
 基づく認証機能を提供するためにSpring Security WebAuthnからアサーションの検証に関するコアを切り出して依存関係を最小化しました。
 
@@ -18,10 +18,20 @@ Web Authentication仕様に基づくアサーションの検証を行うため�
 
 Spring Security WebAuthnが現在サポートする証言ステートメントフォーマットは以下の通りです。
 
-- None Attestation Statement Format
-- FIDO-U2F Attestation Statement Format
+- Packed attestation
+- FIDO U2F attestation
+- Android Key attestation
+- Android SafetyNet attestation
+- TPM attestation
+- None attestation
 
-それ以外の証言ステートメントフォーマットのサポートも順次行う予定です。
+==== 準拠状況
+
+https://fidoalliance.org/certification/functional-certification/conformance/[FIDO Allianceが提供するFIDO2 Test Tools]
+で必須のテストケースに加え、オプションのAndroid Key attestationのテストケースを全て合格しています。
+
+NOTE: WebAuthn4Jを利用して開発されているSpring Security WebAuthnがFIDO Serverインタフェースを提供しており、
+Spring Security WebAuthnのFIDO Serverインタフェースに対してFIDO2 test toolsを実行して検証を行っています。
 
 === 要件
 
@@ -45,3 +55,8 @@ git clone git@github.com:webauthn4j/webauthn4j.git
 WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの
 オープンソースソフトウェアです。
 
+=== 開発への参加
+
+WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4Jの開発に参加するには、必ずしも開発者である必要はありません。
+ドキュメンテーションに関する協力者も必要としています。　開発への参加も、勿論歓迎です。
+お気軽にIssueやPull Requestをお寄せ下さい。

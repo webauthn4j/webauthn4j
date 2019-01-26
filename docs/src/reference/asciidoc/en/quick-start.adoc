@@ -18,10 +18,24 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 
 WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
+// WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
+// which doesn't validate an attestation statement. It is recommended configuration for most web application.
+// If you are building enterprise web application and need to validate the attestation statement, use the constructor of
+// WebAuthnRegistrationContextValidator and provide validators you like
 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-        WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
-webAuthnRegistrationContextValidator.validate(registrationContext);
+
+WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
+
+// please persist Authenticator object, which will be used in the authentication process.
+Authenticator authenticator =
+        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                response.getAttestationObject().getAttestationStatement(),
+                response.getAttestationObject().getAuthenticatorData().getSignCount()
+        );
+save(authenticator); // please persist authenticator in your manner
 ```
 
 === Assertion verification
@@ -50,11 +64,18 @@ WebAuthnAuthenticationContext authenticationContext =
                 serverProperty,
                 true
         );
-Authenticator authenticator = null /* set authenticator */;
+
+Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();
 
-webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+
+// please update the counter of the authenticator record
+updateCounter(
+        response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        response.getAuthenticatorData().getSignCount()
+);
 ```
 

@@ -18,10 +18,25 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 
 WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
+// WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() は 構成証明ステートメントを
+// 検証しないWebAuthnRegistrationContextValidator インスタンスを返却します。これは大多数のWebアプリケーションに推奨の構成です。
+// エンタープライズ用途のWebアプリケーションで構成証明ステートメントの検証が必要な場合はWebAuthnRegistrationContextValidatorの
+// コンストラクタを使用し、使いたいvalidatorを指定してください
 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-        WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
-webAuthnRegistrationContextValidator.validate(registrationContext);
+
+WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
+
+// アプリケーションの作法に則り、Authenticatorオブジェクトを永続化してください。認証時に使用されます。
+Authenticator authenticator =
+        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                response.getAttestationObject().getAttestationStatement(),
+                response.getAttestationObject().getAuthenticatorData().getSignCount()
+        );
+save(authenticator); // アプリケーションの作法に則った、Authenticatorオブジェクトの永続化
+
 ```
 
 === 認証証明の検証
@@ -50,11 +65,18 @@ WebAuthnAuthenticationContext authenticationContext =
                 serverProperty,
                 true
         );
-Authenticator authenticator = null /* set authenticator */;
+
+Authenticator authenticator = load(); // 登録時に永続化したauthenticatorオブジェクトを読込
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();
 
-webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+
+// authenticatorのカウンタを更新
+updateCounter(
+        response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        response.getAuthenticatorData().getSignCount()
+);
 ```
 

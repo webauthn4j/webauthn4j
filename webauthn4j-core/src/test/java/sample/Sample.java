@@ -17,12 +17,15 @@
 package sample;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
+import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 
 public class Sample {
@@ -41,13 +44,28 @@ public class Sample {
 
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
+        // WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
+        // which doesn't validate an attestation statement. It is recommended configuration for most web application.
+        // If you are building enterprise web application and need to validate the attestation statement, use the constructor of
+        // WebAuthnRegistrationContextValidator and provide validators you like
         WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
                 WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
-        webAuthnRegistrationContextValidator.validate(registrationContext);
+
+        WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
+
+        // please persist Authenticator object, which will be used in the authentication process.
+        Authenticator authenticator =
+                new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                        response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                        response.getAttestationObject().getAttestationStatement(),
+                        response.getAttestationObject().getAuthenticatorData().getSignCount()
+                );
+        save(authenticator); // please persist authenticator in your manner
     }
 
-    public void authenticationValidationSample() {
+
+    public void athenticationValidationSample() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;
         byte[] clientDataJSON = null /* set clientDataJSON */;
@@ -70,11 +88,30 @@ public class Sample {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = null /* set authenticator */;
+        Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
 
         WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
                 new WebAuthnAuthenticationContextValidator();
 
-        webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+        WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+
+        // please update the counter of the authenticator record
+        updateCounter(
+                response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+                response.getAuthenticatorData().getSignCount()
+        );
+    }
+
+
+    private void save(Authenticator authenticator) {
+        // please persist in your manner
+    }
+
+    private Authenticator load(){
+        return null; // please load authenticator in your manner
+    }
+
+    private void updateCounter(byte[] credentialId, long signCount) {
+        // please update the counter of the authenticator record
     }
 }

@@ -11,16 +11,23 @@ Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but
 
 === WebAuthn4J
 
-WebAuthn4J is a portable Java library for WebAuthn assertion and attestation verification
+WebAuthn4J is a portable Java library for WebAuthn server side verification
 
 ==== Supported Attestation Statement Formats
 
 List of supported attestation statement formats is below:
 
-- None Attestation Statement Format
-- FIDO-U2F Attestation Statement Format
+- Packed attestation
+- FIDO U2F attestation
+- Android Key attestation
+- Android SafetyNet attestation
+- TPM attestation
+- None attestation
 
-Other attestation statement formats are also planed to support.
+==== Conformance
+
+All mandatory test cases and optional Android Key attestation test cases of https://fidoalliance.org/certification/functional-certification/conformance/[FIDO2 Test Tools provided by FIDO Alliance]
+are all passed.
 
 === Requirements
 
@@ -43,3 +50,8 @@ git clone git@github.com:webauthn4j/webauthn4j.git
 
 WebAuthn4J is an open source software licensed under http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
 
+=== Contributing
+
+Interested in helping out with WebAuthn4J? Great! Note that you do not have to be a developer in order to contribute to
+WebAuthn4J. We need folks to help with documentation. Developers, of course, are also welcome.
+Please feel free to open issues and send pull-requests.

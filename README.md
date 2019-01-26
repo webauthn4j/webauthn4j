@@ -16,7 +16,13 @@ A portable Java library for WebAuthn assertion and attestation verification
 * FIDO U2F attestation
 * Android Key attestation
 * Android SafetyNet attestation
+* TPM attestation
 * None attestation
+
+### Conformance
+
+All mandatory test cases and optional Android Key attestation test cases of [FIDO2 Test Tools provided by FIDO Alliance](https://fidoalliance.org/certification/functional-certification/conformance/)
+are all passed.
 
 ## Documentation
 
@@ -85,10 +91,24 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 
 WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
 
+// WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
+// which doesn't validate an attestation statement. It is recommended configuration for most web application.
+// If you are building enterprise web application and need to validate the attestation statement, use the constructor of 
+// WebAuthnRegistrationContextValidator and provide validators you like
 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-        WebAuthnRegistrationContextValidator.createNullAttestationStatementValidator();
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
-webAuthnRegistrationContextValidator.validate(registrationContext);
+
+WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
+
+// please persist Authenticator object, which will be used in the authentication process.
+Authenticator authenticator =
+        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                response.getAttestationObject().getAttestationStatement(),
+                response.getAttestationObject().getAuthenticatorData().getSignCount()
+        );
+save(authenticator); // please persist authenticator in your manner
 ```
 
 Verification on authentication
@@ -115,12 +135,18 @@ WebAuthnAuthenticationContext authenticationContext =
                 serverProperty,
                 true
         );
-Authenticator authenticator = null /* set authenticator */;
+Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();
 
-webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
+
+// please update the counter of the authenticator record
+updateCounter(
+        response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        response.getAuthenticatorData().getSignCount()
+);
 ```
 
 ## Sample application
@@ -132,3 +158,9 @@ Please see [Spring Security WebAuthn sample application](https://github.com/ynoj
 
 WebAuthn4J is Open Source software released under the
 [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0.html).
+
+## Contributing
+
+Interested in helping out with WebAuthn4J? Great! Note that you do not have to be a developer in order to contribute to
+WebAuthn4J. We need folks to help with documentation. Developers, of course, are also welcome.
+Please feel free to open issues and send pull-requests.
