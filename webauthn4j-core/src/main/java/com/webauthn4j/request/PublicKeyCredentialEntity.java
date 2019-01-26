@@ -17,7 +17,15 @@
 package com.webauthn4j.request;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+/**
+ * The PublicKeyCredentialEntity describes a user account, or a WebAuthn Relying Party,
+ * which a public key credential is associated with or scoped to, respectively.
+ *
+ * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#dictionary-pkcredentialentity">
+ * §5.4.1. Public Key Entity Description (dictionary PublicKeyCredentialEntity)</a>
+ */
 public abstract class PublicKeyCredentialEntity implements Serializable {
 
     // ~ Instance fields
@@ -25,6 +33,9 @@ public abstract class PublicKeyCredentialEntity implements Serializable {
 
     private String name;
     private String icon;
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public PublicKeyCredentialEntity(String name, String icon) {
         this.name = name;
@@ -47,4 +58,18 @@ public abstract class PublicKeyCredentialEntity implements Serializable {
         return icon;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredentialEntity that = (PublicKeyCredentialEntity) o;
+        return Objects.equals(name, that.name) &&
+                Objects.equals(icon, that.icon);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, icon);
+    }
 }

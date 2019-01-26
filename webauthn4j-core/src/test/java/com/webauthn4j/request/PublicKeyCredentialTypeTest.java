@@ -16,6 +16,7 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.registry.Registry;
 import org.junit.Test;
@@ -27,10 +28,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class PublicKeyCredentialTypeTest {
 
+    private Registry registry = new Registry();
+    private ObjectMapper jsonMapper = registry.getJsonMapper();
+
     @Test
     public void test() throws IOException {
-        TestDto testDto = new Registry().getJsonMapper().readValue("{\"type\": \"public-key\"}", TestDto.class);
+        TestDto testDto = jsonMapper.readValue("{\"type\": \"public-key\"}", TestDto.class);
         assertThat(testDto.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
+    }
+
+    @Test
+    public void null_test() throws IOException {
+        TestDto testDto = jsonMapper.readValue("{\"type\": null}", TestDto.class);
+        assertThat(testDto.getType()).isNull();
+    }
+
+    @Test
+    public void create_test() throws IOException {
+        PublicKeyCredentialType value = PublicKeyCredentialType.create(null);
+        //noinspection ConstantConditions
+        assertThat(value).isNull();
     }
 
     @Test(expected = InvalidFormatException.class)

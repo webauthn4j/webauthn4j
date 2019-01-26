@@ -46,6 +46,9 @@ public class AttestationValidator {
     private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
     private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public AttestationValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,

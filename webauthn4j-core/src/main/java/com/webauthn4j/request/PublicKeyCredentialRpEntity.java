@@ -16,12 +16,17 @@
 
 package com.webauthn4j.request;
 
+import java.util.Objects;
+
 public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 
     // ~ Instance fields
     // ================================================================================================
 
     private String id;
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public PublicKeyCredentialRpEntity(String id, String name, String icon) {
         super(name, icon);
@@ -43,5 +48,20 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        PublicKeyCredentialRpEntity that = (PublicKeyCredentialRpEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), id);
     }
 }

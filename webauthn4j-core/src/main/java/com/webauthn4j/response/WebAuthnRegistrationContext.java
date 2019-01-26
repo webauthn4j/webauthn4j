@@ -32,6 +32,9 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
     private final byte[] attestationObject;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
                                        String clientExtensionsJSON,

@@ -28,6 +28,9 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     private byte[] attestationObject;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject) {
         super(clientDataJSON);

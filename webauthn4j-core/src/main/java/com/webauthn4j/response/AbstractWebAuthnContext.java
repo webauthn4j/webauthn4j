@@ -43,6 +43,9 @@ abstract class AbstractWebAuthnContext {
     private boolean userPresenceRequired;
     private List<String> expectedExtensionIds;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public AbstractWebAuthnContext(
             byte[] clientDataJSON,
             String clientExtensionsJSON,

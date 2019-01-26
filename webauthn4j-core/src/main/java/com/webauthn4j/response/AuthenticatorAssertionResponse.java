@@ -30,6 +30,9 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     private byte[] signature;
     private byte[] userHandle;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public AuthenticatorAssertionResponse(byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle) {
         super(clientDataJSON);
         this.authenticatorData = authenticatorData;

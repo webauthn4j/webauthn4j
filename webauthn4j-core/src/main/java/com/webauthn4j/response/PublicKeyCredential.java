@@ -39,6 +39,9 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
     private T authenticatorResponse;
     private AuthenticationExtensionsClientOutputs clientExtensionResults;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public PublicKeyCredential(byte[] credentialId, T authenticatorResponse, AuthenticationExtensionsClientOutputs clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;

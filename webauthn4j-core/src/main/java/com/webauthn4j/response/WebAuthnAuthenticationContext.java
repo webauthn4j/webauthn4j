@@ -36,6 +36,9 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
     private final byte[] authenticatorData;
     private final byte[] signature;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     @SuppressWarnings("squid:S00107")
     public WebAuthnAuthenticationContext(byte[] credentialId,
                                          byte[] clientDataJSON,

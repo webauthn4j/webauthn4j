@@ -16,27 +16,18 @@
 
 package com.webauthn4j.response;
 
-public abstract class AuthenticatorResponse {
 
-    // ~ Instance fields
-    // ================================================================================================
+import com.webauthn4j.request.PublicKeyCredentialType;
+import org.junit.Test;
 
-    private byte[] clientDataJSON;
+import static org.assertj.core.api.Assertions.assertThat;
 
-    // ~ Constructor
-    // ========================================================================================================
+public class PublicKeyCredentialTest {
 
-    public AuthenticatorResponse(byte[] clientDataJSON) {
-        this.clientDataJSON = clientDataJSON;
+    @Test
+    public void test(){
+        PublicKeyCredential<AuthenticatorAssertionResponse> credential = new PublicKeyCredential<>();
+        assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue());
     }
 
-    /**
-     * default constructor for jackson deserialization
-     */
-    public AuthenticatorResponse() {
-    }
-
-    public byte[] getClientDataJSON() {
-        return clientDataJSON;
-    }
 }

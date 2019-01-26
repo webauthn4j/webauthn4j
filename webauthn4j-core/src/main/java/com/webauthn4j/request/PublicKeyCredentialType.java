@@ -20,9 +20,16 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.webauthn4j.util.WIP;
 
-@WIP
+/**
+ * This enumeration defines the valid credential types. It is an extension point; values can be added to it
+ * in the future, as more credential types are defined.
+ * The values of this enumeration are used for versioning the Authentication Assertion and attestation structures
+ * according to the type of the authenticator.
+ *
+ * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#credentialType">
+ * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
+ */
 public enum PublicKeyCredentialType {
 
     PUBLIC_KEY("public-key");
