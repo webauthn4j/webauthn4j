@@ -18,7 +18,6 @@ package com.webauthn4j.validator.attestation.tpm;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.authenticator.Curve;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.util.*;
 import com.webauthn4j.util.exception.NotImplementedException;
@@ -38,7 +37,6 @@ import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
-import java.security.spec.ECParameterSpec;
 import java.security.spec.EllipticCurve;
 import java.util.Arrays;
 import java.util.List;
@@ -48,6 +46,9 @@ import java.util.Objects;
 public class TPMAttestationStatementValidator implements AttestationStatementValidator {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
+
+    // ~ Instance fields
+    // ================================================================================================
 
     private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
 

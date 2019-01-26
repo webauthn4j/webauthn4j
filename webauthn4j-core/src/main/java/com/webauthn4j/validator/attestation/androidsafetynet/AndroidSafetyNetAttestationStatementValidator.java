@@ -33,6 +33,9 @@ import java.util.Objects;
 
 public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private GooglePlayServiceVersionValidator versionValidator = new DefaultVersionValidator();
 
     private int forwardThreshold = 0;

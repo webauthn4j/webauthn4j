@@ -32,6 +32,9 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.userHandle = userHandle;
     }
 
+    /**
+     * default constructor for jackson deserialization
+     */
     public AuthenticatorAssertionResponse() {
     }
 

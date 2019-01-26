@@ -47,6 +47,10 @@ public class KeyDescriptionValidator {
     private static final int KM_TAG_ORIGIN = 702;
     private static final int KM_ORIGIN_GENERATED = 0;
     private static final int KM_PURPOSE_SIGN = 2;
+
+    // ~ Instance fields
+    // ================================================================================================
+
     private Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
 
     public void validate(X509Certificate x509Certificate, byte[] clientDataHash, boolean teeEnforcedOnly) {

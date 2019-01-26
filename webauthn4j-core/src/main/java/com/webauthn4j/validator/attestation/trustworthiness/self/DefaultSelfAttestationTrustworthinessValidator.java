@@ -25,7 +25,9 @@ import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
  */
 public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttestationTrustworthinessValidator {
 
-    //~ Instance fields ================================================================================================
+    // ~ Instance fields
+    // ================================================================================================
+
     private boolean isSelfAttestationAllowed = true;
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {

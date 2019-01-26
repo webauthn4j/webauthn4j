@@ -34,6 +34,9 @@ import java.security.cert.Certificate;
 
 public class AndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
     private boolean teeEnforcedOnly = true;
 

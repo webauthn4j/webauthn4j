@@ -24,6 +24,9 @@ public abstract class AuthenticatorResponse {
         this.clientDataJSON = clientDataJSON;
     }
 
+    /**
+     * default constructor for jackson deserialization
+     */
     public AuthenticatorResponse() {
     }
 

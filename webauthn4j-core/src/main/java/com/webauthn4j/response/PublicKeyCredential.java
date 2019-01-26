@@ -34,6 +34,9 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> {
         this.clientExtensionResults = clientExtensionResults;
     }
 
+    /**
+     * default constructor for jackson deserialization
+     */
     public PublicKeyCredential() {
     }
 

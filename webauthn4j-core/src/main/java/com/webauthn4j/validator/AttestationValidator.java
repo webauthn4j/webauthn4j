@@ -35,6 +35,9 @@ import java.util.Objects;
 
 public class AttestationValidator {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private static final AAGUID U2F_AAGUID = AAGUID.ZERO;
 
     private final List<AttestationStatementValidator> attestationStatementValidators;

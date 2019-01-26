@@ -29,6 +29,9 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         this.attestationObject = attestationObject;
     }
 
+    /**
+     * default constructor for jackson deserialization
+     */
     public AuthenticatorAttestationResponse() {
     }
 

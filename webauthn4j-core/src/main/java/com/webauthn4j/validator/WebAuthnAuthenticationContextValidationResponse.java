@@ -24,6 +24,9 @@ import java.util.Objects;
 
 public class WebAuthnAuthenticationContextValidationResponse {
 
+    // ~ Instance fields
+    // ================================================================================================
+
     private CollectedClientData collectedClientData;
     private AuthenticatorData authenticatorData;
     private AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs;
