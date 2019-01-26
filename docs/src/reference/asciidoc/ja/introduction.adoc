@@ -39,9 +39,31 @@ Spring Security WebAuthnのFIDO Serverインタフェースに対してFIDO2 tes
 
 - Java8以降
 
-==== 動作環境
+=== 動作環境
 
 - SecureContext（サイトがHTTPS接続か、localhost）
+
+=== Maven Centralからの取得
+Mavenを使用している場合、webauthn4jを依存関係として追加して使用してください：
+
+```
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.6.6.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j-core</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+```
 
 === ソースコード
 

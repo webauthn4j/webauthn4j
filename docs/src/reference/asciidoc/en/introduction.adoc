@@ -39,6 +39,28 @@ are all passed.
 
 - SecureContext（connected by https or the localhost）
 
+=== Getting from Maven Central
+If you are using Maven, just add the webauthn4j as a dependency:
+
+```
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.6.6.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j-core</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+```
+
 === Source code
 
 Source code for this project is hosted on https://github.com/webauthn4j/webauthn4j[Github].
