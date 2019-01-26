@@ -50,6 +50,13 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * Constructor for public key
+     * @param keyId keyId
+     * @param algorithm algorithm
+     * @param keyOpts keyOpts
+     * @param baseIV baseIV
+     * @param curve curve
+     * @param x x
+     * @param y y
      */
     @SuppressWarnings("squid:S00107")
     public EC2CredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV,
@@ -62,6 +69,8 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * create from uncompressed ECC key
+     * @param publicKey publicKey
+     * @return {@link EC2CredentialPublicKey}
      */
     public static EC2CredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
         if (publicKey.length != 65) {
@@ -82,6 +91,8 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * create from {@code ECPublicKey}
+     * @param publicKey publicKey
+     * @return {@link EC2CredentialPublicKey}
      */
     public static EC2CredentialPublicKey create(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
