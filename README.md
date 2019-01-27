@@ -22,7 +22,7 @@ A portable Java library for WebAuthn assertion and attestation verification
 ### Conformance
 
 All mandatory test cases and optional Android Key attestation test cases of [FIDO2 Test Tools provided by FIDO Alliance](https://fidoalliance.org/certification/functional-certification/conformance/)
-are all passed.
+are passed.
 
 ## Documentation
 
@@ -151,8 +151,8 @@ updateCounter(
 
 ## Sample application
 
-Spring Security WebAuthn is built on the top of WebAuthn4J. 
-Please see [Spring Security WebAuthn sample application](https://github.com/ynojima/spring-security-webauthn).
+Spring Security WebAuthn is built on the top of WebAuthn4J, and its sample application demonstrates WebAuthn4J feature well.
+Please see [Spring Security WebAuthn sample application](https://github.com/sharplab/spring-security-webauthn).
 
 ## License
 
