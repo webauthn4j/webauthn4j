@@ -197,7 +197,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
                 return;
             }
         }
-        else if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECC && publicKeyInPubArea instanceof ECCUnique){
+        else if(pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique){
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
             TPMSECCParms parms = (TPMSECCParms)pubArea.getParameters();
             EllipticCurve curveInParms = getCurveFromTPMEccCurve(parms.getCurveId());

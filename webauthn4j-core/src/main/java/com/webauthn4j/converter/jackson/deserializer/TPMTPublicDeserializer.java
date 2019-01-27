@@ -74,8 +74,8 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         switch (type){
             case TPM_ALG_RSA:
                 return extractTPMSRSAParms(buffer);
-            case TPM_ALG_ECC:
-                return extractTPMSECCParms(buffer);
+            case TPM_ALG_ECDSA:
+                return extractTPMSECDSAParms(buffer);
             default:
                 throw new NotImplementedException();
         }
@@ -93,7 +93,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMSRSAParms(symmetric, scheme, keyBits, exponent);
     }
 
-    private TPMSECCParms extractTPMSECCParms(ByteBuffer buffer) throws InvalidFormatException {
+    private TPMSECCParms extractTPMSECDSAParms(ByteBuffer buffer) throws InvalidFormatException {
         byte[] symmetric = new byte[2];
         buffer.get(symmetric);
         byte[] scheme = new byte[2];
@@ -112,7 +112,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
             buffer.get(n);
             return new RSAUnique(n);
         }
-        else if(type == TPMIAlgPublic.TPM_ALG_ECC) {
+        else if(type == TPMIAlgPublic.TPM_ALG_ECDSA) {
             int xSize = UnsignedNumberUtil.getUnsignedShort(buffer);
             byte[] x = new byte[xSize];
             buffer.get(x);
