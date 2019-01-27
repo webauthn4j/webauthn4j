@@ -27,7 +27,7 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.interfaces.ECPublicKey;
 
-public class JWS<T> implements Serializable {
+public class JWS<T extends Serializable> implements Serializable {
 
     transient Logger logger = LoggerFactory.getLogger(JWS.class);
 
@@ -128,7 +128,7 @@ public class JWS<T> implements Serializable {
 
         int offset;
 
-        final byte derSignature[];
+        final byte[] derSignature;
 
         if (len < 128) {
             derSignature = new byte[2 + 2 + j + 2 + l];

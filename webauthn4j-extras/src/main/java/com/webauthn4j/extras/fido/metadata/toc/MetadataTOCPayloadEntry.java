@@ -23,6 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.webauthn4j.util.WIP;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +32,7 @@ import java.util.List;
  * Created by ynojima on 2017/09/08.
  */
 @WIP
-public class MetadataTOCPayloadEntry {
+public class MetadataTOCPayloadEntry implements Serializable {
 
     @JsonProperty
     private String aaid;

@@ -18,10 +18,11 @@ package com.webauthn4j.extras.fido.metadata.toc;
 
 import com.webauthn4j.util.WIP;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 @WIP
-public class BiometricStatusReport {
+public class BiometricStatusReport implements Serializable {
     private Integer certLevel;
     private BigInteger modality;
     private String effectiveData;

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class MetadataTOCPayload {
+public class MetadataTOCPayload implements Serializable {
 
     @JsonProperty
     private String legalHeader;

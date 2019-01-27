@@ -18,11 +18,12 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.util.UnsignedNumberUtil;
 
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMTHA {
+public class TPMTHA implements Serializable {
 
     private TPMIAlgHash hashAlg;
     private byte[] digest;

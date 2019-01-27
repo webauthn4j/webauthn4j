@@ -95,12 +95,11 @@ public class PackedAttestationStatementValidator implements AttestationStatement
     }
 
     private AttestationType validateEcdaaKeyId() {
-        // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
-        // using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).
-        // TODO
+        /// Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
+        /// using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).
         throw new NotImplementedException();
-        // If successful, return attestation type ECDAA and attestation trust path ecdaaKeyId.
-        // return AttestationType.ECDAA;
+        /// If successful, return attestation type ECDAA and attestation trust path ecdaaKeyId.
+        // When it is implemented, `AttestationType.ECDAA` is to be returned.
     }
 
     private AttestationType validateSelfAttestation(RegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {

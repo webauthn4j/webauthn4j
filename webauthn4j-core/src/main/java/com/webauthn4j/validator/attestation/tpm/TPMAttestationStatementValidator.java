@@ -109,31 +109,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
 
         /// If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if(attestationStatement.getX5c() != null){
-            X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
-
-            /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-            Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
-            try {
-                certInfoSignature.initVerify(aikCert.getPublicKey());
-                certInfoSignature.update(certInfo.getBytes());
-                if(!certInfoSignature.verify(attestationStatement.getSig())){
-                    throw new BadAttestationStatementException("hash of certInfo doesn't match with sig");
-                }
-            } catch (SignatureException e) {
-                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig", e);
-            } catch (InvalidKeyException e) {
-                throw new BadAttestationStatementException("invalid publicKey", e);
-            }
-
-            /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
-            validateAikCert(aikCert);
-
-            /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
-            byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
-            if(aaguidBytes !=null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())){
-                throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
-            }
-
+            validateX5c(attestationStatement, certInfo, authenticatorData);
             /// If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
             return AttestationType.ATT_CA;
         }
@@ -142,8 +118,36 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
             /// Perform ECDAA-Verify on sig to verify that it is a valid signature over certInfo (see  [FIDOEcdaaAlgorithm]).
             /// If successful, return implementation-specific values representing attestation type ECDAA and attestation trust path ecdaaKeyId.
             throw new NotImplementedException();
+            // When it is implemented, `AttestationType.ECDAA` is to be returned.
         }
         throw new BadAttestationStatementException("x5c or ecdaaKeyId must be present");
+    }
+
+    private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData authenticatorData) {
+        X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
+
+        /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
+        Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
+        try {
+            certInfoSignature.initVerify(aikCert.getPublicKey());
+            certInfoSignature.update(certInfo.getBytes());
+            if(!certInfoSignature.verify(attestationStatement.getSig())){
+                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig");
+            }
+        } catch (SignatureException e) {
+            throw new BadAttestationStatementException("hash of certInfo doesn't match with sig", e);
+        } catch (InvalidKeyException e) {
+            throw new BadAttestationStatementException("invalid publicKey", e);
+        }
+
+        /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
+        validateAikCert(aikCert);
+
+        /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
+        byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+        if(aaguidBytes !=null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())){
+            throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
+        }
     }
 
     private String getAlgJcaName(TPMIAlgHash alg) {

@@ -27,9 +27,14 @@ import java.net.URL;
 
 public class SimpleFIDOMDSClient implements FIDOMDSClient {
 
-    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/?token=f4ec4c72be3fa7932c7556fc59f50ffff07ca29dd5934b8d";
+    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/?token=";
 
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+    private String token;
+
+    public SimpleFIDOMDSClient(String token) {
+        this.token = token;
+    }
 
     @Override
     public String fetchMetadataTOC() {

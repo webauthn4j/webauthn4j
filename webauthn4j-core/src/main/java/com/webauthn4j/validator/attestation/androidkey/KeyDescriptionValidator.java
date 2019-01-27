@@ -64,6 +64,7 @@ public class KeyDescriptionValidator {
             }
 
             /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
+
             /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
             Asn1Container softwareEnforced = (Asn1Container) extension.getChildren().get(SW_ENFORCED_INDEX);
             Asn1Container teeEnforced = (Asn1Container) extension.getChildren().get(TEE_ENFORCED_INDEX);
@@ -73,31 +74,40 @@ public class KeyDescriptionValidator {
                 throw new KeyDescriptionValidationException("Key is not scoped properly.");
             }
 
-            /// For the following, use only the teeEnforced authorization list if the RP wants to accept only keys
-            /// from a trusted execution environment, otherwise use the union of teeEnforced and softwareEnforced.
-            /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
-            /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
-            if (teeEnforcedOnly) {
-                if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN))) {
-                    throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
-                }
-                if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE))) {
-                    throw new KeyDescriptionValidationException("Key purpose is invalid.");
-                }
-            } else {
-                if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN)) &&
-                        !isKeyGeneratedInKeymaster(findAuthorizationListEntry(softwareEnforced, KM_TAG_ORIGIN))) {
-
-                    throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
-                }
-                if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE)) &&
-                        !containsValidPurpose(findAuthorizationListEntry(softwareEnforced, KM_TAG_PURPOSE))) {
-                    throw new KeyDescriptionValidationException("Key purpose is invalid.");
-                }
-            }
+            validateAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
 
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        }
+    }
+
+    private void validateAuthorizationList(boolean teeEnforcedOnly, Asn1Container softwareEnforced, Asn1Container teeEnforced) throws IOException {
+        /// For the following,
+        /// use only the teeEnforced authorization list if the RP wants to accept only keys
+        /// from a trusted execution environment,
+        if (teeEnforcedOnly) {
+            /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
+            /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
+            if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN))) {
+                throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
+            }
+            if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE))) {
+                throw new KeyDescriptionValidationException("Key purpose is invalid.");
+            }
+        }
+        /// otherwise use the union of teeEnforced and softwareEnforced.
+        else {
+            /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
+            /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
+            if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN)) &&
+                    !isKeyGeneratedInKeymaster(findAuthorizationListEntry(softwareEnforced, KM_TAG_ORIGIN))) {
+
+                throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
+            }
+            if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE)) &&
+                    !containsValidPurpose(findAuthorizationListEntry(softwareEnforced, KM_TAG_PURPOSE))) {
+                throw new KeyDescriptionValidationException("Key purpose is invalid.");
+            }
         }
     }
 
@@ -114,13 +124,8 @@ public class KeyDescriptionValidator {
         try {
             Asn1Container set = (Asn1Container) purposes;
             for (Asn1ParseResult purpose : set.getChildren()) {
-                try {
-                    if (getIntegerFromAsn1(purpose).equals(BigInteger.valueOf(KM_PURPOSE_SIGN))) {
-                        return true;
-                    }
-                } catch (RuntimeException e) {
-                    logger.debug("Failed to retrieve purpose.", e);
-                    return false;
+                if (getIntegerFromAsn1(purpose).equals(BigInteger.valueOf(KM_PURPOSE_SIGN))) {
+                    return true;
                 }
             }
             return false;

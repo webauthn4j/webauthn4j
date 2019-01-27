@@ -22,13 +22,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
 
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class StatusReport {
+public class StatusReport implements Serializable {
     @JsonProperty
     private AuthenticatorStatus status;
 

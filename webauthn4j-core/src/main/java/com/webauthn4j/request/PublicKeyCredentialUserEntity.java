@@ -16,6 +16,9 @@
 
 package com.webauthn4j.request;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
 
     // ~ Instance fields
@@ -48,4 +51,20 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         return displayName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        PublicKeyCredentialUserEntity that = (PublicKeyCredentialUserEntity) o;
+        return Arrays.equals(id, that.id) &&
+                Objects.equals(displayName, that.displayName);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(super.hashCode(), displayName);
+        result = 31 * result + Arrays.hashCode(id);
+        return result;
+    }
 }
