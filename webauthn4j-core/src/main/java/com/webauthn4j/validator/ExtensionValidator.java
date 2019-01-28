@@ -16,7 +16,9 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 
@@ -31,8 +33,8 @@ public class ExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(ExtensionsClientOutputs extensionsClientOutputs,
-                         ExtensionsAuthenticatorOutputs authenticatorExtensionOutputs,
+    public void validate(ExtensionsClientOutputs<ExtensionClientOutput> extensionsClientOutputs,
+                         ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensionsAuthenticatorOutputs,
                          List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
@@ -48,8 +50,8 @@ public class ExtensionValidator {
                 }
             });
         }
-        if (authenticatorExtensionOutputs != null) {
-            authenticatorExtensionOutputs.keySet().forEach(identifier -> {
+        if (extensionsAuthenticatorOutputs != null) {
+            extensionsAuthenticatorOutputs.keySet().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier));
                 }
