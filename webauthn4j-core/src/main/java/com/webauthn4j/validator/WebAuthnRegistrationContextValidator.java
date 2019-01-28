@@ -26,6 +26,7 @@ import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
@@ -242,7 +243,7 @@ public class WebAuthnRegistrationContextValidator {
         /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        ExtensionsAuthenticatorOutputs extensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
         extensionValidator.validate(authenticationExtensionsClientOutputs, extensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 

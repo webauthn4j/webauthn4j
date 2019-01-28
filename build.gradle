@@ -68,6 +68,10 @@ subprojects {
         from javadoc.destinationDir
     }
 
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    }
+
     artifacts {
         archives sourcesJar
         archives javadocJar
