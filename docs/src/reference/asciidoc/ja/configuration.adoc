@@ -1,7 +1,7 @@
 [configuration]
 == 設定
 
-===== 構成証明ステートメントの検証
+==== 構成証明ステートメントの検証
 
 WebAuthn4Jでは、`WebAuthnRegistrationContextValidator` が認証デバイスの登録要求の検証を行いますが、
 取得した構成証明ステートメントの署名と信頼性の検証は、それぞれ `AttestationStatementValidator` と
@@ -26,4 +26,26 @@ Spring Security WebAuthnではそれぞれの検証手段のインタフェー�
 `FIDOMetadataServiceCertPathTrustworthinessValidator` は `CertPathTrustworthinessValidator` インタフェースを実装した
 クラスで、FIDO Metadata Serviceで公開されている証明書をトラストアンカーに構成証明証明書の信頼を検証します。
 更に、FIDO Metadata Serviceから得られた各構成証明証明書のStatus Reportを元に検証を行います。
+
+
+==== 認証デバイス
+
+認証デバイスは`Authenticator`インタフェースの実装として表現されます。
+認証時に`Authenticator`インタフェースを実装したクラスが必要です。
+
+
+
+==== RelyingPartyとしての構成
+
+作成する資格情報のスコープを決定するrpIdなど、RelyingPartyとしての構成はServerPropertyクラスによって表現されます。
+
+
+
+
+
+=== ログ
+
+WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。
+Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
+
 

@@ -1,0 +1,38 @@
+[deep-dive]
+== 詳細
+
+=== Project Modules
+
+==== Core webauthn4j-core.jar
+
+==== Extras webauthn4j-extras.jar
+
+==== Test webauthn4j-test.jar
+
+==== Util webauthn4j-util.jar
+
+=== Request/Response
+
+`com.webauthn4j.request`, `com.webauthn4j.request`パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
+
+=== Converter, Registry
+
+リクエスト、レスポンスパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。
+一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、`converter`パッケージ配下に集約されています。
+カスタムシリアライザ、デシリアライザは`WebAuthnModule`にまとめられており、`WebAuthnModule`が適用された
+ObjectMapperインスタンスはRegistryクラスに登録され、WebAuthn4Jの各クラス間で共有されています。
+もしカスタムなシリアライザ、デシリアライザの追加登録が必要な場合は、Registryクラスが保持するObjectMapperに登録しましょう。
+
+=== Validator
+
+資格情報の登録時のバリデーター
+
+`WebAuthnRegistrationContextValidator`
+
+資格情報の認証時のバリデーター
+
+`WebAuthnAuthenticationContextValidator`
+
+=== 例外クラス
+
+

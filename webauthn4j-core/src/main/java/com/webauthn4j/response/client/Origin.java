@@ -76,7 +76,7 @@ public class Origin implements Serializable {
         try {
             return new Origin(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, Origin.class);
+            throw new InvalidFormatException(null, "value is out of range: " + e.getMessage(), value, Origin.class);
         }
     }
 
