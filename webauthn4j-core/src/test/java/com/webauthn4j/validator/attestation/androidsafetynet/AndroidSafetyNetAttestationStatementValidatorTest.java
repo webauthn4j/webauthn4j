@@ -18,12 +18,14 @@ package com.webauthn4j.validator.attestation.androidsafetynet;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AndroidSafetyNetAttestationStatementValidatorTest {
 
     private AndroidSafetyNetAttestationStatementValidator target = new AndroidSafetyNetAttestationStatementValidator();
 
+    @Ignore
     @Test
     public void test(){
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();
