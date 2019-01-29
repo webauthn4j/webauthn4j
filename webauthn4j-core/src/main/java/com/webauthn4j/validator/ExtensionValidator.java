@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Validates clientExtensionOutputs and authenticatorExtensionOutputs
  */
-public class ExtensionValidator {
+class ExtensionValidator {
 
     // ~ Methods
     // ========================================================================================================

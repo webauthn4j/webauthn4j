@@ -25,7 +25,7 @@ import java.util.Arrays;
 /**
  * Validates the specified {@link TokenBinding}
  */
-public class TokenBindingValidator {
+class TokenBindingValidator {
 
     // ~ Methods
     // ========================================================================================================

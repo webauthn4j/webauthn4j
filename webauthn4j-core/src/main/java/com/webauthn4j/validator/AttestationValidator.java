@@ -49,7 +49,7 @@ class AttestationValidator {
     // ~ Constructor
     // ========================================================================================================
 
-    public AttestationValidator(
+    AttestationValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
