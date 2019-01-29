@@ -1,31 +1,41 @@
 [configuration]
 == 設定
 
-==== 構成証明ステートメントの検証
+WebAuthn4Jを利用する上で中心となるクラスは2つ存在します。1つは登録時に資格情報を検証する
+`WebAuthnRegistrationContextValidator` クラスで、もう1つは認証時に資格情報を検証する
+`WebAuthnAuthenticationContextValidator` クラスです。
+前者の `validate` メソッドは登録時のコンテキストを表現するWebAuthnRegistrationContextクラスを引数に持ち、
+検証に成功した場合、`WebAuthnRegistrationContextValidationResponse` クラスを返却します。
+後者の `validate` メソッドは認証時のコンテキストを表現するWebAuthnAuthenticationContextクラスを引数に持ち、
+検証に成功した場合、`WebAuthnAuthenticationContextValidationResponse` クラスを返却します。
+両者とも、検証に失敗した場合は、`ValidationException` クラスのサブクラスの例外をスローします。
 
-WebAuthn4Jでは、`WebAuthnRegistrationContextValidator` が認証デバイスの登録要求の検証を行いますが、
-取得した構成証明ステートメントの署名と信頼性の検証は、それぞれ `AttestationStatementValidator` と
-`CertPathTrustworthinessValidator` インタフェースの実装に委譲します。
+`WebAuthnRegistrationContextValidator` は構成証明ステートメントの署名と信頼性の検証は、
+それぞれ `AttestationStatementValidator` と `CertPathTrustworthinessValidator` インタフェースの実装に委譲します。
 
 厳密な構成証明ステートメントの検証を必要としないサイト向けに、`AttestationStatementValidator` と
 `CertPathTrustworthinessValidator` を構成した `WebAuthnRegistrationContextValidator` のインスタンスは、
 `WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` ファクトリメソッドで作成出来ます。
 
+もし、エンタープライズなユースケースで、認証デバイスの厳密な検証が要件である場合は、
+`WebAuthnRegistrationContextValidator` クラスのコンストラクタを用いて
+`AttestationStatementValidator` と `CertPathTrustworthinessValidator` の実装をコンストラクタインジェクションして
+構成して下さい。
+
+==== 構成証明ステートメントの検証
+
+構成証明ステートメントの検証
 
 ===== 構成証明ステートメントの信頼性の検証
 
-信頼の検証は、構成証明ステートメントが自己署名か、ECDAAか、それ以外かによって方法が異なり、
-Spring Security WebAuthnではそれぞれの検証手段のインタフェースとして `SelfAttestationTrustworthinessValidator` 、
-`ECDAATrustworthinessValidator` 、 `CertPathTrustworthinessValidator` を用意しています。
+構成証明ステートメント自体の信頼性の検証は、信頼するルート証明書から連なる証明書パスの検証、
+ECDAAによる検証、自己署名のパターンがありますが、証明書パスの検証は `CertPathTrustworthinessValidator` インタフェースの実装
+に検証を委ね、 ECDAAの場合は `ECDAATrustworthinessValidator` インタフェースの実装に検証が委譲されます。
+WebAuthn4Jはいくつか `CertPathTrustworthinessValidator` インタフェースの実装を提供しており、
+例えば `TrustAnchorCertPathTrustworthinessValidator` は `TrustAnchorResolver` インタフェースを通じて取得した
+`TrustAnchor` をルート証明書として証明書パスの検証を行うことで構成証明ステートメントの信頼性の検証を行います。
 
-`CertPathTrustworthinessValidator` が証明書パスに基づいて構成証明ステートメントを検証する際、WebAuthn4Jは
-`TrustAnchorProvider` インタフェースの実装を用いてトラスト・アンカーを取得します。
 
-===== FIDOMetadataServiceCertPathTrustworthinessValidator
-
-`FIDOMetadataServiceCertPathTrustworthinessValidator` は `CertPathTrustworthinessValidator` インタフェースを実装した
-クラスで、FIDO Metadata Serviceで公開されている証明書をトラストアンカーに構成証明証明書の信頼を検証します。
-更に、FIDO Metadata Serviceから得られた各構成証明証明書のStatus Reportを元に検証を行います。
 
 
 ==== 認証デバイス
@@ -43,9 +53,5 @@ Spring Security WebAuthnではそれぞれの検証手段のインタフェー�
 
 
 
-=== ログ
-
-WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。
-Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
 
 

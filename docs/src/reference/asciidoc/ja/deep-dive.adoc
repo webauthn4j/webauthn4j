@@ -36,3 +36,7 @@ ObjectMapperインスタンスはRegistryクラスに登録され、WebAuthn4J�
 === 例外クラス
 
 
+=== ログ
+
+WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。
+Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
