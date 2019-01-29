@@ -31,11 +31,11 @@ import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOu
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.attestation.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.androidkey.NullAndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.packed.NullPackedAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.packed.NullPackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
@@ -43,7 +43,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrust
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.u2f.NullFIDOU2FAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;

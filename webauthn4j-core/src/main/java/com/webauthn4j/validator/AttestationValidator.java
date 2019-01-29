@@ -23,7 +23,7 @@ import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
-import com.webauthn4j.validator.attestation.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
@@ -33,7 +33,7 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import java.util.List;
 import java.util.Objects;
 
-public class AttestationValidator {
+class AttestationValidator {
 
     // ~ Instance fields
     // ================================================================================================
