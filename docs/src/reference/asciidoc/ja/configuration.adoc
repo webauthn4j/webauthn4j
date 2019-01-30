@@ -24,7 +24,12 @@ WebAuthn4Jを利用する上で中心となるクラスは2つ存在します。
 
 ==== 構成証明ステートメントの検証
 
-構成証明ステートメントの検証
+構成証明ステートメントの検証は、 `AttestationStatementValidator` インタフェースの実装クラスが提供します。
+構成照明ステートメント毎に、対応する実装クラスが提供されていますので、必要なValidatorからなるListを
+`WebAuthnRegistrationContextValidator` クラスのコンストラクタに指定して下さい。
+例えば、 `packed` のみをサポートする場合は、 `PackedAttestationStatementValidator` を唯一の要素とするListとし、
+例えば、 `packed`, `tpm` をサポートする場合は、 `PackedAttestationStatementValidator` と `TPMAttestationStatementValidator`
+からなるListを指定して下さい。
 
 ===== 構成証明ステートメントの信頼性の検証
 
@@ -35,23 +40,19 @@ WebAuthn4Jはいくつか `CertPathTrustworthinessValidator` インタフェー�
 例えば `TrustAnchorCertPathTrustworthinessValidator` は `TrustAnchorResolver` インタフェースを通じて取得した
 `TrustAnchor` をルート証明書として証明書パスの検証を行うことで構成証明ステートメントの信頼性の検証を行います。
 
+==== サーバー側構成の表現
 
+作成する資格情報のスコープを決定するrpIdなど、サーバー側の構成は `WebAuthnRegistrationContext` クラスの
+フィールドである `ServerProperty` クラスによって表現されます。
 
+==== 認証デバイスの表現
 
-==== 認証デバイス
-
-認証デバイスは`Authenticator`インタフェースの実装として表現されます。
-認証時に`Authenticator`インタフェースを実装したクラスが必要です。
-
-
-
-==== RelyingPartyとしての構成
-
-作成する資格情報のスコープを決定するrpIdなど、RelyingPartyとしての構成はServerPropertyクラスによって表現されます。
-
-
-
-
+認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。
+登録時に、 `WebAuthnRegistrationContextValidationResponse` クラスが含む値を用いてAuthenticator インタフェースの
+インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。
+なお、永続化する際は、credentialIdをキーに永続化すると良いでしょう。
+`Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。
+典型的には、 `Authenticator` をユーザーが識別するためのfriendly nameの追加などが考えられるでしょう。
 
 
 

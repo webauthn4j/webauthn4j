@@ -5,11 +5,20 @@
 
 ==== Core webauthn4j-core.jar
 
+Attestation/Assertionの検証に関わるコア機能を提供します。
+
 ==== Extras webauthn4j-extras.jar
+
+FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
 
 ==== Test webauthn4j-test.jar
 
+WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに
+設計変更されることがあります。
+
 ==== Util webauthn4j-util.jar
+
+WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
 
 === Request/Response
 
@@ -34,6 +43,8 @@ ObjectMapperインスタンスはRegistryクラスに登録され、WebAuthn4J�
 `WebAuthnAuthenticationContextValidator`
 
 === 例外クラス
+
+検証に失敗した場合、 `ValidationException` のサブクラスがスローされます。
 
 
 === ログ
