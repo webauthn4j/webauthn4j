@@ -32,15 +32,7 @@ public class CredentialPublicKeyEnvelope {
         return credentialPublicKey;
     }
 
-    public void setCredentialPublicKey(CredentialPublicKey credentialPublicKey) {
-        this.credentialPublicKey = credentialPublicKey;
-    }
-
     public int getLength() {
         return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
     }
 }

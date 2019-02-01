@@ -81,6 +81,18 @@ public class WebAuthnRegistrationContextValidator {
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
+    ) {
+        this(attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                new DefaultSelfAttestationTrustworthinessValidator(),
+                new Registry());
+    }
+
+    public WebAuthnRegistrationContextValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
@@ -88,18 +100,6 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
-                new Registry());
-    }
-
-    public WebAuthnRegistrationContextValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator
-    ) {
-        this(attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                new DefaultSelfAttestationTrustworthinessValidator(),
                 new Registry());
     }
 
@@ -185,9 +185,7 @@ public class WebAuthnRegistrationContextValidator {
         BeanAssertUtil.validate(attestationObject);
         BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(authenticationExtensionsClientOutputs);
 
-        if (attestationObject.getAuthenticatorData().getAttestedCredentialData() == null) {
-            throw new MaliciousDataException("attestedCredentialData must not be null on registration");
-        }
+        validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
 
@@ -227,15 +225,9 @@ public class WebAuthnRegistrationContextValidator {
         /// Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
-        /// If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
-        if (registrationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("User not verified");
-        }
 
-        /// Verify that the User Present bit of the flags in authData is set.
-        if (registrationContext.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
-            throw new UserNotPresentException("User not present");
-        }
+        validateUVUPFlags(authenticatorData, registrationContext.isUserVerificationRequired(), registrationContext.isUserPresenceRequired());
+
 
         /// Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
         /// extension outputs in the extensions in authData are as expected, considering the client extension input
@@ -262,6 +254,25 @@ public class WebAuthnRegistrationContextValidator {
         // ******* This step is up to library user *******
 
         return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, authenticationExtensionsClientOutputs);
+    }
+
+    void validateAuthenticatorDataField(AuthenticatorData authenticatorData){
+        // attestedCredentialData must be present on registration
+        if (authenticatorData.getAttestedCredentialData() == null) {
+            throw new MaliciousDataException("attestedCredentialData must not be null on registration");
+        }
+    }
+
+    void validateUVUPFlags(AuthenticatorData authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
+        /// If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
+        if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
+            throw new UserNotVerifiedException("User not verified");
+        }
+
+        /// Verify that the User Present bit of the flags in authData is set.
+        if (isUserPresenceRequired && !authenticatorData.isFlagUP()) {
+            throw new UserNotPresentException("User not present");
+        }
     }
 
 

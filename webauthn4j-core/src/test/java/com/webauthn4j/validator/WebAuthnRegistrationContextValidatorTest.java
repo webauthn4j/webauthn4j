@@ -17,12 +17,78 @@
 package com.webauthn4j.validator;
 
 
+import com.webauthn4j.registry.Registry;
+import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
+import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.UserNotPresentException;
+import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.junit.Test;
+
+import java.util.Collections;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 public class WebAuthnRegistrationContextValidatorTest {
 
-    @Test
-    public void test() {
+    CertPathTrustworthinessValidator certPathTrustworthinessValidatorMock = mock(CertPathTrustworthinessValidator.class);
+    ECDAATrustworthinessValidator ecdaaTrustworthinessValidatorMock = mock(ECDAATrustworthinessValidator.class);
+    SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator = mock(SelfAttestationTrustworthinessValidator.class);
+    Registry registry = new Registry();
 
+    @Test
+    public void constructor_test() {
+        WebAuthnRegistrationContextValidator validator;
+        validator = new WebAuthnRegistrationContextValidator(
+                        Collections.emptyList(),
+                        certPathTrustworthinessValidatorMock,
+                        ecdaaTrustworthinessValidatorMock);
+        validator = new WebAuthnRegistrationContextValidator(
+                        Collections.emptyList(),
+                        certPathTrustworthinessValidatorMock,
+                        ecdaaTrustworthinessValidatorMock,
+                        registry);
+        validator = new WebAuthnRegistrationContextValidator(
+                Collections.emptyList(),
+                certPathTrustworthinessValidatorMock,
+                ecdaaTrustworthinessValidatorMock,
+                selfAttestationTrustworthinessValidator,
+                registry);
     }
+
+    @Test(expected = MaliciousDataException.class)
+    public void validateAuthenticatorDataField_test(){
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData);
+    }
+
+    @Test
+    public void validateUVUPFlags_not_required_test(){
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, false);
+    }
+
+    @Test
+    public void validateUVUPFlags_required_test(){
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)(AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, true);
+    }
+
+    @Test(expected = UserNotVerifiedException.class)
+    public void validateUVUPFlags_UserNotVerifiedException_test(){
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false);
+    }
+
+    @Test(expected = UserNotPresentException.class)
+    public void validateUVUPFlags_UserNotPresentException_test(){
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
+        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true);
+    }
+
+
+
 }

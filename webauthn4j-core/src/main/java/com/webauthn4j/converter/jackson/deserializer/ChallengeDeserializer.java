@@ -40,9 +40,6 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
     @Override
     public Challenge deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String str = p.getValueAsString();
-        if (str == null) {
-            return null;
-        }
         try {
             return new DefaultChallenge(str);
         } catch (IllegalArgumentException e) {

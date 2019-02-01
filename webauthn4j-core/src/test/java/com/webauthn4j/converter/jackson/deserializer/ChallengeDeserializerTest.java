@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.client.CollectedClientData;
 import org.junit.Test;
@@ -43,5 +44,31 @@ public class ChallengeDeserializerTest {
         //Then
         assertThat(result).extracting("challenge").isNotNull();
         assertThat(result.getChallenge().getValue()).hasSize(0);
+    }
+
+    @Test
+    public void null_test() throws IOException {
+        ObjectMapper objectMapper = new Registry().getJsonMapper();
+
+        //Given
+        String input = "{ \"challenge\" : null }";
+
+        //When
+        CollectedClientData result = objectMapper.readValue(input, CollectedClientData.class);
+
+        //Then
+        assertThat(result).extracting("challenge").isNotNull();
+        assertThat(result.getChallenge()).isNull();
+    }
+
+    @Test(expected = InvalidFormatException.class)
+    public void invalid_value_test() throws IOException {
+        ObjectMapper objectMapper = new Registry().getJsonMapper();
+
+        //Given
+        String input = "{ \"challenge\" : \"ddddd\" }";
+
+        //When
+        objectMapper.readValue(input, CollectedClientData.class);
     }
 }
