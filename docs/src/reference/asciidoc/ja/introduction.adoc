@@ -18,7 +18,7 @@ Web Authentication仕様に基づくサーバーサイド検証を行うため�
 
 ==== サポートする証言ステートメントフォーマット
 
-Spring Security WebAuthnが現在サポートする証言ステートメントフォーマットは以下の通りです。
+WebAuthn4Jでは、以下の通り全ての証言ステートメントフォーマットをサポートしています。
 
 - Packed attestation
 - FIDO U2F attestation
