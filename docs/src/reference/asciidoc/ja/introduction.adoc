@@ -37,7 +37,7 @@ Spring Security WebAuthnのFIDO Serverインタフェースに対してFIDO2 tes
 
 ==== ポータビリティ
 
-WebAuthn4JはSLF4JとJacksonにのみ依存しており、非常に高いポータビリティを持っています。
+WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常に高いポータビリティを持っています。
 あなたのJavaアプリへの導入の障害は殆どないでしょう。
 
 === 要件
