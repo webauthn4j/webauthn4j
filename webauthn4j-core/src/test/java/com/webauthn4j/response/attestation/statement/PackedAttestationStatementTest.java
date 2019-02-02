@@ -32,7 +32,7 @@ public class PackedAttestationStatementTest {
 
     @Test(expected = ConstraintViolationException.class)
     public void validate_invalid_instance_test() {
-        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement();
+        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(null, null, null,null);
         packedAttestationStatement.validate();
     }
 

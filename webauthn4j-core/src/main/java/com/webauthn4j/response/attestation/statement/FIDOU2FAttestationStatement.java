@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -36,12 +37,12 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     @JsonProperty
     private byte[] sig;
 
-    public FIDOU2FAttestationStatement(AttestationCertificatePath x5c, byte[] sig) {
+    @JsonCreator
+    public FIDOU2FAttestationStatement(
+            @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @JsonProperty("sig") byte[] sig) {
         this.x5c = x5c;
         this.sig = sig;
-    }
-
-    public FIDOU2FAttestationStatement() {
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -25,7 +26,6 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Objects;
 
-@WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
 public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
@@ -38,11 +38,12 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     @JsonProperty
     private JWS<Response> response;
 
-    /**
-     * Default constructor for Jackson deserialization
-     */
-    public AndroidSafetyNetAttestationStatement() {
-        //nop
+    @JsonCreator
+    public AndroidSafetyNetAttestationStatement(
+            @JsonProperty("ver") String ver,
+            @JsonProperty("response") JWS<Response> response) {
+        this.ver = ver;
+        this.response = response;
     }
 
     @Override

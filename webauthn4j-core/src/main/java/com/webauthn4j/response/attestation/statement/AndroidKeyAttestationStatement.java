@@ -16,16 +16,15 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-@WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(AndroidKeyAttestationStatement.FORMAT)
 public class AndroidKeyAttestationStatement implements CertificateBaseAttestationStatement {
@@ -41,17 +40,14 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
     @JsonProperty
     private AttestationCertificatePath x5c;
 
-    public AndroidKeyAttestationStatement(COSEAlgorithmIdentifier alg, byte[] sig, AttestationCertificatePath x5c) {
+    @JsonCreator
+    public AndroidKeyAttestationStatement(
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @JsonProperty("sig") byte[] sig,
+            @JsonProperty("x5c") AttestationCertificatePath x5c) {
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
-    }
-
-    /**
-     * Default constructor for Jackson deserialization
-     */
-    public AndroidKeyAttestationStatement() {
-
     }
 
     public COSEAlgorithmIdentifier getAlg() {

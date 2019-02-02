@@ -16,10 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -45,17 +42,16 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @JsonProperty
     private byte[] ecdaaKeyId;
 
-    public PackedAttestationStatement(COSEAlgorithmIdentifier alg, byte[] sig, AttestationCertificatePath x5c, byte[] ecdaaKeyId) {
+    @JsonCreator
+    public PackedAttestationStatement(
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @JsonProperty("sig") byte[] sig,
+            @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @JsonProperty("ecdaaKeyId") byte[] ecdaaKeyId) {
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
         this.ecdaaKeyId = ecdaaKeyId;
-    }
-
-    /**
-     * Default constructor for Jackson deserialization
-     */
-    public PackedAttestationStatement() {
     }
 
     public COSEAlgorithmIdentifier getAlg() {
