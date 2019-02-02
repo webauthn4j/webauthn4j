@@ -20,8 +20,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.response.extension.AbstractExtensionOutput;
 import com.webauthn4j.response.extension.AuthenticationExtensionsSupported;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SupportedExtensionsExtensionAuthenticatorOutput

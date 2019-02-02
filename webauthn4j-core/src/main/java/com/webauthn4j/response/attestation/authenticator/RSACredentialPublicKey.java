@@ -21,7 +21,6 @@ import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.response.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.RSAUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.math.BigInteger;

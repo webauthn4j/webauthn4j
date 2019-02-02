@@ -17,7 +17,6 @@
 package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
