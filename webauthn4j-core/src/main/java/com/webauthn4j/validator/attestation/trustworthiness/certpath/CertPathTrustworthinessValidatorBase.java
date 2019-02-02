@@ -28,7 +28,6 @@ import java.util.Set;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator {
 
-    private boolean isRevocationCheckEnabled = false;
     private boolean fullChainProhibited = false;
 
     public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
@@ -40,15 +39,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
         certPathParameters.setPolicyQualifiersRejected(false); // As policy qualifiers are checked manually in attestation statement validator, it is turned off
 
-        if (isRevocationCheckEnabled()) {
-            //Set PKIXRevocationChecker to enable CRL based revocation check, which is disabled by default.
-            //Ref. http://docs.oracle.com/javase/7/docs/technotes/guides/security/certpath/CertPathProgGuide.html#AppB
-            PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
-            pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
-            certPathParameters.addCertPathChecker(pkixRevocationChecker);
-        } else {
-            certPathParameters.setRevocationEnabled(false);
-        }
+        certPathParameters.setRevocationEnabled(false);
 
         PKIXCertPathValidatorResult result;
         try {
@@ -65,13 +56,6 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
 
     protected abstract Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid);
 
-    public boolean isRevocationCheckEnabled() {
-        return isRevocationCheckEnabled;
-    }
-
-    public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
-        isRevocationCheckEnabled = revocationCheckEnabled;
-    }
 
     public boolean isFullChainProhibited() {
         return fullChainProhibited;
