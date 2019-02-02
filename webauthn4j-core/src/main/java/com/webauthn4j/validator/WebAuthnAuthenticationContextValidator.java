@@ -102,9 +102,7 @@ public class WebAuthnAuthenticationContextValidator {
         BeanAssertUtil.validate(authenticatorData);
         BeanAssertUtil.validate(serverProperty);
 
-        if (authenticatorData.getAttestedCredentialData() != null) {
-            throw new MaliciousDataException("attestedCredentialData must be null on authentication");
-        }
+        validateAuthenticatorData(authenticatorData);
 
         /// Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
@@ -167,6 +165,12 @@ public class WebAuthnAuthenticationContextValidator {
         }
 
         return new WebAuthnAuthenticationContextValidationResponse(collectedClientData, authenticatorData, authenticationExtensionsClientOutputs);
+    }
+
+    void validateAuthenticatorData(AuthenticatorData authenticatorData) {
+        if (authenticatorData.getAttestedCredentialData() != null) {
+            throw new MaliciousDataException("attestedCredentialData must be null on authentication");
+        }
     }
 
     public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {

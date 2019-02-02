@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import java.util.Collections;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 public class WebAuthnRegistrationContextValidatorTest {
