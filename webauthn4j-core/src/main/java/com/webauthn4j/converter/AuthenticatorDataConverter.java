@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;

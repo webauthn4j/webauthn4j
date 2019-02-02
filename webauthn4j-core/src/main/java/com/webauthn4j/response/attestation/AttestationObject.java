@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -38,12 +39,12 @@ public class AttestationObject implements Serializable {
     )
     private AttestationStatement attestationStatement;
 
-    public AttestationObject(AuthenticatorData authenticatorData, AttestationStatement attestationStatement) {
+    @JsonCreator
+    public AttestationObject(
+            @JsonProperty("authData") AuthenticatorData authenticatorData,
+            @JsonProperty("attStmt") AttestationStatement attestationStatement) {
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
-    }
-
-    public AttestationObject() {
     }
 
     public com.webauthn4j.response.attestation.authenticator.AuthenticatorData getAuthenticatorData() {

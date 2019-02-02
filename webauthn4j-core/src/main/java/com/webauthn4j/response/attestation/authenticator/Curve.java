@@ -35,8 +35,7 @@ public enum Curve {
         this.value = value;
     }
 
-    @JsonCreator
-    public static Curve create(Integer value) throws InvalidFormatException {
+    public static Curve create(Integer value) {
         if (value == null) {
             return null;
         }
@@ -48,7 +47,16 @@ public enum Curve {
             case 3:
                 return SECP521R1;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, Curve.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static Curve fromJson(Integer value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, Curve.class);
         }
     }
 

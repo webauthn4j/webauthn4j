@@ -43,7 +43,12 @@ public class AAGUID implements Serializable {
     }
 
     public AAGUID(String value) {
-        this.value = UUIDUtil.fromString(value);
+        if(value == null){
+            this.value = null;
+        }
+        else {
+            this.value = UUIDUtil.fromString(value);
+        }
     }
 
     public UUID getValue() {
