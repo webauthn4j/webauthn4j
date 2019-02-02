@@ -51,8 +51,5 @@ public interface CredentialPublicKey extends Serializable {
 
     byte[] getBaseIV();
 
-    @JsonIgnore
-    byte[] getBytes();
-
     void validate();
 }

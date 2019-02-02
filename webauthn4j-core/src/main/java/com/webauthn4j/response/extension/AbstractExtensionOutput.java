@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class AbstractExtensionOutput<T> implements ExtensionOutput<T> {
+public abstract class AbstractExtensionOutput<T extends Serializable> implements ExtensionOutput<T> {
 
     private T value;
 

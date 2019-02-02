@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
@@ -109,7 +110,8 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
-        CredentialPublicKey credentialPublicKey = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
+        EC2CredentialPublicKey credentialPublicKey =
+                (EC2CredentialPublicKey)attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 

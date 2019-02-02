@@ -23,7 +23,6 @@ import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
-import java.util.EnumSet;
 import java.util.Set;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator {

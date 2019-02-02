@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.COSEKeyOperation;
@@ -126,7 +127,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         return y;
     }
 
-    @Override
+    @JsonIgnore
     public byte[] getBytes() {
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();

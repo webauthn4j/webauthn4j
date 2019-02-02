@@ -18,18 +18,19 @@ package com.webauthn4j.response.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.response.extension.AbstractExtensionOutput;
+import com.webauthn4j.response.extension.AuthenticationExtensionsSupported;
 
 import java.util.List;
 
 public class SupportedExtensionsExtensionClientOutput
-        extends AbstractExtensionOutput<List<String>>
-        implements RegistrationExtensionClientOutput<List<String>> {
+        extends AbstractExtensionOutput<AuthenticationExtensionsSupported>
+        implements RegistrationExtensionClientOutput<AuthenticationExtensionsSupported> {
 
     public static final String ID = "exts";
 
     @JsonCreator
     public SupportedExtensionsExtensionClientOutput(List<String> value) {
-        super(value);
+        super(new AuthenticationExtensionsSupported(value));
     }
 
     @Override

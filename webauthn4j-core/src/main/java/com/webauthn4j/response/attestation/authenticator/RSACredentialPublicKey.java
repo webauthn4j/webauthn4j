@@ -78,11 +78,6 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     }
 
     @Override
-    public byte[] getBytes() {
-        throw new NotImplementedException(); //TODO
-    }
-
-    @Override
     public void validate() {
         if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null");
