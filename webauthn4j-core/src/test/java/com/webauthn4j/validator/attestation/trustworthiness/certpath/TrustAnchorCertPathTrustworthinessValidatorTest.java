@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,6 +67,11 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
         target.validate(aaguid, attestationStatement);
+    }
+
+    @Test
+    public void test(){
+        assertThat(target.isFullChainProhibited()).isFalse();
     }
 
 }
