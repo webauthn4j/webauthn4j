@@ -28,6 +28,7 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -82,12 +83,12 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
-        if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(Instant.now().minus(Duration.ofSeconds(backwardThreshold)))) {
+        if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).minus(Duration.ofSeconds(backwardThreshold)))) {
             throw new BadAttestationStatementException("timestampMs violates backwardThreshold");
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
-        if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(Instant.now().plus(Duration.ofSeconds(forwardThreshold)))) {
+        if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).plus(Duration.ofSeconds(forwardThreshold)))) {
             throw new BadAttestationStatementException("timestampMs violates forwardThreshold");
         }
 

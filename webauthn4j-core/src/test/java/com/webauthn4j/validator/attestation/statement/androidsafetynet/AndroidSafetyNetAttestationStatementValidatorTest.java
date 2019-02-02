@@ -25,7 +25,6 @@ public class AndroidSafetyNetAttestationStatementValidatorTest {
 
     private AndroidSafetyNetAttestationStatementValidator target = new AndroidSafetyNetAttestationStatementValidator();
 
-    @Ignore
     @Test
     public void test(){
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();

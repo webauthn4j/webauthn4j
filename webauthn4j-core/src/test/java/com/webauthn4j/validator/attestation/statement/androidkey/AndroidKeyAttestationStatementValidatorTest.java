@@ -25,11 +25,9 @@ public class AndroidKeyAttestationStatementValidatorTest {
 
     private AndroidKeyAttestationStatementValidator target = new AndroidKeyAttestationStatementValidator();
 
-    @Ignore
     @Test
     public void validate_test() {
-        RegistrationObject registrationObject =
-                TestUtil.createRegistrationObject((TestUtil::createAttestationObjectWithAndroidKeyAttestationStatement));
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);
     }
 

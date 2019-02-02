@@ -20,6 +20,9 @@ import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.server.ServerProperty;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
+
 /**
  * Internal data transfer object for registration data
  */
@@ -34,6 +37,7 @@ public class RegistrationObject {
     private final byte[] attestationObjectBytes;
     private final byte[] authenticatorDataBytes;
     private final ServerProperty serverProperty;
+    private final LocalDateTime timestamp;
 
     // ~ Constructor
     // ========================================================================================================
@@ -45,12 +49,32 @@ public class RegistrationObject {
                               byte[] authenticatorDataBytes,
                               ServerProperty serverProperty) {
 
+        this(
+                collectedClientData,
+                collectedClientDataBytes,
+                attestationObject,
+                attestationObjectBytes,
+                authenticatorDataBytes,
+                serverProperty,
+                LocalDateTime.now(Clock.systemUTC())
+        );
+    }
+
+    public RegistrationObject(CollectedClientData collectedClientData,
+                              byte[] collectedClientDataBytes,
+                              AttestationObject attestationObject,
+                              byte[] attestationObjectBytes,
+                              byte[] authenticatorDataBytes,
+                              ServerProperty serverProperty,
+                              LocalDateTime timestamp) {
+
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.authenticatorDataBytes = authenticatorDataBytes;
         this.serverProperty = serverProperty;
+        this.timestamp = timestamp;
     }
 
     // ~ Methods
@@ -80,4 +104,7 @@ public class RegistrationObject {
         return serverProperty;
     }
 
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
 }
