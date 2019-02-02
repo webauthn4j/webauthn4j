@@ -16,16 +16,17 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-@WIP
 public class PublicKeyCredentialCreationOptions implements Serializable {
 
     // ~ Instance fields
@@ -43,16 +44,17 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private AuthenticationExtensionsClientInputs extensions;
 
     @SuppressWarnings("squid:S00107")
+    @JsonCreator
     public PublicKeyCredentialCreationOptions(
-            PublicKeyCredentialRpEntity rp,
-            PublicKeyCredentialUserEntity user,
-            Challenge challenge,
-            List<PublicKeyCredentialParameters> pubKeyCredParams,
-            BigInteger timeout,
-            List<PublicKeyCredentialDescriptor> excludeCredentials,
-            AuthenticatorSelectionCriteria authenticatorSelection,
-            AttestationConveyancePreference attestation,
-            AuthenticationExtensionsClientInputs extensions) {
+            @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
+            @JsonProperty("user") PublicKeyCredentialUserEntity user,
+            @JsonProperty("challenge") Challenge challenge,
+            @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
+            @JsonProperty("timeout") BigInteger timeout,
+            @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
+            @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
+            @JsonProperty("attestation") AttestationConveyancePreference attestation,
+            @JsonProperty("extensions") AuthenticationExtensionsClientInputs extensions) {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
@@ -64,11 +66,12 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         this.extensions = extensions;
     }
 
-    public PublicKeyCredentialCreationOptions(PublicKeyCredentialRpEntity rp, PublicKeyCredentialUserEntity user, Challenge challenge, List<PublicKeyCredentialParameters> pubKeyCredParams) {
+    public PublicKeyCredentialCreationOptions(
+            PublicKeyCredentialRpEntity rp,
+            PublicKeyCredentialUserEntity user,
+            Challenge challenge,
+            List<PublicKeyCredentialParameters> pubKeyCredParams) {
         this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
-    }
-
-    public PublicKeyCredentialCreationOptions() {
     }
 
     public PublicKeyCredentialRpEntity getRp() {
@@ -105,5 +108,27 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
 
     public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredentialCreationOptions that = (PublicKeyCredentialCreationOptions) o;
+        return Objects.equals(rp, that.rp) &&
+                Objects.equals(user, that.user) &&
+                Objects.equals(challenge, that.challenge) &&
+                Objects.equals(pubKeyCredParams, that.pubKeyCredParams) &&
+                Objects.equals(timeout, that.timeout) &&
+                Objects.equals(excludeCredentials, that.excludeCredentials) &&
+                Objects.equals(authenticatorSelection, that.authenticatorSelection) &&
+                attestation == that.attestation &&
+                Objects.equals(extensions, that.extensions);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, attestation, extensions);
     }
 }

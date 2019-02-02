@@ -19,7 +19,6 @@ package com.webauthn4j.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 /**
  * This enumeration defines the valid credential types. It is an extension point; values can be added to it
@@ -40,14 +39,22 @@ public enum PublicKeyCredentialType {
         this.value = value;
     }
 
-    @JsonCreator
-    public static PublicKeyCredentialType create(String value) throws MismatchedInputException {
+    public static PublicKeyCredentialType create(String value) {
         if (value == null) {
             return null;
         }
         if ("public-key".equals(value)) {
             return PUBLIC_KEY;
         } else {
+            throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static PublicKeyCredentialType fromJson(String value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, PublicKeyCredentialType.class);
         }
     }

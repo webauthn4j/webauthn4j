@@ -18,11 +18,17 @@ package com.webauthn4j.request;
 
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.registry.Registry;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ALL")
 public class AuthenticatorAttachmentTest {
+
+    private Registry registry = new Registry();
 
     @Test
     public void create_test() throws InvalidFormatException {
@@ -31,14 +37,29 @@ public class AuthenticatorAttachmentTest {
         assertThat(AuthenticatorAttachment.create("cross-platform")).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void create_invalid_value_test() throws InvalidFormatException {
+        AuthenticatorAttachment.create("invalid");
+    }
+
     @Test
     public void getValue_test() {
         assertThat(AuthenticatorAttachment.PLATFORM.getValue()).isEqualTo("platform");
     }
 
+    @Test
+    public void fromJson_test() throws IOException {
+        TestDTO dto = registry.getJsonMapper().readValue("{\"attachment\": \"platform\"}", TestDTO.class);
+        assertThat(dto.attachment).isEqualTo(AuthenticatorAttachment.PLATFORM);
+    }
+
     @Test(expected = InvalidFormatException.class)
-    public void create_invalid_value_test() throws InvalidFormatException {
-        AuthenticatorAttachment.create("invalid");
+    public void fromJson_test_with_invalid() throws IOException {
+        TestDTO dto = registry.getJsonMapper().readValue("{\"attachment\": \"invalid\"}", TestDTO.class);
+    }
+
+    public static class TestDTO{
+        public AuthenticatorAttachment attachment;
     }
 
 }

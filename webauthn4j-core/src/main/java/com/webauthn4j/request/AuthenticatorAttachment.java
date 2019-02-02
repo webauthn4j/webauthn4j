@@ -42,8 +42,7 @@ public enum AuthenticatorAttachment {
         this.value = value;
     }
 
-    @JsonCreator
-    public static AuthenticatorAttachment create(String value) throws InvalidFormatException {
+    public static AuthenticatorAttachment create(String value) {
         if (value == null) {
             return null;
         }
@@ -53,7 +52,17 @@ public enum AuthenticatorAttachment {
             case "cross-platform":
                 return CROSS_PLATFORM;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorAttachment.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static AuthenticatorAttachment fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorAttachment.class);
         }
     }
 

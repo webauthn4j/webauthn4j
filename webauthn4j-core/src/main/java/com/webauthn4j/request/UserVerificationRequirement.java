@@ -33,8 +33,7 @@ public enum UserVerificationRequirement {
         this.value = value;
     }
 
-    @JsonCreator
-    public static UserVerificationRequirement create(String value) throws InvalidFormatException {
+    public static UserVerificationRequirement create(String value) {
         if (value == null) {
             return null;
         }
@@ -43,10 +42,20 @@ public enum UserVerificationRequirement {
                 return REQUIRED;
             case "preferred":
                 return PREFERRED;
-            case "discourage":
+            case "discouraged":
                 return DISCOURAGED;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static UserVerificationRequirement fromJson(String value) throws InvalidFormatException{
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
         }
     }
 

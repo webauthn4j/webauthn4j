@@ -16,12 +16,11 @@
 
 package com.webauthn4j.request;
 
-import com.webauthn4j.util.WIP;
-
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-@WIP
 public class PublicKeyCredentialDescriptor implements Serializable {
 
     // ~ Instance fields
@@ -37,9 +36,6 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         this.transports = transports;
     }
 
-    public PublicKeyCredentialDescriptor() {
-    }
-
     public PublicKeyCredentialType getType() {
         return type;
     }
@@ -50,5 +46,23 @@ public class PublicKeyCredentialDescriptor implements Serializable {
 
     public List<AuthenticatorTransport> getTransports() {
         return transports;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredentialDescriptor that = (PublicKeyCredentialDescriptor) o;
+        return type == that.type &&
+                Arrays.equals(id, that.id) &&
+                Objects.equals(transports, that.transports);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(type, transports);
+        result = 31 * result + Arrays.hashCode(id);
+        return result;
     }
 }

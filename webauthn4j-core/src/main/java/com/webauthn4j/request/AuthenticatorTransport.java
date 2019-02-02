@@ -40,8 +40,7 @@ public enum AuthenticatorTransport {
         this.value = value;
     }
 
-    @JsonCreator
-    public static AuthenticatorTransport create(String value) throws InvalidFormatException {
+    public static AuthenticatorTransport create(String value) {
         if (value == null) {
             return null;
         }
@@ -53,7 +52,16 @@ public enum AuthenticatorTransport {
             case "ble":
                 return BLE;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static AuthenticatorTransport fromJson(String value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
         }
     }
 

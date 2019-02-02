@@ -31,8 +31,7 @@ public enum AttestationConveyancePreference {
         this.value = value;
     }
 
-    @JsonCreator
-    public static AttestationConveyancePreference create(String value) throws InvalidFormatException {
+    public static AttestationConveyancePreference create(String value) {
         if (value == null) {
             return null;
         }
@@ -44,7 +43,17 @@ public enum AttestationConveyancePreference {
             case "direct":
                 return DIRECT;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, AttestationConveyancePreference.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static AttestationConveyancePreference fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, AttestationConveyancePreference.class);
         }
     }
 

@@ -43,9 +43,6 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
         this.id = null;
     }
 
-    public PublicKeyCredentialRpEntity() {
-    }
-
     public String getId() {
         return id;
     }

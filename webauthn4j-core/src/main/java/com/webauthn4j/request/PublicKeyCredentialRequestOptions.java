@@ -22,6 +22,7 @@ import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @WIP
 public class PublicKeyCredentialRequestOptions implements Serializable {
@@ -50,9 +51,6 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         this.extensions = extensions;
     }
 
-    public PublicKeyCredentialRequestOptions() {
-    }
-
     public Challenge getChallenge() {
         return challenge;
     }
@@ -75,5 +73,24 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
 
     public AuthenticationExtensionsClientInputs getExtensions() {
         return extensions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredentialRequestOptions that = (PublicKeyCredentialRequestOptions) o;
+        return timeout == that.timeout &&
+                Objects.equals(challenge, that.challenge) &&
+                Objects.equals(rpId, that.rpId) &&
+                Objects.equals(allowCredentials, that.allowCredentials) &&
+                userVerification == that.userVerification &&
+                Objects.equals(extensions, that.extensions);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(challenge, timeout, rpId, allowCredentials, userVerification, extensions);
     }
 }

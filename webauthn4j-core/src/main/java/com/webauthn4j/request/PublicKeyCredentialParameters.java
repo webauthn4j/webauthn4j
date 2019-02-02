@@ -16,9 +16,12 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class PublicKeyCredentialParameters implements Serializable {
 
@@ -28,12 +31,12 @@ public class PublicKeyCredentialParameters implements Serializable {
     private PublicKeyCredentialType type;
     private COSEAlgorithmIdentifier alg;
 
-    public PublicKeyCredentialParameters(PublicKeyCredentialType type, COSEAlgorithmIdentifier alg) {
+    @JsonCreator
+    public PublicKeyCredentialParameters(
+            @JsonProperty("type") PublicKeyCredentialType type,
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg) {
         this.type = type;
         this.alg = alg;
-    }
-
-    public PublicKeyCredentialParameters() {
     }
 
     public PublicKeyCredentialType getType() {
@@ -44,5 +47,18 @@ public class PublicKeyCredentialParameters implements Serializable {
         return alg;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PublicKeyCredentialParameters that = (PublicKeyCredentialParameters) o;
+        return type == that.type &&
+                alg == that.alg;
+    }
 
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(type, alg);
+    }
 }

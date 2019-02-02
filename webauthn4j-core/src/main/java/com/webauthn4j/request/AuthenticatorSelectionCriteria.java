@@ -16,7 +16,11 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 public class AuthenticatorSelectionCriteria implements Serializable {
 
@@ -30,13 +34,14 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     @SuppressWarnings("UnusedAssignment")
     private UserVerificationRequirement userVerification = UserVerificationRequirement.PREFERRED;
 
-    public AuthenticatorSelectionCriteria(AuthenticatorAttachment authenticatorAttachment, boolean requireResidentKey, UserVerificationRequirement userVerification) {
+    @JsonCreator
+    public AuthenticatorSelectionCriteria(
+            @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
+            @JsonProperty("requireResidentKey") boolean requireResidentKey,
+            @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
         this.requireResidentKey = requireResidentKey;
         this.userVerification = userVerification;
-    }
-
-    public AuthenticatorSelectionCriteria() {
     }
 
     public AuthenticatorAttachment getAuthenticatorAttachment() {
@@ -49,5 +54,21 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     public UserVerificationRequirement getUserVerification() {
         return userVerification;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
+        return requireResidentKey == that.requireResidentKey &&
+                authenticatorAttachment == that.authenticatorAttachment &&
+                userVerification == that.userVerification;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(authenticatorAttachment, requireResidentKey, userVerification);
     }
 }
