@@ -50,12 +50,6 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
         this.clientExtensionResults = clientExtensionResults;
     }
 
-    /**
-     * default constructor for jackson deserialization
-     */
-    public PublicKeyCredential() {
-    }
-
     public String getType() {
         return PublicKeyCredentialType.PUBLIC_KEY.getValue();
     }
@@ -65,7 +59,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
     }
 
     public byte[] getRawId() {
-        return rawId;
+        return rawId.clone();
     }
 
     public T getAuthenticatorResponse() {

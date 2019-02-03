@@ -58,9 +58,9 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
-        this.pubKeyCredParams = pubKeyCredParams;
+        this.pubKeyCredParams = Collections.unmodifiableList(pubKeyCredParams);
         this.timeout = timeout;
-        this.excludeCredentials = excludeCredentials;
+        this.excludeCredentials = Collections.unmodifiableList(excludeCredentials);
         this.authenticatorSelection = authenticatorSelection;
         this.attestation = attestation;
         this.extensions = extensions;

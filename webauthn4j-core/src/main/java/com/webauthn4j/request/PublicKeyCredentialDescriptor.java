@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +34,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
     public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, List<AuthenticatorTransport> transports) {
         this.type = type;
         this.id = id;
-        this.transports = transports;
+        this.transports = Collections.unmodifiableList(transports);
     }
 
     public PublicKeyCredentialType getType() {
@@ -41,7 +42,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
     }
 
     public byte[] getId() {
-        return id;
+        return id.clone();
     }
 
     public List<AuthenticatorTransport> getTransports() {

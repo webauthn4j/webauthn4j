@@ -44,7 +44,7 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     }
 
     public byte[] getId() {
-        return id;
+        return id.clone();
     }
 
     public String getDisplayName() {
