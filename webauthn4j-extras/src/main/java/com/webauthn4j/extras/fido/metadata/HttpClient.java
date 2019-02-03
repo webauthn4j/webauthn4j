@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+/**
+ * HTTP Client for FIDO FidoMdsMetadataItemImpl Service
+ */
+public interface HttpClient {
 
-import java.util.List;
-import java.util.Map;
+    String fetch(String uri);
 
-public interface MetadataStatementProvider {
-
-    Map<AAGUID, List<MetadataStatement>> provide();
 }

@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.validator;
+package com.webauthn4j.extras.fido.metadata;
 
-import org.junit.Test;
+import com.webauthn4j.extras.fido.metadata.toc.StatusReport;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
-/**
- * Created by ynojima on 2017/09/24.
- */
-public class MetadataCertPathTrustworthinessValidatorTest {
+import java.time.LocalDate;
+import java.util.List;
 
-    public MetadataCertPathTrustworthinessValidator target = new MetadataCertPathTrustworthinessValidator(null);
+public interface FidoMdsMetadataItem extends MetadataItem {
 
-    @Test
-    public void test() {
-    }
+    String getAaid();
 
+    AAGUID getAaguid();
+
+    List<String> getAttestationCertificateKeyIdentifiers();
+
+    String getHash();
+
+    List<StatusReport> getStatusReports();
+
+    LocalDate getTimeOfLastStatusChange();
 
 }

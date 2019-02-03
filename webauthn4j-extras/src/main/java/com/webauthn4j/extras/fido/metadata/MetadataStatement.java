@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
+import com.webauthn4j.extras.fido.metadata.statement.*;
+
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -23,7 +26,7 @@ import java.util.List;
 /**
  * Created by ynojima on 2017/09/08.
  */
-public class MetadataStatement {
+public class MetadataStatement implements Serializable {
     private String legalHeader;
     private String aaid;
     private String aaguid;

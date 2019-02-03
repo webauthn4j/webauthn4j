@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.validator;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.io.Serializable;
+import org.junit.Test;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * Created by ynojima on 2017/09/24.
  */
-public class Version implements Serializable {
-    @JsonProperty
-    private Integer major;
-    @JsonProperty
-    private Integer minor;
+public class MetadataItemCertPathTrustworthinessValidatorTest {
 
-    public Integer getMajor() {
-        return major;
+    public MetadataItemListCertPathTrustworthinessValidator target = new MetadataItemListCertPathTrustworthinessValidator(null);
+
+    @Test
+    public void test() {
     }
 
-    public Integer getMinor() {
-        return minor;
-    }
+
 }

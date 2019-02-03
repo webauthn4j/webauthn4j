@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
@@ -24,21 +24,21 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class MetadataStatementResolverImpl implements MetadataStatementResolver {
+public class MetadataItemListResolverImpl<T extends MetadataItem> implements MetadataItemListResolver {
 
-    private MetadataStatementProvider metadataStatementProvider;
+    private MetadataItemListProvider<T> metadataItemListProvider;
 
-    public MetadataStatementResolverImpl(MetadataStatementProvider metadataStatementProvider) {
-        this.metadataStatementProvider = metadataStatementProvider;
+    public MetadataItemListResolverImpl(MetadataItemListProvider<T> metadataItemListProvider) {
+        this.metadataItemListProvider = metadataItemListProvider;
     }
 
     @Override
-    public List<MetadataStatement> resolve(AAGUID aaguid) {
+    public List<T> resolve(AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<AAGUID, List<MetadataStatement>> metadataStatements = metadataStatementProvider.provide();
+        Map<AAGUID, List<T>> metadataStatements = metadataItemListProvider.provide();
 
-        ArrayList<MetadataStatement> list = new ArrayList<>();
+        ArrayList<T> list = new ArrayList<>();
         list.addAll(metadataStatements.getOrDefault(AAGUID.NULL, Collections.emptyList()));
         list.addAll(metadataStatements.getOrDefault(aaguid, Collections.emptyList()));
         return list;

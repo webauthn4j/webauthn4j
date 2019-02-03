@@ -14,26 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-/**
- * Created by ynojima on 2017/09/08.
- */
-public class Version implements Serializable {
-    @JsonProperty
-    private Integer major;
-    @JsonProperty
-    private Integer minor;
+public interface MetadataItem extends Serializable {
 
-    public Integer getMajor() {
-        return major;
-    }
+    MetadataStatement getMetadataStatement();
 
-    public Integer getMinor() {
-        return minor;
-    }
 }

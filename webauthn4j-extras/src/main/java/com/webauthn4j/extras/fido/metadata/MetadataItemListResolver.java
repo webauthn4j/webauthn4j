@@ -16,12 +16,11 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-/**
- * Client for FIDO Metadata Service
- */
-public interface FIDOMDSClient {
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
-    String fetchMetadataTOC();
-    String fetchMetadataStatement(String uri);
+import java.util.List;
 
+public interface MetadataItemListResolver<T extends MetadataItem> {
+
+    List<T> resolve(AAGUID aaguid);
 }

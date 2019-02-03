@@ -23,32 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 
-public class SimpleFIDOMDSClient implements FIDOMDSClient {
-
-    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
-
-    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-    private String token;
-
-    public SimpleFIDOMDSClient(String token) {
-        this.token = token;
-    }
+public class SimpleHttpClient implements HttpClient {
 
     @Override
-    public String fetchMetadataTOC() {
-        String url = fidoMetadataServiceEndpoint + "?token=" + token;
-        return fetch(url);
-    }
-
-    @Override
-    public String fetchMetadataStatement(String url) {
-        return fetch(url);
-    }
-
-    private String fetch(String url){
+    public String fetch(String url){
         try {
             URL fetchUrl = new URL(url);
             HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
@@ -72,13 +52,5 @@ public class SimpleFIDOMDSClient implements FIDOMDSClient {
         } catch (IOException e) {
             throw new MDSException("failed to fetch " + url, e);
         }
-    }
-
-    public String getFidoMetadataServiceEndpoint() {
-        return fidoMetadataServiceEndpoint;
-    }
-
-    public void setFidoMetadataServiceEndpoint(String fidoMetadataServiceEndpoint) {
-        this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
     }
 }

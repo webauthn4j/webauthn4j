@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+public class MetadataItemImpl implements MetadataItem {
 
-import java.util.List;
+    private MetadataStatement metadataStatement;
 
-public interface MetadataStatementResolver {
+    public MetadataItemImpl(MetadataStatement metadataStatement) {
+        this.metadataStatement = metadataStatement;
+    }
 
-    List<MetadataStatement> resolve(AAGUID aaguid);
+    @Override
+    public MetadataStatement getMetadataStatement() {
+        return metadataStatement;
+    }
 }

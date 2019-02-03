@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.extras.fido.metadata.FIDOMDSClient;
-import com.webauthn4j.extras.fido.metadata.Metadata;
 import com.webauthn4j.extras.fido.metadata.exception.MDSException;
 import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayload;
+import com.webauthn4j.extras.fido.metadata.toc.MetadataTOCPayloadEntry;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.WIP;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.util.jws.JWS;
 import com.webauthn4j.util.jws.JWSHeader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,63 +47,61 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@WIP
-public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvider {
+public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider {
+
+    private static final URL DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
 
     private JsonConverter jsonConverter;
-    private FIDOMDSClient fidoMDSClient;
+    private HttpClient httpClient;
 
-    Map<AAGUID, List<Metadata>> cachedMetadataMap;
+    private URL fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+
+    Map<AAGUID, List<FidoMdsMetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
 
     private TrustAnchor trustAnchor;
 
-    public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient, X509Certificate rootCertificate) {
+    static {
+        try {
+            DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = new URL("https://mds2.fidoalliance.org/");
+        } catch (MalformedURLException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    public FidoMdsMetadataItemListProvider(Registry registry, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = new JsonConverter(registry.getJsonMapper());
-        this.fidoMDSClient = fidoMDSClient;
+        this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
-    public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient, Path path) {
-        this(registry, fidoMDSClient, loadRootCertificateFromPath(path));
+    public FidoMdsMetadataItemListProvider(Registry registry, HttpClient httpClient, Path path) {
+        this(registry, httpClient, loadRootCertificateFromPath(path));
     }
 
-    public FIDOMDSMetadataStatementProvider(Registry registry, FIDOMDSClient fidoMDSClient) {
-        this(registry, fidoMDSClient, loadEmbeddedCertificate());
+    public FidoMdsMetadataItemListProvider(Registry registry, HttpClient httpClient) {
+        this(registry, httpClient, loadEmbeddedCertificate());
+    }
+
+    public FidoMdsMetadataItemListProvider(Registry registry) {
+        this(registry, new SimpleHttpClient(), loadEmbeddedCertificate());
     }
 
     @Override
-    public Map<AAGUID, List<MetadataStatement>> provide() {
+    public Map<AAGUID, List<FidoMdsMetadataItem>> provide() {
         if (needsRefresh()) {
             refresh();
         }
-        return cachedMetadataMap.entrySet()
-                .stream()
-                .filter(entry -> true) //TODO
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> entry.getValue().stream().map(Metadata::getMetadataStatement).collect(Collectors.toList())
-                ));
+        return cachedMetadataItemMap;
     }
 
     void refresh(){
         MetadataTOCPayload tocPayload = fetchMetadataTOCPayload();
 
-        cachedMetadataMap =
-        tocPayload.getEntries().parallelStream().map(entry ->{
-            MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl());
-            Metadata metadata = new Metadata();
-            metadata.setAaid(entry.getAaid());
-            metadata.setAaguid(new AAGUID(entry.getAaguid()));
-            metadata.setHash(entry.getHash());
-            metadata.setStatusReports(entry.getStatusReports());
-            metadata.setTimeOfLastStatusChange(entry.getTimeOfLastStatusChange());
-            metadata.setAttestationCertificateKeyIdentifiers(entry.getAttestationCertificateKeyIdentifiers());
-            metadata.setMetadataStatement(metadataStatement);
-            return metadata;
-        })
-        .collect(Collectors.groupingBy(Metadata::getAaguid));
+        cachedMetadataItemMap =
+        tocPayload.getEntries().parallelStream().map(this::mapToFidoMdsMetadataItem)
+        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())));
 
         nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
         lastRefresh = OffsetDateTime.now(ZoneOffset.UTC);
@@ -110,11 +109,12 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
 
     boolean needsRefresh() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        return cachedMetadataMap == null || (nextUpdate.isBefore(now) && lastRefresh.isBefore(now.minusHours(1)));
+        return cachedMetadataItemMap == null || (nextUpdate.isBefore(now) && lastRefresh.isBefore(now.minusHours(1)));
     }
 
     MetadataTOCPayload fetchMetadataTOCPayload(){
-        String toc = fidoMDSClient.fetchMetadataTOC();
+        String url = fidoMetadataServiceEndpoint.toString();
+        String toc = httpClient.fetch(url);
 
         JWS<MetadataTOCPayload> jws = parseJWS(toc);
         if(!jws.isValidSignature()){
@@ -122,6 +122,19 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
         }
         validateCertPath(jws);
         return jws.getPayload();
+    }
+
+    private FidoMdsMetadataItem mapToFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
+        MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl());
+        return new FidoMdsMetadataItemImpl(
+                entry.getAaid(),
+                new AAGUID(entry.getAaguid()),
+                entry.getAttestationCertificateKeyIdentifiers(),
+                entry.getHash(),
+                entry.getStatusReports(),
+                entry.getTimeOfLastStatusChange(),
+                metadataStatement
+        );
     }
 
     private void validateCertPath(JWS<MetadataTOCPayload> jws) {
@@ -142,7 +155,7 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     }
 
     private MetadataStatement fetchMetadataStatement(URI uri) {
-        String metadataStatementBase64url = fidoMDSClient.fetchMetadataStatement(uri.toString());
+        String metadataStatementBase64url = httpClient.fetch(uri.toString());
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
         return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
     }
@@ -171,7 +184,7 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     }
 
     private static X509Certificate loadEmbeddedCertificate() {
-        InputStream inputStream = FIDOMDSMetadataStatementProvider.class.getClassLoader()
+        InputStream inputStream = FidoMdsMetadataItemListProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
         return CertificateUtil.generateX509Certificate(inputStream);
     }

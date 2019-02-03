@@ -16,7 +16,6 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.extras.fido.metadata.statement.MetadataStatement;
 import com.webauthn4j.extras.fido.metadata.toc.StatusReport;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.WIP;
@@ -28,7 +27,7 @@ import java.util.List;
  * Created by ynojima on 2017/09/24.
  */
 @WIP
-public class Metadata {
+public class FidoMdsMetadataItemImpl implements FidoMdsMetadataItem{
 
     private String aaid;
     private AAGUID aaguid;
@@ -38,59 +37,55 @@ public class Metadata {
     private LocalDate timeOfLastStatusChange;
     private MetadataStatement metadataStatement;
 
+    public FidoMdsMetadataItemImpl(
+            String aaid,
+            AAGUID aaguid,
+            List<String> attestationCertificateKeyIdentifiers,
+            String hash,
+            List<StatusReport> statusReports,
+            LocalDate timeOfLastStatusChange,
+            MetadataStatement metadataStatement) {
+        this.aaid = aaid;
+        this.aaguid = aaguid;
+        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.hash = hash;
+        this.statusReports = statusReports;
+        this.timeOfLastStatusChange = timeOfLastStatusChange;
+        this.metadataStatement = metadataStatement;
+    }
+
+    @Override
     public String getAaid() {
         return aaid;
     }
 
-    public void setAaid(String aaid) {
-        this.aaid = aaid;
-    }
-
+    @Override
     public AAGUID getAaguid() {
         return aaguid;
     }
 
-    public void setAaguid(AAGUID aaguid) {
-        this.aaguid = aaguid;
-    }
-
+    @Override
     public List<String> getAttestationCertificateKeyIdentifiers() {
         return attestationCertificateKeyIdentifiers;
     }
 
-    public void setAttestationCertificateKeyIdentifiers(List<String> attestationCertificateKeyIdentifiers) {
-        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
-    }
-
+    @Override
     public String getHash() {
         return hash;
     }
 
-    public void setHash(String hash) {
-        this.hash = hash;
-    }
-
+    @Override
     public List<StatusReport> getStatusReports() {
         return statusReports;
     }
 
-    public void setStatusReports(List<StatusReport> statusReports) {
-        this.statusReports = statusReports;
-    }
-
+    @Override
     public LocalDate getTimeOfLastStatusChange() {
         return timeOfLastStatusChange;
     }
 
-    public void setTimeOfLastStatusChange(LocalDate timeOfLastStatusChange) {
-        this.timeOfLastStatusChange = timeOfLastStatusChange;
-    }
-
+    @Override
     public MetadataStatement getMetadataStatement() {
         return metadataStatement;
-    }
-
-    public void setMetadataStatement(MetadataStatement metadataStatement) {
-        this.metadataStatement = metadataStatement;
     }
 }

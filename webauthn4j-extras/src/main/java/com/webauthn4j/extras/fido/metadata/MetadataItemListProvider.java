@@ -18,8 +18,10 @@ package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
+import java.util.List;
+import java.util.Map;
 
-public interface MetadataResolver {
+public interface MetadataItemListProvider<T extends MetadataItem> {
 
-    Metadata resolve(AAGUID aaguid);
+    Map<AAGUID, List<T>> provide();
 }

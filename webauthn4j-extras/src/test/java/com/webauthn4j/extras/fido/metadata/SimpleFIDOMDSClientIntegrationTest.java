@@ -24,16 +24,16 @@ import java.net.URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Test for SimpleFIDOMDSClient
+ * Test for SimpleHttpClient
  */
 //public class SimpleFIDOMDSClientIntegrationTest {
 //
-//    private SimpleFIDOMDSClient target;
+//    private SimpleHttpClient target;
 //
 //    @Before
 //    public void setup() {
 //        String token = null;
-//        target = new SimpleFIDOMDSClient(token);
+//        target = new SimpleHttpClient(token);
 //    }
 //
 //    @Test
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //    @Test
 //    public void retrieveMetadataStatement_test() {
 //        String url = "https://mds.fidoalliance.org/metadata/4e4e%23400a";
-//        String metadataStatement = target.fetchMetadataStatement(url);
+//        String metadataStatement = target.fetch(url);
 //        assertThat(metadataStatement).isNotNull();
 //    }
 //}

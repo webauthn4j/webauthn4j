@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.extras.fido.metadata.statement;
+package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
@@ -29,25 +29,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JsonFileMetadataStatementProvider implements MetadataStatementProvider {
+public class JsonFileMetadataItemListProvider implements MetadataItemListProvider {
 
     private Registry registry;
     private List<Path> paths = Collections.emptyList();
-    private Map<AAGUID, List<MetadataStatement>> cachedMetadataStatements;
+    private Map<AAGUID, List<MetadataItem>> cachedMetadataItems;
 
-    public JsonFileMetadataStatementProvider(Registry registry) {
+    public JsonFileMetadataItemListProvider(Registry registry) {
         this.registry = registry;
     }
 
     @Override
-    public Map<AAGUID, List<MetadataStatement>> provide() {
-        if (cachedMetadataStatements == null) {
-            cachedMetadataStatements =
+    public Map<AAGUID, List<MetadataItem>> provide() {
+        if (cachedMetadataItems == null) {
+            cachedMetadataItems =
                     paths.stream()
-                            .map(this::readJsonFile)
-                            .collect(Collectors.groupingBy(this::extractAAGUID));
+                            .map(path -> new MetadataItemImpl(readJsonFile(path)))
+                            .collect(Collectors.groupingBy(item -> extractAAGUID(item.getMetadataStatement())));
         }
-        return cachedMetadataStatements;
+        return cachedMetadataItems;
     }
 
     private AAGUID extractAAGUID(MetadataStatement metadataStatement) {
