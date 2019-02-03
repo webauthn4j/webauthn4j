@@ -142,7 +142,8 @@ public class FIDOMDSMetadataStatementProvider implements MetadataStatementProvid
     }
 
     private MetadataStatement fetchMetadataStatement(URI uri) {
-        String metadataStatementStr = fidoMDSClient.fetchMetadataStatement(uri.toString());
+        String metadataStatementBase64url = fidoMDSClient.fetchMetadataStatement(uri.toString());
+        String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
         return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
     }
 
