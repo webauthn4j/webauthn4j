@@ -26,8 +26,10 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.security.cert.TrustAnchor;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MetadataStatementCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
 
@@ -39,7 +41,10 @@ public class MetadataStatementCertPathTrustworthinessValidator extends CertPathT
 
     public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
         List<MetadataStatement> metadataStatements = metadataStatementResolver.resolve(aaguid);
-        boolean isSurrogate = metadataStatements.stream().flatMap(item -> item.getAttestationTypes().stream()).allMatch(type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
+        List<AttestationType> attestationTypes = metadataStatements.stream()
+                .flatMap(item -> item.getAttestationTypes().stream()).collect(Collectors.toList());
+        boolean isSurrogate = !attestationTypes.isEmpty() &&
+                attestationTypes.stream().allMatch(type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
         if (isSurrogate && attestationStatement.getX5c() != null) {
             throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
         }
