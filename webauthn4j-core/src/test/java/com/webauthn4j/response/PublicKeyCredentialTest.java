@@ -17,17 +17,59 @@
 package com.webauthn4j.response;
 
 
-import com.webauthn4j.request.PublicKeyCredentialType;
+import com.webauthn4j.request.*;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.test.client.ClientPlatform;
 import org.junit.Test;
+
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PublicKeyCredentialTest {
 
+    private Origin origin = new Origin("http://localhost");
+    private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
+
     @Test
     public void test(){
-        PublicKeyCredential<AuthenticatorAssertionResponse> credential = new PublicKeyCredential<>();
+        String rpId = "example.com";
+        Challenge challenge = new DefaultChallenge();
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+
+        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
+
+        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        PublicKeyCredentialCreationOptions credentialCreationOptions
+                = new PublicKeyCredentialCreationOptions(
+                new PublicKeyCredentialRpEntity(rpId, "example.com"),
+                publicKeyCredentialUserEntity,
+                challenge,
+                Collections.singletonList(publicKeyCredentialParameters),
+                null,
+                Collections.emptyList(),
+                authenticatorSelectionCriteria,
+                AttestationConveyancePreference.NONE,
+                extensions
+        );
+        PublicKeyCredential<AuthenticatorAttestationResponse> credential = clientPlatform.create(credentialCreationOptions);
         assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue());
+        assertThat(credential.getId()).isNotEmpty();
+        assertThat(credential.getRawId()).isNotEmpty();
+        assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class);
+        assertThat(credential.getClientExtensionResults()).isNotNull();
     }
 
 }

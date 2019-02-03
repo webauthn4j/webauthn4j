@@ -17,9 +17,12 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,11 +62,11 @@ abstract class AbstractWebAuthnContext implements Serializable {
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
-        this.expectedExtensionIds = expectedExtensionIds;
+        this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
     }
 
     public byte[] getClientDataJSON() {
-        return clientDataJSON;
+        return ArrayUtil.clone(clientDataJSON);
     }
 
     public String getClientExtensionsJSON() {

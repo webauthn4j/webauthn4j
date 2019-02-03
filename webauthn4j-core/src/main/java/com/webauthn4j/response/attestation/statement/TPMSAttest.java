@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -55,11 +56,11 @@ public class TPMSAttest implements Serializable {
     }
 
     public byte[] getQualifiedSigner() {
-        return qualifiedSigner;
+        return ArrayUtil.clone(qualifiedSigner);
     }
 
     public byte[] getExtraData() {
-        return extraData;
+        return ArrayUtil.clone(extraData);
     }
 
     public TPMSClockInfo getClockInfo() {

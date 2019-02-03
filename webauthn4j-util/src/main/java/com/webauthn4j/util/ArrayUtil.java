@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.extension.client;
+package com.webauthn4j.util;
 
-import java.util.HashMap;
+public class ArrayUtil {
 
-public class ExtensionsClientOutputs<T extends ExtensionClientOutput> extends HashMap<String, T> { //TODO: make immutable
+    private ArrayUtil() {
+    }
+
+    public static byte[] clone(byte[] value) {
+        return value == null ? null : value.clone();
+    }
+
+    public static String[] clone(String[] value) {
+        return value == null ? null : value.clone();
+    }
 }

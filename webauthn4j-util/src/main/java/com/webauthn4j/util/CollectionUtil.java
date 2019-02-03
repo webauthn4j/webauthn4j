@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.extension.client;
+package com.webauthn4j.util;
 
-import java.util.HashMap;
 
-public class ExtensionsClientOutputs<T extends ExtensionClientOutput> extends HashMap<String, T> { //TODO: make immutable
+import java.util.Collections;
+import java.util.List;
+
+public class CollectionUtil {
+
+    private CollectionUtil() {
+    }
+
+    public static <T> List<T> unmodifiableList(List<? extends T> list) {
+        return list == null ? null : Collections.unmodifiableList(list);
+    }
 }

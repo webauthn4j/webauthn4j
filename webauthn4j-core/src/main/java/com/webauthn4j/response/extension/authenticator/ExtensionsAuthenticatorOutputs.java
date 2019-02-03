@@ -18,5 +18,5 @@ package com.webauthn4j.response.extension.authenticator;
 
 import java.util.HashMap;
 
-public class ExtensionsAuthenticatorOutputs<T extends ExtensionAuthenticatorOutput> extends HashMap<String, T> {
+public class ExtensionsAuthenticatorOutputs<T extends ExtensionAuthenticatorOutput> extends HashMap<String, T> { //TODO make immutable
 }

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.client.challenge;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
@@ -50,7 +51,7 @@ public class DefaultChallenge implements Challenge {
 
     @Override
     public byte[] getValue() {
-        return this.value;
+        return ArrayUtil.clone(value);
     }
 
     @Override

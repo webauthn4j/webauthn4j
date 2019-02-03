@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.WIP;
 
 import java.util.Arrays;
@@ -37,14 +38,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         this.attestationObject = attestationObject;
     }
 
-    /**
-     * default constructor for jackson deserialization
-     */
-    public AuthenticatorAttestationResponse() {
-    }
-
     public byte[] getAttestationObject() {
-        return attestationObject;
+        return ArrayUtil.clone(attestationObject);
     }
 
     @Override

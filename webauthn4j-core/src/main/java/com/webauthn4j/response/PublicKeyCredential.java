@@ -19,6 +19,7 @@ package com.webauthn4j.response;
 import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -59,7 +60,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
     }
 
     public byte[] getRawId() {
-        return rawId.clone();
+        return ArrayUtil.clone(rawId);
     }
 
     public T getAuthenticatorResponse() {

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.nio.ByteBuffer;
@@ -32,11 +33,11 @@ public class ECCUnique implements TPMUPublicId {
     }
 
     public byte[] getX() {
-        return x;
+        return ArrayUtil.clone(x);
     }
 
     public byte[] getY() {
-        return y;
+        return ArrayUtil.clone(y);
     }
 
     @Override

@@ -19,6 +19,7 @@ package com.webauthn4j.response.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
 
@@ -43,6 +44,6 @@ public enum  TPMGenerated {
 
     @JsonValue
     public byte[] getValue() {
-        return value;
+        return ArrayUtil.clone(value);
     }
 }

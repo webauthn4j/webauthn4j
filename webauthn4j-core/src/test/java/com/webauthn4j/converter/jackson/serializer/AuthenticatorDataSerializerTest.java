@@ -40,7 +40,7 @@ public class AuthenticatorDataSerializerTest {
     public void test() throws IOException {
 
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
-        AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey();
+        AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey(null, null, null, null, null, null, null);
 
         AAGUID aaguid = AAGUID.ZERO;
 

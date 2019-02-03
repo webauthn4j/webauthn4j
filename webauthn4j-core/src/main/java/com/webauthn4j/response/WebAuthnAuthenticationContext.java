@@ -17,6 +17,8 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -83,7 +85,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                 serverProperty,
                 userVerificationRequired,
                 true,
-                expectedExtensionIds
+                CollectionUtil.unmodifiableList(expectedExtensionIds)
         );
     }
 
@@ -107,15 +109,15 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
     }
 
     public byte[] getCredentialId() {
-        return credentialId;
+        return ArrayUtil.clone(credentialId);
     }
 
     public byte[] getAuthenticatorData() {
-        return authenticatorData;
+        return ArrayUtil.clone(authenticatorData);
     }
 
     public byte[] getSignature() {
-        return signature;
+        return ArrayUtil.clone(signature);
     }
 
     @Override

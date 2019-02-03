@@ -17,6 +17,8 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -49,7 +51,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
                 serverProperty,
                 userVerificationRequired,
                 userPresenceRequired,
-                expectedExtensionIds
+                CollectionUtil.unmodifiableList(expectedExtensionIds)
         );
         this.attestationObject = attestationObject;
     }
@@ -88,7 +90,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
     }
 
     public byte[] getAttestationObject() {
-        return attestationObject;
+        return ArrayUtil.clone(attestationObject);
     }
 
     @Override

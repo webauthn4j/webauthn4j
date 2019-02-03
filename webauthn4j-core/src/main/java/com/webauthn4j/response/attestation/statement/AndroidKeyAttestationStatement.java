@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
     }
 
     public byte[] getSig() {
-        return sig;
+        return ArrayUtil.clone(sig);
     }
 
     @Override

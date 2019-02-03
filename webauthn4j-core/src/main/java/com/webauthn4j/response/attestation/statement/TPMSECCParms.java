@@ -16,6 +16,8 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,11 +37,11 @@ public class TPMSECCParms implements TPMUPublicParms {
     }
 
     public byte[] getSymmetric() {
-        return symmetric;
+        return ArrayUtil.clone(symmetric);
     }
 
     public byte[] getScheme() {
-        return scheme;
+        return ArrayUtil.clone(scheme);
     }
 
     public TPMEccCurve getCurveId() {
@@ -47,7 +49,7 @@ public class TPMSECCParms implements TPMUPublicParms {
     }
 
     public byte[] getKdf() {
-        return kdf;
+        return ArrayUtil.clone(kdf);
     }
 
     @Override

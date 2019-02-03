@@ -22,11 +22,11 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class TPMUtil {
+class TPMUtil {
 
     private TPMUtil(){}
 
-    public static void writeSizedArray(OutputStream stream, byte[] value) throws IOException {
+    static void writeSizedArray(OutputStream stream, byte[] value) throws IOException {
         if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
             throw new DataConversionException("too large data to write");
         }

@@ -16,6 +16,8 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.webauthn4j.util.ArrayUtil;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
@@ -46,7 +48,7 @@ public class AttestedCredentialData implements Serializable {
     }
 
     public byte[] getCredentialId() {
-        return credentialId;
+        return ArrayUtil.clone(credentialId);
     }
 
     public CredentialPublicKey getCredentialPublicKey() {

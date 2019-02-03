@@ -37,10 +37,8 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 new byte[32],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -57,10 +55,8 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 new byte[32],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -72,10 +68,8 @@ public class BeanAssertUtilTest {
                 null,
                 new byte[512],
                 new byte[32],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -87,10 +81,8 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 null,
                 new byte[32],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -102,10 +94,8 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 null,
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -118,9 +108,7 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 new byte[32],
                 null,
-                null,
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(authenticationContext);
     }
@@ -130,10 +118,8 @@ public class BeanAssertUtilTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 new byte[512],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(registrationContext);
     }
@@ -148,10 +134,8 @@ public class BeanAssertUtilTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 null,
                 new byte[512],
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(registrationContext);
     }
@@ -161,10 +145,8 @@ public class BeanAssertUtilTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 null,
-                null,
                 mock(ServerProperty.class),
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(registrationContext);
     }
@@ -175,9 +157,7 @@ public class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 null,
-                null,
-                true,
-                null
+                true
         );
         BeanAssertUtil.validate(registrationContext);
     }

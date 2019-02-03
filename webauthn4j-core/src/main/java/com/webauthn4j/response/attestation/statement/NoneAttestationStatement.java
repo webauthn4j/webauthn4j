@@ -48,7 +48,7 @@ public class NoneAttestationStatement implements AttestationStatement {
     }
 
     @JsonAnySetter
-    public void addUnknownProperty(String name, Object value) {
+    private void addUnknownProperty(String name, Object value) {
         unknownProperties.put(name, value);
     }
 

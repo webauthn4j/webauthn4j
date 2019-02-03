@@ -16,17 +16,20 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.response.attestation.statement.COSEKeyType;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
@@ -38,38 +41,41 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private COSEAlgorithmIdentifier algorithm;
 
     @JsonProperty("4")
-    private COSEKeyOperation[] keyOpts;
+    private List<COSEKeyOperation> keyOpts;
 
     @JsonProperty("5")
     private byte[] baseIV;
 
-    AbstractCredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV) {
+    @JsonCreator
+    AbstractCredentialPublicKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
+            @JsonProperty("5") byte[] baseIV
+    ){
         this.keyId = keyId;
         this.algorithm = algorithm;
         this.keyOpts = keyOpts;
         this.baseIV = baseIV;
     }
 
-    AbstractCredentialPublicKey() {
-    }
-
     @JsonProperty("1")
     public abstract COSEKeyType getKeyType();
 
     public byte[] getKeyId() {
-        return keyId;
+        return ArrayUtil.clone(keyId);
     }
 
     public COSEAlgorithmIdentifier getAlgorithm() {
         return algorithm;
     }
 
-    public COSEKeyOperation[] getKeyOpts() {
+    public List<COSEKeyOperation> getKeyOpts() {
         return keyOpts;
     }
 
     public byte[] getBaseIV() {
-        return baseIV;
+        return ArrayUtil.clone(baseIV);
     }
 
     @JsonIgnore
@@ -97,16 +103,15 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
         return Arrays.equals(keyId, that.keyId) &&
                 algorithm == that.algorithm &&
-                Arrays.equals(keyOpts, that.keyOpts) &&
+                Objects.equals(keyOpts, that.keyOpts) &&
                 Arrays.equals(baseIV, that.baseIV);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(algorithm);
+        int result = Objects.hash(algorithm, keyOpts);
         result = 31 * result + Arrays.hashCode(keyId);
-        result = 31 * result + Arrays.hashCode(keyOpts);
         result = 31 * result + Arrays.hashCode(baseIV);
         return result;
     }

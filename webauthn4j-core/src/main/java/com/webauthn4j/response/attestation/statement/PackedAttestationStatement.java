@@ -17,6 +17,7 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.annotation.*;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -59,7 +60,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     }
 
     public byte[] getSig() {
-        return sig;
+        return ArrayUtil.clone(sig);
     }
 
     @Override
@@ -68,7 +69,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     }
 
     public byte[] getEcdaaKeyId() {
-        return ecdaaKeyId;
+        return ArrayUtil.clone(ecdaaKeyId);
     }
 
     @JsonIgnore

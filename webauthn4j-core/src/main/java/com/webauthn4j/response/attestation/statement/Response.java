@@ -17,6 +17,7 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.io.Serializable;
 
@@ -59,7 +60,7 @@ public class Response implements Serializable {
     }
 
     public String[] getApkCertificateDigestSha256() {
-        return apkCertificateDigestSha256;
+        return ArrayUtil.clone(apkCertificateDigestSha256);
     }
 
     public String getApkDigestSha256() {

@@ -18,6 +18,7 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
@@ -47,7 +48,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
-        this.allowCredentials = Collections.unmodifiableList(allowCredentials);
+        this.allowCredentials = CollectionUtil.unmodifiableList(allowCredentials);
         this.userVerification = userVerification;
         this.extensions = extensions;
     }

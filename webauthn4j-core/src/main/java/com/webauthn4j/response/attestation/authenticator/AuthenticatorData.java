@@ -17,6 +17,7 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -89,7 +90,7 @@ public class AuthenticatorData implements Serializable {
     }
 
     public byte[] getRpIdHash() {
-        return rpIdHash;
+        return ArrayUtil.clone(rpIdHash);
     }
 
     public byte getFlags() {

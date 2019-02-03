@@ -16,10 +16,12 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.response.attestation.statement.COSEKeyType;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -28,6 +30,7 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
+import java.util.List;
 
 public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
@@ -37,14 +40,17 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     private byte[] e;
 
     @SuppressWarnings("squid:S00107")
-    public RSACredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV, byte[] n, byte[] e) {
+    @JsonCreator
+    public RSACredentialPublicKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
+            @JsonProperty("5") byte[] baseIV,
+            @JsonProperty("-1") byte[] n,
+            @JsonProperty("-2") byte[] e) {
         super(keyId, algorithm, keyOpts, baseIV);
         this.n = n;
         this.e = e;
-    }
-
-    public RSACredentialPublicKey() {
-        super();
     }
 
     public static RSACredentialPublicKey create(RSAPublicKey publicKey) {
@@ -60,11 +66,11 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     }
 
     public byte[] getN() {
-        return n;
+        return ArrayUtil.clone(n);
     }
 
     public byte[] getE() {
-        return e;
+        return ArrayUtil.clone(e);
     }
 
     @Override

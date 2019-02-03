@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.WIP;
 
 import java.util.Arrays;
@@ -40,23 +41,16 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         this.userHandle = userHandle;
     }
 
-    /**
-     * default constructor for jackson deserialization
-     */
-    @SuppressWarnings("unused")
-    public AuthenticatorAssertionResponse() {
-    }
-
     public byte[] getAuthenticatorData() {
-        return authenticatorData;
+        return ArrayUtil.clone(authenticatorData);
     }
 
     public byte[] getSignature() {
-        return signature;
+        return ArrayUtil.clone(signature);
     }
 
     public byte[] getUserHandle() {
-        return userHandle;
+        return ArrayUtil.clone(userHandle);
     }
 
     @Override

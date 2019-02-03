@@ -16,6 +16,8 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.util.ArrayUtil;
+
 import java.io.Serializable;
 
 abstract class AuthenticatorResponse implements Serializable {
@@ -32,13 +34,7 @@ abstract class AuthenticatorResponse implements Serializable {
         this.clientDataJSON = clientDataJSON;
     }
 
-    /**
-     * default constructor for jackson deserialization
-     */
-    AuthenticatorResponse() {
-    }
-
     public byte[] getClientDataJSON() {
-        return clientDataJSON;
+        return ArrayUtil.clone(clientDataJSON);
     }
 }

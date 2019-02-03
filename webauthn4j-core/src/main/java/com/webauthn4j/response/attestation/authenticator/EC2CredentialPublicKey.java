@@ -16,11 +16,13 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.response.attestation.statement.COSEKeyType;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -32,6 +34,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
@@ -45,10 +48,6 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     @JsonProperty("-3")
     private byte[] y;
 
-    public EC2CredentialPublicKey() {
-        super();
-    }
-
     /**
      * Constructor for public key
      * @param keyId keyId
@@ -60,8 +59,15 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
      * @param y y
      */
     @SuppressWarnings("squid:S00107")
-    public EC2CredentialPublicKey(byte[] keyId, COSEAlgorithmIdentifier algorithm, COSEKeyOperation[] keyOpts, byte[] baseIV,
-                                  Curve curve, byte[] x, byte[] y) {
+    @JsonCreator
+    public EC2CredentialPublicKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
+            @JsonProperty("5") byte[] baseIV,
+            @JsonProperty("-1") Curve curve,
+            @JsonProperty("-2") byte[] x,
+            @JsonProperty("-3") byte[] y) {
         super(keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
         this.x = x;
@@ -120,11 +126,11 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     }
 
     public byte[] getX() {
-        return x;
+        return ArrayUtil.clone(x);
     }
 
     public byte[] getY() {
-        return y;
+        return ArrayUtil.clone(y);
     }
 
     @JsonIgnore

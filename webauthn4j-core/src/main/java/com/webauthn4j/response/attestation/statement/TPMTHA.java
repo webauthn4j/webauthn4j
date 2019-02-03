@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.Serializable;
@@ -38,7 +39,7 @@ public class TPMTHA implements Serializable {
     }
 
     public byte[] getDigest() {
-        return digest;
+        return ArrayUtil.clone(digest);
     }
 
     public byte[] getBytes(){

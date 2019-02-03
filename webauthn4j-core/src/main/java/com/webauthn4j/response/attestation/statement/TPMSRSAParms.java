@@ -16,6 +16,8 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -34,19 +36,19 @@ public class TPMSRSAParms implements TPMUPublicParms {
     }
 
     public byte[] getSymmetric() {
-        return symmetric;
+        return ArrayUtil.clone(symmetric);
     }
 
     public byte[] getScheme() {
-        return scheme;
+        return ArrayUtil.clone(scheme);
     }
 
     public byte[] getKeyBits() {
-        return keyBits;
+        return ArrayUtil.clone(keyBits);
     }
 
     public byte[] getExponent() {
-        return exponent;
+        return ArrayUtil.clone(exponent);
     }
 
     public byte[] getBytes() {

@@ -23,7 +23,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AttestationCertificatePath extends ArrayList<X509Certificate> {
+public class AttestationCertificatePath extends ArrayList<X509Certificate> { //TODO make immutable
 
     public AttestationCertificatePath(List<X509Certificate> certificates) {
         super();

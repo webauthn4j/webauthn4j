@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -58,9 +59,9 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
-        this.pubKeyCredParams = Collections.unmodifiableList(pubKeyCredParams);
+        this.pubKeyCredParams = CollectionUtil.unmodifiableList(pubKeyCredParams);
         this.timeout = timeout;
-        this.excludeCredentials = Collections.unmodifiableList(excludeCredentials);
+        this.excludeCredentials = CollectionUtil.unmodifiableList(excludeCredentials);
         this.authenticatorSelection = authenticatorSelection;
         this.attestation = attestation;
         this.extensions = extensions;

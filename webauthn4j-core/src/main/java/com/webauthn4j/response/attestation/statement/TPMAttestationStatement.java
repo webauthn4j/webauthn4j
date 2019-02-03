@@ -19,6 +19,7 @@ package com.webauthn4j.response.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -82,11 +83,11 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     }
 
     public byte[] getEcdaaKeyId() {
-        return ecdaaKeyId;
+        return ArrayUtil.clone(ecdaaKeyId);
     }
 
     public byte[] getSig() {
-        return sig;
+        return ArrayUtil.clone(sig);
     }
 
     public TPMSAttest getCertInfo() {

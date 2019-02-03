@@ -16,6 +16,8 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.util.CollectionUtil;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
@@ -34,7 +36,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
     public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, List<AuthenticatorTransport> transports) {
         this.type = type;
         this.id = id;
-        this.transports = Collections.unmodifiableList(transports);
+        this.transports = CollectionUtil.unmodifiableList(transports);
     }
 
     public PublicKeyCredentialType getType() {

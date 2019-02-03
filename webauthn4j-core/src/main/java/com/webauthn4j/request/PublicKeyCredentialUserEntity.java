@@ -16,6 +16,8 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.util.ArrayUtil;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -44,7 +46,7 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     }
 
     public byte[] getId() {
-        return id.clone();
+        return ArrayUtil.clone(id);
     }
 
     public String getDisplayName() {

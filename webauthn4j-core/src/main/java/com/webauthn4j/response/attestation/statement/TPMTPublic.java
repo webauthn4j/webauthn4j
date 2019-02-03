@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -56,7 +57,7 @@ public class TPMTPublic implements Serializable {
     }
 
     public byte[] getAuthPolicy() {
-        return authPolicy;
+        return ArrayUtil.clone(authPolicy);
     }
 
     public TPMUPublicParms getParameters() {

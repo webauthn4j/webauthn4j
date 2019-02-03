@@ -25,6 +25,7 @@ import com.webauthn4j.response.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
 import java.security.PublicKey;
+import java.util.List;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -47,7 +48,7 @@ public interface CredentialPublicKey extends Serializable {
 
     COSEAlgorithmIdentifier getAlgorithm();
 
-    COSEKeyOperation[] getKeyOpts();
+    List<COSEKeyOperation> getKeyOpts();
 
     byte[] getBaseIV();
 

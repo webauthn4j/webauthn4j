@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.util.ArrayUtil;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -85,7 +86,7 @@ public class RegistrationObject {
     }
 
     public byte[] getCollectedClientDataBytes() {
-        return collectedClientDataBytes;
+        return ArrayUtil.clone(collectedClientDataBytes);
     }
 
     public AttestationObject getAttestationObject() {
@@ -93,11 +94,11 @@ public class RegistrationObject {
     }
 
     public byte[] getAttestationObjectBytes() {
-        return attestationObjectBytes;
+        return ArrayUtil.clone(attestationObjectBytes);
     }
 
     public byte[] getAuthenticatorDataBytes() {
-        return authenticatorDataBytes;
+        return ArrayUtil.clone(authenticatorDataBytes);
     }
 
     public ServerProperty getServerProperty() {

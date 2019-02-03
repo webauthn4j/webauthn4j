@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.nio.ByteBuffer;
@@ -30,7 +31,7 @@ public class RSAUnique implements TPMUPublicId {
     }
 
     public byte[] getN() {
-        return n;
+        return ArrayUtil.clone(n);
     }
 
     @Override
