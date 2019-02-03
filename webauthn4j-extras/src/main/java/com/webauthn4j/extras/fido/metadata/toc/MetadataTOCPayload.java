@@ -37,7 +37,7 @@ public class MetadataTOCPayload implements Serializable {
     @JsonProperty
     private Integer no;
 
-    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonDeserialize(using = NextUpdateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
     private LocalDate nextUpdate;
