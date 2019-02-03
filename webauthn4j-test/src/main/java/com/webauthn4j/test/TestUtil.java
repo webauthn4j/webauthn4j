@@ -33,10 +33,7 @@ import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
-import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.KeyUtil;
-import com.webauthn4j.util.SignatureUtil;
+import com.webauthn4j.util.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import org.springframework.core.io.ClassPathResource;
@@ -89,6 +86,16 @@ public class TestUtil {
                 authenticatorDataBytes,
                 TestUtil.createServerProperty()
         );
+    }
+
+    public static RegistrationObject createRegistrationObjectWithPackedAttestation() {
+        CollectedClientData collectedClientData = TestUtil.createClientData(ClientDataType.CREATE);
+        byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
+        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
+        AttestationObject attestationObject = createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
+        byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
+        byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
+        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, TestUtil.createServerProperty());
     }
 
     public static RegistrationObject createRegistrationObjectWithAndroidKeyAttestation(){

@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 
 /**
  * Thrown if unsupported attestation format is specified
+ * As it won't happen, this class is not a sub-class of {@link ValidationException}
  */
 public class UnsupportedAttestationFormatException extends RuntimeException {
     public UnsupportedAttestationFormatException(String message, Throwable cause) {

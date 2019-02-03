@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.statement.tpm;
-
+package com.webauthn4j.validator.attestation.statement.packed;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 
-public class TPMAttestationStatementValidatorTest {
+public class NullPackedAttestationStatementValidatorTest {
 
-    private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
+    private NullPackedAttestationStatementValidator target = new NullPackedAttestationStatementValidator();
 
     @Test
     public void validate_test(){
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithPackedAttestation();
         target.validate(registrationObject);
     }
 
     @Test(expected = UnsupportedAttestationFormatException.class)
-    public void validate_non_TPMAttestation_test(){
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+    public void validate_non_PackedAttestation_test(){
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 

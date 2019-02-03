@@ -69,7 +69,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
     }
 
     private AttestationType validateX5c(RegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
-        if (attestationStatement.getX5c().isEmpty()) {
+        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found'.");
         }
 

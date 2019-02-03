@@ -42,7 +42,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-@WIP
 public class TPMAttestationStatementValidator implements AttestationStatementValidator {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";

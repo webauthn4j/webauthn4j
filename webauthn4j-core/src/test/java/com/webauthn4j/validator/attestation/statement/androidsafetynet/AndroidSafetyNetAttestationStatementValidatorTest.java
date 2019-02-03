@@ -18,6 +18,8 @@ package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.attestation.statement.tpm.TPMAttestationStatementValidator;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -26,8 +28,14 @@ public class AndroidSafetyNetAttestationStatementValidatorTest {
     private AndroidSafetyNetAttestationStatementValidator target = new AndroidSafetyNetAttestationStatementValidator();
 
     @Test
-    public void test(){
+    public void validate_test(){
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();
+        target.validate(registrationObject);
+    }
+
+    @Test(expected = UnsupportedAttestationFormatException.class)
+    public void validate_non_AndroidSafetyNetAttestation_test(){
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 }

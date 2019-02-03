@@ -19,13 +19,12 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 
-public class TPMAttestationStatementValidatorTest {
+public class NullTPMAttestationStatementValidatorTest {
 
-    private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
+    private NullTPMAttestationStatementValidator target = new NullTPMAttestationStatementValidator();
 
     @Test
     public void validate_test(){
