@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -28,6 +29,12 @@ public class AndroidKeyAttestationStatementValidatorTest {
     @Test
     public void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        target.validate(registrationObject);
+    }
+
+    @Test(expected = UnsupportedAttestationFormatException.class)
+    public void validate_AndroidKeyAttestation_test() {
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 

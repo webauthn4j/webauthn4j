@@ -36,7 +36,7 @@ import java.nio.ByteBuffer;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
-public class KeyDescriptionValidator {
+class KeyDescriptionValidator {
 
     private static final String ATTESTATION_EXTENSION_OID = "1.3.6.1.4.1.11129.2.1.17";
     private static final int ATTESTATION_CHALLENGE_INDEX = 4;

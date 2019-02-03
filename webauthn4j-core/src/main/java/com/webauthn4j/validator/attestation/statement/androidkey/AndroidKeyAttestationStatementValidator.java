@@ -31,6 +31,7 @@ import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.util.Arrays;
 
 public class AndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
 
@@ -49,7 +50,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         AndroidKeyAttestationStatement attestationStatement =
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        if (attestationStatement.getX5c().isEmpty()) {
+        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found'.");
         }
 
