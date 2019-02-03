@@ -72,4 +72,9 @@ public class AAGUID implements Serializable {
 
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString(){
+        return value.toString();
+    }
 }

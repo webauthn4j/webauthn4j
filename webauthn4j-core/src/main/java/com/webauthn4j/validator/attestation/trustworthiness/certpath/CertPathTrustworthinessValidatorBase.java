@@ -19,7 +19,9 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -33,6 +35,10 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
+
+        if(trustAnchors.isEmpty()){
+            throw new TrustAnchorNotFoundException("TrustAnchors do not found for aaguid: " + aaguid.toString());
+        }
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
