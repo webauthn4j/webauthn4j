@@ -24,6 +24,7 @@ import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.jws.JWS;
 
 import java.io.IOException;
@@ -36,10 +37,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider<FidoMdsMetadataItem> {
@@ -121,7 +119,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
     private FidoMdsMetadataItem mapToFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
-        MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl());
+        MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl(), Base64UrlUtil.decode(entry.getHash()));
         return new FidoMdsMetadataItemImpl(
                 entry.getAaid(),
                 new AAGUID(entry.getAaguid()),
@@ -149,9 +147,13 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         }
     }
 
-    private MetadataStatement fetchMetadataStatement(URI uri) {
+    private MetadataStatement fetchMetadataStatement(URI uri, byte[] expectedHash) {
         String metadataStatementBase64url = httpClient.fetch(uri.toString());
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
+        byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementStr.getBytes());
+        if(!Arrays.equals(hash, expectedHash)){
+            throw new MDSException("Hash of metadataStatement doesn't match");
+        }
         return new JsonConverter(registry.getJsonMapper()).readValue(metadataStatementStr, MetadataStatement.class);
     }
 
