@@ -137,6 +137,9 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
+        pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
+        certPathParameters.addCertPathChecker(pkixRevocationChecker);
 
         try {
             certPathValidator.validate(certPath, certPathParameters);
