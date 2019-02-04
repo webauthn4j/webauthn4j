@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.InvalidAlgorithmParameterException;
@@ -133,7 +134,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
     private FidoMdsMetadataItem fetchFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
-        MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl(), Base64UrlUtil.decode(entry.getHash()));
+        MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl().toString(), Base64UrlUtil.decode(entry.getHash()));
         return new FidoMdsMetadataItemImpl(
                 entry.getAaid(),
                 new AAGUID(entry.getAaguid()),
@@ -164,10 +165,10 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         }
     }
 
-    private MetadataStatement fetchMetadataStatement(URI uri, byte[] expectedHash) {
-        String metadataStatementBase64url = httpClient.fetch(uri.toString());
+    MetadataStatement fetchMetadataStatement(String uri, byte[] expectedHash) {
+        String metadataStatementBase64url = httpClient.fetch(uri);
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
-        byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementStr.getBytes());
+        byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementBase64url.getBytes(StandardCharsets.UTF_8));
         if(!Arrays.equals(hash, expectedHash)){
             throw new MDSException("Hash of metadataStatement doesn't match");
         }
