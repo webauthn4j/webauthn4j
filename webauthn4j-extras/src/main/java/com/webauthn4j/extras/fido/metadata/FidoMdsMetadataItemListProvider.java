@@ -26,6 +26,8 @@ import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.jws.JWS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +45,9 @@ import java.util.stream.Collectors;
 public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider<FidoMdsMetadataItem> {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
+
+    transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemListProvider.class);
+
 
     private Registry registry;
     private HttpClient httpClient;
@@ -94,7 +99,16 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         MetadataTOCPayload tocPayload = fetchMetadataTOCPayload();
 
         cachedMetadataItemMap =
-        tocPayload.getEntries().parallelStream().map(this::mapToFidoMdsMetadataItem)
+        tocPayload.getEntries().parallelStream().map(entry -> {
+            try{
+                return fetchFidoMdsMetadataItem(entry);
+            }
+            catch (RuntimeException e){
+                logger.warn("Failed to fetch MetadataTOCPayLoad", e);
+                return null;
+            }
+        })
+        .filter(Objects::nonNull)
         .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())));
 
         nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
@@ -118,7 +132,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         return jws.getPayload();
     }
 
-    private FidoMdsMetadataItem mapToFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
+    private FidoMdsMetadataItem fetchFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
         MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl(), Base64UrlUtil.decode(entry.getHash()));
         return new FidoMdsMetadataItemImpl(
                 entry.getAaid(),
