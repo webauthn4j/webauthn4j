@@ -24,17 +24,12 @@ import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.util.jws.JWS;
-import com.webauthn4j.util.jws.JWSHeader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.InvalidAlgorithmParameterException;
@@ -49,12 +44,12 @@ import java.util.stream.Collectors;
 
 public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider<FidoMdsMetadataItem> {
 
-    private static final URL DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+    private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
 
-    private JsonConverter jsonConverter;
+    private Registry registry;
     private HttpClient httpClient;
 
-    private URL fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
 
     Map<AAGUID, List<FidoMdsMetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
@@ -62,16 +57,8 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
 
     private TrustAnchor trustAnchor;
 
-    static {
-        try {
-            DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = new URL("https://mds2.fidoalliance.org/");
-        } catch (MalformedURLException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-    }
-
     public FidoMdsMetadataItemListProvider(Registry registry, HttpClient httpClient, X509Certificate rootCertificate) {
-        this.jsonConverter = new JsonConverter(registry.getJsonMapper());
+        this.registry = registry;
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
@@ -97,11 +84,11 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
 
-    public URL getFidoMetadataServiceEndpoint() {
+    public String getFidoMetadataServiceEndpoint() {
         return fidoMetadataServiceEndpoint;
     }
 
-    public void setFidoMetadataServiceEndpoint(URL fidoMetadataServiceEndpoint) {
+    public void setFidoMetadataServiceEndpoint(String fidoMetadataServiceEndpoint) {
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
     }
 
@@ -122,10 +109,10 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
     MetadataTOCPayload fetchMetadataTOCPayload(){
-        String url = fidoMetadataServiceEndpoint.toString();
+        String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
-        JWS<MetadataTOCPayload> jws = parseJWS(toc);
+        JWS<MetadataTOCPayload> jws = JWS.parse(toc, registry, MetadataTOCPayload.class);
         if(!jws.isValidSignature()){
             throw new MDSException("invalid signature");
         }
@@ -166,21 +153,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     private MetadataStatement fetchMetadataStatement(URI uri) {
         String metadataStatementBase64url = httpClient.fetch(uri.toString());
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
-        return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
-    }
-
-    private JWS<MetadataTOCPayload> parseJWS(String value){
-        String[] data = value.split("\\.");
-        if (data.length != 3) {
-            throw new IllegalArgumentException("Invalid JWS");
-        }
-        String headerString = data[0];
-        String payloadString = data[1];
-        String signatureString = data[2];
-        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString), StandardCharsets.UTF_8), JWSHeader.class);
-        MetadataTOCPayload payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString), StandardCharsets.UTF_8), MetadataTOCPayload.class);
-        byte[] signature = Base64UrlUtil.decode(signatureString);
-        return new JWS<>(header, headerString, payload, payloadString, signature);
+        return new JsonConverter(registry.getJsonMapper()).readValue(metadataStatementStr, MetadataStatement.class);
     }
 
     private static X509Certificate loadRootCertificateFromPath(Path path) {

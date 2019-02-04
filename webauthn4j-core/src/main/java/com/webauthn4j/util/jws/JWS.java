@@ -16,6 +16,9 @@
 
 package com.webauthn4j.util.jws;
 
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.registry.Registry;
+import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +43,22 @@ public class JWS<T extends Serializable> implements Serializable {
     private String headerString;
     private String payloadString;
 
-    public JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
+    public static <T extends Serializable> JWS<T> parse(String value, Registry registry, Class<T> type){
+        JsonConverter jsonConverter = new JsonConverter(registry.getJsonMapper());
+        String[] data = value.split("\\.");
+        if (data.length != 3) {
+            throw new IllegalArgumentException("Invalid JWS");
+        }
+        String headerString = data[0];
+        String payloadString = data[1];
+        String signatureString = data[2];
+        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
+        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), type);
+        byte[] signature = Base64UrlUtil.decode(signatureString);
+        return new JWS<>(header, headerString, payload, payloadString, signature);
+    }
+
+    private JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
         this.header = header;
         this.payload = payload;
         this.signature = signature;

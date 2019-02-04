@@ -43,19 +43,9 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
 
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);
-        String[] data = str.split("\\.");
-        if (data.length != 3) {
-            throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
-        }
-        String headerString = data[0];
-        String payloadString = data[1];
-        String signatureString = data[2];
-        try {
-            JWSHeader header = registry.getJsonMapper().readValue(Base64UrlUtil.decode(headerString), JWSHeader.class);
-            Response payload = registry.getJsonMapper().readValue(Base64UrlUtil.decode(payloadString), Response.class);
-            byte[] signature = Base64UrlUtil.decode(signatureString);
-            return new JWS<>(header, headerString, payload, payloadString, signature);
-        } catch (IOException e) {
+        try{
+            return JWS.parse(str, registry, Response.class);
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
         }
     }

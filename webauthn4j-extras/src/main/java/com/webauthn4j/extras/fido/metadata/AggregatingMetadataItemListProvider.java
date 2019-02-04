@@ -17,12 +17,18 @@
 package com.webauthn4j.extras.fido.metadata;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class AggregatingMetadataItemListProvider<T extends MetadataItem> implements MetadataItemListProvider<T>{
+
+    transient Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemListProvider.class);
+
 
     private List<MetadataItemListProvider<T>> metadataItemListProviders;
 
@@ -33,7 +39,16 @@ public class AggregatingMetadataItemListProvider<T extends MetadataItem> impleme
     @Override
     public Map<AAGUID, List<T>> provide() {
         return metadataItemListProviders.stream()
-                .flatMap(provider -> provider.provide().entrySet().stream())
+                .flatMap(provider -> {
+                    try{
+                        return provider.provide().entrySet().stream();
+                    }
+                    catch (RuntimeException e){
+                        logger.warn("Failed to load metadata from one of metadataItemListProviders", e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

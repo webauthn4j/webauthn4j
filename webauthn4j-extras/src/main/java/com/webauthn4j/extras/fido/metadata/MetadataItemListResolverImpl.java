@@ -36,11 +36,11 @@ public class MetadataItemListResolverImpl<T extends MetadataItem> implements Met
     public List<T> resolve(AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<AAGUID, List<T>> metadataStatements = metadataItemListProvider.provide();
+        Map<AAGUID, List<T>> metadataItemMap = metadataItemListProvider.provide();
 
         ArrayList<T> list = new ArrayList<>();
-        list.addAll(metadataStatements.getOrDefault(AAGUID.NULL, Collections.emptyList()));
-        list.addAll(metadataStatements.getOrDefault(aaguid, Collections.emptyList()));
+        list.addAll(metadataItemMap.getOrDefault(AAGUID.NULL, Collections.emptyList()));
+        list.addAll(metadataItemMap.getOrDefault(aaguid, Collections.emptyList()));
         return list;
     }
 }
