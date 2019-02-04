@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class JsonFileMetadataItemListProvider implements MetadataItemListProvider {
+public class JsonFileMetadataItemListProvider implements MetadataItemListProvider<MetadataItem> {
 
     private Registry registry;
     private List<Path> paths = Collections.emptyList();

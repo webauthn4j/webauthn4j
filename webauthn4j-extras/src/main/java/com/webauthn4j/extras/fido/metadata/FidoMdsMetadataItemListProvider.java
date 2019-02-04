@@ -47,7 +47,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider {
+public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider<FidoMdsMetadataItem> {
 
     private static final URL DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
 
@@ -81,11 +81,11 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
     public FidoMdsMetadataItemListProvider(Registry registry, HttpClient httpClient) {
-        this(registry, httpClient, loadEmbeddedCertificate());
+        this(registry, httpClient, loadEmbeddedFidoMdsRootCertificate());
     }
 
     public FidoMdsMetadataItemListProvider(Registry registry) {
-        this(registry, new SimpleHttpClient(), loadEmbeddedCertificate());
+        this(registry, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
     @Override
@@ -96,7 +96,16 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         return cachedMetadataItemMap;
     }
 
-    void refresh(){
+
+    public URL getFidoMetadataServiceEndpoint() {
+        return fidoMetadataServiceEndpoint;
+    }
+
+    public void setFidoMetadataServiceEndpoint(URL fidoMetadataServiceEndpoint) {
+        this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
+    }
+
+    private void refresh(){
         MetadataTOCPayload tocPayload = fetchMetadataTOCPayload();
 
         cachedMetadataItemMap =
@@ -183,7 +192,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
         }
     }
 
-    private static X509Certificate loadEmbeddedCertificate() {
+    private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
         InputStream inputStream = FidoMdsMetadataItemListProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
         return CertificateUtil.generateX509Certificate(inputStream);
