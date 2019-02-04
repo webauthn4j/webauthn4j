@@ -40,6 +40,8 @@ public enum TPMIAlgHash {
     public static TPMIAlgHash create(int value) throws InvalidFormatException {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
+        } else if (value == TPM_ALG_SHA1.value) {
+            return TPM_ALG_SHA1;
         } else if (value == TPM_ALG_SHA256.value) {
             return TPM_ALG_SHA256;
         } else if (value == TPM_ALG_SHA384.value) {
