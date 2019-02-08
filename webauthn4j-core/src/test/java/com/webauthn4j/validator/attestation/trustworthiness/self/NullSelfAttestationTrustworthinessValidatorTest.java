@@ -21,8 +21,6 @@ import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class NullSelfAttestationTrustworthinessValidatorTest {
 
     private NullSelfAttestationTrustworthinessValidator validator = new NullSelfAttestationTrustworthinessValidator();

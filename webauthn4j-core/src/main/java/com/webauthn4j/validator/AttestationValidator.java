@@ -33,6 +33,9 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Validates the attestation
+ */
 class AttestationValidator {
 
     // ~ Instance fields

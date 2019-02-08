@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * Thrown if tokenBinding problems happen
+ * Thrown if tokenBinding error happen
  */
 public class TokenBindingException extends ValidationException {
 

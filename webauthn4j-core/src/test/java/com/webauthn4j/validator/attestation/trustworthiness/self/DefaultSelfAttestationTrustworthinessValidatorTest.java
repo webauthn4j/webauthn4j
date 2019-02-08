@@ -23,8 +23,6 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class DefaultSelfAttestationTrustworthinessValidatorTest {
 
     @Test

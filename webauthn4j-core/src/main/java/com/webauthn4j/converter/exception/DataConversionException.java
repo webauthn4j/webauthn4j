@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter.exception;
 
-import com.webauthn4j.util.WebAuthnException;
+import com.webauthn4j.util.exception.WebAuthnException;
 
 public class DataConversionException extends WebAuthnException {
 

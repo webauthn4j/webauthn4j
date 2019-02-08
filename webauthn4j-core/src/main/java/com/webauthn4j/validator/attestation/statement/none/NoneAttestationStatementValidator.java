@@ -21,7 +21,6 @@ import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 /**
  * Validates the specified {@link AttestationStatement} is a none attestation
@@ -31,7 +30,7 @@ public class NoneAttestationStatementValidator implements AttestationStatementVa
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         return AttestationType.NONE;

@@ -19,12 +19,14 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
-import com.webauthn4j.util.*;
+import com.webauthn4j.util.ECUtil;
+import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SignatureUtil;
+import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
 
 import javax.naming.NamingException;
@@ -54,7 +56,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
-import com.webauthn4j.util.WebAuthnException;
+import com.webauthn4j.util.exception.WebAuthnException;
 
 /**
  * An abstract exception for validation violation

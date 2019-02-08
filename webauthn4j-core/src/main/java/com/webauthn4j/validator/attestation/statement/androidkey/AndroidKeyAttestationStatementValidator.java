@@ -26,12 +26,10 @@ import com.webauthn4j.validator.attestation.statement.AttestationStatementValida
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.Certificate;
-import java.util.Arrays;
 
 public class AndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
 
@@ -44,7 +42,7 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         AndroidKeyAttestationStatement attestationStatement =

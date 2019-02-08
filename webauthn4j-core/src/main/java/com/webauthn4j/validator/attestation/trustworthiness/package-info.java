@@ -14,18 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.util;
-
-public class WebAuthnException extends RuntimeException {
-    public WebAuthnException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public WebAuthnException(String message) {
-        super(message);
-    }
-
-    public WebAuthnException(Throwable cause) {
-        super(cause);
-    }
-}
+/**
+ * validator classes for attestation trustworthiness
+ */
+package com.webauthn4j.validator.attestation.trustworthiness;

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.exception;
+package com.webauthn4j.util.exception;
 
-import org.junit.Test;
+public class WebAuthnException extends RuntimeException {
+    public WebAuthnException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-@SuppressWarnings("ThrowableNotThrown")
-public class UnsupportedAttestationFormatExceptionTest {
+    public WebAuthnException(String message) {
+        super(message);
+    }
 
-    private RuntimeException cause = new RuntimeException();
-
-    @Test
-    public void test() {
-        new UnsupportedAttestationFormatException("dummy", cause);
-        new UnsupportedAttestationFormatException("dummy");
-        new UnsupportedAttestationFormatException(cause);
+    public WebAuthnException(Throwable cause) {
+        super(cause);
     }
 }

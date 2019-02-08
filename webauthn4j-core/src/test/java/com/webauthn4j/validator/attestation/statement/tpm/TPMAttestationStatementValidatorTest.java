@@ -19,8 +19,6 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 
 public class TPMAttestationStatementValidatorTest {
@@ -33,7 +31,7 @@ public class TPMAttestationStatementValidatorTest {
         target.validate(registrationObject);
     }
 
-    @Test(expected = UnsupportedAttestationFormatException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void validate_non_TPMAttestation_test(){
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);

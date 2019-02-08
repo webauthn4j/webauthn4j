@@ -14,23 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.exception;
-
-
 /**
- * Thrown if unsupported attestation format is specified
- * As it won't happen, this class is not a sub-class of {@link ValidationException}
+ * validator classes for attestation statement
  */
-public class UnsupportedAttestationFormatException extends RuntimeException {
-    public UnsupportedAttestationFormatException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UnsupportedAttestationFormatException(String message) {
-        super(message);
-    }
-
-    public UnsupportedAttestationFormatException(Throwable cause) {
-        super(cause);
-    }
-}
+package com.webauthn4j.validator.attestation.statement;

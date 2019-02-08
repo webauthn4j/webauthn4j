@@ -17,10 +17,8 @@
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class NullECDAATrustworthinessValidatorTest {

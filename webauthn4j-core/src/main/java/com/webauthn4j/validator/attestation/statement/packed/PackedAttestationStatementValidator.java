@@ -31,7 +31,6 @@ import com.webauthn4j.validator.attestation.statement.AttestationStatementValida
 import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.security.*;
@@ -47,7 +46,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         PackedAttestationStatement attestationStatement = (PackedAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();

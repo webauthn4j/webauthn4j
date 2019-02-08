@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -24,9 +23,6 @@ import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -23,7 +23,6 @@ import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -45,7 +44,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         AndroidSafetyNetAttestationStatement attestationStatement =

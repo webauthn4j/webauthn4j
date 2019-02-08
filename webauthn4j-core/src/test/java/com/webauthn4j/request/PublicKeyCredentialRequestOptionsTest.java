@@ -16,7 +16,6 @@
 
 package com.webauthn4j.request;
 
-import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import org.junit.Test;

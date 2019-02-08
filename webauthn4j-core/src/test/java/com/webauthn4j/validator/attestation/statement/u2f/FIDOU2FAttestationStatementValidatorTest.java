@@ -26,7 +26,6 @@ import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 
 import java.security.KeyPair;
@@ -40,7 +39,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
 
     private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
-    @Test(expected = UnsupportedAttestationFormatException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void validate_invalid_attestation_statement_test() {
         RegistrationObject registrationObject = mock(RegistrationObject.class);
         AttestationObject attestationObject = mock(AttestationObject.class);

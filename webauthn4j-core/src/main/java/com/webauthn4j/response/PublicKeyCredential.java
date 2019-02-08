@@ -18,8 +18,8 @@ package com.webauthn4j.response;
 
 import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.Base64UrlUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;

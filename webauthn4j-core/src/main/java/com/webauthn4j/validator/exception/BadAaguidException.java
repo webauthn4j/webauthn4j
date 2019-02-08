@@ -16,6 +16,9 @@
 
 package com.webauthn4j.validator.exception;
 
+/**
+ * Thrown if bad aaguid is detected
+ */
 public class BadAaguidException extends ValidationException {
     public BadAaguidException(String message, Throwable cause) {
         super(message, cause);

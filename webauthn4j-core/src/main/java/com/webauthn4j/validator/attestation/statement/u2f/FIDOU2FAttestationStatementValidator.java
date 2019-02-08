@@ -28,7 +28,6 @@ import com.webauthn4j.validator.attestation.statement.AttestationStatementValida
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +48,7 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new UnsupportedAttestationFormatException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         FIDOU2FAttestationStatement attestationStatement =

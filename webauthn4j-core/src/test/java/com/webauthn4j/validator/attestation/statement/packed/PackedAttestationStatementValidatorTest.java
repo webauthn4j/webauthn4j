@@ -22,7 +22,6 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.validator.exception.UnsupportedAttestationFormatException;
 import org.junit.Test;
 import sun.security.x509.*;
 
@@ -136,7 +135,7 @@ public class PackedAttestationStatementValidatorTest {
         validate(clientData, attestationObject);
     }
 
-    @Test(expected = UnsupportedAttestationFormatException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void validate_with_invalid_AttestationStatement_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();

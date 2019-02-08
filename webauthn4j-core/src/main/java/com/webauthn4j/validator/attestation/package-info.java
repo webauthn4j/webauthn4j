@@ -14,21 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.exception;
-
 /**
- * Thrown if an invalid TPM key description is detected
+ * validator classes for attestation
  */
-public class KeyDescriptionValidationException extends BadAttestationStatementException {
-    public KeyDescriptionValidationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public KeyDescriptionValidationException(String message) {
-        super(message);
-    }
-
-    public KeyDescriptionValidationException(Throwable cause) {
-        super(cause);
-    }
-}
+package com.webauthn4j.validator.attestation;
