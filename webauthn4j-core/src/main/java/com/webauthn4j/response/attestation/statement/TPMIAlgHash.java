@@ -22,11 +22,11 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 public enum TPMIAlgHash {
 
-    TPM_ALG_ERROR(0),
-    TPM_ALG_SHA1(4),
+    TPM_ALG_ERROR(0x00),
+    TPM_ALG_SHA1(0x04),
     TPM_ALG_SHA256(0x0B),
     TPM_ALG_SHA384(0x0C),
-    TPM_ALG_SHA512(0xD),
+    TPM_ALG_SHA512(0x0D),
     TPM_ALG_NULL(0x10);
 
     private final int value;

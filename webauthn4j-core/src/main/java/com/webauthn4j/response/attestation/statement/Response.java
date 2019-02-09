@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 
@@ -23,29 +24,34 @@ import java.io.Serializable;
 
 public class Response implements Serializable {
 
-    @JsonProperty
     private String nonce;
-
-    @JsonProperty
     private long timestampMs;
-
-    @JsonProperty
     private String apkPackageName;
-
-    @JsonProperty
     private String[] apkCertificateDigestSha256;
-
-    @JsonProperty
     private String apkDigestSha256;
-
-    @JsonProperty
     private boolean ctsProfileMatch;
-
-    @JsonProperty
     private boolean basicIntegrity;
-
-    @JsonProperty
     private String advice;
+
+    @JsonCreator
+    public Response(
+            @JsonProperty("nonce") String nonce,
+            @JsonProperty("timestampMs") long timestampMs,
+            @JsonProperty("apkPackageName") String apkPackageName,
+            @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
+            @JsonProperty("apkDigestSha256") String apkDigestSha256,
+            @JsonProperty("ctsProfileMatch") boolean ctsProfileMatch,
+            @JsonProperty("basicIntegrity") boolean basicIntegrity,
+            @JsonProperty("advice") String advice) {
+        this.nonce = nonce;
+        this.timestampMs = timestampMs;
+        this.apkPackageName = apkPackageName;
+        this.apkCertificateDigestSha256 = apkCertificateDigestSha256;
+        this.apkDigestSha256 = apkDigestSha256;
+        this.ctsProfileMatch = ctsProfileMatch;
+        this.basicIntegrity = basicIntegrity;
+        this.advice = advice;
+    }
 
     public String getNonce() {
         return nonce;

@@ -265,11 +265,11 @@ public class TestUtil {
         return new AndroidKeyAttestationStatement(algorithm, signature, certPath);
     }
 
-    private static AttestationStatement createTPMAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
+    public static AttestationStatement createTPMAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         AttestationCertificatePath certPath = loadAndroidKeyCertPath();
         TPMSAttest certInfo = null; //TODO
         TPMTPublic pubArea = null; //TODO
-        return new TPMAttestationStatement(algorithm, certPath, null, signature, certInfo, pubArea);
+        return new TPMAttestationStatement(algorithm, certPath, signature, certInfo, pubArea);
     }
 
     public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -31,22 +32,23 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     public static final String FORMAT = "tpm";
     public static final String VERSION_2_0 = "2.0";
 
-    @JsonProperty
     private String ver;
-    @JsonProperty
     private COSEAlgorithmIdentifier alg;
-    @JsonProperty
     private AttestationCertificatePath x5c;
-    @JsonProperty
     private byte[] ecdaaKeyId;
-    @JsonProperty
     private byte[] sig;
-    @JsonProperty
     private TPMSAttest certInfo;
-    @JsonProperty
     private TPMTPublic pubArea;
 
-    public TPMAttestationStatement(String ver, COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] ecdaaKeyId, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
+    @JsonCreator
+    public TPMAttestationStatement(
+            @JsonProperty("ver") String ver,
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @JsonProperty("ecdaaKeyId") byte[] ecdaaKeyId,
+            @JsonProperty("sig") byte[] sig,
+            @JsonProperty("certInfo") TPMSAttest certInfo,
+            @JsonProperty("pubArea") TPMTPublic pubArea) {
         this.ver = ver;
         this.alg = alg;
         this.x5c = x5c;
@@ -56,18 +58,14 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.pubArea = pubArea;
     }
 
-    public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] ecdaaKeyId, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
+    public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
         this.ver = VERSION_2_0;
         this.alg = alg;
         this.x5c = x5c;
-        this.ecdaaKeyId = ecdaaKeyId;
         this.sig = sig;
         this.certInfo = certInfo;
         this.pubArea = pubArea;
     }
-
-
-    public TPMAttestationStatement(){}
 
     public String getVer() {
         return ver;

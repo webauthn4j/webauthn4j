@@ -16,18 +16,16 @@
 
 package com.webauthn4j.util.jws;
 
-import com.webauthn4j.util.exception.WebAuthnException;
+import org.junit.Test;
 
-public class JWSException extends WebAuthnException {
-    public JWSException(String message, Throwable cause) {
-        super(message, cause);
+@SuppressWarnings("ThrowableNotThrown")
+public class JWSExceptionTest {
+
+    @Test
+    public void constructor_test(){
+        new JWSException("dummy", new RuntimeException());
+        new JWSException("dummy");
+        new JWSException(new RuntimeException());
     }
 
-    public JWSException(String message) {
-        super(message);
-    }
-
-    public JWSException(Throwable cause) {
-        super(cause);
-    }
 }
