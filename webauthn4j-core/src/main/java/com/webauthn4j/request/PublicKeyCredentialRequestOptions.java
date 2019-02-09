@@ -19,13 +19,11 @@ package com.webauthn4j.request;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-@WIP
 public class PublicKeyCredentialRequestOptions implements Serializable {
 
     // ~ Instance fields

@@ -17,11 +17,9 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.util.WIP;
 
 import java.util.Arrays;
 
-@WIP
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
 
     // ~ Instance fields

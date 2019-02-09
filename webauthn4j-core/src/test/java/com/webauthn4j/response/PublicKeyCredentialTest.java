@@ -23,6 +23,7 @@ import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import org.junit.Test;
@@ -70,6 +71,16 @@ public class PublicKeyCredentialTest {
         assertThat(credential.getRawId()).isNotEmpty();
         assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class);
         assertThat(credential.getClientExtensionResults()).isNotNull();
+    }
+
+    @Test
+    public void equals_hashCode_test(){
+
+        PublicKeyCredential<AuthenticatorAttestationResponse> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs());
+        PublicKeyCredential<AuthenticatorAttestationResponse> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs());
+
+        assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 
 }
