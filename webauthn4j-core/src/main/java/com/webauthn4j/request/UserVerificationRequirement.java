@@ -19,9 +19,7 @@ package com.webauthn4j.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.util.WIP;
 
-@WIP
 public enum UserVerificationRequirement {
     REQUIRED("required"),
     PREFERRED("preferred"),

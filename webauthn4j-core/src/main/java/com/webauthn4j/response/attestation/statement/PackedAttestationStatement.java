@@ -18,13 +18,11 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-@WIP
 @JsonIgnoreProperties(value = "format")
 @JsonTypeName(PackedAttestationStatement.FORMAT)
 public class PackedAttestationStatement implements CertificateBaseAttestationStatement {
