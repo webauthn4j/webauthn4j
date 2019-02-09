@@ -32,12 +32,19 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     public static final String FORMAT = "tpm";
     public static final String VERSION_2_0 = "2.0";
 
+    @JsonProperty
     private String ver;
+    @JsonProperty
     private COSEAlgorithmIdentifier alg;
+    @JsonProperty
     private AttestationCertificatePath x5c;
+    @JsonProperty
     private byte[] ecdaaKeyId;
+    @JsonProperty
     private byte[] sig;
+    @JsonProperty
     private TPMSAttest certInfo;
+    @JsonProperty
     private TPMTPublic pubArea;
 
     @JsonCreator
