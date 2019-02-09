@@ -44,7 +44,7 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
         try{
             return JWS.parse(str, registry, Response.class);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(p, "Invalid JWS", value, JWS.class);
+            throw new InvalidFormatException(p, "value is not valid as JWS", value, JWS.class);
         }
     }
 }

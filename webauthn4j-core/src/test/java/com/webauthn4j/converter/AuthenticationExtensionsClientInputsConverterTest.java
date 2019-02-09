@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
@@ -47,7 +48,14 @@ public class AuthenticationExtensionsClientInputsConverterTest {
 
     @Test
     public void convert_test() {
-        String source = "{\"appid\":\"\"}";
+        String source = "{\"appid\":\"dummy\"}";
         AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        assertThat(clientInputs.get(FIDOAppIDExtensionClientInput.ID)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
+    }
+
+    @Test(expected = DataConversionException.class)
+    public void convert_with_invalid_extension_test() {
+        String source = "{\"invalid\":\"\"}";
+        authenticationExtensionsClientInputsConverter.convert(source);
     }
 }

@@ -47,7 +47,7 @@ public class JWS<T extends Serializable> implements Serializable {
         JsonConverter jsonConverter = new JsonConverter(registry.getJsonMapper());
         String[] data = value.split("\\.");
         if (data.length != 3) {
-            throw new IllegalArgumentException("Invalid JWS");
+            throw new IllegalArgumentException("JWS value is not divided by two period.");
         }
         String headerString = data[0];
         String payloadString = data[1];
