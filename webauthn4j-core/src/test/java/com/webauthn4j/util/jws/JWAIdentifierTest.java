@@ -36,6 +36,11 @@ public class JWAIdentifierTest {
         assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512);
     }
 
+    @Test
+    public void name_test(){
+        assertThat(JWAIdentifier.ES256.getName()).isEqualTo("ES256");
+    }
+
     @Test(expected = InvalidFormatException.class)
     public void create_with_invalid_arg_test() throws InvalidFormatException {
 

@@ -52,7 +52,7 @@ public enum Curve {
     }
 
     @JsonCreator
-    private static Curve fromJson(Integer value) throws InvalidFormatException {
+    static Curve fromJson(Integer value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

@@ -20,9 +20,7 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.util.Base64UrlUtil;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import com.webauthn4j.util.JacksonUtil;
 
 /**
  * Converter for {@link AttestationObject}
@@ -68,11 +66,7 @@ public class AttestationObjectConverter {
     }
 
     public byte[] extractAuthenticatorData(byte[] attestationObject) {
-        try {
-            return cborConverter.readTree(attestationObject).get("authData").binaryValue();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        return JacksonUtil.binaryValue(cborConverter.readTree(attestationObject).get("authData"));
     }
 
 

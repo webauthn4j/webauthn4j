@@ -35,9 +35,10 @@ public class AttestedCredentialDataTest {
     }
 
     @Test
-    public void equals_test() {
+    public void equals_hashCode_test() {
         AttestedCredentialData instanceA = TestUtil.createAttestedCredentialData();
         AttestedCredentialData instanceB = TestUtil.createAttestedCredentialData();
         assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 }

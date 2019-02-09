@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-description = "Package that contains utility classes for WebAuthn4J"
+package com.webauthn4j.util;
 
-dependencies {
+import com.fasterxml.jackson.databind.JsonNode;
 
-    compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
-    //Test
-    testCompile('ch.qos.logback:logback-classic')
-    testCompile('org.projectlombok:lombok')
-    testCompile('junit:junit')
-    testCompile('org.mockito:mockito-core')
-    testCompile('org.assertj:assertj-core')
+public class JacksonUtil {
 
-}
+    private JacksonUtil(){}
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    public static byte[] binaryValue(JsonNode jsonNode){
+        try {
+            return jsonNode.binaryValue();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
-}
-
-sonarqube {
-    skipProject = true
 }
