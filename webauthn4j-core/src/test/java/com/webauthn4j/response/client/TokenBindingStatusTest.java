@@ -33,4 +33,10 @@ public class TokenBindingStatusTest {
         TokenBindingStatus status = TokenBindingStatus.create("supported");
         assertThat(status).isEqualTo(TokenBindingStatus.SUPPORTED);
     }
+
+    @Test
+    public void create_with_null_value_test() throws InvalidFormatException {
+        TokenBindingStatus status = TokenBindingStatus.create(null);
+        assertThat(status).isNull();
+    }
 }

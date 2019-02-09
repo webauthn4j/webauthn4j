@@ -24,13 +24,21 @@ import java.io.Serializable;
 
 public class Response implements Serializable {
 
+    @JsonProperty
     private String nonce;
+    @JsonProperty
     private long timestampMs;
+    @JsonProperty
     private String apkPackageName;
+    @JsonProperty
     private String[] apkCertificateDigestSha256;
+    @JsonProperty
     private String apkDigestSha256;
+    @JsonProperty
     private boolean ctsProfileMatch;
+    @JsonProperty
     private boolean basicIntegrity;
+    @JsonProperty
     private String advice;
 
     @JsonCreator

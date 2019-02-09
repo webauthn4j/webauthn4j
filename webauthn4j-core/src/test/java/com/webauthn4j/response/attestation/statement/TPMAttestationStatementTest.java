@@ -18,6 +18,7 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,15 @@ public class TPMAttestationStatementTest {
 
         new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
     }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void validate_test(){
+
+        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
+        TPMAttestationStatement source = (TPMAttestationStatement)registrationObjectA.getAttestationObject().getAttestationStatement();
+        new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea()).validate();
+    }
+
 
     @Test
     public void equals_hashCode_test(){

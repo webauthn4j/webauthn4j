@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -110,7 +111,9 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
 
     @Override
     public void validate() {
-
+        if(x5c == null && ecdaaKeyId == null){
+            throw new ConstraintViolationException("x5c or ecdaaKeyId must be present");
+        }
     }
 
     @Override

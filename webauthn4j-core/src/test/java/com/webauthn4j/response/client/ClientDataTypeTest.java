@@ -28,6 +28,7 @@ public class ClientDataTypeTest {
     public void create_test() throws InvalidFormatException {
         assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE);
         assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET);
+        assertThat(ClientDataType.create(null)).isNull();
         //noinspection ResultOfMethodCallIgnored
         assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(InvalidFormatException.class);
     }
