@@ -23,6 +23,7 @@ import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationS
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.junit.Test;
 
 import java.security.cert.TrustAnchor;
@@ -45,6 +46,16 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load2tierTestRootCACertificate()));
+        when(trustAnchorResolver.resolve(aaguid)).thenReturn(trustAnchors);
+
+        CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
+        target.validate(aaguid, attestationStatement);
+    }
+
+    @Test(expected = TrustAnchorNotFoundException.class)
+    public void validate_with_empty_trustAnchors_test() {
+
+        Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
