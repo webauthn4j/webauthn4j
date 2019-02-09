@@ -29,6 +29,7 @@ public class TPMAObjectTest {
         assertThat(tpmaObject.isFixedTPM()).isTrue();
         assertThat(tpmaObject.isStClear()).isFalse();
         assertThat(tpmaObject.isFixedParent()).isTrue();
+        assertThat(tpmaObject.isSensitiveDataOrigin()).isTrue();
         assertThat(tpmaObject.isUserWithAuth()).isTrue();
         assertThat(tpmaObject.isAdminWithPolicy()).isFalse();
         assertThat(tpmaObject.isNoDA()).isTrue();
