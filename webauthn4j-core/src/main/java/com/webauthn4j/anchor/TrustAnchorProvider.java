@@ -26,7 +26,7 @@ public interface TrustAnchorProvider {
 
     /**
      * Provides aaguid {@link TrustAnchor} {@link Set} map
-     * TrustAnchors registered for null key is used for all authenticators
+     * TrustAnchors registered for {@link AAGUID}.NULL is used for all authenticators
      *
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */

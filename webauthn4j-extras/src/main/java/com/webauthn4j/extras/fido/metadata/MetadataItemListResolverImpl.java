@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class MetadataItemListResolverImpl<T extends MetadataItem> implements MetadataItemListResolver {
+public class MetadataItemListResolverImpl<T extends MetadataItem> implements MetadataItemListResolver<T> {
 
     private MetadataItemListProvider<T> metadataItemListProvider;
 
