@@ -44,7 +44,8 @@ public class AndroidSafetyNetAttestationStatementTest {
 
     @Test
     public void equals_hashCode_test(){
-        JWS jws = mock(JWS.class);
+        @SuppressWarnings("unchecked")
+        JWS<Response> jws = mock(JWS.class);
         AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jws);
         AndroidSafetyNetAttestationStatement instanceB = new AndroidSafetyNetAttestationStatement("dummy", jws);
 

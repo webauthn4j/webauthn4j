@@ -16,6 +16,7 @@
 
 package com.webauthn4j.extras.validator;
 
+import com.webauthn4j.extras.fido.metadata.MetadataItem;
 import org.junit.Test;
 
 /**
@@ -23,7 +24,7 @@ import org.junit.Test;
  */
 public class MetadataItemCertPathTrustworthinessValidatorTest {
 
-    public MetadataItemListCertPathTrustworthinessValidator target = new MetadataItemListCertPathTrustworthinessValidator(null);
+    public MetadataItemListCertPathTrustworthinessValidator<MetadataItem> target = new MetadataItemListCertPathTrustworthinessValidator<>(null);
 
     @Test
     public void test() {
