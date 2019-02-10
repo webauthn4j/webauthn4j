@@ -22,6 +22,8 @@ description = "Package that contains testing classes for WebAuthn4J"
 dependencies {
     compile project(':webauthn4j-core')
     compile("org.springframework:spring-core")
+    compile("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")
+    compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
 
     //Test
     testCompile('ch.qos.logback:logback-classic')
