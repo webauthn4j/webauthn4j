@@ -4,18 +4,15 @@
 WebAuthn4Jを利用する上で中心となるクラスは2つ存在します。1つは登録時に資格情報を検証する
 `WebAuthnRegistrationContextValidator` クラスで、もう1つは認証時に資格情報を検証する
 `WebAuthnAuthenticationContextValidator` クラスです。
-前者の `validate` メソッドは登録時のコンテキストを表現するWebAuthnRegistrationContextクラスを引数に持ち、
-検証に成功した場合、`WebAuthnRegistrationContextValidationResponse` クラスを返却します。
-後者の `validate` メソッドは認証時のコンテキストを表現するWebAuthnAuthenticationContextクラスを引数に持ち、
-検証に成功した場合、`WebAuthnAuthenticationContextValidationResponse` クラスを返却します。
-両者とも、検証に失敗した場合は、`ValidationException` クラスのサブクラスの例外をスローします。
 
 `WebAuthnRegistrationContextValidator` は構成証明ステートメントの署名と信頼性の検証は、
 それぞれ `AttestationStatementValidator` と `CertPathTrustworthinessValidator` インタフェースの実装に委譲します。
 
-厳密な構成証明ステートメントの検証を必要としないサイト向けに、`AttestationStatementValidator` と
-`CertPathTrustworthinessValidator` を構成した `WebAuthnRegistrationContextValidator` のインスタンスは、
-`WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` ファクトリメソッドで作成出来ます。
+大多数のサイトは厳密な構成証明ステートメントの検証を必要としないでしょうから（
+https://www.w3.org/TR/2019/PR-webauthn-20190117/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、
+WebAuthn4Jでは構成証明ステートメントの検証をしないように `AttestationStatementValidator` と
+`CertPathTrustworthinessValidator` を構成した `WebAuthnRegistrationContextValidator` のインスタンスを返却する
+`WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` ファクトリメソッドを用意しています。
 
 もし、エンタープライズなユースケースで、認証デバイスの厳密な検証が要件である場合は、
 `WebAuthnRegistrationContextValidator` クラスのコンストラクタを用いて
@@ -42,17 +39,14 @@ WebAuthn4Jはいくつか `CertPathTrustworthinessValidator` インタフェー�
 
 ==== サーバー側構成の表現
 
-作成する資格情報のスコープを決定するrpIdなど、サーバー側の構成は `WebAuthnRegistrationContext` クラスの
+作成する資格情報のスコープを決定する `rpId` など、サーバー側の構成は `WebAuthnRegistrationContext` クラスの
 フィールドである `ServerProperty` クラスによって表現されます。
 
 ==== 認証デバイスの表現
 
 認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。
-登録時に、 `WebAuthnRegistrationContextValidationResponse` クラスが含む値を用いてAuthenticator インタフェースの
+登録時に、 `WebAuthnRegistrationContextValidationResponse` クラスが含む値を用いて `Authenticator` インタフェースの
 インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。
 なお、永続化する際は、credentialIdをキーに永続化すると良いでしょう。
 `Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。
-典型的には、 `Authenticator` をユーザーが識別するためのfriendly nameの追加などが考えられるでしょう。
-
-
-
+典型的には、 `Authenticator` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。

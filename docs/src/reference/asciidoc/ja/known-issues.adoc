@@ -30,6 +30,13 @@ Windows Helloを活用した認証が出来るようになるでしょう。
 ResidentKeyを活用してID入力の省略を実現する場合でも、Chrome、Firefoxユーザーを考慮してパスワードとの二要素認証のサポートを行う、
 Safariユーザーを考慮してWebAuthn以外での二要素認証のサポートを行う、などフォールバック手段の確保に努めましょう。
 
+=== ECDAAのサポート
 
+WebAuthn4JはECDAA(Elliptic Curve based Direct Anonymous Attestation)アルゴリズムをサポートしていません。
+ECDAAアルゴリズムはWebAuthn仕様でオプションとされており、主要ブラウザでもサポートされていない為、当面サポートする予定はありません。
 
+=== PS256、PS384、PS512のサポート
 
+WebAuthn4JはPS256、PS384、PS512アルゴリズムをサポートしていません。
+PS256、PS384、PS512アルゴリズムはWebAuthn仕様でオプションとされており、Java Crypto APIでも標準のProviderではサポートされていない為、
+当面サポートする予定はありません。

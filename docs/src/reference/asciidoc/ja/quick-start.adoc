@@ -16,19 +16,19 @@ WebAuthn JS APIを実行して取得した値となります。何らかの方�
 呼び出す際のパラメータには以下の値を指定して下さい。
 
 - `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginを
-ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、フィッシング攻撃から防御を行います。
+ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、
+フィッシング攻撃を防ぎます。
 - `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。
 詳しくは https://www.w3.org/TR/2019/PR-webauthn-20190117/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
-`challenge` はリプレイ攻撃を防ぐ為のパラメータです。サーバー側で `challenge` としてランダムなバイト列を生成し、
-フロントエンド側でWebAuthn JS APIを実行する際にパラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで
-リプレイ攻撃から防御することが出来ます。
-- `challenge` には発行したChallengeを指定して下さい。発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。
-セッションなどに格納しておくと良いでしょう。
+- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。
+サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に
+パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。
+発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 - `tokenBindingId` はToken bindingを利用する場合のパラメータです。利用しない場合は `null` を指定してください。
 
 `userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスがthrowされます。
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
 検証に成功した場合は、 `WebAuthnRegistrationContextValidationResponse` が返却されます。
 返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
 認証時に必要となります。
@@ -83,7 +83,7 @@ save(authenticator); // アプリケーションの作法に則った、Authenti
 
 `Authenticator` には、登録時に永続化した `Authenticator` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスがthrowされます。
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
 検証に成功した場合は、 `WebAuthnAuthenticationContextValidationResponse` が返却されます。
 `Authenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
 作成された場合を検知するために用意されています。カウンタについて詳しくは
