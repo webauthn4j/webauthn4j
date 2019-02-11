@@ -1,0 +1,35 @@
+[known-issues]
+== 既知の問題
+
+WebAuthnは各ブラウザベンダが実装を進めている最中の新技術であり、仕様で定められていても、残念ながら実際の活用には制約がかかる場面もあります。
+本節では、2019/02現在のWebAuthnを活用する上での既知の問題を整理します。
+
+=== Safariのサポート
+
+SafariのWebAuthnの対応は、未完了です。即ち、iPhone/iPadでWebAuthnは利用できません。
+SafariのTechnology Preview版でCTAP2 Authenticatorを利用したWebAuthnの対応がされましたが、Face IDやTouch IDの統合は完了していません。
+とはいえ、遅かれ早かれ対応がされることでしょう。
+
+=== ChromeのResidentKey対応
+
+ChromeはResidentKey対応が完了していません。即ち、ユーザーに対して認証時のID入力を省いた認証体験を提供することは出来ません。
+
+NOTE: 登録時にLocalStorageにcredentialIdを保存し、認証時に読み出すことで疑似的にID入力の省略を実現することは可能ですが、
+Roaming Authenticatorを利用して別デバイスで認証を行う場合には対応出来ないので注意が必要です。
+
+=== Firefoxのサポート
+
+Firefoxは現状、FIDO U2FのAuthenticatorのみに対応しています。CTAP2のAuthenticatorには対応していません。
+但し、Windows版ではOS標準のFIDO2 APIを活用した実装に今後切り替わる予定であり、そうなればCTAP2対応のAuthenticatorや
+Windows Helloを活用した認証が出来るようになるでしょう。
+
+=== ブラウザ間でのサポート状況の差異
+
+各ブラウザ、WebAuthnへの対応が進みつつありますが、上記の通りサポート状況には差異があり、あるプラットフォームで
+サポートされている機能が別のプラットフォームでは利用できないことは珍しくなりません。
+ResidentKeyを活用してID入力の省略を実現する場合でも、Chrome、Firefoxユーザーを考慮してパスワードとの二要素認証のサポートを行う、
+Safariユーザーを考慮してWebAuthn以外での二要素認証のサポートを行う、などフォールバック手段の確保に努めましょう。
+
+
+
+
