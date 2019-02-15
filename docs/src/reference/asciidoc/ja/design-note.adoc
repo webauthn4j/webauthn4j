@@ -14,3 +14,7 @@ ObjectMapperなど、外部からインスタンスを登録したい対象を�
 なお、各Validatorクラスの動作のカスタマイズオプションは、各Validatorクラスにオプション用のフィールドを設けて行う。
 一括設定用のクラスは設けない
 
+=== 何故 `WebAuthnAuthenticationContext` に `Authenticator` を含めないのか
+
+`WebAuthnAuthenticationContext` はimmutableなクラスとして設計されていますが、 `Authenticator` はmutableなクラスとして
+設計されている為、 `WebAuthnAuthenticationContext` のフィールドとはしていません。

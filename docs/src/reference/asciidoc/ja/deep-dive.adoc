@@ -3,6 +3,8 @@
 
 === Project Modules
 
+WebAuthn4Jは、以下の4つのModuleから構成されます。
+
 ==== Core webauthn4j-core.jar
 
 Attestation/Assertionの検証に関わるコア機能を提供します。
@@ -22,14 +24,14 @@ WebAuthn4Jライブラリで使用されるユーティリティクラスをま�
 
 === Request/Response
 
-`com.webauthn4j.request`, `com.webauthn4j.request`パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
+`com.webauthn4j.request` , `com.webauthn4j.request` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
 
 === Converter, Registry
 
 リクエスト、レスポンスパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。
-一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、`converter`パッケージ配下に集約されています。
-カスタムシリアライザ、デシリアライザは`WebAuthnModule`にまとめられており、`WebAuthnModule`が適用された
-ObjectMapperインスタンスはRegistryクラスに登録され、WebAuthn4Jの各クラス間で共有されています。
+一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。
+カスタムシリアライザ、デシリアライザは `WebAuthnModule` にまとめられており、 `WebAuthnModule` が適用された
+`ObjectMapper` インスタンスは `Registry` クラスに登録され、WebAuthn4Jの各クラス間で共有されています。
 もしカスタムなシリアライザ、デシリアライザの追加登録が必要な場合は、Registryクラスが保持するObjectMapperに登録しましょう。
 
 === Validator

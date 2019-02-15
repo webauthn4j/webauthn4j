@@ -7,7 +7,7 @@ WebAuthn認証では、前もって認証デバイスで生成した公開鍵を
 
 === 構成証明の検証
 
-認証デバイスの登録時に構成証明を検証するためには、 `WebAuthnRegistrationContextValidator#validate` を呼び出します。
+認証デバイスの登録時に構成証明を検証する際は、 `WebAuthnRegistrationContextValidator#validate` を呼び出して下さい。
 呼び出す際は、 `WebAuthnRegistrationContext` のインスタンスを引数に指定する必要があります。
 
 `WebAuthnRegistrationContext` のコンストラクタの引数に指定する、 `clientDataJSON` と `attestationObject` はフロントエンド側で
@@ -70,13 +70,15 @@ save(authenticator); // アプリケーションの作法に則った、Authenti
 
 === 認証証明の検証
 
-認証時に認証証明を検証するためには、 `WebAuthnAuthenticationContextValidator#validate` を呼び出します。
+認証時に認証証明を検証する際は、 `WebAuthnAuthenticationContextValidator#validate` を呼び出して下さい。
 呼び出す際は、 `WebAuthnAuthenticationContext` と `Authenticator` のインスタンスを引数に指定する必要があります。
 
 `WebAuthnAuthenticationContext` のコンストラクタの引数に指定する、 `credentialId` と `clientDataJSON` 、
 `authenticatorData` 、 `signature` にはフロントエンド側でWebAuthn JS APIを実行して取得した値を設定してください。
 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+
 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
+
 `userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。
 パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。
 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
