@@ -19,7 +19,7 @@ WebAuthn4Jでは構成証明ステートメントの検証をしないように 
 `AttestationStatementValidator` と `CertPathTrustworthinessValidator` の実装をコンストラクタインジェクションして
 構成して下さい。
 
-==== 構成証明ステートメントの検証
+=== 構成証明ステートメントの検証
 
 構成証明ステートメントの検証は、 `AttestationStatementValidator` インタフェースの実装クラスが提供します。
 構成照明ステートメント毎に、対応する実装クラスが提供されていますので、必要なValidatorからなるListを
@@ -28,7 +28,7 @@ WebAuthn4Jでは構成証明ステートメントの検証をしないように 
 例えば、 `packed`, `tpm` をサポートする場合は、 `PackedAttestationStatementValidator` と `TPMAttestationStatementValidator`
 からなるListを指定して下さい。
 
-===== 構成証明ステートメントの信頼性の検証
+==== 構成証明ステートメントの信頼性の検証
 
 構成証明ステートメント自体の信頼性の検証は、証明書パスの検証、ECDAAによる検証、自己署名のパターンがありますが、
 証明書パスの検証は `CertPathTrustworthinessValidator` インタフェースの実装に検証を委ね、
@@ -37,7 +37,17 @@ WebAuthn4Jはいくつか `CertPathTrustworthinessValidator` インタフェー�
 例えば `TrustAnchorCertPathTrustworthinessValidator` は `TrustAnchorResolver` インタフェースを通じて取得した
 `TrustAnchor` をルート証明書として証明書パスの検証を行うことで構成証明ステートメントの信頼性の検証を行います。
 
-==== 認証デバイスの表現
+===== FIDO Metadata Serviceを用いた構成証明ステートメントの信頼性の検証
+
+FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメタデータを配信するサービスを提供しています。
+このサービスを利用することにより、登録しようとしている認証デバイスで、セキュリティ上の問題が報告されていないか
+チェックすることが可能です。FIDO Metadata Serviceを用いて構成証明ステートメントの信頼性の検証を行う場合、
+`CertPathTrustworthinessValidator` の実装として `MetadataItemListCertPathTrustworthinessValidator` を使用して下さい。
+`MetadataItemListCertPathTrustworthinessValidator` は `MetadataItemListResolver` インタフェースを通じて認証デバイスの
+AAGUIDに対応する `MetadataItem` リストを解決しますので、 `MetadataItemListResolverImpl` と
+`FidoMdsMetadataItemListProvider` を組み合わせて使うことで、FIDO Metadata Serviceによる信頼性の検証を行うことが可能です。
+
+=== 認証デバイスの表現
 
 認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。
 登録時に、 `WebAuthnRegistrationContextValidationResponse` クラスが含む値を用いて `Authenticator` インタフェースの
