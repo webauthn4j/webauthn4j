@@ -16,8 +16,8 @@
 
 package com.webauthn4j.test.authenticator.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
@@ -55,6 +55,8 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 @WIP
 public class WebAuthnModelAuthenticator {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     AAGUID aaguid;
     private PrivateKey attestationPrivateKey;
     private AttestationCertificatePath attestationCertificatePath;
@@ -63,7 +65,7 @@ public class WebAuthnModelAuthenticator {
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private boolean countUpEnabled = true;
 
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(new Registry()); // TODO: inject registry from constructor
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper); // TODO: inject objectMapper from constructor
 
     public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;

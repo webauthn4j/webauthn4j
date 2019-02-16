@@ -16,9 +16,9 @@
 
 package com.webauthn4j.test.authenticator.u2f;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
@@ -48,11 +48,11 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private Registry registry = new Registry();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(registry);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper);
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

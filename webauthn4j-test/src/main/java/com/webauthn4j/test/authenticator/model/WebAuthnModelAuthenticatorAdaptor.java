@@ -16,8 +16,8 @@
 
 package com.webauthn4j.test.authenticator.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.request.UserVerificationRequirement;
@@ -32,8 +32,10 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private WebAuthnModelAuthenticator webAuthnModelAuthenticator = new WebAuthnModelAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(new Registry());
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

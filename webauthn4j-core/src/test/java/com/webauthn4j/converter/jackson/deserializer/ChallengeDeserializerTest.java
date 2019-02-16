@@ -16,13 +16,12 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.client.CollectedClientData;
 import org.junit.Test;
 
-import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,15 +30,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class ChallengeDeserializerTest {
 
+    private JsonConverter jsonConverter = new JsonConverter();
+
     @Test
-    public void test() throws IOException {
-        ObjectMapper objectMapper = new Registry().getJsonMapper();
+    public void test() {
+
 
         //Given
         String input = "{ \"challenge\" : \"\" }";
 
         //When
-        CollectedClientData result = objectMapper.readValue(input, CollectedClientData.class);
+        CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
 
         //Then
         assertThat(result).extracting("challenge").isNotNull();
@@ -47,28 +48,26 @@ public class ChallengeDeserializerTest {
     }
 
     @Test
-    public void null_test() throws IOException {
-        ObjectMapper objectMapper = new Registry().getJsonMapper();
+    public void null_test() {
 
         //Given
         String input = "{ \"challenge\" : null }";
 
         //When
-        CollectedClientData result = objectMapper.readValue(input, CollectedClientData.class);
+        CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
 
         //Then
         assertThat(result).extracting("challenge").isNotNull();
         assertThat(result.getChallenge()).isNull();
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void invalid_value_test() throws IOException {
-        ObjectMapper objectMapper = new Registry().getJsonMapper();
+    @Test(expected = DataConversionException.class)
+    public void invalid_value_test() {
 
         //Given
         String input = "{ \"challenge\" : \"ddddd\" }";
 
         //When
-        objectMapper.readValue(input, CollectedClientData.class);
+        jsonConverter.readValue(input, CollectedClientData.class);
     }
 }

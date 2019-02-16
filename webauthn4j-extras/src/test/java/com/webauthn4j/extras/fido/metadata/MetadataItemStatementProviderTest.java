@@ -16,8 +16,8 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.extras.fido.metadata.exception.MDSException;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
 import org.junit.Test;
@@ -34,8 +34,10 @@ import static org.mockito.Mockito.when;
 
 public class MetadataItemStatementProviderTest {
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     private HttpClient fidoMDSClient = mock(HttpClient.class);
-    private FidoMdsMetadataItemListProvider target = new FidoMdsMetadataItemListProvider(new Registry(), fidoMDSClient);
+    private FidoMdsMetadataItemListProvider target = new FidoMdsMetadataItemListProvider(objectMapper, fidoMDSClient);
     private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
 
     @Test
@@ -90,7 +92,7 @@ public class MetadataItemStatementProviderTest {
                         "HO/hX9Oh69szXzD0ahmZWTAKBggqhkjOPQQDAwNoADBlAjAfT9m8LabIuGS6tXiJ" +
                         "mRB91SjJ49dk+sPsn+AKx1/PS3wbHEGnGxDIIcQplYDFcXICMQDi33M/oUlb7RDA" +
                         "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
-        target = new FidoMdsMetadataItemListProvider(new Registry(), fidoMDSClient, rootCert);
+        target = new FidoMdsMetadataItemListProvider(objectMapper, fidoMDSClient, rootCert);
         target.fetchMetadataTOCPayload();
     }
     @Test(expected = MDSException.class)
@@ -112,7 +114,7 @@ public class MetadataItemStatementProviderTest {
                 "HO/hX9Oh69szXzD0ahmZWTAKBggqhkjOPQQDAwNoADBlAjAfT9m8LabIuGS6tXiJ" +
                 "mRB91SjJ49dk+sPsn+AKx1/PS3wbHEGnGxDIIcQplYDFcXICMQDi33M/oUlb7RDA" +
                 "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
-        target = new FidoMdsMetadataItemListProvider(new Registry(), fidoMDSClient, rootCert);
+        target = new FidoMdsMetadataItemListProvider(objectMapper, fidoMDSClient, rootCert);
         target.fetchMetadataTOCPayload();
     }
 
@@ -135,7 +137,7 @@ public class MetadataItemStatementProviderTest {
                         "HO/hX9Oh69szXzD0ahmZWTAKBggqhkjOPQQDAwNoADBlAjAfT9m8LabIuGS6tXiJ" +
                         "mRB91SjJ49dk+sPsn+AKx1/PS3wbHEGnGxDIIcQplYDFcXICMQDi33M/oUlb7RDA" +
                         "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
-        target = new FidoMdsMetadataItemListProvider(new Registry(), fidoMDSClient, rootCert);
+        target = new FidoMdsMetadataItemListProvider(objectMapper, fidoMDSClient, rootCert);
         target.fetchMetadataTOCPayload();
     }
 

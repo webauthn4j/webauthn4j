@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 
 import java.io.IOException;
@@ -30,11 +29,8 @@ import java.io.IOException;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
-    private final transient AuthenticatorDataConverter authenticatorDataConverter;
-
-    public AuthenticatorDataDeserializer(Registry registry) {
+    public AuthenticatorDataDeserializer() {
         super(AuthenticatorData.class);
-        authenticatorDataConverter = new AuthenticatorDataConverter(registry);
     }
 
     /**
@@ -43,7 +39,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
     @Override
     public AuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
-        return authenticatorDataConverter.convert(value);
+        return new AuthenticatorDataConverter(p.getCodec()).convert(value);
     }
 
 

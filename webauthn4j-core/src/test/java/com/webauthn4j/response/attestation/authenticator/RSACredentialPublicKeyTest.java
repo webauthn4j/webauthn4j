@@ -16,8 +16,8 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.Test;
@@ -29,8 +29,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RSACredentialPublicKeyTest {
 
-    private ObjectMapper jsonMapper = new Registry().getJsonMapper();
-    private ObjectMapper cborMapper = new Registry().getCborMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     public void equals_hashCode_test() {
@@ -41,18 +41,18 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void cbor_serialize_deserialize_test() throws Exception {
+    public void cbor_serialize_deserialize_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
-        byte[] serialized = cborMapper.writeValueAsBytes(original);
-        RSACredentialPublicKey result = cborMapper.readValue(serialized, RSACredentialPublicKey.class);
+        byte[] serialized = cborConverter.writeValueAsBytes(original);
+        RSACredentialPublicKey result = cborConverter.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
     @Test
-    public void json_serialize_deserialize_test() throws Exception {
+    public void json_serialize_deserialize_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
-        String serialized = jsonMapper.writeValueAsString(original);
-        RSACredentialPublicKey result = jsonMapper.readValue(serialized, RSACredentialPublicKey.class);
+        String serialized = jsonConverter.writeValueAsString(original);
+        RSACredentialPublicKey result = jsonConverter.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 

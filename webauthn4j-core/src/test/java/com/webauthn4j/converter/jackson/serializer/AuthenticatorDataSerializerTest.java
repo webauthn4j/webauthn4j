@@ -17,12 +17,14 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.authenticator.*;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.rmi.registry.Registry;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -33,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class AuthenticatorDataSerializerTest {
 
-    private ObjectMapper jsonMapper = new Registry().getJsonMapper();
-    private ObjectMapper cborMapper = new Registry().getCborMapper();
+    private JsonConverter jsonMapper = new JsonConverter();
+    private CborConverter cborMapper = new CborConverter();
 
     @Test
     public void test() throws IOException {

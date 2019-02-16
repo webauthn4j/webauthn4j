@@ -18,11 +18,15 @@ package com.webauthn4j.converter.util;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.WebAuthnModule;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
 import java.io.IOException;
@@ -38,8 +42,18 @@ public class CborConverter {
 
     private final ObjectMapper cborMapper;
 
-    public CborConverter(ObjectMapper cborMapper) {
-        this.cborMapper = cborMapper;
+    public CborConverter(ObjectCodec objectCodec) {
+        this.cborMapper = new ObjectMapper(new CBORFactory(objectCodec));
+        cborMapper.registerModule(new WebAuthnModule());
+        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    public CborConverter(){
+        this.cborMapper = new ObjectMapper(new CBORFactory());
+        cborMapper.registerModule(new WebAuthnModule());
+        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @SuppressWarnings("unchecked")

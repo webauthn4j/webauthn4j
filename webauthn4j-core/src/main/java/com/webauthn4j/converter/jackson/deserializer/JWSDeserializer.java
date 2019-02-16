@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.statement.Response;
 import com.webauthn4j.util.jws.JWS;
 
@@ -29,11 +28,8 @@ import java.nio.charset.StandardCharsets;
 
 public class JWSDeserializer extends StdDeserializer<JWS> {
 
-    private transient Registry registry;
-
-    public JWSDeserializer(Registry registry) {
+    public JWSDeserializer() {
         super(JWS.class);
-        this.registry = registry;
     }
 
     @Override
@@ -42,7 +38,7 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);
         try{
-            return JWS.parse(str, registry, Response.class);
+            return JWS.parse(str, p.getCodec(), Response.class);
         } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(p, "value is not valid as JWS", value, JWS.class);
         }

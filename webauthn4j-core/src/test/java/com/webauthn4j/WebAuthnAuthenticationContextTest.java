@@ -16,9 +16,9 @@
 
 package com.webauthn4j;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
@@ -31,14 +31,14 @@ import static org.mockito.Mockito.mock;
 
 public class WebAuthnAuthenticationContextTest {
 
-    private Registry registry = new Registry();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void getter_test() {
 
         byte[] credentialId = new byte[32];
-        byte[] collectedClientData = new CollectedClientDataConverter(registry).convertToBytes(createClientData(ClientDataType.GET));
-        byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(createAuthenticatorData());
+        byte[] collectedClientData = new CollectedClientDataConverter(objectMapper).convertToBytes(createClientData(ClientDataType.GET));
+        byte[] authenticatorData = new AuthenticatorDataConverter(objectMapper).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
@@ -54,8 +54,8 @@ public class WebAuthnAuthenticationContextTest {
     @Test
     public void equals_hashCode_test() {
         byte[] credentialId = new byte[32];
-        byte[] collectedClientData = new CollectedClientDataConverter(registry).convertToBytes(createClientData(ClientDataType.GET));
-        byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(createAuthenticatorData());
+        byte[] collectedClientData = new CollectedClientDataConverter(objectMapper).convertToBytes(createClientData(ClientDataType.GET));
+        byte[] authenticatorData = new AuthenticatorDataConverter(objectMapper).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext webAuthnAuthenticationContextA = new WebAuthnAuthenticationContext(

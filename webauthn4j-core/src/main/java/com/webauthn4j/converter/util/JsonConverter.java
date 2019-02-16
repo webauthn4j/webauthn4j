@@ -16,12 +16,16 @@
 
 package com.webauthn4j.converter.util;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.WebAuthnModule;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,8 +40,18 @@ public class JsonConverter {
 
     private final ObjectMapper jsonMapper;
 
-    public JsonConverter(ObjectMapper jsonMapper) {
-        this.jsonMapper = jsonMapper;
+    public JsonConverter(ObjectCodec objectCodec) {
+        jsonMapper = new ObjectMapper(new JsonFactory(objectCodec));
+        jsonMapper.registerModule(new WebAuthnModule());
+        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    public JsonConverter() {
+        jsonMapper = new ObjectMapper(new JsonFactory());
+        jsonMapper.registerModule(new WebAuthnModule());
+        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @SuppressWarnings("unchecked")

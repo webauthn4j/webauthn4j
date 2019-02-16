@@ -16,8 +16,7 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestUtil;
@@ -29,13 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationStatementDeserializerTest {
 
-    private ObjectMapper jsonMapper = new Registry().getJsonMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void test() throws IOException {
+    public void test() {
         AttestationStatement source = TestUtil.createFIDOU2FAttestationStatement();
-        String str = jsonMapper.writeValueAsString(source);
-        AttestationStatement obj = jsonMapper.readValue(str, AttestationStatement.class);
+        String str = jsonConverter.writeValueAsString(source);
+        AttestationStatement obj = jsonConverter.readValue(str, AttestationStatement.class);
 
         assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class);
         assertThat(obj).isEqualTo(source);

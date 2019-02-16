@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
@@ -40,18 +39,18 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnModule extends SimpleModule {
 
-    public WebAuthnModule(Registry registry) {
+    public WebAuthnModule() {
         super("WebAuthnModule");
 
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(registry));
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(registry));
+        this.addDeserializer(JWS.class, new JWSDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -59,7 +58,7 @@ public class WebAuthnModule extends SimpleModule {
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(registry));
+        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer());
         this.addSerializer(JWS.class, new JWSSerializer());
         this.addSerializer(TPMSAttest.class, new TPMSAttestSerializer());
         this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());

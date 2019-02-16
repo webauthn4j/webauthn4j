@@ -16,8 +16,8 @@
 
 package com.webauthn4j.request;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.registry.Registry;
 import org.assertj.core.api.Java6Assertions;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthenticatorTransportTest {
 
-    Registry registry = new Registry();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void create_test() {
@@ -49,13 +49,13 @@ public class AuthenticatorTransportTest {
 
     @Test
     public void fromString_test() throws IOException {
-        TestDTO dto = registry.getJsonMapper().readValue("{\"transport\":\"usb\"}", TestDTO.class);
+        TestDTO dto = objectMapper.readValue("{\"transport\":\"usb\"}", TestDTO.class);
         Java6Assertions.assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test(expected = InvalidFormatException.class)
     public void fromString_test_with_invalid_value() throws IOException {
-        registry.getJsonMapper().readValue("{\"transport\":\"invalid\"}", TestDTO.class);
+        objectMapper.readValue("{\"transport\":\"invalid\"}", TestDTO.class);
     }
 
 

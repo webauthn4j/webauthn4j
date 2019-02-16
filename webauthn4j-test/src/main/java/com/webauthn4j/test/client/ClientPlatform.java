@@ -16,9 +16,9 @@
 
 package com.webauthn4j.test.client;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
@@ -47,9 +47,9 @@ import java.util.Collections;
 @WIP
 public class ClientPlatform {
 
-    private Registry registry = new Registry();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectMapper);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
 
     private Origin origin;
     //TODO: support multiple authenticators

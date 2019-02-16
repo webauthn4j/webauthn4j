@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CertPathSerializerTest {
 
-    private ObjectMapper cborMapper = new Registry().getCborMapper();
+    private CborConverter cborMapper = new CborConverter();
 
     @Test
     public void test() throws CertificateException, IOException {

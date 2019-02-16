@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.registry.Registry;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
@@ -30,7 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CollectedClientDataConverterTest {
 
-    private CollectedClientDataConverter target = new CollectedClientDataConverter(new Registry());
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private CollectedClientDataConverter target = new CollectedClientDataConverter(objectMapper);
 
     @Test
     public void convert_deserialization_test() {

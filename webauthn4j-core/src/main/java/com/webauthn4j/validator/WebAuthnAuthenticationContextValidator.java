@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
@@ -48,8 +48,6 @@ public class WebAuthnAuthenticationContextValidator {
     // ================================================================================================
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final Registry registry;
-
     private final AuthenticatorDataConverter authenticatorDataConverter;
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
@@ -67,14 +65,13 @@ public class WebAuthnAuthenticationContextValidator {
     // ========================================================================================================
 
     public WebAuthnAuthenticationContextValidator() {
-        this(new Registry());
+        this(new ObjectMapper());
     }
 
-    public WebAuthnAuthenticationContextValidator(Registry registry) {
-        this.registry = registry;
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(registry);
-        this.collectedClientDataConverter = new CollectedClientDataConverter(registry);
-        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
+    public WebAuthnAuthenticationContextValidator(ObjectMapper objectMapper) {
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
     }
 
     // ~ Methods
