@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
+public class MetadataItemImpl implements MetadataItem {
+
+    private MetadataStatement metadataStatement;
+
+    public MetadataItemImpl(MetadataStatement metadataStatement) {
+        this.metadataStatement = metadataStatement;
+    }
+
+    @Override
+    public MetadataStatement getMetadataStatement() {
+        return metadataStatement;
     }
 }

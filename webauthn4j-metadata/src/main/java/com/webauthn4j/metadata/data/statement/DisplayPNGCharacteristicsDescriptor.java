@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data.statement;
 
-rootProject.name = 'webauthn4j'
+import java.math.BigInteger;
+import java.util.List;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
-    }
+/**
+ * Created by ynojima on 2017/09/08.
+ */
+public class DisplayPNGCharacteristicsDescriptor {
+
+
+    private BigInteger width;
+    private BigInteger height;
+    private Short bitDepth;
+    private Short colorType;
+    private Short compression;
+    private Short filter;
+    private Short interlace;
+    private List<RGBPalletteEntry> plte;
+
+
 }

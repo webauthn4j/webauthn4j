@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data.toc;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.util.WIP;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
-    }
+import java.io.Serializable;
+import java.math.BigInteger;
+
+@WIP
+public class BiometricStatusReport implements Serializable {
+    private Integer certLevel;
+    private BigInteger modality;
+    private String effectiveData;
+    private String certificationDescriptor;
+    private String certificateNumber;
+    private String certificationPolicyVersion;
+    private String certificationRequirementsVersion;
 }

@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.metadata.data.MetadataItem;
+import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
-    }
+import java.time.LocalDate;
+import java.util.List;
+
+public interface FidoMdsMetadataItem extends MetadataItem {
+
+    String getAaid();
+
+    AAGUID getAaguid();
+
+    List<String> getAttestationCertificateKeyIdentifiers();
+
+    String getHash();
+
+    List<StatusReport> getStatusReports();
+
+    LocalDate getTimeOfLastStatusChange();
+
 }

@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.validator;
 
-rootProject.name = 'webauthn4j'
+import com.webauthn4j.metadata.MetadataItemListCertPathTrustworthinessValidator;
+import com.webauthn4j.metadata.data.MetadataItem;
+import org.junit.Test;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
+/**
+ * Created by ynojima on 2017/09/24.
+ */
+public class MetadataItemCertPathTrustworthinessValidatorTest {
+
+    public MetadataItemListCertPathTrustworthinessValidator<MetadataItem> target = new MetadataItemListCertPathTrustworthinessValidator<>(null);
+
+    @Test
+    public void test() {
     }
+
+
 }
