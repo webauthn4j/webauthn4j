@@ -42,10 +42,11 @@ WebAuthn4Jはいくつか `CertPathTrustworthinessValidator` インタフェー�
 FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメタデータを配信するサービスを提供しています。
 このサービスを利用することにより、登録しようとしている認証デバイスで、セキュリティ上の問題が報告されていないか
 チェックすることが可能です。FIDO Metadata Serviceを用いて構成証明ステートメントの信頼性の検証を行う場合、
-`CertPathTrustworthinessValidator` の実装として `MetadataItemListCertPathTrustworthinessValidator` を使用して下さい。
-`MetadataItemListCertPathTrustworthinessValidator` は `MetadataItemListResolver` インタフェースを通じて認証デバイスの
-AAGUIDに対応する `MetadataItem` リストを解決しますので、 `MetadataItemListResolverImpl` と
-`FidoMdsMetadataItemListProvider` を組み合わせて使うことで、FIDO Metadata Serviceによる信頼性の検証を行うことが可能です。
+`CertPathTrustworthinessValidator` の実装として `webauthn4j-metadata` モジュールの
+`MetadataItemsCertPathTrustworthinessValidator` を使用して下さい。`MetadataItemsCertPathTrustworthinessValidator` は
+`MetadataItemsResolver` インタフェースを通じて認証デバイスのAAGUIDに対応する `MetadataItem` リストを解決しますので、
+`MetadataItemsResolverImpl` と `FidoMdsMetadataItemsProvider` を組み合わせて使うことで、FIDO Metadata Serviceによる
+信頼性の検証を行うことが可能です。
 
 === 認証デバイスの表現
 
