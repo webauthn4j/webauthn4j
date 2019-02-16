@@ -29,8 +29,7 @@ import java.util.stream.Collectors;
 
 public class AggregatingMetadataItemsProvider<T extends MetadataItem> implements MetadataItemsProvider<T> {
 
-    transient Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);
-
+    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);
 
     private List<MetadataItemsProvider<T>> metadataItemsProviders;
 
