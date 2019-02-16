@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AttestationObjectConverterTest {
 
     private Registry registry = new Registry();
-    private AttestationObjectConverter target = new AttestationObjectConverter(registry);
+    private AttestationObjectConverter target = new AttestationObjectConverter(registry.getJsonMapper());
 
     @Test
     public void convert_deserialization_test() {

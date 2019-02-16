@@ -35,8 +35,8 @@ public class WebAuthnRegistrationContextTest {
 
     @Test
     public void test() {
-        byte[] collectedClientData = new CollectedClientDataConverter(registry).convertToBytes(createClientData(ClientDataType.GET));
-        byte[] authenticatorData = new AttestationObjectConverter(registry).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
+        byte[] collectedClientData = new CollectedClientDataConverter(registry.getJsonMapper()).convertToBytes(createClientData(ClientDataType.GET));
+        byte[] authenticatorData = new AttestationObjectConverter(registry.getJsonMapper()).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
 
         ServerProperty serverProperty = mock(ServerProperty.class);
 

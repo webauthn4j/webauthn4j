@@ -63,7 +63,7 @@ public class WebAuthnModelAuthenticator {
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private boolean countUpEnabled = true;
 
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(new Registry()); // TODO: inject registry from constructor
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(new Registry().getJsonMapper()); // TODO: inject registry from constructor
 
     public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;

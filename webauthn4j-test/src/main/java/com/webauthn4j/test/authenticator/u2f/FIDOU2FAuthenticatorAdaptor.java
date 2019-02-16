@@ -51,8 +51,8 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     private Registry registry = new Registry();
 
     private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(registry);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry.getJsonMapper());
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(registry.getJsonMapper());
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

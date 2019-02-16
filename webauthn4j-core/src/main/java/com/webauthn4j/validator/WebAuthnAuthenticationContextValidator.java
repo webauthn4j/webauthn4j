@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator;
 
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
@@ -48,8 +50,6 @@ public class WebAuthnAuthenticationContextValidator {
     // ================================================================================================
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final Registry registry;
-
     private final AuthenticatorDataConverter authenticatorDataConverter;
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
@@ -67,14 +67,13 @@ public class WebAuthnAuthenticationContextValidator {
     // ========================================================================================================
 
     public WebAuthnAuthenticationContextValidator() {
-        this(new Registry());
+        this(new ObjectMapper());
     }
 
-    public WebAuthnAuthenticationContextValidator(Registry registry) {
-        this.registry = registry;
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(registry);
-        this.collectedClientDataConverter = new CollectedClientDataConverter(registry);
-        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
+    public WebAuthnAuthenticationContextValidator(ObjectCodec objectCodec) {
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectCodec);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectCodec);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectCodec);
     }
 
     // ~ Methods

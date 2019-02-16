@@ -131,9 +131,9 @@ public class WebAuthnRegistrationContextValidator {
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
 
         this.registry = registry;
-        collectedClientDataConverter = new CollectedClientDataConverter(registry);
-        attestationObjectConverter = new AttestationObjectConverter(registry);
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry);
+        collectedClientDataConverter = new CollectedClientDataConverter(registry.getJsonMapper());
+        attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry.getJsonMapper());
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,

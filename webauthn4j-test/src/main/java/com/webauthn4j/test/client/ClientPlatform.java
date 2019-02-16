@@ -48,8 +48,8 @@ import java.util.Collections;
 public class ClientPlatform {
 
     private Registry registry = new Registry();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry);
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(registry.getJsonMapper());
 
     private Origin origin;
     //TODO: support multiple authenticators

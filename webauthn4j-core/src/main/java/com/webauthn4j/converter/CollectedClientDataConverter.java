@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.client.CollectedClientData;
@@ -35,8 +36,8 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public CollectedClientDataConverter(Registry registry) {
-        jsonConverter = new JsonConverter(registry.getJsonMapper());
+    public CollectedClientDataConverter(ObjectCodec objectCodec) {
+        jsonConverter = new JsonConverter(objectCodec);
     }
 
     //~ Methods

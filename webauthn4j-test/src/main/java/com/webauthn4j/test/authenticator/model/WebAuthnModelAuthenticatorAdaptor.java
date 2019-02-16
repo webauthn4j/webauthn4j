@@ -33,7 +33,7 @@ import com.webauthn4j.util.exception.NotImplementedException;
 public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     private WebAuthnModelAuthenticator webAuthnModelAuthenticator = new WebAuthnModelAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(new Registry());
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(new Registry().getJsonMapper());
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {

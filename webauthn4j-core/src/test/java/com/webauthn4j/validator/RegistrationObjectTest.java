@@ -36,11 +36,11 @@ public class RegistrationObjectTest {
     public void test() {
         Registry registry = new Registry();
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
-        byte[] clientDataBytes = new CollectedClientDataConverter(registry).convertToBytes(clientData);
+        byte[] clientDataBytes = new CollectedClientDataConverter(registry.getJsonMapper()).convertToBytes(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = new AttestationObjectConverter(registry).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(registry.getJsonMapper()).convertToBytes(attestationObject);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(registry).convert(authenticatorData);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(registry.getJsonMapper()).convert(authenticatorData);
         ServerProperty serverProperty = TestUtil.createServerProperty();
         RegistrationObject registrationObject = new RegistrationObject(
                 clientData,

@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 
 import java.io.IOException;
@@ -30,11 +29,8 @@ import java.io.IOException;
  */
 public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
 
-    private final transient AuthenticatorDataConverter authenticatorDataConverter;
-
-    public AuthenticatorDataSerializer(Registry registry) {
+    public AuthenticatorDataSerializer() {
         super(AuthenticatorData.class);
-        authenticatorDataConverter = new AuthenticatorDataConverter(registry);
     }
 
     /**
@@ -42,7 +38,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      */
     @Override
     public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeBinary(authenticatorDataConverter.convert(value));
+        gen.writeBinary(new AuthenticatorDataConverter(gen.getCodec()).convert(value));
     }
 
 }

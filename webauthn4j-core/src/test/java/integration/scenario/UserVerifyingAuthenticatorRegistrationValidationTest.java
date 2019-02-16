@@ -74,7 +74,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     );
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(new Registry());
+            = new AuthenticationExtensionsClientOutputsConverter(new Registry().getJsonMapper());
 
     @Test
     public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {

@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CollectedClientDataConverterTest {
 
-    private CollectedClientDataConverter target = new CollectedClientDataConverter(new Registry());
+    private CollectedClientDataConverter target = new CollectedClientDataConverter(new Registry().getJsonMapper());
 
     @Test
     public void convert_deserialization_test() {

@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AuthenticationExtensionsClientOutputsConverterTest {
 
     private Registry registry = new Registry();
-    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(registry);
+    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(registry.getJsonMapper());
 
     @Test
     public void convert_null_test(){

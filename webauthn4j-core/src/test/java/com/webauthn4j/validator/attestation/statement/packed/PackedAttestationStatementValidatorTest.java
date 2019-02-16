@@ -133,13 +133,13 @@ public class PackedAttestationStatementValidatorTest {
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {
 
-        byte[] attestationObjectBytes = new AttestationObjectConverter(registry).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(registry.getJsonMapper()).convertToBytes(attestationObject);
 
         Origin origin = new Origin(originUrl);
         Challenge challenge = (Challenge) () -> Base64UrlUtil.decode(challengeString);
 
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
-        CollectedClientData collectedClientData = new CollectedClientDataConverter(registry).convert(clientDataBytes);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
+        CollectedClientData collectedClientData = new CollectedClientDataConverter(registry.getJsonMapper()).convert(clientDataBytes);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
@@ -185,7 +185,7 @@ public class PackedAttestationStatementValidatorTest {
 
 
     private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] authenticatorData = new AuthenticatorDataConverter(registry).convert(data);
+        byte[] authenticatorData = new AuthenticatorDataConverter(registry.getJsonMapper()).convert(data);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientDataJSON);
 
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

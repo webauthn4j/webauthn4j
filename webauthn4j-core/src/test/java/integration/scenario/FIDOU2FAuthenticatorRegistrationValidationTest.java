@@ -70,7 +70,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     );
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(new Registry());
+            = new AuthenticationExtensionsClientOutputsConverter(new Registry().getJsonMapper());
 
     @Test
     public void validate_test() {
@@ -341,7 +341,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
-        byte[] maliciousClientDataBytes = new CollectedClientDataConverter(registry).convertToBytes(maliciousClientData);
+        byte[] maliciousClientDataBytes = new CollectedClientDataConverter(registry.getJsonMapper()).convertToBytes(maliciousClientData);
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty, false);
         target.validate(registrationContext);

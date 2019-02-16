@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.AttestationObject;
@@ -34,8 +35,8 @@ public class AttestationObjectConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AttestationObjectConverter(Registry registry) {
-        cborConverter = new CborConverter(registry.getCborMapper());
+    public AttestationObjectConverter(ObjectCodec objectCodec) {
+        cborConverter = new CborConverter(objectCodec);
     }
 
     //~ Methods

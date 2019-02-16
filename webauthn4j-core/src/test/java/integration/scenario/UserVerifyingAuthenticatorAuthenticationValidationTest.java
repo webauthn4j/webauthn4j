@@ -57,7 +57,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(new Registry());
+            = new AuthenticationExtensionsClientOutputsConverter(new Registry().getJsonMapper());
 
     @Test
     public void validate_test() {
@@ -415,7 +415,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

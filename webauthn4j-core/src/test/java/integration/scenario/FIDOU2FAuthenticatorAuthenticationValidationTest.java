@@ -57,7 +57,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(new Registry());
+            = new AuthenticationExtensionsClientOutputsConverter(new Registry().getJsonMapper());
 
     @Test
     public void validate_test() {
@@ -470,7 +470,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 
