@@ -17,18 +17,20 @@
 package com.webauthn4j.response.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AbstractImmutableMap;
 
+import java.util.Collections;
 import java.util.Map;
 
-public class AuthenticationExtensionsClientOutputs extends ExtensionsClientOutputs<ExtensionClientOutput> {
+public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractImmutableMap<String, V> {
 
     @JsonCreator
-    public AuthenticationExtensionsClientOutputs(Map<String, ExtensionClientOutput> map) {
+    public AuthenticationExtensionsClientOutputs(Map<String, V> map) {
         super(map);
     }
 
-    public AuthenticationExtensionsClientOutputs() {
-        super();
+    public AuthenticationExtensionsClientOutputs(){
+        this(Collections.emptyMap());
     }
 
 }

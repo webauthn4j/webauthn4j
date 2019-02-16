@@ -14,31 +14,35 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.response.extension.client;
+package com.webauthn4j.util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.webauthn4j.util.AssertUtil;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class ExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractMap<String, V> implements Serializable {
+public abstract class AbstractImmutableMap<K, V> extends AbstractMap<K, V> implements Serializable {
 
-    private final Map<String, V> map;
+    private final HashMap<K, V> map;
+    private transient Set<Entry<K, V>> cachedEntrySet;
 
+    @SuppressWarnings("unchecked")
     @JsonCreator
-    public ExtensionsClientOutputs(Map<String, V> map) {
+    public AbstractImmutableMap(Map<K, V> map) {
         AssertUtil.notNull(map, "map must not be null");
-        this.map = Collections.unmodifiableMap(map);
+        this.map = new HashMap<>(map);
     }
 
-    public ExtensionsClientOutputs() {
-        this.map = Collections.emptyMap();
+    public AbstractImmutableMap() {
+        this(Collections.emptyMap());
     }
 
     @Override
-    public Set<Entry<String, V>> entrySet() {
-        return map.entrySet();
+    public Set<Entry<K, V>> entrySet() {
+        if(this.cachedEntrySet == null){
+            this.cachedEntrySet = Collections.unmodifiableMap(map).entrySet();
+        }
+        return this.cachedEntrySet;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class ExtensionsClientOutputs<V extends ExtensionClientOutput> extends Ab
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        ExtensionsClientOutputs<?> that = (ExtensionsClientOutputs<?>) o;
+        AbstractImmutableMap<?, ?> that = (AbstractImmutableMap<?, ?>) o;
         return Objects.equals(map, that.map);
     }
 

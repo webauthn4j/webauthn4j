@@ -17,17 +17,21 @@
 package com.webauthn4j.response.extension.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AbstractImmutableMap;
 
+import java.util.Collections;
 import java.util.Map;
 
-public class AuthenticationExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutput>
-        extends ExtensionsAuthenticatorOutputs<V> {
+public class AuthenticationExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutput> extends AbstractImmutableMap<String, V> {
 
+    @SuppressWarnings("unchecked")
     @JsonCreator
     public AuthenticationExtensionsAuthenticatorOutputs(Map<String, V> map) {
         super(map);
     }
 
     public AuthenticationExtensionsAuthenticatorOutputs() {
+        this(Collections.emptyMap());
     }
+
 }

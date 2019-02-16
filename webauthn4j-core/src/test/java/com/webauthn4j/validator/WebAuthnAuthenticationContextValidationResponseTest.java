@@ -20,6 +20,7 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ public class WebAuthnAuthenticationContextValidationResponseTest {
     public void equals_hashCode_test() {
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
-        AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         WebAuthnAuthenticationContextValidationResponse instanceA =
                 new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, authenticationExtensionsClientOutputs);
         WebAuthnAuthenticationContextValidationResponse instanceB =

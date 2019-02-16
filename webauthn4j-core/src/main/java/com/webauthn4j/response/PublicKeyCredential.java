@@ -18,6 +18,7 @@ package com.webauthn4j.response;
 
 import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 
@@ -39,12 +40,12 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
     private String id;
     private byte[] rawId;
     private T authenticatorResponse;
-    private AuthenticationExtensionsClientOutputs clientExtensionResults;
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensionResults;
 
     // ~ Constructor
     // ========================================================================================================
 
-    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse, AuthenticationExtensionsClientOutputs clientExtensionResults) {
+    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse, AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.authenticatorResponse = authenticatorResponse;
@@ -67,7 +68,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
         return authenticatorResponse;
     }
 
-    public AuthenticationExtensionsClientOutputs getClientExtensionResults() {
+    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensionResults() {
         return clientExtensionResults;
     }
 

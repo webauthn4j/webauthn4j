@@ -20,6 +20,7 @@ import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ public class WebAuthnRegistrationContextValidationResponseTest {
     public void equals_hashCode_test() {
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         WebAuthnRegistrationContextValidationResponse instanceA =
                 new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);
         WebAuthnRegistrationContextValidationResponse instanceB =

@@ -113,7 +113,7 @@ public class ClientPlatform {
 
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        AuthenticationExtensionsClientOutputs clientExtensions = processRegistrationExtensions(publicKeyCredentialCreationOptions.getExtensions());
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = processRegistrationExtensions(publicKeyCredentialCreationOptions.getExtensions());
         return new PublicKeyCredential<>(
                 credentialId,
                 new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes),
@@ -121,7 +121,7 @@ public class ClientPlatform {
         );
     }
 
-    private AuthenticationExtensionsClientOutputs processRegistrationExtensions(AuthenticationExtensionsClientInputs extensions) {
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs extensions) {
 
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
@@ -138,16 +138,16 @@ public class ClientPlatform {
                     break;
             }
         });
-        return new AuthenticationExtensionsClientOutputs(map);
+        return new AuthenticationExtensionsClientOutputs<>(map);
     }
 
-    private AuthenticationExtensionsClientOutputs processAuthenticationExtensions(AuthenticationExtensionsClientInputs extensions) {
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processAuthenticationExtensions(AuthenticationExtensionsClientInputs extensions) {
 
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
         }
 
-        AuthenticationExtensionsClientOutputs map = new AuthenticationExtensionsClientOutputs();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> map = new AuthenticationExtensionsClientOutputs<>();
         extensions.forEach((key, value) -> {
             switch (key) {
                 //TODO
@@ -175,7 +175,7 @@ public class ClientPlatform {
 
             byte[] credentialId = credentialRequestResponse.getCredentialId();
 
-            AuthenticationExtensionsClientOutputs clientExtensions = processAuthenticationExtensions(publicKeyCredentialRequestOptions.getExtensions());
+            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = processAuthenticationExtensions(publicKeyCredentialRequestOptions.getExtensions());
 
             return new PublicKeyCredential<>(
                     credentialId,

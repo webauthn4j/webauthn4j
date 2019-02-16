@@ -30,6 +30,7 @@ import com.webauthn4j.response.extension.ExtensionOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -167,11 +168,14 @@ class BeanAssertUtil {
         validate(credentialPublicKey);
     }
 
-    public static void validateAuthenticationExtensionsClientOutputs(AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs) {
+    public static void validateAuthenticationExtensionsClientOutputs(
+            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs) {
         if (authenticationExtensionsClientOutputs == null) {
             return;
         }
-        authenticationExtensionsClientOutputs.forEach(BeanAssertUtil::validate);
+        for (Map.Entry<String, ExtensionClientOutput> set: authenticationExtensionsClientOutputs.entrySet()){
+            validate(set.getKey(), set.getValue());
+        }
     }
 
     public static void validateAuthenticatorExtensionsOutputs(

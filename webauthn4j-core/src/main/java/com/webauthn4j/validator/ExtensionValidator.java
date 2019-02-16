@@ -17,9 +17,9 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
-import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 
 import java.util.Collections;
@@ -33,8 +33,8 @@ class ExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(ExtensionsClientOutputs<ExtensionClientOutput> extensionsClientOutputs,
-                         ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensionsAuthenticatorOutputs,
+    public void validate(AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs,
+                         AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs,
                          List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
@@ -43,15 +43,15 @@ class ExtensionValidator {
             expected = expectedExtensionIdentifiers;
         }
 
-        if (extensionsClientOutputs != null) {
-            extensionsClientOutputs.keySet().forEach(identifier -> {
+        if (authenticationExtensionsClientOutputs != null) {
+            authenticationExtensionsClientOutputs.keySet().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
                 }
             });
         }
-        if (extensionsAuthenticatorOutputs != null) {
-            extensionsAuthenticatorOutputs.keySet().forEach(identifier -> {
+        if (authenticationExtensionsAuthenticatorOutputs != null) {
+            authenticationExtensionsAuthenticatorOutputs.keySet().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier));
                 }

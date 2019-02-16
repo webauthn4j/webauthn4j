@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 
 import java.util.Objects;
 
@@ -32,12 +33,12 @@ public class WebAuthnRegistrationContextValidationResponse {
 
     private CollectedClientData collectedClientData;
     private AttestationObject attestationObject;
-    private AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs;
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs;
 
     public WebAuthnRegistrationContextValidationResponse(
             CollectedClientData collectedClientData,
             AttestationObject attestationObject,
-            AuthenticationExtensionsClientOutputs registrationExtensionsClientOutputs) {
+            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs) {
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
         this.registrationExtensionsClientOutputs = registrationExtensionsClientOutputs;
@@ -51,7 +52,7 @@ public class WebAuthnRegistrationContextValidationResponse {
         return attestationObject;
     }
 
-    public AuthenticationExtensionsClientOutputs getRegistrationExtensionsClientOutputs() {
+    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getRegistrationExtensionsClientOutputs() {
         return registrationExtensionsClientOutputs;
     }
 
