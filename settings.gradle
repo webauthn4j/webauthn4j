@@ -16,7 +16,6 @@
 
 include "webauthn4j-core"
 include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
 include 'webauthn4j-test'
 include 'webauthn4j-util'
 
