@@ -47,6 +47,13 @@ public class JsonConverter {
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    public JsonConverter() {
+        jsonMapper = new ObjectMapper(new JsonFactory());
+        jsonMapper.registerModule(new WebAuthnModule());
+        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T readValue(String src, Class valueType) {
         try {

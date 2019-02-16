@@ -1,7 +1,8 @@
 package com.webauthn4j.request;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class AttestationConveyancePreferenceTest {
 
-    Registry registry = new Registry();
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     public void create_test() {
@@ -38,14 +39,14 @@ public class AttestationConveyancePreferenceTest {
     }
 
     @Test
-    public void fromString_test() throws IOException {
-        TestDTO dto = registry.getJsonMapper().readValue("{\"preference\":\"none\"}", TestDTO.class);
+    public void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"preference\":\"none\"}", TestDTO.class);
         assertThat(dto.preference).isEqualTo(AttestationConveyancePreference.NONE);
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void fromString_test_with_invalid_value() throws IOException {
-        registry.getJsonMapper().readValue("{\"preference\":\"invalid\"}", TestDTO.class);
+    @Test(expected = DataConversionException.class)
+    public void fromString_test_with_invalid_value() {
+        jsonConverter.readValue("{\"preference\":\"invalid\"}", TestDTO.class);
     }
 
 

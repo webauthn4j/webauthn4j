@@ -16,12 +16,10 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
@@ -32,26 +30,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class X509CertificateDeserializerTest {
 
     @Test
-    public void deserialize_test() throws IOException, CertificateEncodingException {
-        ObjectMapper objectMapper = new Registry().getCborMapper();
+    public void deserialize_test() throws CertificateEncodingException {
+        CborConverter cborConverter = new CborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", TestUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
-        byte[] input = objectMapper.writeValueAsBytes(source);
+        byte[] input = cborConverter.writeValueAsBytes(source);
 
-        X509CertificateDeserializerTestData result = objectMapper.readValue(input, X509CertificateDeserializerTestData.class);
+        X509CertificateDeserializerTestData result = cborConverter.readValue(input, X509CertificateDeserializerTestData.class);
         assertThat(result.getCertificate()).isInstanceOf(X509Certificate.class);
     }
 
     @Test
-    public void deserialize_empty_byte_array_test() throws IOException {
-        ObjectMapper objectMapper = new Registry().getCborMapper();
+    public void deserialize_empty_byte_array_test() {
+        CborConverter cborConverter = new CborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", new byte[0]);
-        byte[] input = objectMapper.writeValueAsBytes(source);
+        byte[] input = cborConverter.writeValueAsBytes(source);
 
-        X509CertificateDeserializerTestData result = objectMapper.readValue(input, X509CertificateDeserializerTestData.class);
+        X509CertificateDeserializerTestData result = cborConverter.readValue(input, X509CertificateDeserializerTestData.class);
         assertThat(result.getCertificate()).isNull();
     }
 }

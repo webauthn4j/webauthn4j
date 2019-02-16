@@ -17,10 +17,10 @@
 package com.webauthn4j.validator;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -60,8 +60,6 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private final Registry registry;
-
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AttestationObjectConverter attestationObjectConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
@@ -87,7 +85,7 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                new Registry());
+                new ObjectMapper());
     }
 
     public WebAuthnRegistrationContextValidator(
@@ -100,21 +98,21 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
-                new Registry());
+                new ObjectMapper());
     }
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-            Registry registry
+            ObjectMapper objectMapper
     ) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                registry
+                objectMapper
         );
     }
 
@@ -123,17 +121,16 @@ public class WebAuthnRegistrationContextValidator {
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            Registry registry
+            ObjectMapper objectMapper
     ) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
 
-        this.registry = registry;
-        collectedClientDataConverter = new CollectedClientDataConverter(registry.getJsonMapper());
-        attestationObjectConverter = new AttestationObjectConverter(registry.getJsonMapper());
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(registry.getJsonMapper());
+        collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
+        attestationObjectConverter = new AttestationObjectConverter(objectMapper);
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,
@@ -147,10 +144,10 @@ public class WebAuthnRegistrationContextValidator {
     // ========================================================================================================
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new Registry());
+        return createNonStrictRegistrationContextValidator(new ObjectMapper());
     }
 
-    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(Registry registry) {
+    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(ObjectMapper objectMapper) {
         return new WebAuthnRegistrationContextValidator(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
@@ -162,7 +159,7 @@ public class WebAuthnRegistrationContextValidator {
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
-                registry
+                objectMapper
         );
     }
 

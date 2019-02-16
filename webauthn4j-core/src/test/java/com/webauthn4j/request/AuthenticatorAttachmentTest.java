@@ -17,8 +17,8 @@
 package com.webauthn4j.request;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.registry.Registry;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("ALL")
 public class AuthenticatorAttachmentTest {
 
-    private Registry registry = new Registry();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void create_test() throws InvalidFormatException {
@@ -49,13 +49,13 @@ public class AuthenticatorAttachmentTest {
 
     @Test
     public void fromJson_test() throws IOException {
-        TestDTO dto = registry.getJsonMapper().readValue("{\"attachment\": \"platform\"}", TestDTO.class);
+        TestDTO dto = objectMapper.readValue("{\"attachment\": \"platform\"}", TestDTO.class);
         assertThat(dto.attachment).isEqualTo(AuthenticatorAttachment.PLATFORM);
     }
 
     @Test(expected = InvalidFormatException.class)
     public void fromJson_test_with_invalid() throws IOException {
-        TestDTO dto = registry.getJsonMapper().readValue("{\"attachment\": \"invalid\"}", TestDTO.class);
+        TestDTO dto = objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class);
     }
 
     public static class TestDTO{

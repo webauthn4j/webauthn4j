@@ -17,8 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.registry.Registry;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.extension.Coordinates;
 import com.webauthn4j.response.extension.client.*;
 import org.junit.Test;
@@ -33,10 +32,10 @@ public class ExtensionClientOutputDeserializerTest {
 
     @Test
     public void deserialize_test_with_JSON_data() throws IOException {
-        ObjectMapper objectMapper = new Registry().getJsonMapper();
+        JsonConverter jsonConverter = new JsonConverter();
 
         Map<String, ExtensionClientOutput> extensionOutputs =
-                objectMapper.readValue(
+                jsonConverter.readValue(
                         "{ " +
                                 "\"appid\": true, " +
                                 "\"txAuthSimple\": \"authorization message\", " +

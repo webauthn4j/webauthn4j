@@ -16,13 +16,11 @@
 
 package com.webauthn4j.validator;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
@@ -70,10 +68,10 @@ public class WebAuthnAuthenticationContextValidator {
         this(new ObjectMapper());
     }
 
-    public WebAuthnAuthenticationContextValidator(ObjectCodec objectCodec) {
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectCodec);
-        this.collectedClientDataConverter = new CollectedClientDataConverter(objectCodec);
-        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectCodec);
+    public WebAuthnAuthenticationContextValidator(ObjectMapper objectMapper) {
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
     }
 
     // ~ Methods

@@ -49,6 +49,13 @@ public class CborConverter {
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
+    public CborConverter(){
+        this.cborMapper = new ObjectMapper(new CBORFactory());
+        cborMapper.registerModule(new WebAuthnModule());
+        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> T readValue(byte[] src, Class valueType) {
         try {

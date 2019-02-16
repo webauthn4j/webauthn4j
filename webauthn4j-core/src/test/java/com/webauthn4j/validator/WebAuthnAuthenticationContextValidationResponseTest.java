@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
@@ -30,7 +29,6 @@ public class WebAuthnAuthenticationContextValidationResponseTest {
 
     @Test
     public void equals_hashCode_test() {
-        Registry registry = new Registry();
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
         AuthenticationExtensionsClientOutputs authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs();

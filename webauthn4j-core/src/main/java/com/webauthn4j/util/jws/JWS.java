@@ -18,7 +18,6 @@ package com.webauthn4j.util.jws;
 
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.registry.Registry;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 import org.slf4j.Logger;

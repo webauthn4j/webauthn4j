@@ -16,7 +16,8 @@
 
 package com.webauthn4j.extras.fido.metadata;
 
-import com.webauthn4j.registry.Registry;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
 import java.io.IOException;
@@ -31,12 +32,12 @@ import java.util.stream.Collectors;
 
 public class JsonFileMetadataItemListProvider implements MetadataItemListProvider<MetadataItem> {
 
-    private Registry registry;
+    private JsonConverter jsonConverter;
     private List<Path> paths = Collections.emptyList();
     private Map<AAGUID, List<MetadataItem>> cachedMetadataItems;
 
-    public JsonFileMetadataItemListProvider(Registry registry) {
-        this.registry = registry;
+    public JsonFileMetadataItemListProvider(ObjectMapper objectMapper) {
+        this.jsonConverter = new JsonConverter(objectMapper);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class JsonFileMetadataItemListProvider implements MetadataItemListProvide
 
     MetadataStatement readJsonFile(Path path) {
         try (InputStream inputStream = Files.newInputStream(path)) {
-            return registry.getJsonMapper().readValue(inputStream, MetadataStatement.class);
+            return jsonConverter.readValue(inputStream, MetadataStatement.class);
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to load a metadata statement json file", e);
         }
