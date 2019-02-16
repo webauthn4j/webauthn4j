@@ -29,7 +29,7 @@ public class ExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutp
     @SuppressWarnings("unchecked")
     @JsonCreator
     public ExtensionsAuthenticatorOutputs(Map<String, V> map) {
-        AssertUtil.notNull(map, "elements must not be null");
+        AssertUtil.notNull(map, "map must not be null");
         this.map = Collections.unmodifiableMap(map);
     }
 

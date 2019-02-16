@@ -16,7 +16,43 @@
 
 package com.webauthn4j.response.extension.client;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AssertUtil;
 
-public class ExtensionsClientOutputs<T extends ExtensionClientOutput> extends HashMap<String, T> { //TODO: make immutable
+import java.io.Serializable;
+import java.util.*;
+
+public class ExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractMap<String, V> implements Serializable {
+
+    private final Map<String, V> map;
+
+    @JsonCreator
+    public ExtensionsClientOutputs(Map<String, V> map) {
+        AssertUtil.notNull(map, "map must not be null");
+        this.map = Collections.unmodifiableMap(map);
+    }
+
+    public ExtensionsClientOutputs() {
+        this.map = Collections.emptyMap();
+    }
+
+    @Override
+    public Set<Entry<String, V>> entrySet() {
+        return map.entrySet();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ExtensionsClientOutputs<?> that = (ExtensionsClientOutputs<?>) o;
+        return Objects.equals(map, that.map);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), map);
+    }
 }

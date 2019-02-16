@@ -33,6 +33,7 @@ import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.response.client.*;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClientOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
@@ -43,6 +44,8 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @WIP
 public class ClientPlatform {
@@ -124,7 +127,7 @@ public class ClientPlatform {
             extensions = new AuthenticationExtensionsClientInputs();
         }
 
-        AuthenticationExtensionsClientOutputs map = new AuthenticationExtensionsClientOutputs();
+        Map<String, ExtensionClientOutput> map = new HashMap<>();
         extensions.forEach((key, value) -> {
             switch (key) {
                 case SupportedExtensionsExtensionClientInput.ID:
@@ -135,7 +138,7 @@ public class ClientPlatform {
                     break;
             }
         });
-        return map;
+        return new AuthenticationExtensionsClientOutputs(map);
     }
 
     private AuthenticationExtensionsClientOutputs processAuthenticationExtensions(AuthenticationExtensionsClientInputs extensions) {

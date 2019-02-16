@@ -20,10 +20,7 @@ import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsA
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
-import com.webauthn4j.response.extension.client.ExtensionsClientOutputs;
-import com.webauthn4j.response.extension.client.FIDOAppIDExtensionClientOutput;
-import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClientOutput;
+import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.Test;
 
@@ -45,20 +42,20 @@ public class ExtensionValidatorTest {
 
     @Test
     public void expected_extension_does_exist_test(){
-        ExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new ExtensionsClientOutputs<>();
+        Map<String, ExtensionClientOutput> clientOutputs = new HashMap<>();
         ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new ExtensionsAuthenticatorOutputs<>();
         clientOutputs.put(FIDOAppIDExtensionClientOutput.ID, new FIDOAppIDExtensionClientOutput(true));
         List<String> expectedExtensions = Collections.singletonList(FIDOAppIDExtensionClientOutput.ID);
-        extensionValidator.validate(clientOutputs, authenticatorOutputs, expectedExtensions);
+        extensionValidator.validate(new ExtensionsClientOutputs<>(clientOutputs), authenticatorOutputs, expectedExtensions);
     }
 
     @Test(expected = UnexpectedExtensionException.class)
     public void unexpected_extension_does_exist_test(){
-        ExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new ExtensionsClientOutputs<>();
+        Map<String, ExtensionClientOutput> clientOutputs = new HashMap<>();
         ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new ExtensionsAuthenticatorOutputs<>();
         clientOutputs.put(FIDOAppIDExtensionClientOutput.ID, new FIDOAppIDExtensionClientOutput(true));
         List<String> expectedExtensions = Collections.emptyList();
-        extensionValidator.validate(clientOutputs, authenticatorOutputs, expectedExtensions);
+        extensionValidator.validate(new AuthenticationExtensionsClientOutputs(clientOutputs), authenticatorOutputs, expectedExtensions);
     }
 
     @Test(expected = UnexpectedExtensionException.class)

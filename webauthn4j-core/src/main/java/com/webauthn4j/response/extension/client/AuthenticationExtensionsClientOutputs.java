@@ -16,5 +16,19 @@
 
 package com.webauthn4j.response.extension.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Map;
+
 public class AuthenticationExtensionsClientOutputs extends ExtensionsClientOutputs<ExtensionClientOutput> {
+
+    @JsonCreator
+    public AuthenticationExtensionsClientOutputs(Map<String, ExtensionClientOutput> map) {
+        super(map);
+    }
+
+    public AuthenticationExtensionsClientOutputs() {
+        super();
+    }
+
 }
