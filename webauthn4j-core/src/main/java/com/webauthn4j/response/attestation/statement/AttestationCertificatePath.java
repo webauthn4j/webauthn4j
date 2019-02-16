@@ -16,26 +16,42 @@
 
 package com.webauthn4j.response.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class AttestationCertificatePath extends ArrayList<X509Certificate> { //TODO make immutable
+public class AttestationCertificatePath extends AbstractList<X509Certificate> {
 
+    private X509Certificate[] certificates;
+    private final int size;
+
+    @JsonCreator
     public AttestationCertificatePath(List<X509Certificate> certificates) {
-        super();
-        this.addAll(certificates);
+        AssertUtil.notNull(certificates, "certificates must not be null");
+        this.size = certificates.size();
+        this.certificates = certificates.toArray(new X509Certificate[this.size]);
     }
 
     public AttestationCertificatePath() {
-        super();
+        this(Collections.emptyList());
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public X509Certificate get(int index) {
+        return certificates[index];
     }
 
     public CertPath createCertPath() {
-        return CertificateUtil.generateCertPath(new ArrayList<>(this));
+        return CertificateUtil.generateCertPath(this);
     }
 
     public AttestationCertificate getEndEntityAttestationCertificate() {
@@ -43,5 +59,23 @@ public class AttestationCertificatePath extends ArrayList<X509Certificate> { //T
             throw new IllegalStateException();
         }
         return new AttestationCertificate(this.get(0));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        AttestationCertificatePath that = (AttestationCertificatePath) o;
+        return size == that.size &&
+                Arrays.equals(certificates, that.certificates);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(super.hashCode(), size);
+        result = 31 * result + Arrays.hashCode(certificates);
+        return result;
     }
 }

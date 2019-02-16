@@ -70,11 +70,11 @@ public class CertificateUtil {
         }
     }
 
-    public static Set<TrustAnchor> generateTrustAnchors(List<X509Certificate> certificates) {
+    public static <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(List<C> certificates) {
         return certificates.stream().map(certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
 
-    public static CertPath generateCertPath(List<Certificate> certificates) {
+    public static <C extends Certificate> CertPath generateCertPath(List<C> certificates) {
         try {
             return certificateFactory.generateCertPath(certificates);
         } catch (CertificateException e) {
