@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 
 import java.io.IOException;
 
@@ -32,9 +33,10 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public AuthenticationExtensionsAuthenticatorOutputsEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        AuthenticationExtensionsAuthenticatorOutputs authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, AuthenticationExtensionsAuthenticatorOutputs.class);
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, AuthenticationExtensionsAuthenticatorOutputs.class);
         int length = (int) p.getCurrentLocation().getByteOffset();
         return new AuthenticationExtensionsAuthenticatorOutputsEnvelope(authenticationExtensionsAuthenticatorOutputs, length);
     }

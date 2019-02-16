@@ -20,13 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -72,11 +71,11 @@ public class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        AuthenticationExtensionsAuthenticatorOutputs extensionOutputMap = new AuthenticationExtensionsAuthenticatorOutputs();
+        Map<String, ExtensionAuthenticatorOutput> extensionOutputMap = new HashMap<>();
         List<String> extension = Collections.singletonList("uvm");
         SupportedExtensionsExtensionAuthenticatorOutput extensionOutput = new SupportedExtensionsExtensionAuthenticatorOutput(extension);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, 0, extensionOutputMap);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
 
         //When
         byte[] serialized = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);

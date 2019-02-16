@@ -32,6 +32,7 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
@@ -229,7 +230,7 @@ public class WebAuthnModelAuthenticator {
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs();
         }
-        AuthenticationExtensionsAuthenticatorOutputs processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs();
+        Map<String, ExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
         for (Map.Entry<String, ExtensionClientInput> entry : extensions.entrySet()) {
             String extensionIdentifier = entry.getKey();
             if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
@@ -257,7 +258,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, processedExtensions);
+        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, counter, attestedCredentialData, new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions));
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
@@ -341,7 +342,7 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsAuthenticatorOutputs processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs();
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
         if (!processedExtensions.isEmpty()) {
             flags |= BIT_ED;
         }

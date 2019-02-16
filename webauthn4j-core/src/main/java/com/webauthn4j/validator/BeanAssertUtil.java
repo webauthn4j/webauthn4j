@@ -28,11 +28,14 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.TokenBinding;
 import com.webauthn4j.response.extension.ExtensionOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+
+import java.util.Map;
 
 /**
  * Per field checker utility class
@@ -142,7 +145,7 @@ class BeanAssertUtil {
         if (signCount < 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        AuthenticationExtensionsAuthenticatorOutputs extensions = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions = authenticatorData.getExtensions();
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
@@ -171,11 +174,14 @@ class BeanAssertUtil {
         authenticationExtensionsClientOutputs.forEach(BeanAssertUtil::validate);
     }
 
-    public static void validateAuthenticatorExtensionsOutputs(AuthenticationExtensionsAuthenticatorOutputs authenticatorExtensionOutputs) {
-        if (authenticatorExtensionOutputs == null) {
+    public static void validateAuthenticatorExtensionsOutputs(
+            AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs) {
+        if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
         }
-        authenticatorExtensionOutputs.forEach(BeanAssertUtil::validate);
+        for (Map.Entry<String, ExtensionAuthenticatorOutput> set: authenticationExtensionsAuthenticatorOutputs.entrySet()){
+            validate(set.getKey(), set.getValue());
+        }
     }
 
     public static void validate(String identifier, ExtensionOutput extensionOutput) {

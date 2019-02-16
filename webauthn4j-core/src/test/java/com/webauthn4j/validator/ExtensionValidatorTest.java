@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.ExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
@@ -26,9 +27,7 @@ import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClie
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class ExtensionValidatorTest {
 
@@ -37,11 +36,11 @@ public class ExtensionValidatorTest {
     @Test
     public void expected_extension_does_not_exist_test(){
         ExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new ExtensionsClientOutputs<>();
-        ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new ExtensionsAuthenticatorOutputs<>();
+        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
                 new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Arrays.asList(FIDOAppIDExtensionClientOutput.ID, SupportedExtensionsExtensionAuthenticatorOutput.ID);
-        extensionValidator.validate(clientOutputs, authenticatorOutputs, expectedExtensions);
+        extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), expectedExtensions);
     }
 
     @Test
@@ -65,11 +64,11 @@ public class ExtensionValidatorTest {
     @Test(expected = UnexpectedExtensionException.class)
     public void unexpected_authenticator_extension_does_exist_test(){
         ExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new ExtensionsClientOutputs<>();
-        ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new ExtensionsAuthenticatorOutputs<>();
+        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
                 new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Collections.emptyList();
-        extensionValidator.validate(clientOutputs, authenticatorOutputs, expectedExtensions);
+        extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), expectedExtensions);
     }
 
 

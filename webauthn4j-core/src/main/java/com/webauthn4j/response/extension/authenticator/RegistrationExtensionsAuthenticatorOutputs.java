@@ -16,5 +16,10 @@
 
 package com.webauthn4j.response.extension.authenticator;
 
+import java.util.Map;
+
 public class RegistrationExtensionsAuthenticatorOutputs extends ExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> {
+    public RegistrationExtensionsAuthenticatorOutputs(Map<String, RegistrationExtensionAuthenticatorOutput> map) {
+        super(map);
+    }
 }

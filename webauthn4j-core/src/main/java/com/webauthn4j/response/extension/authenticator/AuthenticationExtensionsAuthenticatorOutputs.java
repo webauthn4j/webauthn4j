@@ -16,6 +16,18 @@
 
 package com.webauthn4j.response.extension.authenticator;
 
-public class AuthenticationExtensionsAuthenticatorOutputs
-        extends ExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> {
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Map;
+
+public class AuthenticationExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutput>
+        extends ExtensionsAuthenticatorOutputs<V> {
+
+    @JsonCreator
+    public AuthenticationExtensionsAuthenticatorOutputs(Map<String, V> map) {
+        super(map);
+    }
+
+    public AuthenticationExtensionsAuthenticatorOutputs() {
+    }
 }

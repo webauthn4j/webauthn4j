@@ -26,6 +26,7 @@ import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -89,7 +90,7 @@ public class AuthenticatorDataConverter {
             long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
             AttestedCredentialData attestationData;
-            AuthenticationExtensionsAuthenticatorOutputs extensions;
+            AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
                 attestationData = convertToAttestedCredentialData(byteBuffer);
             } else {
@@ -98,7 +99,7 @@ public class AuthenticatorDataConverter {
             if (AuthenticatorData.checkFlagED(flags)) {
                 extensions = convertToExtensions(byteBuffer);
             } else {
-                extensions = new AuthenticationExtensionsAuthenticatorOutputs();
+                extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
             }
             if (byteBuffer.hasRemaining()) {
                 throw new DataConversionException("provided data does not have proper byte layout");
@@ -133,9 +134,9 @@ public class AuthenticatorDataConverter {
         return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
     }
 
-    private AuthenticationExtensionsAuthenticatorOutputs convertToExtensions(ByteBuffer byteBuffer) {
+    private AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
-            return new AuthenticationExtensionsAuthenticatorOutputs();
+            return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);

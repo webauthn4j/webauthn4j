@@ -17,6 +17,7 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.ArrayUtil;
 
 import java.io.Serializable;
@@ -33,11 +34,11 @@ public class AuthenticatorData implements Serializable {
     private final byte flags;
     private final long signCount;
     private final AttestedCredentialData attestedCredentialData;
-    private final AuthenticationExtensionsAuthenticatorOutputs extensions;
+    private final AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
                              AttestedCredentialData attestedCredentialData,
-                             AuthenticationExtensionsAuthenticatorOutputs extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -51,11 +52,11 @@ public class AuthenticatorData implements Serializable {
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = attestedCredentialData;
-        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs();
+        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
     }
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             AuthenticationExtensionsAuthenticatorOutputs extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -68,7 +69,7 @@ public class AuthenticatorData implements Serializable {
         this.flags = flags;
         this.signCount = counter;
         this.attestedCredentialData = null;
-        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs();
+        this.extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -121,7 +122,7 @@ public class AuthenticatorData implements Serializable {
         return attestedCredentialData;
     }
 
-    public AuthenticationExtensionsAuthenticatorOutputs getExtensions() {
+    public AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> getExtensions() {
         return extensions;
     }
 
