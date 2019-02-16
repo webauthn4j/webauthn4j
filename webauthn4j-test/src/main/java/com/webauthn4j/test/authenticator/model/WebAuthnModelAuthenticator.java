@@ -226,9 +226,9 @@ public class WebAuthnModelAuthenticator {
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsClientInputs extensions = makeCredentialRequest.getExtensions();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
         if (extensions == null) {
-            extensions = new AuthenticationExtensionsClientInputs();
+            extensions = new AuthenticationExtensionsClientInputs<>();
         }
         Map<String, ExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
         for (Map.Entry<String, ExtensionClientInput> entry : extensions.entrySet()) {

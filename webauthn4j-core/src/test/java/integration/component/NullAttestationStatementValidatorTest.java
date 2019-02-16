@@ -18,6 +18,7 @@ package integration.component;
 
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
@@ -53,7 +54,7 @@ public class NullAttestationStatementValidatorTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -87,7 +88,7 @@ public class NullAttestationStatementValidatorTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 publicKeyCredentialUserEntity,

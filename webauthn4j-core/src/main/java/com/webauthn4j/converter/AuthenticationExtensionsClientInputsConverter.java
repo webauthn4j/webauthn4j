@@ -19,6 +19,7 @@ package com.webauthn4j.converter;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 
 public class AuthenticationExtensionsClientInputsConverter {
 
@@ -36,7 +37,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     //~ Methods
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputs convert(String value) {
+    public AuthenticationExtensionsClientInputs<ExtensionClientInput> convert(String value) {
         if (value == null) {
             return null;
         }

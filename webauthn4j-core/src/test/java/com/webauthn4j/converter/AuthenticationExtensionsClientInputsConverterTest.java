@@ -19,8 +19,12 @@ package com.webauthn4j.converter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,9 +42,9 @@ public class AuthenticationExtensionsClientInputsConverterTest {
 
     @Test
     public void convertToString_test() {
-        AuthenticationExtensionsClientInputs clientInputs = new AuthenticationExtensionsClientInputs();
+        Map<String, ExtensionClientInput> clientInputs = new HashMap<>();
         clientInputs.put(FIDOAppIDExtensionClientInput.ID, new FIDOAppIDExtensionClientInput("test"));
-        assertThat(authenticationExtensionsClientInputsConverter.convertToString(clientInputs)).isEqualTo("{\"appid\":\"test\"}");
+        assertThat(authenticationExtensionsClientInputsConverter.convertToString(new AuthenticationExtensionsClientInputs<>(clientInputs))).isEqualTo("{\"appid\":\"test\"}");
     }
 
     @Test

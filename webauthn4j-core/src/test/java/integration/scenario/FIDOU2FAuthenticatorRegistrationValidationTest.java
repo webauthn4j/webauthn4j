@@ -22,6 +22,7 @@ import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
@@ -122,7 +123,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -283,7 +284,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -325,7 +326,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),

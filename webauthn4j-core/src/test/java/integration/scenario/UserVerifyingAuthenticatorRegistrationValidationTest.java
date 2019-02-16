@@ -21,6 +21,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
@@ -46,9 +47,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAtte
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -92,7 +91,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
@@ -141,7 +140,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
@@ -191,7 +190,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs extensions = new AuthenticationExtensionsClientInputs();
+        Map<String, ExtensionClientInput> extensions = new HashMap<>();
         extensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionClientInput(true));
 
         PublicKeyCredentialCreationOptions credentialCreationOptions
@@ -204,7 +203,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
                 Collections.emptyList(),
                 authenticatorSelectionCriteria,
                 AttestationConveyancePreference.NONE,
-                extensions
+                new AuthenticationExtensionsClientInputs<>(extensions)
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse> credential = clientPlatform.create(credentialCreationOptions);

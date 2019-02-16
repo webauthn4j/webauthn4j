@@ -19,6 +19,7 @@ package com.webauthn4j.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
 
@@ -42,7 +43,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
-    private AuthenticationExtensionsClientInputs extensions;
+    private AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions;
 
     @SuppressWarnings("squid:S00107")
     @JsonCreator
@@ -55,7 +56,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
             @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
             @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
             @JsonProperty("attestation") AttestationConveyancePreference attestation,
-            @JsonProperty("extensions") AuthenticationExtensionsClientInputs extensions) {
+            @JsonProperty("extensions") AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
@@ -107,7 +108,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         return attestation;
     }
 
-    public AuthenticationExtensionsClientInputs getExtensions() {
+    public AuthenticationExtensionsClientInputs<ExtensionClientInput> getExtensions() {
         return extensions;
     }
 

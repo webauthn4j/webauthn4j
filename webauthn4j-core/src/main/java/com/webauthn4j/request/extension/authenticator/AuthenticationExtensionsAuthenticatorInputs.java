@@ -16,7 +16,22 @@
 
 package com.webauthn4j.request.extension.authenticator;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AbstractImmutableMap;
 
-public class AuthenticationExtensionsAuthenticatorInputs extends HashMap<String, ExtensionAuthenticatorInput> {
+import java.util.Collections;
+import java.util.Map;
+
+public class AuthenticationExtensionsAuthenticatorInputs<V extends ExtensionAuthenticatorInput> extends AbstractImmutableMap<String, V> {
+
+    @SuppressWarnings("unchecked")
+    @JsonCreator
+    public AuthenticationExtensionsAuthenticatorInputs(Map<String, V> map) {
+        super(map);
+    }
+
+    public AuthenticationExtensionsAuthenticatorInputs() {
+        this(Collections.emptyMap());
+    }
+
 }

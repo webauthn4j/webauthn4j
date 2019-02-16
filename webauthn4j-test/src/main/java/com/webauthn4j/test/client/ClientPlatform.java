@@ -23,6 +23,7 @@ import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAssertionResponse;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
@@ -121,10 +122,10 @@ public class ClientPlatform {
         );
     }
 
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs extensions) {
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
 
         if (extensions == null) {
-            extensions = new AuthenticationExtensionsClientInputs();
+            extensions = new AuthenticationExtensionsClientInputs<>();
         }
 
         Map<String, ExtensionClientOutput> map = new HashMap<>();
@@ -141,10 +142,10 @@ public class ClientPlatform {
         return new AuthenticationExtensionsClientOutputs<>(map);
     }
 
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processAuthenticationExtensions(AuthenticationExtensionsClientInputs extensions) {
+    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processAuthenticationExtensions(AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
 
         if (extensions == null) {
-            extensions = new AuthenticationExtensionsClientInputs();
+            extensions = new AuthenticationExtensionsClientInputs<>();
         }
 
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> map = new AuthenticationExtensionsClientOutputs<>();
