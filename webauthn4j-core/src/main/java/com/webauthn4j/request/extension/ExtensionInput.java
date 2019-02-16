@@ -16,7 +16,9 @@
 
 package com.webauthn4j.request.extension;
 
-public interface ExtensionInput<T> {
+import java.io.Serializable;
+
+public interface ExtensionInput<T> extends Serializable {
 
     String getIdentifier();
 
