@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data.statement;
 
-rootProject.name = 'webauthn4j'
+/**
+ * Created by ynojima on 2017/09/08.
+ */
+public class CodeAccuracyDescriptor {
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
-    }
+    private Integer base;
+    private Integer minLength;
+    private Integer maxRetries;
+    private Integer blockSlowdown;
 }

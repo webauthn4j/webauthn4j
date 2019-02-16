@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.exception;
 
-rootProject.name = 'webauthn4j'
+public class MDSException extends RuntimeException {
+    public MDSException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
+    public MDSException(String message) {
+        super(message);
+    }
+
+    public MDSException(Throwable cause) {
+        super(cause);
     }
 }

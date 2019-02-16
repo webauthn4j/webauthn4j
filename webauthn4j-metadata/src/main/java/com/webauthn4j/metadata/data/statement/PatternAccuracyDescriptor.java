@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-include "webauthn4j-core"
-include 'webauthn4j-metadata'
-include 'webauthn4j-extras'
-include 'webauthn4j-test'
-include 'webauthn4j-util'
+package com.webauthn4j.metadata.data.statement;
 
-rootProject.name = 'webauthn4j'
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-rootProject.children.each { project ->
-    if (!project.name.startsWith("webauthn4j")) {
-        project.name = "spring-security-webauthn-${project.name}"
-    }
+import java.math.BigInteger;
+
+/**
+ * Created by ynojima on 2017/09/08.
+ */
+public class PatternAccuracyDescriptor {
+
+    @JsonProperty
+    private BigInteger minComplexity;
+    @JsonProperty
+    private Integer maxRetries;
+    @JsonProperty
+    private Integer blockSlowdown;
 }
