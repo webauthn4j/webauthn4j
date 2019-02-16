@@ -32,14 +32,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * MetadataItemListCertPathTrustworthinessValidator
+ * MetadataItemsCertPathTrustworthinessValidator
  */
 @WIP
-public class MetadataItemListCertPathTrustworthinessValidator<T extends MetadataItem> extends CertPathTrustworthinessValidatorBase {
+public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataItem> extends CertPathTrustworthinessValidatorBase {
 
     private MetadataItemsResolver<T> metadataItemsResolver;
 
-    public MetadataItemListCertPathTrustworthinessValidator(MetadataItemsResolver<T> metadataItemsResolver) {
+    public MetadataItemsCertPathTrustworthinessValidator(MetadataItemsResolver<T> metadataItemsResolver) {
         this.metadataItemsResolver = metadataItemsResolver;
     }
 
