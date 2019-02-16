@@ -19,9 +19,10 @@ package com.webauthn4j.request.extension;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class AbstractExtensionInput<T> implements ExtensionInput<T> {
+public abstract class AbstractExtensionInput<T extends Serializable> implements ExtensionInput<T> {
 
     private T value;
 

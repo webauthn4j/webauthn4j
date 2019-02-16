@@ -23,7 +23,7 @@ import java.util.*;
 
 public abstract class AbstractImmutableMap<K, V> extends AbstractMap<K, V> implements Serializable {
 
-    private final HashMap<K, V> map;
+    private HashMap<K, V> map;
     private transient Set<Entry<K, V>> cachedEntrySet;
 
     @SuppressWarnings("unchecked")
