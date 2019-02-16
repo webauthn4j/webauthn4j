@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.AssertUtil;
@@ -29,15 +29,15 @@ import java.util.Set;
  */
 public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
 
-    private final TrustAnchorResolver trustAnchorResolver;
+    private final TrustAnchorsResolver trustAnchorsResolver;
 
-    public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorResolver trustAnchorResolver) {
-        AssertUtil.notNull(trustAnchorResolver, "trustAnchorResolver must not be null");
-        this.trustAnchorResolver = trustAnchorResolver;
+    public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorsResolver trustAnchorsResolver) {
+        AssertUtil.notNull(trustAnchorsResolver, "trustAnchorsResolver must not be null");
+        this.trustAnchorsResolver = trustAnchorsResolver;
     }
 
     @Override
     protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
-        return trustAnchorResolver.resolve(aaguid);
+        return trustAnchorsResolver.resolve(aaguid);
     }
 }

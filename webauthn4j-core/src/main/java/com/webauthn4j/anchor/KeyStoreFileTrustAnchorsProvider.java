@@ -33,7 +33,7 @@ import java.util.*;
 /**
  * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
  */
-public class KeyStoreFileTrustAnchorProvider extends CachingTrustAnchorProviderBase {
+public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
     //~ Instance fields ================================================================================================
 

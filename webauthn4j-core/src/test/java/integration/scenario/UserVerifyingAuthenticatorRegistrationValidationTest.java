@@ -17,7 +17,7 @@
 package integration.scenario;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
@@ -63,14 +63,14 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private TrustAnchorResolver trustAnchorResolver = TestUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private TrustAnchorsResolver trustAnchorsResolver = TestUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(
                     noneAttestationStatementValidator,
                     packedAttestationStatementValidator,
                     fidoU2FAttestationStatementValidator,
                     androidKeyAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorResolver),
+            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()
     );

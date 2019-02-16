@@ -24,28 +24,29 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AggregatingMetadataItemListProvider<T extends MetadataItem> implements MetadataItemListProvider<T>{
+public class AggregatingMetadataItemsProvider<T extends MetadataItem> implements MetadataItemsProvider<T> {
 
-    transient Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemListProvider.class);
+    transient Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);
 
 
-    private List<MetadataItemListProvider<T>> metadataItemListProviders;
+    private List<MetadataItemsProvider<T>> metadataItemsProviders;
 
-    public AggregatingMetadataItemListProvider(List<MetadataItemListProvider<T>> metadataItemListProviders) {
-        this.metadataItemListProviders = metadataItemListProviders;
+    public AggregatingMetadataItemsProvider(List<MetadataItemsProvider<T>> metadataItemsProviders) {
+        this.metadataItemsProviders = metadataItemsProviders;
     }
 
     @Override
-    public Map<AAGUID, List<T>> provide() {
-        return metadataItemListProviders.stream()
+    public Map<AAGUID, Set<T>> provide() {
+        return metadataItemsProviders.stream()
                 .flatMap(provider -> {
                     try{
                         return provider.provide().entrySet().stream();
                     }
                     catch (RuntimeException e){
-                        logger.warn("Failed to load metadata from one of metadataItemListProviders", e);
+                        logger.warn("Failed to load metadata from one of metadataItemsProviders", e);
                         return null;
                     }
                 })

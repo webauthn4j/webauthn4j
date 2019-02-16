@@ -25,12 +25,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class TrustAnchorResolverImpl implements TrustAnchorResolver {
+public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
 
-    private TrustAnchorProvider trustAnchorProvider;
+    private TrustAnchorsProvider trustAnchorsProvider;
 
-    public TrustAnchorResolverImpl(TrustAnchorProvider trustAnchorProvider) {
-        this.trustAnchorProvider = trustAnchorProvider;
+    public TrustAnchorsResolverImpl(TrustAnchorsProvider trustAnchorsProvider) {
+        this.trustAnchorsProvider = trustAnchorsProvider;
     }
 
     /**
@@ -40,7 +40,7 @@ public class TrustAnchorResolverImpl implements TrustAnchorResolver {
     public Set<TrustAnchor> resolve(AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<AAGUID, Set<TrustAnchor>> trustAnchors = trustAnchorProvider.provide();
+        Map<AAGUID, Set<TrustAnchor>> trustAnchors = trustAnchorsProvider.provide();
 
         HashSet<TrustAnchor> set = new HashSet<>();
         set.addAll(trustAnchors.getOrDefault(AAGUID.NULL, Collections.emptySet()));

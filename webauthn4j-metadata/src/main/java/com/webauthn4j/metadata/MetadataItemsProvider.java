@@ -21,8 +21,9 @@ import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-public interface MetadataItemListProvider<T extends MetadataItem> {
+public interface MetadataItemsProvider<T extends MetadataItem> {
 
-    Map<AAGUID, List<T>> provide();
+    Map<AAGUID, Set<T>> provide();
 }

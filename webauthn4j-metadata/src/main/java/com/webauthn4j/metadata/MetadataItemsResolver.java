@@ -14,25 +14,14 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.anchor;
+package com.webauthn4j.metadata;
 
+import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import org.junit.Test;
 
-import java.security.cert.TrustAnchor;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+public interface MetadataItemsResolver<T extends MetadataItem> {
 
-public class TrustAnchorResolverImplTest {
-
-    @Test
-    public void test() {
-        TrustAnchorResolverImpl target = new TrustAnchorResolverImpl(new SampleTrustAnchorProvider());
-
-        Set<TrustAnchor> trustAnchorsA = target.resolve(AAGUID.ZERO);
-        Set<TrustAnchor> trustAnchorsB = target.resolve(AAGUID.ZERO);
-        assertThat(trustAnchorsA).isEqualTo(trustAnchorsB);
-    }
-
+    Set<T> resolve(AAGUID aaguid);
 }

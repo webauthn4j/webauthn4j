@@ -22,13 +22,22 @@ import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 
-public interface TrustAnchorProvider {
+public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsProvider {
+
+    private Map<AAGUID, Set<TrustAnchor>> cachedTrustAnchors;
 
     /**
-     * Provides aaguid {@link TrustAnchor} {@link Set} map
-     * TrustAnchors registered for {@link AAGUID}.NULL is used for all authenticators
+     * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
      *
      * @return aaguid {@link TrustAnchor} {@link Set} map
      */
-    Map<AAGUID, Set<TrustAnchor>> provide();
+    @Override
+    public Map<AAGUID, Set<TrustAnchor>> provide() {
+        if (cachedTrustAnchors == null) {
+            cachedTrustAnchors = loadTrustAnchors();
+        }
+        return cachedTrustAnchors;
+    }
+
+    protected abstract Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();
 }

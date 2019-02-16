@@ -14,14 +14,21 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata;
+package com.webauthn4j.anchor;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
-import java.util.List;
+import java.security.cert.TrustAnchor;
+import java.util.Map;
+import java.util.Set;
 
-public interface MetadataItemListResolver<T extends MetadataItem> {
+public interface TrustAnchorsProvider {
 
-    List<T> resolve(AAGUID aaguid);
+    /**
+     * Provides aaguid {@link TrustAnchor} {@link Set} map
+     * TrustAnchors registered for {@link AAGUID}.NULL is used for all authenticators
+     *
+     * @return aaguid {@link TrustAnchor} {@link Set} map
+     */
+    Map<AAGUID, Set<TrustAnchor>> provide();
 }

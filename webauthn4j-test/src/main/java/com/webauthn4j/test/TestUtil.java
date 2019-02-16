@@ -17,7 +17,7 @@
 package com.webauthn4j.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
@@ -438,7 +438,7 @@ public class TestUtil {
         return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getSignCount());
     }
 
-    public static TrustAnchorResolver createTrustAnchorProviderWith2tierTestRootCACertificate() {
+    public static TrustAnchorsResolver createTrustAnchorProviderWith2tierTestRootCACertificate() {
         return (aaguid) -> {
             Set<TrustAnchor> set = new HashSet<>();
             set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
@@ -446,7 +446,7 @@ public class TestUtil {
         };
     }
 
-    public static TrustAnchorResolver createTrustAnchorProviderWith3tierTestRootCACertificate() {
+    public static TrustAnchorsResolver createTrustAnchorProviderWith3tierTestRootCACertificate() {
         return (aaguid) -> {
             Set<TrustAnchor> set = new HashSet<>();
             set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));

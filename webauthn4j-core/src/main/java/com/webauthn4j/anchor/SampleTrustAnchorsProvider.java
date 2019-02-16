@@ -10,11 +10,11 @@ import java.util.*;
 /**
  * NOT FOR PRODUCTION USE
  */
-public class SampleTrustAnchorProvider extends CachingTrustAnchorProviderBase {
+public class SampleTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
     private List<String> classPaths;
 
-    public SampleTrustAnchorProvider() {
+    public SampleTrustAnchorsProvider() {
         this.classPaths = Collections.singletonList("attestation/google/google-root-CA.crt");
     }
 

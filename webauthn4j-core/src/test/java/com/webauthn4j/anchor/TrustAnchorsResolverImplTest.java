@@ -17,20 +17,22 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import org.junit.Test;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
 
-/**
- * Provides {@link TrustAnchor} {@link Set}.
- */
-public interface TrustAnchorResolver {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    /**
-     * Resolve {@link TrustAnchor} {@link Set} from aaguid.
-     *
-     * @param aaguid aaguid for authenticator
-     * @return {@link TrustAnchor} {@link Set}.
-     */
-    Set<TrustAnchor> resolve(AAGUID aaguid);
+public class TrustAnchorsResolverImplTest {
+
+    @Test
+    public void test() {
+        TrustAnchorsResolverImpl target = new TrustAnchorsResolverImpl(new SampleTrustAnchorsProvider());
+
+        Set<TrustAnchor> trustAnchorsA = target.resolve(AAGUID.ZERO);
+        Set<TrustAnchor> trustAnchorsB = target.resolve(AAGUID.ZERO);
+        assertThat(trustAnchorsA).isEqualTo(trustAnchorsB);
+    }
+
 }

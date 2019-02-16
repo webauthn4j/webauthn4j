@@ -45,11 +45,11 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider<FidoMdsMetadataItem> {
+public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoMdsMetadataItem> {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
 
-    transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemListProvider.class);
+    transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
 
 
     private ObjectMapper objectMapper;
@@ -57,32 +57,32 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
 
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
 
-    Map<AAGUID, List<FidoMdsMetadataItem>> cachedMetadataItemMap;
+    Map<AAGUID, Set<FidoMdsMetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
 
     private TrustAnchor trustAnchor;
 
-    public FidoMdsMetadataItemListProvider(ObjectMapper objectMapper, HttpClient httpClient, X509Certificate rootCertificate) {
+    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient, X509Certificate rootCertificate) {
         this.objectMapper = objectMapper;
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
-    public FidoMdsMetadataItemListProvider(ObjectMapper objectMapper, HttpClient httpClient, Path path) {
+    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient, Path path) {
         this(objectMapper, httpClient, loadRootCertificateFromPath(path));
     }
 
-    public FidoMdsMetadataItemListProvider(ObjectMapper objectMapper, HttpClient httpClient) {
+    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient) {
         this(objectMapper, httpClient, loadEmbeddedFidoMdsRootCertificate());
     }
 
-    public FidoMdsMetadataItemListProvider(ObjectMapper objectMapper) {
+    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper) {
         this(objectMapper, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
     @Override
-    public Map<AAGUID, List<FidoMdsMetadataItem>> provide() {
+    public Map<AAGUID, Set<FidoMdsMetadataItem>> provide() {
         if (needsRefresh()) {
             refresh();
         }
@@ -112,7 +112,10 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
             }
         })
         .filter(Objects::nonNull)
-        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())));
+        .distinct()
+        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())))
+        .entrySet().stream()
+        .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
 
         nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
         lastRefresh = OffsetDateTime.now(ZoneOffset.UTC);
@@ -187,7 +190,7 @@ public class FidoMdsMetadataItemListProvider implements MetadataItemListProvider
     }
 
     private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
-        InputStream inputStream = FidoMdsMetadataItemListProvider.class.getClassLoader()
+        InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
         return CertificateUtil.generateX509Certificate(inputStream);
     }

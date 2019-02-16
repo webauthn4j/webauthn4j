@@ -28,28 +28,30 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class JsonFileMetadataItemListProvider implements MetadataItemListProvider<MetadataItem> {
+public class JsonFileMetadataItemsProvider implements MetadataItemsProvider<MetadataItem> {
 
     private JsonConverter jsonConverter;
     private List<Path> paths = Collections.emptyList();
-    private Map<AAGUID, List<MetadataItem>> cachedMetadataItems;
+    private Map<AAGUID, Set<MetadataItem>> cachedMetadataItems;
 
-    public JsonFileMetadataItemListProvider(ObjectMapper objectMapper) {
+    public JsonFileMetadataItemsProvider(ObjectMapper objectMapper) {
         this.jsonConverter = new JsonConverter(objectMapper);
     }
 
     @Override
-    public Map<AAGUID, List<MetadataItem>> provide() {
+    public Map<AAGUID, Set<MetadataItem>> provide() {
         if (cachedMetadataItems == null) {
             cachedMetadataItems =
                     paths.stream()
                             .map(path -> new MetadataItemImpl(readJsonFile(path)))
-                            .collect(Collectors.groupingBy(item -> extractAAGUID(item.getMetadataStatement())));
+                            .distinct()
+                            .collect(Collectors.groupingBy(item -> extractAAGUID(item.getMetadataStatement())))
+                            .entrySet().stream()
+                            .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
+
         }
         return cachedMetadataItems;
     }

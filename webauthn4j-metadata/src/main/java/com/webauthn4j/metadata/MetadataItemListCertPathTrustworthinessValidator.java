@@ -18,7 +18,6 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.metadata.MetadataItemListResolver;
 import com.webauthn4j.metadata.data.statement.AttestationType;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
@@ -38,15 +37,15 @@ import java.util.stream.Collectors;
 @WIP
 public class MetadataItemListCertPathTrustworthinessValidator<T extends MetadataItem> extends CertPathTrustworthinessValidatorBase {
 
-    private MetadataItemListResolver<T> metadataItemListResolver;
+    private MetadataItemsResolver<T> metadataItemsResolver;
 
-    public MetadataItemListCertPathTrustworthinessValidator(MetadataItemListResolver<T> metadataItemListResolver) {
-        this.metadataItemListResolver = metadataItemListResolver;
+    public MetadataItemListCertPathTrustworthinessValidator(MetadataItemsResolver<T> metadataItemsResolver) {
+        this.metadataItemsResolver = metadataItemsResolver;
     }
 
     @Override
     public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
-        List<T> metadataItems = metadataItemListResolver.resolve(aaguid);
+        Set<T> metadataItems = metadataItemsResolver.resolve(aaguid);
 
         //TODO: this logic should be placed in another class. It is domain violation.
         List<AttestationType> attestationTypes = metadataItems.stream()
@@ -93,7 +92,7 @@ public class MetadataItemListCertPathTrustworthinessValidator<T extends Metadata
 
     @Override
     protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
-        return metadataItemListResolver.resolve(aaguid).stream()
+        return metadataItemsResolver.resolve(aaguid).stream()
                 .flatMap(metadataItem -> metadataItem.getMetadataStatement().getAttestationRootCertificates().stream())
                 .map(certificate -> new TrustAnchor(certificate, null))
                 .collect(Collectors.toSet());

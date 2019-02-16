@@ -17,7 +17,7 @@
 package integration.scenario;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.anchor.TrustAnchorResolver;
+import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.request.*;
@@ -61,10 +61,10 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private TrustAnchorResolver trustAnchorResolver = TestUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
+    private TrustAnchorsResolver trustAnchorsResolver = TestUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
-            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorResolver),
+            new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
@@ -262,7 +262,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
-                new TrustAnchorCertPathTrustworthinessValidator(mock(TrustAnchorResolver.class)),
+                new TrustAnchorCertPathTrustworthinessValidator(mock(TrustAnchorsResolver.class)),
                 new DefaultECDAATrustworthinessValidator(),
                 new DefaultSelfAttestationTrustworthinessValidator()
         );

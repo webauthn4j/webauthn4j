@@ -20,28 +20,25 @@ import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class MetadataItemListResolverImpl<T extends MetadataItem> implements MetadataItemListResolver<T> {
+public class MetadataItemsResolverImpl<T extends MetadataItem> implements MetadataItemsResolver<T> {
 
-    private MetadataItemListProvider<T> metadataItemListProvider;
+    private MetadataItemsProvider<T> metadataItemsProvider;
 
-    public MetadataItemListResolverImpl(MetadataItemListProvider<T> metadataItemListProvider) {
-        this.metadataItemListProvider = metadataItemListProvider;
+    public MetadataItemsResolverImpl(MetadataItemsProvider<T> metadataItemsProvider) {
+        this.metadataItemsProvider = metadataItemsProvider;
     }
 
     @Override
-    public List<T> resolve(AAGUID aaguid) {
+    public Set<T> resolve(AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
-        Map<AAGUID, List<T>> metadataItemMap = metadataItemListProvider.provide();
+        Map<AAGUID, Set<T>> metadataItemMap = metadataItemsProvider.provide();
 
-        ArrayList<T> list = new ArrayList<>();
-        list.addAll(metadataItemMap.getOrDefault(AAGUID.NULL, Collections.emptyList()));
-        list.addAll(metadataItemMap.getOrDefault(aaguid, Collections.emptyList()));
+        HashSet<T> list = new HashSet<>();
+        list.addAll(metadataItemMap.getOrDefault(AAGUID.NULL, Collections.emptySet()));
+        list.addAll(metadataItemMap.getOrDefault(aaguid, Collections.emptySet()));
         return list;
     }
 }
