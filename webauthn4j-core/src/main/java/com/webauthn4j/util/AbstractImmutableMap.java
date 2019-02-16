@@ -21,9 +21,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.io.Serializable;
 import java.util.*;
 
-public abstract class AbstractImmutableMap<K, V> extends AbstractMap<K, V> implements Serializable {
+public abstract class AbstractImmutableMap<K extends Serializable, V extends Serializable> extends AbstractMap<K, V> implements Serializable {
 
-    HashMap<K, V> map;
+    private HashMap<K, V> map;
     private transient Set<Entry<K, V>> cachedEntrySet;
 
     @SuppressWarnings("unchecked")
