@@ -151,7 +151,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         }
     }
 
-    private String getAlgJcaName(TPMIAlgHash alg) {
+    String getAlgJcaName(TPMIAlgHash alg) {
         String algJcaName;
         switch (alg){
             case TPM_ALG_SHA1:
@@ -161,7 +161,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
                 algJcaName = "SHA-256";
                 break;
             case TPM_ALG_SHA384:
-                algJcaName = "SHA-386";
+                algJcaName = "SHA-384";
                 break;
             case TPM_ALG_SHA512:
                 algJcaName = "SHA-512";
@@ -212,7 +212,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
     }
 
-    private EllipticCurve getCurveFromTPMEccCurve(TPMEccCurve curveId) {
+    EllipticCurve getCurveFromTPMEccCurve(TPMEccCurve curveId) {
         switch (curveId){
             case TPM_ECC_NIST_P256:
                 return ECUtil.P_256_SPEC.getCurve();
