@@ -16,28 +16,49 @@
 
 package com.webauthn4j.util.jws;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class JWSHeader implements Serializable {
 
-    @JsonProperty
     private JWAIdentifier alg;
-
-    @JsonProperty
     private AttestationCertificatePath x5c;
 
-    public JWSHeader() {
-        //nop
+    @JsonCreator
+    public JWSHeader(
+            @JsonProperty("alg") JWAIdentifier alg,
+            @JsonProperty("x5c") AttestationCertificatePath x5c) {
+        this.alg = alg;
+        this.x5c = x5c;
     }
 
+    @JsonGetter
     public JWAIdentifier getAlg() {
         return alg;
     }
 
+    @JsonGetter
     public AttestationCertificatePath getX5c() {
         return x5c;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JWSHeader jwsHeader = (JWSHeader) o;
+        return alg == jwsHeader.alg &&
+                Objects.equals(x5c, jwsHeader.x5c);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(alg, x5c);
     }
 }
