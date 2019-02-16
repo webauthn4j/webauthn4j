@@ -20,11 +20,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 
+import java.io.Serializable;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class AttestationCertificatePath extends AbstractList<X509Certificate> {
+public class AttestationCertificatePath extends AbstractList<X509Certificate> implements Serializable {
 
     private X509Certificate[] certificates;
     private final int size;
