@@ -18,5 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import java.util.HashMap;
 
+/**
+ * This descriptor contains description in alternative languages.
+ */
 public class AlternativeDescriptions extends HashMap<String, String> {
 }

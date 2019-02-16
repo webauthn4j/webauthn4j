@@ -16,5 +16,69 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-public class ExtensionDescriptor {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * This descriptor contains an extension supported by the authenticator.
+ */
+public class ExtensionDescriptor implements Serializable {
+
+    private String id;
+    private Integer tag;
+    private String  data;
+    private Boolean failIfUnknown;
+
+    @JsonCreator
+    public ExtensionDescriptor(
+            @JsonProperty("id") String id,
+            @JsonProperty("tag") Integer tag,
+            @JsonProperty("data") String data,
+            @JsonProperty("fail_if_unknown") Boolean failIfUnknown) {
+        this.id = id;
+        this.tag = tag;
+        this.data = data;
+        this.failIfUnknown = failIfUnknown;
+    }
+
+    @JsonGetter
+    public String getId() {
+        return id;
+    }
+
+    @JsonGetter
+    public Integer getTag() {
+        return tag;
+    }
+
+    @JsonGetter
+    public String getData() {
+        return data;
+    }
+
+    @JsonGetter("fail_if_unknown")
+    public Boolean getFailIfUnknown() {
+        return failIfUnknown;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExtensionDescriptor that = (ExtensionDescriptor) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(tag, that.tag) &&
+                Objects.equals(data, that.data) &&
+                Objects.equals(failIfUnknown, that.failIfUnknown);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, tag, data, failIfUnknown);
+    }
 }

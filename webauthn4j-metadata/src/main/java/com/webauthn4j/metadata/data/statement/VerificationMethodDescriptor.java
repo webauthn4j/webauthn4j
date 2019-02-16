@@ -16,22 +16,33 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * A descriptor for a specific base user verification method as implemented by the authenticator.
  */
 public class VerificationMethodDescriptor {
-    @JsonProperty
+
     private BigInteger userVerification;
-    @JsonProperty
     private CodeAccuracyDescriptor caDesc;
-    @JsonProperty
     private BiometricAccuracyDescriptor baDesc;
-    @JsonProperty
     private PatternAccuracyDescriptor paDesc;
+
+    @JsonCreator
+    public VerificationMethodDescriptor(
+            @JsonProperty("userVerification") BigInteger userVerification,
+            @JsonProperty("caDesc") CodeAccuracyDescriptor caDesc,
+            @JsonProperty("baDesc") BiometricAccuracyDescriptor baDesc,
+            @JsonProperty("paDesc") PatternAccuracyDescriptor paDesc) {
+        this.userVerification = userVerification;
+        this.caDesc = caDesc;
+        this.baDesc = baDesc;
+        this.paDesc = paDesc;
+    }
 
     public BigInteger getUserVerification() {
         return userVerification;
@@ -47,5 +58,22 @@ public class VerificationMethodDescriptor {
 
     public PatternAccuracyDescriptor getPaDesc() {
         return paDesc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VerificationMethodDescriptor that = (VerificationMethodDescriptor) o;
+        return Objects.equals(userVerification, that.userVerification) &&
+                Objects.equals(caDesc, that.caDesc) &&
+                Objects.equals(baDesc, that.baDesc) &&
+                Objects.equals(paDesc, that.paDesc);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(userVerification, caDesc, baDesc, paDesc);
     }
 }

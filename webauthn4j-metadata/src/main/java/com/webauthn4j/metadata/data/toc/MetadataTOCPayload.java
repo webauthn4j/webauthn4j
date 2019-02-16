@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.toc;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import java.io.Serializable;
@@ -26,7 +27,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * Represents the MetadataTOCPayload
  */
 public class MetadataTOCPayload implements Serializable {
 
@@ -36,7 +37,7 @@ public class MetadataTOCPayload implements Serializable {
     @JsonProperty
     private Integer no;
 
-    @JsonDeserialize(using = NextUpdateDeserializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
     private LocalDate nextUpdate;
@@ -44,7 +45,11 @@ public class MetadataTOCPayload implements Serializable {
     @JsonProperty
     private List<MetadataTOCPayloadEntry> entries;
 
-    public MetadataTOCPayload(String legalHeader, Integer no, LocalDate nextUpdate, List<MetadataTOCPayloadEntry> entries) {
+    public MetadataTOCPayload(
+            String legalHeader,
+            Integer no,
+            LocalDate nextUpdate,
+            List<MetadataTOCPayloadEntry> entries) {
         this.legalHeader = legalHeader;
         this.no = no;
         this.nextUpdate = nextUpdate;

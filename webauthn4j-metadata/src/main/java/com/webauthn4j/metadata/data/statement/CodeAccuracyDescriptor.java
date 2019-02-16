@@ -16,8 +16,13 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
 /**
- * Created by ynojima on 2017/09/08.
+ * The CodeAccuracyDescriptor describes the relevant accuracy/complexity aspects of passcode user verification methods.
  */
 public class CodeAccuracyDescriptor {
 
@@ -25,4 +30,49 @@ public class CodeAccuracyDescriptor {
     private Integer minLength;
     private Integer maxRetries;
     private Integer blockSlowdown;
+
+    @JsonCreator
+    public CodeAccuracyDescriptor(
+            @JsonProperty("base") Integer base,
+            @JsonProperty("minLength") Integer minLength,
+            @JsonProperty("maxRetries") Integer maxRetries,
+            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+        this.base = base;
+        this.minLength = minLength;
+        this.maxRetries = maxRetries;
+        this.blockSlowdown = blockSlowdown;
+    }
+
+    public Integer getBase() {
+        return base;
+    }
+
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public Integer getMaxRetries() {
+        return maxRetries;
+    }
+
+    public Integer getBlockSlowdown() {
+        return blockSlowdown;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CodeAccuracyDescriptor that = (CodeAccuracyDescriptor) o;
+        return Objects.equals(base, that.base) &&
+                Objects.equals(minLength, that.minLength) &&
+                Objects.equals(maxRetries, that.maxRetries) &&
+                Objects.equals(blockSlowdown, that.blockSlowdown);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(base, minLength, maxRetries, blockSlowdown);
+    }
 }

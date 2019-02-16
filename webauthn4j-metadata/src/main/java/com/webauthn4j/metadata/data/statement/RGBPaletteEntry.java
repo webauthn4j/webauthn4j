@@ -23,41 +23,49 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The FIDO unified protocol version(s) (related to the specific protocol family) supported by this authenticator.
+ * The RGBPaletteEntry is an RGB three-sample tuple palette entry
  */
-public class Version implements Serializable {
+public class RGBPaletteEntry implements Serializable {
 
-    private Integer major;
-    private Integer minor;
+    private Integer r;
+    private Integer g;
+    private Integer b;
 
     @JsonCreator
-    public Version(
-            @JsonProperty("major") Integer major,
-            @JsonProperty("minor") Integer minor) {
-        this.major = major;
-        this.minor = minor;
+    public RGBPaletteEntry(
+            @JsonProperty("r") Integer r,
+            @JsonProperty("g") Integer g,
+            @JsonProperty("b") Integer b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
 
-    public Integer getMajor() {
-        return major;
+    public Integer getR() {
+        return r;
     }
 
-    public Integer getMinor() {
-        return minor;
+    public Integer getG() {
+        return g;
+    }
+
+    public Integer getB() {
+        return b;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Version version = (Version) o;
-        return Objects.equals(major, version.major) &&
-                Objects.equals(minor, version.minor);
+        RGBPaletteEntry that = (RGBPaletteEntry) o;
+        return Objects.equals(r, that.r) &&
+                Objects.equals(g, that.g) &&
+                Objects.equals(b, that.b);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(major, minor);
+        return Objects.hash(r, g, b);
     }
 }

@@ -16,6 +16,11 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Objects;
+
 /**
  * BiometricAccuracyDescriptor
  */
@@ -27,4 +32,56 @@ public class BiometricAccuracyDescriptor {
     private Integer maxTemplate;
     private Integer maxRetries;
     private Integer blockSlowdown;
+
+    @JsonCreator
+    public BiometricAccuracyDescriptor(
+            @JsonProperty("selfAttestedFAR") double selfAttestedFAR,
+            @JsonProperty("selfAttestedFRR") double selfAttestedFRR,
+            @JsonProperty("maxTemplate") Integer maxTemplate,
+            @JsonProperty("maxRetries") Integer maxRetries,
+            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+        this.selfAttestedFAR = selfAttestedFAR;
+        this.selfAttestedFRR = selfAttestedFRR;
+        this.maxTemplate = maxTemplate;
+        this.maxRetries = maxRetries;
+        this.blockSlowdown = blockSlowdown;
+    }
+
+    public double getSelfAttestedFAR() {
+        return selfAttestedFAR;
+    }
+
+    public double getSelfAttestedFRR() {
+        return selfAttestedFRR;
+    }
+
+    public Integer getMaxTemplate() {
+        return maxTemplate;
+    }
+
+    public Integer getMaxRetries() {
+        return maxRetries;
+    }
+
+    public Integer getBlockSlowdown() {
+        return blockSlowdown;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BiometricAccuracyDescriptor that = (BiometricAccuracyDescriptor) o;
+        return Double.compare(that.selfAttestedFAR, selfAttestedFAR) == 0 &&
+                Double.compare(that.selfAttestedFRR, selfAttestedFRR) == 0 &&
+                Objects.equals(maxTemplate, that.maxTemplate) &&
+                Objects.equals(maxRetries, that.maxRetries) &&
+                Objects.equals(blockSlowdown, that.blockSlowdown);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(selfAttestedFAR, selfAttestedFRR, maxTemplate, maxRetries, blockSlowdown);
+    }
 }

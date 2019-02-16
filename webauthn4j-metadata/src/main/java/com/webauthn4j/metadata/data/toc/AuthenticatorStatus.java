@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * This enumeration describes the status of an authenticator model as identified by its AAID and potentially some additional information (such as a specific attestation key).
  */
 public enum AuthenticatorStatus {
     FIDO_CERTIFIED("FIDO_CERTIFIED"),

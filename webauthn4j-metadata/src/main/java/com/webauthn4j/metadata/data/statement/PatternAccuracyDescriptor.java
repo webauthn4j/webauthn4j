@@ -16,19 +16,56 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * The PatternAccuracyDescriptor describes relevant accuracy/complexity aspects in the case that a pattern is used as the user verification method.
  */
 public class PatternAccuracyDescriptor {
 
-    @JsonProperty
     private BigInteger minComplexity;
-    @JsonProperty
     private Integer maxRetries;
-    @JsonProperty
     private Integer blockSlowdown;
+
+    @JsonCreator
+    public PatternAccuracyDescriptor(
+            @JsonProperty("minComplexity") BigInteger minComplexity,
+            @JsonProperty("maxRetries") Integer maxRetries,
+            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+        this.minComplexity = minComplexity;
+        this.maxRetries = maxRetries;
+        this.blockSlowdown = blockSlowdown;
+    }
+
+    public BigInteger getMinComplexity() {
+        return minComplexity;
+    }
+
+    public Integer getMaxRetries() {
+        return maxRetries;
+    }
+
+    public Integer getBlockSlowdown() {
+        return blockSlowdown;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatternAccuracyDescriptor that = (PatternAccuracyDescriptor) o;
+        return Objects.equals(minComplexity, that.minComplexity) &&
+                Objects.equals(maxRetries, that.maxRetries) &&
+                Objects.equals(blockSlowdown, that.blockSlowdown);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(minComplexity, maxRetries, blockSlowdown);
+    }
 }

@@ -16,7 +16,8 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.metadata.data.statement.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -24,7 +25,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  */
 public class MetadataStatement implements Serializable {
     private String legalHeader;
@@ -57,6 +58,70 @@ public class MetadataStatement implements Serializable {
     private List<EcdaaTrustAnchor> ecdaaTrustAnchors;
     private String icon;
     private List<ExtensionDescriptor> supportedExtensions;
+
+    @JsonCreator
+    public MetadataStatement(
+            @JsonProperty("legalHeader") String legalHeader,
+            @JsonProperty("aaid") String aaid,
+            @JsonProperty("aaguid") String aaguid,
+            @JsonProperty("attestationCertificateKeyIdentifiers") List<String> attestationCertificateKeyIdentifiers,
+            @JsonProperty("alternativeDescriptions") AlternativeDescriptions alternativeDescriptions,
+            @JsonProperty("authenticatorVersion") Integer authenticatorVersion,
+            @JsonProperty("protocolFamily") String protocolFamily,
+            @JsonProperty("upv") List<Version> upv,
+            @JsonProperty("assertionScheme") String assertionScheme,
+            @JsonProperty("authenticationAlgorithm") Integer authenticationAlgorithm,
+            @JsonProperty("authenticationAlgorithms") List<Integer> authenticationAlgorithms,
+            @JsonProperty("publicKeyAlgAndEncoding") Integer publicKeyAlgAndEncoding,
+            @JsonProperty("publicKeyAlgAndEncodings") List<Integer> publicKeyAlgAndEncodings,
+            @JsonProperty("attestationTypes") List<AttestationType> attestationTypes,
+            @JsonProperty("userVerificationDetails") List<VerificationMethodANDCombinations> userVerificationDetails,
+            @JsonProperty("keyProtection") Integer keyProtection,
+            @JsonProperty("isKeyRestricted") Boolean isKeyRestricted,
+            @JsonProperty("isFreshUserVerificationRequired") Boolean isFreshUserVerificationRequired,
+            @JsonProperty("matcherProtection") Integer matcherProtection,
+            @JsonProperty("cryptoStrength") Integer cryptoStrength,
+            @JsonProperty("operationEnv") String operationEnv,
+            @JsonProperty("attachmentHint") BigInteger attachmentHint,
+            @JsonProperty("isSecondFactorOnly") Boolean isSecondFactorOnly,
+            @JsonProperty("tcDisplay") Integer tcDisplay,
+            @JsonProperty("tcDisplayContentType") String tcDisplayContentType,
+            @JsonProperty("tcDisplayPNGCharacteristics") List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics,
+            @JsonProperty("attestationRootCertificates") List<X509Certificate> attestationRootCertificates,
+            @JsonProperty("ecdaaTrustAnchors") List<EcdaaTrustAnchor> ecdaaTrustAnchors,
+            @JsonProperty("icon") String icon,
+            @JsonProperty("supportedExtensions") List<ExtensionDescriptor> supportedExtensions) {
+        this.legalHeader = legalHeader;
+        this.aaid = aaid;
+        this.aaguid = aaguid;
+        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.alternativeDescriptions = alternativeDescriptions;
+        this.authenticatorVersion = authenticatorVersion;
+        this.protocolFamily = protocolFamily;
+        this.upv = upv;
+        this.assertionScheme = assertionScheme;
+        this.authenticationAlgorithm = authenticationAlgorithm;
+        this.authenticationAlgorithms = authenticationAlgorithms;
+        this.publicKeyAlgAndEncoding = publicKeyAlgAndEncoding;
+        this.publicKeyAlgAndEncodings = publicKeyAlgAndEncodings;
+        this.attestationTypes = attestationTypes;
+        this.userVerificationDetails = userVerificationDetails;
+        this.keyProtection = keyProtection;
+        this.isKeyRestricted = isKeyRestricted;
+        this.isFreshUserVerificationRequired = isFreshUserVerificationRequired;
+        this.matcherProtection = matcherProtection;
+        this.cryptoStrength = cryptoStrength;
+        this.operationEnv = operationEnv;
+        this.attachmentHint = attachmentHint;
+        this.isSecondFactorOnly = isSecondFactorOnly;
+        this.tcDisplay = tcDisplay;
+        this.tcDisplayContentType = tcDisplayContentType;
+        this.tcDisplayPNGCharacteristics = tcDisplayPNGCharacteristics;
+        this.attestationRootCertificates = attestationRootCertificates;
+        this.ecdaaTrustAnchors = ecdaaTrustAnchors;
+        this.icon = icon;
+        this.supportedExtensions = supportedExtensions;
+    }
 
     public String getLegalHeader() {
         return legalHeader;

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.data.toc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,9 +26,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * Contains an AuthenticatorStatus and additional data associated with it, if any.
+ * New StatusReport entries will be added to report known issues present in firmware updates.
  */
 public class StatusReport implements Serializable {
     @JsonProperty
@@ -41,6 +44,18 @@ public class StatusReport implements Serializable {
     private X509Certificate certificate;
     @JsonProperty
     private String url;
+
+    @JsonCreator
+    public StatusReport(
+            @JsonProperty("status") AuthenticatorStatus status,
+            @JsonProperty("effectiveDate") LocalDate effectiveDate,
+            @JsonProperty("certificate") X509Certificate certificate,
+            @JsonProperty("url") String url) {
+        this.status = status;
+        this.effectiveDate = effectiveDate;
+        this.certificate = certificate;
+        this.url = url;
+    }
 
     public AuthenticatorStatus getStatus() {
         return status;
@@ -56,5 +71,22 @@ public class StatusReport implements Serializable {
 
     public String getUrl() {
         return url;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StatusReport that = (StatusReport) o;
+        return status == that.status &&
+                Objects.equals(effectiveDate, that.effectiveDate) &&
+                Objects.equals(certificate, that.certificate) &&
+                Objects.equals(url, that.url);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(status, effectiveDate, certificate, url);
     }
 }

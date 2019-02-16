@@ -21,6 +21,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
+/**
+ * The supported attestation type(s). (e.g. ATTESTATION_BASIC_FULL(0x3E07), ATTESTATION_BASIC_SURROGATE(0x3E08)).
+ * See section 3.6.3 of FIDO Registry for all available attestation formats
+ */
 public enum AttestationType {
 
     ATTESTATION_BASIC_FULL(0x3E07),

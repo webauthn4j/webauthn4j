@@ -16,12 +16,16 @@
 
 package com.webauthn4j.metadata.data.toc;
 
-import com.webauthn4j.util.WIP;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Objects;
 
-@WIP
+/**
+ * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
+ */
 public class BiometricStatusReport implements Serializable {
     private Integer certLevel;
     private BigInteger modality;
@@ -30,4 +34,70 @@ public class BiometricStatusReport implements Serializable {
     private String certificateNumber;
     private String certificationPolicyVersion;
     private String certificationRequirementsVersion;
+
+    @JsonCreator
+    public BiometricStatusReport(
+            @JsonProperty("certLevel") Integer certLevel,
+            @JsonProperty("modality") BigInteger modality,
+            @JsonProperty("effectiveData") String effectiveData,
+            @JsonProperty("certificationDescriptor") String certificationDescriptor,
+            @JsonProperty("certificateNumber") String certificateNumber,
+            @JsonProperty("certificationPolicyVersion") String certificationPolicyVersion,
+            @JsonProperty("certificationRequirementsVersion") String certificationRequirementsVersion) {
+        this.certLevel = certLevel;
+        this.modality = modality;
+        this.effectiveData = effectiveData;
+        this.certificationDescriptor = certificationDescriptor;
+        this.certificateNumber = certificateNumber;
+        this.certificationPolicyVersion = certificationPolicyVersion;
+        this.certificationRequirementsVersion = certificationRequirementsVersion;
+    }
+
+    public Integer getCertLevel() {
+        return certLevel;
+    }
+
+    public BigInteger getModality() {
+        return modality;
+    }
+
+    public String getEffectiveData() {
+        return effectiveData;
+    }
+
+    public String getCertificationDescriptor() {
+        return certificationDescriptor;
+    }
+
+    public String getCertificateNumber() {
+        return certificateNumber;
+    }
+
+    public String getCertificationPolicyVersion() {
+        return certificationPolicyVersion;
+    }
+
+    public String getCertificationRequirementsVersion() {
+        return certificationRequirementsVersion;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BiometricStatusReport that = (BiometricStatusReport) o;
+        return Objects.equals(certLevel, that.certLevel) &&
+                Objects.equals(modality, that.modality) &&
+                Objects.equals(effectiveData, that.effectiveData) &&
+                Objects.equals(certificationDescriptor, that.certificationDescriptor) &&
+                Objects.equals(certificateNumber, that.certificateNumber) &&
+                Objects.equals(certificationPolicyVersion, that.certificationPolicyVersion) &&
+                Objects.equals(certificationRequirementsVersion, that.certificationRequirementsVersion);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(certLevel, modality, effectiveData, certificationDescriptor, certificateNumber, certificationPolicyVersion, certificationRequirementsVersion);
+    }
 }

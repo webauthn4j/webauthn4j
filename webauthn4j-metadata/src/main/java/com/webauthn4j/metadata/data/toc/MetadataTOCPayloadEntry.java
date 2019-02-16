@@ -16,22 +16,22 @@
 
 package com.webauthn4j.metadata.data.toc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.webauthn4j.util.WIP;
 
 import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Created by ynojima on 2017/09/08.
+ * Represents the MetadataTOCPayloadEntry
  */
-@WIP
 public class MetadataTOCPayloadEntry implements Serializable {
 
     @JsonProperty
@@ -57,6 +57,30 @@ public class MetadataTOCPayloadEntry implements Serializable {
     private String rogueListURL;
     @JsonProperty
     private String rogueListHash;
+
+    @JsonCreator
+    public MetadataTOCPayloadEntry(
+            @JsonProperty("aaid") String aaid,
+            @JsonProperty("aaguid") String aaguid,
+            @JsonProperty("attestationCertificateKeyIdentifiers") List<String> attestationCertificateKeyIdentifiers,
+            @JsonProperty("hash") String hash,
+            @JsonProperty("url") URI url,
+            @JsonProperty("biometricStatusReports") List<BiometricStatusReport> biometricStatusReports,
+            @JsonProperty("statusReports") List<StatusReport> statusReports,
+            @JsonProperty("timeOfLastStatusChange") LocalDate timeOfLastStatusChange,
+            @JsonProperty("rogueListURL") String rogueListURL,
+            @JsonProperty("rogueListHash") String rogueListHash) {
+        this.aaid = aaid;
+        this.aaguid = aaguid;
+        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.hash = hash;
+        this.url = url;
+        this.biometricStatusReports = biometricStatusReports;
+        this.statusReports = statusReports;
+        this.timeOfLastStatusChange = timeOfLastStatusChange;
+        this.rogueListURL = rogueListURL;
+        this.rogueListHash = rogueListHash;
+    }
 
     public String getAaid() {
         return aaid;
@@ -96,5 +120,28 @@ public class MetadataTOCPayloadEntry implements Serializable {
 
     public String getRogueListHash() {
         return rogueListHash;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MetadataTOCPayloadEntry that = (MetadataTOCPayloadEntry) o;
+        return Objects.equals(aaid, that.aaid) &&
+                Objects.equals(aaguid, that.aaguid) &&
+                Objects.equals(attestationCertificateKeyIdentifiers, that.attestationCertificateKeyIdentifiers) &&
+                Objects.equals(hash, that.hash) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(biometricStatusReports, that.biometricStatusReports) &&
+                Objects.equals(statusReports, that.statusReports) &&
+                Objects.equals(timeOfLastStatusChange, that.timeOfLastStatusChange) &&
+                Objects.equals(rogueListURL, that.rogueListURL) &&
+                Objects.equals(rogueListHash, that.rogueListHash);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(aaid, aaguid, attestationCertificateKeyIdentifiers, hash, url, biometricStatusReports, statusReports, timeOfLastStatusChange, rogueListURL, rogueListHash);
     }
 }
