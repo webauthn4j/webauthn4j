@@ -41,10 +41,9 @@ public class AggregatingMetadataItemsProvider<T extends MetadataItem> implements
     public Map<AAGUID, Set<T>> provide() {
         return metadataItemsProviders.stream()
                 .flatMap(provider -> {
-                    try{
+                    try {
                         return provider.provide().entrySet().stream();
-                    }
-                    catch (RuntimeException e){
+                    } catch (RuntimeException e) {
                         logger.warn("Failed to load metadata from one of metadataItemsProviders", e);
                         return null;
                     }

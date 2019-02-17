@@ -107,7 +107,7 @@ public class Sample {
         // please persist in your manner
     }
 
-    private Authenticator load(){
+    private Authenticator load() {
         return null; // please load authenticator in your manner
     }
 

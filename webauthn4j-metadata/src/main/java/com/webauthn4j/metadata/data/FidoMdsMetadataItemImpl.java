@@ -28,7 +28,7 @@ import java.util.List;
  * Created by ynojima on 2017/09/24.
  */
 @WIP
-public class FidoMdsMetadataItemImpl implements FidoMdsMetadataItem{
+public class FidoMdsMetadataItemImpl implements FidoMdsMetadataItem {
 
     private String aaid;
     private AAGUID aaguid;

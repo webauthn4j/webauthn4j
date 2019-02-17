@@ -16,7 +16,6 @@
 
 package com.webauthn4j.metadata.data;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 

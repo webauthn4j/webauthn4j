@@ -28,7 +28,7 @@ import java.net.URL;
 public class SimpleHttpClient implements HttpClient {
 
     @Override
-    public String fetch(String url){
+    public String fetch(String url) {
         try {
             URL fetchUrl = new URL(url);
             HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
@@ -42,7 +42,7 @@ public class SimpleHttpClient implements HttpClient {
                 BufferedInputStream bis = new BufferedInputStream(inputStream);
                 ByteArrayOutputStream buf = new ByteArrayOutputStream();
                 int result = bis.read();
-                while(result != -1) {
+                while (result != -1) {
                     buf.write((byte) result);
                     result = bis.read();
                 }
