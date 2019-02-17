@@ -122,6 +122,8 @@ subprojects {
     def bintrayToken = getVariable('BINTRAY_TOKEN', 'bintrayToken')
     def artifactoryUser = getVariable('ARTIFACTORY_USER', 'artifactoryUser')
     def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
+    def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
+    def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
 
     artifactory {
         contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
@@ -142,7 +144,7 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = false
+        publish = true
         dryRun = false
         publications = ['artifactPublication']
         pkg {
@@ -158,6 +160,11 @@ subprojects {
                 vcsTag = "${webauthn4jVersion}"
                 gpg {
                     sign = true
+                }
+                //Optional configuration for Maven Central sync of the version
+                mavenCentralSync {
+                    user = mavenCentralUser
+                    password = mavenCentralPassword
                 }
             }
         }

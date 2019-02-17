@@ -35,7 +35,6 @@ deploy:
     skip-cleanup: true
     script: ./gradlew bintrayUpload
     on:
-      branch: master
       jdk: openjdk8
       tags: true
   - provider: script
