@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 
 import java.io.Serializable;

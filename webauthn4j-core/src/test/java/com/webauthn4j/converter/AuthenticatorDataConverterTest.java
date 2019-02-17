@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;

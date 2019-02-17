@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.serializer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;

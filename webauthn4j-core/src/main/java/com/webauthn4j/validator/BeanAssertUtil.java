@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.request.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
@@ -28,10 +27,8 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.TokenBinding;
 import com.webauthn4j.response.extension.ExtensionOutput;
-import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
