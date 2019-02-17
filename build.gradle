@@ -135,12 +135,12 @@ subprojects {
             }
             defaults {
                 publications('artifactPublication')
-                publishBuildInfo = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishArtifacts = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishPom = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishIvy = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
             }
         }
+    }
+
+    artifactoryPublish {
+        skip = !"${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
     }
 
     bintray {
