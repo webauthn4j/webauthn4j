@@ -32,20 +32,20 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
  */
-public class PublicKeyCredential<T extends AuthenticatorResponse> implements Serializable {
+public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput> implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================
 
     private String id;
     private byte[] rawId;
-    private T authenticatorResponse;
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensionResults;
+    private R authenticatorResponse;
+    private AuthenticationExtensionsClientOutputs<E> clientExtensionResults;
 
     // ~ Constructor
     // ========================================================================================================
 
-    public PublicKeyCredential(byte[] credentialId, T authenticatorResponse, AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensionResults) {
+    public PublicKeyCredential(byte[] credentialId, R authenticatorResponse, AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.authenticatorResponse = authenticatorResponse;
@@ -64,11 +64,11 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
         return ArrayUtil.clone(rawId);
     }
 
-    public T getAuthenticatorResponse() {
+    public R getAuthenticatorResponse() {
         return authenticatorResponse;
     }
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensionResults() {
+    public AuthenticationExtensionsClientOutputs<E> getClientExtensionResults() {
         return clientExtensionResults;
     }
 
@@ -76,7 +76,7 @@ public class PublicKeyCredential<T extends AuthenticatorResponse> implements Ser
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PublicKeyCredential<?> that = (PublicKeyCredential<?>) o;
+        PublicKeyCredential<?, ?> that = (PublicKeyCredential<?, ?>) o;
         return Objects.equals(id, that.id) &&
                 Arrays.equals(rawId, that.rawId) &&
                 Objects.equals(authenticatorResponse, that.authenticatorResponse) &&

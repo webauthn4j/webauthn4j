@@ -23,6 +23,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
+import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
@@ -32,7 +33,9 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
@@ -88,7 +91,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
 
-        PublicKeyCredential<AuthenticatorAttestationResponse> credential = clientPlatform.create(credentialCreationOptions);
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
@@ -123,7 +126,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -135,7 +138,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                 AttestationConveyancePreference.DIRECT,
                 extensions
         );
-        PublicKeyCredential<AuthenticatorAttestationResponse> credential = clientPlatform.create(credentialCreationOptions);
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
@@ -284,7 +287,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),
@@ -326,7 +329,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
 
-        AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
                 new PublicKeyCredentialUserEntity(),

@@ -16,8 +16,8 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.request.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
 
@@ -35,14 +35,14 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     private String rpId;
     private List<PublicKeyCredentialDescriptor> allowCredentials;
     private UserVerificationRequirement userVerification;
-    private AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions;
+    private AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
-                                             AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
+                                             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -71,7 +71,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         return userVerification;
     }
 
-    public AuthenticationExtensionsClientInputs<ExtensionClientInput> getExtensions() {
+    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
     }
 

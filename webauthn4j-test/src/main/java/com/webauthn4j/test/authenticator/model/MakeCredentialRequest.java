@@ -21,7 +21,7 @@ import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.request.PublicKeyCredentialUserEntity;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
+import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class MakeCredentialRequest {
     private boolean requireUserVerification;
     private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
-    private AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions;
+    private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
 
     public byte[] getHash() {
         return hash;
@@ -101,11 +101,11 @@ public class MakeCredentialRequest {
         this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
     }
 
-    public AuthenticationExtensionsClientInputs<ExtensionClientInput> getExtensions() {
+    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
+    public void setExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
         this.extensions = extensions;
     }
 }

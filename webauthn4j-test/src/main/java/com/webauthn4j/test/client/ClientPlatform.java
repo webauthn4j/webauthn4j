@@ -22,9 +22,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.request.extension.client.*;
 import com.webauthn4j.response.AuthenticatorAssertionResponse;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
@@ -33,9 +31,7 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.response.client.*;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
-import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClientOutput;
+import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -76,7 +72,7 @@ public class ClientPlatform {
         this(new Origin("https://example.com"));
     }
 
-    public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
                                                                         RegistrationEmulationOption registrationEmulationOption) {
         CollectedClientData collectedClientData;
         if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
@@ -114,7 +110,7 @@ public class ClientPlatform {
 
         byte[] credentialId = credentialCreationResponse.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = processRegistrationExtensions(publicKeyCredentialCreationOptions.getExtensions());
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = processRegistrationExtensions(publicKeyCredentialCreationOptions.getExtensions());
         return new PublicKeyCredential<>(
                 credentialId,
                 new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes),
@@ -122,13 +118,13 @@ public class ClientPlatform {
         );
     }
 
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
+    private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
 
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs<>();
         }
 
-        Map<String, ExtensionClientOutput> map = new HashMap<>();
+        Map<String, RegistrationExtensionClientOutput> map = new HashMap<>();
         extensions.forEach((key, value) -> {
             switch (key) {
                 case SupportedExtensionsExtensionClientInput.ID:
@@ -142,13 +138,14 @@ public class ClientPlatform {
         return new AuthenticationExtensionsClientOutputs<>(map);
     }
 
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> processAuthenticationExtensions(AuthenticationExtensionsClientInputs<ExtensionClientInput> extensions) {
+    private AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput>
+        processAuthenticationExtensions(AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
 
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs<>();
         }
 
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> map = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> map = new AuthenticationExtensionsClientOutputs<>();
         extensions.forEach((key, value) -> {
             switch (key) {
                 //TODO
@@ -158,11 +155,11 @@ public class ClientPlatform {
     }
 
 
-    public PublicKeyCredential<AuthenticatorAttestationResponse> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
         return create(publicKeyCredentialCreationOptions, new RegistrationEmulationOption());
     }
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
+    public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
                                                                    CollectedClientData collectedClientData,
                                                                    AuthenticationEmulationOption authenticationEmulationOption) {
 
@@ -176,7 +173,7 @@ public class ClientPlatform {
 
             byte[] credentialId = credentialRequestResponse.getCredentialId();
 
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = processAuthenticationExtensions(publicKeyCredentialRequestOptions.getExtensions());
+            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = processAuthenticationExtensions(publicKeyCredentialRequestOptions.getExtensions());
 
             return new PublicKeyCredential<>(
                     credentialId,
@@ -194,11 +191,11 @@ public class ClientPlatform {
         throw noAuthenticatorSuccessException;
     }
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData) {
+    public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions, CollectedClientData collectedClientData) {
         return get(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
-    public PublicKeyCredential<AuthenticatorAssertionResponse> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
+    public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
         CollectedClientData collectedClientData = createCollectedClientData(ClientDataType.GET, publicKeyCredentialRequestOptions.getChallenge());
         return get(publicKeyCredentialRequestOptions, collectedClientData);
     }
