@@ -135,7 +135,7 @@ subprojects {
             }
             defaults {
                 publications('artifactPublication')
-                publishArtifacts = true
+                publishArtifacts = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
             }
         }
     }
@@ -144,7 +144,7 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = true
+        publish = "${webauthn4jVersion}".endsWith(".RELEASE") // Publish only when it is RELEASE release
         dryRun = false
         publications = ['artifactPublication']
         pkg {
