@@ -112,7 +112,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static <T extends ExtensionAuthenticatorOutput> void validate(AttestationObject attestationObject) {
+    public static void validate(AttestationObject attestationObject) {
         if (attestationObject == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
