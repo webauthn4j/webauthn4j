@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,7 +31,7 @@ public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")
-    private AuthenticatorData authenticatorData;
+    private AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData;
 
     @JsonProperty("attStmt")
     @JsonTypeInfo(
@@ -41,13 +43,13 @@ public class AttestationObject implements Serializable {
 
     @JsonCreator
     public AttestationObject(
-            @JsonProperty("authData") AuthenticatorData authenticatorData,
+            @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
             @JsonProperty("attStmt") AttestationStatement attestationStatement) {
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
     }
 
-    public com.webauthn4j.response.attestation.authenticator.AuthenticatorData getAuthenticatorData() {
+    public com.webauthn4j.response.attestation.authenticator.AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 

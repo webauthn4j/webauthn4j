@@ -25,6 +25,7 @@ import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
@@ -91,7 +92,7 @@ public class WebAuthnAuthenticationContextValidator {
         // Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
-        AuthenticatorData authenticatorData = authenticatorDataConverter.convert(aData);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(aData);
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs =
                 authenticationExtensionsClientOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
         ServerProperty serverProperty = authenticationContext.getServerProperty();
@@ -138,7 +139,7 @@ public class WebAuthnAuthenticationContextValidator {
         // values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         // identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         // In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = authenticationContext.getExpectedExtensionIds();
         extensionValidator.validate(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 

@@ -31,6 +31,7 @@ import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -77,7 +78,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 new AttestedCredentialData(aaguid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flag, 0, attestedCredentialData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(rpIdHash, flag, 0, attestedCredentialData);
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
