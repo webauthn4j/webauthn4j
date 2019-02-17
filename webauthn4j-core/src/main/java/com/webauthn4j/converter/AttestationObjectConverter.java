@@ -41,7 +41,7 @@ public class AttestationObjectConverter {
     //~ Methods
     // ================================================================================================
 
-    public AttestationObject convert(String source) {
+    public AttestationObject  convert(String source) {
         if (source == null) {
             return null;
         }

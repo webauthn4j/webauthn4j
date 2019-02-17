@@ -22,8 +22,6 @@ import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationStatementDeserializerTest {

@@ -33,8 +33,8 @@ class ExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs,
-                         AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs,
+    public <T extends ExtensionAuthenticatorOutput> void validate(AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs,
+                         AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs,
                          List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {

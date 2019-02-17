@@ -19,7 +19,6 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

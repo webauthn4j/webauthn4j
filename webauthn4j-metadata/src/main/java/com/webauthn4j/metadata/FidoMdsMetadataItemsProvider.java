@@ -21,9 +21,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
+import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
@@ -98,24 +98,23 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         this.fidoMetadataServiceEndpoint = fidoMetadataServiceEndpoint;
     }
 
-    private void refresh(){
+    private void refresh() {
         MetadataTOCPayload tocPayload = fetchMetadataTOCPayload();
 
         cachedMetadataItemMap =
-        tocPayload.getEntries().parallelStream().map(entry -> {
-            try{
-                return fetchFidoMdsMetadataItem(entry);
-            }
-            catch (RuntimeException e){
-                logger.warn("Failed to fetch MetadataTOCPayLoad", e);
-                return null;
-            }
-        })
-        .filter(Objects::nonNull)
-        .distinct()
-        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())))
-        .entrySet().stream()
-        .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
+                tocPayload.getEntries().parallelStream().map(entry -> {
+                    try {
+                        return fetchFidoMdsMetadataItem(entry);
+                    } catch (RuntimeException e) {
+                        logger.warn("Failed to fetch MetadataTOCPayLoad", e);
+                        return null;
+                    }
+                })
+                        .filter(Objects::nonNull)
+                        .distinct()
+                        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())))
+                        .entrySet().stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
 
         nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
         lastRefresh = OffsetDateTime.now(ZoneOffset.UTC);
@@ -126,12 +125,12 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         return cachedMetadataItemMap == null || (nextUpdate.isBefore(now) && lastRefresh.isBefore(now.minusHours(1)));
     }
 
-    MetadataTOCPayload fetchMetadataTOCPayload(){
+    MetadataTOCPayload fetchMetadataTOCPayload() {
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
         JWS<MetadataTOCPayload> jws = JWS.parse(toc, objectMapper, MetadataTOCPayload.class);
-        if(!jws.isValidSignature()){
+        if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
         validateCertPath(jws);
@@ -174,7 +173,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         String metadataStatementBase64url = httpClient.fetch(uri);
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
         byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementBase64url.getBytes(StandardCharsets.UTF_8));
-        if(!Arrays.equals(hash, expectedHash)){
+        if (!Arrays.equals(hash, expectedHash)) {
             throw new MDSException("Hash of metadataStatement doesn't match");
         }
         return new JsonConverter(objectMapper).readValue(metadataStatementStr, MetadataStatement.class);

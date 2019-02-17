@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticatorData implements Serializable {
+public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;
     public static final byte BIT_AT = (byte) 0b01000000;
@@ -34,11 +34,11 @@ public class AuthenticatorData implements Serializable {
     private final byte flags;
     private final long signCount;
     private final AttestedCredentialData attestedCredentialData;
-    private final AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions;
+    private final AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
                              AttestedCredentialData attestedCredentialData,
-                             AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -56,7 +56,7 @@ public class AuthenticatorData implements Serializable {
     }
 
     public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions) {
+                             AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -122,7 +122,7 @@ public class AuthenticatorData implements Serializable {
         return attestedCredentialData;
     }
 
-    public AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> getExtensions() {
+    public AuthenticationExtensionsAuthenticatorOutputs<T> getExtensions() {
         return extensions;
     }
 

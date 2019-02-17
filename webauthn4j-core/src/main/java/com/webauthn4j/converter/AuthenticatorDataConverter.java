@@ -80,7 +80,7 @@ public class AuthenticatorDataConverter {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public AuthenticatorData convert(byte[] value) {
+    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] value) {
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(value);
 
@@ -90,7 +90,7 @@ public class AuthenticatorDataConverter {
             long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
             AttestedCredentialData attestationData;
-            AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions;
+            AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
                 attestationData = convertToAttestedCredentialData(byteBuffer);
             } else {
@@ -105,7 +105,7 @@ public class AuthenticatorDataConverter {
                 throw new DataConversionException("provided data does not have proper byte layout");
             }
 
-            return new AuthenticatorData(rpIdHash, flags, counter, attestationData, extensions);
+            return new AuthenticatorData<>(rpIdHash, flags, counter, attestationData, extensions);
 
         } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
@@ -124,24 +124,24 @@ public class AuthenticatorDataConverter {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
         CredentialPublicKey credentialPublicKey = credentialPublicKeyEnvelope.getCredentialPublicKey();
-        AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
         int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
         byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
-        return attestationData;
+        return attestedCredentialData;
     }
 
     private CredentialPublicKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
         return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
     }
 
-    private AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> convertToExtensions(ByteBuffer byteBuffer) {
+    private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        AuthenticationExtensionsAuthenticatorOutputsEnvelope envelope =
+        AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
                 cborConverter.readValue(byteArrayInputStream, AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
         int leftoverLength = remaining.length - envelope.getLength();
         byteBuffer.position(byteBuffer.position() - leftoverLength);

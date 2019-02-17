@@ -19,17 +19,17 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
 
-public class AuthenticationExtensionsAuthenticatorOutputsEnvelope {
+public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends ExtensionAuthenticatorOutput> {
 
-    private AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs;
+    private AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;
     private int length;
 
-    AuthenticationExtensionsAuthenticatorOutputsEnvelope(AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs, int length) {
+    AuthenticationExtensionsAuthenticatorOutputsEnvelope(AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs, int length) {
         this.authenticationExtensionsAuthenticatorOutputs = authenticationExtensionsAuthenticatorOutputs;
         this.length = length;
     }
 
-    public AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> getAuthenticationExtensionsAuthenticatorOutputs() {
+    public AuthenticationExtensionsAuthenticatorOutputs<T> getAuthenticationExtensionsAuthenticatorOutputs() {
         return authenticationExtensionsAuthenticatorOutputs;
     }
 

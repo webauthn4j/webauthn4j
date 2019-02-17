@@ -20,7 +20,10 @@ import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class MetadataItemsResolverImpl<T extends MetadataItem> implements MetadataItemsResolver<T> {
 

@@ -56,7 +56,8 @@ public class MetadataTOCPayload implements Serializable {
         this.entries = entries;
     }
 
-    public MetadataTOCPayload(){}
+    public MetadataTOCPayload() {
+    }
 
     public String getLegalHeader() {
         return legalHeader;

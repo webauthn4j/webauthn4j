@@ -31,6 +31,9 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
 import com.webauthn4j.util.*;
@@ -132,7 +135,7 @@ public class TestUtil {
 
     public static AttestationObject createAttestationObjectWithBasicPackedECAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
-        AuthenticatorData authenticatorData = createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
@@ -142,7 +145,7 @@ public class TestUtil {
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
-        AuthenticatorData authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
@@ -152,7 +155,7 @@ public class TestUtil {
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
         RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
-        AuthenticatorData authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
@@ -161,7 +164,7 @@ public class TestUtil {
 
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestUtil.loadAndroidKeyAttestationPrivateKey();
-        AuthenticatorData authenticatorData = createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
@@ -171,7 +174,7 @@ public class TestUtil {
 
     public static AttestationObject createAttestationObjectWithTPMAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestUtil.loadTPMAttestationPrivateKey();
-        AuthenticatorData authenticatorData = createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
@@ -192,14 +195,14 @@ public class TestUtil {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 
-    public static AuthenticatorData createAuthenticatorData() {
+    public static <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> createAuthenticatorData() {
         byte flags = BIT_UP | BIT_AT;
-        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData());
+        return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData());
     }
 
-    public static AuthenticatorData createAuthenticatorData(CredentialPublicKey credentialPublicKey) {
+    public static <T extends RegistrationExtensionAuthenticatorOutput> AuthenticatorData<T> createAuthenticatorData(CredentialPublicKey credentialPublicKey) {
         byte flags = BIT_UP | BIT_AT;
-        return new AuthenticatorData(new byte[32], flags, 1, createAttestedCredentialData(credentialPublicKey));
+        return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData(credentialPublicKey));
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {

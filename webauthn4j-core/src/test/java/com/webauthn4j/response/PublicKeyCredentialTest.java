@@ -19,7 +19,6 @@ package com.webauthn4j.response;
 
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.Origin;

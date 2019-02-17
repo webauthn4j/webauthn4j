@@ -21,7 +21,6 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;

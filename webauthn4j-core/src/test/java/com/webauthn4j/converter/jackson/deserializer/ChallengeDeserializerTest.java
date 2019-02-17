@@ -16,12 +16,10 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.client.CollectedClientData;
 import org.junit.Test;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 

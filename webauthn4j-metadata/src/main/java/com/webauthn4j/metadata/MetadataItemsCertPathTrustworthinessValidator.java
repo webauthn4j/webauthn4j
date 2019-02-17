@@ -56,8 +56,8 @@ public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataIte
             throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
         }
 
-        for(T metadataItem : metadataItems){
-            if(metadataItem instanceof FidoMdsMetadataItem){
+        for (T metadataItem : metadataItems) {
+            if (metadataItem instanceof FidoMdsMetadataItem) {
                 FidoMdsMetadataItem fidoMdsMetadataItem = (FidoMdsMetadataItem) metadataItem;
                 doAdditionalValidationForFidoMdsMetadataItem(fidoMdsMetadataItem);
             }

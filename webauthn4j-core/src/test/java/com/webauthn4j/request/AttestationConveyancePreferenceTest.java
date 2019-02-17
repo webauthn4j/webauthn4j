@@ -1,11 +1,8 @@
 package com.webauthn4j.request;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 

@@ -126,7 +126,7 @@ class BeanAssertUtil {
         validate(attestationObject.getAuthenticatorData());
     }
 
-    public static void validate(AuthenticatorData authenticatorData) {
+    public static <T extends ExtensionAuthenticatorOutput> void validate(AuthenticatorData<T> authenticatorData) {
 
         // attestedCredentialData may be null
         AttestedCredentialData attestedCredentialData = authenticatorData.getAttestedCredentialData();
@@ -146,7 +146,7 @@ class BeanAssertUtil {
         if (signCount < 0 || signCount > UnsignedNumberUtil.UNSIGNED_INT_MAX) {
             throw new ConstraintViolationException("signCount must be unsigned int");
         }
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> extensions = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<T> extensions = authenticatorData.getExtensions();
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
@@ -178,12 +178,12 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validateAuthenticatorExtensionsOutputs(
-            AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs) {
+    public static <T extends ExtensionAuthenticatorOutput> void validateAuthenticatorExtensionsOutputs(
+            AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs) {
         if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
         }
-        for (Map.Entry<String, ExtensionAuthenticatorOutput> set: authenticationExtensionsAuthenticatorOutputs.entrySet()){
+        for (Map.Entry<String, T> set: authenticationExtensionsAuthenticatorOutputs.entrySet()){
             validate(set.getKey(), set.getValue());
         }
     }

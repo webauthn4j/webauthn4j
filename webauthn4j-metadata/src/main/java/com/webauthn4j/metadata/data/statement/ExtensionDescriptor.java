@@ -30,7 +30,7 @@ public class ExtensionDescriptor implements Serializable {
 
     private String id;
     private Integer tag;
-    private String  data;
+    private String data;
     private Boolean failIfUnknown;
 
     @JsonCreator

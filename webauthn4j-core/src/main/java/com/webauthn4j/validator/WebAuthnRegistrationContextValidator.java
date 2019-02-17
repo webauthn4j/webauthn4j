@@ -27,7 +27,7 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
@@ -196,7 +196,7 @@ public class WebAuthnRegistrationContextValidator {
                 registrationContext.getServerProperty()
         );
 
-        AuthenticatorData authenticatorData = attestationObject.getAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
         ServerProperty serverProperty = registrationContext.getServerProperty();
 
         /// Verify that the value of C.type is webauthn.create.
@@ -233,7 +233,7 @@ public class WebAuthnRegistrationContextValidator {
         /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
         extensionValidator.validate(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 

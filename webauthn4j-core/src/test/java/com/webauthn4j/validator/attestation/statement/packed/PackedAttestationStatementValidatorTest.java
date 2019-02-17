@@ -14,6 +14,7 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -70,7 +71,7 @@ public class PackedAttestationStatementValidatorTest {
     @Test
     public void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
-        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
 
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
@@ -104,7 +105,7 @@ public class PackedAttestationStatementValidatorTest {
     @Test(expected = NotImplementedException.class)
     public void validate_with_ecdaaKeyId_test() throws Exception {
         KeyPair keyPair = KeyUtil.createECKeyPair();
-        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
 
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
         byte[] signature = generateSignature("SHA256withECDSA", keyPair, authenticatorData, clientData);
