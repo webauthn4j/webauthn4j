@@ -120,25 +120,13 @@ subprojects {
 
     def bintrayUser = getVariable('BINTRAY_USER', 'bintrayUser')
     def bintrayToken = getVariable('BINTRAY_TOKEN', 'bintrayToken')
-    def artifactoryUser = getVariable('ARTIFACTORY_USER', 'artifactoryUser')
-    def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
     def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
     def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
 
     artifactory {
-        contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
         publish {
-            repository {
-                repoKey = 'oss-snapshot-local' // The Artifactory repository key to publish to
-                username = artifactoryUser
-                password = artifactoryPassword
-            }
             defaults {
                 publications('artifactPublication')
-                publishBuildInfo = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishArtifacts = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishPom = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-                publishIvy = "${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
             }
         }
     }
@@ -175,6 +163,20 @@ subprojects {
 
 }
 
+def artifactoryUser = getVariable('ARTIFACTORY_USER', 'artifactoryUser')
+def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
+    skip = !"${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
+    publish {
+         repository {
+            repoKey = 'oss-snapshot-local' // The Artifactory repository key to publish to
+            username = artifactoryUser
+            password = artifactoryPassword
+        }
+    }
+}
 
 asciidoctorj {
     version = asciidoctorVersion
