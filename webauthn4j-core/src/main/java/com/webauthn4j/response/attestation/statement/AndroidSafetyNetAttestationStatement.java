@@ -16,25 +16,18 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Objects;
 
-@JsonIgnoreProperties(value = "format")
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
 public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "android-safetynet";
 
-    @JsonProperty
     private String ver;
-
-    @JsonProperty
     private JWS<Response> response;
 
     @JsonCreator
@@ -45,11 +38,13 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         this.response = response;
     }
 
+    @JsonIgnore
     @Override
     public String getFormat() {
         return FORMAT;
     }
 
+    @JsonIgnore
     @Override
     public AttestationCertificatePath getX5c() {
         return getResponse().getHeader().getX5c();
@@ -65,10 +60,12 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         }
     }
 
+    @JsonGetter("ver")
     public String getVer() {
         return ver;
     }
 
+    @JsonGetter("response")
     public JWS<Response> getResponse() {
         return response;
     }
