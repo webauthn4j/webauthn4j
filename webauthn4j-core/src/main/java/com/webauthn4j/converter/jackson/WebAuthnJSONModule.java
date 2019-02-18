@@ -39,7 +39,8 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnJSONModule extends SimpleModule {
 
-    public WebAuthnJSONModule(JsonConverter jsonConverter, @SuppressWarnings("unused") CborConverter cborConverter) {
+    @SuppressWarnings("unused")
+    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
         super("WebAuthnJSONModule");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
