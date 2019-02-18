@@ -16,7 +16,6 @@
 
 package com.webauthn4j.util.jws;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -43,8 +42,7 @@ public class JWS<T extends Serializable> implements Serializable {
     private String headerString;
     private String payloadString;
 
-    public static <T extends Serializable> JWS<T> parse(String value, ObjectCodec objectCodec, Class<T> type){
-        JsonConverter jsonConverter = new JsonConverter(objectCodec);
+    public static <T extends Serializable> JWS<T> parse(String value, JsonConverter jsonConverter, Class<T> type){
         String[] data = value.split("\\.");
         if (data.length != 3) {
             throw new IllegalArgumentException("JWS value is not divided by two period.");

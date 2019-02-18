@@ -16,10 +16,11 @@
 
 package integration.scenario;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.response.AuthenticatorAssertionResponse;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
@@ -51,14 +52,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
+
 
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
+            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
     public void validate_test() {
@@ -471,7 +474,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectMapper);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 

@@ -16,9 +16,9 @@
 
 package integration.scenario;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
@@ -54,7 +54,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+
 
     private Origin origin = new Origin("http://localhost");
     private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
@@ -76,7 +77,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     );
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
+            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
     public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {

@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -35,8 +34,8 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public CollectedClientDataConverter(ObjectCodec objectCodec) {
-        jsonConverter = new JsonConverter(objectCodec);
+    public CollectedClientDataConverter(JsonConverter jsonConverter) {
+        this.jsonConverter = jsonConverter;
     }
 
     //~ Methods

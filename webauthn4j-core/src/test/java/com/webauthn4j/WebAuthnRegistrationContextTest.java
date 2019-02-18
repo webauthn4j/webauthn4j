@@ -16,9 +16,10 @@
 
 package com.webauthn4j;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
@@ -31,12 +32,14 @@ import static org.mockito.Mockito.mock;
 
 public class WebAuthnRegistrationContextTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
+
 
     @Test
     public void test() {
-        byte[] collectedClientData = new CollectedClientDataConverter(objectMapper).convertToBytes(createClientData(ClientDataType.GET));
-        byte[] authenticatorData = new AttestationObjectConverter(objectMapper).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
+        byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
+        byte[] authenticatorData = new AttestationObjectConverter(cborConverter).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
 
         ServerProperty serverProperty = mock(ServerProperty.class);
 

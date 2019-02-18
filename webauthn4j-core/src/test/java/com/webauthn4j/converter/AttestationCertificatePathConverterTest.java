@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
@@ -27,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationCertificatePathConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     public void test(){
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
-        String json = jsonConverter.writeValueAsString(attestationCertificatePath);
-        AttestationCertificatePath restored = jsonConverter.readValue(json, AttestationCertificatePath.class);
+        byte[] cbor = cborConverter.writeValueAsBytes(attestationCertificatePath);
+        AttestationCertificatePath restored = cborConverter.readValue(cbor, AttestationCertificatePath.class);
         assertThat(restored).isEqualTo(attestationCertificatePath);
     }
 }

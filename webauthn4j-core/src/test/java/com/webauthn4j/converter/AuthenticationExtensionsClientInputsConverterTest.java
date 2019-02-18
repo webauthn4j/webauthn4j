@@ -16,8 +16,8 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
@@ -30,9 +30,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthenticationExtensionsClientInputsConverterTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
 
-    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectMapper);
+    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(jsonConverter);
 
 
     @Test

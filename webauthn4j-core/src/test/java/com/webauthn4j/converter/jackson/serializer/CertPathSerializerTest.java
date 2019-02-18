@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class CertPathSerializerTest {
 
-    private CborConverter cborMapper = new CborConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     public void test() throws CertificateException, IOException {
@@ -46,13 +46,13 @@ public class CertPathSerializerTest {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));
 
-        byte[] result = cborMapper.writeValueAsBytes(certPath);
+        byte[] result = cborConverter.writeValueAsBytes(certPath);
 
         //When
-        CertPath deserialized = cborMapper.readValue(result, CertPath.class);
+        CertPath restored = cborConverter.readValue(result, CertPath.class);
 
         //Then
-        assertThat(deserialized.getCertificates().toArray()).containsExactly(cert1, cert2);
+        assertThat(restored.getCertificates().toArray()).containsExactly(cert1, cert2);
 
     }
 }

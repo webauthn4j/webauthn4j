@@ -17,10 +17,11 @@
 package com.webauthn4j.validator;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -86,7 +87,8 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                new ObjectMapper());
+                new JsonConverter(),
+                new CborConverter());
     }
 
     public WebAuthnRegistrationContextValidator(
@@ -99,21 +101,24 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
-                new ObjectMapper());
+                new JsonConverter(),
+                new CborConverter());
     }
 
     public WebAuthnRegistrationContextValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-            ObjectMapper objectMapper
+            JsonConverter jsonConverter,
+            CborConverter cborConverter
     ) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                objectMapper
+                jsonConverter,
+                cborConverter
         );
     }
 
@@ -122,16 +127,17 @@ public class WebAuthnRegistrationContextValidator {
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            ObjectMapper objectMapper
+            JsonConverter jsonConverter,
+            CborConverter cborConverter
     ) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
 
-        collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
-        attestationObjectConverter = new AttestationObjectConverter(objectMapper);
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
+        collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+        attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,
@@ -145,10 +151,10 @@ public class WebAuthnRegistrationContextValidator {
     // ========================================================================================================
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new ObjectMapper());
+        return createNonStrictRegistrationContextValidator(new JsonConverter(), new CborConverter());
     }
 
-    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(ObjectMapper objectMapper) {
+    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {
         return new WebAuthnRegistrationContextValidator(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
@@ -160,7 +166,8 @@ public class WebAuthnRegistrationContextValidator {
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
-                objectMapper
+                jsonConverter,
+                cborConverter
         );
     }
 

@@ -16,10 +16,11 @@
 
 package com.webauthn4j.validator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
@@ -32,17 +33,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RegistrationObjectTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     public void test() {
 
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
-        byte[] clientDataBytes = new CollectedClientDataConverter(objectMapper).convertToBytes(clientData);
+        byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = new AttestationObjectConverter(objectMapper).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectMapper).convert(authenticatorData);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         ServerProperty serverProperty = TestUtil.createServerProperty();
         RegistrationObject registrationObject = new RegistrationObject(
                 clientData,

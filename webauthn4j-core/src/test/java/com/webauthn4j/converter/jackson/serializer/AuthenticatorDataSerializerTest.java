@@ -17,7 +17,6 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.authenticator.*;
 import org.junit.Test;
 
@@ -33,8 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class AuthenticatorDataSerializerTest {
 
-    private JsonConverter jsonMapper = new JsonConverter();
-    private CborConverter cborMapper = new CborConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     public void test() throws IOException {
@@ -54,19 +52,19 @@ public class AuthenticatorDataSerializerTest {
         //Given
 
         //When
-        byte[] result = cborMapper.writeValueAsBytes(authenticatorData);
-        AuthenticatorData deserialized = cborMapper.readValue(result, AuthenticatorData.class);
-
+        byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
+        AuthenticatorData restored = cborConverter.readValue(result, AuthenticatorData.class);
+        
         //Then
 
-        assertThat(deserialized.getRpIdHash()).isEqualTo(rpIdHash);
-        assertThat(deserialized.getFlags()).isEqualTo(flags);
-        assertThat(deserialized.getSignCount()).isEqualTo(counter);
-        assertThat(deserialized.getAttestedCredentialData()).isNotNull();
-        assertThat(deserialized.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid);
-        assertThat(deserialized.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId);
-        assertThat(deserialized.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
-        assertThat(deserialized.getExtensions().isEmpty()).isTrue();
+        assertThat(restored.getRpIdHash()).isEqualTo(rpIdHash);
+        assertThat(restored.getFlags()).isEqualTo(flags);
+        assertThat(restored.getSignCount()).isEqualTo(counter);
+        assertThat(restored.getAttestedCredentialData()).isNotNull();
+        assertThat(restored.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid);
+        assertThat(restored.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId);
+        assertThat(restored.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey);
+        assertThat(restored.getExtensions().isEmpty()).isTrue();
     }
 
 }

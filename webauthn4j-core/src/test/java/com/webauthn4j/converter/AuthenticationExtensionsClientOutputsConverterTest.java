@@ -17,15 +17,16 @@
 package com.webauthn4j.converter;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.converter.util.JsonConverter;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthenticationExtensionsClientOutputsConverterTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
+    private JsonConverter jsonConverter = new JsonConverter();
+
+    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
     public void convert_null_test(){

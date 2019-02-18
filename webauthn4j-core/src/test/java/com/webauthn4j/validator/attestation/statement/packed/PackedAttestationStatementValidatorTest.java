@@ -1,9 +1,10 @@
 package com.webauthn4j.validator.attestation.statement.packed;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
@@ -49,7 +50,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PackedAttestationStatementValidatorTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
 
@@ -134,13 +136,13 @@ public class PackedAttestationStatementValidatorTest {
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {
 
-        byte[] attestationObjectBytes = new AttestationObjectConverter(objectMapper).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
 
         Origin origin = new Origin(originUrl);
         Challenge challenge = (Challenge) () -> Base64UrlUtil.decode(challengeString);
 
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectMapper);
-        CollectedClientData collectedClientData = new CollectedClientDataConverter(objectMapper).convert(clientDataBytes);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        CollectedClientData collectedClientData = new CollectedClientDataConverter(jsonConverter).convert(clientDataBytes);
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
@@ -186,7 +188,7 @@ public class PackedAttestationStatementValidatorTest {
 
 
     private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] authenticatorData = new AuthenticatorDataConverter(objectMapper).convert(data);
+        byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(data);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientDataJSON);
 
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

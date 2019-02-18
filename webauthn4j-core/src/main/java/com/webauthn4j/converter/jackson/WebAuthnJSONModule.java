@@ -19,49 +19,37 @@ package com.webauthn4j.converter.jackson;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
-import com.webauthn4j.converter.jackson.serializer.*;
+import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
+import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
+import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
-import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.response.extension.authenticator.*;
 import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.util.jws.JWS;
 
-import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 
 /**
  * Jackson Module for WebAuthn classes serialization and deserialization
  */
-public class WebAuthnModule extends SimpleModule {
+public class WebAuthnJSONModule extends SimpleModule {
 
-    public WebAuthnModule() {
-        super("WebAuthnModule");
+    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+        super("WebAuthnJSONModule");
 
-        this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
-        this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
-        this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer());
-        this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
-        this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
+        this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
-        this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
-        this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer());
         this.addSerializer(JWS.class, new JWSSerializer());
-        this.addSerializer(TPMSAttest.class, new TPMSAttestSerializer());
-        this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
@@ -70,6 +58,7 @@ public class WebAuthnModule extends SimpleModule {
         this.registerSubtypes(new NamedType(AndroidSafetyNetAttestationStatement.class, AndroidSafetyNetAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(TPMAttestationStatement.class, TPMAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
+
 
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientInput.class, SupportedExtensionsExtensionClientInput.ID));
@@ -82,12 +71,6 @@ public class WebAuthnModule extends SimpleModule {
         this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionClientOutput.class, SimpleTransactionAuthorizationExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientOutput.class, SupportedExtensionsExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(UserVerificationIndexExtensionClientOutput.class, UserVerificationIndexExtensionClientOutput.ID));
-
-        this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionAuthenticatorOutput.class, GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(LocationExtensionAuthenticatorOutput.class, LocationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(SupportedExtensionsExtensionAuthenticatorOutput.class, SupportedExtensionsExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(UserVerificationIndexExtensionAuthenticatorOutput.class, UserVerificationIndexExtensionAuthenticatorOutput.ID));
 
     }
 

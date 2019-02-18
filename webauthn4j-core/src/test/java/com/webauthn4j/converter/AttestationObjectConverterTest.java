@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
@@ -28,8 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AttestationObjectConverterTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private AttestationObjectConverter target = new AttestationObjectConverter(objectMapper);
+    private CborConverter cborConverter = new CborConverter();
+
+    private AttestationObjectConverter target = new AttestationObjectConverter(cborConverter);
 
     @Test
     public void convert_deserialization_test() {

@@ -16,13 +16,17 @@
 
 package com.webauthn4j.test.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.request.extension.client.*;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionClientInput;
+import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.AuthenticatorAssertionResponse;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
@@ -31,7 +35,10 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.response.client.*;
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.response.extension.client.*;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClientOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -47,9 +54,10 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectMapper);
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
+    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
 
     private Origin origin;
     //TODO: support multiple authenticators

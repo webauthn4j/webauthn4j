@@ -16,11 +16,12 @@
 
 package com.webauthn4j.validator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
@@ -66,13 +67,13 @@ public class WebAuthnAuthenticationContextValidator {
     // ========================================================================================================
 
     public WebAuthnAuthenticationContextValidator() {
-        this(new ObjectMapper());
+        this(new JsonConverter(), new CborConverter());
     }
 
-    public WebAuthnAuthenticationContextValidator(ObjectMapper objectMapper) {
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper);
-        this.collectedClientDataConverter = new CollectedClientDataConverter(objectMapper);
-        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectMapper);
+    public WebAuthnAuthenticationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+        this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
     }
 
     // ~ Methods

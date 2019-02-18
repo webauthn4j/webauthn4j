@@ -17,7 +17,6 @@
 package com.webauthn4j.validator;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
@@ -36,7 +35,7 @@ public class WebAuthnRegistrationContextValidatorTest {
     CertPathTrustworthinessValidator certPathTrustworthinessValidatorMock = mock(CertPathTrustworthinessValidator.class);
     ECDAATrustworthinessValidator ecdaaTrustworthinessValidatorMock = mock(ECDAATrustworthinessValidator.class);
     SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator = mock(SelfAttestationTrustworthinessValidator.class);
-    ObjectMapper objectMapper = new ObjectMapper();
+
 
     @Test
     public void constructor_test() {
@@ -48,14 +47,12 @@ public class WebAuthnRegistrationContextValidatorTest {
         validator = new WebAuthnRegistrationContextValidator(
                         Collections.emptyList(),
                         certPathTrustworthinessValidatorMock,
-                        ecdaaTrustworthinessValidatorMock,
-                        objectMapper);
+                        ecdaaTrustworthinessValidatorMock);
         validator = new WebAuthnRegistrationContextValidator(
                 Collections.emptyList(),
                 certPathTrustworthinessValidatorMock,
                 ecdaaTrustworthinessValidatorMock,
-                selfAttestationTrustworthinessValidator,
-                objectMapper);
+                selfAttestationTrustworthinessValidator);
     }
 
     @Test(expected = MaliciousDataException.class)

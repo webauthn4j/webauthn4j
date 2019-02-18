@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
@@ -45,8 +44,8 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticatorDataConverter(ObjectCodec objectCodec) {
-        cborConverter = new CborConverter(objectCodec);
+    public AuthenticatorDataConverter(CborConverter cborConverter) {
+        this.cborConverter = cborConverter;
     }
 
 

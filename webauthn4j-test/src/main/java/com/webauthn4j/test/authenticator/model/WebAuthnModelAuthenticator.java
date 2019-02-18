@@ -16,14 +16,13 @@
 
 package com.webauthn4j.test.authenticator.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
 import com.webauthn4j.request.PublicKeyCredentialType;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.attestation.AttestationObject;
@@ -32,7 +31,10 @@ import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.response.extension.authenticator.*;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -55,7 +57,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 @WIP
 public class WebAuthnModelAuthenticator {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private CborConverter cborConverter = new CborConverter();
 
     AAGUID aaguid;
     private PrivateKey attestationPrivateKey;
@@ -65,7 +67,7 @@ public class WebAuthnModelAuthenticator {
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private boolean countUpEnabled = true;
 
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectMapper); // TODO: inject objectMapper from constructor
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter); // TODO: inject objectMapper from constructor
 
     public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.attestationPrivateKey = attestationPrivateKey;
