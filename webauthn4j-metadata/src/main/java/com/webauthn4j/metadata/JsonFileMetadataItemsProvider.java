@@ -16,7 +16,6 @@
 
 package com.webauthn4j.metadata;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
@@ -37,8 +36,8 @@ public class JsonFileMetadataItemsProvider implements MetadataItemsProvider<Meta
     private List<Path> paths = Collections.emptyList();
     private Map<AAGUID, Set<MetadataItem>> cachedMetadataItems;
 
-    public JsonFileMetadataItemsProvider(ObjectMapper objectMapper) {
-        this.jsonConverter = new JsonConverter(objectMapper);
+    public JsonFileMetadataItemsProvider(JsonConverter jsonConverter) {
+        this.jsonConverter = jsonConverter;
     }
 
     @Override

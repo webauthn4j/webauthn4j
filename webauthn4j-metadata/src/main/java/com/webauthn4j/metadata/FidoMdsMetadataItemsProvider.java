@@ -16,7 +16,6 @@
 
 package com.webauthn4j.metadata;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
@@ -52,7 +51,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
     transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
 
 
-    private ObjectMapper objectMapper;
+    private JsonConverter jsonConverter;
     private HttpClient httpClient;
 
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
@@ -63,22 +62,22 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
 
     private TrustAnchor trustAnchor;
 
-    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient, X509Certificate rootCertificate) {
-        this.objectMapper = objectMapper;
+    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
+        this.jsonConverter = jsonConverter;
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
-    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient, Path path) {
-        this(objectMapper, httpClient, loadRootCertificateFromPath(path));
+    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, Path path) {
+        this(jsonConverter, httpClient, loadRootCertificateFromPath(path));
     }
 
-    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper, HttpClient httpClient) {
-        this(objectMapper, httpClient, loadEmbeddedFidoMdsRootCertificate());
+    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient) {
+        this(jsonConverter, httpClient, loadEmbeddedFidoMdsRootCertificate());
     }
 
-    public FidoMdsMetadataItemsProvider(ObjectMapper objectMapper) {
-        this(objectMapper, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
+    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter) {
+        this(jsonConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
     @Override
@@ -129,7 +128,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
-        JWS<MetadataTOCPayload> jws = JWS.parse(toc, objectMapper, MetadataTOCPayload.class);
+        JWS<MetadataTOCPayload> jws = JWS.parse(toc, jsonConverter, MetadataTOCPayload.class);
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
@@ -176,7 +175,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         if (!Arrays.equals(hash, expectedHash)) {
             throw new MDSException("Hash of metadataStatement doesn't match");
         }
-        return new JsonConverter(objectMapper).readValue(metadataStatementStr, MetadataStatement.class);
+        return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
     }
 
     private static X509Certificate loadRootCertificateFromPath(Path path) {
