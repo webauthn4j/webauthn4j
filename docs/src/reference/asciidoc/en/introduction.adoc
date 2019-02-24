@@ -13,9 +13,19 @@ Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but
 
 WebAuthn4J is a portable Java library for WebAuthn server side verification
 
+=== Spring Security WebAuthn
+
+As a related project of WebAuthn4J, we are developing a wrapper library named Spring Security WebAuthn
+to support WebAuthn with Spring Security.
+To introduce WebAuthn in an application built with Spring Security, It is better to use Spring Security WebAuthn rather
+than directly using WebAuthn4J.
+Spring Security WebAuthn also provides an implementation of the REST API of FIDO2 transporting binding profile.
+
+=== Feature
+
 ==== Supported Attestation Statement Formats
 
-List of supported attestation statement formats is below:
+All attestation statement formats are supported:
 
 - Packed attestation
 - FIDO U2F attestation
@@ -28,6 +38,9 @@ List of supported attestation statement formats is below:
 
 All mandatory test cases and optional Android Key attestation test cases of https://fidoalliance.org/certification/functional-certification/conformance/[FIDO2 Test Tools provided by FIDO Alliance]
 are all passed.
+
+NOTE: Since FIDO2 Test Tools runs the test via the REST API of FIDO2 Transport Binding Profile,
+It is executed through the REST API implementation provided by Spring Security WebAuthn.
 
 === Requirements
 

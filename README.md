@@ -12,6 +12,8 @@ A portable Java library for WebAuthn server side verification
 
 ### Supported Attestation statement format
 
+All attestation statement formats are supported.
+
 * Packed attestation
 * FIDO U2F attestation
 * Android Key attestation
