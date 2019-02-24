@@ -20,6 +20,8 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class AndroidKeyAttestationStatementValidatorTest {
 
     private AndroidKeyAttestationStatementValidator target = new AndroidKeyAttestationStatementValidator();
@@ -30,8 +32,16 @@ public class AndroidKeyAttestationStatementValidatorTest {
         target.validate(registrationObject);
     }
 
+    @Test
+    public void validate_with_teeEnforcedOnly_option_test() {
+        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        target.setTeeEnforcedOnly(true);
+        assertThat(target.isTeeEnforcedOnly()).isTrue();
+        target.validate(registrationObject);
+    }
+
     @Test(expected = IllegalArgumentException.class)
-    public void validate_AndroidKeyAttestation_test() {
+    public void validate_TPMAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }

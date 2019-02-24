@@ -37,5 +37,4 @@ public class KeyDescriptionValidatorTest {
         target.validate(TestUtil.loadAndroidKeyAttestationCertificate(), null, false);
     }
 
-
 }

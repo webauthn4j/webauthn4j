@@ -108,4 +108,12 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }
+
+    public boolean isTeeEnforcedOnly() {
+        return teeEnforcedOnly;
+    }
+
+    public void setTeeEnforcedOnly(boolean teeEnforcedOnly) {
+        this.teeEnforcedOnly = teeEnforcedOnly;
+    }
 }
