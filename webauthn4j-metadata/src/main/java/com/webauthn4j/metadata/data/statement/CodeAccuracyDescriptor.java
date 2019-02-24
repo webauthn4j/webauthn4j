@@ -19,12 +19,13 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The CodeAccuracyDescriptor describes the relevant accuracy/complexity aspects of passcode user verification methods.
  */
-public class CodeAccuracyDescriptor {
+public class CodeAccuracyDescriptor implements Serializable {
 
     private Integer base;
     private Integer minLength;

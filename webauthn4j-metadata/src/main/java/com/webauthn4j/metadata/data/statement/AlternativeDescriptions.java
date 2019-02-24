@@ -21,5 +21,5 @@ import java.util.HashMap;
 /**
  * This descriptor contains description in alternative languages.
  */
-public class AlternativeDescriptions extends HashMap<String, String> {
+public class AlternativeDescriptions extends HashMap<String, String> { //TODO
 }

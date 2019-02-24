@@ -19,13 +19,14 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
 /**
  * A descriptor for a specific base user verification method as implemented by the authenticator.
  */
-public class VerificationMethodDescriptor {
+public class VerificationMethodDescriptor implements Serializable {
 
     private BigInteger userVerification;
     private CodeAccuracyDescriptor caDesc;
