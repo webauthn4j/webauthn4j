@@ -55,30 +55,40 @@ class KeyDescriptionValidator {
 
     public void validate(X509Certificate x509Certificate, byte[] clientDataHash, boolean teeEnforcedOnly) {
         try {
-            Asn1Container extension = parseAttestationExtension(x509Certificate);
-
-            /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
-            byte[] attestationChallenge = extension.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
-            if (!Arrays.equals(attestationChallenge, clientDataHash)) {
-                throw new KeyDescriptionValidationException("Bad attestation challenge exception");
-            }
-
-            /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
-
-            /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
-            Asn1Container softwareEnforced = (Asn1Container) extension.getChildren().get(SW_ENFORCED_INDEX);
-            Asn1Container teeEnforced = (Asn1Container) extension.getChildren().get(TEE_ENFORCED_INDEX);
-
-            if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
-                    findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
-                throw new KeyDescriptionValidationException("Key is not scoped properly.");
-            }
-
-            validateAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
-
+            Asn1Container keyDescription = extractKeyDescription(x509Certificate);
+            doValidate(keyDescription, clientDataHash, teeEnforcedOnly);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    Asn1Container extractKeyDescription(X509Certificate x509Certificate) throws IOException {
+
+        byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
+        Asn1OctetString container = new Asn1OctetString();
+        container.decode(attestationExtensionBytes);
+        return  (Asn1Container)Asn1Parser.parse(ByteBuffer.wrap(container.getValue()));
+    }
+
+    void doValidate(Asn1Container keyDescription, byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+        /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
+        byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
+        if (!Arrays.equals(attestationChallenge, clientDataHash)) {
+            throw new KeyDescriptionValidationException("Bad attestation challenge exception");
+        }
+
+        /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
+
+        /// The AuthorizationList.allApplications field is not present on either authorization list (softwareEnforced nor teeEnforced), since PublicKeyCredential MUST be scoped to the RP ID.
+        Asn1Container softwareEnforced = (Asn1Container) keyDescription.getChildren().get(SW_ENFORCED_INDEX);
+        Asn1Container teeEnforced = (Asn1Container) keyDescription.getChildren().get(TEE_ENFORCED_INDEX);
+
+        if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
+                findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
+            throw new KeyDescriptionValidationException("Key is not scoped properly.");
+        }
+
+        validateAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
     private void validateAuthorizationList(boolean teeEnforcedOnly, Asn1Container softwareEnforced, Asn1Container teeEnforced) throws IOException {
@@ -158,13 +168,6 @@ class KeyDescriptionValidator {
         return null;
     }
 
-    Asn1Container parseAttestationExtension(X509Certificate x509Certificate) throws IOException {
-
-        byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
-        Asn1OctetString container = new Asn1OctetString();
-        container.decode(attestationExtensionBytes);
-        return  (Asn1Container)Asn1Parser.parse(ByteBuffer.wrap(container.getValue()));
-    }
 
 
 }
