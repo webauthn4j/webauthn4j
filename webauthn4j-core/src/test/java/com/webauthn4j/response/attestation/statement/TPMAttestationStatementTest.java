@@ -31,7 +31,13 @@ public class TPMAttestationStatementTest {
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement)registrationObjectA.getAttestationObject().getAttestationStatement();
 
-        new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
+        TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
+
+        assertThat(tpmAttestationStatement.getAlg()).isEqualTo(source.getAlg());
+        assertThat(tpmAttestationStatement.getX5c()).isEqualTo(source.getX5c());
+        assertThat(tpmAttestationStatement.getSig()).isEqualTo(source.getSig());
+        assertThat(tpmAttestationStatement.getCertInfo()).isEqualTo(source.getCertInfo());
+        assertThat(tpmAttestationStatement.getPubArea()).isEqualTo(source.getPubArea());
     }
 
     @Test(expected = ConstraintViolationException.class)

@@ -19,6 +19,8 @@ package com.webauthn4j.validator.exception;
 import com.webauthn4j.anchor.KeyStoreException;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class KeyStoreExceptionTest {
 
@@ -26,8 +28,18 @@ public class KeyStoreExceptionTest {
 
     @Test
     public void test() {
-        new KeyStoreException("dummy", cause);
-        new KeyStoreException("dummy");
-        new KeyStoreException(cause);
+        KeyStoreException exception;
+
+        exception = new KeyStoreException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new KeyStoreException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new KeyStoreException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

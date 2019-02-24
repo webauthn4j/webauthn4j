@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class MaliciousDataExceptionTest {
 
@@ -25,8 +27,18 @@ public class MaliciousDataExceptionTest {
 
     @Test
     public void test() {
-        new MaliciousDataException("dummy", cause);
-        new MaliciousDataException("dummy");
-        new MaliciousDataException(cause);
+        MaliciousDataException exception;
+
+        exception = new MaliciousDataException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new MaliciousDataException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new MaliciousDataException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class MissingChallengeExceptionTest {
 
@@ -25,8 +27,18 @@ public class MissingChallengeExceptionTest {
 
     @Test
     public void test() {
-        new MissingChallengeException("dummy", cause);
-        new MissingChallengeException("dummy");
-        new MissingChallengeException(cause);
+        MissingChallengeException exception;
+
+        exception = new MissingChallengeException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new MissingChallengeException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new MissingChallengeException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

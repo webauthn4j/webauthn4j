@@ -18,14 +18,27 @@ package com.webauthn4j.util.jws;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class JWSExceptionTest {
 
     @Test
     public void constructor_test(){
-        new JWSException("dummy", new RuntimeException());
-        new JWSException("dummy");
-        new JWSException(new RuntimeException());
+        RuntimeException cause = new RuntimeException();
+        JWSException exception;
+
+        exception = new JWSException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new JWSException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new JWSException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 
 }
