@@ -41,7 +41,7 @@ public class AuthenticatorImplTest {
 
     @Test
     public void setCounter_range_test() {
-        AuthenticatorImpl authenticator = new AuthenticatorImpl();
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
         assertThatThrownBy(() -> authenticator.setCounter(-1)).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> authenticator.setCounter(4294967296L)).isInstanceOf(IllegalArgumentException.class);
     }
