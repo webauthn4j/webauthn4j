@@ -1,0 +1,37 @@
+[configuration]
+== Configuration
+
+There are two main classes when using WebAuthn4J. One is `WebAuthnRegistrationContextValidator` class, which is
+used to verify the credentials at the time of registration, and the other is `WebAuthnRegistrationContextValidator` class,
+which is used to verify the credentials during authentication.
+
+`WebAuthnRegistrationContextValidator` delegates attestation statements validation to an implementation of
+`AttestationStatementValidator` and attestation statements trustworthiness validation to an implementation of
+`CertPathTrustworthinessValidator`.
+
+Since most sites don't require strict attestation statement validation
+(https://www.w3.org/TR/2019/PR-webauthn-20190117/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ),
+WebAuthn4J provides `WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` factory method
+that returns an instance configured `CertPathTrustworthinessValidator` and  `WebAuthnRegistrationContextValidator`
+not to validate attestation statements.
+
+If you are engaging an enterprise use case and strict verification of an authenticator is a requirement,
+Use the constructor of the `WebAuthnRegistrationContextValidator` class and inject validators.
+
+=== Attestation statement validation
+
+Attestation statement validation is provided by the implementation of `AttestationStatementValidator` interface.
+For each attestation statement format, corresponding validator classes are provided.
+Please specify its list at the first argument of the constructor of `WebAuthnRegistrationContextValidator` class.
+For example, if you would like to limit the supported format to `packed` only, make the `List` only with
+`PackedAttestationStatementValidator`, and if you would like to support `packed and `tpm` format, make the `List` with
+`PackedAttestationStatementValidator` and `TPMAttestationStatementValidator`.
+
+==== Attestation statement trustworthiness validation
+
+Attestation statement trustworthiness validation has three patterns: certificate path validation, ecdaa validation, and
+self attestation.
+Certificate path validation is delegated via `CertPathTrustworthinessValidator` interface, and ECDAA is delegated via
+`ECDAATrustworthinessValidator` interface. WebAuthn4J provides some `CertPathTrustworthinessValidator` implementations.
+For example, `TrustAnchorCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate
+chains to the root certificate provided as `TrustAnchor` via `TrustAnchorResolver` interface.

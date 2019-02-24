@@ -14,3 +14,4 @@
 
 include::introduction.adoc[]
 include::quick-start.adoc[]
+include::configuration.adoc[]
