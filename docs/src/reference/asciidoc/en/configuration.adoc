@@ -35,3 +35,13 @@ Certificate path validation is delegated via `CertPathTrustworthinessValidator` 
 `ECDAATrustworthinessValidator` interface. WebAuthn4J provides some `CertPathTrustworthinessValidator` implementations.
 For example, `TrustAnchorCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate
 chains to the root certificate provided as `TrustAnchor` via `TrustAnchorResolver` interface.
+
+===== Attestation statement trustworthiness validation using FIDO Metadata Service
+
+FIDO Alliance offers FIDO Metadata Service, which delivers Authenticator metadata.
+With this service, Relying Party can judge whether a security issue is reported for the authenticator trying to register.
+When verifying the reliability of the attestation statement, `MetadataItemsCertPathTrustworthinessValidator` in
+`webauthn4j-metadata` module can be used for it.
+As `MetadataItemsCertPathTrustworthinessValidator` resolves the `MetadataItem` list corresponding to
+the AAGUID of the authenticator through the `MetadataItemsResolver` interface, we can verify the reliability with
+the service by a combination of `MetadataItemsResolverImpl` and `FidoMdsMetadataItemsProvider`.
