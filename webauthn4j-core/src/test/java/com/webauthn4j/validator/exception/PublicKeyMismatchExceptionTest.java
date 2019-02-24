@@ -18,14 +18,26 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class PublicKeyMismatchExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
     public void test() {
-        new PublicKeyMismatchException("dummy", cause);
-        new PublicKeyMismatchException("dummy");
-        new PublicKeyMismatchException(cause);
+        PublicKeyMismatchException exception;
+
+        exception = new PublicKeyMismatchException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new PublicKeyMismatchException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new PublicKeyMismatchException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

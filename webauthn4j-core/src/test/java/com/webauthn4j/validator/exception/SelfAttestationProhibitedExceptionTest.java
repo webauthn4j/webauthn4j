@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class SelfAttestationProhibitedExceptionTest {
 
@@ -25,8 +27,18 @@ public class SelfAttestationProhibitedExceptionTest {
 
     @Test
     public void test() {
-        new SelfAttestationProhibitedException("dummy", cause);
-        new SelfAttestationProhibitedException("dummy");
-        new SelfAttestationProhibitedException(cause);
+        SelfAttestationProhibitedException exception;
+
+        exception = new SelfAttestationProhibitedException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new SelfAttestationProhibitedException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new SelfAttestationProhibitedException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

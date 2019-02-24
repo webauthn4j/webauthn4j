@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class WebAuthnRegistrationContextValidatorTest {
@@ -40,19 +41,25 @@ public class WebAuthnRegistrationContextValidatorTest {
     @Test
     public void constructor_test() {
         WebAuthnRegistrationContextValidator validator;
+
         validator = new WebAuthnRegistrationContextValidator(
                         Collections.emptyList(),
                         certPathTrustworthinessValidatorMock,
                         ecdaaTrustworthinessValidatorMock);
+        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
+
         validator = new WebAuthnRegistrationContextValidator(
                         Collections.emptyList(),
                         certPathTrustworthinessValidatorMock,
                         ecdaaTrustworthinessValidatorMock);
+        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
+
         validator = new WebAuthnRegistrationContextValidator(
                 Collections.emptyList(),
                 certPathTrustworthinessValidatorMock,
                 ecdaaTrustworthinessValidatorMock,
                 selfAttestationTrustworthinessValidator);
+        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
     }
 
     @Test(expected = MaliciousDataException.class)

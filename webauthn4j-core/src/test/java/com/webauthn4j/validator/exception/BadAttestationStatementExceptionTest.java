@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class BadAttestationStatementExceptionTest {
 
@@ -25,8 +27,18 @@ public class BadAttestationStatementExceptionTest {
 
     @Test
     public void test() {
-        new BadAttestationStatementException("dummy", cause);
-        new BadAttestationStatementException("dummy");
-        new BadAttestationStatementException(cause);
+        BadAttestationStatementException exception;
+
+        exception = new BadAttestationStatementException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new BadAttestationStatementException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new BadAttestationStatementException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

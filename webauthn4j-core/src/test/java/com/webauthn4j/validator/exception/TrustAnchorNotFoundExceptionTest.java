@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @SuppressWarnings("ThrowableNotThrown")
 public class TrustAnchorNotFoundExceptionTest {
@@ -26,9 +28,19 @@ public class TrustAnchorNotFoundExceptionTest {
 
     @Test
     public void test() {
-        new TrustAnchorNotFoundException("dummy", cause);
-        new TrustAnchorNotFoundException("dummy");
-        new TrustAnchorNotFoundException(cause);
+        TrustAnchorNotFoundException exception;
+
+        exception = new TrustAnchorNotFoundException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new TrustAnchorNotFoundException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new TrustAnchorNotFoundException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 
 }

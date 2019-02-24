@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class UnexpectedExtensionExceptionTest {
 
@@ -25,8 +27,18 @@ public class UnexpectedExtensionExceptionTest {
 
     @Test
     public void test() {
-        new UnexpectedExtensionException("dummy", cause);
-        new UnexpectedExtensionException("dummy");
-        new UnexpectedExtensionException(cause);
+        UnexpectedExtensionException exception;
+
+        exception = new UnexpectedExtensionException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new UnexpectedExtensionException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new UnexpectedExtensionException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }
