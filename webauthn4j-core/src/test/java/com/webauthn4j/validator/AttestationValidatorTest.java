@@ -22,6 +22,7 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.*;
 
 public class AttestationValidatorTest {
 
+    @SuppressWarnings("unchecked")
     @Test
     public void validate_ecdaa(){
         AttestationStatementValidator attestationStatementValidatorMock = mock(AttestationStatementValidator.class);
@@ -53,12 +55,13 @@ public class AttestationValidatorTest {
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(attestationObject.getFormat()).thenReturn(PackedAttestationStatement.FORMAT);
         when(attestationObject.getAttestationStatement()).thenReturn(TestUtil.createFIDOU2FAttestationStatement());
-        AuthenticatorData authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
         when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
         attestationValidator.validate(registrationObject);
     }
 
+    @SuppressWarnings("unchecked")
     @Test(expected = BadAaguidException.class)
     public void validateAAGUID(){
         AttestationValidator attestationValidator = new AttestationValidator(
@@ -70,7 +73,7 @@ public class AttestationValidatorTest {
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(attestationObject.getFormat()).thenReturn(FIDOU2FAttestationStatement.FORMAT);
         when(attestationObject.getAttestationStatement()).thenReturn(TestUtil.createFIDOU2FAttestationStatement());
-        AuthenticatorData authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
         when(authenticatorData.getAttestedCredentialData().getAaguid()).thenReturn(new AAGUID("fea37a71-08ce-479f-bf4b-472a93e2d17d"));
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
         attestationValidator.validateAAGUID(attestationObject);
