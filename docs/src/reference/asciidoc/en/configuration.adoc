@@ -24,7 +24,7 @@ Attestation statement validation is provided by the implementation of `Attestati
 For each attestation statement format, corresponding validator classes are provided.
 Please specify its list at the first argument of the constructor of `WebAuthnRegistrationContextValidator` class.
 For example, if you would like to limit the supported format to `packed` only, make the `List` only with
-`PackedAttestationStatementValidator`, and if you would like to support `packed and `tpm` format, make the `List` with
+`PackedAttestationStatementValidator`, and if you would like to support `packed` and `tpm` format, make the `List` with
 `PackedAttestationStatementValidator` and `TPMAttestationStatementValidator`.
 
 ==== Attestation statement trustworthiness validation
