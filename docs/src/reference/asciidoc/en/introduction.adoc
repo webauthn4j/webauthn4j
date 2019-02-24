@@ -74,6 +74,5 @@ WebAuthn4J is an open source software licensed under http://www.apache.org/licen
 
 === Contributing
 
-Interested in helping out with WebAuthn4J? Great! Note that you do not have to be a developer in order to contribute to
-WebAuthn4J. We need folks to help with documentation. Developers, of course, are also welcome.
+Interested in helping out with WebAuthn4J? Great! Your participation in the community is much appreciated!
 Please feel free to open issues and send pull-requests.

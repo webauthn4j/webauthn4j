@@ -6,17 +6,18 @@
 To verify an attestation on authenticator registration, call `WebAuthnRegistrationContextValidator#validate`.
 ```java
 // Client properties
-byte[] clientDataJSON    = null /* set clientDataJSON */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
 byte[] attestationObject = null /* set attestationObject */;
 
 // Server properties
-Origin origin          = null /* set origin */;
-String rpId            = null /* set rpId */;
-Challenge challenge    = null /* set challenge */;
-byte[] tokenBindingId  = null /* set tokenBindingId */;
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+boolean userVerificationRequired = false;
 
-WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, userVerificationRequired);
 
 // WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
 // which doesn't validate an attestation statement. It is recommended configuration for most web application.
@@ -43,17 +44,18 @@ save(authenticator); // please persist authenticator in your manner
 To verify an assertion on authentication, call `WebAuthnAuthenticationContextValidator#validate`.
 ```java
 // Client properties
-byte[] credentialId      = null /* set credentialId */;
-byte[] clientDataJSON    = null /* set clientDataJSON */;
+byte[] credentialId = null /* set credentialId */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
 byte[] authenticatorData = null /* set authenticatorData */;
 byte[] signature = null /* set signature */;
 
 // Server properties
-Origin origin          = null /* set origin */;
-String rpId            = null /* set rpId */;
-Challenge challenge    = null /* set challenge */;
-byte[] tokenBindingId  = null /* set tokenBindingId */;
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+boolean userVerificationRequired = true;
 
 WebAuthnAuthenticationContext authenticationContext =
         new WebAuthnAuthenticationContext(
@@ -62,10 +64,9 @@ WebAuthnAuthenticationContext authenticationContext =
                 authenticatorData,
                 signature,
                 serverProperty,
-                true
+                userVerificationRequired
         );
-
-Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
+Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();

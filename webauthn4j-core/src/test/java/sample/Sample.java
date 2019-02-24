@@ -41,8 +41,9 @@ public class Sample {
         Challenge challenge = null /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        boolean userVerificationRequired = false;
 
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, userVerificationRequired);
 
         // WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
         // which doesn't validate an attestation statement. It is recommended configuration for most web application.
@@ -78,6 +79,7 @@ public class Sample {
         Challenge challenge = null /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        boolean userVerificationRequired = true;
 
         WebAuthnAuthenticationContext authenticationContext =
                 new WebAuthnAuthenticationContext(
@@ -86,9 +88,9 @@ public class Sample {
                         authenticatorData,
                         signature,
                         serverProperty,
-                        true
+                        userVerificationRequired
                 );
-        Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
+        Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
         WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
                 new WebAuthnAuthenticationContextValidator();
@@ -107,7 +109,7 @@ public class Sample {
         // please persist in your manner
     }
 
-    private Authenticator load() {
+    private Authenticator load(byte[] credentialId) {
         return null; // please load authenticator in your manner
     }
 
