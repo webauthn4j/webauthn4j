@@ -22,7 +22,7 @@ import java.security.*;
 import java.security.spec.*;
 
 /**
- * A Utility class for Epic Curve(EC) manipulation
+ * A Utility class for Elliptic Curve(EC) manipulation
  */
 public class ECUtil {
 
@@ -44,10 +44,10 @@ public class ECUtil {
     private static ECParameterSpec createECParameterSpec(String name) {
         try {
             AlgorithmParameters parameters;
-            parameters = AlgorithmParameters.getInstance("EC", "SunEC");
+            parameters = AlgorithmParameters.getInstance("EC");
             parameters.init(new ECGenParameterSpec(name));
             return parameters.getParameterSpec(ECParameterSpec.class);
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidParameterSpecException e) {
+        } catch (NoSuchAlgorithmException | InvalidParameterSpecException e) {
             throw new UnexpectedCheckedException(e);
         }
     }
