@@ -9,7 +9,7 @@ WebAuthn4Jは、以下の4つのModuleから構成されます。
 
 Attestation/Assertionの検証に関わるコア機能を提供します。
 
-==== Extras webauthn4j-metadata.jar
+==== Metadata webauthn4j-metadata.jar
 
 FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
 
@@ -26,7 +26,7 @@ WebAuthn4Jライブラリで使用されるユーティリティクラスをま�
 
 ==== Request/Response
 
-`com.webauthn4j.request` , `com.webauthn4j.request` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
+`com.webauthn4j.request`, `com.webauthn4j.request` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
 
 ==== Converter, WebAuthnModule
 
