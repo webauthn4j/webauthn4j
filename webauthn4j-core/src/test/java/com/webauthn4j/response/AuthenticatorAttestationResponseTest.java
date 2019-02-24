@@ -16,7 +16,10 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import org.junit.Test;
+
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +32,16 @@ public class AuthenticatorAttestationResponseTest {
 
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceA).hasSameHashCodeAs(instanceB);
+    }
+
+    @Test
+    public void getTransports_test(){
+        AuthenticatorAttestationResponse target;
+        target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], Collections.singletonList(AuthenticatorTransport.USB));
+        assertThat(target.getAuthenticatorTransports()).containsExactly(AuthenticatorTransport.USB);
+
+        target = new AuthenticatorAttestationResponse(new byte[0], new byte[0]);
+        assertThat(target.getAuthenticatorTransports()).isEmpty();
     }
 
 }
