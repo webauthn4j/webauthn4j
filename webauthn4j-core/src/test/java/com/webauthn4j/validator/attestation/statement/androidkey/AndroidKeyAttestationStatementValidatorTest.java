@@ -16,11 +16,18 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
+import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
+import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Answers.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AndroidKeyAttestationStatementValidatorTest {
 
@@ -39,6 +46,21 @@ public class AndroidKeyAttestationStatementValidatorTest {
         assertThat(target.isTeeEnforcedOnly()).isTrue();
         target.validate(registrationObject);
     }
+
+    @Test(expected = BadAttestationStatementException.class)
+    public void validate_null_x5c_test1(){
+        RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
+        when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null));
+        target.validate(registrationObject);
+    }
+
+    @Test(expected = BadAttestationStatementException.class)
+    public void validate_null_x5c_test2(){
+        RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
+        when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()));
+        target.validate(registrationObject);
+    }
+
 
     @Test(expected = IllegalArgumentException.class)
     public void validate_TPMAttestation_test() {
