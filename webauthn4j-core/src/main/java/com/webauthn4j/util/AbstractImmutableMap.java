@@ -33,10 +33,6 @@ public abstract class AbstractImmutableMap<K extends Serializable, V extends Ser
         this.map = new HashMap<>(map);
     }
 
-    public AbstractImmutableMap() {
-        this(Collections.emptyMap());
-    }
-
     @Override
     public Set<Entry<K, V>> entrySet() {
         if(this.cachedEntrySet == null){
