@@ -127,7 +127,7 @@ class AttestationValidator {
                 // nop
                 break;
             default:
-                throw new NotImplementedException();
+                throw new IllegalStateException();
         }
 
     }
