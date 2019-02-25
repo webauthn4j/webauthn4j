@@ -16,10 +16,13 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.ConstUtil;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,15 +33,18 @@ public class AuthenticatorImpl implements Authenticator {
     //~ Instance fields ================================================================================================
     private AttestedCredentialData attestedCredentialData;
     private AttestationStatement attestationStatement;
+    private List<AuthenticatorTransport> authenticatorTransports;
     private long counter;
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, List<AuthenticatorTransport> authenticatorTransports) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
+        this.authenticatorTransports = Collections.unmodifiableList(authenticatorTransports);
         setCounter(counter);
     }
 
-    public AuthenticatorImpl() {
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
+        this(attestedCredentialData, attestationStatement, counter, Collections.emptyList());
     }
 
     @Override
@@ -76,18 +82,24 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     @Override
+    public List<AuthenticatorTransport> getAuthenticatorTransports() {
+        return authenticatorTransports;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorImpl that = (AuthenticatorImpl) o;
         return counter == that.counter &&
                 Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
-                Objects.equals(attestationStatement, that.attestationStatement);
+                Objects.equals(attestationStatement, that.attestationStatement) &&
+                Objects.equals(authenticatorTransports, that.authenticatorTransports);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(attestedCredentialData, attestationStatement, counter);
+        return Objects.hash(attestedCredentialData, attestationStatement, authenticatorTransports, counter);
     }
 }

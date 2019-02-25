@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class BadRpIdExceptionTest {
 
@@ -25,8 +27,18 @@ public class BadRpIdExceptionTest {
 
     @Test
     public void test() {
-        new BadRpIdException("dummy", cause);
-        new BadRpIdException("dummy");
-        new BadRpIdException(cause);
+        BadRpIdException exception;
+
+        exception = new BadRpIdException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new BadRpIdException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new BadRpIdException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

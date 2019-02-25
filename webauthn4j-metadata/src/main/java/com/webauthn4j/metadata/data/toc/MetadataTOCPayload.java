@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.data.toc;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents the MetadataTOCPayload
@@ -45,18 +47,16 @@ public class MetadataTOCPayload implements Serializable {
     @JsonProperty
     private List<MetadataTOCPayloadEntry> entries;
 
+    @JsonCreator
     public MetadataTOCPayload(
-            String legalHeader,
-            Integer no,
-            LocalDate nextUpdate,
-            List<MetadataTOCPayloadEntry> entries) {
+            @JsonProperty("legalHeader") String legalHeader,
+            @JsonProperty("no") Integer no,
+            @JsonProperty("nextUpdate") LocalDate nextUpdate,
+            @JsonProperty("entries") List<MetadataTOCPayloadEntry> entries) {
         this.legalHeader = legalHeader;
         this.no = no;
         this.nextUpdate = nextUpdate;
         this.entries = entries;
-    }
-
-    public MetadataTOCPayload() {
     }
 
     public String getLegalHeader() {
@@ -75,4 +75,20 @@ public class MetadataTOCPayload implements Serializable {
         return entries;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MetadataTOCPayload that = (MetadataTOCPayload) o;
+        return Objects.equals(legalHeader, that.legalHeader) &&
+                Objects.equals(no, that.no) &&
+                Objects.equals(nextUpdate, that.nextUpdate) &&
+                Objects.equals(entries, that.entries);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(legalHeader, no, nextUpdate, entries);
+    }
 }

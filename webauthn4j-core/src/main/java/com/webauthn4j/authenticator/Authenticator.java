@@ -16,10 +16,12 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * WebAuthn Authenticator
@@ -29,6 +31,8 @@ public interface Authenticator extends Serializable {
     AttestedCredentialData getAttestedCredentialData();
 
     AttestationStatement getAttestationStatement();
+
+    List<AuthenticatorTransport> getAuthenticatorTransports();
 
     long getCounter();
 

@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class ConstraintViolationExceptionTest {
 
@@ -25,8 +27,18 @@ public class ConstraintViolationExceptionTest {
 
     @Test
     public void test() {
-        new ConstraintViolationException("dummy", cause);
-        new ConstraintViolationException("dummy");
-        new ConstraintViolationException(cause);
+        ConstraintViolationException exception;
+
+        exception = new ConstraintViolationException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new ConstraintViolationException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new ConstraintViolationException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

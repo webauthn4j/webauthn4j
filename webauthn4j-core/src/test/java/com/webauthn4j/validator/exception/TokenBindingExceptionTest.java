@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class TokenBindingExceptionTest {
 
@@ -25,8 +27,18 @@ public class TokenBindingExceptionTest {
 
     @Test
     public void test() {
-        new TokenBindingException("dummy", cause);
-        new TokenBindingException("dummy");
-        new TokenBindingException(cause);
+        TokenBindingException exception;
+
+        exception = new TokenBindingException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new TokenBindingException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new TokenBindingException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

@@ -31,7 +31,8 @@ public class JsonConverterTest {
 
     @Test
     public void readValue_test() {
-        jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
+        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
+        assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
     @Test(expected = DataConversionException.class)
@@ -41,8 +42,9 @@ public class JsonConverterTest {
 
     @Test
     public void readValue_with_TypeReference_test() {
-        jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
+        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
         });
+        assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
     @Test(expected = DataConversionException.class)

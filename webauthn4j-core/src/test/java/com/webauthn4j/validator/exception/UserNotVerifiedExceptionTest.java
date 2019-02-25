@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class UserNotVerifiedExceptionTest {
 
@@ -25,8 +27,18 @@ public class UserNotVerifiedExceptionTest {
 
     @Test
     public void test() {
-        new UserNotVerifiedException("dummy", cause);
-        new UserNotVerifiedException("dummy");
-        new UserNotVerifiedException(cause);
+        UserNotVerifiedException exception;
+
+        exception = new UserNotVerifiedException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new UserNotVerifiedException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new UserNotVerifiedException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

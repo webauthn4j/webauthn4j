@@ -6,11 +6,13 @@
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
 
-A portable Java library for WebAuthn assertion and attestation verification
+A portable Java library for WebAuthn server side verification
 
 **This library hasn't reached version 1. Design may change.**
 
 ### Supported Attestation statement format
+
+All attestation statement formats are supported.
 
 * Packed attestation
 * FIDO U2F attestation
@@ -79,21 +81,22 @@ git clone https://github.com/webauthn4j/webauthn4j
 Verification on registration
 ```java 
 // Client properties
-byte[] clientDataJSON    = null /* set clientDataJSON */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
 byte[] attestationObject = null /* set attestationObject */;
 
 // Server properties
-Origin origin          = null /* set origin */;
-String rpId            = null /* set rpId */;
-Challenge challenge    = null /* set challenge */;
-byte[] tokenBindingId  = null /* set tokenBindingId */;
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+boolean userVerificationRequired = false;
 
-WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, false);
+WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, userVerificationRequired);
 
 // WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
 // which doesn't validate an attestation statement. It is recommended configuration for most web application.
-// If you are building enterprise web application and need to validate the attestation statement, use the constructor of 
+// If you are building enterprise web application and need to validate the attestation statement, use the constructor of
 // WebAuthnRegistrationContextValidator and provide validators you like
 WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
         WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
@@ -114,17 +117,18 @@ save(authenticator); // please persist authenticator in your manner
 Verification on authentication
 ```java 
 // Client properties
-byte[] credentialId      = null /* set credentialId */;
-byte[] clientDataJSON    = null /* set clientDataJSON */;
+byte[] credentialId = null /* set credentialId */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
 byte[] authenticatorData = null /* set authenticatorData */;
 byte[] signature = null /* set signature */;
 
 // Server properties
-Origin origin          = null /* set origin */;
-String rpId            = null /* set rpId */;
-Challenge challenge    = null /* set challenge */;
-byte[] tokenBindingId  = null /* set tokenBindingId */;
+Origin origin = null /* set origin */;
+String rpId = null /* set rpId */;
+Challenge challenge = null /* set challenge */;
+byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+boolean userVerificationRequired = true;
 
 WebAuthnAuthenticationContext authenticationContext =
         new WebAuthnAuthenticationContext(
@@ -133,9 +137,9 @@ WebAuthnAuthenticationContext authenticationContext =
                 authenticatorData,
                 signature,
                 serverProperty,
-                true
+                userVerificationRequired
         );
-Authenticator authenticator = load(); // please load authenticator object persisted in the registration process in your manner
+Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
 WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
         new WebAuthnAuthenticationContextValidator();
@@ -161,6 +165,5 @@ WebAuthn4J is Open Source software released under the
 
 ## Contributing
 
-Interested in helping out with WebAuthn4J? Great! Note that you do not have to be a developer in order to contribute to
-WebAuthn4J. We need folks to help with documentation. Developers, of course, are also welcome.
+Interested in helping out with WebAuthn4J? Great! Your participation in the community is much appreciated!
 Please feel free to open issues and send pull-requests.

@@ -19,13 +19,14 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
 /**
  * The PatternAccuracyDescriptor describes relevant accuracy/complexity aspects in the case that a pattern is used as the user verification method.
  */
-public class PatternAccuracyDescriptor {
+public class PatternAccuracyDescriptor implements Serializable {
 
     private BigInteger minComplexity;
     private Integer maxRetries;

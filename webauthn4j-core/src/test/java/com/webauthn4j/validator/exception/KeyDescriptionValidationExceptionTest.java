@@ -18,14 +18,26 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class KeyDescriptionValidationExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
     public void test() {
-        new KeyDescriptionValidationException("dummy", cause);
-        new KeyDescriptionValidationException("dummy");
-        new KeyDescriptionValidationException(cause);
+        KeyDescriptionValidationException exception;
+
+        exception = new KeyDescriptionValidationException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new KeyDescriptionValidationException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new KeyDescriptionValidationException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

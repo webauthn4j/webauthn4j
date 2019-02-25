@@ -20,6 +20,7 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.Test;
 
@@ -35,7 +36,9 @@ public class EC2CredentialPublicKeyTest {
 
     @Test
     public void createFromUncompressedECCKey_test() {
-        EC2CredentialPublicKey.createFromUncompressedECCKey(TestUtil.createECCredentialPublicKey().getBytes());
+        EC2CredentialPublicKey key = EC2CredentialPublicKey.createFromUncompressedECCKey(TestUtil.createECCredentialPublicKey().getBytes());
+        assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
+        assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
 
     @Test(expected = IllegalArgumentException.class)

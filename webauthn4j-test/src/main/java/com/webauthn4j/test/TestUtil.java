@@ -467,11 +467,7 @@ public class TestUtil {
     }
 
     public static Authenticator createAuthenticator(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {
-        AuthenticatorImpl authenticator = new AuthenticatorImpl();
-        authenticator.setAttestedCredentialData(attestedCredentialData);
-        authenticator.setAttestationStatement(attestationStatement);
-        authenticator.setCounter(1);
-        return authenticator;
+        return new AuthenticatorImpl(attestedCredentialData, attestationStatement, 1);
     }
 
     public static Authenticator createAuthenticator() {

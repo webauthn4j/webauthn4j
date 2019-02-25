@@ -22,7 +22,6 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
@@ -82,14 +81,7 @@ class AttestationValidator {
         /// Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
-
-        if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
-            AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
-            if (!Objects.equals(aaguid, U2F_AAGUID)) {
-                throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
-            }
-        }
-
+        validateAAGUID(attestationObject);
 
         /// If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
         /// ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
@@ -134,9 +126,18 @@ class AttestationValidator {
                 // nop
                 break;
             default:
-                throw new NotImplementedException();
+                throw new IllegalStateException();
         }
 
+    }
+
+    void validateAAGUID(AttestationObject attestationObject) {
+        if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
+            AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+            if (!Objects.equals(aaguid, U2F_AAGUID)) {
+                throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
+            }
+        }
     }
 
     private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {

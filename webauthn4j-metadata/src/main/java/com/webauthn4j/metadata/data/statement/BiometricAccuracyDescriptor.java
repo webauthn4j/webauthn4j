@@ -19,13 +19,14 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * BiometricAccuracyDescriptor
  */
 @SuppressWarnings("squid:S00116")
-public class BiometricAccuracyDescriptor {
+public class BiometricAccuracyDescriptor implements Serializable {
 
     private double selfAttestedFAR;
     private double selfAttestedFRR;

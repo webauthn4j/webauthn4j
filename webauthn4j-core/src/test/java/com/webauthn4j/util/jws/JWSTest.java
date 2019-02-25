@@ -32,4 +32,10 @@ public class JWSTest {
         assertThat(jws.isValidSignature()).isFalse();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void parse_invalid_data_test(){
+        String input = "invalid";
+        JWS.parse(input, new JsonConverter(), HashMap.class);
+    }
+
 }

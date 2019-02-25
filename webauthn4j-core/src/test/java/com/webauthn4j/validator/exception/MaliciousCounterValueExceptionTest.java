@@ -16,7 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.anchor.KeyStoreException;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class MaliciousCounterValueExceptionTest {
@@ -25,8 +28,18 @@ public class MaliciousCounterValueExceptionTest {
 
     @Test
     public void test() {
-        new MaliciousCounterValueException("dummy", cause);
-        new MaliciousCounterValueException("dummy");
-        new MaliciousCounterValueException(cause);
+        MaliciousCounterValueException exception;
+
+        exception = new MaliciousCounterValueException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new MaliciousCounterValueException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new MaliciousCounterValueException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

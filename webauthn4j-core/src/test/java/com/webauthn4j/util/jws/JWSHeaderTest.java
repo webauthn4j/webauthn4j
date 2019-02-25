@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator;
+package com.webauthn4j.util.jws;
 
+
+import com.webauthn4j.test.TestUtil;
 import org.junit.Test;
 
-public class AssertionSignatureValidatorTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    AssertionSignatureValidator target = new AssertionSignatureValidator();
+public class JWSHeaderTest {
 
     @Test
-    public void dummy() {
+    public void equals_hashCode_test(){
+        JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
+        JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
 
+        assertThat(instanceA).isEqualTo(instanceB);
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 
 }

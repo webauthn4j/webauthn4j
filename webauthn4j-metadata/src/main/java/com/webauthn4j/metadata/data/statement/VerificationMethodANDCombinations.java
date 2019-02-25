@@ -18,5 +18,5 @@ package com.webauthn4j.metadata.data.statement;
 
 import java.util.ArrayList;
 
-public class VerificationMethodANDCombinations extends ArrayList<VerificationMethodDescriptor> {
+public class VerificationMethodANDCombinations extends ArrayList<VerificationMethodDescriptor> { //TODO
 }

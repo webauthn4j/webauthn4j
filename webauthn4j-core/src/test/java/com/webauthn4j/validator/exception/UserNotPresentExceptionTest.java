@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class UserNotPresentExceptionTest {
 
@@ -25,8 +27,18 @@ public class UserNotPresentExceptionTest {
 
     @Test
     public void test() {
-        new UserNotPresentException("dummy", cause);
-        new UserNotPresentException("dummy");
-        new UserNotPresentException(cause);
+        UserNotPresentException exception;
+
+        exception = new UserNotPresentException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new UserNotPresentException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new UserNotPresentException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

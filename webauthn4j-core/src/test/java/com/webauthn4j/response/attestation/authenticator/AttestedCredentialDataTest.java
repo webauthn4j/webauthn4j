@@ -31,7 +31,10 @@ public class AttestedCredentialDataTest {
      */
     @Test
     public void constructor_test() {
-        new AttestedCredentialData();
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData();
+        assertThat(attestedCredentialData.getCredentialId()).isNull();
+        assertThat(attestedCredentialData.getAaguid()).isNull();
+        assertThat(attestedCredentialData.getCredentialPublicKey()).isNull();
     }
 
     @Test

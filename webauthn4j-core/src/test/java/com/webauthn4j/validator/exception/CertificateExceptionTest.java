@@ -18,6 +18,8 @@ package com.webauthn4j.validator.exception;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SuppressWarnings("ThrowableNotThrown")
 public class CertificateExceptionTest {
 
@@ -25,8 +27,18 @@ public class CertificateExceptionTest {
 
     @Test
     public void test() {
-        new CertificateException("dummy", cause);
-        new CertificateException("dummy");
-        new CertificateException(cause);
+        CertificateException exception;
+
+        exception = new CertificateException("dummy", cause);
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isEqualTo(cause);
+
+        exception = new CertificateException("dummy");
+        assertThat(exception.getMessage()).isEqualTo("dummy");
+        assertThat(exception.getCause()).isNull();
+
+        exception = new CertificateException(cause);
+        assertThat(exception.getMessage()).isEqualTo(cause.toString());
+        assertThat(exception.getCause()).isEqualTo(cause);
     }
 }

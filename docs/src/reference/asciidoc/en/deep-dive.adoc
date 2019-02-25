@@ -1,0 +1,29 @@
+[deep-dive]
+== Deep-Dive
+
+=== Project Modules
+
+WebAuthn4J consists of the following four modules.
+
+==== Core webauthn4j-core.jar
+
+Provides core features for attestation and assertion verification.
+
+==== Metadata webauthn4j-metadata.jar
+
+Provides additional features regarding FIDO Metadata Service.
+
+==== Test webauthn4j-test.jar
+
+Internal library for WebAuthn4J testing. The included classes don't follow semantic versioning and the design
+may be changed even though it is public.
+
+==== Util webauthn4j-util.jar
+
+Contains utility classes used in WebAuthn4J library.
+
+=== Classes
+
+==== Request/Response
+
+Classes under `com.webauthn4j.request`, `com.webauthn4j.request` package are designed as immutable DTO.

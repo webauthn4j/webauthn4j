@@ -16,40 +16,90 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+/**
+ * The {@link AuthenticatorAttestationResponse} represents the authenticator's response to a client’s request
+ * for the creation of a new public key credential.
+ */
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     // ~ Instance fields
     // ================================================================================================
 
     private byte[] attestationObject;
+    private List<AuthenticatorTransport> authenticatorTransports;
 
     // ~ Constructor
     // ========================================================================================================
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject) {
-        super(clientDataJSON);
-        this.attestationObject = attestationObject;
+        this(clientDataJSON, attestationObject, Collections.emptyList());
     }
 
+    public AuthenticatorAttestationResponse(byte[] clientDataJSON,
+                                            byte[] attestationObject,
+                                            List<AuthenticatorTransport> authenticatorTransports) {
+        super(clientDataJSON);
+
+        List<AuthenticatorTransport> sorted = authenticatorTransports.stream()
+                .sorted((left, right) -> left.getValue().compareToIgnoreCase(right.getValue()))
+                .collect(Collectors.toList());
+
+
+        this.attestationObject = attestationObject;
+        this.authenticatorTransports =
+                CollectionUtil.unmodifiableList(sorted);
+    }
+
+
+    /**
+     * Returns an attestation object, which is opaque to, and cryptographically protected against tampering by, the client.
+     * @return byte array representation of {@link com.webauthn4j.response.attestation.AttestationObject}
+     */
     public byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
 
+    /**
+     * Returns a sequence of zero or more unique {@link AuthenticatorTransport} values in lexicographical order.
+     * These values are the transports that the authenticator is believed to support, or an empty sequence
+     * if the information is unavailable.
+     * @return list of {@link AuthenticatorTransport}
+     */
+    public List<AuthenticatorTransport> getAuthenticatorTransports() {
+        return authenticatorTransports;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorAttestationResponse that = (AuthenticatorAttestationResponse) o;
-        return Arrays.equals(attestationObject, that.attestationObject);
+        return Arrays.equals(attestationObject, that.attestationObject) &&
+                Objects.equals(authenticatorTransports, that.authenticatorTransports);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(attestationObject);
+
+        int result = Objects.hash(authenticatorTransports);
+        result = 31 * result + Arrays.hashCode(attestationObject);
+        return result;
     }
 }
