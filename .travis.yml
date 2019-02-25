@@ -17,10 +17,10 @@ cache:
 
 script:
   # unshallow git repository
-  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$TRAVIS_PULL_REQUEST" != "false" ]; then git fetch --unshallow --quiet; fi'
+  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$SONAR_TOKEN" != "" ]; then git fetch --unshallow --quiet; fi'
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - 'if [ "$TRAVIS_JDK_VERSION" != "openjdk8" -o  "$TRAVIS_PULL_REQUEST"  = "false" ]; then ./gradlew build test javadoc asciidoc; fi'
-  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$TRAVIS_PULL_REQUEST" != "false" ]; then ./gradlew sonarqube build test javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi'
+  - 'if [ "$TRAVIS_JDK_VERSION" != "openjdk8" -o  "$SONAR_TOKEN"  = "" ]; then ./gradlew build test javadoc asciidoc; fi'
+  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$SONAR_TOKEN" != "" ]; then ./gradlew sonarqube build test javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi'
 deploy:
   - provider: pages
     skip-cleanup: true
