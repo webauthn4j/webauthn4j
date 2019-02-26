@@ -38,12 +38,10 @@ public enum AttestationType {
         this.value = value;
     }
 
-    @JsonCreator
-    public static AttestationType create(int value) throws InvalidFormatException {
+    public static AttestationType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
+            throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
-
         switch (value) {
             case 0x3E07:
                 return ATTESTATION_BASIC_FULL;
@@ -54,7 +52,17 @@ public enum AttestationType {
             case 0x3E0A:
                 return ATTESTATION_ATTCA;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static AttestationType fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
         }
     }
 
