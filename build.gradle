@@ -30,7 +30,6 @@ plugins {
     id "org.sonarqube" version "2.6.2"
     id 'nebula.provided-base' version '3.0.3'
     id 'org.asciidoctor.convert' version "1.5.2"
-    id "com.jfrog.bintray" version "1.8.4"
     id "com.jfrog.artifactory" version "4.7.5"
 }
 
@@ -40,6 +39,7 @@ allprojects {
 }
 
 subprojects {
+
     apply plugin: 'java'
     apply plugin: 'nebula.provided-base'
     apply plugin: "io.spring.dependency-management"
@@ -88,31 +88,29 @@ subprojects {
             artifactPublication(MavenPublication) {
                 from components.java
                 artifact sourcesJar
-                afterEvaluate {
-                    pom.withXml {
-                        def node = asNode()
-                        node.children().last() + {
-                            resolveStrategy = Closure.DELEGATE_FIRST
+                pom.withXml {
+                    def node = asNode()
+                    node.children().last() + {
+                        resolveStrategy = Closure.DELEGATE_FIRST
 
-                            name project.name
-                            description project.description
-                            url projectUrl
-                            scm {
-                                url vcsUrl
+                        name project.name
+                        description project.description
+                        url projectUrl
+                        scm {
+                            url vcsUrl
+                        }
+                        developers {
+                            developer {
+                                id 'ynojima'
+                                name 'Yoshikazu Nojima'
+                                email 'mail@ynojima.net'
                             }
-                            developers {
-                                developer {
-                                    id 'ynojima'
-                                    name 'Yoshikazu Nojima'
-                                    email 'mail@ynojima.net'
-                                }
-                            }
-                            licenses {
-                                license {
-                                    name 'The Apache Software License, Version 2.0'
-                                    url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                                    distribution 'repo'
-                                }
+                        }
+                        licenses {
+                            license {
+                                name 'The Apache Software License, Version 2.0'
+                                url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                                distribution 'repo'
                             }
                         }
                     }
@@ -150,8 +148,8 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = "${webauthn4jVersion}".endsWith(".RELEASE") // Publish only when it is RELEASE release
-        dryRun = false
+        publish = true
+        dryRun = !("${webauthn4jVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
         publications = ['artifactPublication']
         pkg {
             userOrg = "webauthn4j"
@@ -205,8 +203,4 @@ asciidoctor {
             doctype: 'book',
             numbered: '',
             revnumber: "${webauthn4jVersion}"
-}
-
-bintray {
-    publish = false // skip bintray on root project
 }
