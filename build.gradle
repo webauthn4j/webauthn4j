@@ -206,3 +206,7 @@ asciidoctor {
             numbered: '',
             revnumber: "${webauthn4jVersion}"
 }
+
+bintray {
+    publish = false // skip bintray on root project
+}
