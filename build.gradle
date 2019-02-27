@@ -30,6 +30,7 @@ plugins {
     id "org.sonarqube" version "2.6.2"
     id 'nebula.provided-base' version '3.0.3'
     id 'org.asciidoctor.convert' version "1.5.2"
+    id "com.jfrog.bintray" version "1.8.4"
     id "com.jfrog.artifactory" version "4.7.5"
 }
 
@@ -87,29 +88,31 @@ subprojects {
             artifactPublication(MavenPublication) {
                 from components.java
                 artifact sourcesJar
-                pom.withXml {
-                    def node = asNode()
-                    node.children().last() + {
-                        resolveStrategy = Closure.DELEGATE_FIRST
+                afterEvaluate {
+                    pom.withXml {
+                        def node = asNode()
+                        node.children().last() + {
+                            resolveStrategy = Closure.DELEGATE_FIRST
 
-                        name project.name
-                        description project.description
-                        url projectUrl
-                        scm {
-                            url vcsUrl
-                        }
-                        developers {
-                            developer {
-                                id 'ynojima'
-                                name 'Yoshikazu Nojima'
-                                email 'mail@ynojima.net'
+                            name project.name
+                            description project.description
+                            url projectUrl
+                            scm {
+                                url vcsUrl
                             }
-                        }
-                        licenses {
-                            license {
-                                name 'The Apache Software License, Version 2.0'
-                                url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                                distribution 'repo'
+                            developers {
+                                developer {
+                                    id 'ynojima'
+                                    name 'Yoshikazu Nojima'
+                                    email 'mail@ynojima.net'
+                                }
+                            }
+                            licenses {
+                                license {
+                                    name 'The Apache Software License, Version 2.0'
+                                    url 'http://www.apache.org/license/LICENSE-2.0.txt'
+                                    distribution 'repo'
+                                }
                             }
                         }
                     }
