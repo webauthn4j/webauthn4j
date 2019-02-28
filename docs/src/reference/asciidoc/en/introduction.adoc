@@ -3,10 +3,10 @@
 
 === Web Authentication
 
-Web Authentication is a new, secure web application authentication specification standardizing under W3C.
+Web Authentication is a new, secure web application authentication specification standardized under W3C.
 By combining local authentication, public-key authentication, per-origin key management,
 it provides strong authentication to web sites against authentication process attacks like phishing.
-Implementation is in progress in major browsers, the specification offers excellent choices for users who place importance on security and convenience.
+Implementation is in progress in major browsers, and the specification offers excellent choices for users who place importance on security and convenience.
 Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but it has been transferred to W3C.
 
 === WebAuthn4J
@@ -17,7 +17,7 @@ WebAuthn4J is a portable Java library for WebAuthn server side verification
 
 As a related project of WebAuthn4J, we are developing a wrapper library named Spring Security WebAuthn
 to support WebAuthn with Spring Security.
-To introduce WebAuthn in an application built with Spring Security, It is better to use Spring Security WebAuthn rather
+To introduce WebAuthn in an application built with Spring Security, it is better to use Spring Security WebAuthn rather
 than directly using WebAuthn4J.
 Spring Security WebAuthn also provides an implementation of the REST API of FIDO2 transporting binding profile.
 
@@ -40,7 +40,7 @@ All mandatory test cases and optional Android Key attestation test cases of http
 are all passed.
 
 NOTE: Since FIDO2 Test Tools runs the test via the REST API of FIDO2 Transport Binding Profile,
-It is executed through the REST API implementation provided by Spring Security WebAuthn.
+it is executed through the REST API implementation provided by Spring Security WebAuthn.
 
 === Requirements
 
@@ -50,7 +50,7 @@ It is executed through the REST API implementation provided by Spring Security W
 
 ==== Environment
 
-- SecureContext（connected by https or the localhost）
+- SecureContext (https or the localhost)
 
 === Getting from Maven Central
 If you are using Maven, just add the webauthn4j as a dependency:
