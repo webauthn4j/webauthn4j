@@ -2,43 +2,55 @@
 == Known Issues
 
 WebAuthn is state of the art technology. Therefore, there are still some limitations products utilizing it have.
-This section tells you issues known at the time of Feb 2019 that might be encountered if you try to use products utilizing WebAuthn technology.
+This section tells you issues known at the time of Feb 2019 that might be encountered if you try to use products
+utilizing WebAuthn technology.
 
 
-=== Safari’s WebAuthn support
+=== Safari's WebAuthn support
 
-Safari has not yet supported WebAuthn, which means that you cannot use iPhone/iPad to experience authentication utilizing WebAuthn technology.
+Safari has not yet supported WebAuthn, which means that you cannot use iPhone/iPad to experience authentication
+utilizing WebAuthn technology.
 
-Safari’s Technology Preview version has supported WebAuthn using CTAP2 Authenticator, but it has not yet integrated Face ID and Touch ID. However, it seems to be expected to integrate them sooner or later.
-
-
-=== Chrome’s ResidentKey support
-
-Chrome has not yet supported ResidentKey, which means that you cannot use Chrome to experience authentication utilizing WebAuthn technology without entering your account’s ID
-
-NOTE: You can mimic such the experience by storing credentialId onto LocalStorage on registration and read it on authentication.
-However, you cannot do that if you use Roaming Authenticator for authentication.
+Safari's Technology Preview version has supported WebAuthn using CTAP2 Authenticator, but it has not yet integrated
+Face ID and Touch ID. However, it seems to be expected to integrate them sooner or later.
 
 
-=== Firefox’s WebAuthn support
+=== Chrome's ResidentKey support
+
+Chrome has not yet supported ResidentKey, which means that you cannot use Chrome to experience authentication utilizing
+WebAuthn technology without entering your account's ID
+
+NOTE: You can mimic such the experience by storing credentialId onto LocalStorage on registration and read it on
+authentication. However, it doesn't works if a user uses Roaming Authenticator for authentication.
+
+=== Firefox's WebAuthn support
 
 Firefox has supported WebAuthn using FIDO U2F Authenticator, and not CTAP2 Authenticator.
 
-However, Windows’ Firefox implementation plans to use FIDO2 API provided by Windows OS, which makes users to experience authentication utilizing WebAuthn technology with CTAP2 Authenticator and Windows Hello.
+However, Windows' Firefox implementation plans to use FIDO2 API provided by Windows OS, which will makes users to
+experience authentication utilizing WebAuthn technology with CTAP2 Authenticator and Windows Hello.
 
 
-=== Supporting features’ difference between browsers
+=== Supporting features' difference between browsers
 
-Browser vendors has been struggling to support WebAuthn. However, it is nothing unusual that the feature supported by some platforms are not supported by other platforms. Considering it, it is recommended to prepare some fallback mechanism for your users using platforms not supporting the feature you expected to support.
+Browser vendors has been struggling to support WebAuthn. However, it is nothing unusual that the feature supported
+by some platforms are not supported by other platforms. Considering it, it is recommended to prepare some fallback
+mechanism for your users using platforms not supporting the feature you expected to support.
 
-For example, if you utilize ResidentKey to omit entering user account’s ID, it might be better to support two-factor authentication requiring password authentication for users using Chrome and Firefox, and two-factor authentication without WebAuthn for users using Safari.
+For example, if you utilize ResidentKey to omit entering user account's ID, it might be better to support two-factor
+authentication requiring password authentication for users using Chrome and Firefox, and two-factor authentication
+without WebAuthn for users using Safari.
 
 
-=== WebAuthn4J’s ECDAA support
+=== WebAuthn4J's ECDAA support
 
-WebAuthn4J has not yet supported ECDAA (Elliptic Curve based Direct Anonymous Attestation) algorithm. There is no plan to support it for the time being because ECDAA algorithm support is optional by WebAuthn specification and major browsers have not yet supported it.
+WebAuthn4J has not yet supported ECDAA (Elliptic Curve based Direct Anonymous Attestation) algorithm. There is no plan
+to support it for the time being because ECDAA algorithm support is optional by WebAuthn specification and major
+browsers have not yet supported it.
 
 
-=== WebAuthn4J’s PS256/PS384/PS512 support
+=== WebAuthn4J's PS256/PS384/PS512 support
 
-WebAuthn4J has not yet supported PS256, PS384, and PS512 algorithms. There is no plan to support it for the time being because these algorithms support is optional by WebAuthn specification and standard Providers of Java Crypto API have not yet supported it.
+WebAuthn4J has not yet supported PS256, PS384, and PS512 algorithms. There is no plan to support it for the time being
+because these algorithms support is optional by WebAuthn specification and standard Providers of Java Crypto API
+have not yet supported it.

@@ -46,12 +46,15 @@ As `MetadataItemsCertPathTrustworthinessValidator` resolves the `MetadataItem` l
 the AAGUID of the authenticator through the `MetadataItemsResolver` interface, we can verify the reliability with
 the service by a combination of `MetadataItemsResolverImpl` and `FidoMdsMetadataItemsProvider`.
 
-=== Representation of an authentication device
+=== Representation of an authenticator
 
-WebAuthn4j provides `Authenticator` interface as a representation of an authentication device (aka authenticator). 
+WebAuthn4j provides `Authenticator` interface as a representation of an authenticator.
 
-On registering the authenticator, you need to persist its representation by creating the instance implementing `Authenticator` interface in your application manner because it is used afterwards on authentication verification. It might be better to use credentialId as a search key for this persisted instance.
+On registering the authenticator, you need to persist its representation by creating the instance implementing
+`Authenticator` interface in your application manner because it is used afterwards on authentication verification.
+It might be better to use credentialId as a search key for this persisted instance.
 
-You can freely enhance the class implementing `Authenticator` interface in order to meet your application’s requirements. For example, you can add the field for your application’s user to identify the authenticator.
+You can freely enhance the class implementing `Authenticator` interface in order to meet your application’s requirements.
+For example, you can add the field for your application’s user to identify the authenticator.
 
 

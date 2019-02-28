@@ -32,11 +32,16 @@ Classes under `com.webauthn4j.request`, `com.webauthn4j.request` package are des
 
 Classes under `com.webauthn4j.request`, `com.webauthn4j.request` package are designed as being serializable and deserializable.
 
-Classes under `converter` package needs custom serializer and deserializer. Jackson’s module named `WebAuthnModule` consolidates these custom serializer and deserializer. WebAuthn4J’s validators register `WebAuthnModule` onto Jackson’s `ObjectMapper` automatically. 
+Classes under `converter` package needs custom serializer and deserializer. Jackson's module named `WebAuthnModule`
+consolidates these custom serializer and deserializer. WebAuthn4J’s validators register `WebAuthnModule` onto Jackson's
+`ObjectMapper` automatically.
 
-If you want to use WebAuthn4J’s serializer and deserializer outside these WebAuthn4J’s validators, you can register `WebAuthnModule` onto Jackson’s `ObjectMapper`.
+If you want to use WebAuthn4J’s serializer and deserializer outside these WebAuthn4J's validators,
+you can register `WebAuthnModule` onto Jackson's `ObjectMapper`.
 
-If you want to use your custom serializer and deserializer for WebAuthn4J’s validators, you can register your custom serializer and deserializer onto `ObjectMapper` and pass it onto WebAuthn4J’ validators via those constructors.
+If you want to use your custom serializer and deserializer for WebAuthn4J’s validators,
+you can register your custom serializer and deserializer onto `ObjectMapper` and pass it onto WebAuthn4J' validators
+via those constructors.
 
 ==== TrustAnchorsResolver
 
