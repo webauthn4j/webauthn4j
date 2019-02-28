@@ -2,12 +2,13 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.security.cert.X509Certificate;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
@@ -30,11 +31,12 @@ public class KeyDescriptionValidatorTest {
         keyDescriptionValidator.validate(certificate, clientDataHash, true);
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test
     public void validate_with_IOException_test() throws IOException {
         KeyDescriptionValidator target = spy(KeyDescriptionValidator.class);
         doThrow(new IOException()).when(target).extractKeyDescription(any());
-        target.validate(TestUtil.loadAndroidKeyAttestationCertificate(), null, false);
+        assertThrows(UncheckedIOException.class,
+                () -> target.validate(TestUtil.loadAndroidKeyAttestationCertificate(), null, false)
+        );
     }
-
 }

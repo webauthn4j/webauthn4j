@@ -44,11 +44,13 @@ import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
@@ -104,10 +106,11 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
-
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
     @Test
@@ -155,14 +158,15 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
-
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
 
-    @Test(expected = MaliciousDataException.class)
+    @Test
     public void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;
@@ -196,11 +200,12 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(MaliciousDataException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadChallengeException.class)
+    @Test
     public void validate_assertion_with_bad_challenge_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -234,11 +239,12 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(BadChallengeException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadOriginException.class)
+    @Test
     public void validate_assertion_with_bad_origin_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -272,11 +278,12 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(BadOriginException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = TokenBindingException.class)
+    @Test
     public void validate_assertion_with_invalid_tokenBinding_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -312,12 +319,13 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(TokenBindingException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
 
-    @Test(expected = BadRpIdException.class)
+    @Test
     public void validate_bad_rpId_test() {
         String rpId = "example.com";
         String anotherSiteRpId = "another.site.example.net";
@@ -351,11 +359,12 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(BadRpIdException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = UserNotVerifiedException.class)
+    @Test
     public void validate_assertion_with_userVerificationDiscouraged_option_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -388,8 +397,9 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
-
+        assertThrows(UserNotVerifiedException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
 

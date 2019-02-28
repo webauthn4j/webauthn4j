@@ -23,11 +23,12 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.webauthn4j.test.TestUtil.createAuthenticatorData;
 import static com.webauthn4j.test.TestUtil.createClientData;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
 public class WebAuthnAuthenticationContextTest {
@@ -46,12 +47,14 @@ public class WebAuthnAuthenticationContextTest {
         ServerProperty serverProperty = mock(ServerProperty.class);
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
                 credentialId, collectedClientData, authenticatorData, signature, serverProperty, false);
-        assertThat(target.getCredentialId()).isEqualTo(credentialId);
-        assertThat(target.getClientDataJSON()).isEqualTo(collectedClientData);
-        assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData);
-        assertThat(target.getSignature()).isEqualTo(signature);
-        assertThat(target.getServerProperty()).isEqualTo(serverProperty);
-        assertThat(target.isUserVerificationRequired()).isFalse();
+        assertAll(
+                () -> assertThat(target.getCredentialId()).isEqualTo(credentialId),
+                () -> assertThat(target.getClientDataJSON()).isEqualTo(collectedClientData),
+                () -> assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData),
+                () -> assertThat(target.getSignature()).isEqualTo(signature),
+                () -> assertThat(target.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(target.isUserVerificationRequired()).isFalse()
+        );
     }
 
     @Test
@@ -66,7 +69,9 @@ public class WebAuthnAuthenticationContextTest {
         WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
                 credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
 
-        assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB);
-        assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB);
+        assertAll(
+                () -> assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB),
+                () -> assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB)
+        );
     }
 }

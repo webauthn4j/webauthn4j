@@ -24,43 +24,55 @@ import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMAttestationStatementValidatorTest {
 
     private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_non_TPMAttestation_test(){
+    @Test
+    public void validate_non_TPMAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
-        target.validate(registrationObject);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.validate(registrationObject)
+        );
     }
 
     @Test
-    public void getCurveFromTPMEccCurve_test(){
-        assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P256)).isEqualTo(ECUtil.P_256_SPEC.getCurve());
-        assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P384)).isEqualTo(ECUtil.P_384_SPEC.getCurve());
-        assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P521)).isEqualTo(ECUtil.P_521_SPEC.getCurve());
-        assertThatThrownBy(()->target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P192)).isInstanceOf(NotImplementedException.class);
+    public void getCurveFromTPMEccCurve_test() {
+        assertAll(
+                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P256)).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
+                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P384)).isEqualTo(ECUtil.P_384_SPEC.getCurve()),
+                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P521)).isEqualTo(ECUtil.P_521_SPEC.getCurve()),
+                () -> assertThrows(NotImplementedException.class,
+                        () -> target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P192)
+                )
+        );
     }
 
     @Test
-    public void getAlgJcaName_test(){
-        assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA1)).isEqualTo("SHA-1");
-        assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA256)).isEqualTo("SHA-256");
-        assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA384)).isEqualTo("SHA-384");
-        assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA512)).isEqualTo("SHA-512");
-        assertThatThrownBy(()->target.getAlgJcaName(TPMIAlgHash.TPM_ALG_ERROR)).isInstanceOf(BadAttestationStatementException.class);
-        assertThatThrownBy(()->target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)).isInstanceOf(BadAttestationStatementException.class);
+    public void getAlgJcaName_test() {
+        assertAll(
+                () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA1)).isEqualTo("SHA-1"),
+                () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA256)).isEqualTo("SHA-256"),
+                () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA384)).isEqualTo("SHA-384"),
+                () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA512)).isEqualTo("SHA-512"),
+                () -> assertThrows(BadAttestationStatementException.class,
+                        () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_ERROR)
+                ),
+                () -> assertThrows(BadAttestationStatementException.class,
+                        () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)
+                )
+        );
     }
-
 }

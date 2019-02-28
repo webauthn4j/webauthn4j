@@ -2,9 +2,11 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class AttestationConveyancePreferenceTest {
@@ -13,9 +15,11 @@ public class AttestationConveyancePreferenceTest {
 
     @Test
     public void create_test() {
-        assertThat(AttestationConveyancePreference.create("none")).isEqualTo(AttestationConveyancePreference.NONE);
-        assertThat(AttestationConveyancePreference.create("direct")).isEqualTo(AttestationConveyancePreference.DIRECT);
-        assertThat(AttestationConveyancePreference.create("indirect")).isEqualTo(AttestationConveyancePreference.INDIRECT);
+        assertAll(
+                () -> assertThat(AttestationConveyancePreference.create("none")).isEqualTo(AttestationConveyancePreference.NONE),
+                () -> assertThat(AttestationConveyancePreference.create("direct")).isEqualTo(AttestationConveyancePreference.DIRECT),
+                () -> assertThat(AttestationConveyancePreference.create("indirect")).isEqualTo(AttestationConveyancePreference.INDIRECT)
+        );
     }
 
     @Test
@@ -23,16 +27,20 @@ public class AttestationConveyancePreferenceTest {
         assertThat(AttestationConveyancePreference.create(null)).isEqualTo(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void create_test_with_invalid_value() {
-        AttestationConveyancePreference.create("invalid");
+        assertThrows(IllegalArgumentException.class,
+                () -> AttestationConveyancePreference.create("invalid")
+        );
     }
 
     @Test
     public void getValue_test() {
-        assertThat(AttestationConveyancePreference.NONE.getValue()).isEqualTo("none");
-        assertThat(AttestationConveyancePreference.DIRECT.getValue()).isEqualTo("direct");
-        assertThat(AttestationConveyancePreference.INDIRECT.getValue()).isEqualTo("indirect");
+        assertAll(
+                () -> assertThat(AttestationConveyancePreference.NONE.getValue()).isEqualTo("none"),
+                () -> assertThat(AttestationConveyancePreference.DIRECT.getValue()).isEqualTo("direct"),
+                () -> assertThat(AttestationConveyancePreference.INDIRECT.getValue()).isEqualTo("indirect")
+        );
     }
 
     @Test
@@ -41,11 +49,12 @@ public class AttestationConveyancePreferenceTest {
         assertThat(dto.preference).isEqualTo(AttestationConveyancePreference.NONE);
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void fromString_test_with_invalid_value() {
-        jsonConverter.readValue("{\"preference\":\"invalid\"}", TestDTO.class);
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"preference\":\"invalid\"}", TestDTO.class)
+        );
     }
-
 
     public static class TestDTO{
         public AttestationConveyancePreference preference;

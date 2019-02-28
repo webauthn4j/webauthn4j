@@ -17,22 +17,26 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class COSEKeyTypeTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(COSEKeyType.create(0)).isEqualTo(COSEKeyType.RESERVED);
-        assertThat(COSEKeyType.create(1)).isEqualTo(COSEKeyType.OKP);
-        assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2);
-        assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA);
-        assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC);
-
-        //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(() -> COSEKeyType.create(-1)).isInstanceOf(InvalidFormatException.class);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(COSEKeyType.create(0)).isEqualTo(COSEKeyType.RESERVED),
+                () -> assertThat(COSEKeyType.create(1)).isEqualTo(COSEKeyType.OKP),
+                () -> assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2),
+                () -> assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA),
+                () -> assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC),
+                //noinspection ResultOfMethodCallIgnored
+                () -> assertThrows(InvalidFormatException.class,
+                        () -> COSEKeyType.create(-1)
+                )
+        );
     }
 }

@@ -22,9 +22,10 @@ import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for EC2CredentialPublicKey
@@ -41,9 +42,11 @@ public class EC2CredentialPublicKeyTest {
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createFromUncompressedECCKey_with_invalid_length_input_test() {
-        EC2CredentialPublicKey.createFromUncompressedECCKey(new byte[64]);
+        assertThrows(IllegalArgumentException.class,
+                () -> EC2CredentialPublicKey.createFromUncompressedECCKey(new byte[64])
+        );
     }
 
     @Test
@@ -75,7 +78,7 @@ public class EC2CredentialPublicKeyTest {
         target.validate();
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_invalid_algorithm_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
@@ -87,10 +90,12 @@ public class EC2CredentialPublicKeyTest {
                 original.getX(),
                 original.getY()
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_invalid_curve_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
@@ -102,11 +107,12 @@ public class EC2CredentialPublicKeyTest {
                 original.getX(),
                 original.getY()
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 
-
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_invalid_x_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
@@ -118,10 +124,12 @@ public class EC2CredentialPublicKeyTest {
                 null,
                 original.getY()
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_invalid_y_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
@@ -133,8 +141,8 @@ public class EC2CredentialPublicKeyTest {
                 original.getX(),
                 null
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
-
-
 }

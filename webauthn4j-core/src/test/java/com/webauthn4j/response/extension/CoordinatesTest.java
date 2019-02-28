@@ -16,9 +16,10 @@
 
 package com.webauthn4j.response.extension;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class CoordinatesTest {
 
@@ -34,13 +35,15 @@ public class CoordinatesTest {
                 8.9
         );
 
-        assertThat(instance.getLatitude()).isEqualTo(12.34);
-        assertThat(instance.getLongitude()).isEqualTo(23.45);
-        assertThat(instance.getAltitude()).isEqualTo(34.56);
-        assertThat(instance.getAccuracy()).isEqualTo(4.5);
-        assertThat(instance.getAltitudeAccuracy()).isEqualTo(5.6);
-        assertThat(instance.getHeading()).isEqualTo(7.8);
-        assertThat(instance.getSpeed()).isEqualTo(8.9);
+        assertAll(
+                () -> assertThat(instance.getLatitude()).isEqualTo(12.34),
+                () -> assertThat(instance.getLongitude()).isEqualTo(23.45),
+                () -> assertThat(instance.getAltitude()).isEqualTo(34.56),
+                () -> assertThat(instance.getAccuracy()).isEqualTo(4.5),
+                () -> assertThat(instance.getAltitudeAccuracy()).isEqualTo(5.6),
+                () -> assertThat(instance.getHeading()).isEqualTo(7.8),
+                () -> assertThat(instance.getSpeed()).isEqualTo(8.9)
+        );
     }
 
     @Test
@@ -48,7 +51,9 @@ public class CoordinatesTest {
         Coordinates instanceA = new Coordinates();
         Coordinates instanceB = new Coordinates();
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }

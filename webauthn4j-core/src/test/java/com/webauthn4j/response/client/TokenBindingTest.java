@@ -17,9 +17,10 @@
 package com.webauthn4j.response.client;
 
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class TokenBindingTest {
 
@@ -36,9 +37,9 @@ public class TokenBindingTest {
         TokenBinding tokenBindingA = new TokenBinding(TokenBindingStatus.SUPPORTED, new byte[]{0x01, 0x23, 0x45});
         TokenBinding tokenBindingB = new TokenBinding(TokenBindingStatus.SUPPORTED, new byte[]{0x01, 0x23, 0x45});
 
-        assertThat(tokenBindingA).isEqualTo(tokenBindingB);
-        assertThat(tokenBindingA).hasSameHashCodeAs(tokenBindingB);
+        assertAll(
+                () -> assertThat(tokenBindingA).isEqualTo(tokenBindingB),
+                () -> assertThat(tokenBindingA).hasSameHashCodeAs(tokenBindingB)
+        );
     }
-
-
 }

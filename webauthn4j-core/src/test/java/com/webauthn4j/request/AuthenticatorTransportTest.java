@@ -19,11 +19,13 @@ package com.webauthn4j.request;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.assertj.core.api.Java6Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AuthenticatorTransportTest {
 
@@ -31,10 +33,12 @@ public class AuthenticatorTransportTest {
 
     @Test
     public void create_test() {
-        assertThat(AuthenticatorTransport.create(null)).isEqualTo(null);
-        assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB);
-        assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC);
-        assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE);
+        assertAll(
+                () -> assertThat(AuthenticatorTransport.create(null)).isEqualTo(null),
+                () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
+                () -> assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC),
+                () -> assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE)
+        );
     }
 
     @Test
@@ -42,9 +46,11 @@ public class AuthenticatorTransportTest {
         assertThat(AuthenticatorTransport.USB.getValue()).isEqualTo("usb");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void create_invalid_value_test() {
-        AuthenticatorTransport.create("invalid");
+        assertThrows(IllegalArgumentException.class,
+                () -> AuthenticatorTransport.create("invalid")
+        );
     }
 
     @Test
@@ -53,14 +59,14 @@ public class AuthenticatorTransportTest {
         Java6Assertions.assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void fromString_test_with_invalid_value() throws IOException {
-        objectMapper.readValue("{\"transport\":\"invalid\"}", TestDTO.class);
+    @Test
+    public void fromString_test_with_invalid_value() {
+        assertThrows(InvalidFormatException.class,
+                () -> objectMapper.readValue("{\"transport\":\"invalid\"}", TestDTO.class)
+        );
     }
 
-
-    public static class TestDTO{
+    public static class TestDTO {
         public AuthenticatorTransport transport;
     }
-
 }

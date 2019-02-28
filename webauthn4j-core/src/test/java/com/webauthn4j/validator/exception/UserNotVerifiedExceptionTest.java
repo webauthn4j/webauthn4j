@@ -16,9 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class UserNotVerifiedExceptionTest {
@@ -27,18 +28,19 @@ public class UserNotVerifiedExceptionTest {
 
     @Test
     public void test() {
-        UserNotVerifiedException exception;
+        UserNotVerifiedException exception1 = new UserNotVerifiedException("dummy", cause);
+        UserNotVerifiedException exception2 = new UserNotVerifiedException("dummy");
+        UserNotVerifiedException exception3 = new UserNotVerifiedException(cause);
 
-        exception = new UserNotVerifiedException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new UserNotVerifiedException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new UserNotVerifiedException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

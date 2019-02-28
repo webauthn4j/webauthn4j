@@ -18,7 +18,7 @@ package com.webauthn4j.metadata.validator;
 
 import com.webauthn4j.metadata.MetadataItemsCertPathTrustworthinessValidator;
 import com.webauthn4j.metadata.data.MetadataItem;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by ynojima on 2017/09/24.
@@ -30,6 +30,4 @@ public class MetadataItemCertPathTrustworthinessValidatorTest {
     @Test
     public void test() {
     }
-
-
 }

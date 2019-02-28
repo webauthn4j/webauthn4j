@@ -17,9 +17,10 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AttestationCertificatePathTest {
 
@@ -29,9 +30,11 @@ public class AttestationCertificatePathTest {
         assertThat(attestationCertificatePath.getEndEntityAttestationCertificate()).isEqualTo(attestationCertificatePath.getEndEntityAttestationCertificate());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void getEndEntityCertificate_test_with_no_certificates() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
-        attestationCertificatePath.getEndEntityAttestationCertificate();
+        assertThrows(IllegalStateException.class,
+                () -> attestationCertificatePath.getEndEntityAttestationCertificate()
+        );
     }
 }

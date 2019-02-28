@@ -18,22 +18,25 @@ package com.webauthn4j.validator.attestation.statement.packed;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NullPackedAttestationStatementValidatorTest {
 
     private NullPackedAttestationStatementValidator target = new NullPackedAttestationStatementValidator();
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithPackedAttestation();
         target.validate(registrationObject);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void validate_non_PackedAttestation_test(){
+    @Test
+    public void validate_non_PackedAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
-        target.validate(registrationObject);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.validate(registrationObject)
+        );
     }
-
 }

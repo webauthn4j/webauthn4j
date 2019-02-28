@@ -16,9 +16,11 @@
 
 package com.webauthn4j.response.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for Origin
@@ -33,19 +35,22 @@ public class OriginTest {
         Origin http_examplecom_80 = new Origin("http://example.com:80");
         Origin http_examplecom_8080 = new Origin("http://example.com:8080");
 
-        assertThat(https_examplecom_default).isEqualTo(https_examplecom_443);
-        assertThat(http_examplecom_default).isEqualTo(http_examplecom_80);
-        assertThat(http_examplecom_default).isNotEqualTo(http_examplecom_8080);
-        assertThat(http_examplecom_default).isNotEqualTo(https_examplecom_default);
+        assertAll(
+                () -> assertThat(https_examplecom_default).isEqualTo(https_examplecom_443),
+                () -> assertThat(http_examplecom_default).isEqualTo(http_examplecom_80),
+                () -> assertThat(http_examplecom_default).isNotEqualTo(http_examplecom_8080),
+                () -> assertThat(http_examplecom_default).isNotEqualTo(https_examplecom_default)
+        );
     }
 
     @Test
     public void getter_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
-        assertThat(https_examplecom_default.getScheme()).isEqualTo("https");
-        assertThat(https_examplecom_default.getHost()).isEqualTo("example.com");
-        assertThat(https_examplecom_default.getPort()).isEqualTo(443);
-
+        assertAll(
+                () -> assertThat(https_examplecom_default.getScheme()).isEqualTo("https"),
+                () -> assertThat(https_examplecom_default.getHost()).isEqualTo("example.com"),
+                () -> assertThat(https_examplecom_default.getPort()).isEqualTo(443)
+        );
     }
 
     @Test
@@ -56,26 +61,33 @@ public class OriginTest {
         assertThat(originA).isEqualTo(originB);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_test_with_illegal_input() {
-        new Origin("ftp", "example.com", 80);
+        assertThrows(IllegalArgumentException.class,
+                () -> new Origin("ftp", "example.com", 80)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void constructor_test_with_null_input() {
-        new Origin(null, "example.com", 80);
+        assertThrows(IllegalArgumentException.class,
+                () -> new Origin(null, "example.com", 80)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void single_string_constructor_test_with_illegal_input() {
-        new Origin("ftp://example.com");
+        assertThrows(IllegalArgumentException.class,
+                () -> new Origin("ftp://example.com")
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void single_string_constructor_test_without_scheme_input() {
-        new Origin("example.com");
+        assertThrows(IllegalArgumentException.class,
+                () -> new Origin("example.com")
+        );
     }
-
 
     @Test
     public void hasCode_test() {
@@ -84,5 +96,4 @@ public class OriginTest {
 
         assertThat(originA.hashCode()).isEqualTo(originB.hashCode());
     }
-
 }

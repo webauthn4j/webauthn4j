@@ -17,7 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
@@ -34,5 +34,4 @@ public class TrustAnchorsResolverImplTest {
         Set<TrustAnchor> trustAnchorsB = target.resolve(AAGUID.ZERO);
         assertThat(trustAnchorsA).isEqualTo(trustAnchorsB);
     }
-
 }

@@ -26,12 +26,13 @@ import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,16 +40,18 @@ public class FIDOU2FAttestationStatementValidatorTest {
 
     private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void validate_invalid_attestation_statement_test() {
         RegistrationObject registrationObject = mock(RegistrationObject.class);
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
         when(attestationObject.getAttestationStatement()).thenReturn(new NoneAttestationStatement());
-        target.validate(registrationObject);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.validate(registrationObject)
+        );
     }
 
-    @Test(expected = BadAttestationStatementException.class)
+    @Test
     public void validateAttestationStatement_test() {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
@@ -57,20 +60,25 @@ public class FIDOU2FAttestationStatementValidatorTest {
                         TestUtil.load3tierTestIntermediateCACertificate()
                 ))
         );
-        target.validateAttestationStatement(attestationStatement);
+        assertThrows(BadAttestationStatementException.class,
+                () -> target.validateAttestationStatement(attestationStatement)
+        );
     }
 
-    @Test(expected = CertificateException.class)
+    @Test
     public void validatePublicKey_with_rsa_key_test() {
         PublicKey publicKey = mock(PublicKey.class);
         when(publicKey.getAlgorithm()).thenReturn("RSA");
-        target.validatePublicKey(publicKey);
+        assertThrows(CertificateException.class,
+                () -> target.validatePublicKey(publicKey)
+        );
     }
 
-    @Test(expected = CertificateException.class)
+    @Test
     public void validatePublicKey_with_non_p256_curve_ec_key_test() {
         KeyPair keyPair = KeyUtil.createECKeyPair(ECUtil.P_521_SPEC);
-        target.validatePublicKey(keyPair.getPublic());
+        assertThrows(CertificateException.class,
+                () -> target.validatePublicKey(keyPair.getPublic())
+        );
     }
-
 }

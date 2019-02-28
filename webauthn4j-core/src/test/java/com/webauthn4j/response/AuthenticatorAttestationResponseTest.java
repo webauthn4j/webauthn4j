@@ -17,11 +17,12 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.request.AuthenticatorTransport;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class AuthenticatorAttestationResponseTest {
 
@@ -30,8 +31,10 @@ public class AuthenticatorAttestationResponseTest {
         AuthenticatorAttestationResponse instanceA = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
         AuthenticatorAttestationResponse instanceB = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 
     @Test
@@ -43,5 +46,4 @@ public class AuthenticatorAttestationResponseTest {
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0]);
         assertThat(target.getAuthenticatorTransports()).isEmpty();
     }
-
 }

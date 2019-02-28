@@ -17,11 +17,12 @@
 package com.webauthn4j.util.jws;
 
 import com.webauthn4j.converter.util.JsonConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JWSTest {
 
@@ -32,10 +33,11 @@ public class JWSTest {
         assertThat(jws.isValidSignature()).isFalse();
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void parse_invalid_data_test(){
+    @Test
+    public void parse_invalid_data_test() {
         String input = "invalid";
-        JWS.parse(input, new JsonConverter(), HashMap.class);
+        assertThrows(IllegalArgumentException.class,
+                () -> JWS.parse(input, new JsonConverter(), HashMap.class)
+        );
     }
-
 }

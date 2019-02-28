@@ -17,15 +17,18 @@
 package com.webauthn4j.response.client;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TokenBindingStatusTest {
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_illegal_value_test() throws InvalidFormatException {
-        TokenBindingStatus.create("illegal");
+    @Test
+    public void create_with_illegal_value_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> TokenBindingStatus.create("illegal")
+        );
     }
 
     @Test

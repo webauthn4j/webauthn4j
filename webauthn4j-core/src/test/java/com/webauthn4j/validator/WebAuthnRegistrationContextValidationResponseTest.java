@@ -22,9 +22,10 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class WebAuthnRegistrationContextValidationResponseTest {
 
@@ -37,7 +38,9 @@ public class WebAuthnRegistrationContextValidationResponseTest {
                 new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);
         WebAuthnRegistrationContextValidationResponse instanceB =
                 new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceB).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceB).hasSameHashCodeAs(instanceB)
+        );
     }
 }

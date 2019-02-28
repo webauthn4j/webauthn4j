@@ -19,9 +19,11 @@ package com.webauthn4j.validator;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Created by ynojima on 2017/08/27.
@@ -44,7 +46,7 @@ public class RpIdHashValidatorTest {
         target.validate(rpIdHashA, serverProperty);
     }
 
-    @Test(expected = BadRpIdException.class)
+    @Test
     public void verifyRpIdHash_test_with_different_rpIds() {
 
         String rpIdA = "sub.example.com";
@@ -55,10 +57,12 @@ public class RpIdHashValidatorTest {
         ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
 
         //When
-        target.validate(rpIdHashA, serverProperty);
+        assertThrows(BadRpIdException.class,
+                () -> target.validate(rpIdHashA, serverProperty)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void verifyRpIdHash_test_with_relyingParty_null() {
 
         String rpIdA = "example.com";
@@ -67,10 +71,12 @@ public class RpIdHashValidatorTest {
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
         //When
-        target.validate(rpIdHashA, null);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.validate(rpIdHashA, null)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void verifyRpIdHash_test_with_relyingParty_rpId_null() {
 
         String rpIdA = "example.com";
@@ -81,7 +87,8 @@ public class RpIdHashValidatorTest {
         ServerProperty serverProperty = new ServerProperty(null, null, null, null);
 
         //When
-        target.validate(rpIdHashA, serverProperty);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.validate(rpIdHashA, serverProperty)
+        );
     }
-
 }

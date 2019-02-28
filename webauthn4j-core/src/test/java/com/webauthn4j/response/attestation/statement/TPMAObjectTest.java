@@ -17,25 +17,28 @@
 package com.webauthn4j.response.attestation.statement;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class TPMAObjectTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         TPMAObject tpmaObject = new TPMAObject(394354);
-        assertThat(tpmaObject.isFixedTPM()).isTrue();
-        assertThat(tpmaObject.isStClear()).isFalse();
-        assertThat(tpmaObject.isFixedParent()).isTrue();
-        assertThat(tpmaObject.isSensitiveDataOrigin()).isTrue();
-        assertThat(tpmaObject.isUserWithAuth()).isTrue();
-        assertThat(tpmaObject.isAdminWithPolicy()).isFalse();
-        assertThat(tpmaObject.isNoDA()).isTrue();
-        assertThat(tpmaObject.isEncryptedDuplication()).isFalse();
-        assertThat(tpmaObject.isRestricted()).isFalse();
-        assertThat(tpmaObject.isDecrypt()).isTrue();
-        assertThat(tpmaObject.isSignEncrypt()).isTrue();
+        assertAll(
+                () -> assertThat(tpmaObject.isFixedTPM()).isTrue(),
+                () -> assertThat(tpmaObject.isStClear()).isFalse(),
+                () -> assertThat(tpmaObject.isFixedParent()).isTrue(),
+                () -> assertThat(tpmaObject.isSensitiveDataOrigin()).isTrue(),
+                () -> assertThat(tpmaObject.isUserWithAuth()).isTrue(),
+                () -> assertThat(tpmaObject.isAdminWithPolicy()).isFalse(),
+                () -> assertThat(tpmaObject.isNoDA()).isTrue(),
+                () -> assertThat(tpmaObject.isEncryptedDuplication()).isFalse(),
+                () -> assertThat(tpmaObject.isRestricted()).isFalse(),
+                () -> assertThat(tpmaObject.isDecrypt()).isTrue(),
+                () -> assertThat(tpmaObject.isSignEncrypt()).isTrue()
+        );
     }
 }

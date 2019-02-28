@@ -30,7 +30,7 @@ import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -106,5 +106,4 @@ public class NullAttestationStatementValidatorTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, true);
         target.validate(registrationContext);
     }
-
 }

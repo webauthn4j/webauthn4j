@@ -18,7 +18,7 @@ package com.webauthn4j.converter;
 
 
 import com.webauthn4j.converter.util.JsonConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,13 +29,12 @@ public class AuthenticationExtensionsClientOutputsConverterTest {
     private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void convert_null_test(){
-        assertThat(target.convert(null)).isNull();;
+    public void convert_null_test() {
+        assertThat(target.convert(null)).isNull();
     }
 
     @Test
-    public void convertToString_null_test(){
-        assertThat(target.convertToString(null)).isNull();;
+    public void convertToString_null_test() {
+        assertThat(target.convertToString(null)).isNull();
     }
-
 }

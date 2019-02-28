@@ -17,9 +17,10 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Created by ynojima on 2017/08/19.
@@ -32,16 +33,20 @@ public class AttestedCredentialDataTest {
     @Test
     public void constructor_test() {
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData();
-        assertThat(attestedCredentialData.getCredentialId()).isNull();
-        assertThat(attestedCredentialData.getAaguid()).isNull();
-        assertThat(attestedCredentialData.getCredentialPublicKey()).isNull();
+        assertAll(
+                () -> assertThat(attestedCredentialData.getCredentialId()).isNull(),
+                () -> assertThat(attestedCredentialData.getAaguid()).isNull(),
+                () -> assertThat(attestedCredentialData.getCredentialPublicKey()).isNull()
+        );
     }
 
     @Test
     public void equals_hashCode_test() {
         AttestedCredentialData instanceA = TestUtil.createAttestedCredentialData();
         AttestedCredentialData instanceB = TestUtil.createAttestedCredentialData();
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }

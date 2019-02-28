@@ -16,9 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class SelfAttestationProhibitedExceptionTest {
@@ -27,18 +28,19 @@ public class SelfAttestationProhibitedExceptionTest {
 
     @Test
     public void test() {
-        SelfAttestationProhibitedException exception;
+        SelfAttestationProhibitedException exception1 = new SelfAttestationProhibitedException("dummy", cause);
+        SelfAttestationProhibitedException exception2 = new SelfAttestationProhibitedException("dummy");
+        SelfAttestationProhibitedException exception3 = new SelfAttestationProhibitedException(cause);
 
-        exception = new SelfAttestationProhibitedException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new SelfAttestationProhibitedException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new SelfAttestationProhibitedException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

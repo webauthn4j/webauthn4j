@@ -35,7 +35,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -46,6 +46,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class PackedAttestationStatementValidatorTest {
@@ -104,7 +106,7 @@ public class PackedAttestationStatementValidatorTest {
 
     }
 
-    @Test(expected = NotImplementedException.class)
+    @Test
     public void validate_with_ecdaaKeyId_test() throws Exception {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
@@ -115,23 +117,29 @@ public class PackedAttestationStatementValidatorTest {
         byte[] ecdaaKeyId = new byte[16];
         AttestationObject attestationObject = new AttestationObject(authenticatorData, new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, null, ecdaaKeyId));
 
-        validate(clientData, attestationObject);
+        assertThrows(NotImplementedException.class,
+                () -> validate(clientData, attestationObject)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void validate_with_invalid_AttestationStatement_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        validate(clientData, attestationObject);
+        assertThrows(IllegalArgumentException.class,
+                () -> validate(clientData, attestationObject)
+        );
     }
 
-    @Test(expected = BadSignatureException.class)
+    @Test
     public void validate_with_bad_signature_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = new byte[32];
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
 
-        validate(clientData, attestationObject);
+        assertThrows(BadSignatureException.class,
+                () -> validate(clientData, attestationObject)
+        );
     }
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {

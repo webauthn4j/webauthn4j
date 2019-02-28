@@ -17,28 +17,32 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class TPMDevicePropertyTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         TPMDeviceProperty tpmDeviceProperty = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
 
-        assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("manufacturer");
-        assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("partNumber");
-        assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("firmwareVersion");
+        assertAll(
+                () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("manufacturer"),
+                () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("partNumber"),
+                () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("firmwareVersion")
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         TPMDeviceProperty instanceA = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
         TPMDeviceProperty instanceB = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

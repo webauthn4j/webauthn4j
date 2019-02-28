@@ -28,11 +28,12 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOu
 import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyCredentialTest {
 
@@ -41,7 +42,7 @@ public class PublicKeyCredentialTest {
     private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
 
     @Test
-    public void test(){
+    public void test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -68,21 +69,24 @@ public class PublicKeyCredentialTest {
                 extensions
         );
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue());
-        assertThat(credential.getId()).isNotEmpty();
-        assertThat(credential.getRawId()).isNotEmpty();
-        assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class);
-        assertThat(credential.getClientExtensionResults()).isNotNull();
+        assertAll(
+                () -> assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue()),
+                () -> assertThat(credential.getId()).isNotEmpty(),
+                () -> assertThat(credential.getRawId()).isNotEmpty(),
+                () -> assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
+                () -> assertThat(credential.getClientExtensionResults()).isNotNull()
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

@@ -17,7 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyStoreFileTrustAnchorsProviderTest {
 
@@ -42,14 +43,15 @@ public class KeyStoreFileTrustAnchorsProviderTest {
         assertThat(trustAnchors).isNotEmpty();
     }
 
-    @Test(expected = KeyStoreException.class)
-    public void provide_test_with_invalid_path() throws Exception {
+    @Test
+    public void provide_test_with_invalid_path() {
         target = new KeyStoreFileTrustAnchorsProvider();
         Path path = Paths.get("invalid.path.to.jks");
         target.setKeyStore(path);
         target.setPassword("password");
 
-        target.provide();
+        assertThrows(KeyStoreException.class,
+                () -> target.provide()
+        );
     }
-
 }

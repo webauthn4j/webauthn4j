@@ -18,13 +18,15 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -37,8 +39,10 @@ public class FIDOU2FAttestationStatementTest {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.emptyList());
         byte[] signature = new byte[32];
         FIDOU2FAttestationStatement target = new FIDOU2FAttestationStatement(attestationCertificatePath, signature);
-        assertThat(target.getX5c()).isEqualTo(attestationCertificatePath);
-        assertThat(target.getSig()).isEqualTo(signature);
+        assertAll(
+                () -> assertThat(target.getX5c()).isEqualTo(attestationCertificatePath),
+                () -> assertThat(target.getSig()).isEqualTo(signature)
+        );
     }
 
     @Test
@@ -93,36 +97,43 @@ public class FIDOU2FAttestationStatementTest {
     }
 
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_null_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(null, new byte[0]);
-        instance.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> instance.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_empty_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
-        instance.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> instance.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_two_certificates_x5c_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         new AttestationCertificatePath(Arrays.asList(mock(X509Certificate.class), mock(X509Certificate.class))),
                         new byte[0]
                 );
-        instance.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> instance.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_null_signature_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         TestUtil.create2tierTestAuthenticatorCertPath(),
                         null
                 );
-        instance.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> instance.validate()
+        );
     }
-
 }

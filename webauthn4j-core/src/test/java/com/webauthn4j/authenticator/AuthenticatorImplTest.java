@@ -19,31 +19,39 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AuthenticatorImplTest {
 
     @Test
     public void getter_setter_test() {
-
         AttestedCredentialData attestedCredentialData = TestUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement();
         Authenticator authenticator = TestUtil.createAuthenticator(attestedCredentialData, attestationStatement);
 
-        assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData);
-        assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement);
-        assertThat(authenticator.getCounter()).isEqualTo(1);
-
+        assertAll(
+                () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
+                () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
+                () -> assertThat(authenticator.getCounter()).isEqualTo(1)
+        );
     }
 
     @Test
     public void setCounter_range_test() {
         AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
-        assertThatThrownBy(() -> authenticator.setCounter(-1)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> authenticator.setCounter(4294967296L)).isInstanceOf(IllegalArgumentException.class);
+
+        assertAll(
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> authenticator.setCounter(-1)
+                ),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> authenticator.setCounter(4294967296L)
+                )
+        );
     }
 
     @Test
@@ -51,7 +59,9 @@ public class AuthenticatorImplTest {
         Authenticator authenticatorA = TestUtil.createAuthenticator();
         Authenticator authenticatorB = TestUtil.createAuthenticator();
 
-        assertThat(authenticatorA).isEqualTo(authenticatorB);
-        assertThat(authenticatorA).hasSameHashCodeAs(authenticatorB);
+        assertAll(
+                () -> assertThat(authenticatorA).isEqualTo(authenticatorB),
+                () -> assertThat(authenticatorA).hasSameHashCodeAs(authenticatorB)
+        );
     }
 }

@@ -18,11 +18,12 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class PublicKeyCredentialTypeTest {
@@ -42,15 +43,16 @@ public class PublicKeyCredentialTypeTest {
     }
 
     @Test
-    public void create_test() throws IOException {
+    public void create_test() {
         PublicKeyCredentialType value = PublicKeyCredentialType.create(null);
         //noinspection ConstantConditions
         assertThat(value).isNull();
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void invalid_data_test() throws IOException {
-        objectMapper.readValue("{\"type\": \"invalid-data\"}", TestDto.class);
+    @Test
+    public void invalid_data_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> objectMapper.readValue("{\"type\": \"invalid-data\"}", TestDto.class)
+        );
     }
-
 }

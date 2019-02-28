@@ -16,29 +16,33 @@
 
 package com.webauthn4j.request;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyCredentialDescriptorTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         PublicKeyCredentialDescriptor descriptor = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
-        assertThat(descriptor.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
-        assertThat(descriptor.getId()).isEqualTo(new byte[32]);
-        assertThat(descriptor.getTransports()).isEqualTo(Collections.singletonList(AuthenticatorTransport.USB));
+        assertAll(
+                () -> assertThat(descriptor.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY),
+                () -> assertThat(descriptor.getId()).isEqualTo(new byte[32]),
+                () -> assertThat(descriptor.getTransports()).isEqualTo(Collections.singletonList(AuthenticatorTransport.USB))
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         PublicKeyCredentialDescriptor instanceA = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
         PublicKeyCredentialDescriptor instanceB = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

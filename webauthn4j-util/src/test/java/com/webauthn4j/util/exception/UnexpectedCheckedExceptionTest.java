@@ -16,12 +16,18 @@
 
 package com.webauthn4j.util.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UnexpectedCheckedExceptionTest {
 
-    @Test(expected = UnexpectedCheckedException.class)
+    @Test
     public void constructor_test() {
-        throw new UnexpectedCheckedException(new Exception());
+        assertThrows(UnexpectedCheckedException.class,
+                () -> {
+                    throw new UnexpectedCheckedException(new Exception());
+                }
+        );
     }
 }

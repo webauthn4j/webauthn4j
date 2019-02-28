@@ -18,9 +18,11 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PackedAttestationStatementTest {
 
@@ -30,17 +32,21 @@ public class PackedAttestationStatementTest {
         packedAttestationStatement.validate();
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_invalid_instance_test() {
         PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(null, null, null,null);
-        packedAttestationStatement.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> packedAttestationStatement.validate()
+        );
     }
 
     @Test
     public void equals_and_hashCode_test() {
         PackedAttestationStatement packedAttestationStatementA = TestUtil.createBasicPackedAttestationStatement();
         PackedAttestationStatement packedAttestationStatementB = TestUtil.createBasicPackedAttestationStatement();
-        assertThat(packedAttestationStatementA).isEqualTo(packedAttestationStatementB);
-        assertThat(packedAttestationStatementA).hasSameHashCodeAs(packedAttestationStatementB);
+        assertAll(
+                () -> assertThat(packedAttestationStatementA).isEqualTo(packedAttestationStatementB),
+                () -> assertThat(packedAttestationStatementA).hasSameHashCodeAs(packedAttestationStatementB)
+        );
     }
 }

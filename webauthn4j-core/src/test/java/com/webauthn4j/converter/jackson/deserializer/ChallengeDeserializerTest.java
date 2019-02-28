@@ -19,9 +19,11 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.client.CollectedClientData;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for ChallengeDeserializer
@@ -41,8 +43,10 @@ public class ChallengeDeserializerTest {
         CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
 
         //Then
-        assertThat(result).extracting("challenge").isNotNull();
-        assertThat(result.getChallenge().getValue()).hasSize(0);
+        assertAll(
+                () -> assertThat(result).extracting("challenge").isNotNull(),
+                () -> assertThat(result.getChallenge().getValue()).hasSize(0)
+        );
     }
 
     @Test
@@ -59,13 +63,15 @@ public class ChallengeDeserializerTest {
         assertThat(result.getChallenge()).isNull();
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void invalid_value_test() {
 
         //Given
         String input = "{ \"challenge\" : \"ddddd\" }";
 
         //When
-        jsonConverter.readValue(input, CollectedClientData.class);
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue(input, CollectedClientData.class)
+        );
     }
 }

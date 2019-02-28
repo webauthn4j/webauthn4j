@@ -18,17 +18,20 @@ package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 public class DefaultECDAATrustworthinessValidatorTest {
 
-    @Test(expected = NotImplementedException.class)
+    @Test
     public void validate_test() {
         DefaultECDAATrustworthinessValidator validator = new DefaultECDAATrustworthinessValidator();
         PackedAttestationStatement attestationStatement = mock(PackedAttestationStatement.class);
 
-        validator.validate(attestationStatement);
+        assertThrows(NotImplementedException.class,
+                () -> validator.validate(attestationStatement)
+        );
     }
 }

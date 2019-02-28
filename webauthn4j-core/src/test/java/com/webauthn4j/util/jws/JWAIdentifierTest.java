@@ -17,33 +17,37 @@
 package com.webauthn4j.util.jws;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class JWAIdentifierTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-
-        assertThat(JWAIdentifier.create("ES256")).isEqualTo(JWAIdentifier.ES256);
-        assertThat(JWAIdentifier.create("ES384")).isEqualTo(JWAIdentifier.ES384);
-        assertThat(JWAIdentifier.create("ES512")).isEqualTo(JWAIdentifier.ES512);
-        assertThat(JWAIdentifier.create("RS1")).isEqualTo(JWAIdentifier.RS1);
-        assertThat(JWAIdentifier.create("RS256")).isEqualTo(JWAIdentifier.RS256);
-        assertThat(JWAIdentifier.create("RS384")).isEqualTo(JWAIdentifier.RS384);
-        assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(JWAIdentifier.create("ES256")).isEqualTo(JWAIdentifier.ES256),
+                () -> assertThat(JWAIdentifier.create("ES384")).isEqualTo(JWAIdentifier.ES384),
+                () -> assertThat(JWAIdentifier.create("ES512")).isEqualTo(JWAIdentifier.ES512),
+                () -> assertThat(JWAIdentifier.create("RS1")).isEqualTo(JWAIdentifier.RS1),
+                () -> assertThat(JWAIdentifier.create("RS256")).isEqualTo(JWAIdentifier.RS256),
+                () -> assertThat(JWAIdentifier.create("RS384")).isEqualTo(JWAIdentifier.RS384),
+                () -> assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512)
+        );
     }
 
     @Test
-    public void name_test(){
+    public void name_test() {
         assertThat(JWAIdentifier.ES256.getName()).isEqualTo("ES256");
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_invalid_arg_test() throws InvalidFormatException {
-
-        JWAIdentifier.create("invalid");
+    @Test
+    public void create_with_invalid_arg_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> JWAIdentifier.create("invalid")
+        );
     }
 }

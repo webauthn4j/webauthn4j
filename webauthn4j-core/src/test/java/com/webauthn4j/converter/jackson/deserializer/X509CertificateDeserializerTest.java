@@ -18,7 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;

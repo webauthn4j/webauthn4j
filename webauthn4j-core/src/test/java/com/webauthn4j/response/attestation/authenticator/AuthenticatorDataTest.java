@@ -17,10 +17,11 @@
 package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Test for AuthenticatorData
@@ -29,36 +30,32 @@ public class AuthenticatorDataTest {
 
     @Test
     public void flag_operation_test() {
-        AuthenticatorData target;
-        byte flags;
+        AuthenticatorData target1 = new AuthenticatorData(null, BIT_UP, 0);
+        AuthenticatorData target2 = new AuthenticatorData(null, BIT_UV, 0);
+        AuthenticatorData target3 = new AuthenticatorData(null, BIT_AT, 0);
+        AuthenticatorData target4 = new AuthenticatorData(null, BIT_ED, 0);
 
-        flags = BIT_UP;
-        target = new AuthenticatorData(null, flags, 0);
-        assertThat(target.isFlagUP()).isTrue();
-        assertThat(target.isFlagUV()).isFalse();
-        assertThat(target.isFlagAT()).isFalse();
-        assertThat(target.isFlagED()).isFalse();
+        assertAll(
+                () -> assertThat(target1.isFlagUP()).isTrue(),
+                () -> assertThat(target1.isFlagUV()).isFalse(),
+                () -> assertThat(target1.isFlagAT()).isFalse(),
+                () -> assertThat(target1.isFlagED()).isFalse(),
 
-        flags = BIT_UV;
-        target = new AuthenticatorData(null, flags, 0);
-        assertThat(target.isFlagUP()).isFalse();
-        assertThat(target.isFlagUV()).isTrue();
-        assertThat(target.isFlagAT()).isFalse();
-        assertThat(target.isFlagED()).isFalse();
+                () -> assertThat(target2.isFlagUP()).isFalse(),
+                () -> assertThat(target2.isFlagUV()).isTrue(),
+                () -> assertThat(target2.isFlagAT()).isFalse(),
+                () -> assertThat(target2.isFlagED()).isFalse(),
 
-        flags = BIT_AT;
-        target = new AuthenticatorData(null, flags, 0);
-        assertThat(target.isFlagUP()).isFalse();
-        assertThat(target.isFlagUV()).isFalse();
-        assertThat(target.isFlagAT()).isTrue();
-        assertThat(target.isFlagED()).isFalse();
+                () -> assertThat(target3.isFlagUP()).isFalse(),
+                () -> assertThat(target3.isFlagUV()).isFalse(),
+                () -> assertThat(target3.isFlagAT()).isTrue(),
+                () -> assertThat(target3.isFlagED()).isFalse(),
 
-        flags = BIT_ED;
-        target = new AuthenticatorData(null, flags, 0);
-        assertThat(target.isFlagUP()).isFalse();
-        assertThat(target.isFlagUV()).isFalse();
-        assertThat(target.isFlagAT()).isFalse();
-        assertThat(target.isFlagED()).isTrue();
+                () -> assertThat(target4.isFlagUP()).isFalse(),
+                () -> assertThat(target4.isFlagUV()).isFalse(),
+                () -> assertThat(target4.isFlagAT()).isFalse(),
+                () -> assertThat(target4.isFlagED()).isTrue()
+        );
     }
 
     @Test
@@ -88,6 +85,4 @@ public class AuthenticatorDataTest {
         AuthenticatorData instanceB = new AuthenticatorData(new byte[32], BIT_UV, 0);
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
     }
-
-
 }

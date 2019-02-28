@@ -18,18 +18,19 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyCredentialRequestOptionsTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -51,16 +52,18 @@ public class PublicKeyCredentialRequestOptionsTest {
                 null
         );
 
-        assertThat(credentialRequestOptions.getChallenge()).isEqualTo(challenge);
-        assertThat(credentialRequestOptions.getTimeout()).isEqualTo(timeout);
-        assertThat(credentialRequestOptions.getRpId()).isEqualTo(rpId);
-        assertThat(credentialRequestOptions.getAllowCredentials()).isEqualTo(allowCredentials);
-        assertThat(credentialRequestOptions.getUserVerification()).isEqualTo(UserVerificationRequirement.DISCOURAGED);
-        assertThat(credentialRequestOptions.getExtensions()).isNull();
+        assertAll(
+                () -> assertThat(credentialRequestOptions.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(credentialRequestOptions.getTimeout()).isEqualTo(timeout),
+                () -> assertThat(credentialRequestOptions.getRpId()).isEqualTo(rpId),
+                () -> assertThat(credentialRequestOptions.getAllowCredentials()).isEqualTo(allowCredentials),
+                () -> assertThat(credentialRequestOptions.getUserVerification()).isEqualTo(UserVerificationRequirement.DISCOURAGED),
+                () -> assertThat(credentialRequestOptions.getExtensions()).isNull()
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -90,8 +93,9 @@ public class PublicKeyCredentialRequestOptionsTest {
                 null
         );
 
-
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }

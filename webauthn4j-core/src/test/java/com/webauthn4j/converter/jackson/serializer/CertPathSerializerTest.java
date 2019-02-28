@@ -18,9 +18,8 @@ package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.security.cert.CertPath;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
@@ -37,7 +36,7 @@ public class CertPathSerializerTest {
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test() throws CertificateException, IOException {
+    public void test() throws CertificateException {
 
         //Given
         Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
@@ -53,6 +52,5 @@ public class CertPathSerializerTest {
 
         //Then
         assertThat(restored.getCertificates().toArray()).containsExactly(cert1, cert2);
-
     }
 }

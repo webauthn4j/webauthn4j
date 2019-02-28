@@ -19,9 +19,10 @@ package com.webauthn4j.server;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ServerPropertyTest {
 
@@ -31,7 +32,9 @@ public class ServerPropertyTest {
         ServerProperty serverPropertyA = TestUtil.createServerProperty(challenge);
         ServerProperty serverPropertyB = TestUtil.createServerProperty(challenge);
 
-        assertThat(serverPropertyA).isEqualTo(serverPropertyB);
-        assertThat(serverPropertyA).hasSameHashCodeAs(serverPropertyB);
+        assertAll(
+                () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),
+                () -> assertThat(serverPropertyA).hasSameHashCodeAs(serverPropertyB)
+        );
     }
 }

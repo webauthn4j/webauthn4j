@@ -17,26 +17,30 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMIAlgHashTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-
-        assertThat(TPMIAlgHash.create(0x0)).isEqualTo(TPMIAlgHash.TPM_ALG_ERROR);
-        assertThat(TPMIAlgHash.create(0x04)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA1);
-        assertThat(TPMIAlgHash.create(0x0B)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
-        assertThat(TPMIAlgHash.create(0x0C)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA384);
-        assertThat(TPMIAlgHash.create(0x0D)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA512);
-        assertThat(TPMIAlgHash.create(0x10)).isEqualTo(TPMIAlgHash.TPM_ALG_NULL);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(TPMIAlgHash.create(0x0)).isEqualTo(TPMIAlgHash.TPM_ALG_ERROR),
+                () -> assertThat(TPMIAlgHash.create(0x04)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA1),
+                () -> assertThat(TPMIAlgHash.create(0x0B)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256),
+                () -> assertThat(TPMIAlgHash.create(0x0C)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA384),
+                () -> assertThat(TPMIAlgHash.create(0x0D)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA512),
+                () -> assertThat(TPMIAlgHash.create(0x10)).isEqualTo(TPMIAlgHash.TPM_ALG_NULL)
+        );
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_invalid_value_test() throws InvalidFormatException {
-
-        TPMIAlgPublic.create(0x2);
+    @Test
+    public void create_with_invalid_value_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> TPMIAlgPublic.create(0x2)
+        );
     }
 }

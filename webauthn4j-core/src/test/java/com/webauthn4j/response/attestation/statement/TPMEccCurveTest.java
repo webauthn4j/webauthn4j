@@ -17,28 +17,34 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMEccCurveTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(TPMEccCurve.create(0x0000)).isEqualTo(TPMEccCurve.TPM_ECC_NONE);
-        assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P192);
-        assertThat(TPMEccCurve.create(0x0002)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P224);
-        assertThat(TPMEccCurve.create(0x0003)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
-        assertThat(TPMEccCurve.create(0x0004)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P384);
-        assertThat(TPMEccCurve.create(0x0005)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P521);
-        assertThat(TPMEccCurve.create(0x0010)).isEqualTo(TPMEccCurve.TPM_ECC_BN_P256);
-        assertThat(TPMEccCurve.create(0x0011)).isEqualTo(TPMEccCurve.TPM_ECC_BN_P638);
-        assertThat(TPMEccCurve.create(0x0020)).isEqualTo(TPMEccCurve.TPM_ECC_SM2_P256);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(TPMEccCurve.create(0x0000)).isEqualTo(TPMEccCurve.TPM_ECC_NONE),
+                () -> assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P192),
+                () -> assertThat(TPMEccCurve.create(0x0002)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P224),
+                () -> assertThat(TPMEccCurve.create(0x0003)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256),
+                () -> assertThat(TPMEccCurve.create(0x0004)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P384),
+                () -> assertThat(TPMEccCurve.create(0x0005)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P521),
+                () -> assertThat(TPMEccCurve.create(0x0010)).isEqualTo(TPMEccCurve.TPM_ECC_BN_P256),
+                () -> assertThat(TPMEccCurve.create(0x0011)).isEqualTo(TPMEccCurve.TPM_ECC_BN_P638),
+                () -> assertThat(TPMEccCurve.create(0x0020)).isEqualTo(TPMEccCurve.TPM_ECC_SM2_P256)
+        );
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_invalid_value_test() throws InvalidFormatException {
-        TPMEccCurve.create(0xFFFF);
+    @Test
+    public void create_with_invalid_value_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> TPMEccCurve.create(0xFFFF)
+        );
     }
 
     @Test
@@ -50,5 +56,4 @@ public class TPMEccCurveTest {
     public void getValue_test() {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
     }
-
 }

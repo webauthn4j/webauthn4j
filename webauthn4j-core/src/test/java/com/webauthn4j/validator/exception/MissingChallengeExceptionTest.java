@@ -16,9 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class MissingChallengeExceptionTest {
@@ -27,18 +28,19 @@ public class MissingChallengeExceptionTest {
 
     @Test
     public void test() {
-        MissingChallengeException exception;
+        MissingChallengeException exception1 = new MissingChallengeException("dummy", cause);
+        MissingChallengeException exception2 = new MissingChallengeException("dummy");
+        MissingChallengeException exception3 = new MissingChallengeException(cause);
 
-        exception = new MissingChallengeException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new MissingChallengeException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new MissingChallengeException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

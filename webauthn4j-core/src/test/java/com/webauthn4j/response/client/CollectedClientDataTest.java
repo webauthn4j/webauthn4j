@@ -18,9 +18,10 @@ package com.webauthn4j.response.client;
 
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class CollectedClientDataTest {
 
@@ -29,7 +30,9 @@ public class CollectedClientDataTest {
         Challenge challenge = TestUtil.createChallenge();
         CollectedClientData collectedClientDataA = TestUtil.createClientData(ClientDataType.GET, challenge);
         CollectedClientData collectedClientDataB = TestUtil.createClientData(ClientDataType.GET, challenge);
-        assertThat(collectedClientDataA).isEqualTo(collectedClientDataB);
-        assertThat(collectedClientDataA).hasSameHashCodeAs(collectedClientDataB);
+        assertAll(
+                () -> assertThat(collectedClientDataA).isEqualTo(collectedClientDataB),
+                () -> assertThat(collectedClientDataA).hasSameHashCodeAs(collectedClientDataB)
+        );
     }
 }

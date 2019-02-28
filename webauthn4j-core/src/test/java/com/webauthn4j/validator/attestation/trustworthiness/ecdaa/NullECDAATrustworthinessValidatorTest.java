@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
@@ -29,6 +29,5 @@ public class NullECDAATrustworthinessValidatorTest {
         PackedAttestationStatement attestationStatement = mock(PackedAttestationStatement.class);
 
         validator.validate(attestationStatement);
-
     }
 }

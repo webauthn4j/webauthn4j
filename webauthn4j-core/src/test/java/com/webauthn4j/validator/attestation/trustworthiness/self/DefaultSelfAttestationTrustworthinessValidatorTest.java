@@ -21,7 +21,9 @@ import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DefaultSelfAttestationTrustworthinessValidatorTest {
 
@@ -33,20 +35,24 @@ public class DefaultSelfAttestationTrustworthinessValidatorTest {
         validator.validate(attestationStatement);
     }
 
-    @Test(expected = BadAttestationStatementException.class)
+    @Test
     public void validate_basic_type_attestation_statement_test() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         PackedAttestationStatement attestationStatement = TestUtil.createBasicPackedAttestationStatement();
 
-        validator.validate(attestationStatement);
+        assertThrows(BadAttestationStatementException.class,
+                () -> validator.validate(attestationStatement)
+        );
     }
 
-    @Test(expected = SelfAttestationProhibitedException.class)
+    @Test
     public void validate_test_with_self_attestation_allowed_false() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         validator.setSelfAttestationAllowed(false);
         PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
-        validator.validate(attestationStatement);
+        assertThrows(SelfAttestationProhibitedException.class,
+                () -> validator.validate(attestationStatement)
+        );
     }
 }

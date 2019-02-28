@@ -19,7 +19,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.self;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NullSelfAttestationTrustworthinessValidatorTest {
 

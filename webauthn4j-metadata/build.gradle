@@ -19,6 +19,10 @@ version "${webauthn4jVersion}"
 
 description = "WebAuthn4J Metadata library"
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
     compile project(':webauthn4j-core')
 
@@ -27,9 +31,10 @@ dependencies {
     //Test
     testCompile('ch.qos.logback:logback-classic')
     testCompile('org.projectlombok:lombok')
-    testCompile('junit:junit')
     testCompile('org.mockito:mockito-core')
     testCompile('org.assertj:assertj-core')
+    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
 }
 

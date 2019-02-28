@@ -16,9 +16,10 @@
 
 package com.webauthn4j.response.extension.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class GenericTransactionAuthorizationExtensionClientOutputTest {
 
@@ -33,16 +34,19 @@ public class GenericTransactionAuthorizationExtensionClientOutputTest {
     public void TxAuthnGenericArg_getter_setter_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg target
                 = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("type", new byte[32]);
-        assertThat(target.getContentType()).isEqualTo("type");
-        assertThat(target.getContent()).isEqualTo(new byte[32]);
+        assertAll(
+                () -> assertThat(target.getContentType()).isEqualTo("type"),
+                () -> assertThat(target.getContent()).isEqualTo(new byte[32])
+        );
     }
 
     @Test
     public void TxAuthnGenericArg_equals_hashCode_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceA = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceB = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
-
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }

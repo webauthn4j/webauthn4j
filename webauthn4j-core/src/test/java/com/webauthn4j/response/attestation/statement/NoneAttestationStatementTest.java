@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NoneAttestationStatementTest {
 

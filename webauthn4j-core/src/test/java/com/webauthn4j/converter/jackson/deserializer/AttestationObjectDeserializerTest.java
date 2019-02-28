@@ -20,9 +20,10 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Test for AttestationObjectDeserializer
@@ -41,11 +42,12 @@ public class AttestationObjectDeserializerTest {
         AttestationObject result = cborConverter.readValue(Base64UrlUtil.decode(input), AttestationObject.class);
 
         //Then
-        assertThat(result).isNotNull();
-        assertThat(result.getAuthenticatorData()).isNotNull();
-        assertThat(result.getFormat()).isEqualTo("fido-u2f");
-        assertThat(result.getAttestationStatement()).isNotNull();
-        assertThat(result.getAttestationStatement()).isInstanceOf(FIDOU2FAttestationStatement.class);
-
+        assertAll(
+                () -> assertThat(result).isNotNull(),
+                () -> assertThat(result.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(result.getFormat()).isEqualTo("fido-u2f"),
+                () -> assertThat(result.getAttestationStatement()).isNotNull(),
+                () -> assertThat(result.getAttestationStatement()).isInstanceOf(FIDOU2FAttestationStatement.class)
+        );
     }
 }
