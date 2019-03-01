@@ -47,12 +47,14 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchor
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 public class FIDOU2FAuthenticatorRegistrationValidationTest {
@@ -107,9 +109,11 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAttestationObject()).isNotNull();
-        assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull();
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAttestationObject()).isNotNull(),
+                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
     @Test
@@ -154,12 +158,14 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAttestationObject()).isNotNull();
-        assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull();
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAttestationObject()).isNotNull(),
+                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
-    @Test(expected = MaliciousDataException.class)
+    @Test
     public void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -181,10 +187,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(MaliciousDataException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadChallengeException.class)
+    @Test
     public void validate_with_bad_challenge_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -203,10 +211,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(BadChallengeException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadOriginException.class)
+    @Test
     public void validate_with_bad_origin_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -225,10 +235,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(BadOriginException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadRpIdException.class)
+    @Test
     public void validate_with_bad_rpId_test() {
         String rpId = "example.com";
         String badRpId = "example.net";
@@ -244,10 +256,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(BadRpIdException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadAttestationStatementException.class)
+    @Test
     public void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -269,10 +283,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
                 new DefaultECDAATrustworthinessValidator(),
                 new DefaultSelfAttestationTrustworthinessValidator()
         );
-        target.validate(registrationContext);
+        assertThrows(BadAttestationStatementException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadSignatureException.class)
+    @Test
     public void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -306,10 +322,12 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(BadSignatureException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 
-    @Test(expected = BadSignatureException.class)
+    @Test
     public void validate_malicious_client_data_test() {
         Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");
         Origin validSiteOrigin = new Origin("http://valid.site.example.com");
@@ -347,7 +365,8 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
         byte[] maliciousClientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(maliciousClientData);
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty, false);
-        target.validate(registrationContext);
+        assertThrows(BadSignatureException.class,
+                () -> target.validate(registrationContext)
+        );
     }
-
 }

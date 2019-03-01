@@ -27,9 +27,10 @@ import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class RegistrationObjectTest {
 
@@ -55,11 +56,13 @@ public class RegistrationObjectTest {
                 serverProperty
         );
 
-        assertThat(registrationObject.getCollectedClientData()).isEqualTo(clientData);
-        assertThat(registrationObject.getCollectedClientDataBytes()).isEqualTo(clientDataBytes);
-        assertThat(registrationObject.getAttestationObject()).isEqualTo(attestationObject);
-        assertThat(registrationObject.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
-        assertThat(registrationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes);
-        assertThat(registrationObject.getServerProperty()).isEqualTo(serverProperty);
+        assertAll(
+                () -> assertThat(registrationObject.getCollectedClientData()).isEqualTo(clientData),
+                () -> assertThat(registrationObject.getCollectedClientDataBytes()).isEqualTo(clientDataBytes),
+                () -> assertThat(registrationObject.getAttestationObject()).isEqualTo(attestationObject),
+                () -> assertThat(registrationObject.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes),
+                () -> assertThat(registrationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
+                () -> assertThat(registrationObject.getServerProperty()).isEqualTo(serverProperty)
+        );
     }
 }

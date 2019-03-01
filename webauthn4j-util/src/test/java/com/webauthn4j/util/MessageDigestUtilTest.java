@@ -16,11 +16,13 @@
 
 package com.webauthn4j.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.MessageDigest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for MessageDigestUtil
@@ -35,15 +37,18 @@ public class MessageDigestUtilTest {
 
         MessageDigest sha256 = MessageDigestUtil.createMessageDigest("SHA-256");
 
-        assertThat(s256.getAlgorithm()).isEqualTo("SHA-256");
-        assertThat(s384.getAlgorithm()).isEqualTo("SHA-384");
-        assertThat(s512.getAlgorithm()).isEqualTo("SHA-512");
-        assertThat(sha256.getAlgorithm()).isEqualTo("SHA-256");
+        assertAll(
+                () -> assertThat(s256.getAlgorithm()).isEqualTo("SHA-256"),
+                () -> assertThat(s384.getAlgorithm()).isEqualTo("SHA-384"),
+                () -> assertThat(s512.getAlgorithm()).isEqualTo("SHA-512"),
+                () -> assertThat(sha256.getAlgorithm()).isEqualTo("SHA-256")
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void createMessageDigest_test_with_wrong_arg() {
-        MessageDigest s256 = MessageDigestUtil.createMessageDigest("wrong-arg");
+        assertThrows(IllegalArgumentException.class,
+                () -> MessageDigestUtil.createMessageDigest("wrong-arg")
+        );
     }
-
 }

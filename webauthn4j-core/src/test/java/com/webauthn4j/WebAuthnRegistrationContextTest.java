@@ -23,7 +23,7 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.webauthn4j.test.TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement;
 import static com.webauthn4j.test.TestUtil.createClientData;
@@ -49,5 +49,4 @@ public class WebAuthnRegistrationContextTest {
         assertThat(webAuthnRegistrationContextA).isEqualTo(webAuthnRegistrationContextB);
         assertThat(webAuthnRegistrationContextA).hasSameHashCodeAs(webAuthnRegistrationContextB);
     }
-
 }

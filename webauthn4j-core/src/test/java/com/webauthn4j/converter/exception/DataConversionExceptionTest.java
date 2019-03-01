@@ -17,16 +17,15 @@
 package com.webauthn4j.converter.exception;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class DataConversionExceptionTest {
 
     @Test
-    public void constructor_test(){
+    public void constructor_test() {
         RuntimeException cause = new RuntimeException();
         DataConversionException exception = new DataConversionException(cause);
         Assertions.assertThat(exception.getCause()).isEqualTo(cause);
     }
-
 }

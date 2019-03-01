@@ -3,16 +3,17 @@ package com.webauthn4j.request;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyCredentialCreationOptionsTest {
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
 
@@ -31,8 +32,9 @@ public class PublicKeyCredentialCreationOptionsTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JsonConverterIntegrationTest {
 
     @Test
-    public void constructor_with_customized_objectMapper_inherits_customization(){
+    public void constructor_with_customized_objectMapper_inherits_customization() {
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         SimpleModule module = new SimpleModule();

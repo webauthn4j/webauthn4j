@@ -17,25 +17,29 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMIAlgPublicTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-
-        assertThat(TPMIAlgPublic.create(0x0)).isEqualTo(TPMIAlgPublic.TPM_ALG_ERROR);
-        assertThat(TPMIAlgPublic.create(0x1)).isEqualTo(TPMIAlgPublic.TPM_ALG_RSA);
-        assertThat(TPMIAlgPublic.create(0x10)).isEqualTo(TPMIAlgPublic.TPM_ALG_NULL);
-        assertThat(TPMIAlgPublic.create(0x18)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA);
-        assertThat(TPMIAlgPublic.create(0x1A)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDAA);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(TPMIAlgPublic.create(0x0)).isEqualTo(TPMIAlgPublic.TPM_ALG_ERROR),
+                () -> assertThat(TPMIAlgPublic.create(0x1)).isEqualTo(TPMIAlgPublic.TPM_ALG_RSA),
+                () -> assertThat(TPMIAlgPublic.create(0x10)).isEqualTo(TPMIAlgPublic.TPM_ALG_NULL),
+                () -> assertThat(TPMIAlgPublic.create(0x18)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA),
+                () -> assertThat(TPMIAlgPublic.create(0x1A)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDAA)
+        );
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_invalid_value_test() throws InvalidFormatException {
-
-        TPMIAlgPublic.create(0x2);
+    @Test
+    public void create_with_invalid_value_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> TPMIAlgPublic.create(0x2)
+        );
     }
 }

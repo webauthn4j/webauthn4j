@@ -17,25 +17,31 @@
 package com.webauthn4j.response.attestation.statement;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMISTAttestTest {
 
     @Test
-    public void create() throws InvalidFormatException {
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x17})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x18})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_QUOTE);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x16})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_SESSION_AUDIT);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x15})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_COMMAND_AUDIT);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x19})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_TIME);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x1A})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CREATION);
-        assertThat(TPMISTAttest.create(new byte[]{(byte)0x80, (byte)0x14})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_NV);
+    public void create() {
+        assertAll(
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x17})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x18})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_QUOTE),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x16})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_SESSION_AUDIT),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x15})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_COMMAND_AUDIT),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x19})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_TIME),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x1A})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CREATION),
+                () -> assertThat(TPMISTAttest.create(new byte[]{(byte) 0x80, (byte) 0x14})).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_NV)
+        );
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void create_with_invalid_value() throws InvalidFormatException {
-        TPMISTAttest.create(new byte[]{});
+    @Test
+    public void create_with_invalid_value() {
+        assertThrows(InvalidFormatException.class,
+                () -> TPMISTAttest.create(new byte[]{})
+        );
     }
 }

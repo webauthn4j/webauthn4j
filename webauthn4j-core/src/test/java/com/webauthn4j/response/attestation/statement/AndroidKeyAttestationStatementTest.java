@@ -20,37 +20,40 @@ package com.webauthn4j.response.attestation.statement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AndroidKeyAttestationStatementTest {
 
     @Test
-    public void validate_test(){
+    public void validate_test() {
         new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()).validate();
-        assertThatThrownBy(()->{
-            new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-        assertThatThrownBy(()->{
-            new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, new AttestationCertificatePath()).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-        assertThatThrownBy(()->{
-            new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath()).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-
+        assertAll(
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null).validate()
+                ),
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, new AttestationCertificatePath()).validate()
+                ),
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath()).validate()
+                )
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceA = (AndroidKeyAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceB = (AndroidKeyAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

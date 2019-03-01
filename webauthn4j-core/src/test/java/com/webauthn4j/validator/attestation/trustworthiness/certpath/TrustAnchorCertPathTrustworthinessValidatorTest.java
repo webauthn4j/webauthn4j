@@ -24,7 +24,7 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.cert.TrustAnchor;
 import java.util.Arrays;
@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -52,17 +53,19 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
         target.validate(aaguid, attestationStatement);
     }
 
-    @Test(expected = TrustAnchorNotFoundException.class)
+    @Test
     public void validate_with_empty_trustAnchors_test() {
 
         Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
-        target.validate(aaguid, attestationStatement);
+        assertThrows(TrustAnchorNotFoundException.class,
+                () -> target.validate(aaguid, attestationStatement)
+        );
     }
 
-    @Test(expected = CertificateException.class)
+    @Test
     public void validate_full_chain_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
@@ -77,12 +80,13 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
 
         CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
-        target.validate(aaguid, attestationStatement);
+        assertThrows(CertificateException.class,
+                () -> target.validate(aaguid, attestationStatement)
+        );
     }
 
     @Test
     public void test(){
         assertThat(target.isFullChainProhibited()).isFalse();
     }
-
 }

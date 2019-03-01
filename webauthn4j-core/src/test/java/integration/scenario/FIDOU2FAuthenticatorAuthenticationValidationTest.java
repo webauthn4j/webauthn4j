@@ -43,12 +43,14 @@ import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
@@ -109,12 +111,14 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
-    @Test(expected = MaliciousDataException.class)
+    @Test
     public void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;
@@ -155,14 +159,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
-
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAuthenticatorData()).isNotNull();
-        assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull();
+        assertThrows(MaliciousDataException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadChallengeException.class)
+    @Test
     public void validate_assertion_with_bad_challenge_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -202,10 +204,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(BadChallengeException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadOriginException.class)
+    @Test
     public void validate_assertion_with_bad_origin_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -245,10 +249,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(BadOriginException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadRpIdException.class)
+    @Test
     public void validate_assertion_with_bad_rpId_test() {
         String rpId = "example.com";
         String badRpId = "bad.rpId.example.net";
@@ -288,10 +294,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(BadRpIdException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = UserNotVerifiedException.class)
+    @Test
     public void validate_assertion_with_userVerificationRequired_option_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -330,10 +338,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(UserNotVerifiedException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = UserNotPresentException.class)
+    @Test
     public void validate_assertion_with_UP_flag_off_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
         fidou2FAuthenticatorAdaptor.getFidoU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
@@ -375,10 +385,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(UserNotPresentException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = BadSignatureException.class)
+    @Test
     public void validate_assertion_with_bad_signature_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -417,10 +429,12 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
-        target.validate(authenticationContext, authenticator);
+        assertThrows(BadSignatureException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
-    @Test(expected = MaliciousCounterValueException.class)
+    @Test
     public void validate_assertion_with_malicious_counter_test() {
         String rpId = "example.com";
         long timeout = 0;
@@ -460,7 +474,9 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 );
         Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
         authenticator.setCounter(100); //set expected minimum counter bigger than that of actual authenticator
-        target.validate(authenticationContext, authenticator);
+        assertThrows(MaliciousCounterValueException.class,
+                () -> target.validate(authenticationContext, authenticator)
+        );
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
@@ -477,5 +493,4 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
-
 }

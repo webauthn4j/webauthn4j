@@ -16,10 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import com.webauthn4j.anchor.KeyStoreException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class MaliciousCounterValueExceptionTest {
@@ -28,18 +28,19 @@ public class MaliciousCounterValueExceptionTest {
 
     @Test
     public void test() {
-        MaliciousCounterValueException exception;
+        MaliciousCounterValueException exception1 = new MaliciousCounterValueException("dummy", cause);
+        MaliciousCounterValueException exception2 = new MaliciousCounterValueException("dummy");
+        MaliciousCounterValueException exception3 = new MaliciousCounterValueException(cause);
 
-        exception = new MaliciousCounterValueException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new MaliciousCounterValueException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new MaliciousCounterValueException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

@@ -24,11 +24,13 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 public class WebAuthnRegistrationContextValidatorTest {
@@ -40,58 +42,63 @@ public class WebAuthnRegistrationContextValidatorTest {
 
     @Test
     public void constructor_test() {
-        WebAuthnRegistrationContextValidator validator;
 
-        validator = new WebAuthnRegistrationContextValidator(
-                        Collections.emptyList(),
-                        certPathTrustworthinessValidatorMock,
-                        ecdaaTrustworthinessValidatorMock);
-        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
+        WebAuthnRegistrationContextValidator validator1 = new WebAuthnRegistrationContextValidator(
+                Collections.emptyList(),
+                certPathTrustworthinessValidatorMock,
+                ecdaaTrustworthinessValidatorMock);
 
-        validator = new WebAuthnRegistrationContextValidator(
-                        Collections.emptyList(),
-                        certPathTrustworthinessValidatorMock,
-                        ecdaaTrustworthinessValidatorMock);
-        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
+        WebAuthnRegistrationContextValidator validator2 = new WebAuthnRegistrationContextValidator(
+                Collections.emptyList(),
+                certPathTrustworthinessValidatorMock,
+                ecdaaTrustworthinessValidatorMock);
 
-        validator = new WebAuthnRegistrationContextValidator(
+        WebAuthnRegistrationContextValidator validator3 = new WebAuthnRegistrationContextValidator(
                 Collections.emptyList(),
                 certPathTrustworthinessValidatorMock,
                 ecdaaTrustworthinessValidatorMock,
                 selfAttestationTrustworthinessValidator);
-        assertThat(validator).hasFieldOrProperty("attestationValidator").isNotNull();
-    }
 
-    @Test(expected = MaliciousDataException.class)
-    public void validateAuthenticatorDataField_test(){
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData);
+        assertAll(
+                () -> assertThat(validator1).hasFieldOrProperty("attestationValidator").isNotNull(),
+                () -> assertThat(validator2).hasFieldOrProperty("attestationValidator").isNotNull(),
+                () -> assertThat(validator3).hasFieldOrProperty("attestationValidator").isNotNull()
+        );
     }
 
     @Test
-    public void validateUVUPFlags_not_required_test(){
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
+    public void validateAuthenticatorDataField_test() {
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        assertThrows(MaliciousDataException.class,
+                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData)
+        );
+    }
+
+    @Test
+    public void validateUVUPFlags_not_required_test() {
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
         WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, false);
     }
 
     @Test
-    public void validateUVUPFlags_required_test(){
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)(AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
+    public void validateUVUPFlags_required_test() {
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
         WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, true);
     }
 
-    @Test(expected = UserNotVerifiedException.class)
-    public void validateUVUPFlags_UserNotVerifiedException_test(){
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false);
+    @Test
+    public void validateUVUPFlags_UserNotVerifiedException_test() {
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        assertThrows(UserNotVerifiedException.class,
+                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false)
+        );
     }
 
-    @Test(expected = UserNotPresentException.class)
-    public void validateUVUPFlags_UserNotPresentException_test(){
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte)0, 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true);
+    @Test
+    public void validateUVUPFlags_UserNotPresentException_test() {
+        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        assertThrows(UserNotPresentException.class,
+                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true)
+        );
     }
-
-
-
 }

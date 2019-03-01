@@ -16,6 +16,10 @@
 
 description = "Package that contains utility classes for WebAuthn4J"
 
+test {
+    useJUnitPlatform()
+}
+
 dependencies {
 
     compile("com.fasterxml.jackson.core:jackson-databind")
@@ -24,9 +28,10 @@ dependencies {
     //Test
     testCompile('ch.qos.logback:logback-classic')
     testCompile('org.projectlombok:lombok')
-    testCompile('junit:junit')
     testCompile('org.mockito:mockito-core')
     testCompile('org.assertj:assertj-core')
+    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
 }
 

@@ -16,9 +16,10 @@
 
 package com.webauthn4j.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SignatureUtilTest {
 
@@ -29,13 +30,17 @@ public class SignatureUtilTest {
 
     @Test
     public void createSignature_test_with_null() {
-        assertThatThrownBy(() -> SignatureUtil.createSignature(null))
-                .isInstanceOf(IllegalArgumentException.class).hasMessage("algorithm is required; it must not be null");
+        Throwable t = assertThrows(IllegalArgumentException.class,
+                () -> SignatureUtil.createSignature(null)
+        );
+        assertThat(t).hasMessage("algorithm is required; it must not be null");
     }
 
     @Test
     public void createSignature_test_with_illegal_argument() {
-        assertThatThrownBy(() -> SignatureUtil.createSignature("dummyAlg"))
-                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("dummyAlg Signature not available");
+        Throwable t = assertThrows(IllegalArgumentException.class,
+                () -> SignatureUtil.createSignature("dummyAlg")
+        );
+        assertThat(t).hasMessageContaining("dummyAlg Signature not available");
     }
 }

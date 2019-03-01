@@ -17,19 +17,24 @@
 package com.webauthn4j.response.client;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ClientDataTypeTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE);
-        assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET);
-        assertThat(ClientDataType.create(null)).isNull();
-        //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(InvalidFormatException.class);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
+                () -> assertThat(ClientDataType.create(null)).isNull(),
+                //noinspection ResultOfMethodCallIgnored
+                () -> assertThrows(InvalidFormatException.class,
+                        () -> ClientDataType.create("invalid")
+                )
+        );
     }
 }

@@ -18,33 +18,41 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CurveTest {
 
     @Test
     public void create_test() {
-        assertThat(Curve.create(null)).isNull();
-        assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1);
-        assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1);
-        assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1);
-        //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(IllegalArgumentException.class);
+        assertAll(
+                () -> assertThat(Curve.create(null)).isNull(),
+                () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
+                () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
+                () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
+                //noinspection ResultOfMethodCallIgnored
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> Curve.create(4)
+                )
+        );
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void fromJson_with_invalid_value_test() throws InvalidFormatException {
-        Curve.fromJson(-1);
+    @Test
+    public void fromJson_with_invalid_value_test() {
+        assertThrows(InvalidFormatException.class,
+                () -> Curve.fromJson(-1)
+        );
     }
 
     @Test
     public void getECParameterSpec_test() {
-        assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC);
-        assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC);
-        assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC);
+        assertAll(
+                () -> assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
+                () -> assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
+                () -> assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC)
+        );
     }
-
 }

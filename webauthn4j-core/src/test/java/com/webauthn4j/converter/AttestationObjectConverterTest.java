@@ -22,9 +22,11 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AttestationObjectConverterTest {
 
@@ -41,15 +43,19 @@ public class AttestationObjectConverterTest {
         String format = attestationObject.getFormat();
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
 
-        assertThat(authenticatorData).isNotNull();
-        assertThat(format).isEqualTo("fido-u2f");
-        assertThat(attestationStatement).isInstanceOf(FIDOU2FAttestationStatement.class);
+        assertAll(
+                () -> assertThat(authenticatorData).isNotNull(),
+                () -> assertThat(format).isEqualTo("fido-u2f"),
+                () -> assertThat(attestationStatement).isInstanceOf(FIDOU2FAttestationStatement.class)
+        );
     }
 
     @Test
     public void convert_null_test() {
-        assertThat(target.convert((String) null)).isNull();
-        assertThat(target.convert((byte[]) null)).isNull();
+        assertAll(
+                () -> assertThat(target.convert((String) null)).isNull(),
+                () -> assertThat(target.convert((byte[]) null)).isNull()
+        );
     }
 
     @Test
@@ -80,12 +86,12 @@ public class AttestationObjectConverterTest {
         target.convert(result);
     }
 
-
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void convert_test_with_illegal_input() {
         String testData = "illegal input";
-        target.convert(testData);
+        assertThrows(IllegalArgumentException.class,
+                () -> target.convert(testData)
+        );
     }
 
     @Test
@@ -95,5 +101,4 @@ public class AttestationObjectConverterTest {
         AttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);
     }
-
 }

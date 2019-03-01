@@ -19,11 +19,12 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JsonConverterTest {
 
@@ -35,9 +36,11 @@ public class JsonConverterTest {
         assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void readValue_with_invalid_json_test() {
-        jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class);
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)
+        );
     }
 
     @Test
@@ -47,10 +50,12 @@ public class JsonConverterTest {
         assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void readValue_with_invalid_json_and_TypeReference_test() {
-        jsonConverter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>() {
-        });
+        assertThrows(DataConversionException.class, () ->
+                jsonConverter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>() {
+                })
+        );
     }
 
     @Test
@@ -61,11 +66,13 @@ public class JsonConverterTest {
         assertThat(str).isEqualTo("{\"value\":\"dummy\"}");
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test
     public void writeValueAsString_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
-        jsonConverter.writeValueAsString(converterTestInvalidDto);
+        assertThrows(UncheckedIOException.class, () ->
+                jsonConverter.writeValueAsString(converterTestInvalidDto)
+        );
     }
 
     @Test
@@ -76,12 +83,12 @@ public class JsonConverterTest {
         assertThat(Base64UrlUtil.encodeToString(bytes)).isEqualTo("eyJ2YWx1ZSI6ImR1bW15In0");
     }
 
-    @Test(expected = UncheckedIOException.class)
+    @Test
     public void writeValueAsBytes_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
-        jsonConverter.writeValueAsBytes(converterTestInvalidDto);
+        assertThrows(UncheckedIOException.class, () ->
+                jsonConverter.writeValueAsBytes(converterTestInvalidDto)
+        );
     }
-
-
 }

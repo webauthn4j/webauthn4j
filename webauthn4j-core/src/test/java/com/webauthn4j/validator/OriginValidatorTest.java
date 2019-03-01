@@ -22,7 +22,9 @@ import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for OriginValidator
@@ -41,14 +43,15 @@ public class OriginValidatorTest {
         target.validate(collectedClientData, serverProperty);
     }
 
-    @Test(expected = BadOriginException.class)
+    @Test
     public void test_with_not_equal_origins() {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestUtil.createChallenge(), null);
-        target.validate(collectedClientData, serverProperty);
+        assertThrows(BadOriginException.class,
+                () -> target.validate(collectedClientData, serverProperty)
+        );
     }
-
 }

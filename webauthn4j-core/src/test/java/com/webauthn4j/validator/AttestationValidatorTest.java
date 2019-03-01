@@ -30,17 +30,18 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPat
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class AttestationValidatorTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void validate_ecdaa(){
+    public void validate_ecdaa() {
         AttestationStatementValidator attestationStatementValidatorMock = mock(AttestationStatementValidator.class);
         when(attestationStatementValidatorMock.supports(any())).thenReturn(true);
         when(attestationStatementValidatorMock.validate(any())).thenReturn(AttestationType.ECDAA);
@@ -62,8 +63,8 @@ public class AttestationValidatorTest {
     }
 
     @SuppressWarnings("unchecked")
-    @Test(expected = BadAaguidException.class)
-    public void validateAAGUID(){
+    @Test
+    public void validateAAGUID() {
         AttestationValidator attestationValidator = new AttestationValidator(
                 Collections.singletonList(new FIDOU2FAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),
@@ -76,7 +77,8 @@ public class AttestationValidatorTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
         when(authenticatorData.getAttestedCredentialData().getAaguid()).thenReturn(new AAGUID("fea37a71-08ce-479f-bf4b-472a93e2d17d"));
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
-        attestationValidator.validateAAGUID(attestationObject);
+        assertThrows(BadAaguidException.class,
+                () -> attestationValidator.validateAAGUID(attestationObject)
+        );
     }
-
 }

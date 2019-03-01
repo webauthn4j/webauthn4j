@@ -19,7 +19,7 @@ package com.webauthn4j.converter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
@@ -30,7 +30,7 @@ public class AttestationCertificatePathConverterTest {
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test(){
+    public void test() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
         byte[] cbor = cborConverter.writeValueAsBytes(attestationCertificatePath);
         AttestationCertificatePath restored = cborConverter.readValue(cbor, AttestationCertificatePath.class);

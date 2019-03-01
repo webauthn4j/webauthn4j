@@ -23,7 +23,9 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -46,7 +48,7 @@ public class ChallengeValidatorTest {
         target.validate(collectedClientData, serverProperty);
     }
 
-    @Test(expected = BadChallengeException.class)
+    @Test
     public void verifyChallenge_test_with_different_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
@@ -56,10 +58,12 @@ public class ChallengeValidatorTest {
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, serverProperty);
+        assertThrows(BadChallengeException.class,
+                () -> target.validate(collectedClientData, serverProperty)
+        );
     }
 
-    @Test(expected = MissingChallengeException.class)
+    @Test
     public void verifyChallenge_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
@@ -69,6 +73,8 @@ public class ChallengeValidatorTest {
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, serverProperty);
+        assertThrows(MissingChallengeException.class,
+                () -> target.validate(collectedClientData, serverProperty)
+        );
     }
 }

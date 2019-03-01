@@ -16,20 +16,22 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class COSEAlgorithmIdentifierTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(COSEAlgorithmIdentifier.create(-257)).isEqualTo(COSEAlgorithmIdentifier.RS256);
-        assertThat(COSEAlgorithmIdentifier.create(-258)).isEqualTo(COSEAlgorithmIdentifier.RS384);
-        assertThat(COSEAlgorithmIdentifier.create(-259)).isEqualTo(COSEAlgorithmIdentifier.RS512);
-        assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256);
-        assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384);
-        assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(COSEAlgorithmIdentifier.create(-257)).isEqualTo(COSEAlgorithmIdentifier.RS256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-258)).isEqualTo(COSEAlgorithmIdentifier.RS384),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-259)).isEqualTo(COSEAlgorithmIdentifier.RS512),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512)
+        );
     }
 }

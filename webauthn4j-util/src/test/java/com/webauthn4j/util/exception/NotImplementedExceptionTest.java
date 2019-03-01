@@ -16,12 +16,18 @@
 
 package com.webauthn4j.util.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class NotImplementedExceptionTest {
 
-    @Test(expected = NotImplementedException.class)
+    @Test
     public void constructor_test() {
-        throw new NotImplementedException();
+        assertThrows(NotImplementedException.class,
+                () -> {
+                    throw new NotImplementedException();
+                }
+        );
     }
 }

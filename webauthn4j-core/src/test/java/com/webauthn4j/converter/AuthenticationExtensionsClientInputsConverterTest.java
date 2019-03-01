@@ -21,12 +21,13 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AuthenticationExtensionsClientInputsConverterTest {
 
@@ -59,9 +60,11 @@ public class AuthenticationExtensionsClientInputsConverterTest {
         assertThat(clientInputs.get(FIDOAppIDExtensionClientInput.ID)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void convert_with_invalid_extension_test() {
         String source = "{\"invalid\":\"\"}";
-        authenticationExtensionsClientInputsConverter.convert(source);
+        assertThrows(DataConversionException.class,
+                () -> authenticationExtensionsClientInputsConverter.convert(source)
+        );
     }
 }

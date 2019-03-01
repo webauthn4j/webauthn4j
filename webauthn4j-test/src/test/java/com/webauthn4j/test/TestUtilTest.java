@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.PrivateKey;
 

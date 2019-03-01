@@ -23,13 +23,14 @@ import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsA
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for AuthenticatorDataConverter
@@ -56,14 +57,16 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getExtensions()).isEmpty();
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void convert_too_short_data_test() {
         //Given
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcP";
 
         //When
-        new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input));
+        assertThrows(DataConversionException.class,
+                () -> new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input))
+        );
     }
 
     @Test
@@ -92,13 +95,15 @@ public class AuthenticatorDataConverterTest {
         assertThat(result.getExtensions()).containsValues(extensionOutput);
     }
 
-    @Test(expected = DataConversionException.class)
+    @Test
     public void deserialize_data_with_surplus_bytes_test() {
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
         byte[] data = Base64UrlUtil.decode(input);
         byte[] bytes = Arrays.copyOf(data, data.length + 1);
         //When
-        new AuthenticatorDataConverter(cborConverter).convert(bytes);
+        assertThrows(DataConversionException.class,
+                () -> new AuthenticatorDataConverter(cborConverter).convert(bytes)
+        );
     }
 }

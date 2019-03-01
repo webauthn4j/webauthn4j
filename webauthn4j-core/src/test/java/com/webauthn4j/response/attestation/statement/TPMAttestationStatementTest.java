@@ -19,46 +19,52 @@ package com.webauthn4j.response.attestation.statement;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TPMAttestationStatementTest {
 
     @Test
-    public void constructor_test(){
+    public void constructor_test() {
 
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement)registrationObjectA.getAttestationObject().getAttestationStatement();
+        TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
 
         TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
 
-        assertThat(tpmAttestationStatement.getAlg()).isEqualTo(source.getAlg());
-        assertThat(tpmAttestationStatement.getX5c()).isEqualTo(source.getX5c());
-        assertThat(tpmAttestationStatement.getSig()).isEqualTo(source.getSig());
-        assertThat(tpmAttestationStatement.getCertInfo()).isEqualTo(source.getCertInfo());
-        assertThat(tpmAttestationStatement.getPubArea()).isEqualTo(source.getPubArea());
+        assertAll(
+                () -> assertThat(tpmAttestationStatement.getAlg()).isEqualTo(source.getAlg()),
+                () -> assertThat(tpmAttestationStatement.getX5c()).isEqualTo(source.getX5c()),
+                () -> assertThat(tpmAttestationStatement.getSig()).isEqualTo(source.getSig()),
+                () -> assertThat(tpmAttestationStatement.getCertInfo()).isEqualTo(source.getCertInfo()),
+                () -> assertThat(tpmAttestationStatement.getPubArea()).isEqualTo(source.getPubArea())
+        );
     }
-
-    @Test(expected = ConstraintViolationException.class)
-    public void validate_test(){
-
-        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement)registrationObjectA.getAttestationObject().getAttestationStatement();
-        new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea()).validate();
-    }
-
 
     @Test
-    public void equals_hashCode_test(){
+    public void validate_test() {
 
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement instanceA = (TPMAttestationStatement)registrationObjectA.getAttestationObject().getAttestationStatement();
-        RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement instanceB = (TPMAttestationStatement)registrationObjectB.getAttestationObject().getAttestationStatement();
-
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
+        assertThrows(ConstraintViolationException.class,
+                () -> new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea()).validate()
+        );
     }
 
+    @Test
+    public void equals_hashCode_test() {
+
+        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
+        TPMAttestationStatement instanceA = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
+        RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithTPMAttestation();
+        TPMAttestationStatement instanceB = (TPMAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
+
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
+    }
 }

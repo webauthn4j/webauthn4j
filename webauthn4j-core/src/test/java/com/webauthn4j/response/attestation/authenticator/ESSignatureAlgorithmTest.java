@@ -18,31 +18,36 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ESSignatureAlgorithmTest {
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256);
-        assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384);
-        assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
+                () -> assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512)
+        );
     }
 
     @Test
     public void create_with_invalid_value_test() {
         //noinspection ResultOfMethodCallIgnored
-        assertThatThrownBy(() -> COSEAlgorithmIdentifier.create(0)).isInstanceOf(InvalidFormatException.class);
+        assertThrows(InvalidFormatException.class,
+                () -> COSEAlgorithmIdentifier.create(0)
+        );
     }
 
     @Test
     public void equals_test() {
-        assertThat(COSEAlgorithmIdentifier.ES256).isEqualTo(COSEAlgorithmIdentifier.ES256);
-        assertThat(COSEAlgorithmIdentifier.ES384).isNotEqualTo(COSEAlgorithmIdentifier.ES512);
+        assertAll(
+                () -> assertThat(COSEAlgorithmIdentifier.ES256).isEqualTo(COSEAlgorithmIdentifier.ES256),
+                () -> assertThat(COSEAlgorithmIdentifier.ES384).isNotEqualTo(COSEAlgorithmIdentifier.ES512)
+        );
     }
-
-
 }

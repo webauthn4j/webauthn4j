@@ -2,11 +2,13 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserVerificationRequirementTest {
 
@@ -14,15 +16,19 @@ public class UserVerificationRequirementTest {
 
     @Test
     public void create_test() {
-        assertThat(UserVerificationRequirement.create("discouraged")).isEqualTo(UserVerificationRequirement.DISCOURAGED);
-        assertThat(UserVerificationRequirement.create("preferred")).isEqualTo(UserVerificationRequirement.PREFERRED);
-        assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED);
-        assertThat(UserVerificationRequirement.create(null)).isEqualTo(null);
+        assertAll(
+                () -> assertThat(UserVerificationRequirement.create("discouraged")).isEqualTo(UserVerificationRequirement.DISCOURAGED),
+                () -> assertThat(UserVerificationRequirement.create("preferred")).isEqualTo(UserVerificationRequirement.PREFERRED),
+                () -> assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED),
+                () -> assertThat(UserVerificationRequirement.create(null)).isEqualTo(null)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void create_test_with_invalid() {
-        UserVerificationRequirement.create("invalid");
+        assertThrows(IllegalArgumentException.class,
+                () -> UserVerificationRequirement.create("invalid")
+        );
     }
 
     @Test
@@ -36,14 +42,14 @@ public class UserVerificationRequirementTest {
         assertThat(dto.requirement).isEqualTo(UserVerificationRequirement.REQUIRED);
     }
 
-    @Test(expected = InvalidFormatException.class)
-    public void fromString_test_with_invalid_value() throws IOException {
-        objectMapper.readValue("{\"requirement\":\"invalid\"}", TestDTO.class);
+    @Test
+    public void fromString_test_with_invalid_value() {
+        assertThrows(InvalidFormatException.class,
+                () -> objectMapper.readValue("{\"requirement\":\"invalid\"}", TestDTO.class)
+        );
     }
 
-    public static class TestDTO{
+    public static class TestDTO {
         public UserVerificationRequirement requirement;
     }
-
-
 }

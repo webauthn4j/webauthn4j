@@ -17,9 +17,10 @@
 package com.webauthn4j.validator.exception;
 
 import com.webauthn4j.anchor.KeyStoreException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
 public class KeyStoreExceptionTest {
@@ -28,18 +29,19 @@ public class KeyStoreExceptionTest {
 
     @Test
     public void test() {
-        KeyStoreException exception;
+        KeyStoreException exception1 = new KeyStoreException("dummy", cause);
+        KeyStoreException exception2 = new KeyStoreException("dummy");
+        KeyStoreException exception3 = new KeyStoreException(cause);
 
-        exception = new KeyStoreException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new KeyStoreException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new KeyStoreException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

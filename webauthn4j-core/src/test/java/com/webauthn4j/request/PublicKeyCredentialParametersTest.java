@@ -17,30 +17,34 @@
 package com.webauthn4j.request;
 
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyCredentialParametersTest {
 
     @Test
-    public void getter_test(){
+    public void getter_test() {
         PublicKeyCredentialParameters parameters =
                 new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
-        assertThat(parameters.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
-        assertThat(parameters.getAlg()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        assertAll(
+                () -> assertThat(parameters.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY),
+                () -> assertThat(parameters.getAlg()).isEqualTo(COSEAlgorithmIdentifier.ES256)
+        );
     }
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         PublicKeyCredentialParameters instanceA =
                 new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialParameters instanceB =
                 new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
-
 }

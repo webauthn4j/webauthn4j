@@ -18,10 +18,11 @@ package com.webauthn4j.response.attestation.statement;
 
 import com.webauthn4j.util.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 public class AndroidSafetyNetAttestationStatementTest {
@@ -30,16 +31,17 @@ public class AndroidSafetyNetAttestationStatementTest {
     @Test
     public void validate() {
         new AndroidSafetyNetAttestationStatement("dummy", mock(JWS.class)).validate();
-        assertThatThrownBy(()->{
-            new AndroidSafetyNetAttestationStatement("dummy", null).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-        assertThatThrownBy(()->{
-            new AndroidSafetyNetAttestationStatement(null, mock(JWS.class)).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-        assertThatThrownBy(()->{
-            new AndroidSafetyNetAttestationStatement(null, null).validate();
-        }).isInstanceOf(ConstraintViolationException.class);
-
+        assertAll(
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidSafetyNetAttestationStatement("dummy", null).validate()
+                ),
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidSafetyNetAttestationStatement(null, mock(JWS.class)).validate()
+                ),
+                () -> assertThrows(ConstraintViolationException.class,
+                        () -> new AndroidSafetyNetAttestationStatement(null, null).validate()
+                )
+        );
     }
 
     @Test
@@ -49,8 +51,9 @@ public class AndroidSafetyNetAttestationStatementTest {
         AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jws);
         AndroidSafetyNetAttestationStatement instanceB = new AndroidSafetyNetAttestationStatement("dummy", jws);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
-
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }

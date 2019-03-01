@@ -16,9 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class KeyDescriptionValidationExceptionTest {
 
@@ -26,18 +27,19 @@ public class KeyDescriptionValidationExceptionTest {
 
     @Test
     public void test() {
-        KeyDescriptionValidationException exception;
+        KeyDescriptionValidationException exception1 = new KeyDescriptionValidationException("dummy", cause);
+        KeyDescriptionValidationException exception2 = new KeyDescriptionValidationException("dummy");
+        KeyDescriptionValidationException exception3 = new KeyDescriptionValidationException(cause);
 
-        exception = new KeyDescriptionValidationException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new KeyDescriptionValidationException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new KeyDescriptionValidationException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

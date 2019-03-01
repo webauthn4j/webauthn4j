@@ -18,19 +18,22 @@ package com.webauthn4j.util.jws;
 
 
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class JWSHeaderTest {
 
     @Test
-    public void equals_hashCode_test(){
+    public void equals_hashCode_test() {
         JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
         JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 
 }

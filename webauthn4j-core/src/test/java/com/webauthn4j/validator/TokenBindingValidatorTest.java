@@ -19,7 +19,9 @@ package com.webauthn4j.validator;
 import com.webauthn4j.response.client.TokenBinding;
 import com.webauthn4j.response.client.TokenBindingStatus;
 import com.webauthn4j.validator.exception.TokenBindingException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TokenBindingValidatorTest {
 
@@ -32,12 +34,14 @@ public class TokenBindingValidatorTest {
         target.validate(tokenBinding, bindingId);
     }
 
-    @Test(expected = TokenBindingException.class)
+    @Test
     public void validate_invalid_bindingId_test() {
         byte[] bindingId = new byte[]{0x01, 0x23, 0x45};
         byte[] invalidBindingId = new byte[]{0x00, 0x00, 0x00};
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.PRESENT, bindingId);
-        target.validate(tokenBinding, invalidBindingId);
+        assertThrows(TokenBindingException.class,
+                () -> target.validate(tokenBinding, invalidBindingId)
+        );
     }
 
     @Test
@@ -53,5 +57,4 @@ public class TokenBindingValidatorTest {
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.SUPPORTED, bindingId);
         target.validate(tokenBinding, bindingId);
     }
-
 }

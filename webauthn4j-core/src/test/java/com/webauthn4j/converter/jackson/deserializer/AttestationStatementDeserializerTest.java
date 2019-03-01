@@ -20,9 +20,10 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class AttestationStatementDeserializerTest {
 
@@ -34,7 +35,9 @@ public class AttestationStatementDeserializerTest {
         String str = jsonConverter.writeValueAsString(source);
         AttestationStatement obj = jsonConverter.readValue(str, AttestationStatement.class);
 
-        assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class);
-        assertThat(obj).isEqualTo(source);
+        assertAll(
+                () -> assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class),
+                () -> assertThat(obj).isEqualTo(source)
+        );
     }
 }

@@ -46,11 +46,13 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchor
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
@@ -123,9 +125,11 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAttestationObject()).isNotNull();
-        assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull();
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAttestationObject()).isNotNull(),
+                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
     @Test
@@ -173,12 +177,14 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
 
-        assertThat(response.getCollectedClientData()).isNotNull();
-        assertThat(response.getAttestationObject()).isNotNull();
-        assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull();
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAttestationObject()).isNotNull(),
+                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+        );
     }
 
-    @Test(expected = UnexpectedExtensionException.class)
+    @Test
     public void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -223,6 +229,8 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
                 false,
                 expectedExtensions
         );
-        target.validate(registrationContext);
+        assertThrows(UnexpectedExtensionException.class,
+                () -> target.validate(registrationContext)
+        );
     }
 }

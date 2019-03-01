@@ -20,18 +20,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.extension.Coordinates;
 import com.webauthn4j.response.extension.client.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ExtensionClientOutputDeserializerTest {
 
     @Test
-    public void deserialize_test_with_JSON_data() throws IOException {
+    public void deserialize_test_with_JSON_data() {
         JsonConverter jsonConverter = new JsonConverter();
 
         Map<String, ExtensionClientOutput> extensionOutputs =
@@ -50,26 +50,27 @@ public class ExtensionClientOutputDeserializerTest {
                         }
                 );
 
-        assertThat(extensionOutputs).containsKeys(
-                FIDOAppIDExtensionClientOutput.ID,
-                SimpleTransactionAuthorizationExtensionClientOutput.ID,
-                GenericTransactionAuthorizationExtensionClientOutput.ID,
-                AuthenticatorSelectionExtensionClientOutput.ID,
-                SupportedExtensionsExtensionClientOutput.ID,
-                UserVerificationIndexExtensionClientOutput.ID,
-                LocationExtensionClientOutput.ID,
-                BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID
-        );
-        assertThat(extensionOutputs).containsValues(
-                new FIDOAppIDExtensionClientOutput(true),
-                new SimpleTransactionAuthorizationExtensionClientOutput("authorization message"),
-                new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("image/png", null)),
-                new AuthenticatorSelectionExtensionClientOutput(true),
-                new SupportedExtensionsExtensionClientOutput(Arrays.asList("exts", "authnSel")),
-                new UserVerificationIndexExtensionClientOutput(new byte[0]),
-                new LocationExtensionClientOutput(new Coordinates(0d, 0d, null, 1d, null, null, null)),
-                new BiometricAuthenticatorPerformanceBoundsExtensionClientOutput(true)
+        assertAll(
+                () -> assertThat(extensionOutputs).containsKeys(
+                        FIDOAppIDExtensionClientOutput.ID,
+                        SimpleTransactionAuthorizationExtensionClientOutput.ID,
+                        GenericTransactionAuthorizationExtensionClientOutput.ID,
+                        AuthenticatorSelectionExtensionClientOutput.ID,
+                        SupportedExtensionsExtensionClientOutput.ID,
+                        UserVerificationIndexExtensionClientOutput.ID,
+                        LocationExtensionClientOutput.ID,
+                        BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID
+                ),
+                () -> assertThat(extensionOutputs).containsValues(
+                        new FIDOAppIDExtensionClientOutput(true),
+                        new SimpleTransactionAuthorizationExtensionClientOutput("authorization message"),
+                        new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("image/png", null)),
+                        new AuthenticatorSelectionExtensionClientOutput(true),
+                        new SupportedExtensionsExtensionClientOutput(Arrays.asList("exts", "authnSel")),
+                        new UserVerificationIndexExtensionClientOutput(new byte[0]),
+                        new LocationExtensionClientOutput(new Coordinates(0d, 0d, null, 1d, null, null, null)),
+                        new BiometricAuthenticatorPerformanceBoundsExtensionClientOutput(true)
+                )
         );
     }
-
 }

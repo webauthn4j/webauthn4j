@@ -16,9 +16,10 @@
 
 package com.webauthn4j.validator.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class PublicKeyMismatchExceptionTest {
 
@@ -26,18 +27,19 @@ public class PublicKeyMismatchExceptionTest {
 
     @Test
     public void test() {
-        PublicKeyMismatchException exception;
+        PublicKeyMismatchException exception1 = new PublicKeyMismatchException("dummy", cause);
+        PublicKeyMismatchException exception2 = new PublicKeyMismatchException("dummy");
+        PublicKeyMismatchException exception3 = new PublicKeyMismatchException(cause);
 
-        exception = new PublicKeyMismatchException("dummy", cause);
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isEqualTo(cause);
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
-        exception = new PublicKeyMismatchException("dummy");
-        assertThat(exception.getMessage()).isEqualTo("dummy");
-        assertThat(exception.getCause()).isNull();
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
 
-        exception = new PublicKeyMismatchException(cause);
-        assertThat(exception.getMessage()).isEqualTo(cause.toString());
-        assertThat(exception.getCause()).isEqualTo(cause);
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+        );
     }
 }

@@ -19,11 +19,13 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ALL")
 public class AuthenticatorAttachmentTest {
@@ -31,15 +33,19 @@ public class AuthenticatorAttachmentTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void create_test() throws InvalidFormatException {
-        assertThat(AuthenticatorAttachment.create(null)).isNull();
-        assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM);
-        assertThat(AuthenticatorAttachment.create("cross-platform")).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM);
+    public void create_test() {
+        assertAll(
+                () -> assertThat(AuthenticatorAttachment.create(null)).isNull(),
+                () -> assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM),
+                () -> assertThat(AuthenticatorAttachment.create("cross-platform")).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM)
+        );
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void create_invalid_value_test() throws InvalidFormatException {
-        AuthenticatorAttachment.create("invalid");
+    @Test
+    public void create_invalid_value_test() {
+        assertThrows(IllegalArgumentException.class,
+                () -> AuthenticatorAttachment.create("invalid")
+        );
     }
 
     @Test
@@ -53,13 +59,14 @@ public class AuthenticatorAttachmentTest {
         assertThat(dto.attachment).isEqualTo(AuthenticatorAttachment.PLATFORM);
     }
 
-    @Test(expected = InvalidFormatException.class)
+    @Test
     public void fromJson_test_with_invalid() throws IOException {
-        TestDTO dto = objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class);
+        assertThrows(InvalidFormatException.class,
+                () -> objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class)
+        );
     }
 
-    public static class TestDTO{
+    public static class TestDTO {
         public AuthenticatorAttachment attachment;
     }
-
 }

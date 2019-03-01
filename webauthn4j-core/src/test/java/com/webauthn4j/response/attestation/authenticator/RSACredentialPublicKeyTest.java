@@ -20,9 +20,11 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for RSACredentialPublicKey
@@ -36,8 +38,10 @@ public class RSACredentialPublicKeyTest {
     public void equals_hashCode_test() {
         RSACredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 
     @Test
@@ -62,7 +66,7 @@ public class RSACredentialPublicKeyTest {
         target.validate();
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_null_algorithm_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
@@ -73,10 +77,12 @@ public class RSACredentialPublicKeyTest {
                 original.getN(),
                 original.getE()
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_null_n_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
@@ -87,10 +93,12 @@ public class RSACredentialPublicKeyTest {
                 null,
                 original.getE()
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 
-    @Test(expected = ConstraintViolationException.class)
+    @Test
     public void validate_with_null_e_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
@@ -101,6 +109,8 @@ public class RSACredentialPublicKeyTest {
                 original.getN(),
                 null
         );
-        target.validate();
+        assertThrows(ConstraintViolationException.class,
+                () -> target.validate()
+        );
     }
 }

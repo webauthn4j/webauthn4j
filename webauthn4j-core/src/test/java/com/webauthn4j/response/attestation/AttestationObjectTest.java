@@ -17,9 +17,10 @@
 package com.webauthn4j.response.attestation;
 
 import com.webauthn4j.test.TestUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Test for AttestationObject
@@ -30,7 +31,9 @@ public class AttestationObjectTest {
     public void equals_hashCode_test() {
         AttestationObject instanceA = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AttestationObject instanceB = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
     }
 }
