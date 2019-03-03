@@ -39,8 +39,7 @@ public enum COSEAlgorithmIdentifier {
         this.messageDigestJcaName = messageDigestJcaName;
     }
 
-    @JsonCreator
-    public static COSEAlgorithmIdentifier create(int value) throws InvalidFormatException {
+    public static COSEAlgorithmIdentifier create(int value)  {
         switch (value) {
             case -65535:
                 return RS1;
@@ -57,10 +56,19 @@ public enum COSEAlgorithmIdentifier {
             case -36:
                 return ES512;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }
 
+    @JsonCreator
+    private static COSEAlgorithmIdentifier fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+        }
+    }
 
     @JsonValue
     public long getValue() {

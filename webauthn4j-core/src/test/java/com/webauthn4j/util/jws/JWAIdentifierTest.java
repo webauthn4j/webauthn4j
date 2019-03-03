@@ -16,7 +16,9 @@
 
 package com.webauthn4j.util.jws;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class JWAIdentifierTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create_test() {
@@ -35,19 +39,37 @@ class JWAIdentifierTest {
                 () -> assertThat(JWAIdentifier.create("RS1")).isEqualTo(JWAIdentifier.RS1),
                 () -> assertThat(JWAIdentifier.create("RS256")).isEqualTo(JWAIdentifier.RS256),
                 () -> assertThat(JWAIdentifier.create("RS384")).isEqualTo(JWAIdentifier.RS384),
-                () -> assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512)
+                () -> assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> JWAIdentifier.create("invalid")),
+                () -> assertThat(JWAIdentifier.create(null)).isNull()
         );
     }
 
     @Test
-    void name_test() {
+    void getName_test() {
         assertThat(JWAIdentifier.ES256.getName()).isEqualTo("ES256");
     }
 
     @Test
-    void create_with_invalid_arg_test() {
-        assertThrows(InvalidFormatException.class,
-                () -> JWAIdentifier.create("invalid")
+    void getJcaName_test() {
+        assertThat(JWAIdentifier.ES256.getJcaName()).isEqualTo("SHA256withECDSA");
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"jwa_id\":\"ES256\"}", TestDTO.class);
+        assertThat(dto.jwa_id).isEqualTo(JWAIdentifier.ES256);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"jwa_id\":\"ES521\"}", TestDTO.class)
         );
+    }
+
+    static class TestDTO {
+        public JWAIdentifier jwa_id;
     }
 }

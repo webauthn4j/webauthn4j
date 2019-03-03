@@ -42,8 +42,7 @@ public enum TPMEccCurve {
         return UnsignedNumberUtil.toBytes(getValue());
     }
 
-    @JsonCreator
-    public static TPMEccCurve create(int value) throws InvalidFormatException {
+    public static TPMEccCurve create(int value) {
         switch (value) {
             case 0x0000:
                 return TPM_ECC_NONE;
@@ -64,7 +63,17 @@ public enum TPMEccCurve {
             case 0x0020:
                 return TPM_ECC_SM2_P256;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, TPMEccCurve.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static TPMEccCurve fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, TPMEccCurve.class);
         }
     }
 

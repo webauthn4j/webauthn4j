@@ -16,7 +16,9 @@
 
 package com.webauthn4j.response.client;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ClientDataTypeTest {
 
+    JsonConverter jsonConverter = new JsonConverter();
+
     @Test
     void create_test() {
         assertAll(
@@ -32,9 +36,26 @@ class ClientDataTypeTest {
                 () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
                 () -> assertThat(ClientDataType.create(null)).isNull(),
                 //noinspection ResultOfMethodCallIgnored
-                () -> assertThrows(InvalidFormatException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> ClientDataType.create("invalid")
                 )
         );
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
+        assertThat(dto.client_data_type).isEqualTo(ClientDataType.CREATE);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"client_data_type\":\"webauthn.get \"}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public ClientDataType client_data_type;
     }
 }

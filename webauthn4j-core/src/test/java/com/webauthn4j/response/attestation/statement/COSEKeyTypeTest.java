@@ -16,7 +16,9 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class COSEKeyTypeTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create_test() {
@@ -34,9 +38,31 @@ class COSEKeyTypeTest {
                 () -> assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA),
                 () -> assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC),
                 //noinspection ResultOfMethodCallIgnored
-                () -> assertThrows(InvalidFormatException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> COSEKeyType.create(-1)
                 )
         );
+    }
+
+    @Test
+    void getValueTest() {
+        assertThat(COSEKeyType.OKP.getValue()).isEqualTo(1);
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"cose_key_type\":0}", TestDTO.class);
+        assertThat(dto.cose_key_type).isEqualTo(COSEKeyType.RESERVED);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"cose_key_type\":-1}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public COSEKeyType cose_key_type;
     }
 }

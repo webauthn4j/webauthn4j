@@ -38,8 +38,7 @@ public enum  TPMISTAttest {
         this.value = value;
     }
 
-    @JsonCreator
-    public static TPMISTAttest create(byte[] value) throws InvalidFormatException {
+    public static TPMISTAttest create(byte[] value) {
         if (Arrays.equals(value, TPM_ST_ATTEST_CERTIFY.value)) {
             return TPM_ST_ATTEST_CERTIFY;
         }
@@ -62,6 +61,16 @@ public enum  TPMISTAttest {
             return TPM_ST_ATTEST_NV;
         }
         else {
+            throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static TPMISTAttest fromJson(byte[] value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
             throw new InvalidFormatException(null, "value is out of range", value, TPMISTAttest.class);
         }
     }

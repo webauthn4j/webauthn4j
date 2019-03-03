@@ -16,7 +16,9 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class COSEKeyOperationTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
@@ -39,10 +43,10 @@ class COSEKeyOperationTest {
                 () -> assertThat(COSEKeyOperation.create(8)).isEqualTo(COSEKeyOperation.DERIVE_BITS),
                 () -> assertThat(COSEKeyOperation.create(9)).isEqualTo(COSEKeyOperation.MAC_CREATE),
                 () -> assertThat(COSEKeyOperation.create(10)).isEqualTo(COSEKeyOperation.MAC_VERIFY),
-                () -> assertThrows(InvalidFormatException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> COSEKeyOperation.create(0)
                 ),
-                () -> assertThrows(InvalidFormatException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> COSEKeyOperation.create(11)
                 )
         );
@@ -51,5 +55,22 @@ class COSEKeyOperationTest {
     @Test
     void getValueTest() {
         assertThat(COSEKeyOperation.SIGN.getValue()).isEqualTo(1);
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"cose_key_op\":1}", TestDTO.class);
+        assertThat(dto.cose_key_op).isEqualTo(COSEKeyOperation.SIGN);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"cose_key_op\":0}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public COSEKeyOperation cose_key_op;
     }
 }

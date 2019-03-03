@@ -35,9 +35,7 @@ public enum TPMIAlgHash {
         this.value = value;
     }
 
-    @JsonCreator
-    @SuppressWarnings("squid:S3776")
-    public static TPMIAlgHash create(int value) throws InvalidFormatException {
+    public static TPMIAlgHash create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
         } else if (value == TPM_ALG_SHA1.value) {
@@ -51,7 +49,18 @@ public enum TPMIAlgHash {
         } else if (value == TPM_ALG_NULL.value) {
             return TPM_ALG_NULL;
         } else {
-            throw new InvalidFormatException(null, "value is out of range", value, TPMIAlgPublic.class);
+            throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    @SuppressWarnings("squid:S3776")
+    private static TPMIAlgHash fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, TPMIAlgHash.class);
         }
     }
 

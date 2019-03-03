@@ -16,14 +16,19 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Base64;
+
 class TPMISTAttestTest {
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create() {
@@ -40,8 +45,27 @@ class TPMISTAttestTest {
 
     @Test
     void create_with_invalid_value() {
-        assertThrows(InvalidFormatException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> TPMISTAttest.create(new byte[]{})
         );
+    }
+
+    @Test
+    void fromString_test() {
+        byte[] source = new byte[]{(byte)0x80, (byte)0x17};
+        TestDTO dto = jsonConverter.readValue("{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class);
+        assertThat(dto.tpmi_st_attest).isEqualTo(TPMISTAttest.TPM_ST_ATTEST_CERTIFY);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        byte[] source = new byte[]{(byte)0xff, (byte)0xaa};
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public TPMISTAttest tpmi_st_attest;
     }
 }

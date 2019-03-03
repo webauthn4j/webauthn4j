@@ -16,7 +16,9 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMEccCurveTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create_test() {
@@ -42,7 +46,7 @@ class TPMEccCurveTest {
 
     @Test
     void create_with_invalid_value_test() {
-        assertThrows(InvalidFormatException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> TPMEccCurve.create(0xFFFF)
         );
     }
@@ -55,5 +59,22 @@ class TPMEccCurveTest {
     @Test
     void getValue_test() {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);
+        assertThat(dto.tpm_ecc_curve).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"tpm_ecc_curve\":-1}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public TPMEccCurve tpm_ecc_curve;
     }
 }

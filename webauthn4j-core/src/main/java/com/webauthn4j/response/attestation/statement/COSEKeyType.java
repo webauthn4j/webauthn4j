@@ -33,8 +33,7 @@ public enum COSEKeyType {
         this.value = value;
     }
 
-    @JsonCreator
-    public static COSEKeyType create(int value) throws InvalidFormatException {
+    public static COSEKeyType create(int value) {
         switch (value) {
             case 1:
                 return OKP;
@@ -47,7 +46,17 @@ public enum COSEKeyType {
             case 0:
                 return RESERVED;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, COSEKeyType.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static COSEKeyType fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, COSEKeyType.class);
         }
     }
 

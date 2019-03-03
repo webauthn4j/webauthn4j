@@ -23,7 +23,7 @@ import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
 
-public enum  TPMGenerated {
+public enum TPMGenerated {
 
     TPM_GENERATED_VALUE(new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47});
 
@@ -33,11 +33,20 @@ public enum  TPMGenerated {
         this.value = value;
     }
 
-    @JsonCreator
-    public static TPMGenerated create(byte[] value) throws InvalidFormatException {
+    public static TPMGenerated create(byte[] value) {
         if (Arrays.equals(value, TPM_GENERATED_VALUE.value)) {
             return TPM_GENERATED_VALUE;
         } else {
+            throw new IllegalArgumentException("value is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static TPMGenerated fromJson(byte[] value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
             throw new InvalidFormatException(null, "value is out of range", value, TPMGenerated.class);
         }
     }

@@ -71,12 +71,21 @@ public class Origin implements Serializable {
         this.port = originPort;
     }
 
-    @JsonCreator
-    public static Origin create(String value) throws InvalidFormatException {
+    public static Origin create(String value) {
         try {
             return new Origin(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range: " + e.getMessage(), value, Origin.class);
+            throw new IllegalArgumentException("value is out of range: " + e.getMessage());
+        }
+    }
+
+    @JsonCreator
+    private static Origin fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, Origin.class);
         }
     }
 
