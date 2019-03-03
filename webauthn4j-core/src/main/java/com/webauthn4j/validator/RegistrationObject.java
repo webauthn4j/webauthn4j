@@ -16,13 +16,18 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * Internal data transfer object for registration data
@@ -37,17 +42,21 @@ public class RegistrationObject {
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
     private final byte[] authenticatorDataBytes;
+    private final Set<AuthenticatorTransport> transports;
+    private final AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
 
     // ~ Constructor
     // ========================================================================================================
-
+    @SuppressWarnings("squid:S00107")
     public RegistrationObject(CollectedClientData collectedClientData,
                               byte[] collectedClientDataBytes,
                               AttestationObject attestationObject,
                               byte[] attestationObjectBytes,
                               byte[] authenticatorDataBytes,
+                              Set<AuthenticatorTransport> transports,
+                              AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
                               ServerProperty serverProperty) {
 
         this(
@@ -56,16 +65,21 @@ public class RegistrationObject {
                 attestationObject,
                 attestationObjectBytes,
                 authenticatorDataBytes,
+                transports,
+                clientExtensions,
                 serverProperty,
                 LocalDateTime.now(Clock.systemUTC())
         );
     }
 
+    @SuppressWarnings("squid:S00107")
     public RegistrationObject(CollectedClientData collectedClientData,
                               byte[] collectedClientDataBytes,
                               AttestationObject attestationObject,
                               byte[] attestationObjectBytes,
                               byte[] authenticatorDataBytes,
+                              Set<AuthenticatorTransport> transports,
+                              AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
                               ServerProperty serverProperty,
                               LocalDateTime timestamp) {
 
@@ -74,6 +88,8 @@ public class RegistrationObject {
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.authenticatorDataBytes = authenticatorDataBytes;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
+        this.clientExtensions = clientExtensions;
         this.serverProperty = serverProperty;
         this.timestamp = timestamp;
     }
@@ -99,6 +115,14 @@ public class RegistrationObject {
 
     public byte[] getAuthenticatorDataBytes() {
         return ArrayUtil.clone(authenticatorDataBytes);
+    }
+
+    public Set<AuthenticatorTransport> getTransports() {
+        return transports;
+    }
+
+    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensions() {
+        return clientExtensions;
     }
 
     public ServerProperty getServerProperty() {

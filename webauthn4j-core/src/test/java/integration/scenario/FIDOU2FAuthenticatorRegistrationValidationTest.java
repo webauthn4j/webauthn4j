@@ -101,6 +101,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
+                registrationRequest.getTransports(),
                 clientExtensionJSON,
                 serverProperty,
                 false,
@@ -150,6 +151,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
+                registrationRequest.getTransports(),
                 clientExtensionJSON,
                 serverProperty,
                 false,
@@ -186,7 +188,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         assertThrows(MaliciousDataException.class,
                 () -> target.validate(registrationContext)
         );
@@ -210,7 +212,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         assertThrows(BadChallengeException.class,
                 () -> target.validate(registrationContext)
         );
@@ -234,7 +236,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         assertThrows(BadOriginException.class,
                 () -> target.validate(registrationContext)
         );
@@ -255,7 +257,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         assertThrows(BadRpIdException.class,
                 () -> target.validate(registrationContext)
         );
@@ -276,7 +278,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
                 new TrustAnchorCertPathTrustworthinessValidator(mock(TrustAnchorsResolver.class)),
@@ -321,7 +323,13 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext =
+                new WebAuthnRegistrationContext(
+                        registrationRequest.getClientDataJSON(),
+                        registrationRequest.getAttestationObject(),
+                        registrationRequest.getTransports(),
+                        serverProperty,
+                        false);
         assertThrows(BadSignatureException.class,
                 () -> target.validate(registrationContext)
         );
@@ -364,7 +372,8 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
         byte[] maliciousClientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(maliciousClientData);
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes, registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes,
+                registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, false);
         assertThrows(BadSignatureException.class,
                 () -> target.validate(registrationContext)
         );

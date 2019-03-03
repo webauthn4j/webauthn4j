@@ -55,7 +55,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = jsonConverter.getCborConverter();
 
     private Origin origin = new Origin("http://example.com");
     private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();

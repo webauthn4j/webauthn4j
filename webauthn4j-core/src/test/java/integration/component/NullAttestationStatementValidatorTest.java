@@ -68,7 +68,12 @@ class NullAttestationStatementValidatorTest {
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, false);
+        WebAuthnRegistrationContext registrationContext =
+                new WebAuthnRegistrationContext(
+                        registrationRequest.getClientDataJSON(),
+                        registrationRequest.getAttestationObject(),
+                        registrationRequest.getTransports(),
+                        serverProperty, false);
         target.validate(registrationContext);
     }
 
@@ -103,7 +108,7 @@ class NullAttestationStatementValidatorTest {
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), serverProperty, true);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, true);
         target.validate(registrationContext);
     }
 }

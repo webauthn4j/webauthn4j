@@ -16,16 +16,14 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.request.AuthenticatorTransport;
-import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
@@ -33,13 +31,11 @@ import com.webauthn4j.test.TestUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class RegistrationObjectTest {
+class AuthenticationObjectTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
@@ -47,38 +43,35 @@ class RegistrationObjectTest {
     @Test
     void test() {
 
+        byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
-        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
-        RegistrationObject registrationObject = new RegistrationObject(
+        AuthenticationObject authenticationObject = new AuthenticationObject(
+                credentialId,
                 clientData,
                 clientDataBytes,
-                attestationObject,
-                attestationObjectBytes,
+                authenticatorData,
                 authenticatorDataBytes,
-                transports,
                 clientExtensions,
                 serverProperty,
                 timestamp
         );
 
         assertAll(
-                () -> assertThat(registrationObject.getCollectedClientData()).isEqualTo(clientData),
-                () -> assertThat(registrationObject.getCollectedClientDataBytes()).isEqualTo(clientDataBytes),
-                () -> assertThat(registrationObject.getAttestationObject()).isEqualTo(attestationObject),
-                () -> assertThat(registrationObject.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes),
-                () -> assertThat(registrationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
-                () -> assertThat(registrationObject.getTransports()).isEqualTo(transports),
-                () -> assertThat(registrationObject.getClientExtensions()).isEqualTo(clientExtensions),
-                () -> assertThat(registrationObject.getServerProperty()).isEqualTo(serverProperty),
-                () -> assertThat(registrationObject.getTimestamp()).isEqualTo(timestamp)
+                () -> assertThat(authenticationObject.getCredentialId()).isEqualTo(credentialId),
+                () -> assertThat(authenticationObject.getCollectedClientData()).isEqualTo(clientData),
+                () -> assertThat(authenticationObject.getCollectedClientDataBytes()).isEqualTo(clientDataBytes),
+                () -> assertThat(authenticationObject.getAuthenticatorData()).isEqualTo(authenticatorData),
+                () -> assertThat(authenticationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
+                () -> assertThat(authenticationObject.getClientExtensions()).isEqualTo(clientExtensions),
+                () -> assertThat(authenticationObject.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(authenticationObject.getTimestamp()).isEqualTo(timestamp)
         );
     }
+
 }

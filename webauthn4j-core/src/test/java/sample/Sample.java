@@ -18,6 +18,7 @@ package sample;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.Origin;
@@ -28,12 +29,15 @@ import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 
+import java.util.Set;
+
 class Sample {
 
     public void registrationValidationSample() {
         // Client properties
         byte[] clientDataJSON = null /* set clientDataJSON */;
         byte[] attestationObject = null /* set attestationObject */;
+        Set<AuthenticatorTransport> transports = null /* set transports */;
 
         // Server properties
         Origin origin = null /* set origin */;
@@ -43,7 +47,7 @@ class Sample {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
         boolean userVerificationRequired = false;
 
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, userVerificationRequired);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, transports, serverProperty, userVerificationRequired);
 
         // WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
         // which doesn't validate an attestation statement. It is recommended configuration for most web application.

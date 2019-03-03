@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
@@ -23,6 +24,7 @@ import com.webauthn4j.util.CollectionUtil;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * WebAuthn registration context
@@ -33,12 +35,14 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
     // ================================================================================================
 
     private final byte[] attestationObject;
+    private final Set<AuthenticatorTransport> transports;
 
     // ~ Constructor
     // ========================================================================================================
-
+    @SuppressWarnings("squid:S00107")
     public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
+                                       Set<AuthenticatorTransport> transports,
                                        String clientExtensionsJSON,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired,
@@ -53,11 +57,13 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
                 userPresenceRequired,
                 CollectionUtil.unmodifiableList(expectedExtensionIds)
         );
+        this.transports = CollectionUtil.unmodifiableSet(transports);
         this.attestationObject = attestationObject;
     }
 
     public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
+                                       Set<AuthenticatorTransport> authenticatorTransports,
                                        String clientExtensionsJSON,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired,
@@ -66,6 +72,7 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
         this(
                 clientDataJSON,
                 attestationObject,
+                authenticatorTransports,
                 clientExtensionsJSON,
                 serverProperty,
                 userVerificationRequired,
@@ -76,12 +83,14 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
     public WebAuthnRegistrationContext(byte[] clientDataJSON,
                                        byte[] attestationObject,
+                                       Set<AuthenticatorTransport> transports,
                                        ServerProperty serverProperty,
                                        boolean userVerificationRequired) {
 
         this(
                 clientDataJSON,
                 attestationObject,
+                transports,
                 null,
                 serverProperty,
                 userVerificationRequired,
@@ -91,6 +100,10 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
 
     public byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
+    }
+
+    public Set<AuthenticatorTransport> getTransports() {
+        return transports;
     }
 
     @Override

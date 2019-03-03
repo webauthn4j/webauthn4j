@@ -5,6 +5,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
@@ -16,6 +17,8 @@ import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -42,9 +45,7 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -151,6 +152,8 @@ class PackedAttestationStatementValidatorTest {
 
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
         CollectedClientData collectedClientData = new CollectedClientDataConverter(jsonConverter).convert(clientDataBytes);
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,
@@ -158,6 +161,8 @@ class PackedAttestationStatementValidatorTest {
                 attestationObject,
                 attestationObjectBytes,
                 attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes),
+                transports,
+                authenticationExtensionsClientOutputs,
                 new ServerProperty(origin, rpId, challenge, tokenBindingId)
         );
 

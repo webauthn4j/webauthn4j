@@ -22,6 +22,7 @@ import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -50,9 +51,7 @@ import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Validates the specified {@link WebAuthnRegistrationContext} instance
@@ -71,6 +70,7 @@ public class WebAuthnRegistrationContextValidator {
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final ExtensionValidator extensionValidator = new ExtensionValidator();
+    private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
 
     private final AttestationValidator attestationValidator;
 
@@ -183,12 +183,13 @@ public class WebAuthnRegistrationContextValidator {
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs =
+        Set<AuthenticatorTransport> transports = registrationContext.getTransports();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(attestationObject);
-        BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(authenticationExtensionsClientOutputs);
+        BeanAssertUtil.validateAuthenticationExtensionsClientOutputs(clientExtensions);
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
@@ -200,6 +201,8 @@ public class WebAuthnRegistrationContextValidator {
                 attestationObject,
                 attestationObjectBytes,
                 authenticatorDataBytes,
+                transports,
+                clientExtensions,
                 registrationContext.getServerProperty()
         );
 
@@ -242,7 +245,7 @@ public class WebAuthnRegistrationContextValidator {
         /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
-        extensionValidator.validate(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+        extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         // Verify attestation
         attestationValidator.validate(registrationObject);
@@ -258,7 +261,12 @@ public class WebAuthnRegistrationContextValidator {
 
         // ******* This step is up to library user *******
 
-        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, authenticationExtensionsClientOutputs);
+        // validate with custom logic
+        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators){
+            customRegistrationValidator.validate(registrationObject);
+        }
+
+        return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensions);
     }
 
     void validateAuthenticatorDataField(AuthenticatorData authenticatorData){
@@ -280,5 +288,7 @@ public class WebAuthnRegistrationContextValidator {
         }
     }
 
-
+    public List<CustomRegistrationValidator> getCustomRegistrationValidators() {
+        return customRegistrationValidators;
+    }
 }
