@@ -17,51 +17,22 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.AbstractMap;
+import com.webauthn4j.util.AbstractImmutableMap;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * This descriptor contains description in alternative languages.
  */
-public class AlternativeDescriptions extends AbstractMap<String, String> {
+public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 	
-	private final Map<String, String> alternativeDescription;
-	
+	@SuppressWarnings("unchecked")
 	@JsonCreator
-	public AlternativeDescriptions(
-		Map<String, String> alternativeDescription) {
-		this.alternativeDescription = alternativeDescription;
+	public AlternativeDescriptions(Map<String, String> map) {
+		super(map);
 	}
 	
 	public AlternativeDescriptions(){
 		this(Collections.emptyMap());
-	}
-	
-	@Override
-	public Set<Entry<String, String>> entrySet() {
-		return alternativeDescription.entrySet();
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		if (!super.equals(o)) {
-			return false;
-		}
-		AlternativeDescriptions that = (AlternativeDescriptions) o;
-		return Objects.equals(alternativeDescription, that.alternativeDescription);
-	}
-	
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), alternativeDescription);
 	}
 }
