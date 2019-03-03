@@ -16,10 +16,23 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AbstractImmutableMap;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * This descriptor contains description in alternative languages.
  */
-public class AlternativeDescriptions extends HashMap<String, String> { //TODO
+public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
+	
+	@SuppressWarnings("unchecked")
+	@JsonCreator
+	public AlternativeDescriptions(Map<String, String> map) {
+		super(map);
+	}
+	
+	public AlternativeDescriptions(){
+		this(Collections.emptyMap());
+	}
 }
