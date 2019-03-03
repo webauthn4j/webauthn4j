@@ -24,15 +24,15 @@ import java.util.Map;
 /**
  * This descriptor contains description in alternative languages.
  */
-public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
+class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 	
 	@SuppressWarnings("unchecked")
 	@JsonCreator
-	public AlternativeDescriptions(Map<String, String> map) {
+	AlternativeDescriptions(Map<String, String> map) {
 		super(map);
 	}
 	
-	public AlternativeDescriptions(){
+	AlternativeDescriptions(){
 		this(Collections.emptyMap());
 	}
 }
