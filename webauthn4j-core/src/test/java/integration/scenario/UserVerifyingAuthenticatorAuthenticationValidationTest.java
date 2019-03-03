@@ -52,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserVerifyingAuthenticatorAuthenticationValidationTest {
+class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
@@ -66,7 +66,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -114,7 +114,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_tokenBinding_test() {
+    void validate_assertion_with_tokenBinding_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -167,7 +167,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
 
     @Test
-    public void validate_assertion_test_with_bad_clientData_type() {
+    void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -206,7 +206,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_challenge_test() {
+    void validate_assertion_with_bad_challenge_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -245,7 +245,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_origin_test() {
+    void validate_assertion_with_bad_origin_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -284,7 +284,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_invalid_tokenBinding_test() {
+    void validate_assertion_with_invalid_tokenBinding_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -326,7 +326,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
 
     @Test
-    public void validate_bad_rpId_test() {
+    void validate_bad_rpId_test() {
         String rpId = "example.com";
         String anotherSiteRpId = "another.site.example.net";
         long timeout = 0;
@@ -365,7 +365,7 @@ public class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_userVerificationDiscouraged_option_test() {
+    void validate_assertion_with_userVerificationDiscouraged_option_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();

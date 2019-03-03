@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyMismatchExceptionTest {
+class PublicKeyMismatchExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         PublicKeyMismatchException exception1 = new PublicKeyMismatchException("dummy", cause);
         PublicKeyMismatchException exception2 = new PublicKeyMismatchException("dummy");
         PublicKeyMismatchException exception3 = new PublicKeyMismatchException(cause);

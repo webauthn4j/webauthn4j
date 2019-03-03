@@ -30,18 +30,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TPMAttestationStatementValidatorTest {
+class TPMAttestationStatementValidatorTest {
 
     private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 
     @Test
-    public void validate_non_TPMAttestation_test() {
+    void validate_non_TPMAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
@@ -49,7 +49,7 @@ public class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    public void getCurveFromTPMEccCurve_test() {
+    void getCurveFromTPMEccCurve_test() {
         assertAll(
                 () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P256)).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
                 () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P384)).isEqualTo(ECUtil.P_384_SPEC.getCurve()),
@@ -61,7 +61,7 @@ public class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    public void getAlgJcaName_test() {
+    void getAlgJcaName_test() {
         assertAll(
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA1)).isEqualTo("SHA-1"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA256)).isEqualTo("SHA-256"),

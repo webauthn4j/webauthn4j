@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DefaultChallengeTest {
+class DefaultChallengeTest {
 
     @Test
-    public void hashCode_test() {
+    void hashCode_test() {
         Challenge challengeA = new DefaultChallenge();
         Challenge challengeB = new DefaultChallenge(challengeA.getValue());
 

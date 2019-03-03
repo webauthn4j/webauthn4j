@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NotImplementedExceptionTest {
+class NotImplementedExceptionTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         assertThrows(NotImplementedException.class,
                 () -> {
                     throw new NotImplementedException();

@@ -52,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class FIDOU2FAuthenticatorAuthenticationValidationTest {
+class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
@@ -66,7 +66,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -119,7 +119,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_test_with_bad_clientData_type() {
+    void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -165,7 +165,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_challenge_test() {
+    void validate_assertion_with_bad_challenge_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -210,7 +210,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_origin_test() {
+    void validate_assertion_with_bad_origin_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -255,7 +255,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_rpId_test() {
+    void validate_assertion_with_bad_rpId_test() {
         String rpId = "example.com";
         String badRpId = "bad.rpId.example.net";
         long timeout = 0;
@@ -300,7 +300,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_userVerificationRequired_option_test() {
+    void validate_assertion_with_userVerificationRequired_option_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -344,7 +344,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_UP_flag_off_test() {
+    void validate_assertion_with_UP_flag_off_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
         fidou2FAuthenticatorAdaptor.getFidoU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
         clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
@@ -391,7 +391,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_bad_signature_test() {
+    void validate_assertion_with_bad_signature_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -435,7 +435,7 @@ public class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
-    public void validate_assertion_with_malicious_counter_test() {
+    void validate_assertion_with_malicious_counter_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();

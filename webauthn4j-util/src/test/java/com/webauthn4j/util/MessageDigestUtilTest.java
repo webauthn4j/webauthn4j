@@ -27,10 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for MessageDigestUtil
  */
-public class MessageDigestUtilTest {
+class MessageDigestUtilTest {
 
     @Test
-    public void createMessageDigest_test() {
+    void createMessageDigest_test() {
         MessageDigest s256 = MessageDigestUtil.createMessageDigest("S256");
         MessageDigest s384 = MessageDigestUtil.createMessageDigest("S384");
         MessageDigest s512 = MessageDigestUtil.createMessageDigest("S512");
@@ -46,7 +46,7 @@ public class MessageDigestUtilTest {
     }
 
     @Test
-    public void createMessageDigest_test_with_wrong_arg() {
+    void createMessageDigest_test_with_wrong_arg() {
         assertThrows(IllegalArgumentException.class,
                 () -> MessageDigestUtil.createMessageDigest("wrong-arg")
         );

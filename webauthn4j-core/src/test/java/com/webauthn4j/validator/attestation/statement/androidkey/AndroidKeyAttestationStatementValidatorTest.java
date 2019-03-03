@@ -30,18 +30,18 @@ import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AndroidKeyAttestationStatementValidatorTest {
+class AndroidKeyAttestationStatementValidatorTest {
 
     private AndroidKeyAttestationStatementValidator target = new AndroidKeyAttestationStatementValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);
     }
 
     @Test
-    public void validate_with_teeEnforcedOnly_option_test() {
+    void validate_with_teeEnforcedOnly_option_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.setTeeEnforcedOnly(true);
         assertThat(target.isTeeEnforcedOnly()).isTrue();
@@ -49,7 +49,7 @@ public class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_null_x5c_test1() {
+    void validate_null_x5c_test1() {
         RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
         when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null));
         assertThrows(BadAttestationStatementException.class,
@@ -58,7 +58,7 @@ public class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_null_x5c_test2() {
+    void validate_null_x5c_test2() {
         RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
         when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()));
         assertThrows(BadAttestationStatementException.class,
@@ -67,7 +67,7 @@ public class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_TPMAttestation_test() {
+    void validate_TPMAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)

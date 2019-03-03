@@ -23,10 +23,10 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialDescriptorTest {
+class PublicKeyCredentialDescriptorTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         PublicKeyCredentialDescriptor descriptor = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
         assertAll(
                 () -> assertThat(descriptor.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY),
@@ -36,7 +36,7 @@ public class PublicKeyCredentialDescriptorTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         PublicKeyCredentialDescriptor instanceA = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
         PublicKeyCredentialDescriptor instanceB = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
 

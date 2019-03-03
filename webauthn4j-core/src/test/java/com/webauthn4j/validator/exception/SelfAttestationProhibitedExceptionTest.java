@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class SelfAttestationProhibitedExceptionTest {
+class SelfAttestationProhibitedExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         SelfAttestationProhibitedException exception1 = new SelfAttestationProhibitedException("dummy", cause);
         SelfAttestationProhibitedException exception2 = new SelfAttestationProhibitedException("dummy");
         SelfAttestationProhibitedException exception3 = new SelfAttestationProhibitedException(cause);

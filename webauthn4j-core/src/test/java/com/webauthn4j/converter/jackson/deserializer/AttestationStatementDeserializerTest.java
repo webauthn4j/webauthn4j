@@ -25,12 +25,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AttestationStatementDeserializerTest {
+class AttestationStatementDeserializerTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void test() {
+    void test() {
         AttestationStatement source = TestUtil.createFIDOU2FAttestationStatement();
         String str = jsonConverter.writeValueAsString(source);
         AttestationStatement obj = jsonConverter.readValue(str, AttestationStatement.class);

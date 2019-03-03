@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for CUnsignedNumberUtil
  */
-public class UnsignedNumberUtilTest {
+class UnsignedNumberUtilTest {
 
     @Test
-    public void getUnsignedShort_test1() {
+    void getUnsignedShort_test1() {
         byte[] bytes = new byte[4];
         bytes[0] = 0x00;
         bytes[1] = 0x01;
@@ -40,7 +40,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedShort_test2() {
+    void getUnsignedShort_test2() {
         byte[] bytes = new byte[4];
         bytes[0] = (byte) 0xFF;
         bytes[1] = (byte) 0xFF;
@@ -49,7 +49,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedShort_test3() {
+    void getUnsignedShort_test3() {
         byte[] bytes = new byte[2];
         bytes[0] = 0x00;
         bytes[1] = 0x01;
@@ -58,7 +58,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedShort_test4() {
+    void getUnsignedShort_test4() {
         byte[] bytes = new byte[4];
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.getUnsignedShort(bytes)
@@ -66,7 +66,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedInt_test1() {
+    void getUnsignedInt_test1() {
         byte[] bytes = new byte[4];
         bytes[0] = 0x00;
         bytes[1] = 0x00;
@@ -77,7 +77,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedInt_test2() {
+    void getUnsignedInt_test2() {
         byte[] bytes = new byte[4];
         bytes[0] = (byte) 0xFF;
         bytes[1] = (byte) 0xFF;
@@ -88,7 +88,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedInt_test3() {
+    void getUnsignedInt_test3() {
         byte[] bytes = new byte[4];
         bytes[0] = (byte) 0xFF;
         bytes[1] = (byte) 0xFF;
@@ -99,7 +99,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void getUnsignedInt_test4() {
+    void getUnsignedInt_test4() {
         byte[] bytes = new byte[8];
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.getUnsignedInt(bytes)
@@ -107,35 +107,35 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void toBytes_test1() {
+    void toBytes_test1() {
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.toBytes((short) -1)
         );
     }
 
     @Test
-    public void toBytes_test2() {
+    void toBytes_test2() {
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.toBytes(-1)
         );
     }
 
     @Test
-    public void toBytes_test3() {
+    void toBytes_test3() {
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.toBytes((long) -1)
         );
     }
 
     @Test
-    public void toBytes_test4() {
+    void toBytes_test4() {
         assertThrows(IllegalArgumentException.class,
                 () -> UnsignedNumberUtil.toBytes(BigInteger.valueOf(-1))
         );
     }
 
     @Test
-    public void getUnsignedLong_form_UNSIGNED_LONG_MAX_test() {
+    void getUnsignedLong_form_UNSIGNED_LONG_MAX_test() {
         byte[] bytes = new byte[8];
         bytes[0] = (byte) 0xFF;
         bytes[1] = (byte) 0xFF;
@@ -149,7 +149,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void toBytes_long_1_test1() {
+    void toBytes_long_1_test1() {
         byte[] bytes = UnsignedNumberUtil.toBytes(0x00000001L);
         assertAll(
                 () -> assertThat(bytes).hasSize(4),
@@ -158,7 +158,7 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void toBytes_long_uint_max_test2() {
+    void toBytes_long_uint_max_test2() {
         byte[] bytes = UnsignedNumberUtil.toBytes(0xFFFFFFFFL);
         assertAll(
                 () -> assertThat(bytes).hasSize(4),
@@ -167,19 +167,19 @@ public class UnsignedNumberUtilTest {
     }
 
     @Test
-    public void toBytes_ulong_max_test() {
+    void toBytes_ulong_max_test() {
         byte[] bytes = UnsignedNumberUtil.toBytes(UnsignedNumberUtil.UNSIGNED_LONG_MAX);
         assertThat(bytes).isEqualTo(new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
     }
 
     @Test
-    public void toBytes_BigInteger_uint_max_test() {
+    void toBytes_BigInteger_uint_max_test() {
         byte[] bytes = UnsignedNumberUtil.toBytes(BigInteger.valueOf(UnsignedNumberUtil.UNSIGNED_INT_MAX));
         assertThat(bytes).isEqualTo(new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF});
     }
 
     @Test
-    public void isWithinUnsignedLong_test() {
+    void isWithinUnsignedLong_test() {
         assertAll(
                 () -> assertThat(UnsignedNumberUtil.isWithinUnsignedLong(UnsignedNumberUtil.UNSIGNED_LONG_MAX)).isTrue(),
                 () -> assertThat(UnsignedNumberUtil.isWithinUnsignedLong(BigInteger.valueOf(0))).isTrue(),

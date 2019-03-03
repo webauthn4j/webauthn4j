@@ -10,10 +10,10 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialCreationOptionsTest {
+class PublicKeyCredentialCreationOptionsTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
 

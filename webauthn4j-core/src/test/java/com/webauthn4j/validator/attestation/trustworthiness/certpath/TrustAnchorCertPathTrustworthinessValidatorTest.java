@@ -36,14 +36,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TrustAnchorCertPathTrustworthinessValidatorTest {
+class TrustAnchorCertPathTrustworthinessValidatorTest {
 
     private TrustAnchorsResolver trustAnchorsResolver = mock(TrustAnchorsResolver.class);
     private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver);
     private AAGUID aaguid = AAGUID.ZERO;
 
     @Test
-    public void validate_test() {
+    void validate_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load2tierTestRootCACertificate()));
@@ -54,7 +54,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
     }
 
     @Test
-    public void validate_with_empty_trustAnchors_test() {
+    void validate_with_empty_trustAnchors_test() {
 
         Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
@@ -66,7 +66,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
     }
 
     @Test
-    public void validate_full_chain_test() {
+    void validate_full_chain_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
                 Collections.singletonList(TestUtil.load3tierTestRootCACertificate()));
@@ -86,7 +86,7 @@ public class TrustAnchorCertPathTrustworthinessValidatorTest {
     }
 
     @Test
-    public void test(){
+    void test(){
         assertThat(target.isFullChainProhibited()).isFalse();
     }
 }

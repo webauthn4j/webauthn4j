@@ -32,13 +32,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class RegistrationObjectTest {
+class RegistrationObjectTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test() {
+    void test() {
 
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);

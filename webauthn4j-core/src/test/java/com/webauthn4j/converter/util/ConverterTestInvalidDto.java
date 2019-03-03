@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter.util;
 
-public class ConverterTestInvalidDto {
+class ConverterTestInvalidDto {
     private Object value;
 
     public Object getValue() {

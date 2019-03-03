@@ -25,12 +25,12 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TPMTPublicDeserializerTest {
+class TPMTPublicDeserializerTest {
 
     private TPMTPublicDeserializer deserializer = new TPMTPublicDeserializer();
 
     @Test
-    public void deserialize_test() throws IOException {
+    void deserialize_test() throws IOException {
         String input = "AAEACwAGBHIAIJ3/y/NsODrmmfuYaNxty4nXFTiEvigDkiwSQVi/rSKuABAAEAgAAAAAAAEAxdpvTZNXveIC9cVYzQoxVtJU8uCtmrV5MfmCa3R94axPKdYHCHTc5XkQ4ZhESZ2OQkcDObFw0CK1AauI6cL07TAuRxnHDevohCQD7ZvfwicwphobcPYWxfG3AMrPeEYTfcSy1Gmo4VqrT62GVwhAItKPRNkHUyMSa3AHyYGTn99yTK9PvkdQQEMaTqBkQwvLLPrX0Fvbn2S1sOCVLs+GeSc9bG36gWAfFFAzFqE9B4LDGj5r3e09e8Rrwfqb7w3/g7ferxRrWCxGRIIaPGLtuqa+QivwTkPtr1/TeDCGFT1zYaIDBhpimKsm4TN8ocntBnQaWQVHeYjnIDBOrhidfw";
         byte[] inputBytes = Base64Util.decode(input);
         TPMTPublic value = deserializer.deserialize(inputBytes);

@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class UserNotVerifiedExceptionTest {
+class UserNotVerifiedExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         UserNotVerifiedException exception1 = new UserNotVerifiedException("dummy", cause);
         UserNotVerifiedException exception2 = new UserNotVerifiedException("dummy");
         UserNotVerifiedException exception3 = new UserNotVerifiedException(cause);

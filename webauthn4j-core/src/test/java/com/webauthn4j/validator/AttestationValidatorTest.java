@@ -37,11 +37,11 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class AttestationValidatorTest {
+class AttestationValidatorTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void validate_ecdaa() {
+    void validate_ecdaa() {
         AttestationStatementValidator attestationStatementValidatorMock = mock(AttestationStatementValidator.class);
         when(attestationStatementValidatorMock.supports(any())).thenReturn(true);
         when(attestationStatementValidatorMock.validate(any())).thenReturn(AttestationType.ECDAA);
@@ -64,7 +64,7 @@ public class AttestationValidatorTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void validateAAGUID() {
+    void validateAAGUID() {
         AttestationValidator attestationValidator = new AttestationValidator(
                 Collections.singletonList(new FIDOU2FAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),

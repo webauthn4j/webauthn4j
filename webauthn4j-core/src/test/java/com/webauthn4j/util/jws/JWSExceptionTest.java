@@ -22,10 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class JWSExceptionTest {
+class JWSExceptionTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         RuntimeException cause = new RuntimeException();
 
         JWSException exception1 = new JWSException("dummy", cause);

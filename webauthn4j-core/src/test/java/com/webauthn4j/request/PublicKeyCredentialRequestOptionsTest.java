@@ -27,10 +27,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialRequestOptionsTest {
+class PublicKeyCredentialRequestOptionsTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();
@@ -63,7 +63,7 @@ public class PublicKeyCredentialRequestOptionsTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         String rpId = "example.com";
         long timeout = 0;
         Challenge challenge = new DefaultChallenge();

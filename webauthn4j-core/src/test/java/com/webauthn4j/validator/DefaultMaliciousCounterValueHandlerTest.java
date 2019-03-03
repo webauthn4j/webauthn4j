@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DefaultMaliciousCounterValueHandlerTest {
+class DefaultMaliciousCounterValueHandlerTest {
 
     private DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
 
     @Test
-    public void maliciousCounterValueDetected_test() {
+    void maliciousCounterValueDetected_test() {
         assertThrows(MaliciousCounterValueException.class,
                 () -> target.maliciousCounterValueDetected(null, null)
         );

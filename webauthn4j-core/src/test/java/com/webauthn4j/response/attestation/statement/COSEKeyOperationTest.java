@@ -23,11 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class COSEKeyOperationTest {
+class COSEKeyOperationTest {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(COSEKeyOperation.create(1)).isEqualTo(COSEKeyOperation.SIGN),
                 () -> assertThat(COSEKeyOperation.create(2)).isEqualTo(COSEKeyOperation.VERIFY),
@@ -49,7 +49,7 @@ public class COSEKeyOperationTest {
     }
 
     @Test
-    public void getValueTest() {
+    void getValueTest() {
         assertThat(COSEKeyOperation.SIGN.getValue()).isEqualTo(1);
     }
 }

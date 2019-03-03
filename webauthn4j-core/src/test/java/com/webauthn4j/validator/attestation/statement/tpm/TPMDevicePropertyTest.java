@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class TPMDevicePropertyTest {
+class TPMDevicePropertyTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         TPMDeviceProperty tpmDeviceProperty = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
 
         assertAll(
@@ -36,7 +36,7 @@ public class TPMDevicePropertyTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         TPMDeviceProperty instanceA = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
         TPMDeviceProperty instanceB = new TPMDeviceProperty("manufacturer", "partNumber", "firmwareVersion");
 

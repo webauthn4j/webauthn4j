@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-public class FIDOU2FAuthenticatorRegistrationValidationTest {
+class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
@@ -78,7 +78,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
 
@@ -117,7 +117,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_direct_attestation_conveyance_preference_test() {
+    void validate_with_direct_attestation_conveyance_preference_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialParameters publicKeyCredentialParameters
@@ -166,7 +166,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_bad_clientData_type_test() {
+    void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
 
@@ -193,7 +193,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_bad_challenge_test() {
+    void validate_with_bad_challenge_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         Challenge badChallenge = new DefaultChallenge();
@@ -217,7 +217,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_bad_origin_test() {
+    void validate_with_bad_origin_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         Origin badOrigin = new Origin("http://bad.origin.example.net");
@@ -241,7 +241,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_bad_rpId_test() {
+    void validate_with_bad_rpId_test() {
         String rpId = "example.com";
         String badRpId = "example.net";
         Challenge challenge = new DefaultChallenge();
@@ -262,7 +262,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_with_bad_attestationStatement_test() {
+    void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         PublicKeyCredentialParameters publicKeyCredentialParameters
@@ -289,7 +289,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_invalid_format_attestation_signature_test() {
+    void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
 
@@ -328,7 +328,7 @@ public class FIDOU2FAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_malicious_client_data_test() {
+    void validate_malicious_client_data_test() {
         Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");
         Origin validSiteOrigin = new Origin("http://valid.site.example.com");
         Origin phishingSiteClaimingOrigin = new Origin("http://valid.site.example.com");

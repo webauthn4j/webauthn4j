@@ -54,7 +54,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserVerifyingAuthenticatorRegistrationValidationTest {
+class UserVerifyingAuthenticatorRegistrationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
@@ -82,7 +82,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {
+    void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -133,7 +133,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
+    void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -185,7 +185,7 @@ public class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
+    void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =

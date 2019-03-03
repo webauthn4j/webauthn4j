@@ -25,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AuthenticatorImplTest {
+class AuthenticatorImplTest {
 
     @Test
-    public void getter_setter_test() {
+    void getter_setter_test() {
         AttestedCredentialData attestedCredentialData = TestUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement();
         Authenticator authenticator = TestUtil.createAuthenticator(attestedCredentialData, attestationStatement);
@@ -41,7 +41,7 @@ public class AuthenticatorImplTest {
     }
 
     @Test
-    public void setCounter_range_test() {
+    void setCounter_range_test() {
         AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
 
         assertAll(
@@ -55,7 +55,7 @@ public class AuthenticatorImplTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         Authenticator authenticatorA = TestUtil.createAuthenticator();
         Authenticator authenticatorB = TestUtil.createAuthenticator();
 

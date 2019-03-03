@@ -24,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CurveTest {
+class CurveTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(Curve.create(null)).isNull(),
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
@@ -41,14 +41,14 @@ public class CurveTest {
     }
 
     @Test
-    public void fromJson_with_invalid_value_test() {
+    void fromJson_with_invalid_value_test() {
         assertThrows(InvalidFormatException.class,
                 () -> Curve.fromJson(-1)
         );
     }
 
     @Test
-    public void getECParameterSpec_test() {
+    void getECParameterSpec_test() {
         assertAll(
                 () -> assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
                 () -> assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),

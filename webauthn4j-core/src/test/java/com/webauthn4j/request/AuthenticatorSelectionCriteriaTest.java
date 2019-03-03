@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AuthenticatorSelectionCriteriaTest {
+class AuthenticatorSelectionCriteriaTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria
                 = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, true, UserVerificationRequirement.REQUIRED);
         assertAll(
@@ -19,7 +19,7 @@ public class AuthenticatorSelectionCriteriaTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         AuthenticatorSelectionCriteria instanceA
                 = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, true, UserVerificationRequirement.REQUIRED);
         AuthenticatorSelectionCriteria instanceB

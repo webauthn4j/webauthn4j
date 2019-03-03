@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
 
-public class NullECDAATrustworthinessValidatorTest {
+class NullECDAATrustworthinessValidatorTest {
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         NullECDAATrustworthinessValidator validator = new NullECDAATrustworthinessValidator();
         PackedAttestationStatement attestationStatement = mock(PackedAttestationStatement.class);
 

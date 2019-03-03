@@ -27,10 +27,10 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class X509CertificateDeserializerTest {
+class X509CertificateDeserializerTest {
 
     @Test
-    public void deserialize_test() throws CertificateEncodingException {
+    void deserialize_test() throws CertificateEncodingException {
         CborConverter cborConverter = new CborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
@@ -42,7 +42,7 @@ public class X509CertificateDeserializerTest {
     }
 
     @Test
-    public void deserialize_empty_byte_array_test() {
+    void deserialize_empty_byte_array_test() {
         CborConverter cborConverter = new CborConverter();
 
         Map<String, byte[]> source = new HashMap<>();

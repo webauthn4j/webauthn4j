@@ -24,10 +24,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class WebAuthnAuthenticationContextValidatorTest {
+class WebAuthnAuthenticationContextValidatorTest {
 
     @Test
-    public void getter_setter_test() {
+    void getter_setter_test() {
         WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
         MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
@@ -37,14 +37,14 @@ public class WebAuthnAuthenticationContextValidatorTest {
     }
 
     @Test
-    public void validateAuthenticatorData() {
+    void validateAuthenticatorData() {
         WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
         AuthenticatorData authenticatorData = new AuthenticatorData(new byte[32], AuthenticatorData.BIT_UP, 0);
         target.validateAuthenticatorData(authenticatorData);
     }
 
     @Test
-    public void validateAuthenticatorData_with_invalid_data() {
+    void validateAuthenticatorData_with_invalid_data() {
         WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
         AuthenticatorData authenticatorData = new AuthenticatorData(new byte[32], AuthenticatorData.BIT_AT, 0, new AttestedCredentialData());
         assertThrows(MaliciousDataException.class,

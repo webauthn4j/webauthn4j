@@ -11,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class AttestationTypeTest {
+class AttestationTypeTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(AttestationType.create(0x3E07)).isEqualTo(AttestationType.ATTESTATION_BASIC_FULL),
                 () -> assertThat(AttestationType.create(0x3E08)).isEqualTo(AttestationType.ATTESTATION_BASIC_SURROGATE),
@@ -26,28 +26,28 @@ public class AttestationTypeTest {
     }
 
     @Test
-    public void create_test_with_value_over_upper_bound() {
+    void create_test_with_value_over_upper_bound() {
         assertThrows(IllegalArgumentException.class,
                 () -> AttestationType.create(UnsignedNumberUtil.UNSIGNED_SHORT_MAX + 1)
         );
     }
 
     @Test
-    public void create_test_with_value_under_lower_bound() {
+    void create_test_with_value_under_lower_bound() {
         assertThrows(IllegalArgumentException.class,
                 () -> AttestationType.create(-1)
         );
     }
 
     @Test
-    public void create_test_with_out_of_range_value() {
+    void create_test_with_out_of_range_value() {
         assertThrows(IllegalArgumentException.class,
                 () -> AttestationType.create(0x2A1D)
         );
     }
 
     @Test
-    public void getValue_test() {
+    void getValue_test() {
         assertAll(
                 () -> assertThat(AttestationType.ATTESTATION_BASIC_FULL.getValue()).isEqualTo(0x3E07),
                 () -> assertThat(AttestationType.ATTESTATION_BASIC_SURROGATE.getValue()).isEqualTo(0x3E08),
@@ -57,7 +57,7 @@ public class AttestationTypeTest {
     }
 
     @Test
-    public void fromInt_test() {
+    void fromInt_test() {
         TestDTO dto1 = jsonConverter.readValue("{\"attestation_type\":15879}", TestDTO.class);
         TestDTO dto2 = jsonConverter.readValue("{\"attestation_type\":15880}", TestDTO.class);
         TestDTO dto3 = jsonConverter.readValue("{\"attestation_type\":15881}", TestDTO.class);
@@ -72,13 +72,14 @@ public class AttestationTypeTest {
     }
 
     @Test
-    public void fromInt_test_with_invalid_value() {
+    void fromInt_test_with_invalid_value() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"attestation_type\":123}", TestDTO.class)
         );
     }
 
-    public static class TestDTO {
+    static class TestDTO {
+        @SuppressWarnings("WeakerAccess")
         public AttestationType attestation_type;
     }
 }

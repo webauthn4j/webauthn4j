@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialUserEntityTest {
+class PublicKeyCredentialUserEntityTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         PublicKeyCredentialUserEntity userEntity = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName");
         assertAll(
                 () -> assertThat(userEntity.getId()).isEqualTo(new byte[16]),
@@ -19,7 +19,7 @@ public class PublicKeyCredentialUserEntityTest {
     }
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         PublicKeyCredentialUserEntity userEntity = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
         assertAll(
                 () -> assertThat(userEntity.getId()).isEqualTo(new byte[16]),
@@ -30,7 +30,7 @@ public class PublicKeyCredentialUserEntityTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         PublicKeyCredentialUserEntity instanceA = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
         PublicKeyCredentialUserEntity instanceB = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
 

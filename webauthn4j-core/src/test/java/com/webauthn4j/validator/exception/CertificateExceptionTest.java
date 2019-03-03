@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class CertificateExceptionTest {
+class CertificateExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         CertificateException exception1 = new CertificateException("dummy", cause);
         CertificateException exception2 = new CertificateException("dummy");
         CertificateException exception3 = new CertificateException(cause);

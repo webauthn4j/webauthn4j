@@ -16,7 +16,60 @@
 
 package com.webauthn4j.metadata.data.statement;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.util.AssertUtil;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
-public class VerificationMethodANDCombinations extends ArrayList<VerificationMethodDescriptor> { //TODO
+public class VerificationMethodANDCombinations extends AbstractList<VerificationMethodDescriptor> {
+	
+	private VerificationMethodDescriptor[] descriptors;
+	private final int size;
+	
+	@JsonCreator
+	public VerificationMethodANDCombinations(List<VerificationMethodDescriptor> descriptors) {
+		AssertUtil.notNull(descriptors, "descriptors must not be null");
+		this.size = descriptors.size();
+		this.descriptors = descriptors.toArray(new VerificationMethodDescriptor[this.size]);
+	}
+	
+	public VerificationMethodANDCombinations(){
+		this(Collections.emptyList());
+	}
+	
+	@Override
+	public VerificationMethodDescriptor get(int index) {
+		return descriptors[index];
+	}
+	
+	@Override
+	public int size() {
+		return size;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		if (!super.equals(o)) {
+			return false;
+		}
+		VerificationMethodANDCombinations that = (VerificationMethodANDCombinations) o;
+		return size == that.size &&
+			Arrays.equals(descriptors, that.descriptors);
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(super.hashCode(), size);
+		result = 31 * result + Arrays.hashCode(descriptors);
+		return result;
+	}
 }

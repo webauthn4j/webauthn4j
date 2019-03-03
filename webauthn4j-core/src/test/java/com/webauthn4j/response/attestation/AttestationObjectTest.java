@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 /**
  * Test for AttestationObject
  */
-public class AttestationObjectTest {
+class AttestationObjectTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         AttestationObject instanceA = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AttestationObject instanceB = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertAll(

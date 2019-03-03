@@ -32,10 +32,10 @@ import static org.mockito.Mockito.mock;
 /**
  * Test for FIDOU2FAttestationStatement
  */
-public class FIDOU2FAttestationStatementTest {
+class FIDOU2FAttestationStatementTest {
 
     @Test
-    public void getter_setter_test() {
+    void getter_setter_test() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.emptyList());
         byte[] signature = new byte[32];
         FIDOU2FAttestationStatement target = new FIDOU2FAttestationStatement(attestationCertificatePath, signature);
@@ -46,14 +46,14 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void getFormat_test() {
+    void getFormat_test() {
         FIDOU2FAttestationStatement target = TestUtil.createFIDOU2FAttestationStatement();
         assertThat(target.getFormat()).isEqualTo("fido-u2f");
     }
 
 
     @Test
-    public void equals_test() {
+    void equals_test() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestUtil.createFIDOU2FAttestationStatement();
 
@@ -61,7 +61,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void equals_test_with_not_equal_certificates() {
+    void equals_test_with_not_equal_certificates() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestUtil.loadFirefoxSWTokenAttestationCertificate()))
         );
@@ -73,7 +73,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void hashCode_test() {
+    void hashCode_test() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestUtil.createFIDOU2FAttestationStatement();
 
@@ -81,7 +81,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void hashCode_test_with_not_equal_certificates() {
+    void hashCode_test_with_not_equal_certificates() {
         FIDOU2FAttestationStatement instanceA = TestUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestUtil.loadFeitianU2FTokenAttestationCertificate()))
@@ -91,14 +91,14 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         FIDOU2FAttestationStatement instance = TestUtil.createFIDOU2FAttestationStatement();
         instance.validate();
     }
 
 
     @Test
-    public void validate_with_null_x5c_test() {
+    void validate_with_null_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(null, new byte[0]);
         assertThrows(ConstraintViolationException.class,
                 () -> instance.validate()
@@ -106,7 +106,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void validate_with_empty_x5c_test() {
+    void validate_with_empty_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
         assertThrows(ConstraintViolationException.class,
                 () -> instance.validate()
@@ -114,7 +114,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void validate_with_two_certificates_x5c_test() {
+    void validate_with_two_certificates_x5c_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         new AttestationCertificatePath(Arrays.asList(mock(X509Certificate.class), mock(X509Certificate.class))),
@@ -126,7 +126,7 @@ public class FIDOU2FAttestationStatementTest {
     }
 
     @Test
-    public void validate_with_null_signature_test() {
+    void validate_with_null_signature_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
                         TestUtil.create2tierTestAuthenticatorCertPath(),

@@ -23,12 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 @SuppressWarnings("ThrowableNotThrown")
-public class TrustAnchorNotFoundExceptionTest {
+class TrustAnchorNotFoundExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         TrustAnchorNotFoundException exception1 = new TrustAnchorNotFoundException("dummy", cause);
         TrustAnchorNotFoundException exception2 = new TrustAnchorNotFoundException("dummy");
         TrustAnchorNotFoundException exception3 = new TrustAnchorNotFoundException(cause);

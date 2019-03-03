@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleTransactionAuthorizationExtensionClientOutputTest {
+class SimpleTransactionAuthorizationExtensionClientOutputTest {
 
     @Test
-    public void test() {
+    void test() {
         SimpleTransactionAuthorizationExtensionClientOutput target = new SimpleTransactionAuthorizationExtensionClientOutput("dummy");
         assertThat(target.getIdentifier()).isEqualTo(SimpleTransactionAuthorizationExtensionClientOutput.ID);
     }

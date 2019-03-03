@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialRpEntityTest {
+class PublicKeyCredentialRpEntityTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo("localhost"),
@@ -19,7 +19,7 @@ public class PublicKeyCredentialRpEntityTest {
     }
 
     @Test
-    public void single_arg_constructor_test() {
+    void single_arg_constructor_test() {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("name");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo(null),
@@ -29,7 +29,7 @@ public class PublicKeyCredentialRpEntityTest {
     }
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo("localhost"),
@@ -39,7 +39,7 @@ public class PublicKeyCredentialRpEntityTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         PublicKeyCredentialRpEntity instanceA = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
         PublicKeyCredentialRpEntity instanceB = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
 

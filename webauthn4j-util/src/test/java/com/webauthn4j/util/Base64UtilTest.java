@@ -20,10 +20,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Base64UtilTest {
+class Base64UtilTest {
 
     @Test
-    public void encode_test() {
+    void encode_test() {
         byte[] data = new byte[]{0x01, 0x23, 0x45};
         byte[] expected = new byte[]{0x41, 0x53, 0x4E, 0x46};
         byte[] result = Base64Util.encode(data);
@@ -31,7 +31,7 @@ public class Base64UtilTest {
     }
 
     @Test
-    public void encodeToString_test() {
+    void encodeToString_test() {
         byte[] data = new byte[]{0x01, 0x23, 0x45};
         String expected = "ASNF";
         String result = Base64Util.encodeToString(data);
@@ -39,7 +39,7 @@ public class Base64UtilTest {
     }
 
     @Test
-    public void decode_test() {
+    void decode_test() {
         byte[] data = new byte[]{0x41, 0x53, 0x4E, 0x46};
         byte[] expected = new byte[]{0x01, 0x23, 0x45};
         byte[] result = Base64Util.decode(data);

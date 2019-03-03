@@ -29,10 +29,10 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JsonConverterIntegrationTest {
+class JsonConverterIntegrationTest {
 
     @Test
-    public void constructor_with_customized_objectMapper_inherits_customization() {
+    void constructor_with_customized_objectMapper_inherits_customization() {
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         SimpleModule module = new SimpleModule();
@@ -48,7 +48,7 @@ public class JsonConverterIntegrationTest {
 
     static class TestDataSerializer extends StdSerializer<TestData> {
 
-        protected TestDataSerializer() {
+        TestDataSerializer() {
             super(TestData.class);
         }
 

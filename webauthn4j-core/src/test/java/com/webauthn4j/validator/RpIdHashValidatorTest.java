@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Created by ynojima on 2017/08/27.
  */
-public class RpIdHashValidatorTest {
+class RpIdHashValidatorTest {
 
     private RpIdHashValidator target = new RpIdHashValidator();
 
     @Test
-    public void verifyRpIdHash_test() {
+    void verifyRpIdHash_test() {
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -47,7 +47,7 @@ public class RpIdHashValidatorTest {
     }
 
     @Test
-    public void verifyRpIdHash_test_with_different_rpIds() {
+    void verifyRpIdHash_test_with_different_rpIds() {
 
         String rpIdA = "sub.example.com";
         String rpIdB = "example.com";
@@ -63,7 +63,7 @@ public class RpIdHashValidatorTest {
     }
 
     @Test
-    public void verifyRpIdHash_test_with_relyingParty_null() {
+    void verifyRpIdHash_test_with_relyingParty_null() {
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -77,7 +77,7 @@ public class RpIdHashValidatorTest {
     }
 
     @Test
-    public void verifyRpIdHash_test_with_relyingParty_rpId_null() {
+    void verifyRpIdHash_test_with_relyingParty_rpId_null() {
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";

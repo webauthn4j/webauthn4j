@@ -35,12 +35,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for AuthenticatorDataConverter
  */
-public class AuthenticatorDataConverterTest {
+class AuthenticatorDataConverterTest {
 
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void convert_test() {
+    void convert_test() {
         //Given
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
@@ -58,7 +58,7 @@ public class AuthenticatorDataConverterTest {
     }
 
     @Test
-    public void convert_too_short_data_test() {
+    void convert_too_short_data_test() {
         //Given
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcP";
@@ -70,7 +70,7 @@ public class AuthenticatorDataConverterTest {
     }
 
     @Test
-    public void serialize_deserialize_test() {
+    void serialize_deserialize_test() {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
@@ -96,7 +96,7 @@ public class AuthenticatorDataConverterTest {
     }
 
     @Test
-    public void deserialize_data_with_surplus_bytes_test() {
+    void deserialize_data_with_surplus_bytes_test() {
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
         byte[] data = Base64UrlUtil.decode(input);

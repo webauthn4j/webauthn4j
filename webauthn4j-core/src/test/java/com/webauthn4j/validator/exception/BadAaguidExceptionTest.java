@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class BadAaguidExceptionTest {
+class BadAaguidExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         BadAaguidException exception1 = new BadAaguidException("dummy", cause);
         BadAaguidException exception2 = new BadAaguidException("dummy");
         BadAaguidException exception3 = new BadAaguidException(cause);

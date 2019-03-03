@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AndroidKeyAttestationStatementTest {
+class AndroidKeyAttestationStatementTest {
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()).validate();
         assertAll(
                 () -> assertThrows(ConstraintViolationException.class,
@@ -45,7 +45,7 @@ public class AndroidKeyAttestationStatementTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceA = (AndroidKeyAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();

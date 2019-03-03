@@ -25,10 +25,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TPMAttestationStatementTest {
+class TPMAttestationStatementTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
 
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
@@ -45,7 +45,7 @@ public class TPMAttestationStatementTest {
     }
 
     @Test
-    public void validate_test() {
+    void validate_test() {
 
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
@@ -55,7 +55,7 @@ public class TPMAttestationStatementTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
 
         RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement instanceA = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();

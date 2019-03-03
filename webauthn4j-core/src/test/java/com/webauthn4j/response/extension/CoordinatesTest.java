@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class CoordinatesTest {
+class CoordinatesTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         Coordinates instance = new Coordinates(
                 12.34,
                 23.45,
@@ -47,7 +47,7 @@ public class CoordinatesTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         Coordinates instanceA = new Coordinates();
         Coordinates instanceB = new Coordinates();
 

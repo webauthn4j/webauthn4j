@@ -28,12 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for ChallengeDeserializer
  */
-public class ChallengeDeserializerTest {
+class ChallengeDeserializerTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void test() {
+    void test() {
 
 
         //Given
@@ -50,7 +50,7 @@ public class ChallengeDeserializerTest {
     }
 
     @Test
-    public void null_test() {
+    void null_test() {
 
         //Given
         String input = "{ \"challenge\" : null }";
@@ -64,7 +64,7 @@ public class ChallengeDeserializerTest {
     }
 
     @Test
-    public void invalid_value_test() {
+    void invalid_value_test() {
 
         //Given
         String input = "{ \"challenge\" : \"ddddd\" }";

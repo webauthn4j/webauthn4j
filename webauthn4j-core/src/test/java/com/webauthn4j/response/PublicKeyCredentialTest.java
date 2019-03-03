@@ -35,14 +35,14 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialTest {
+class PublicKeyCredentialTest {
 
     private Origin origin = new Origin("http://localhost");
     private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
     private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
 
     @Test
-    public void test() {
+    void test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -79,7 +79,7 @@ public class PublicKeyCredentialTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());

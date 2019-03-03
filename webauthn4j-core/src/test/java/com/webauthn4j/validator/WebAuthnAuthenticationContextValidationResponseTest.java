@@ -27,10 +27,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class WebAuthnAuthenticationContextValidationResponseTest {
+class WebAuthnAuthenticationContextValidationResponseTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();

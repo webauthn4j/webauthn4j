@@ -29,13 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for RSACredentialPublicKey
  */
-public class RSACredentialPublicKeyTest {
+class RSACredentialPublicKeyTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         RSACredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
         assertAll(
@@ -45,7 +45,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void cbor_serialize_deserialize_test() {
+    void cbor_serialize_deserialize_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         RSACredentialPublicKey result = cborConverter.readValue(serialized, RSACredentialPublicKey.class);
@@ -53,7 +53,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void json_serialize_deserialize_test() {
+    void json_serialize_deserialize_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         RSACredentialPublicKey result = jsonConverter.readValue(serialized, RSACredentialPublicKey.class);
@@ -61,13 +61,13 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         RSACredentialPublicKey target = TestUtil.createRSCredentialPublicKey();
         target.validate();
     }
 
     @Test
-    public void validate_with_null_algorithm_test() {
+    void validate_with_null_algorithm_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
@@ -83,7 +83,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_with_null_n_test() {
+    void validate_with_null_n_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
@@ -99,7 +99,7 @@ public class RSACredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_with_null_e_test() {
+    void validate_with_null_e_test() {
         RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,

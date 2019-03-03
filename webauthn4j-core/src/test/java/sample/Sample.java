@@ -28,7 +28,7 @@ import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 
-public class Sample {
+class Sample {
 
     public void registrationValidationSample() {
         // Client properties

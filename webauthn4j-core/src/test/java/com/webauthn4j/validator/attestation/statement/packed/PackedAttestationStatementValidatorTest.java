@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class PackedAttestationStatementValidatorTest {
+class PackedAttestationStatementValidatorTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
@@ -64,7 +64,7 @@ public class PackedAttestationStatementValidatorTest {
 
 
     @Test
-    public void validate_with_ECx5c_test() {
+    void validate_with_ECx5c_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
@@ -73,7 +73,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_RSAx5c_test() throws Exception {
+    void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
 
@@ -88,7 +88,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_ECSelfAttestation_test() {
+    void validate_with_ECSelfAttestation_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedECAttestationStatement(clientDataHash);
@@ -97,7 +97,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_RSASelfAttestation_test() {
+    void validate_with_RSASelfAttestation_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedRSAAttestationStatement(clientDataHash);
@@ -107,7 +107,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_ecdaaKeyId_test() throws Exception {
+    void validate_with_ecdaaKeyId_test() throws Exception {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
 
@@ -123,7 +123,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_invalid_AttestationStatement_test() {
+    void validate_with_invalid_AttestationStatement_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertThrows(IllegalArgumentException.class,
@@ -132,7 +132,7 @@ public class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_with_bad_signature_test() {
+    void validate_with_bad_signature_test() {
         byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = new byte[32];
         AttestationObject attestationObject = TestUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);

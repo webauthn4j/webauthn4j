@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class UnexpectedExtensionExceptionTest {
+class UnexpectedExtensionExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         UnexpectedExtensionException exception1 = new UnexpectedExtensionException("dummy", cause);
         UnexpectedExtensionException exception2 = new UnexpectedExtensionException("dummy");
         UnexpectedExtensionException exception3 = new UnexpectedExtensionException(cause);

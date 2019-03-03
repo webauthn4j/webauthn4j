@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter.util;
 
-public class ConverterTestDto {
+class ConverterTestDto {
     private String value;
 
     public String getValue() {

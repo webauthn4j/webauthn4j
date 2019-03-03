@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class COSEKeyTypeTest {
+class COSEKeyTypeTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(COSEKeyType.create(0)).isEqualTo(COSEKeyType.RESERVED),
                 () -> assertThat(COSEKeyType.create(1)).isEqualTo(COSEKeyType.OKP),

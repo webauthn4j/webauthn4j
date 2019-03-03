@@ -25,12 +25,12 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AttestationCertificatePathConverterTest {
+class AttestationCertificatePathConverterTest {
 
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test() {
+    void test() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
         byte[] cbor = cborConverter.writeValueAsBytes(attestationCertificatePath);
         AttestationCertificatePath restored = cborConverter.readValue(cbor, AttestationCertificatePath.class);

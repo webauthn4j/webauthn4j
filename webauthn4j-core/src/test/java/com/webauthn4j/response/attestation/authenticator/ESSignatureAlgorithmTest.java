@@ -24,10 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ESSignatureAlgorithmTest {
+class ESSignatureAlgorithmTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
@@ -36,7 +36,7 @@ public class ESSignatureAlgorithmTest {
     }
 
     @Test
-    public void create_with_invalid_value_test() {
+    void create_with_invalid_value_test() {
         //noinspection ResultOfMethodCallIgnored
         assertThrows(InvalidFormatException.class,
                 () -> COSEAlgorithmIdentifier.create(0)
@@ -44,7 +44,7 @@ public class ESSignatureAlgorithmTest {
     }
 
     @Test
-    public void equals_test() {
+    void equals_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.ES256).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.ES384).isNotEqualTo(COSEAlgorithmIdentifier.ES512)

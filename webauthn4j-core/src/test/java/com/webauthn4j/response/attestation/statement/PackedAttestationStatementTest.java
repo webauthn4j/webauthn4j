@@ -24,16 +24,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PackedAttestationStatementTest {
+class PackedAttestationStatementTest {
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         PackedAttestationStatement packedAttestationStatement = TestUtil.createBasicPackedAttestationStatement();
         packedAttestationStatement.validate();
     }
 
     @Test
-    public void validate_invalid_instance_test() {
+    void validate_invalid_instance_test() {
         PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(null, null, null,null);
         assertThrows(ConstraintViolationException.class,
                 () -> packedAttestationStatement.validate()
@@ -41,7 +41,7 @@ public class PackedAttestationStatementTest {
     }
 
     @Test
-    public void equals_and_hashCode_test() {
+    void equals_and_hashCode_test() {
         PackedAttestationStatement packedAttestationStatementA = TestUtil.createBasicPackedAttestationStatement();
         PackedAttestationStatement packedAttestationStatementB = TestUtil.createBasicPackedAttestationStatement();
         assertAll(

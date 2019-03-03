@@ -27,12 +27,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AuthenticatorTransportTest {
+class AuthenticatorTransportTest {
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(AuthenticatorTransport.create(null)).isEqualTo(null),
                 () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
@@ -42,31 +42,32 @@ public class AuthenticatorTransportTest {
     }
 
     @Test
-    public void getValue_test() {
+    void getValue_test() {
         assertThat(AuthenticatorTransport.USB.getValue()).isEqualTo("usb");
     }
 
     @Test
-    public void create_invalid_value_test() {
+    void create_invalid_value_test() {
         assertThrows(IllegalArgumentException.class,
                 () -> AuthenticatorTransport.create("invalid")
         );
     }
 
     @Test
-    public void fromString_test() throws IOException {
+    void fromString_test() throws IOException {
         TestDTO dto = objectMapper.readValue("{\"transport\":\"usb\"}", TestDTO.class);
         Java6Assertions.assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test
-    public void fromString_test_with_invalid_value() {
+    void fromString_test_with_invalid_value() {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"transport\":\"invalid\"}", TestDTO.class)
         );
     }
 
-    public static class TestDTO {
+    static class TestDTO {
+        @SuppressWarnings("WeakerAccess")
         public AuthenticatorTransport transport;
     }
 }

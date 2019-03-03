@@ -21,15 +21,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SignatureUtilTest {
+class SignatureUtilTest {
 
     @Test
-    public void createSignature_test() {
+    void createSignature_test() {
         SignatureUtil.createSignature("SHA256withRSA");
     }
 
     @Test
-    public void createSignature_test_with_null() {
+    void createSignature_test_with_null() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> SignatureUtil.createSignature(null)
         );
@@ -37,7 +37,7 @@ public class SignatureUtilTest {
     }
 
     @Test
-    public void createSignature_test_with_illegal_argument() {
+    void createSignature_test_with_illegal_argument() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> SignatureUtil.createSignature("dummyAlg")
         );
