@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class BadOriginExceptionTest {
+class BadOriginExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         BadOriginException exception1 = new BadOriginException("dummy", cause);
         BadOriginException exception2 = new BadOriginException("dummy");
         BadOriginException exception3 = new BadOriginException(cause);

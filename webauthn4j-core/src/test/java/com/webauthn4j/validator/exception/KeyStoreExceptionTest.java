@@ -23,12 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class KeyStoreExceptionTest {
+class KeyStoreExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         KeyStoreException exception1 = new KeyStoreException("dummy", cause);
         KeyStoreException exception2 = new KeyStoreException("dummy");
         KeyStoreException exception3 = new KeyStoreException(cause);

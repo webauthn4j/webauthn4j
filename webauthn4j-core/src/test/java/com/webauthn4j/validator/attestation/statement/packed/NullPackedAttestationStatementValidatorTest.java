@@ -22,18 +22,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NullPackedAttestationStatementValidatorTest {
+class NullPackedAttestationStatementValidatorTest {
 
     private NullPackedAttestationStatementValidator target = new NullPackedAttestationStatementValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithPackedAttestation();
         target.validate(registrationObject);
     }
 
     @Test
-    public void validate_non_PackedAttestation_test() {
+    void validate_non_PackedAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)

@@ -13,26 +13,26 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 
-public class KeyDescriptionValidatorTest {
+class KeyDescriptionValidatorTest {
 
     private KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, false);
     }
 
     @Test
-    public void validate_with_teeEnforcedOnly_true_test() {
+    void validate_with_teeEnforcedOnly_true_test() {
         X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, true);
     }
 
     @Test
-    public void validate_with_IOException_test() throws IOException {
+    void validate_with_IOException_test() throws IOException {
         KeyDescriptionValidator target = spy(KeyDescriptionValidator.class);
         doThrow(new IOException()).when(target).extractKeyDescription(any());
         assertThrows(UncheckedIOException.class,

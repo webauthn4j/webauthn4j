@@ -22,19 +22,19 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AuthenticationExtensionsClientOutputsConverterTest {
+class AuthenticationExtensionsClientOutputsConverterTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
     private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    public void convert_null_test() {
+    void convert_null_test() {
         assertThat(target.convert(null)).isNull();
     }
 
     @Test
-    public void convertToString_null_test() {
+    void convertToString_null_test() {
         assertThat(target.convertToString(null)).isNull();
     }
 }

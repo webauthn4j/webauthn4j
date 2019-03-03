@@ -22,18 +22,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NullAndroidSafetyNetAttestationStatementValidatorTest {
+class NullAndroidSafetyNetAttestationStatementValidatorTest {
 
     private NullAndroidSafetyNetAttestationStatementValidator target = new NullAndroidSafetyNetAttestationStatementValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();
         target.validate(registrationObject);
     }
 
     @Test
-    public void validate_non_AndroidSafetyNetAttestation_test() {
+    void validate_non_AndroidSafetyNetAttestation_test() {
         RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)

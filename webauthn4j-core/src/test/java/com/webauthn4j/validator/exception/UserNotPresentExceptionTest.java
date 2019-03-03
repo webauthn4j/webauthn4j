@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class UserNotPresentExceptionTest {
+class UserNotPresentExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         UserNotPresentException exception1 = new UserNotPresentException("dummy", cause);
         UserNotPresentException exception2 = new UserNotPresentException("dummy");
         UserNotPresentException exception3 = new UserNotPresentException(cause);

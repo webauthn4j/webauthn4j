@@ -22,23 +22,23 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TokenBindingStatusTest {
+class TokenBindingStatusTest {
 
     @Test
-    public void create_with_illegal_value_test() {
+    void create_with_illegal_value_test() {
         assertThrows(InvalidFormatException.class,
                 () -> TokenBindingStatus.create("illegal")
         );
     }
 
     @Test
-    public void create_test() throws InvalidFormatException {
+    void create_test() throws InvalidFormatException {
         TokenBindingStatus status = TokenBindingStatus.create("supported");
         assertThat(status).isEqualTo(TokenBindingStatus.SUPPORTED);
     }
 
     @Test
-    public void create_with_null_value_test() throws InvalidFormatException {
+    void create_with_null_value_test() throws InvalidFormatException {
         TokenBindingStatus status = TokenBindingStatus.create(null);
         assertThat(status).isNull();
     }

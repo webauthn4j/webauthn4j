@@ -30,12 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 /**
  * Created by ynojima on 2017/08/18.
  */
-public class AuthenticatorDataSerializerTest {
+class AuthenticatorDataSerializerTest {
 
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test() {
+    void test() {
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
         AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey(null, null, null, null, null, null, null);
 

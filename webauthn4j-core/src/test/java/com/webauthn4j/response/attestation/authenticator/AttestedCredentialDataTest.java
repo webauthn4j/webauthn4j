@@ -25,13 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 /**
  * Created by ynojima on 2017/08/19.
  */
-public class AttestedCredentialDataTest {
+class AttestedCredentialDataTest {
 
     /**
      * AttestedCredentialData must have default constructor
      */
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData();
         assertAll(
                 () -> assertThat(attestedCredentialData.getCredentialId()).isNull(),
@@ -41,7 +41,7 @@ public class AttestedCredentialDataTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         AttestedCredentialData instanceA = TestUtil.createAttestedCredentialData();
         AttestedCredentialData instanceB = TestUtil.createAttestedCredentialData();
         assertAll(

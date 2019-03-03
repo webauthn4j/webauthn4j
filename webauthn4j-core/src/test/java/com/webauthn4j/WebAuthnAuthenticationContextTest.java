@@ -31,14 +31,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;
 
-public class WebAuthnAuthenticationContextTest {
+class WebAuthnAuthenticationContextTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
 
     @Test
-    public void getter_test() {
+    void getter_test() {
 
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
@@ -58,7 +58,7 @@ public class WebAuthnAuthenticationContextTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         byte[] credentialId = new byte[32];
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(createAuthenticatorData());

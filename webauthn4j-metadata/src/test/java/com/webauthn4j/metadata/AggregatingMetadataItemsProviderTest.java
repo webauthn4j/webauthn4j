@@ -26,12 +26,12 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AggregatingMetadataItemsProviderTest {
+class AggregatingMetadataItemsProviderTest {
 
 
     @SuppressWarnings("unchecked")
     @Test
-    public void provide_test() {
+    void provide_test() {
         MetadataItemsProvider<MetadataItem> providerA = mock(MetadataItemsProvider.class);
         Map<AAGUID, Set<MetadataItem>> mapA = new HashMap<>();
         mapA.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>());
@@ -48,7 +48,7 @@ public class AggregatingMetadataItemsProviderTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void provide_with_one_of_provider_throws_exception_test() {
+    void provide_with_one_of_provider_throws_exception_test() {
         MetadataItemsProvider<MetadataItem> providerA = mock(MetadataItemsProvider.class);
         Map<AAGUID, Set<MetadataItem>> mapA = new HashMap<>();
         mapA.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>());

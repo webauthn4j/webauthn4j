@@ -25,11 +25,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-public class AndroidSafetyNetAttestationStatementTest {
+class AndroidSafetyNetAttestationStatementTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void validate() {
+    void validate() {
         new AndroidSafetyNetAttestationStatement("dummy", mock(JWS.class)).validate();
         assertAll(
                 () -> assertThrows(ConstraintViolationException.class,
@@ -45,7 +45,7 @@ public class AndroidSafetyNetAttestationStatementTest {
     }
 
     @Test
-    public void equals_hashCode_test(){
+    void equals_hashCode_test(){
         @SuppressWarnings("unchecked")
         JWS<Response> jws = mock(JWS.class);
         AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jws);

@@ -28,16 +28,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-public class CertificateUtilTest {
+class CertificateUtilTest {
 
     @Test
-    public void generateCertPathValidator_test() {
+    void generateCertPathValidator_test() {
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         assertThat(certPathValidator).isNotNull();
     }
 
     @Test
-    public void createPKIXParameters_test() {
+    void createPKIXParameters_test() {
         HashSet<TrustAnchor> trustAnchors = new HashSet<>();
         trustAnchors.add(new TrustAnchor(mock(X509Certificate.class), null));
         PKIXParameters pkixParameters = CertificateUtil.createPKIXParameters(trustAnchors);
@@ -45,7 +45,7 @@ public class CertificateUtilTest {
     }
 
     @Test
-    public void createPKIXParameters_test_with_empty_trustAnchors() {
+    void createPKIXParameters_test_with_empty_trustAnchors() {
         HashSet<TrustAnchor> trustAnchors = new HashSet<>();
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> CertificateUtil.createPKIXParameters(trustAnchors)
@@ -54,7 +54,7 @@ public class CertificateUtilTest {
      }
 
     @Test
-    public void createKeystore_test() {
+    void createKeystore_test() {
         CertificateUtil.createKeyStore();
     }
 }

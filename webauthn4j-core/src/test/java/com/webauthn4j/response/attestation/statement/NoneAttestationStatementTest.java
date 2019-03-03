@@ -18,10 +18,10 @@ package com.webauthn4j.response.attestation.statement;
 
 import org.junit.jupiter.api.Test;
 
-public class NoneAttestationStatementTest {
+class NoneAttestationStatementTest {
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         NoneAttestationStatement noneAttestationStatement = new NoneAttestationStatement();
         noneAttestationStatement.validate();
     }

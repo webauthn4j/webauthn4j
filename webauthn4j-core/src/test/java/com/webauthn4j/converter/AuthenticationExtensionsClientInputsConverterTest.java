@@ -29,7 +29,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AuthenticationExtensionsClientInputsConverterTest {
+class AuthenticationExtensionsClientInputsConverterTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
@@ -37,31 +37,31 @@ public class AuthenticationExtensionsClientInputsConverterTest {
 
 
     @Test
-    public void convert_null_test() {
+    void convert_null_test() {
         assertThat(authenticationExtensionsClientInputsConverter.convert(null)).isNull();
     }
 
     @Test
-    public void convertToString_test() {
+    void convertToString_test() {
         Map<String, ExtensionClientInput> clientInputs = new HashMap<>();
         clientInputs.put(FIDOAppIDExtensionClientInput.ID, new FIDOAppIDExtensionClientInput("test"));
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(new AuthenticationExtensionsClientInputs<>(clientInputs))).isEqualTo("{\"appid\":\"test\"}");
     }
 
     @Test
-    public void convertToString_null_test() {
+    void convertToString_null_test() {
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(null)).isNull();
     }
 
     @Test
-    public void convert_test() {
+    void convert_test() {
         String source = "{\"appid\":\"dummy\"}";
         AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
         assertThat(clientInputs.get(FIDOAppIDExtensionClientInput.ID)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
     }
 
     @Test
-    public void convert_with_invalid_extension_test() {
+    void convert_with_invalid_extension_test() {
         String source = "{\"invalid\":\"\"}";
         assertThrows(DataConversionException.class,
                 () -> authenticationExtensionsClientInputsConverter.convert(source)

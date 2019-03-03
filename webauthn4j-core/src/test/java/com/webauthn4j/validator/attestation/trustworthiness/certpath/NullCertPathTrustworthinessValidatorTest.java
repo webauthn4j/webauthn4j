@@ -21,12 +21,12 @@ import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import org.junit.jupiter.api.Test;
 
-public class NullCertPathTrustworthinessValidatorTest {
+class NullCertPathTrustworthinessValidatorTest {
 
     private NullCertPathTrustworthinessValidator validator = new NullCertPathTrustworthinessValidator();
 
     @Test
-    public void validate() {
+    void validate() {
         PackedAttestationStatement attestationStatement = TestUtil.createBasicPackedAttestationStatement();
         validator.validate(new AAGUID("c4781c71-69d5-48ca-b228-c0ecaa41c75a"), attestationStatement);
     }

@@ -31,12 +31,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Test for CertPathSerializer
  */
-public class CertPathSerializerTest {
+class CertPathSerializerTest {
 
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void test() throws CertificateException {
+    void test() throws CertificateException {
 
         //Given
         Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();

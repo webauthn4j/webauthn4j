@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for Origin
  */
-public class OriginTest {
+class OriginTest {
 
     @Test
-    public void equals_test() {
+    void equals_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         Origin https_examplecom_443 = new Origin("https://example.com:443");
         Origin http_examplecom_default = new Origin("http://example.com");
@@ -44,7 +44,7 @@ public class OriginTest {
     }
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         assertAll(
                 () -> assertThat(https_examplecom_default.getScheme()).isEqualTo("https"),
@@ -54,7 +54,7 @@ public class OriginTest {
     }
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
 
@@ -62,35 +62,35 @@ public class OriginTest {
     }
 
     @Test
-    public void constructor_test_with_illegal_input() {
+    void constructor_test_with_illegal_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin("ftp", "example.com", 80)
         );
     }
 
     @Test
-    public void constructor_test_with_null_input() {
+    void constructor_test_with_null_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin(null, "example.com", 80)
         );
     }
 
     @Test
-    public void single_string_constructor_test_with_illegal_input() {
+    void single_string_constructor_test_with_illegal_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin("ftp://example.com")
         );
     }
 
     @Test
-    public void single_string_constructor_test_without_scheme_input() {
+    void single_string_constructor_test_without_scheme_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin("example.com")
         );
     }
 
     @Test
-    public void hasCode_test() {
+    void hasCode_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
 

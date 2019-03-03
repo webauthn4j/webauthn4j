@@ -25,10 +25,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class DefaultSelfAttestationTrustworthinessValidatorTest {
+class DefaultSelfAttestationTrustworthinessValidatorTest {
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
@@ -36,7 +36,7 @@ public class DefaultSelfAttestationTrustworthinessValidatorTest {
     }
 
     @Test
-    public void validate_basic_type_attestation_statement_test() {
+    void validate_basic_type_attestation_statement_test() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         PackedAttestationStatement attestationStatement = TestUtil.createBasicPackedAttestationStatement();
 
@@ -46,7 +46,7 @@ public class DefaultSelfAttestationTrustworthinessValidatorTest {
     }
 
     @Test
-    public void validate_test_with_self_attestation_allowed_false() {
+    void validate_test_with_self_attestation_allowed_false() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         validator.setSelfAttestationAllowed(false);
         PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);

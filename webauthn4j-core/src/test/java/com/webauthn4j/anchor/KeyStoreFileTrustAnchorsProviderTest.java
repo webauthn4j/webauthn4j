@@ -28,12 +28,12 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class KeyStoreFileTrustAnchorsProviderTest {
+class KeyStoreFileTrustAnchorsProviderTest {
 
     private KeyStoreFileTrustAnchorsProvider target;
 
     @Test
-    public void provide_test() throws Exception {
+    void provide_test() throws Exception {
         target = new KeyStoreFileTrustAnchorsProvider();
         Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorProviderImplTest/test.jks").toURI());
         target.setKeyStore(path);
@@ -44,7 +44,7 @@ public class KeyStoreFileTrustAnchorsProviderTest {
     }
 
     @Test
-    public void provide_test_with_invalid_path() {
+    void provide_test_with_invalid_path() {
         target = new KeyStoreFileTrustAnchorsProvider();
         Path path = Paths.get("invalid.path.to.jks");
         target.setKeyStore(path);

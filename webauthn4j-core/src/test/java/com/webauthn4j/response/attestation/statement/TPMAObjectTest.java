@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class TPMAObjectTest {
+class TPMAObjectTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         TPMAObject tpmaObject = new TPMAObject(394354);
         assertAll(
                 () -> assertThat(tpmaObject.isFixedTPM()).isTrue(),

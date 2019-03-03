@@ -26,32 +26,32 @@ import java.io.UncheckedIOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class JsonConverterTest {
+class JsonConverterTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void readValue_test() {
+    void readValue_test() {
         ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
         assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
     @Test
-    public void readValue_with_invalid_json_test() {
+    void readValue_with_invalid_json_test() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)
         );
     }
 
     @Test
-    public void readValue_with_TypeReference_test() {
+    void readValue_with_TypeReference_test() {
         ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
         });
         assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
     @Test
-    public void readValue_with_invalid_json_and_TypeReference_test() {
+    void readValue_with_invalid_json_and_TypeReference_test() {
         assertThrows(DataConversionException.class, () ->
                 jsonConverter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>() {
                 })
@@ -59,7 +59,7 @@ public class JsonConverterTest {
     }
 
     @Test
-    public void writeValueAsString_test() {
+    void writeValueAsString_test() {
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
         String str = jsonConverter.writeValueAsString(converterTestDto);
@@ -67,7 +67,7 @@ public class JsonConverterTest {
     }
 
     @Test
-    public void writeValueAsString_with_invalid_dto_test() {
+    void writeValueAsString_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
         assertThrows(UncheckedIOException.class, () ->
@@ -76,7 +76,7 @@ public class JsonConverterTest {
     }
 
     @Test
-    public void writeValueAsBytes_test() {
+    void writeValueAsBytes_test() {
         ConverterTestDto converterTestDto = new ConverterTestDto();
         converterTestDto.setValue("dummy");
         byte[] bytes = jsonConverter.writeValueAsBytes(converterTestDto);
@@ -84,7 +84,7 @@ public class JsonConverterTest {
     }
 
     @Test
-    public void writeValueAsBytes_with_invalid_dto_test() {
+    void writeValueAsBytes_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());
         assertThrows(UncheckedIOException.class, () ->

@@ -24,10 +24,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class ServerPropertyTest {
+class ServerPropertyTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         Challenge challenge = new DefaultChallenge();
         ServerProperty serverPropertyA = TestUtil.createServerProperty(challenge);
         ServerProperty serverPropertyB = TestUtil.createServerProperty(challenge);

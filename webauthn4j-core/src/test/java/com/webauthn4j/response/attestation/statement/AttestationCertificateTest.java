@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AttestationCertificateTest {
+class AttestationCertificateTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
         assertAll(
                 () -> assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("JP"),
@@ -43,13 +43,13 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
         attestationCertificate.validate();
     }
 
     @Test
-    public void validate_with_invalid_version_certificate_test() {
+    void validate_with_invalid_version_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(2); //v2
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
@@ -59,7 +59,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_with_invalid_CN_certificate_test() {
+    void validate_with_invalid_CN_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., C=JP"));
@@ -70,7 +70,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_with_invalid_O_certificate_test() {
+    void validate_with_invalid_O_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, CN=webauthn4j test 3tier authenticator attestation, C=JP"));
@@ -81,7 +81,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_with_invalid_OU_certificate_test() {
+    void validate_with_invalid_OU_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
@@ -93,7 +93,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_with_invalid_C_certificate_test() {
+    void validate_with_invalid_C_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
@@ -105,7 +105,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void validate_with_invalid_basicConstraints_certificate_test() {
+    void validate_with_invalid_basicConstraints_certificate_test() {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
@@ -117,7 +117,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         AttestationCertificate attestationCertificateA = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
         AttestationCertificate attestationCertificateB = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
 
@@ -128,7 +128,7 @@ public class AttestationCertificateTest {
     }
 
     @Test
-    public void getX500Name_with_invalid_subjectDN_test() {
+    void getX500Name_with_invalid_subjectDN_test() {
         assertThrows(CertificateException.class,
                 () -> AttestationCertificate.getX500Name("Invalid DN")
         );

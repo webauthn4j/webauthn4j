@@ -24,10 +24,10 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AuthenticatorAttestationResponseTest {
+class AuthenticatorAttestationResponseTest {
 
     @Test
-    public void equals_hashCode_test(){
+    void equals_hashCode_test(){
         AuthenticatorAttestationResponse instanceA = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
         AuthenticatorAttestationResponse instanceB = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
 
@@ -38,7 +38,7 @@ public class AuthenticatorAttestationResponseTest {
     }
 
     @Test
-    public void getTransports_test(){
+    void getTransports_test(){
         AuthenticatorAttestationResponse target;
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], Collections.singletonList(AuthenticatorTransport.USB));
         assertThat(target.getAuthenticatorTransports()).containsExactly(AuthenticatorTransport.USB);

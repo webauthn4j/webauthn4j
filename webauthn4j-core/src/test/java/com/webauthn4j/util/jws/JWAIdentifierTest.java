@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class JWAIdentifierTest {
+class JWAIdentifierTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(JWAIdentifier.create("ES256")).isEqualTo(JWAIdentifier.ES256),
                 () -> assertThat(JWAIdentifier.create("ES384")).isEqualTo(JWAIdentifier.ES384),
@@ -40,12 +40,12 @@ public class JWAIdentifierTest {
     }
 
     @Test
-    public void name_test() {
+    void name_test() {
         assertThat(JWAIdentifier.ES256.getName()).isEqualTo("ES256");
     }
 
     @Test
-    public void create_with_invalid_arg_test() {
+    void create_with_invalid_arg_test() {
         assertThrows(InvalidFormatException.class,
                 () -> JWAIdentifier.create("invalid")
         );

@@ -30,14 +30,14 @@ import static com.webauthn4j.test.TestUtil.createClientData;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class WebAuthnRegistrationContextTest {
+class WebAuthnRegistrationContextTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
 
     @Test
-    public void test() {
+    void test() {
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AttestationObjectConverter(cborConverter).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
 

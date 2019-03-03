@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TPMIAlgHashTest {
+class TPMIAlgHashTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(TPMIAlgHash.create(0x0)).isEqualTo(TPMIAlgHash.TPM_ALG_ERROR),
                 () -> assertThat(TPMIAlgHash.create(0x04)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA1),
@@ -38,7 +38,7 @@ public class TPMIAlgHashTest {
     }
 
     @Test
-    public void create_with_invalid_value_test() {
+    void create_with_invalid_value_test() {
         assertThrows(InvalidFormatException.class,
                 () -> TPMIAlgPublic.create(0x2)
         );

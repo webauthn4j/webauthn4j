@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class KeyDescriptionValidationExceptionTest {
+class KeyDescriptionValidationExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         KeyDescriptionValidationException exception1 = new KeyDescriptionValidationException("dummy", cause);
         KeyDescriptionValidationException exception2 = new KeyDescriptionValidationException("dummy");
         KeyDescriptionValidationException exception3 = new KeyDescriptionValidationException(cause);

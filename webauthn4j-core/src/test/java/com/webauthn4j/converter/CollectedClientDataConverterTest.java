@@ -29,14 +29,14 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class CollectedClientDataConverterTest {
+class CollectedClientDataConverterTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
     private CollectedClientDataConverter target = new CollectedClientDataConverter(jsonConverter);
 
     @Test
-    public void convert_deserialization_test() {
+    void convert_deserialization_test() {
         //noinspection SpellCheckingInspection
         String clientDataJson = "{\"challenge\":\"tk31UH1ETGGTPj33OhOMzw\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.get\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
@@ -50,7 +50,7 @@ public class CollectedClientDataConverterTest {
     }
 
     @Test
-    public void convert_null_test() {
+    void convert_null_test() {
         assertAll(
                 () -> assertThat(target.convert((String) null)).isNull(),
                 () -> assertThat(target.convert((byte[]) null)).isNull()
@@ -58,7 +58,7 @@ public class CollectedClientDataConverterTest {
     }
 
     @Test
-    public void convert_clientDataBase64UrlString_with_new_keys_test() {
+    void convert_clientDataBase64UrlString_with_new_keys_test() {
         //noinspection SpellCheckingInspection
         String clientDataJson = "{\"challenge\":\"Tgup0LZZQKinvtQcZFYdRw\",\"new_keys_may_be_added_here\":\"do not compare clientDataJSON against a template. See https://goo.gl/yabPex\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.create\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
@@ -72,7 +72,7 @@ public class CollectedClientDataConverterTest {
     }
 
     @Test
-    public void convertToString_deserialization_test() {
+    void convertToString_deserialization_test() {
         //noinspection SpellCheckingInspection
         String clientDataJson = "{\"challenge\":\"tk31UH1ETGGTPj33OhOMzw\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.get\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));

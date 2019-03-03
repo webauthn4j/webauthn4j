@@ -23,10 +23,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class JWSHeaderTest {
+class JWSHeaderTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
         JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
 

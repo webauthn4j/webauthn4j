@@ -26,16 +26,16 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AssertUtilTest {
+class AssertUtilTest {
 
     @Test
-    public void notNull_test() {
+    void notNull_test() {
         Object object = new Object();
         AssertUtil.notNull(object, "message");
     }
 
     @Test
-    public void notNull_test_with_null() {
+    void notNull_test_with_null() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> AssertUtil.notNull(null, "message")
         );
@@ -43,17 +43,17 @@ public class AssertUtilTest {
     }
 
     @Test
-    public void notEmpty_test_with_list() {
+    void notEmpty_test_with_list() {
         AssertUtil.notEmpty(Collections.singletonList(new Object()), "message");
     }
 
     @Test
-    public void notEmpty_test_with_array() {
+    void notEmpty_test_with_array() {
         AssertUtil.notEmpty(Arrays.array(new Object()), "message");
     }
 
     @Test
-    public void notEmpty_test_with_null_as_set() {
+    void notEmpty_test_with_null_as_set() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> AssertUtil.notEmpty((Set) null, "message")
         );
@@ -61,7 +61,7 @@ public class AssertUtilTest {
     }
 
     @Test
-    public void notEmpty_test_with_null_as_array() {
+    void notEmpty_test_with_null_as_array() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> AssertUtil.notEmpty((Object[]) null, "message")
         );
@@ -69,7 +69,7 @@ public class AssertUtilTest {
     }
 
     @Test
-    public void notEmpty_test_with_empty_set() {
+    void notEmpty_test_with_empty_set() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> AssertUtil.notEmpty(new HashSet<>(), "message")
         );
@@ -77,7 +77,7 @@ public class AssertUtilTest {
     }
 
     @Test
-    public void notEmpty_test_with_empty_array() {
+    void notEmpty_test_with_empty_array() {
         Throwable t = assertThrows(IllegalArgumentException.class,
                 () -> AssertUtil.notEmpty(new Object[0], "message")
         );

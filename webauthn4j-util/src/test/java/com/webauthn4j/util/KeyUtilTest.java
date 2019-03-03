@@ -22,16 +22,16 @@ import java.security.KeyPair;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KeyUtilTest {
+class KeyUtilTest {
 
     @Test
-    public void createKeyPair_test() {
+    void createKeyPair_test() {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         assertThat(keyPair).isNotNull();
     }
 
     @Test
-    public void createKeyPair_test_with_seed() {
+    void createKeyPair_test_with_seed() {
         byte[] seed = new byte[]{0x01, 0x23, 0x45};
         KeyPair keyPairA = KeyUtil.createECKeyPair(seed);
         KeyPair keyPairB = KeyUtil.createECKeyPair(seed);

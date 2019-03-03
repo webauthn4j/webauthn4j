@@ -21,17 +21,17 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class GenericTransactionAuthorizationExtensionClientOutputTest {
+class GenericTransactionAuthorizationExtensionClientOutputTest {
 
     @Test
-    public void test() {
+    void test() {
         GenericTransactionAuthorizationExtensionClientOutput target
                 = new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg());
         assertThat(target.getIdentifier()).isEqualTo(GenericTransactionAuthorizationExtensionClientOutput.ID);
     }
 
     @Test
-    public void TxAuthnGenericArg_getter_setter_test() {
+    void TxAuthnGenericArg_getter_setter_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg target
                 = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("type", new byte[32]);
         assertAll(
@@ -41,7 +41,7 @@ public class GenericTransactionAuthorizationExtensionClientOutputTest {
     }
 
     @Test
-    public void TxAuthnGenericArg_equals_hashCode_test() {
+    void TxAuthnGenericArg_equals_hashCode_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceA = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceB = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
         assertAll(

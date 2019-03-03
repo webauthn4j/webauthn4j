@@ -22,10 +22,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class PublicKeyCredentialParametersTest {
+class PublicKeyCredentialParametersTest {
 
     @Test
-    public void getter_test() {
+    void getter_test() {
         PublicKeyCredentialParameters parameters =
                 new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
@@ -36,7 +36,7 @@ public class PublicKeyCredentialParametersTest {
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         PublicKeyCredentialParameters instanceA =
                 new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialParameters instanceB =

@@ -26,31 +26,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-public class PublicKeyCredentialTypeTest {
+class PublicKeyCredentialTypeTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void test() throws IOException {
+    void test() throws IOException {
         TestDto testDto = objectMapper.readValue("{\"type\": \"public-key\"}", TestDto.class);
         assertThat(testDto.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
     }
 
     @Test
-    public void null_test() throws IOException {
+    void null_test() throws IOException {
         TestDto testDto = objectMapper.readValue("{\"type\": null}", TestDto.class);
         assertThat(testDto.getType()).isNull();
     }
 
     @Test
-    public void create_test() {
+    void create_test() {
         PublicKeyCredentialType value = PublicKeyCredentialType.create(null);
         //noinspection ConstantConditions
         assertThat(value).isNull();
     }
 
     @Test
-    public void invalid_data_test() {
+    void invalid_data_test() {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"type\": \"invalid-data\"}", TestDto.class)
         );

@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TPMEccCurveTest {
+class TPMEccCurveTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(TPMEccCurve.create(0x0000)).isEqualTo(TPMEccCurve.TPM_ECC_NONE),
                 () -> assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P192),
@@ -41,19 +41,19 @@ public class TPMEccCurveTest {
     }
 
     @Test
-    public void create_with_invalid_value_test() {
+    void create_with_invalid_value_test() {
         assertThrows(InvalidFormatException.class,
                 () -> TPMEccCurve.create(0xFFFF)
         );
     }
 
     @Test
-    public void getBytes_test() {
+    void getBytes_test() {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getBytes()).isEqualTo(new byte[]{0x00, 0x03});
     }
 
     @Test
-    public void getValue_test() {
+    void getValue_test() {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
     }
 }

@@ -21,12 +21,12 @@ import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestUtil;
 import org.junit.jupiter.api.Test;
 
-public class NullSelfAttestationTrustworthinessValidatorTest {
+class NullSelfAttestationTrustworthinessValidatorTest {
 
     private NullSelfAttestationTrustworthinessValidator validator = new NullSelfAttestationTrustworthinessValidator();
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         validator.validate(attestationStatement);

@@ -21,16 +21,16 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AuthenticatorAssertionResponseTest {
+class AuthenticatorAssertionResponseTest {
 
     @Test
-    public void getUserHandle_test() {
+    void getUserHandle_test() {
         AuthenticatorAssertionResponse instance = new AuthenticatorAssertionResponse(new byte[0], new byte[1], new byte[2], new byte[3]);
         assertThat(instance.getUserHandle()).isEqualTo(new byte[3]);
     }
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         AuthenticatorAssertionResponse instanceA = new AuthenticatorAssertionResponse(new byte[0], new byte[1], new byte[2], new byte[3]);
         AuthenticatorAssertionResponse instanceB = new AuthenticatorAssertionResponse(new byte[0], new byte[1], new byte[2], new byte[3]);
 

@@ -23,10 +23,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class CollectedClientDataTest {
+class CollectedClientDataTest {
 
     @Test
-    public void equals_hashCode_test() {
+    void equals_hashCode_test() {
         Challenge challenge = TestUtil.createChallenge();
         CollectedClientData collectedClientDataA = TestUtil.createClientData(ClientDataType.GET, challenge);
         CollectedClientData collectedClientDataB = TestUtil.createClientData(ClientDataType.GET, challenge);

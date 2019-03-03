@@ -28,10 +28,10 @@ import java.util.Map;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class ExtensionClientOutputDeserializerTest {
+class ExtensionClientOutputDeserializerTest {
 
     @Test
-    public void deserialize_test_with_JSON_data() {
+    void deserialize_test_with_JSON_data() {
         JsonConverter jsonConverter = new JsonConverter();
 
         Map<String, ExtensionClientOutput> extensionOutputs =

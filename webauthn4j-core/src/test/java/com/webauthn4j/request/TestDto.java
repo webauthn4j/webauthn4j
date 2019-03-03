@@ -18,7 +18,7 @@ package com.webauthn4j.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TestDto {
+class TestDto {
 
     @JsonProperty
     private PublicKeyCredentialType type;

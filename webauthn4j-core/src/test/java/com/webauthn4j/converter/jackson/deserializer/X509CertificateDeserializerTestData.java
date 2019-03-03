@@ -18,7 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import java.security.cert.X509Certificate;
 
-public class X509CertificateDeserializerTestData {
+class X509CertificateDeserializerTestData {
 
     private X509Certificate certificate;
 

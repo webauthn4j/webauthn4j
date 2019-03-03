@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class TokenBindingExceptionTest {
+class TokenBindingExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         TokenBindingException exception1 = new TokenBindingException("dummy", cause);
         TokenBindingException exception2 = new TokenBindingException("dummy");
         TokenBindingException exception3 = new TokenBindingException(cause);

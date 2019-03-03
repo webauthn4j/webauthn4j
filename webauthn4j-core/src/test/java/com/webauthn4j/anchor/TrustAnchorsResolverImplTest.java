@@ -24,10 +24,10 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TrustAnchorsResolverImplTest {
+class TrustAnchorsResolverImplTest {
 
     @Test
-    public void test() {
+    void test() {
         TrustAnchorsResolverImpl target = new TrustAnchorsResolverImpl(new SampleTrustAnchorsProvider());
 
         Set<TrustAnchor> trustAnchorsA = target.resolve(AAGUID.ZERO);

@@ -28,10 +28,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 /**
  * Test for AttestationObjectDeserializer
  */
-public class AttestationObjectDeserializerTest {
+class AttestationObjectDeserializerTest {
 
     @Test
-    public void test() {
+    void test() {
         CborConverter cborConverter = new CborConverter();
 
         //Given

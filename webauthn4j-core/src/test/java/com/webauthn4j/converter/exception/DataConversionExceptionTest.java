@@ -20,10 +20,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class DataConversionExceptionTest {
+class DataConversionExceptionTest {
 
     @Test
-    public void constructor_test() {
+    void constructor_test() {
         RuntimeException cause = new RuntimeException();
         DataConversionException exception = new DataConversionException(cause);
         Assertions.assertThat(exception.getCause()).isEqualTo(cause);

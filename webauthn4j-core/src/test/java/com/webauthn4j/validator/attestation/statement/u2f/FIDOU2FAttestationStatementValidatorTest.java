@@ -36,12 +36,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FIDOU2FAttestationStatementValidatorTest {
+class FIDOU2FAttestationStatementValidatorTest {
 
     private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
     @Test
-    public void validate_invalid_attestation_statement_test() {
+    void validate_invalid_attestation_statement_test() {
         RegistrationObject registrationObject = mock(RegistrationObject.class);
         AttestationObject attestationObject = mock(AttestationObject.class);
         when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
@@ -52,7 +52,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validateAttestationStatement_test() {
+    void validateAttestationStatement_test() {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
                 new AttestationCertificatePath(Arrays.asList(
@@ -66,7 +66,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validatePublicKey_with_rsa_key_test() {
+    void validatePublicKey_with_rsa_key_test() {
         PublicKey publicKey = mock(PublicKey.class);
         when(publicKey.getAlgorithm()).thenReturn("RSA");
         assertThrows(CertificateException.class,
@@ -75,7 +75,7 @@ public class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validatePublicKey_with_non_p256_curve_ec_key_test() {
+    void validatePublicKey_with_non_p256_curve_ec_key_test() {
         KeyPair keyPair = KeyUtil.createECKeyPair(ECUtil.P_521_SPEC);
         assertThrows(CertificateException.class,
                 () -> target.validatePublicKey(keyPair.getPublic())

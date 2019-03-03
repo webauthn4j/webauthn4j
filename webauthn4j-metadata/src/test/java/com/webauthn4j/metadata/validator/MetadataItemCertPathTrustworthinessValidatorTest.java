@@ -23,11 +23,11 @@ import org.junit.jupiter.api.Test;
 /**
  * Created by ynojima on 2017/09/24.
  */
-public class MetadataItemCertPathTrustworthinessValidatorTest {
+class MetadataItemCertPathTrustworthinessValidatorTest {
 
     public MetadataItemsCertPathTrustworthinessValidator<MetadataItem> target = new MetadataItemsCertPathTrustworthinessValidator<>(null);
 
     @Test
-    public void test() {
+    void test() {
     }
 }

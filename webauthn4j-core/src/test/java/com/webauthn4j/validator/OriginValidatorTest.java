@@ -29,12 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for OriginValidator
  */
-public class OriginValidatorTest {
+class OriginValidatorTest {
 
     private OriginValidator target = new OriginValidator();
 
     @Test
-    public void test() {
+    void test() {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
@@ -44,7 +44,7 @@ public class OriginValidatorTest {
     }
 
     @Test
-    public void test_with_not_equal_origins() {
+    void test_with_not_equal_origins() {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 

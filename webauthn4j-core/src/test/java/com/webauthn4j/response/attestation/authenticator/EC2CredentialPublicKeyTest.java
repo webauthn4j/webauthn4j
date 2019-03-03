@@ -30,34 +30,34 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for EC2CredentialPublicKey
  */
-public class EC2CredentialPublicKeyTest {
+class EC2CredentialPublicKeyTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    public void createFromUncompressedECCKey_test() {
+    void createFromUncompressedECCKey_test() {
         EC2CredentialPublicKey key = EC2CredentialPublicKey.createFromUncompressedECCKey(TestUtil.createECCredentialPublicKey().getBytes());
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
 
     @Test
-    public void createFromUncompressedECCKey_with_invalid_length_input_test() {
+    void createFromUncompressedECCKey_with_invalid_length_input_test() {
         assertThrows(IllegalArgumentException.class,
                 () -> EC2CredentialPublicKey.createFromUncompressedECCKey(new byte[64])
         );
     }
 
     @Test
-    public void equals_test() {
+    void equals_test() {
         EC2CredentialPublicKey instanceA = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey instanceB = TestUtil.createECCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
-    public void cbor_serialize_deserialize_test() {
+    void cbor_serialize_deserialize_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         CredentialPublicKey result = cborConverter.readValue(serialized, CredentialPublicKey.class);
@@ -65,7 +65,7 @@ public class EC2CredentialPublicKeyTest {
     }
 
     @Test
-    public void json_serialize_deserialize_test() {
+    void json_serialize_deserialize_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         CredentialPublicKey result = jsonConverter.readValue(serialized, CredentialPublicKey.class);
@@ -73,13 +73,13 @@ public class EC2CredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_test() {
+    void validate_test() {
         EC2CredentialPublicKey target = TestUtil.createECCredentialPublicKey();
         target.validate();
     }
 
     @Test
-    public void validate_with_invalid_algorithm_test() {
+    void validate_with_invalid_algorithm_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
@@ -96,7 +96,7 @@ public class EC2CredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_with_invalid_curve_test() {
+    void validate_with_invalid_curve_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
@@ -113,7 +113,7 @@ public class EC2CredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_with_invalid_x_test() {
+    void validate_with_invalid_x_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
@@ -130,7 +130,7 @@ public class EC2CredentialPublicKeyTest {
     }
 
     @Test
-    public void validate_with_invalid_y_test() {
+    void validate_with_invalid_y_test() {
         EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,

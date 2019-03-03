@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class MissingChallengeExceptionTest {
+class MissingChallengeExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         MissingChallengeException exception1 = new MissingChallengeException("dummy", cause);
         MissingChallengeException exception2 = new MissingChallengeException("dummy");
         MissingChallengeException exception3 = new MissingChallengeException(cause);

@@ -22,16 +22,16 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AttestationCertificatePathTest {
+class AttestationCertificatePathTest {
 
     @Test
-    public void getEndEntityCertificate_test() {
+    void getEndEntityCertificate_test() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestUtil.create2tierTestAuthenticatorCertPath());
         assertThat(attestationCertificatePath.getEndEntityAttestationCertificate()).isEqualTo(attestationCertificatePath.getEndEntityAttestationCertificate());
     }
 
     @Test
-    public void getEndEntityCertificate_test_with_no_certificates() {
+    void getEndEntityCertificate_test_with_no_certificates() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
         assertThrows(IllegalStateException.class,
                 () -> attestationCertificatePath.getEndEntityAttestationCertificate()

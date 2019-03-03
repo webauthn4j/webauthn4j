@@ -31,12 +31,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for ChallengeValidator
  */
-public class ChallengeValidatorTest {
+class ChallengeValidatorTest {
 
     private ChallengeValidator target = new ChallengeValidator();
 
     @Test
-    public void verifyChallenge_test1() {
+    void verifyChallenge_test1() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
@@ -49,7 +49,7 @@ public class ChallengeValidatorTest {
     }
 
     @Test
-    public void verifyChallenge_test_with_different_challenge() {
+    void verifyChallenge_test_with_different_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
@@ -64,7 +64,7 @@ public class ChallengeValidatorTest {
     }
 
     @Test
-    public void verifyChallenge_test_without_saved_challenge() {
+    void verifyChallenge_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;

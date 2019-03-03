@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-public class ConstraintViolationExceptionTest {
+class ConstraintViolationExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
-    public void test() {
+    void test() {
         ConstraintViolationException exception1 = new ConstraintViolationException("dummy", cause);
         ConstraintViolationException exception2 = new ConstraintViolationException("dummy");
         ConstraintViolationException exception3 = new ConstraintViolationException(cause);

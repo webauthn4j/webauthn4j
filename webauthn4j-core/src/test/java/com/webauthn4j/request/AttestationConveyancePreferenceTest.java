@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class AttestationConveyancePreferenceTest {
+class AttestationConveyancePreferenceTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(AttestationConveyancePreference.create("none")).isEqualTo(AttestationConveyancePreference.NONE),
                 () -> assertThat(AttestationConveyancePreference.create("direct")).isEqualTo(AttestationConveyancePreference.DIRECT),
@@ -23,19 +23,19 @@ public class AttestationConveyancePreferenceTest {
     }
 
     @Test
-    public void create_test_with_null_value() {
+    void create_test_with_null_value() {
         assertThat(AttestationConveyancePreference.create(null)).isEqualTo(null);
     }
 
     @Test
-    public void create_test_with_invalid_value() {
+    void create_test_with_invalid_value() {
         assertThrows(IllegalArgumentException.class,
                 () -> AttestationConveyancePreference.create("invalid")
         );
     }
 
     @Test
-    public void getValue_test() {
+    void getValue_test() {
         assertAll(
                 () -> assertThat(AttestationConveyancePreference.NONE.getValue()).isEqualTo("none"),
                 () -> assertThat(AttestationConveyancePreference.DIRECT.getValue()).isEqualTo("direct"),
@@ -44,19 +44,19 @@ public class AttestationConveyancePreferenceTest {
     }
 
     @Test
-    public void fromString_test() {
+    void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"preference\":\"none\"}", TestDTO.class);
         assertThat(dto.preference).isEqualTo(AttestationConveyancePreference.NONE);
     }
 
     @Test
-    public void fromString_test_with_invalid_value() {
+    void fromString_test_with_invalid_value() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"preference\":\"invalid\"}", TestDTO.class)
         );
     }
 
-    public static class TestDTO{
-        public AttestationConveyancePreference preference;
+    static class TestDTO{
+        AttestationConveyancePreference preference;
     }
 }

@@ -34,13 +34,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-public class NullAttestationStatementValidatorTest {
+class NullAttestationStatementValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
     private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {
+    void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
         ClientPlatform clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
         String rpId = "example.com";
@@ -73,7 +73,7 @@ public class NullAttestationStatementValidatorTest {
     }
 
     @Test
-    public void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
+    void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
         WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
         ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
         String rpId = "example.com";

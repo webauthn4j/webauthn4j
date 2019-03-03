@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class COSEAlgorithmIdentifierTest {
+class COSEAlgorithmIdentifierTest {
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(COSEAlgorithmIdentifier.create(-257)).isEqualTo(COSEAlgorithmIdentifier.RS256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-258)).isEqualTo(COSEAlgorithmIdentifier.RS384),
