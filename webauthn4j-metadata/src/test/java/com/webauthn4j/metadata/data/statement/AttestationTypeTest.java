@@ -79,6 +79,7 @@ class AttestationTypeTest {
     }
 
     static class TestDTO {
-        AttestationType attestation_type;
+        @SuppressWarnings("WeakerAccess")
+        public AttestationType attestation_type;
     }
 }
