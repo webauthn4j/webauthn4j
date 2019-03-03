@@ -24,7 +24,6 @@ import java.util.Map;
 
 public class AuthenticationExtensionsAuthenticatorInputs<V extends ExtensionAuthenticatorInput> extends AbstractImmutableMap<String, V> {
 
-    @SuppressWarnings("unchecked")
     @JsonCreator
     public AuthenticationExtensionsAuthenticatorInputs(Map<String, V> map) {
         super(map);

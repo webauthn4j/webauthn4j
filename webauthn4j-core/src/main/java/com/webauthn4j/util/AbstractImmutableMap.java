@@ -26,7 +26,6 @@ public abstract class AbstractImmutableMap<K extends Serializable, V extends Ser
     private HashMap<K, V> map;
     private transient Set<Entry<K, V>> cachedEntrySet;
 
-    @SuppressWarnings("unchecked")
     @JsonCreator
     public AbstractImmutableMap(Map<K, V> map) {
         AssertUtil.notNull(map, "map must not be null");

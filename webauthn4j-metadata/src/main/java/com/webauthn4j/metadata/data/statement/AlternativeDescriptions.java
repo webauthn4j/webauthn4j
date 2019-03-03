@@ -26,7 +26,6 @@ import java.util.Map;
  */
 class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 	
-	@SuppressWarnings("unchecked")
 	@JsonCreator
 	AlternativeDescriptions(Map<String, String> map) {
 		super(map);
