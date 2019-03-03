@@ -50,6 +50,7 @@ class UserVerificationRequirementTest {
     }
 
     static class TestDTO {
-        UserVerificationRequirement requirement;
+        @SuppressWarnings("WeakerAccess")
+        public UserVerificationRequirement requirement;
     }
 }

@@ -67,6 +67,7 @@ class AuthenticatorTransportTest {
     }
 
     static class TestDTO {
-        AuthenticatorTransport transport;
+        @SuppressWarnings("WeakerAccess")
+        public AuthenticatorTransport transport;
     }
 }

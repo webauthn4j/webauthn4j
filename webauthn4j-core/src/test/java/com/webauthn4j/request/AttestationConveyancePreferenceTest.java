@@ -57,6 +57,7 @@ class AttestationConveyancePreferenceTest {
     }
 
     static class TestDTO{
-        AttestationConveyancePreference preference;
+        @SuppressWarnings("WeakerAccess")
+        public AttestationConveyancePreference preference;
     }
 }
