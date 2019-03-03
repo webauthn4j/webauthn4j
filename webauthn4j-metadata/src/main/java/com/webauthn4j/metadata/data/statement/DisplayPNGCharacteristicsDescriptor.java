@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -55,7 +56,7 @@ public class DisplayPNGCharacteristicsDescriptor implements Serializable {
         this.compression = compression;
         this.filter = filter;
         this.interlace = interlace;
-        this.plte = plte;
+        this.plte = CollectionUtil.unmodifiableList(plte);
     }
 
     public BigInteger getWidth() {

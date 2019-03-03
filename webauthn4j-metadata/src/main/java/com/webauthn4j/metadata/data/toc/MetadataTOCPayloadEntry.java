@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -72,11 +73,11 @@ public class MetadataTOCPayloadEntry implements Serializable {
             @JsonProperty("rogueListHash") String rogueListHash) {
         this.aaid = aaid;
         this.aaguid = aaguid;
-        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.attestationCertificateKeyIdentifiers = CollectionUtil.unmodifiableList(attestationCertificateKeyIdentifiers);
         this.hash = hash;
         this.url = url;
-        this.biometricStatusReports = biometricStatusReports;
-        this.statusReports = statusReports;
+        this.biometricStatusReports = CollectionUtil.unmodifiableList(biometricStatusReports);
+        this.statusReports = CollectionUtil.unmodifiableList(statusReports);
         this.timeOfLastStatusChange = timeOfLastStatusChange;
         this.rogueListURL = rogueListURL;
         this.rogueListHash = rogueListHash;

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -56,7 +57,7 @@ public class MetadataTOCPayload implements Serializable {
         this.legalHeader = legalHeader;
         this.no = no;
         this.nextUpdate = nextUpdate;
-        this.entries = entries;
+        this.entries = CollectionUtil.unmodifiableList(entries);
     }
 
     public String getLegalHeader() {

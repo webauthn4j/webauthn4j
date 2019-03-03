@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -94,18 +95,18 @@ public class MetadataStatement implements Serializable {
         this.legalHeader = legalHeader;
         this.aaid = aaid;
         this.aaguid = aaguid;
-        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.attestationCertificateKeyIdentifiers = CollectionUtil.unmodifiableList(attestationCertificateKeyIdentifiers);
         this.alternativeDescriptions = alternativeDescriptions;
         this.authenticatorVersion = authenticatorVersion;
         this.protocolFamily = protocolFamily;
-        this.upv = upv;
+        this.upv = CollectionUtil.unmodifiableList(upv);
         this.assertionScheme = assertionScheme;
         this.authenticationAlgorithm = authenticationAlgorithm;
-        this.authenticationAlgorithms = authenticationAlgorithms;
+        this.authenticationAlgorithms = CollectionUtil.unmodifiableList(authenticationAlgorithms);
         this.publicKeyAlgAndEncoding = publicKeyAlgAndEncoding;
-        this.publicKeyAlgAndEncodings = publicKeyAlgAndEncodings;
+        this.publicKeyAlgAndEncodings = CollectionUtil.unmodifiableList(publicKeyAlgAndEncodings);
         this.attestationTypes = attestationTypes;
-        this.userVerificationDetails = userVerificationDetails;
+        this.userVerificationDetails = CollectionUtil.unmodifiableList(userVerificationDetails);
         this.keyProtection = keyProtection;
         this.isKeyRestricted = isKeyRestricted;
         this.isFreshUserVerificationRequired = isFreshUserVerificationRequired;
@@ -116,11 +117,11 @@ public class MetadataStatement implements Serializable {
         this.isSecondFactorOnly = isSecondFactorOnly;
         this.tcDisplay = tcDisplay;
         this.tcDisplayContentType = tcDisplayContentType;
-        this.tcDisplayPNGCharacteristics = tcDisplayPNGCharacteristics;
-        this.attestationRootCertificates = attestationRootCertificates;
-        this.ecdaaTrustAnchors = ecdaaTrustAnchors;
+        this.tcDisplayPNGCharacteristics = CollectionUtil.unmodifiableList(tcDisplayPNGCharacteristics);
+        this.attestationRootCertificates = CollectionUtil.unmodifiableList(attestationRootCertificates);
+        this.ecdaaTrustAnchors = CollectionUtil.unmodifiableList(ecdaaTrustAnchors);
         this.icon = icon;
-        this.supportedExtensions = supportedExtensions;
+        this.supportedExtensions = CollectionUtil.unmodifiableList(supportedExtensions);
     }
 
     public String getLegalHeader() {
