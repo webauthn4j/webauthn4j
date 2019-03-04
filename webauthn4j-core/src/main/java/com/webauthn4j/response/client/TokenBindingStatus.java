@@ -31,8 +31,7 @@ public enum TokenBindingStatus {
         this.value = value;
     }
 
-    @JsonCreator
-    public static TokenBindingStatus create(String value) throws InvalidFormatException {
+    public static TokenBindingStatus create(String value) {
         if (value == null) {
             return null;
         }
@@ -44,7 +43,17 @@ public enum TokenBindingStatus {
             case "not-supported":
                 return NOT_SUPPORTED;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, TokenBindingStatus.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static TokenBindingStatus fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, TokenBindingStatus.class);
         }
     }
 

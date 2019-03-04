@@ -16,7 +16,6 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 
@@ -38,7 +37,7 @@ class ESSignatureAlgorithmTest {
     @Test
     void create_with_invalid_value_test() {
         //noinspection ResultOfMethodCallIgnored
-        assertThrows(InvalidFormatException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> COSEAlgorithmIdentifier.create(0)
         );
     }

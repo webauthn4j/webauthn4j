@@ -16,30 +16,54 @@
 
 package com.webauthn4j.response.client;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TokenBindingStatusTest {
 
+    JsonConverter jsonConverter = new JsonConverter();
+
+    @Test
+    void create_test() {
+        assertAll(
+                () -> assertThat(TokenBindingStatus.create("present")).isEqualTo(TokenBindingStatus.PRESENT),
+                () -> assertThat(TokenBindingStatus.create("supported")).isEqualTo(TokenBindingStatus.SUPPORTED),
+                () -> assertThat(TokenBindingStatus.create("not-supported")).isEqualTo(TokenBindingStatus.NOT_SUPPORTED)
+        );
+    }
+
     @Test
     void create_with_illegal_value_test() {
-        assertThrows(InvalidFormatException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> TokenBindingStatus.create("illegal")
         );
     }
 
     @Test
-    void create_test() throws InvalidFormatException {
-        TokenBindingStatus status = TokenBindingStatus.create("supported");
-        assertThat(status).isEqualTo(TokenBindingStatus.SUPPORTED);
+    void create_with_null_value_test() throws IllegalArgumentException {
+        assertThat(TokenBindingStatus.create(null)).isNull();
     }
 
     @Test
-    void create_with_null_value_test() throws InvalidFormatException {
-        TokenBindingStatus status = TokenBindingStatus.create(null);
-        assertThat(status).isNull();
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"token_binding_id\":\"present\"}", TestDTO.class);
+        assertThat(dto.token_binding_id).isEqualTo(TokenBindingStatus.PRESENT);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"token_binding_id\":\" not-supported\"}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public TokenBindingStatus token_binding_id;
     }
 }

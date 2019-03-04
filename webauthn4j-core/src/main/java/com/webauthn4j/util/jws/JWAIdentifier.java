@@ -37,8 +37,10 @@ public enum JWAIdentifier {
         this.jcaName = jcaName;
     }
 
-    @JsonCreator
-    public static JWAIdentifier create(String value) throws InvalidFormatException {
+    public static JWAIdentifier create(String value) {
+        if (value == null) {
+            return null;
+        }
         switch (value) {
             case "ES256":
                 return ES256;
@@ -55,10 +57,19 @@ public enum JWAIdentifier {
             case "RS512":
                 return RS512;
             default:
-                throw new InvalidFormatException(null, "name is out of range", value, JWAIdentifier.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }
 
+    @JsonCreator
+    private static JWAIdentifier fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, JWAIdentifier.class);
+        }
+    }
 
     @JsonValue
     public String getName() {

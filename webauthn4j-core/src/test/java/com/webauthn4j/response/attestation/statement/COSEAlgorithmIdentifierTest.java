@@ -18,10 +18,16 @@ package com.webauthn4j.response.attestation.statement;
 
 import org.junit.jupiter.api.Test;
 
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class COSEAlgorithmIdentifierTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create_test() {
@@ -31,7 +37,41 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(-259)).isEqualTo(COSEAlgorithmIdentifier.RS512),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
-                () -> assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512)
+                () -> assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> COSEAlgorithmIdentifier.create(-1))
         );
+    }
+
+    @Test
+    void getValue_test() {
+        assertThat(COSEAlgorithmIdentifier.RS256.getValue()).isEqualTo(-257);
+    }
+
+    @Test
+    void getJcaName_test() {
+        assertThat(COSEAlgorithmIdentifier.RS256.getJcaName()).isEqualTo("SHA256withRSA");
+    }
+
+    @Test
+    void getMessageDigestJcaName_test() {
+        assertThat(COSEAlgorithmIdentifier.RS256.getMessageDigestJcaName()).isEqualTo("SHA-256");
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
+        assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"cose_alg_id\":0}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public COSEAlgorithmIdentifier cose_alg_id;
     }
 }

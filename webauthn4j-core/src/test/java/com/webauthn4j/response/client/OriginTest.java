@@ -18,6 +18,9 @@ package com.webauthn4j.response.client;
 
 import org.junit.jupiter.api.Test;
 
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -26,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Test for Origin
  */
 class OriginTest {
+
+    JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void equals_test() {
@@ -69,7 +74,7 @@ class OriginTest {
     }
 
     @Test
-    void constructor_test_with_null_input() {
+    public void constructor_test_with_null_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin(null, "example.com", 80)
         );
@@ -95,5 +100,22 @@ class OriginTest {
         Origin originB = new Origin("https", "example.com", 443);
 
         assertThat(originA.hashCode()).isEqualTo(originB.hashCode());
+    }
+
+    @Test
+    void fromString_test() {
+        TestDTO dto = jsonConverter.readValue("{\"origin\":\"https://example.com\"}", TestDTO.class);
+        assertThat(dto.origin).isEqualTo(new Origin("https://example.com"));
+    }
+
+    @Test
+    void fromString_test_with_invalid_value() {
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"origin\":\"file://example.com\"}", TestDTO.class)
+        );
+    }
+
+    static class TestDTO {
+        public Origin origin;
     }
 }

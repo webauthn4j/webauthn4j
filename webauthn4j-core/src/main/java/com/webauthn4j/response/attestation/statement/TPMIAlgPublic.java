@@ -33,9 +33,7 @@ public enum  TPMIAlgPublic {
         this.value = value;
     }
 
-    @JsonCreator
-    @SuppressWarnings("squid:S3776")
-    public static TPMIAlgPublic create(int value) throws InvalidFormatException {
+    public static TPMIAlgPublic create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
         } else if (value == TPM_ALG_RSA.value) {
@@ -47,6 +45,17 @@ public enum  TPMIAlgPublic {
         } else if (value == TPM_ALG_ECDAA.value) {
             return TPM_ALG_ECDAA;
         } else {
+            throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    @SuppressWarnings("squid:S3776")
+    private static TPMIAlgPublic fromJson(int value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
             throw new InvalidFormatException(null, "value is out of range", value, TPMIAlgPublic.class);
         }
     }

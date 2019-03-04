@@ -25,43 +25,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TPMIAlgHashTest {
+import java.util.Base64;
+
+class TPMGeneratedTest {
 
     JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    void create_test() {
+    void create() {
         assertAll(
-                () -> assertThat(TPMIAlgHash.create(0x0)).isEqualTo(TPMIAlgHash.TPM_ALG_ERROR),
-                () -> assertThat(TPMIAlgHash.create(0x04)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA1),
-                () -> assertThat(TPMIAlgHash.create(0x0B)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256),
-                () -> assertThat(TPMIAlgHash.create(0x0C)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA384),
-                () -> assertThat(TPMIAlgHash.create(0x0D)).isEqualTo(TPMIAlgHash.TPM_ALG_SHA512),
-                () -> assertThat(TPMIAlgHash.create(0x10)).isEqualTo(TPMIAlgHash.TPM_ALG_NULL)
-        );
-    }
-
-    @Test
-    void create_with_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> TPMIAlgHash.create(0x2)
+                () -> assertThat(TPMGenerated.create(new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47})).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> TPMGenerated.create(new byte[]{}))
         );
     }
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"tpmi_alg_hash\":11}", TestDTO.class);
-        assertThat(dto.tpmi_alg_hash).isEqualTo(TPMIAlgHash.TPM_ALG_SHA256);
+        byte[] source = new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47};
+        TestDTO dto = jsonConverter.readValue("{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class);
+        assertThat(dto.tpm_generated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
+        byte[] source = new byte[]{(byte)0xff, (byte)0xaa, (byte)0xff, (byte)0xaa};
         assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"tpmi_alg_hash\":-1}", TestDTO.class)
+                () -> jsonConverter.readValue("{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class)
         );
     }
 
     static class TestDTO {
-        public TPMIAlgHash tpmi_alg_hash;
+        public TPMGenerated tpm_generated;
     }
 }

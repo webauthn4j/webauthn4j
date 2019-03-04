@@ -30,8 +30,7 @@ public enum ClientDataType {
         this.value = value;
     }
 
-    @JsonCreator
-    public static ClientDataType create(String value) throws InvalidFormatException {
+    public static ClientDataType create(String value) {
         if (value == null) {
             return null;
         }
@@ -41,7 +40,17 @@ public enum ClientDataType {
             case "webauthn.get":
                 return GET;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static ClientDataType fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
         }
     }
 

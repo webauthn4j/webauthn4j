@@ -46,8 +46,10 @@ public enum AuthenticatorStatus {
         this.value = value;
     }
 
-    @JsonCreator
-    public static AuthenticatorStatus create(String value) throws InvalidFormatException {
+    public static AuthenticatorStatus create(String value) {
+        if (value == null) {
+            return null;
+        }
         switch (value) {
             case "NOT_FIDO_CERTIFIED":
                 return NOT_FIDO_CERTIFIED;
@@ -80,7 +82,17 @@ public enum AuthenticatorStatus {
             case "FIDO_CERTIFIED_L3plus":
                 return FIDO_CERTIFIED_L3_PLUS;
             default:
-                throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorStatus.class);
+                throw new IllegalArgumentException("value '" + value + "' is out of range");
+        }
+    }
+
+    @JsonCreator
+    private static AuthenticatorStatus fromJson(String value) throws InvalidFormatException {
+        try{
+            return create(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorStatus.class);
         }
     }
 
