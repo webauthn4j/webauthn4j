@@ -71,6 +71,12 @@ class COSEAlgorithmIdentifierTest {
         );
     }
 
+    @Test
+    void fromString_test_with_null() {
+        TestDTO data = jsonConverter.readValue("{\"cose_alg_id\":null}", TestDTO.class);
+        assertThat(data.cose_alg_id).isNull();
+    }
+
     static class TestDTO {
         public COSEAlgorithmIdentifier cose_alg_id;
     }
