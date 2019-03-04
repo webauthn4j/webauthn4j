@@ -29,7 +29,6 @@ class CurveTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(Curve.create(null)).isNull(),
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
