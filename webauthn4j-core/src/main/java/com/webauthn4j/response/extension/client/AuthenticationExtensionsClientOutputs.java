@@ -22,6 +22,13 @@ import com.webauthn4j.util.AbstractImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * This is a dictionary containing the client extension output values for zero or more WebAuthn
+ * extensions, as defined in §9 WebAuthn Extensions.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientoutputs">§5.8. Authentication Extensions Client Outputs</a>
+ * @param <V>
+ */
 public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractImmutableMap<String, V> {
 
     @JsonCreator

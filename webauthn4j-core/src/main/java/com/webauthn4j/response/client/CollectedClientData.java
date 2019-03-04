@@ -22,7 +22,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * CollectedClientData
+ * The client data represents the contextual bindings of both the WebAuthn Relying Party and the client.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-client-data">§5.10.1. Client Data Used in WebAuthn Signatures (dictionary CollectedClientData)</a>
  */
 public class CollectedClientData implements Serializable {
 

@@ -20,9 +20,24 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+/**
+ * This member is one of the following:
+ * <ul>
+ *     <li>supported</li>
+ *     <li>present</li>
+ * </ul>
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-tokenbindingstatus">§5.10.1. Client Data Used in WebAuthn Signatures - TokenBindingStatus</a>
+ */
 public enum TokenBindingStatus {
+    
+    /** Indicates token binding was used when communicating with the Relying Party. In this case, the id member MUST be present. */
     PRESENT("present"),
+ 
+    /** Indicates the client supports token binding, but it was not negotiated when communicating with the Relying Party. */
     SUPPORTED("supported"),
+    
+    /** */
     NOT_SUPPORTED("not-supported");
 
     private final String value;

@@ -20,6 +20,13 @@ import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
 
+/**
+ * The AuthenticatorAssertionResponse interface represents an authenticator's response to a
+ * client’s request for generation of a new authentication assertion given the WebAuthn
+ * Relying Party's challenge and OPTIONAL list of credentials it is aware of.
+ *
+ * @see <a href ="https://www.w3.org/TR/webauthn-1/#authenticatorassertionresponse">§5.2.2. Web Authentication Assertion (interface AuthenticatorAssertionResponse)</a>
+ */
 public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
 
     // ~ Instance fields

@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 /**
  * The {@link AuthenticatorAttestationResponse} represents the authenticator's response to a client’s request
  * for the creation of a new public key credential.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#authenticatorattestationresponse">§5.2.1. Information About Public Key Credential (interface AuthenticatorAttestationResponse)</a>
  */
 public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 

@@ -24,6 +24,13 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * This attribute contains the authenticator data returned by the authenticator.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-authenticator-data">§6.1 Authenticator Data.</a>
+ *
+ * @param <T>
+ */
 public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;

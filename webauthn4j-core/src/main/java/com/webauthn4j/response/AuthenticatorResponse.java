@@ -20,6 +20,12 @@ import com.webauthn4j.util.ArrayUtil;
 
 import java.io.Serializable;
 
+/**
+ * Authenticators respond to Relying Party requests by returning an object derived from the
+ * AuthenticatorResponse interface.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#authenticatorresponse">§5.2. Authenticator Responses (interface AuthenticatorResponse)</a>
+ */
 abstract class AuthenticatorResponse implements Serializable {
 
     // ~ Instance fields
