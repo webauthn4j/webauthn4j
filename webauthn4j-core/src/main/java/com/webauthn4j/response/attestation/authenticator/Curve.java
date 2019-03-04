@@ -35,10 +35,7 @@ public enum Curve {
         this.value = value;
     }
 
-    public static Curve create(Integer value) {
-        if (value == null) {
-            return null;
-        }
+    public static Curve create(int value) {
         switch (value) {
             case 1:
                 return SECP256R1;
@@ -52,7 +49,7 @@ public enum Curve {
     }
 
     @JsonCreator
-    static Curve fromJson(Integer value) throws InvalidFormatException {
+    static Curve fromJson(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
