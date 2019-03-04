@@ -29,7 +29,6 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-authenticator-data">§6.1 Authenticator Data.</a>
  *
- * @param <T>
  */
 public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;

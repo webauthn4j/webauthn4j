@@ -27,7 +27,6 @@ import java.util.Map;
  * extensions, as defined in §9 WebAuthn Extensions.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientoutputs">§5.8. Authentication Extensions Client Outputs</a>
- * @param <V>
  */
 public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractImmutableMap<String, V> {
 
