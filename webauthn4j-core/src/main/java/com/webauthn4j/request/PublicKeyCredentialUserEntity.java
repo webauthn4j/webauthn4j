@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * The PublicKeyCredentialUserEntity dictionary is used to supply additional user account attributes
+ * {@link PublicKeyCredentialUserEntity} is used to supply additional user account attributes
  * when creating a new credential.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialuserentity">

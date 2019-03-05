@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * This is a dictionary containing the client extension input values for zero or more WebAuthn
- * extensions, as defined in §9 WebAuthn Extensions.
+ * {@link AuthenticationExtensionsClientInputs} is a map containing the client extension input values for
+ * zero or more WebAuthn extensions, as defined in §9 WebAuthn Extensions.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientinputs">
  * §5.7. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>

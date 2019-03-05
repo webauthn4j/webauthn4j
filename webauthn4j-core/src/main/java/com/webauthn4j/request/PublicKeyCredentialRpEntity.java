@@ -19,7 +19,7 @@ package com.webauthn4j.request;
 import java.util.Objects;
 
 /**
- * The PublicKeyCredentialRpEntity dictionary is used to supply additional Relying Party attributes
+ * {@link PublicKeyCredentialRpEntity} is used to supply additional Relying Party attributes
  * when creating a new credential.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialrpentity">

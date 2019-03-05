@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * This dictionary is used to supply additional parameters when creating a new credential.
+ * {@link PublicKeyCredentialParameters} is used to supply additional parameters when creating a new credential.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialparameters">
  * §5.3. Parameters for Credential Generation (dictionary PublicKeyCredentialParameters)</a>

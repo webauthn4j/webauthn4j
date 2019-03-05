@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * WebAuthn Relying Parties may use the AuthenticatorSelectionCriteria dictionary to specify their
+ * WebAuthn Relying Parties may use the AuthenticatorSelectionCriteria to specify their
  * requirements regarding authenticator attributes.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticatorselectioncriteria">

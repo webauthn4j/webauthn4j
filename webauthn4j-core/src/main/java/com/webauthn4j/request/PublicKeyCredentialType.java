@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
- * This enumeration defines the valid credential types. It is an extension point; values can be added to it
- * in the future, as more credential types are defined.
+ * {@link PublicKeyCredentialType} defines the valid credential types. It is an extension point;
+ * values can be added to it in the future, as more credential types are defined.
  * The values of this enumeration are used for versioning the Authentication Assertion and attestation structures
  * according to the type of the authenticator.
  *

@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *  Dictionary for Options for Credential Creation
+ *  Options for Credential Creation
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialcreationoptions">
  * §5.4. Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)</a>
