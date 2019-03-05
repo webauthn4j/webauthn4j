@@ -29,11 +29,15 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  *     the credentials listed in allowCredentials when calling navigator.credentials.get().</li>
  * </ul>
  *
- * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#attachment">
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#attachment">
  * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
  */
 public enum AuthenticatorAttachment {
+    
+    /** This value indicates platform attachment. */
     PLATFORM("platform"),
+    
+    /** This value indicates cross-platform attachment. */
     CROSS_PLATFORM("cross-platform");
 
     private String value;

@@ -22,6 +22,13 @@ import com.webauthn4j.util.AbstractImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * This is a dictionary containing the authenticator extension input values for zero or more
+ * WebAuthn extensions, as defined in §9 WebAuthn Extensions.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#typedefdef-authenticationextensionsauthenticatorinputs">
+ * §5.9. Authentication Extensions Authenticator Inputs (typedef AuthenticationExtensionsAuthenticatorInputs)</a>
+ */
 public class AuthenticationExtensionsAuthenticatorInputs<V extends ExtensionAuthenticatorInput> extends AbstractImmutableMap<String, V> {
 
     @JsonCreator
