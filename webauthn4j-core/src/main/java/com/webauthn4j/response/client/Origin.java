@@ -25,7 +25,7 @@ import java.net.URI;
 import java.util.Objects;
 
 /**
- * This member contains the fully qualified origin of the requester, as provided to the authenticator
+ * {@link Origin} contains the fully qualified origin of the requester, as provided to the authenticator
  * by the client.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dom-collectedclientdata-origin">§5.10.1. Client Data Used in WebAuthn Signatures - origin</a>

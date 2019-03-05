@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Returns a the location information in the authenticator extension output as a Coordinates value,
+ * Location information in the authenticator extension output as a Coordinates value,
  * as defined by [Geolocation-API].
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientoutputs">§10.7. Location Extension (loc) - Client extension output</a>

@@ -23,7 +23,7 @@ the written Origin (namely, recognized by the browser) matches the specified Ori
 phishing attacks, which is a behavior required in WebAuthn specification.
 - For `rpId`, please set the rpId of the site that provides WebAuthn authentication. rpId is a parameter that specifies
 the scope of credentials. For more details, please refer to
-https://www.w3.org/TR/2019/PR-webauthn-20190117/#relying-party-identifier[WebAuthn specification rpId definition].
+https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthn specification rpId definition].
 
 - For `challenge`, please specify the Challenge issued on WebAuthn JS API call. `challenge` is a parameter to prevent
 replay attacks. By issuing the random byte sequence `challenge` on server side, signing it with WebAuthn JS API,

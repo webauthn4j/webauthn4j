@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  * obtain an assertion for a specific credential. Note that these hints represent the WebAuthn Relying Party's
  * best belief as to how an authenticator may be reached.
  *
- * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#transport">
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#transport">
  * §5.10.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
 public enum AuthenticatorTransport {

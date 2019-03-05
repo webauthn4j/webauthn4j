@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * This OPTIONAL member contains information about the state of the Token Binding protocol
+ * {@link TokenBinding} contains information about the state of the Token Binding protocol
  * used when communicating with the Relying Party. Its absence indicates that the client doesn’t
  * support token binding.
  *

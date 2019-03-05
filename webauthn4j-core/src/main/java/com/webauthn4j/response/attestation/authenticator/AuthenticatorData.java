@@ -25,7 +25,13 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * This attribute contains the authenticator data returned by the authenticator.
+ * The authenticator data structure encodes contextual bindings made by the authenticator.
+ * These bindings are controlled by the authenticator itself, and derive their trust from the WebAuthn Relying Party's
+ * assessment of the security properties of the authenticator. In one extreme case, the authenticator may be embedded
+ * in the client, and its bindings may be no more trustworthy than the client data. At the other extreme,
+ * the authenticator may be a discrete entity with high-security hardware and software, connected to the client over
+ * a secure channel. In both cases, the Relying Party receives the authenticator data in the same format, and uses
+ * its knowledge of the authenticator to make trust decisions.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-authenticator-data">§6.1 Authenticator Data.</a>
  *

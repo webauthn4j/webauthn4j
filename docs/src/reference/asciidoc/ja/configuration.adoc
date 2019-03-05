@@ -9,7 +9,7 @@ WebAuthn4Jを利用する上で中心となるクラスは2つ存在します。
 それぞれ `AttestationStatementValidator` と `CertPathTrustworthinessValidator` インタフェースの実装に委譲します。
 
 大多数のサイトは厳密な構成証明ステートメントの検証を必要としないでしょうから（
-https://www.w3.org/TR/2019/PR-webauthn-20190117/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、
+https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn仕様書関連個所参照] ）、
 WebAuthn4Jでは構成証明ステートメントの検証をしないように `AttestationStatementValidator` と
 `CertPathTrustworthinessValidator` を構成した `WebAuthnRegistrationContextValidator` のインスタンスを返却する
 `WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` ファクトリメソッドを用意しています。

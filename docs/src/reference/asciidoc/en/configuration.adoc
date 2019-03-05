@@ -10,7 +10,7 @@ which is used to verify the credentials during authentication.
 `CertPathTrustworthinessValidator`.
 
 Since most sites don't require strict attestation statement validation
-(https://www.w3.org/TR/2019/PR-webauthn-20190117/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ),
+(https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ),
 WebAuthn4J provides `WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` factory method
 that returns an instance configured `CertPathTrustworthinessValidator` and  `WebAuthnRegistrationContextValidator`
 not to validate attestation statements.

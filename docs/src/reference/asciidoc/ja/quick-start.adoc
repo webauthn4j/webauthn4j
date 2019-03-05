@@ -19,7 +19,7 @@ WebAuthn JS APIを実行して取得した値となります。何らかの方�
 ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、
 フィッシング攻撃を防ぎます。
 - `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。
-詳しくは https://www.w3.org/TR/2019/PR-webauthn-20190117/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
+詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
 - `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。
 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に
 パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。
@@ -89,7 +89,7 @@ save(authenticator); // アプリケーションの作法に則った、Authenti
 検証に成功した場合は、 `WebAuthnAuthenticationContextValidationResponse` が返却されます。
 `Authenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
 作成された場合を検知するために用意されています。カウンタについて詳しくは
-https://www.w3.org/TR/2019/PR-webauthn-20190117/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 ```java
 // Client properties

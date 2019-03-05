@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Returns the list of supported extensions as an array of extension identifier strings.
+ * List of supported extensions as an array of extension identifier strings.
  * @see <a href="https://www.w3.org/TR/webauthn-1/#ref-for-typedefdef-authenticationextensionssupported">§10.5. Supported Extensions Extension (exts) - Client extension output</a>
  */
 public class AuthenticationExtensionsSupported extends AbstractList<String> implements Serializable {

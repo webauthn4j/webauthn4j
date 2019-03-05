@@ -23,7 +23,7 @@ import java.util.Objects;
  * The PublicKeyCredentialEntity describes a user account, or a WebAuthn Relying Party,
  * which a public key credential is associated with or scoped to, respectively.
  *
- * @see <a href="https://www.w3.org/TR/2019/PR-webauthn-20190117/#dictionary-pkcredentialentity">
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#dictionary-pkcredentialentity">
  * §5.4.1. Public Key Entity Description (dictionary PublicKeyCredentialEntity)</a>
  */
 public abstract class PublicKeyCredentialEntity implements Serializable {

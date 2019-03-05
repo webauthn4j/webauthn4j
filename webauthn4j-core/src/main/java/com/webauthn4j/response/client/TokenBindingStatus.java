@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
- * This member is one of the following:
+ * {@link TokenBindingStatus} is one of the following:
  * <ul>
  *     <li>supported</li>
  *     <li>present</li>
