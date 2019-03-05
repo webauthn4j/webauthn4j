@@ -25,6 +25,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The PublicKeyCredentialRequestOptions dictionary supplies get() with the data it needs to
+ * generate an assertion. Its challenge member MUST be present, while its other members are OPTIONAL.
+ *
+ * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialrequestoptions">
+ * §5.5. Options for Assertion Generation (dictionary PublicKeyCredentialRequestOptions)</a>
+ */
 public class PublicKeyCredentialRequestOptions implements Serializable {
 
     // ~ Instance fields
