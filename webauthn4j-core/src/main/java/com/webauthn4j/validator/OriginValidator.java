@@ -45,7 +45,7 @@ class OriginValidator {
 
         if (!Objects.equals(collectedClientData.getOrigin(), serverProperty.getOrigin())) {
             logger.debug("Authentication failed: bad origin is specified");
-            throw new BadOriginException("Bad origin");
+            throw new BadOriginException("Preconfigured server origin and collected clientData origin is not same.");
         }
     }
 }
