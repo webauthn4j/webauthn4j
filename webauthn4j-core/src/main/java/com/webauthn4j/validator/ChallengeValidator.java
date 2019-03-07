@@ -65,7 +65,7 @@ class ChallengeValidator {
 
         if (!Arrays.equals(expectedChallengeBytes, actualChallengeBytes)) {
             logger.debug("Authentication failed: bad challenge is specified");
-            throw new BadChallengeException("Bad challenge");
+            throw new BadChallengeException("Actual Challenge does not match the expected Challenge");
         }
     }
 }
