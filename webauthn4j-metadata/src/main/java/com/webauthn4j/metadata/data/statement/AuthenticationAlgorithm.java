@@ -27,24 +27,24 @@ import com.webauthn4j.util.UnsignedNumberUtil;
  */
 public enum AuthenticationAlgorithm {
 
-    ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW(0x0001),
-    ALG_SIGN_SECP256R1_ECDSA_SHA256_DER(0x0002),
-    ALG_SIGN_RSASSA_PSS_SHA256_RAW(0x0003),
-    ALG_SIGN_RSASSA_PSS_SHA256_DER(0x0004),
-    ALG_SIGN_SECP256K1_ECDSA_SHA256_RAW(0x0005),
-    ALG_SIGN_SECP256K1_ECDSA_SHA256_DER(0x0006),
-    ALG_SIGN_SM2_SM3_RAW(0x0007),
-    ALG_SIGN_RSA_EMSA_PKCS1_SHA256_RAW(0x0008),
-    ALG_SIGN_RSA_EMSA_PKCS1_SHA256_DER(0x0009),
-    ALG_SIGN_RSASSA_PSS_SHA384_RAW(0x000A),
-    ALG_SIGN_RSASSA_PSS_SHA512_RAW(0x000B),
-    ALG_SIGN_RSASSA_PKCSV15_SHA256_RAW(0x000C),
-    ALG_SIGN_RSASSA_PKCSV15_SHA384_RAW(0x000D),
-    ALG_SIGN_RSASSA_PKCSV15_SHA512_RAW(0x000E),
-    ALG_SIGN_RSASSA_PKCSV15_SHA1_RAW(0x000F),
-    ALG_SIGN_SECP384R1_ECDSA_SHA384_RAW(0x0010),
-    ALG_SIGN_SECP521R1_ECDSA_SHA512_RAW(0x0011),
-    ALG_SIGN_ED25519_EDDSA_SHA256_RAW(0x0012);
+    SECP256R1_ECDSA_SHA256_RAW(0x0001),
+    SECP256R1_ECDSA_SHA256_DER(0x0002),
+    RSASSA_PSS_SHA256_RAW(0x0003),
+    RSASSA_PSS_SHA256_DER(0x0004),
+    SECP256K1_ECDSA_SHA256_RAW(0x0005),
+    SECP256K1_ECDSA_SHA256_DER(0x0006),
+    SM2_SM3_RAW(0x0007),
+    RSA_EMSA_PKCS1_SHA256_RAW(0x0008),
+    RSA_EMSA_PKCS1_SHA256_DER(0x0009),
+    RSASSA_PSS_SHA384_RAW(0x000A),
+    RSASSA_PSS_SHA512_RAW(0x000B),
+    RSASSA_PKCSV15_SHA256_RAW(0x000C),
+    RSASSA_PKCSV15_SHA384_RAW(0x000D),
+    RSASSA_PKCSV15_SHA512_RAW(0x000E),
+    RSASSA_PKCSV15_SHA1_RAW(0x000F),
+    SECP384R1_ECDSA_SHA384_RAW(0x0010),
+    SECP521R1_ECDSA_SHA512_RAW(0x0011),
+    ED25519_EDDSA_SHA256_RAW(0x0012);
 
     private final int value;
 
@@ -58,41 +58,41 @@ public enum AuthenticationAlgorithm {
         }
         switch (value) {
             case 0x0001:
-                return ALG_SIGN_SECP256R1_ECDSA_SHA256_RAW;
+                return SECP256R1_ECDSA_SHA256_RAW;
             case 0x0002:
-                return ALG_SIGN_SECP256R1_ECDSA_SHA256_DER;
+                return SECP256R1_ECDSA_SHA256_DER;
             case 0x0003:
-                return ALG_SIGN_RSASSA_PSS_SHA256_RAW;
+                return RSASSA_PSS_SHA256_RAW;
             case 0x0004:
-                return ALG_SIGN_RSASSA_PSS_SHA256_DER;
+                return RSASSA_PSS_SHA256_DER;
             case 0x0005:
-                return ALG_SIGN_SECP256K1_ECDSA_SHA256_RAW;
+                return SECP256K1_ECDSA_SHA256_RAW;
             case 0x0006:
-                return ALG_SIGN_SECP256K1_ECDSA_SHA256_DER;
+                return SECP256K1_ECDSA_SHA256_DER;
             case 0x0007:
-                return ALG_SIGN_SM2_SM3_RAW;
+                return SM2_SM3_RAW;
             case 0x0008:
-                return ALG_SIGN_RSA_EMSA_PKCS1_SHA256_RAW;
+                return RSA_EMSA_PKCS1_SHA256_RAW;
             case 0x0009:
-                return ALG_SIGN_RSA_EMSA_PKCS1_SHA256_DER;
+                return RSA_EMSA_PKCS1_SHA256_DER;
             case 0x000A:
-                return ALG_SIGN_RSASSA_PSS_SHA384_RAW;
+                return RSASSA_PSS_SHA384_RAW;
             case 0x000B:
-                return ALG_SIGN_RSASSA_PSS_SHA512_RAW;
+                return RSASSA_PSS_SHA512_RAW;
             case 0x000C:
-                return ALG_SIGN_RSASSA_PKCSV15_SHA256_RAW;
+                return RSASSA_PKCSV15_SHA256_RAW;
             case 0x000D:
-                return ALG_SIGN_RSASSA_PKCSV15_SHA384_RAW;
+                return RSASSA_PKCSV15_SHA384_RAW;
             case 0x000E:
-                return ALG_SIGN_RSASSA_PKCSV15_SHA512_RAW;
+                return RSASSA_PKCSV15_SHA512_RAW;
             case 0x000F:
-                return ALG_SIGN_RSASSA_PKCSV15_SHA1_RAW;
+                return RSASSA_PKCSV15_SHA1_RAW;
             case 0x0010:
-                return ALG_SIGN_SECP384R1_ECDSA_SHA384_RAW;
+                return SECP384R1_ECDSA_SHA384_RAW;
             case 0x0011:
-                return ALG_SIGN_SECP521R1_ECDSA_SHA512_RAW;
+                return SECP521R1_ECDSA_SHA512_RAW;
             case 0x0012:
-                return ALG_SIGN_ED25519_EDDSA_SHA256_RAW;
+                return ED25519_EDDSA_SHA256_RAW;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
