@@ -33,6 +33,7 @@ public class MetadataStatement implements Serializable {
     private String aaid;
     private String aaguid;
     private List<String> attestationCertificateKeyIdentifiers;
+    private String description;
     private AlternativeDescriptions alternativeDescriptions;
     private Integer authenticatorVersion;
     private String protocolFamily;
@@ -66,6 +67,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("aaid") String aaid,
             @JsonProperty("aaguid") String aaguid,
             @JsonProperty("attestationCertificateKeyIdentifiers") List<String> attestationCertificateKeyIdentifiers,
+            @JsonProperty("description") String description,
             @JsonProperty("alternativeDescriptions") AlternativeDescriptions alternativeDescriptions,
             @JsonProperty("authenticatorVersion") Integer authenticatorVersion,
             @JsonProperty("protocolFamily") String protocolFamily,
@@ -140,7 +142,11 @@ public class MetadataStatement implements Serializable {
         return attestationCertificateKeyIdentifiers;
     }
 
-    public AlternativeDescriptions getAlternativeDescriptions() {
+    public String getDescription() {
+        return description;
+    }
+
+	public AlternativeDescriptions getAlternativeDescriptions() {
         return alternativeDescriptions;
     }
 
