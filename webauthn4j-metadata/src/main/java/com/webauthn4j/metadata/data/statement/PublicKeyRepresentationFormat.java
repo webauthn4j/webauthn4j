@@ -23,15 +23,15 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported publik key representation format(s).
- * See section 3.6.2 Public Key Representation Formats of FIDO Registry of Predefined Values.
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#public-key-representation-formats">§3.6.2 Public Key Representation Formats</a> 
  */
 public enum PublicKeyRepresentationFormat {
 
-    ALG_KEY_ECC_X962_RAW(0x0100),
-    ALG_KEY_ECC_X962_DER(0x0101),
-    ALG_KEY_RSA_2048_RAW(0x0102),
-    ALG_KEY_RSA_2048_DER(0x0103),
-    ALG_KEY_COSE(0x0104);
+    ECC_X962_RAW(0x0100),
+    ECC_X962_DER(0x0101),
+    RSA_2048_RAW(0x0102),
+    RSA_2048_DER(0x0103),
+    COSE(0x0104);
 
     private final int value;
 
@@ -45,15 +45,15 @@ public enum PublicKeyRepresentationFormat {
         }
         switch (value) {
             case 0x0100:
-                return ALG_KEY_ECC_X962_RAW;
+                return ECC_X962_RAW;
             case 0x0101:
-                return ALG_KEY_ECC_X962_DER;
+                return ECC_X962_DER;
             case 0x0102:
-                return ALG_KEY_RSA_2048_RAW;
+                return RSA_2048_RAW;
             case 0x0103:
-                return ALG_KEY_RSA_2048_DER;
+                return RSA_2048_DER;
             case 0x0104:
-                return ALG_KEY_COSE;
+                return COSE;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }

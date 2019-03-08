@@ -33,11 +33,11 @@ public class PublicKeyRepresentationFormatTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(PublicKeyRepresentationFormat.create(0x0100)).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_ECC_X962_RAW),
-                () -> assertThat(PublicKeyRepresentationFormat.create(0x0101)).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_ECC_X962_DER),
-                () -> assertThat(PublicKeyRepresentationFormat.create(0x0102)).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_RSA_2048_RAW),
-                () -> assertThat(PublicKeyRepresentationFormat.create(0x0103)).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_RSA_2048_DER),
-                () -> assertThat(PublicKeyRepresentationFormat.create(0x0104)).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_COSE),
+                () -> assertThat(PublicKeyRepresentationFormat.create(0x0100)).isEqualTo(PublicKeyRepresentationFormat.ECC_X962_RAW),
+                () -> assertThat(PublicKeyRepresentationFormat.create(0x0101)).isEqualTo(PublicKeyRepresentationFormat.ECC_X962_DER),
+                () -> assertThat(PublicKeyRepresentationFormat.create(0x0102)).isEqualTo(PublicKeyRepresentationFormat.RSA_2048_RAW),
+                () -> assertThat(PublicKeyRepresentationFormat.create(0x0103)).isEqualTo(PublicKeyRepresentationFormat.RSA_2048_DER),
+                () -> assertThat(PublicKeyRepresentationFormat.create(0x0104)).isEqualTo(PublicKeyRepresentationFormat.COSE),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> PublicKeyRepresentationFormat.create(UnsignedNumberUtil.UNSIGNED_SHORT_MAX + 1)),
                 () -> assertThrows(IllegalArgumentException.class,
@@ -49,14 +49,14 @@ public class PublicKeyRepresentationFormatTest {
 
     @Test
     void getValue_test() {
-        assertThat(PublicKeyRepresentationFormat.ALG_KEY_ECC_X962_DER.getValue()).isEqualTo(0x0101);
+        assertThat(PublicKeyRepresentationFormat.ECC_X962_DER.getValue()).isEqualTo(0x0101);
     }
 
     @Test
     void fromInt_test() {
         TestDTO dto = jsonConverter.readValue("{\"pubkey_representation\":256}", TestDTO.class);
         assertAll(
-                () -> assertThat(dto.pubkey_representation).isEqualTo(PublicKeyRepresentationFormat.ALG_KEY_ECC_X962_RAW),
+                () -> assertThat(dto.pubkey_representation).isEqualTo(PublicKeyRepresentationFormat.ECC_X962_RAW),
                 () -> assertThrows(DataConversionException.class,
                         () -> jsonConverter.readValue("{\"pubkey_representation\":1}", TestDTO.class))
         );
