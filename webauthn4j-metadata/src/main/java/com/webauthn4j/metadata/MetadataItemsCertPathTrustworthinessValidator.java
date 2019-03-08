@@ -51,7 +51,7 @@ public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataIte
         List<AttestationType> attestationTypes = metadataItems.stream()
                 .flatMap(item -> item.getMetadataStatement().getAttestationTypes().stream()).collect(Collectors.toList());
         boolean isSurrogate = !attestationTypes.isEmpty() &&
-                attestationTypes.stream().allMatch(type -> type.equals(AttestationType.ATTESTATION_BASIC_SURROGATE));
+                attestationTypes.stream().allMatch(type -> type.equals(AttestationType.BASIC_SURROGATE));
         if (isSurrogate && attestationStatement.getX5c() != null) {
             throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
         }

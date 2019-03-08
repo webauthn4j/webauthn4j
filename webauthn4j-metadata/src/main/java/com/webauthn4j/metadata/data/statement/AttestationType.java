@@ -23,14 +23,14 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported attestation type(s). (e.g. ATTESTATION_BASIC_FULL(0x3E07), ATTESTATION_BASIC_SURROGATE(0x3E08)).
- * See section 3.6.3 of FIDO Registry for all available attestation formats
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a> 
  */
 public enum AttestationType {
 
-    ATTESTATION_BASIC_FULL(0x3E07),
-    ATTESTATION_BASIC_SURROGATE(0x3E08),
-    ATTESTATION_ECDAA(0x3E09),
-    ATTESTATION_ATTCA(0x3E0A);
+    BASIC_FULL(0x3E07),
+    BASIC_SURROGATE(0x3E08),
+    ECDAA(0x3E09),
+    ATTCA(0x3E0A);
 
     private final int value;
 
@@ -44,13 +44,13 @@ public enum AttestationType {
         }
         switch (value) {
             case 0x3E07:
-                return ATTESTATION_BASIC_FULL;
+                return BASIC_FULL;
             case 0x3E08:
-                return ATTESTATION_BASIC_SURROGATE;
+                return BASIC_SURROGATE;
             case 0x3E09:
-                return ATTESTATION_ECDAA;
+                return ECDAA;
             case 0x3E0A:
-                return ATTESTATION_ATTCA;
+                return ATTCA;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
