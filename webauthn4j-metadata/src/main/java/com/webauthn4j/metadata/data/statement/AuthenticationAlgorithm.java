@@ -23,7 +23,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported authentication algorithm(s).
- * See section 3.6.1 Authentication Algorithms of FIDO Registry of Predefined Values
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authentication-algorithms">§3.6.1 Authentication Algorithms</a> 
  */
 public enum AuthenticationAlgorithm {
 
