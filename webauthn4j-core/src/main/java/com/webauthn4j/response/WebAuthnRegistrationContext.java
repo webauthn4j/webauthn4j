@@ -16,6 +16,7 @@
 
 package com.webauthn4j.response;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
