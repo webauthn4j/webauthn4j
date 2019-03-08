@@ -32,17 +32,17 @@ class UserVerificationMethodTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(UserVerificationMethod.create(0x00000001L)).isEqualTo(UserVerificationMethod.USER_VERIFY_PRESENCE),
-                () -> assertThat(UserVerificationMethod.create(0x00000002L)).isEqualTo(UserVerificationMethod.USER_VERIFY_FINGERPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x00000004L)).isEqualTo(UserVerificationMethod.USER_VERIFY_PASSCODE),
-                () -> assertThat(UserVerificationMethod.create(0x00000008L)).isEqualTo(UserVerificationMethod.USER_VERIFY_VOICEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x00000010L)).isEqualTo(UserVerificationMethod.USER_VERIFY_FACEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x00000020L)).isEqualTo(UserVerificationMethod.USER_VERIFY_LOCATION),
-                () -> assertThat(UserVerificationMethod.create(0x00000040L)).isEqualTo(UserVerificationMethod.USER_VERIFY_EYEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x00000080L)).isEqualTo(UserVerificationMethod.USER_VERIFY_PATTERN),
-                () -> assertThat(UserVerificationMethod.create(0x00000100L)).isEqualTo(UserVerificationMethod.USER_VERIFY_HANDPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x00000200L)).isEqualTo(UserVerificationMethod.USER_VERIFY_NONE),
-                () -> assertThat(UserVerificationMethod.create(0x00000400L)).isEqualTo(UserVerificationMethod.USER_VERIFY_ALL),
+                () -> assertThat(UserVerificationMethod.create(0x00000001L)).isEqualTo(UserVerificationMethod.PRESENCE),
+                () -> assertThat(UserVerificationMethod.create(0x00000002L)).isEqualTo(UserVerificationMethod.FINGERPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x00000004L)).isEqualTo(UserVerificationMethod.PASSCODE),
+                () -> assertThat(UserVerificationMethod.create(0x00000008L)).isEqualTo(UserVerificationMethod.VOICEPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x00000010L)).isEqualTo(UserVerificationMethod.FACEPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x00000020L)).isEqualTo(UserVerificationMethod.LOCATION),
+                () -> assertThat(UserVerificationMethod.create(0x00000040L)).isEqualTo(UserVerificationMethod.EYEPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x00000080L)).isEqualTo(UserVerificationMethod.PATTERN),
+                () -> assertThat(UserVerificationMethod.create(0x00000100L)).isEqualTo(UserVerificationMethod.HANDPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x00000200L)).isEqualTo(UserVerificationMethod.NONE),
+                () -> assertThat(UserVerificationMethod.create(0x00000400L)).isEqualTo(UserVerificationMethod.ALL),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> UserVerificationMethod.create(0xFFFFFFFFL))
         );
@@ -50,14 +50,14 @@ class UserVerificationMethodTest {
 
     @Test
     void getValue_test() {
-        assertThat(UserVerificationMethod.USER_VERIFY_FINGERPRINT.getValue()).isEqualTo(0x00000002L);
+        assertThat(UserVerificationMethod.FINGERPRINT.getValue()).isEqualTo(0x00000002L);
     }
 
     @Test
     void fromLong_test() {
         TestDTO dto = jsonConverter.readValue("{\"user_verification_method\":64}", TestDTO.class);
         assertAll(
-                () -> assertThat(dto.user_verification_method).isEqualTo(UserVerificationMethod.USER_VERIFY_EYEPRINT),
+                () -> assertThat(dto.user_verification_method).isEqualTo(UserVerificationMethod.EYEPRINT),
                 () -> assertThrows(DataConversionException.class,
                         () -> jsonConverter.readValue("{\"user_verification_method\":3}", TestDTO.class))
         );

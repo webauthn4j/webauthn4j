@@ -21,21 +21,21 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
  * The supported user verification method(s).
- * See section 3.1 User Verification Methods of FIDO FIDO Registry of Predefined Values.
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#user-verification-methods">§3.1 User Verification Methods</a>
  */
 public enum UserVerificationMethod {
 
-    USER_VERIFY_PRESENCE(0x00000001L),
-    USER_VERIFY_FINGERPRINT(0x00000002L),
-    USER_VERIFY_PASSCODE(0x00000004L),
-    USER_VERIFY_VOICEPRINT(0x00000008L),
-    USER_VERIFY_FACEPRINT(0x00000010L),
-    USER_VERIFY_LOCATION(0x00000020L),
-    USER_VERIFY_EYEPRINT(0x00000040L),
-    USER_VERIFY_PATTERN(0x00000080L),
-    USER_VERIFY_HANDPRINT(0x00000100L),
-    USER_VERIFY_NONE(0x00000200L),
-    USER_VERIFY_ALL(0x00000400L);
+    PRESENCE(0x00000001L),
+    FINGERPRINT(0x00000002L),
+    PASSCODE(0x00000004L),
+    VOICEPRINT(0x00000008L),
+    FACEPRINT(0x00000010L),
+    LOCATION(0x00000020L),
+    EYEPRINT(0x00000040L),
+    PATTERN(0x00000080L),
+    HANDPRINT(0x00000100L),
+    NONE(0x00000200L),
+    ALL(0x00000400L);
 
     private final long value;
 
@@ -45,27 +45,27 @@ public enum UserVerificationMethod {
 
     public static UserVerificationMethod create(long value) {
         if (value == 0x00000001L) {
-            return USER_VERIFY_PRESENCE;
+            return PRESENCE;
         } else if (value == 0x00000002L) {
-            return USER_VERIFY_FINGERPRINT;
+            return FINGERPRINT;
         } else if (value == 0x00000004L) {
-            return USER_VERIFY_PASSCODE;
+            return PASSCODE;
         } else if (value == 0x00000008L) {
-            return USER_VERIFY_VOICEPRINT;
+            return VOICEPRINT;
         } else if (value == 0x00000010L) {
-            return USER_VERIFY_FACEPRINT;
+            return FACEPRINT;
         } else if (value == 0x00000020L) {
-            return USER_VERIFY_LOCATION;
+            return LOCATION;
         } else if (value == 0x00000040L) {
-            return USER_VERIFY_EYEPRINT;
+            return EYEPRINT;
         } else if (value == 0x00000080L) {
-            return USER_VERIFY_PATTERN;
+            return PATTERN;
         } else if (value == 0x00000100L) {
-            return USER_VERIFY_HANDPRINT;
+            return HANDPRINT;
         } else if (value == 0x00000200L) {
-            return USER_VERIFY_NONE;
+            return NONE;
         } else if (value == 0x00000400L) {
-            return USER_VERIFY_ALL;
+            return ALL;
         } else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
