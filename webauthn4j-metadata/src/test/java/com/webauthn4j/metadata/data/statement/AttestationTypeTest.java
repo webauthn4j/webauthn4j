@@ -18,10 +18,10 @@ class AttestationTypeTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(AttestationType.create(0x3E07)).isEqualTo(AttestationType.ATTESTATION_BASIC_FULL),
-                () -> assertThat(AttestationType.create(0x3E08)).isEqualTo(AttestationType.ATTESTATION_BASIC_SURROGATE),
-                () -> assertThat(AttestationType.create(0x3E09)).isEqualTo(AttestationType.ATTESTATION_ECDAA),
-                () -> assertThat(AttestationType.create(0x3E0A)).isEqualTo(AttestationType.ATTESTATION_ATTCA)
+                () -> assertThat(AttestationType.create(0x3E07)).isEqualTo(AttestationType.BASIC_FULL),
+                () -> assertThat(AttestationType.create(0x3E08)).isEqualTo(AttestationType.BASIC_SURROGATE),
+                () -> assertThat(AttestationType.create(0x3E09)).isEqualTo(AttestationType.ECDAA),
+                () -> assertThat(AttestationType.create(0x3E0A)).isEqualTo(AttestationType.ATTCA)
         );
     }
 
@@ -49,10 +49,10 @@ class AttestationTypeTest {
     @Test
     void getValue_test() {
         assertAll(
-                () -> assertThat(AttestationType.ATTESTATION_BASIC_FULL.getValue()).isEqualTo(0x3E07),
-                () -> assertThat(AttestationType.ATTESTATION_BASIC_SURROGATE.getValue()).isEqualTo(0x3E08),
-                () -> assertThat(AttestationType.ATTESTATION_ECDAA.getValue()).isEqualTo(0x3E09),
-                () -> assertThat(AttestationType.ATTESTATION_ATTCA.getValue()).isEqualTo(0x3E0A)
+                () -> assertThat(AttestationType.BASIC_FULL.getValue()).isEqualTo(0x3E07),
+                () -> assertThat(AttestationType.BASIC_SURROGATE.getValue()).isEqualTo(0x3E08),
+                () -> assertThat(AttestationType.ECDAA.getValue()).isEqualTo(0x3E09),
+                () -> assertThat(AttestationType.ATTCA.getValue()).isEqualTo(0x3E0A)
         );
     }
 
@@ -64,10 +64,10 @@ class AttestationTypeTest {
         TestDTO dto4 = jsonConverter.readValue("{\"attestation_type\":15882}", TestDTO.class);
 
         assertAll(
-                () -> assertThat(dto1.attestation_type).isEqualTo(AttestationType.ATTESTATION_BASIC_FULL),
-                () -> assertThat(dto2.attestation_type).isEqualTo(AttestationType.ATTESTATION_BASIC_SURROGATE),
-                () -> assertThat(dto3.attestation_type).isEqualTo(AttestationType.ATTESTATION_ECDAA),
-                () -> assertThat(dto4.attestation_type).isEqualTo(AttestationType.ATTESTATION_ATTCA)
+                () -> assertThat(dto1.attestation_type).isEqualTo(AttestationType.BASIC_FULL),
+                () -> assertThat(dto2.attestation_type).isEqualTo(AttestationType.BASIC_SURROGATE),
+                () -> assertThat(dto3.attestation_type).isEqualTo(AttestationType.ECDAA),
+                () -> assertThat(dto4.attestation_type).isEqualTo(AttestationType.ATTCA)
         );
     }
 
