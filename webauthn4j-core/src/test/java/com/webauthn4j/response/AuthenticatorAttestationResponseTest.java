@@ -41,9 +41,9 @@ class AuthenticatorAttestationResponseTest {
     void getTransports_test(){
         AuthenticatorAttestationResponse target;
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], Collections.singletonList(AuthenticatorTransport.USB));
-        assertThat(target.getAuthenticatorTransports()).containsExactly(AuthenticatorTransport.USB);
+        assertThat(target.getTransports()).containsExactly(AuthenticatorTransport.USB);
 
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0]);
-        assertThat(target.getAuthenticatorTransports()).isEmpty();
+        assertThat(target.getTransports()).isEmpty();
     }
 }

@@ -32,7 +32,7 @@ public interface Authenticator extends Serializable {
 
     AttestationStatement getAttestationStatement();
 
-    List<AuthenticatorTransport> getAuthenticatorTransports();
+    List<AuthenticatorTransport> getTransports();
 
     long getCounter();
 

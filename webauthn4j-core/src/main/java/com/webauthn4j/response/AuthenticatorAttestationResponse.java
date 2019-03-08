@@ -38,7 +38,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     // ================================================================================================
 
     private byte[] attestationObject;
-    private List<AuthenticatorTransport> authenticatorTransports;
+    private List<AuthenticatorTransport> transports;
 
     // ~ Constructor
     // ========================================================================================================
@@ -50,16 +50,16 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject,
-                                            List<AuthenticatorTransport> authenticatorTransports) {
+                                            List<AuthenticatorTransport> transports) {
         super(clientDataJSON);
 
-        List<AuthenticatorTransport> sorted = authenticatorTransports.stream()
+        List<AuthenticatorTransport> sorted = transports.stream()
                 .sorted((left, right) -> left.getValue().compareToIgnoreCase(right.getValue()))
                 .collect(Collectors.toList());
 
 
         this.attestationObject = attestationObject;
-        this.authenticatorTransports =
+        this.transports =
                 CollectionUtil.unmodifiableList(sorted);
     }
 
@@ -78,8 +78,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * if the information is unavailable.
      * @return list of {@link AuthenticatorTransport}
      */
-    public List<AuthenticatorTransport> getAuthenticatorTransports() {
-        return authenticatorTransports;
+    public List<AuthenticatorTransport> getTransports() {
+        return transports;
     }
 
     /**
@@ -91,7 +91,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorAttestationResponse that = (AuthenticatorAttestationResponse) o;
         return Arrays.equals(attestationObject, that.attestationObject) &&
-                Objects.equals(authenticatorTransports, that.authenticatorTransports);
+                Objects.equals(transports, that.transports);
     }
 
     /**
@@ -100,7 +100,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(authenticatorTransports);
+        int result = Objects.hash(transports);
         result = 31 * result + Arrays.hashCode(attestationObject);
         return result;
     }

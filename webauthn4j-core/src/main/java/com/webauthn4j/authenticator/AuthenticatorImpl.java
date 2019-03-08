@@ -33,13 +33,13 @@ public class AuthenticatorImpl implements Authenticator {
     //~ Instance fields ================================================================================================
     private AttestedCredentialData attestedCredentialData;
     private AttestationStatement attestationStatement;
-    private List<AuthenticatorTransport> authenticatorTransports;
+    private List<AuthenticatorTransport> transports;
     private long counter;
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, List<AuthenticatorTransport> authenticatorTransports) {
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, List<AuthenticatorTransport> transports) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
-        this.authenticatorTransports = Collections.unmodifiableList(authenticatorTransports);
+        this.transports = Collections.unmodifiableList(transports);
         setCounter(counter);
     }
 
@@ -82,8 +82,8 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     @Override
-    public List<AuthenticatorTransport> getAuthenticatorTransports() {
-        return authenticatorTransports;
+    public List<AuthenticatorTransport> getTransports() {
+        return transports;
     }
 
     @Override
@@ -94,12 +94,12 @@ public class AuthenticatorImpl implements Authenticator {
         return counter == that.counter &&
                 Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
                 Objects.equals(attestationStatement, that.attestationStatement) &&
-                Objects.equals(authenticatorTransports, that.authenticatorTransports);
+                Objects.equals(transports, that.transports);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(attestedCredentialData, attestationStatement, authenticatorTransports, counter);
+        return Objects.hash(attestedCredentialData, attestationStatement, transports, counter);
     }
 }
