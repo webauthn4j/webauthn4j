@@ -32,6 +32,7 @@ public class CollectionUtil {
         return set == null ? null : Collections.unmodifiableSet(set);
     }
 
+    @SafeVarargs
     public static <T> Set<T> unmodifiableSet(T ... items) {
         Set<T> set = new HashSet<>(Arrays.asList(items));
         return Collections.unmodifiableSet(set);
