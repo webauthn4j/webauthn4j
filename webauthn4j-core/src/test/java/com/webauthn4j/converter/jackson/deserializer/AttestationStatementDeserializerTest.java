@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestUtil;
@@ -27,13 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AttestationStatementDeserializerTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private CborConverter cborConverter = new CborConverter();
 
     @Test
     void test() {
         AttestationStatement source = TestUtil.createFIDOU2FAttestationStatement();
-        String str = jsonConverter.writeValueAsString(source);
-        AttestationStatement obj = jsonConverter.readValue(str, AttestationStatement.class);
+        byte[] data = cborConverter.writeValueAsBytes(source);
+        AttestationStatement obj = cborConverter.readValue(data, AttestationStatement.class);
 
         assertAll(
                 () -> assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class),

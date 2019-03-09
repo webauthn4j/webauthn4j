@@ -27,7 +27,6 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.extension.client.ExtensionClientInput;
 import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.extension.client.*;
 import com.webauthn4j.util.jws.JWS;
@@ -52,14 +51,6 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(JWS.class, new JWSSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
-
-        this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
-        this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
-        this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
-        this.registerSubtypes(new NamedType(AndroidSafetyNetAttestationStatement.class, AndroidSafetyNetAttestationStatement.FORMAT));
-        this.registerSubtypes(new NamedType(TPMAttestationStatement.class, TPMAttestationStatement.FORMAT));
-        this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
-
 
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientInput.class, SupportedExtensionsExtensionClientInput.ID));

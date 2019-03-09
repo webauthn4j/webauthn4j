@@ -57,8 +57,6 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
-
-
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
