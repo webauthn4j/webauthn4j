@@ -17,9 +17,8 @@
 package com.webauthn4j.response;
 
 import com.webauthn4j.request.AuthenticatorTransport;
+import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -40,7 +39,7 @@ class AuthenticatorAttestationResponseTest {
     @Test
     void getTransports_test(){
         AuthenticatorAttestationResponse target;
-        target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], Collections.singletonList(AuthenticatorTransport.USB));
+        target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB));
         assertThat(target.getTransports()).containsExactly(AuthenticatorTransport.USB);
 
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0]);

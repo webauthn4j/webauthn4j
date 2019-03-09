@@ -17,8 +17,7 @@
 package com.webauthn4j.util;
 
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CollectionUtil {
 
@@ -27,5 +26,14 @@ public class CollectionUtil {
 
     public static <T> List<T> unmodifiableList(List<? extends T> list) {
         return list == null ? null : Collections.unmodifiableList(list);
+    }
+
+    public static <T> Set<T> unmodifiableSet(Set<? extends T> set) {
+        return set == null ? null : Collections.unmodifiableSet(set);
+    }
+
+    public static <T> Set<T> unmodifiableSet(T ... items) {
+        Set<T> set = new HashSet<>(Arrays.asList(items));
+        return Collections.unmodifiableSet(set);
     }
 }

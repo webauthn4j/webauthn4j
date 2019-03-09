@@ -18,9 +18,9 @@ package com.webauthn4j.request;
 
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +39,7 @@ class PublicKeyCredentialRequestOptionsTest {
                 new PublicKeyCredentialDescriptor(
                         PublicKeyCredentialType.PUBLIC_KEY,
                         credentialId,
-                        Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                        CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                 )
         );
 
@@ -72,7 +72,7 @@ class PublicKeyCredentialRequestOptionsTest {
                 new PublicKeyCredentialDescriptor(
                         PublicKeyCredentialType.PUBLIC_KEY,
                         credentialId,
-                        Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                        CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                 )
         );
 

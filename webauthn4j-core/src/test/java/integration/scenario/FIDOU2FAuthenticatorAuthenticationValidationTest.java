@@ -40,12 +40,12 @@ import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
+import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,7 +83,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -136,7 +136,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -183,7 +183,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -227,7 +227,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -273,7 +273,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -317,7 +317,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -364,7 +364,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -408,7 +408,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,
@@ -452,7 +452,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         new PublicKeyCredentialDescriptor(
                                 PublicKeyCredentialType.PUBLIC_KEY,
                                 attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-                                Arrays.asList(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
                         )
                 ),
                 UserVerificationRequirement.DISCOURAGED,

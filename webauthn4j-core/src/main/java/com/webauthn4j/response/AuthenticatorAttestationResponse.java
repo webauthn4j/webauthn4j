@@ -22,9 +22,8 @@ import com.webauthn4j.util.CollectionUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * The {@link AuthenticatorAttestationResponse} represents the authenticator's response to a client’s request
@@ -38,29 +37,24 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     // ================================================================================================
 
     private byte[] attestationObject;
-    private List<AuthenticatorTransport> transports;
+    private Set<AuthenticatorTransport> transports;
 
     // ~ Constructor
     // ========================================================================================================
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject) {
-        this(clientDataJSON, attestationObject, Collections.emptyList());
+        this(clientDataJSON, attestationObject, Collections.emptySet());
     }
 
     public AuthenticatorAttestationResponse(byte[] clientDataJSON,
                                             byte[] attestationObject,
-                                            List<AuthenticatorTransport> transports) {
+                                            Set<AuthenticatorTransport> transports) {
         super(clientDataJSON);
-
-        List<AuthenticatorTransport> sorted = transports.stream()
-                .sorted((left, right) -> left.getValue().compareToIgnoreCase(right.getValue()))
-                .collect(Collectors.toList());
 
 
         this.attestationObject = attestationObject;
-        this.transports =
-                CollectionUtil.unmodifiableList(sorted);
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
 
@@ -78,7 +72,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * if the information is unavailable.
      * @return list of {@link AuthenticatorTransport}
      */
-    public List<AuthenticatorTransport> getTransports() {
+    public Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 

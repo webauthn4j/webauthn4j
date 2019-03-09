@@ -21,7 +21,7 @@ import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * WebAuthn Authenticator
@@ -32,7 +32,7 @@ public interface Authenticator extends Serializable {
 
     AttestationStatement getAttestationStatement();
 
-    List<AuthenticatorTransport> getTransports();
+    Set<AuthenticatorTransport> getTransports();
 
     long getCounter();
 

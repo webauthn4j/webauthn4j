@@ -22,8 +22,8 @@ import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.ConstUtil;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * An {@link Authenticator} implementation
@@ -33,18 +33,18 @@ public class AuthenticatorImpl implements Authenticator {
     //~ Instance fields ================================================================================================
     private AttestedCredentialData attestedCredentialData;
     private AttestationStatement attestationStatement;
-    private List<AuthenticatorTransport> transports;
+    private Set<AuthenticatorTransport> transports;
     private long counter;
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, List<AuthenticatorTransport> transports) {
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
-        this.transports = Collections.unmodifiableList(transports);
+        this.transports = Collections.unmodifiableSet(transports);
         setCounter(counter);
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
-        this(attestedCredentialData, attestationStatement, counter, Collections.emptyList());
+        this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     @Override
-    public List<AuthenticatorTransport> getTransports() {
+    public Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 

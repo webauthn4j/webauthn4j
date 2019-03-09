@@ -16,9 +16,8 @@
 
 package com.webauthn4j.request;
 
+import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,18 +26,18 @@ class PublicKeyCredentialDescriptorTest {
 
     @Test
     void getter_test() {
-        PublicKeyCredentialDescriptor descriptor = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
+        PublicKeyCredentialDescriptor descriptor = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB));
         assertAll(
                 () -> assertThat(descriptor.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY),
                 () -> assertThat(descriptor.getId()).isEqualTo(new byte[32]),
-                () -> assertThat(descriptor.getTransports()).isEqualTo(Collections.singletonList(AuthenticatorTransport.USB))
+                () -> assertThat(descriptor.getTransports()).isEqualTo(CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB))
         );
     }
 
     @Test
     void equals_hashCode_test() {
-        PublicKeyCredentialDescriptor instanceA = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
-        PublicKeyCredentialDescriptor instanceB = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], Collections.singletonList(AuthenticatorTransport.USB));
+        PublicKeyCredentialDescriptor instanceA = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB));
+        PublicKeyCredentialDescriptor instanceB = new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY, new byte[32], CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB));
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

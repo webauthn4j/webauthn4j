@@ -20,8 +20,8 @@ import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * {@link PublicKeyCredentialDescriptor} contains the attributes that are specified by a caller when referring to
@@ -37,12 +37,12 @@ public class PublicKeyCredentialDescriptor implements Serializable {
 
     private PublicKeyCredentialType type;
     private byte[] id;
-    private List<AuthenticatorTransport> transports;
+    private Set<AuthenticatorTransport> transports;
 
-    public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, List<AuthenticatorTransport> transports) {
+    public PublicKeyCredentialDescriptor(PublicKeyCredentialType type, byte[] id, Set<AuthenticatorTransport> transports) {
         this.type = type;
         this.id = id;
-        this.transports = CollectionUtil.unmodifiableList(transports);
+        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     public PublicKeyCredentialType getType() {
@@ -53,7 +53,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         return id.clone();
     }
 
-    public List<AuthenticatorTransport> getTransports() {
+    public Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
