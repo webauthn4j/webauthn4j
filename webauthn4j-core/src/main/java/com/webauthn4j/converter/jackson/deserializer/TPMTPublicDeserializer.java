@@ -44,7 +44,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         }
     }
 
-    TPMTPublic deserialize(byte[] value) throws IOException {
+    TPMTPublic deserialize(byte[] value) {
         ByteBuffer buffer = ByteBuffer.wrap(value);
 
         int typeValue = UnsignedNumberUtil.getUnsignedShort(buffer);
@@ -70,7 +70,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMAObject(value);
     }
 
-    private TPMUPublicParms extractTPMUPublicParms(TPMIAlgPublic type, ByteBuffer buffer) throws InvalidFormatException {
+    private TPMUPublicParms extractTPMUPublicParms(TPMIAlgPublic type, ByteBuffer buffer) {
         switch (type){
             case TPM_ALG_RSA:
                 return extractTPMSRSAParms(buffer);
@@ -93,7 +93,7 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
         return new TPMSRSAParms(symmetric, scheme, keyBits, exponent);
     }
 
-    private TPMSECCParms extractTPMSECDSAParms(ByteBuffer buffer) throws InvalidFormatException {
+    private TPMSECCParms extractTPMSECDSAParms(ByteBuffer buffer) {
         byte[] symmetric = new byte[2];
         buffer.get(symmetric);
         byte[] scheme = new byte[2];
