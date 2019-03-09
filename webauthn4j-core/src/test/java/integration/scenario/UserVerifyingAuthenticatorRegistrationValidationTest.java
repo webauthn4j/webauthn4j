@@ -111,12 +111,14 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
+                transports,
                 clientExtensionJSON,
                 serverProperty,
                 false,
@@ -163,12 +165,14 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
+                transports,
                 clientExtensionJSON,
                 serverProperty,
                 false,
@@ -217,6 +221,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -224,6 +229,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
+                transports,
                 clientExtensionJSON,
                 serverProperty,
                 false,

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
@@ -25,6 +26,9 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -128,9 +132,11 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_test() {
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 new byte[512],
+                transports,
                 mock(ServerProperty.class),
                 true
         );
@@ -146,9 +152,11 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_clientDataJSON_null_test() {
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 null,
                 new byte[512],
+                transports,
                 mock(ServerProperty.class),
                 true
         );
@@ -159,9 +167,12 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_attestationObject_null_test() {
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 null,
+                transports,
                 mock(ServerProperty.class),
                 true
         );
@@ -172,9 +183,11 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_serverProperty_null_test() {
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 new byte[512],
+                transports,
                 null,
                 true
         );

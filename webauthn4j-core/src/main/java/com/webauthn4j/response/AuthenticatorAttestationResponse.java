@@ -73,7 +73,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * @return list of {@link AuthenticatorTransport}
      */
     public Set<AuthenticatorTransport> getTransports() {
-        return transports;
+        return this.transports;
     }
 
     /**

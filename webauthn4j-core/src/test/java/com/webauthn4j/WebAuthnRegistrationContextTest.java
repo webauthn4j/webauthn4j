@@ -20,10 +20,14 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.Set;
 
 import static com.webauthn4j.test.TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement;
 import static com.webauthn4j.test.TestUtil.createClientData;
@@ -40,11 +44,13 @@ class WebAuthnRegistrationContextTest {
     void test() {
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AttestationObjectConverter(cborConverter).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+
 
         ServerProperty serverProperty = mock(ServerProperty.class);
 
-        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false);
-        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, serverProperty, false);
+        WebAuthnRegistrationContext webAuthnRegistrationContextA = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, transports, serverProperty, false);
+        WebAuthnRegistrationContext webAuthnRegistrationContextB = new WebAuthnRegistrationContext(collectedClientData, authenticatorData, transports, serverProperty, false);
 
         assertThat(webAuthnRegistrationContextA).isEqualTo(webAuthnRegistrationContextB);
         assertThat(webAuthnRegistrationContextA).hasSameHashCodeAs(webAuthnRegistrationContextB);
