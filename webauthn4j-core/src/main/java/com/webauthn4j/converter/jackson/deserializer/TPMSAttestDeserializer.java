@@ -68,7 +68,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSClockInfo(clock, resetCount, restartCount, safe);
     }
 
-    private TPMUAttest extractTPMUAttest(TPMISTAttest type, ByteBuffer buffer) throws InvalidFormatException {
+    private TPMUAttest extractTPMUAttest(TPMISTAttest type, ByteBuffer buffer) {
         if(type != TPMISTAttest.TPM_ST_ATTEST_CERTIFY){
             throw new NotImplementedException();
         }
@@ -81,7 +81,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         return new TPMSCertifyInfo(name, qualifiedName);
     }
 
-    private TPMTHA extractTPMTHA(ByteBuffer buffer, int digestLength) throws InvalidFormatException {
+    private TPMTHA extractTPMTHA(ByteBuffer buffer, int digestLength) {
         TPMIAlgHash hashAlg = TPMIAlgHash.create(UnsignedNumberUtil.getUnsignedShort(buffer));
         byte[] digest = new byte[digestLength];
         buffer.get(digest);
