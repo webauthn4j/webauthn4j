@@ -70,7 +70,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 public class TestUtil {
 
     private static JsonConverter jsonConverter = new JsonConverter();
-    private static CborConverter cborConverter = new CborConverter();
+    private static CborConverter cborConverter = jsonConverter.getCborConverter();
     private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
