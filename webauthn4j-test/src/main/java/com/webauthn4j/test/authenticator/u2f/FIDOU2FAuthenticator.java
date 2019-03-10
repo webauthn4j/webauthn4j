@@ -52,7 +52,7 @@ public class FIDOU2FAuthenticator {
     }
 
     public FIDOU2FAuthenticator() {
-        this(TestDataConstants.FIDO_U2F_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY, TestDataConstants.FIDO_U2F_AUTHENTICATOR_ATTESTATION_CERTIFICATE, 0);
+        this(TestDataConstants.GENERIC_2TIER_ATTESTATION_PRIVATE_KEY, TestDataConstants.GENERIC_2TIER_ATTESTATION_CERTIFICATE, 0);
     }
 
     public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption) {

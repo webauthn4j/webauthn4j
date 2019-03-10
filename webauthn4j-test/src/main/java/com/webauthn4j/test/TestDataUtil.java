@@ -146,7 +146,7 @@ public class TestDataUtil {
     public static AttestationObject createAttestationObjectWithBasicPackedECAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
         return new AttestationObject(authenticatorData, TestAttestationUtil.createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
@@ -156,7 +156,7 @@ public class TestDataUtil {
         KeyPair keyPair = KeyUtil.createECKeyPair();
         EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
         return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
@@ -166,7 +166,7 @@ public class TestDataUtil {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
         RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
         return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
@@ -175,7 +175,7 @@ public class TestDataUtil {
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestAttestationUtil.loadAndroidKeyAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
         return new AttestationObject(authenticatorData, TestAttestationUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
@@ -185,7 +185,7 @@ public class TestDataUtil {
     public static AttestationObject createAttestationObjectWithTPMAttestationStatement(byte[] clientDataHash) {
         PrivateKey privateKey = TestAttestationUtil.loadTPMAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
         return new AttestationObject(authenticatorData, TestAttestationUtil.createTPMAttestationStatement(COSEAlgorithmIdentifier.RS1, signature));
@@ -249,11 +249,11 @@ public class TestDataUtil {
     }
 
     public static byte[] createClientDataJSON(ClientDataType type) {
-        return new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(type));
+        return collectedClientDataConverter.convertToBytes(createClientData(type));
     }
 
     public static byte[] createClientDataJSON(ClientDataType type, Challenge challenge) {
-        return new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(type, challenge));
+        return collectedClientDataConverter.convertToBytes(createClientData(type, challenge));
     }
 
     public static Challenge createChallenge() {

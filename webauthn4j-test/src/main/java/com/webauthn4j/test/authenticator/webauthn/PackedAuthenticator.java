@@ -33,8 +33,8 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     public PackedAuthenticator(){
         super();
-        this.attestationPrivateKey = TestDataConstants.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestDataConstants.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH;
+        this.attestationPrivateKey = TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY;
+        this.attestationCertificatePath = TestDataConstants.GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH;
     }
 
     @Override
