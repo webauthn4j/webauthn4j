@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.webauthn;
+package com.webauthn4j.test.authenticator.webauthn.exception;
 
-public class NotAllowedException extends WebAuthnModelException {
+public class WebAuthnModelException extends RuntimeException {
 
-    public NotAllowedException(String message, Throwable cause) {
+    public WebAuthnModelException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public NotAllowedException(String message) {
+    public WebAuthnModelException(String message) {
         super(message);
     }
 
-    public NotAllowedException(Throwable e) {
+    public WebAuthnModelException(Throwable e) {
         super(e);
+    }
+
+    public WebAuthnModelException() {
     }
 }

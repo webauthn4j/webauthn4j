@@ -30,13 +30,14 @@ import com.webauthn4j.response.attestation.authenticator.*;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.authenticator.webauthn.attestation.PackedAttestationStatementGenerator;
+import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
@@ -55,7 +56,7 @@ import java.util.stream.Collectors;
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.*;
 
 @WIP
-public class WebAuthnModelAuthenticator {
+public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
     private CborConverter cborConverter = new CborConverter();
 
@@ -272,7 +273,9 @@ public class WebAuthnModelAuthenticator {
             signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
         }
 
-        AttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+        AttestationStatement attestationStatement;
+
+        attestationStatement = new PackedAttestationStatementGenerator().generate(signature, attestationCertificatePath);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,

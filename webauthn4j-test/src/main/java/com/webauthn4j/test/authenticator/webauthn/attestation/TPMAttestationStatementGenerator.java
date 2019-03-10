@@ -14,22 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.u2f;
+package com.webauthn4j.test.authenticator.webauthn.attestation;
 
-import com.webauthn4j.util.WIP;
-
-@WIP
-public class FIDOU2FException extends RuntimeException {
-
-    public FIDOU2FException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public FIDOU2FException(Throwable cause) {
-        super(cause);
-    }
-
-    public FIDOU2FException(String message) {
-        super(message);
-    }
+public class TPMAttestationStatementGenerator {
 }

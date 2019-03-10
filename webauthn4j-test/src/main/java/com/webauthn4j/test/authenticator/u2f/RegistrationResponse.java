@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.u2f;
 
+import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.WIP;
 

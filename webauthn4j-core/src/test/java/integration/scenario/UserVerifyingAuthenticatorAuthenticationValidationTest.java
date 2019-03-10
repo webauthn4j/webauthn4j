@@ -39,7 +39,7 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOut
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestUtil;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
@@ -58,8 +58,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
     private CborConverter cborConverter = jsonConverter.getCborConverter();
 
     private Origin origin = new Origin("http://example.com");
-    private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
+    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter

@@ -14,19 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.webauthn;
+package com.webauthn4j.test.authenticator.webauthn.attestation;
 
-public class NotSupportedException extends WebAuthnModelException {
-
-    public NotSupportedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NotSupportedException(String message) {
-        super(message);
-    }
-
-    public NotSupportedException(Throwable e) {
-        super(e);
-    }
+public class AndroidSafetyNetAttestationStatementGenerator {
 }

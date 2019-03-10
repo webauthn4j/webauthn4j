@@ -26,7 +26,7 @@ import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class PublicKeyCredentialTest {
 
     private Origin origin = new Origin("http://localhost");
-    private WebAuthnModelAuthenticatorAdaptor webAuthnModelAuthenticatorAdaptor = new WebAuthnModelAuthenticatorAdaptor();
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnModelAuthenticatorAdaptor);
+    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
 
     @Test
     void test() {

@@ -30,12 +30,20 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 
-public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
+public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     private JsonConverter jsonConverter = new JsonConverter();
 
-    private WebAuthnModelAuthenticator webAuthnModelAuthenticator = new WebAuthnModelAuthenticator();
+    private WebAuthnAuthenticator webAuthnAuthenticator;
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+
+    public WebAuthnAuthenticatorAdaptor(){
+        webAuthnAuthenticator = new PackedAuthenticator();
+    }
+
+    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator){
+        this.webAuthnAuthenticator = webAuthnAuthenticator;
+    }
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
@@ -52,7 +60,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         makeCredentialRequest.setCredTypesAndPublicKeyAlgs(publicKeyCredentialCreationOptions.getPubKeyCredParams());
         makeCredentialRequest.setExcludeCredentialDescriptorList(publicKeyCredentialCreationOptions.getExcludeCredentials());
         makeCredentialRequest.setExtensions(publicKeyCredentialCreationOptions.getExtensions());
-        MakeCredentialResponse makeCredentialResponse = webAuthnModelAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
+        MakeCredentialResponse makeCredentialResponse = webAuthnAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
 
         return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
     }
@@ -82,7 +90,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
         getAssertionRequest.setRequireUserVerification(requireUserVerification);
         getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
 
-        GetAssertionResponse getAssertionResponse = webAuthnModelAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
+        GetAssertionResponse getAssertionResponse = webAuthnAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
 
         return new CredentialRequestResponse(
                 getAssertionResponse.getCredentialId(),
@@ -98,7 +106,7 @@ public class WebAuthnModelAuthenticatorAdaptor implements AuthenticatorAdaptor {
             case REQUIRED:
                 return true;
             case PREFERRED:
-                return webAuthnModelAuthenticator.isCapableOfUserVerification();
+                return webAuthnAuthenticator.isCapableOfUserVerification();
             case DISCOURAGED:
                 return false;
             default:
