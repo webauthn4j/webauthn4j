@@ -16,35 +16,34 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestData;
+import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
+import com.webauthn4j.util.WIP;
 
 import java.security.PrivateKey;
 
-public class PackedAuthenticator extends WebAuthnModelAuthenticator {
+@WIP
+public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
 
     private PrivateKey attestationPrivateKey;
     private AttestationCertificatePath attestationCertificatePath;
 
-    public PackedAuthenticator(){
+    public AndroidKeyAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath){
         super();
-        this.attestationPrivateKey = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH;
+        this.attestationPrivateKey = attestationPrivateKey;
+        this.attestationCertificatePath = attestationCertificatePath;
     }
 
     @Override
-    public AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption){
+    protected AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
             signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
         }
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+        return new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath);
     }
+
 }

@@ -16,35 +16,47 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestData;
+import com.webauthn4j.response.attestation.statement.Response;
 import com.webauthn4j.test.TestUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
+import com.webauthn4j.util.WIP;
+import com.webauthn4j.util.jws.JWAIdentifier;
+import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.util.jws.JWSHeader;
 
 import java.security.PrivateKey;
 
-public class PackedAuthenticator extends WebAuthnModelAuthenticator {
+@WIP
+public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private PrivateKey attestationPrivateKey;
     private AttestationCertificatePath attestationCertificatePath;
 
-    public PackedAuthenticator(){
-        super();
-        this.attestationPrivateKey = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH;
-    }
 
     @Override
-    public AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption){
+    protected AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
             signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
         }
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+        JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, attestationCertificatePath);
+        String nonce = null; //TODO
+        long timestampMs = 0;  //TODO
+        String apkPackageName = null;  //TODO
+        String[] apkCertificateDigestSha256 = null;  //TODO
+        String apkDigestSha256 = null;  //TODO
+        boolean ctsProfileMatch = true;
+        boolean basicIntegrity = true;  //TODO
+        String advice = null;  //TODO
+        Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256,apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
+
+        String ver = ""; //TODO
+        JWS<Response> responseJWS = new JWS<>(jwsHeader, null, response, null, signature);
+        return new AndroidSafetyNetAttestationStatement(ver, responseJWS);
     }
 }

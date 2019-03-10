@@ -36,7 +36,6 @@ import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuth
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestData;
 import com.webauthn4j.test.TestUtil;
-import com.webauthn4j.test.authenticator.webauthn.attestation.PackedAttestationStatementGenerator;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -61,8 +60,6 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private CborConverter cborConverter = new CborConverter();
 
     AAGUID aaguid;
-    private PrivateKey attestationPrivateKey;
-    private AttestationCertificatePath attestationCertificatePath;
     private boolean capableOfUserVerification;
     private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
@@ -70,9 +67,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter); // TODO: inject objectMapper from constructor
 
-    public WebAuthnModelAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath, boolean capableOfUserVerification, AAGUID aaguid, int counter) {
-        this.attestationPrivateKey = attestationPrivateKey;
-        this.attestationCertificatePath = attestationCertificatePath;
+    public WebAuthnModelAuthenticator(boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.capableOfUserVerification = capableOfUserVerification;
         this.aaguid = aaguid;
         this.counter = counter;
@@ -81,8 +76,6 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public WebAuthnModelAuthenticator() {
         this(
-                TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY,
-                TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH,
                 true,
                 AAGUID.ZERO,
                 0
@@ -266,16 +259,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
 
-        byte[] signature;
-        if (registrationEmulationOption.isSignatureOverrideEnabled()) {
-            signature = registrationEmulationOption.getSignature();
-        } else {
-            signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
-        }
 
-        AttestationStatement attestationStatement;
 
-        attestationStatement = new PackedAttestationStatementGenerator().generate(signature, attestationCertificatePath);
+        AttestationStatement attestationStatement = generateAttestationStatement(signedData, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -406,6 +392,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     public void setCountUpEnabled(boolean countUpEnabled) {
         this.countUpEnabled = countUpEnabled;
     }
+
+    protected abstract AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption);
 
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
