@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.model;
+package com.webauthn4j.test.authenticator.webauthn;
 
-public class ConstraintException extends WebAuthnModelException {
-    public ConstraintException(String message, Throwable cause) {
-        super(message, cause);
+import com.webauthn4j.response.attestation.AttestationObject;
+
+public class MakeCredentialResponse {
+
+    private AttestationObject attestationObject;
+
+    public AttestationObject getAttestationObject() {
+        return attestationObject;
     }
 
-    public ConstraintException(String message) {
-        super(message);
-    }
-
-    public ConstraintException(Throwable e) {
-        super(e);
+    public void setAttestationObject(AttestationObject attestationObject) {
+        this.attestationObject = attestationObject;
     }
 }

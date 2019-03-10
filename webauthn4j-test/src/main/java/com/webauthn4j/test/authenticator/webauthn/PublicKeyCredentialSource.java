@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.model;
+package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.request.PublicKeyCredentialType;
 

@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.model;
+package com.webauthn4j.test.authenticator.webauthn;
 
-public class InvalidStateException extends WebAuthnModelException {
+public class WebAuthnModelException extends RuntimeException {
 
-    public InvalidStateException(String message, Throwable cause) {
+    public WebAuthnModelException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public InvalidStateException(String message) {
+    public WebAuthnModelException(String message) {
         super(message);
     }
 
-    public InvalidStateException(Throwable e) {
+    public WebAuthnModelException(Throwable e) {
         super(e);
+    }
+
+    public WebAuthnModelException() {
     }
 }

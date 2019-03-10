@@ -38,7 +38,7 @@ import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuth
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.authenticator.model.WebAuthnModelException;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelException;
 import com.webauthn4j.util.*;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;

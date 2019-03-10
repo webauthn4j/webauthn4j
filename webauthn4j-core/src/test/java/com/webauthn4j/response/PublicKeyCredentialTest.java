@@ -26,7 +26,7 @@ import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import org.junit.jupiter.api.Test;
 

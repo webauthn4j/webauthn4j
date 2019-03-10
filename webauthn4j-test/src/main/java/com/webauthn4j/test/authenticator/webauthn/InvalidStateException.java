@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test.authenticator.model;
+package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.response.attestation.AttestationObject;
+public class InvalidStateException extends WebAuthnModelException {
 
-public class MakeCredentialResponse {
-
-    private AttestationObject attestationObject;
-
-    public AttestationObject getAttestationObject() {
-        return attestationObject;
+    public InvalidStateException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public void setAttestationObject(AttestationObject attestationObject) {
-        this.attestationObject = attestationObject;
+    public InvalidStateException(String message) {
+        super(message);
+    }
+
+    public InvalidStateException(Throwable e) {
+        super(e);
     }
 }

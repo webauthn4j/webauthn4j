@@ -42,7 +42,7 @@ import com.webauthn4j.response.extension.client.SupportedExtensionsExtensionClie
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
-import com.webauthn4j.test.authenticator.model.WebAuthnModelAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelAuthenticatorAdaptor;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
