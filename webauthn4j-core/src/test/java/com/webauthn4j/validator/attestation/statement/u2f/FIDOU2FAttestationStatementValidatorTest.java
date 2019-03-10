@@ -20,7 +20,7 @@ import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -56,8 +56,8 @@ class FIDOU2FAttestationStatementValidatorTest {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(
                 new AttestationCertificatePath(Arrays.asList(
-                        TestUtil.load3tierTestAuthenticatorAttestationCertificate(),
-                        TestUtil.load3tierTestIntermediateCACertificate()
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate(),
+                        TestAttestationUtil.load3tierTestIntermediateCACertificate()
                 ))
         );
         assertThrows(BadAttestationStatementException.class,

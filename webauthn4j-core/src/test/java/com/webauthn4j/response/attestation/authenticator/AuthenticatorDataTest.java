@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation.authenticator;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.*;
@@ -60,8 +60,8 @@ class AuthenticatorDataTest {
 
     @Test
     void equals_test() {
-        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceA = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestDataUtil.createAuthenticatorData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
@@ -74,8 +74,8 @@ class AuthenticatorDataTest {
 
     @Test
     void hashCode_test() {
-        AuthenticatorData instanceA = TestUtil.createAuthenticatorData();
-        AuthenticatorData instanceB = TestUtil.createAuthenticatorData();
+        AuthenticatorData instanceA = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData instanceB = TestDataUtil.createAuthenticatorData();
         assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
     }
 

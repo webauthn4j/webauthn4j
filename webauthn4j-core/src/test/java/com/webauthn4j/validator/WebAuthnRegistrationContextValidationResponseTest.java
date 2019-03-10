@@ -21,7 +21,7 @@ import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +31,8 @@ class WebAuthnRegistrationContextValidationResponseTest {
 
     @Test
     void equals_hashCode_test() {
-        CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         WebAuthnRegistrationContextValidationResponse instanceA =
                 new WebAuthnRegistrationContextValidationResponse(clientData, attestationObject, registrationExtensionsClientOutputs);

@@ -38,7 +38,7 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
@@ -102,7 +102,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true,
                         Collections.emptyList()
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
@@ -154,7 +154,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true,
                         Collections.emptyList()
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
@@ -199,7 +199,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(MaliciousDataException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -238,7 +238,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadChallengeException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -277,7 +277,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadOriginException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -318,7 +318,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(TokenBindingException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -358,7 +358,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadRpIdException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -396,7 +396,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(UserNotVerifiedException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );

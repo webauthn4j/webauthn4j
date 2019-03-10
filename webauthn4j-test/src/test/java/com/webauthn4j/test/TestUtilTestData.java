@@ -22,11 +22,11 @@ import java.security.PrivateKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestUtilTest {
+class TestUtilTestData {
 
     @Test
     void loadTestAuthenticatorAttestationPrivateKey_test() {
-        PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
+        PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         assertThat(privateKey).isNotNull();
     }
 }

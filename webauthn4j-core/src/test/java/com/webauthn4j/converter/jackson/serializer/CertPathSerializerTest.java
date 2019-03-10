@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 import java.security.cert.CertPath;
@@ -39,8 +39,8 @@ class CertPathSerializerTest {
     void test() throws CertificateException {
 
         //Given
-        Certificate cert1 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
-        Certificate cert2 = TestUtil.loadFirefoxSWTokenAttestationCertificate();
+        Certificate cert1 = TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate();
+        Certificate cert2 = TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate();
 
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
         CertPath certPath = certificateFactory.generateCertPath(Arrays.asList(cert1, cert2));

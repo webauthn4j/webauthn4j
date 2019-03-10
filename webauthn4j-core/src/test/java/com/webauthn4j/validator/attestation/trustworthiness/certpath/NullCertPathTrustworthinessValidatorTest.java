@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 class NullCertPathTrustworthinessValidatorTest {
@@ -27,7 +27,7 @@ class NullCertPathTrustworthinessValidatorTest {
 
     @Test
     void validate() {
-        PackedAttestationStatement attestationStatement = TestUtil.createBasicPackedAttestationStatement();
+        PackedAttestationStatement attestationStatement = TestAttestationUtil.createBasicPackedAttestationStatement();
         validator.validate(new AAGUID("c4781c71-69d5-48ca-b228-c0ecaa41c75a"), attestationStatement);
     }
 }

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +33,7 @@ class AttestationCertificateTest {
 
     @Test
     void getter_test() {
-        AttestationCertificate attestationCertificate = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
+        AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
         assertAll(
                 () -> assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("JP"),
                 () -> assertThat(attestationCertificate.getSubjectOrganization()).isEqualTo("SharpLab."),
@@ -44,7 +44,7 @@ class AttestationCertificateTest {
 
     @Test
     void validate_test() {
-        AttestationCertificate attestationCertificate = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
+        AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
         attestationCertificate.validate();
     }
 
@@ -118,8 +118,8 @@ class AttestationCertificateTest {
 
     @Test
     void equals_hashCode_test() {
-        AttestationCertificate attestationCertificateA = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
-        AttestationCertificate attestationCertificateB = new AttestationCertificate(TestUtil.load3tierTestAuthenticatorAttestationCertificate());
+        AttestationCertificate attestationCertificateA = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
+        AttestationCertificate attestationCertificateB = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
 
         assertAll(
                 () -> assertThat(attestationCertificateA).isEqualTo(attestationCertificateB),

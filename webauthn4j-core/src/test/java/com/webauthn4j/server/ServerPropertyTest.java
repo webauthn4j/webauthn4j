@@ -18,7 +18,7 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.response.client.challenge.DefaultChallenge;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +29,8 @@ class ServerPropertyTest {
     @Test
     void equals_hashCode_test() {
         Challenge challenge = new DefaultChallenge();
-        ServerProperty serverPropertyA = TestUtil.createServerProperty(challenge);
-        ServerProperty serverPropertyB = TestUtil.createServerProperty(challenge);
+        ServerProperty serverPropertyA = TestDataUtil.createServerProperty(challenge);
+        ServerProperty serverPropertyB = TestDataUtil.createServerProperty(challenge);
 
         assertAll(
                 () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),

@@ -17,7 +17,7 @@
 package com.webauthn4j.response.attestation.statement;
 
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -46,9 +46,9 @@ class AndroidKeyAttestationStatementTest {
 
     @Test
     void equals_hashCode_test() {
-        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceA = (AndroidKeyAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
-        RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         AndroidKeyAttestationStatement instanceB = (AndroidKeyAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
         assertAll(

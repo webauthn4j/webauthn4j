@@ -27,7 +27,7 @@ import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAu
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -44,12 +44,12 @@ class AuthenticationObjectTest {
     void test() {
 
         byte[] credentialId = new byte[32];
-        CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
-        ServerProperty serverProperty = TestUtil.createServerProperty();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,

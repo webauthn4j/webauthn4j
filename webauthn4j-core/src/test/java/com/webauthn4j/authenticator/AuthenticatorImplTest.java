@@ -18,7 +18,8 @@ package com.webauthn4j.authenticator;
 
 import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +30,9 @@ class AuthenticatorImplTest {
 
     @Test
     void getter_setter_test() {
-        AttestedCredentialData attestedCredentialData = TestUtil.createAttestedCredentialData();
-        AttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement();
-        Authenticator authenticator = TestUtil.createAuthenticator(attestedCredentialData, attestationStatement);
+        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
+        AttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestedCredentialData, attestationStatement);
 
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
@@ -56,8 +57,8 @@ class AuthenticatorImplTest {
 
     @Test
     void equals_hashCode_test() {
-        Authenticator authenticatorA = TestUtil.createAuthenticator();
-        Authenticator authenticatorB = TestUtil.createAuthenticator();
+        Authenticator authenticatorA = TestDataUtil.createAuthenticator();
+        Authenticator authenticatorB = TestDataUtil.createAuthenticator();
 
         assertAll(
                 () -> assertThat(authenticatorA).isEqualTo(authenticatorB),

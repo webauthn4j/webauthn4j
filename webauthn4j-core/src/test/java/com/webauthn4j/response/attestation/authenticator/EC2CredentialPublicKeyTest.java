@@ -19,7 +19,7 @@ package com.webauthn4j.response.attestation.authenticator;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void createFromUncompressedECCKey_test() {
-        EC2CredentialPublicKey key = EC2CredentialPublicKey.createFromUncompressedECCKey(TestUtil.createECCredentialPublicKey().getBytes());
+        EC2CredentialPublicKey key = EC2CredentialPublicKey.createFromUncompressedECCKey(TestDataUtil.createECCredentialPublicKey().getBytes());
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
@@ -51,14 +51,14 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void equals_test() {
-        EC2CredentialPublicKey instanceA = TestUtil.createECCredentialPublicKey();
-        EC2CredentialPublicKey instanceB = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey instanceA = TestDataUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey instanceB = TestDataUtil.createECCredentialPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void cbor_serialize_deserialize_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         CredentialPublicKey result = cborConverter.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -66,7 +66,7 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void json_serialize_deserialize_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         CredentialPublicKey result = jsonConverter.readValue(serialized, CredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -74,13 +74,13 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void validate_test() {
-        EC2CredentialPublicKey target = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey target = TestDataUtil.createECCredentialPublicKey();
         target.validate();
     }
 
     @Test
     void validate_with_invalid_algorithm_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
                 null,
@@ -97,7 +97,7 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void validate_with_invalid_curve_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -114,7 +114,7 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void validate_with_invalid_x_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -131,7 +131,7 @@ class EC2CredentialPublicKeyTest {
 
     @Test
     void validate_with_invalid_y_test() {
-        EC2CredentialPublicKey original = TestUtil.createECCredentialPublicKey();
+        EC2CredentialPublicKey original = TestDataUtil.createECCredentialPublicKey();
         EC2CredentialPublicKey target = new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,

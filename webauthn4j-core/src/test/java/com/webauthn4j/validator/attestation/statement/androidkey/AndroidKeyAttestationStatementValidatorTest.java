@@ -19,7 +19,7 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
@@ -36,13 +36,13 @@ class AndroidKeyAttestationStatementValidatorTest {
 
     @Test
     void validate_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);
     }
 
     @Test
     void validate_with_teeEnforcedOnly_option_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.setTeeEnforcedOnly(true);
         assertThat(target.isTeeEnforcedOnly()).isTrue();
         target.validate(registrationObject);
@@ -68,7 +68,7 @@ class AndroidKeyAttestationStatementValidatorTest {
 
     @Test
     void validate_TPMAttestation_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
         );

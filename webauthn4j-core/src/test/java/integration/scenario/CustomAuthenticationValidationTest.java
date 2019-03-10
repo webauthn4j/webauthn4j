@@ -34,7 +34,7 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.util.CollectionUtil;
@@ -100,7 +100,7 @@ public class CustomAuthenticationValidationTest {
                         false,
                         Collections.emptyList()
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
         // You can add custom authentication validator
         target.getCustomAuthenticationValidators().add(authenticationObject ->

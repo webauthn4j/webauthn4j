@@ -33,7 +33,7 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
@@ -66,7 +66,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
     private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(
                     noneAttestationStatementValidator,

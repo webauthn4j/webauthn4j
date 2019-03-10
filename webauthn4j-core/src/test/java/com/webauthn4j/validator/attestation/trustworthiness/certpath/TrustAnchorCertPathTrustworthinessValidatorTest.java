@@ -20,7 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.response.attestation.authenticator.AAGUID;
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
@@ -46,10 +46,10 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
     void validate_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
-                Collections.singletonList(TestUtil.load2tierTestRootCACertificate()));
+                Collections.singletonList(TestAttestationUtil.load2tierTestRootCACertificate()));
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
         target.validate(aaguid, attestationStatement);
     }
 
@@ -59,7 +59,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
         Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(TestUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
         assertThrows(TrustAnchorNotFoundException.class,
                 () -> target.validate(aaguid, attestationStatement)
         );
@@ -69,16 +69,16 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
     void validate_full_chain_test() {
 
         Set<TrustAnchor> trustAnchors = CertificateUtil.generateTrustAnchors(
-                Collections.singletonList(TestUtil.load3tierTestRootCACertificate()));
+                Collections.singletonList(TestAttestationUtil.load3tierTestRootCACertificate()));
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
         AttestationCertificatePath attestationCertificatePath
                 = new AttestationCertificatePath(Arrays.asList(
-                TestUtil.load3tierTestAuthenticatorAttestationCertificate(),
-                TestUtil.load3tierTestIntermediateCACertificate(),
-                TestUtil.load3tierTestRootCACertificate()));
+                TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate(),
+                TestAttestationUtil.load3tierTestIntermediateCACertificate(),
+                TestAttestationUtil.load3tierTestRootCACertificate()));
 
-        CertificateBaseAttestationStatement attestationStatement = TestUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
         assertThrows(CertificateException.class,
                 () -> target.validate(aaguid, attestationStatement)

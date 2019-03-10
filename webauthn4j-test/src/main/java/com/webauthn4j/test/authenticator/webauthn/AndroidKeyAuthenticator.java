@@ -17,7 +17,7 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.response.attestation.statement.*;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.WIP;
 
@@ -41,7 +41,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
         }
         return new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath);
     }

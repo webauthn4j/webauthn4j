@@ -17,7 +17,7 @@
 package com.webauthn4j.util.jws;
 
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,8 +27,8 @@ class JWSHeaderTest {
 
     @Test
     void equals_hashCode_test() {
-        JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
-        JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestUtil.create2tierTestAuthenticatorCertPath());
+        JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.create2tierTestAuthenticatorCertPath());
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

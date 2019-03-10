@@ -36,7 +36,7 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
@@ -107,7 +107,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         false,
                         Collections.emptyList()
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
         WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
 
@@ -157,7 +157,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
         assertThrows(MaliciousDataException.class,
                 () -> target.validate(authenticationContext, authenticator)
@@ -203,7 +203,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadChallengeException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -248,7 +248,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadOriginException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -293,7 +293,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadRpIdException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -337,7 +337,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         true
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(UserNotVerifiedException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -384,7 +384,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(UserNotPresentException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -428,7 +428,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         assertThrows(BadSignatureException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
@@ -472,7 +472,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         false
                 );
-        Authenticator authenticator = TestUtil.createAuthenticator(attestationObject);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
         authenticator.setCounter(100); //set expected minimum counter bigger than that of actual authenticator
         assertThrows(MaliciousCounterValueException.class,
                 () -> target.validate(authenticationContext, authenticator)

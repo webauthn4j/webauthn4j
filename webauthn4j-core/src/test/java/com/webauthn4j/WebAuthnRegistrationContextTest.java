@@ -29,8 +29,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Set;
 
-import static com.webauthn4j.test.TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement;
-import static com.webauthn4j.test.TestUtil.createClientData;
+import static com.webauthn4j.test.TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement;
+import static com.webauthn4j.test.TestDataUtil.createClientData;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 

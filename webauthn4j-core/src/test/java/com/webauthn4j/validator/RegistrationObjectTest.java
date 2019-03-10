@@ -29,7 +29,7 @@ import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -47,15 +47,15 @@ class RegistrationObjectTest {
     @Test
     void test() {
 
-        CollectedClientData clientData = TestUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
-        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
-        ServerProperty serverProperty = TestUtil.createServerProperty();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         RegistrationObject registrationObject = new RegistrationObject(
                 clientData,

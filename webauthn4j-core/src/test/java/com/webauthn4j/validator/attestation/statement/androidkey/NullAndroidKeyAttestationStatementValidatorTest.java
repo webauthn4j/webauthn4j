@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +28,13 @@ class NullAndroidKeyAttestationStatementValidatorTest {
 
     @Test
     void validate_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);
     }
 
     @Test
     void validate_non_AndroidSafetyNetAttestation_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
         );

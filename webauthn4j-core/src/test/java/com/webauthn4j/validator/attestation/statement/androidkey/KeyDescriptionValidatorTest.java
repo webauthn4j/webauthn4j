@@ -1,6 +1,6 @@
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
@@ -19,14 +19,14 @@ class KeyDescriptionValidatorTest {
 
     @Test
     void validate_test() {
-        X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
+        X509Certificate certificate = TestAttestationUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, false);
     }
 
     @Test
     void validate_with_teeEnforcedOnly_true_test() {
-        X509Certificate certificate = TestUtil.loadAndroidKeyAttestationCertificate();
+        X509Certificate certificate = TestAttestationUtil.loadAndroidKeyAttestationCertificate();
         byte[] clientDataHash = Base64UrlUtil.decode("aGVsbG8");
         keyDescriptionValidator.validate(certificate, clientDataHash, true);
     }
@@ -36,7 +36,7 @@ class KeyDescriptionValidatorTest {
         KeyDescriptionValidator target = spy(KeyDescriptionValidator.class);
         doThrow(new IOException()).when(target).extractKeyDescription(any());
         assertThrows(UncheckedIOException.class,
-                () -> target.validate(TestUtil.loadAndroidKeyAttestationCertificate(), null, false)
+                () -> target.validate(TestAttestationUtil.loadAndroidKeyAttestationCertificate(), null, false)
         );
     }
 }

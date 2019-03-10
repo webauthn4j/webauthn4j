@@ -19,7 +19,7 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 import com.webauthn4j.response.attestation.statement.TPMEccCurve;
 import com.webauthn4j.response.attestation.statement.TPMIAlgHash;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
@@ -36,13 +36,13 @@ class TPMAttestationStatementValidatorTest {
 
     @Test
     void validate_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         target.validate(registrationObject);
     }
 
     @Test
     void validate_non_TPMAttestation_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidKeyAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
         );

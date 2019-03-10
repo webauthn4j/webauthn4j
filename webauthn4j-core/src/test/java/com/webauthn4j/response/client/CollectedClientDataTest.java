@@ -17,7 +17,7 @@
 package com.webauthn4j.response.client;
 
 import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,9 +27,9 @@ class CollectedClientDataTest {
 
     @Test
     void equals_hashCode_test() {
-        Challenge challenge = TestUtil.createChallenge();
-        CollectedClientData collectedClientDataA = TestUtil.createClientData(ClientDataType.GET, challenge);
-        CollectedClientData collectedClientDataB = TestUtil.createClientData(ClientDataType.GET, challenge);
+        Challenge challenge = TestDataUtil.createChallenge();
+        CollectedClientData collectedClientDataA = TestDataUtil.createClientData(ClientDataType.GET, challenge);
+        CollectedClientData collectedClientDataB = TestDataUtil.createClientData(ClientDataType.GET, challenge);
         assertAll(
                 () -> assertThat(collectedClientDataA).isEqualTo(collectedClientDataB),
                 () -> assertThat(collectedClientDataA).hasSameHashCodeAs(collectedClientDataB)

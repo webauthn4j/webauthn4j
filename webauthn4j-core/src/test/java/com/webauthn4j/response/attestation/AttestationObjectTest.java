@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +29,8 @@ class AttestationObjectTest {
 
     @Test
     void equals_hashCode_test() {
-        AttestationObject instanceA = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        AttestationObject instanceB = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject instanceA = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject instanceB = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)

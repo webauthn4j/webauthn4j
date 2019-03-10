@@ -27,15 +27,13 @@ import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.*;
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
-import com.webauthn4j.test.TestData;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -355,7 +353,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // The hash of the serialized client data (which potentially has a variable length) is always the last element.
         byte[] clientDataHash = getAssertionRequest.getHash();
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-        byte[] signature = TestUtil.calculateSignature(selectedCredential.getPrivateKey(), signedData);
+        byte[] signature = TestDataUtil.calculateSignature(selectedCredential.getPrivateKey(), signedData);
         // If any error occurred while generating the assertion signature,
         // return an error code equivalent to "UnknownError" and terminate the operation.
 

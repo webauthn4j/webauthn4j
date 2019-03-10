@@ -20,7 +20,7 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
@@ -96,7 +96,7 @@ class AttestationObjectConverterTest {
 
     @Test
     void convert_serialization_test() {
-        AttestationObject input = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        AttestationObject input = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         String result = target.convertToString(input);
         AttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);

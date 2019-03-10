@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +26,7 @@ class AttestationCertificatePathTest {
 
     @Test
     void getEndEntityCertificate_test() {
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestUtil.create2tierTestAuthenticatorCertPath());
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
         assertThat(attestationCertificatePath.getEndEntityAttestationCertificate()).isEqualTo(attestationCertificatePath.getEndEntityAttestationCertificate());
     }
 

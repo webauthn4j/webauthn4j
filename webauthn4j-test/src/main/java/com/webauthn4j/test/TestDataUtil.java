@@ -16,7 +16,6 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
@@ -27,7 +26,8 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.*;
-import com.webauthn4j.response.attestation.statement.*;
+import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
@@ -39,26 +39,20 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOu
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
-import com.webauthn4j.util.*;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.StreamUtils;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
-import java.security.cert.TrustAnchor;
-import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
@@ -67,7 +61,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 /**
  * A utility class for core module test
  */
-public class TestUtil {
+public class TestDataUtil {
 
     private static JsonConverter jsonConverter = new JsonConverter();
     private static CborConverter cborConverter = jsonConverter.getCborConverter();
@@ -75,7 +69,7 @@ public class TestUtil {
     private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
 
-    private TestUtil() {
+    private TestDataUtil() {
     }
 
     public static RegistrationObject createRegistrationObject(Function<byte[], AttestationObject> attestationObjectProvider) {
@@ -83,7 +77,7 @@ public class TestUtil {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         AttestationObject attestationObject = attestationObjectProvider.apply(collectedClientDataBytes);
         byte[] attestationObjectBytes =attestationObjectConverter.convertToBytes(attestationObject);
-        AuthenticatorData authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
@@ -95,12 +89,12 @@ public class TestUtil {
                 authenticatorDataBytes,
                 transports,
                 authenticationExtensionsClientOutputs,
-                TestUtil.createServerProperty()
+                TestDataUtil.createServerProperty()
         );
     }
 
     public static RegistrationObject createRegistrationObjectWithPackedAttestation() {
-        CollectedClientData collectedClientData = TestUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         AttestationObject attestationObject = createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
@@ -108,7 +102,7 @@ public class TestUtil {
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestUtil.createServerProperty());
+        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
     public static RegistrationObject createRegistrationObjectWithAndroidKeyAttestation(){
@@ -119,7 +113,7 @@ public class TestUtil {
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestUtil.createServerProperty());
+        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
     public static RegistrationObject createRegistrationObjectWithAndroidSafetyNetAttestation(){
@@ -131,7 +125,7 @@ public class TestUtil {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         LocalDateTime timestamp = LocalDateTime.parse("2019-02-02T07:01:00");
-        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestUtil.createServerProperty(), timestamp);
+        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty(), timestamp);
     }
 
     public static RegistrationObject createRegistrationObjectWithTPMAttestation(){
@@ -142,20 +136,20 @@ public class TestUtil {
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestUtil.createServerProperty());
+        return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
     public static AttestationObject createAttestationObjectWithFIDOU2FAttestationStatement() {
-        return new AttestationObject(createAuthenticatorData(), createFIDOU2FAttestationStatement());
+        return new AttestationObject(createAuthenticatorData(), TestAttestationUtil.createFIDOU2FAttestationStatement());
     }
 
     public static AttestationObject createAttestationObjectWithBasicPackedECAttestationStatement(byte[] clientDataHash) {
-        PrivateKey privateKey = TestUtil.load3tierTestAuthenticatorAttestationPrivateKey();
+        PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
-        return new AttestationObject(authenticatorData, createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
@@ -165,7 +159,7 @@ public class TestUtil {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
-        return new AttestationObject(authenticatorData, createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
@@ -175,35 +169,26 @@ public class TestUtil {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
-        return new AttestationObject(authenticatorData, createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
-        PrivateKey privateKey = TestUtil.loadAndroidKeyAttestationPrivateKey();
+        PrivateKey privateKey = TestAttestationUtil.loadAndroidKeyAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
-        return new AttestationObject(authenticatorData, createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
 
     public static AttestationObject createAttestationObjectWithTPMAttestationStatement(byte[] clientDataHash) {
-        PrivateKey privateKey = TestUtil.loadTPMAttestationPrivateKey();
+        PrivateKey privateKey = TestAttestationUtil.loadTPMAttestationPrivateKey();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
         byte[] signature = calculateSignature(privateKey, signedData);
-        return new AttestationObject(authenticatorData, createTPMAttestationStatement(COSEAlgorithmIdentifier.RS1, signature));
-    }
-
-    private static PrivateKey loadAndroidKeyAttestationPrivateKey() {
-        throw new NotImplementedException();
-    }
-
-
-    private static PrivateKey loadTPMAttestationPrivateKey() {
-        throw new NotImplementedException();
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createTPMAttestationStatement(COSEAlgorithmIdentifier.RS1, signature));
     }
 
 
@@ -254,150 +239,9 @@ public class TestUtil {
         return credentialPublicKey;
     }
 
-    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
-        return createFIDOU2FAttestationStatement(create2tierTestAuthenticatorCertPath());
-    }
-
-    public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(AttestationCertificatePath certPath) {
-
-        byte[] sig = new byte[32];
-
-        return new FIDOU2FAttestationStatement(certPath, sig);
-    }
-
-    public static PackedAttestationStatement createBasicPackedAttestationStatement() {
-        byte[] signature = new byte[32]; // dummy
-        return createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature);
-    }
-
-    public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = load3tierTestCertPath();
-        return new PackedAttestationStatement(algorithm, signature, certPath, null);
-    }
-
-    public static PackedAttestationStatement createSelfPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        return new PackedAttestationStatement(algorithm, signature, null, null);
-    }
-
-    public static AndroidKeyAttestationStatement createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = loadAndroidKeyCertPath();
-        return new AndroidKeyAttestationStatement(algorithm, signature, certPath);
-    }
-
-    public static AttestationStatement createTPMAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = loadAndroidKeyCertPath();
-        TPMSAttest certInfo = null; //TODO
-        TPMTPublic pubArea = null; //TODO
-        return new TPMAttestationStatement(algorithm, certPath, signature, certInfo, pubArea);
-    }
-
-    public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {
-        return new AttestationCertificatePath(Collections.singletonList(TestUtil.load2tierTestAuthenticatorAttestationCertificate()));
-    }
-
-    public static AttestationCertificatePath load3tierTestCertPath() {
-        return new AttestationCertificatePath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
-    }
-
-    public static X509Certificate load3tierTestRootCACertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-root-CA.crt");
-    }
-
-    public static X509Certificate load3tierTestIntermediateCACertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-intermediate-CA.crt");
-    }
-
-    public static X509Certificate load3tierTestAuthenticatorAttestationCertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-authenticator.crt");
-    }
-
-    public static X509Certificate load2tierTestRootCACertificate() {
-        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-root-CA.crt");
-    }
-
-    public static X509Certificate load2tierTestAuthenticatorAttestationCertificate() {
-        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-authenticator.crt");
-    }
-
-    private static AttestationCertificatePath loadAndroidKeyCertPath() {
-        throw new NotImplementedException();
-    }
-
-    public static X509Certificate loadCertificateFromClassPath(String classPath) {
-        ClassPathResource resource = new ClassPathResource(classPath);
-        try {
-            return CertificateUtil.generateX509Certificate(resource.getInputStream());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static X509Certificate loadFirefoxSWTokenAttestationCertificate() {
-        String base64UrlCertificate = "MIIBMTCB2KADAgECAgRdWm5nMAoGCCqGSM49BAMCMCExHzAdBgNVBAMTFkZpcmVmb3ggVTJGIFNvZnQgVG9rZW4wHhcNMTcwODE5MTExMDI3WhcNMTcwODIxMTExMDI3WjAhMR8wHQYDVQQDExZGaXJlZm94IFUyRiBTb2Z0IFRva2VuMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEmNdtc7TW47xJcunwo_5ZuqSeHKJDZixC3AhTy2OEnYZfLmLZn9ssfWqLmPY4E642bKRDsm6qLNfjj_z9ufejNTAKBggqhkjOPQQDAgNIADBFAiEA6SdHwFyOq1trbQA6TLxLHS11EYUYDWyA24BnsJD8TrACIEw7k4aGBMOYlT5uMXLlj4bV5jo1Svi83VOpBo5ykMvd";
-        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
-    }
-
-    public static X509Certificate loadFeitianU2FTokenAttestationCertificate() {
-        String base64UrlCertificate = "MIIBTDCB86ADAgECAgrMFgqn4TlPa3dQMAoGCCqGSM49BAMCMBcxFTATBgNVBAMTDEZUIEZJRE8gMDEwMDAeFw0xNjA0MTUxNDUwMzJaFw0yNjA0MTUxNDUwMzJaMCcxJTAjBgNVBAMTHEZUIEZJRE8gVTJGIDExNjE2MTczMDMwNTAyMTAwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATG1tXh9HyGi4UJapsP3Fw8NEwRr5WEYfV5xOvP2XU4jpnJ17SEbyZTCn7rX38Ept32BPr6IaOmamqAdQvsDpNgoxcwFTATBgsrBgEEAYLlHAIBAQQEAwIEMDAKBggqhkjOPQQDAgNIADBFAiEA3wPvLOvjpbU3VCsKBjWtb5MzcX_I2p7NN_X03kyyFoUCIAxoJPinKGUxoNR_bhx3uZHtQQpwLWuaBND9y2Omhf47";
-        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
-    }
-
-    public static X509Certificate loadYubikeyAttestationCertificate() {
-        String base64UrlCertificate = "MIICRDCCAS6gAwIBAgIEeMDfDjALBgkqhkiG9w0BAQswLjEsMCoGA1UEAxMjWXViaWNvIFUyRiBSb290IENBIFNlcmlhbCA0NTcyMDA2MzEwIBcNMTQwODAxMDAwMDAwWhgPMjA1MDA5MDQwMDAwMDBaMCoxKDAmBgNVBAMMH1l1YmljbyBVMkYgRUUgU2VyaWFsIDIwMjU5MDU5MzQwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAS1uHFcg_3-DqFcRXeshY30jBdv3oedyvS4PUDTIPJvreYl_Pf1yK_YNRj4254h7Ag7GEWAxxfsSkcLlopvuj9vozswOTAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIFIDALBgkqhkiG9w0BAQsDggEBAD72q_ZKkWsL-ZSTjdyVNOBUQAJoVninLEOnq-ZdkGX_YfRRzoo67thmidGQuVCvAHpU0THu8G_ia06nuz4yt5IFpd-nYAQ0U-NK-ETDfNSoX4xcLYcOCiiyt-1EAkH9s3krIHaw4Yr6m0Mu7vwmWLoJBcQbJKk8bsi7ptVvM-jWU9fPa9UBVFWiZZdA99zFHMAxYJzQPqbN6Tmeygh2MpB2P7TI0A9WkGmhJUkAauuwaiGiFOSZmDe0KegdflbTOlSS3ToWHIKTlUCBqn7vdJw6Vj2919ujlcxHPkRpbUGRhcJDesg6wGTBy-RyJ_96G3fH1eoMNn1F9jC9mY1Zsm4=";
-        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
-    }
-
-    public static X509Certificate loadAndroidKeyAttestationCertificate() {
-        String certificate =
-                "-----BEGIN CERTIFICATE-----\n"
-                        + "MIIByTCCAXCgAwIBAgIBATAKBggqhkjOPQQDAjAcMRowGAYDVQQDDBFBbmRyb2lkIE"
-                        + "tleW1hc3Rl cjAgFw03MDAxMDEwMDAwMDBaGA8yMTA2MDIwNzA2MjgxNVowGjEYMBY"
-                        + "GA1UEAwwPQSBLZXltYXN0 ZXIgS2V5MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE"
-                        + "FpsFUWID9p2QPAvtfal4MRf9vJg0tNc3 vKJwoDhhSCMm7If0FljgvmroBYQyCIbnn"
-                        + "Bxh2OU9SKxI/manPwIIUqOBojCBnzALBgNVHQ8EBAMC B4AwbwYKKwYBBAHWeQIBEQ"
-                        + "RhMF8CAQEKAQACAQEKAQEEBWhlbGxvBAAwDL+FPQgCBgFWDy29GDA6 oQUxAwIBAqI"
-                        + "DAgEDowQCAgEApQUxAwIBBKoDAgEBv4N4AwIBA7+DeQQCAgEsv4U+AwIBAL+FPwIF "
-                        + "ADAfBgNVHSMEGDAWgBQ//KzWGrE6noEguNUlHMVlux6RqTAKBggqhkjOPQQDAgNHAD"
-                        + "BEAiBKzJSk 9VNauKu4dr+ZJ5jMTNlAxSI99XkKEkXSolsGSAIgCnd5T99gv3B/IqM"
-                        + "CHn0yZ7Wuu/jisU0epRRo xh8otA8=\n"
-                        + "-----END CERTIFICATE-----";
-        return createCertificate(certificate);
-    }
-
-    public static X509Certificate loadAndroidKeyIntermidiateCertificate() {
-        String certificate =
-                "-----BEGIN CERTIFICATE-----\n" +
-                        "MIICeDCCAh6gAwIBAgICEAEwCgYIKoZIzj0EAwIwgZgxCzAJBgNVBAYTAlVTMRMwEQ"
-                        + "YDVQQIDApD YWxpZm9ybmlhMRYwFAYDVQQHDA1Nb3VudGFpbiBWaWV3MRUwEwYDVQQ"
-                        + "KDAxHb29nbGUsIEluYy4x EDAOBgNVBAsMB0FuZHJvaWQxMzAxBgNVBAMMKkFuZHJv"
-                        + "aWQgS2V5c3RvcmUgU29mdHdhcmUgQXR0 ZXN0YXRpb24gUm9vdDAeFw0xNjAxMTEwM"
-                        + "DQ2MDlaFw0yNjAxMDgwMDQ2MDlaMIGIMQswCQYDVQQG EwJVUzETMBEGA1UECAwKQ2"
-                        + "FsaWZvcm5pYTEVMBMGA1UECgwMR29vZ2xlLCBJbmMuMRAwDgYDVQQL DAdBbmRyb2l"
-                        + "kMTswOQYDVQQDDDJBbmRyb2lkIEtleXN0b3JlIFNvZnR3YXJlIEF0dGVzdGF0aW9u "
-                        + "IEludGVybWVkaWF0ZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABOueefhCY1msyy"
-                        + "qRTImGzHCt kGaTgqlzJhP+rMv4ISdMIXSXSir+pblNf2bU4GUQZjW8U7ego6ZxWD7"
-                        + "bPhGuEBSjZjBkMB0GA1Ud DgQWBBQ//KzWGrE6noEguNUlHMVlux6RqTAfBgNVHSME"
-                        + "GDAWgBTIrel3TEXDo88NFhDkeUM6IVow zzASBgNVHRMBAf8ECDAGAQH/AgEAMA4GA"
-                        + "1UdDwEB/wQEAwIChDAKBggqhkjOPQQDAgNIADBFAiBL ipt77oK8wDOHri/AiZi03c"
-                        + "ONqycqRZ9pDMfDktQPjgIhAO7aAV229DLp1IQ7YkyUBO86fMy9Xvsi u+f+uXc/WT/"
-                        + "7\n" +
-                        "-----END CERTIFICATE-----";
-        return createCertificate(certificate);
-    }
-
-
-    /**
-     * Creates {@link X509Certificate} from PEM style certificate string.
-     *
-     * @param derEncodedCertificate DER-encoded certificate. Please note it is encoded in base64 string, not base64url.
-     * @return created X509Certificate
-     */
-    public static X509Certificate createCertificate(String derEncodedCertificate) {
-        return CertificateUtil.generateX509Certificate(derEncodedCertificate.getBytes());
-    }
 
     public static CollectedClientData createClientData(ClientDataType type) {
-        return createClientData(type, TestUtil.createChallenge());
+        return createClientData(type, TestDataUtil.createChallenge());
     }
 
     public static CollectedClientData createClientData(ClientDataType type, Challenge challenge) {
@@ -428,57 +272,17 @@ public class TestUtil {
         return new ServerProperty(createOrigin(), "localhost", createChallenge(), null);
     }
 
-    public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey() {
-        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-authenticator.der");
-    }
-
-    public static PrivateKey load2tierTestAuthenticatorAttestationPrivateKey() {
-        return loadPrivateKey("classpath:attestation/2tier/private/2tier-test-authenticator.der");
-    }
-
-    public static PrivateKey loadPrivateKeyFromResource(Resource resource) {
-        try {
-            InputStream inputStream = resource.getInputStream();
-            byte[] data = StreamUtils.copyToByteArray(inputStream);
-            return KeyUtil.loadECPrivateKey(data);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static PrivateKey loadPrivateKey(String resourcePath) {
-        ResourceLoader resourceLoader = new DefaultResourceLoader();
-        Resource resource = resourceLoader.getResource(resourcePath);
-        return loadPrivateKeyFromResource(resource);
-    }
-
     public static Authenticator createAuthenticator(AttestationObject attestationObject) {
         AttestedCredentialData attestedCredentialData = attestationObject.getAuthenticatorData().getAttestedCredentialData();
         return new AuthenticatorImpl(attestedCredentialData, attestationObject.getAttestationStatement(), attestationObject.getAuthenticatorData().getSignCount());
     }
 
-    public static TrustAnchorsResolver createTrustAnchorProviderWith2tierTestRootCACertificate() {
-        return (aaguid) -> {
-            Set<TrustAnchor> set = new HashSet<>();
-            set.add(new TrustAnchor(load2tierTestRootCACertificate(), null));
-            return set;
-        };
-    }
-
-    public static TrustAnchorsResolver createTrustAnchorProviderWith3tierTestRootCACertificate() {
-        return (aaguid) -> {
-            Set<TrustAnchor> set = new HashSet<>();
-            set.add(new TrustAnchor(load3tierTestRootCACertificate(), null));
-            return set;
-        };
-    }
-
     public static ServerProperty createServerProperty() {
-        return createServerProperty(TestUtil.createChallenge());
+        return createServerProperty(TestDataUtil.createChallenge());
     }
 
     public static ServerProperty createServerProperty(Challenge challenge) {
-        return new ServerProperty(TestUtil.createOrigin(), "example.com", challenge, new byte[32]);
+        return new ServerProperty(TestDataUtil.createOrigin(), "example.com", challenge, new byte[32]);
     }
 
     public static Authenticator createAuthenticator(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement) {
@@ -486,7 +290,7 @@ public class TestUtil {
     }
 
     public static Authenticator createAuthenticator() {
-        return createAuthenticator(TestUtil.createAttestedCredentialData(), TestUtil.createFIDOU2FAttestationStatement());
+        return createAuthenticator(TestDataUtil.createAttestedCredentialData(), TestAttestationUtil.createFIDOU2FAttestationStatement());
     }
 
 

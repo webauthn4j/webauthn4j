@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
 import java.security.cert.CertificateEncodingException;
@@ -34,7 +34,7 @@ class X509CertificateDeserializerTest {
         CborConverter cborConverter = new CborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
-        source.put("certificate", TestUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
+        source.put("certificate", TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
         byte[] input = cborConverter.writeValueAsBytes(source);
 
         X509CertificateDeserializerTestData result = cborConverter.readValue(input, X509CertificateDeserializerTestData.class);

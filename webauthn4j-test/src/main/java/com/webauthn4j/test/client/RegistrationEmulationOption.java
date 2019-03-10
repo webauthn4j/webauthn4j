@@ -18,14 +18,14 @@ package com.webauthn4j.test.client;
 
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 
 public class RegistrationEmulationOption {
 
     private boolean signatureOverrideEnabled = false;
     private byte[] signature = new byte[]{0x01, 0x23, 0x45, 0x67};
     private boolean collectedClientDataOverrideEnabled = false;
-    private CollectedClientData collectedClientData = TestUtil.createClientData(ClientDataType.CREATE);
+    private CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.CREATE);
 
     public boolean isSignatureOverrideEnabled() {
         return signatureOverrideEnabled;

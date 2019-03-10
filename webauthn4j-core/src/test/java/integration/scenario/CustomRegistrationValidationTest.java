@@ -30,7 +30,7 @@ import com.webauthn4j.response.client.challenge.DefaultChallenge;
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
@@ -55,7 +55,7 @@ public class CustomRegistrationValidationTest {
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
+    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
     private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),

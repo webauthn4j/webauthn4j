@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class DefaultSelfAttestationTrustworthinessValidatorTest {
     @Test
     void validate_test() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
-        PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
+        PackedAttestationStatement attestationStatement = TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         validator.validate(attestationStatement);
     }
@@ -38,7 +38,7 @@ class DefaultSelfAttestationTrustworthinessValidatorTest {
     @Test
     void validate_basic_type_attestation_statement_test() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
-        PackedAttestationStatement attestationStatement = TestUtil.createBasicPackedAttestationStatement();
+        PackedAttestationStatement attestationStatement = TestAttestationUtil.createBasicPackedAttestationStatement();
 
         assertThrows(BadAttestationStatementException.class,
                 () -> validator.validate(attestationStatement)
@@ -49,7 +49,7 @@ class DefaultSelfAttestationTrustworthinessValidatorTest {
     void validate_test_with_self_attestation_allowed_false() {
         DefaultSelfAttestationTrustworthinessValidator validator = new DefaultSelfAttestationTrustworthinessValidator();
         validator.setSelfAttestationAllowed(false);
-        PackedAttestationStatement attestationStatement = TestUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
+        PackedAttestationStatement attestationStatement = TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         assertThrows(SelfAttestationProhibitedException.class,
                 () -> validator.validate(attestationStatement)

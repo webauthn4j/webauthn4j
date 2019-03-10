@@ -25,8 +25,8 @@ import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
-import static com.webauthn4j.test.TestUtil.createAuthenticatorData;
-import static com.webauthn4j.test.TestUtil.createClientData;
+import static com.webauthn4j.test.TestDataUtil.createAuthenticatorData;
+import static com.webauthn4j.test.TestDataUtil.createClientData;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.mock;

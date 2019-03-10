@@ -20,8 +20,8 @@ import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestData;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataConstants;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 import java.security.PrivateKey;
@@ -33,8 +33,8 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     public PackedAuthenticator(){
         super();
-        this.attestationPrivateKey = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestData.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH;
+        this.attestationPrivateKey = TestDataConstants.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_PRIVATE_KEY;
+        this.attestationCertificatePath = TestDataConstants.USER_VERIFYING_AUTHENTICATOR_ATTESTATION_CERTIFICATE_PATH;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
         }
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
     }

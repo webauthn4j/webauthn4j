@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +28,13 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
 
     @Test
     void validate_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidSafetyNetAttestation();
         target.validate(registrationObject);
     }
 
     @Test
     void validate_non_AndroidSafetyNetAttestation_test() {
-        RegistrationObject registrationObject = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
         );

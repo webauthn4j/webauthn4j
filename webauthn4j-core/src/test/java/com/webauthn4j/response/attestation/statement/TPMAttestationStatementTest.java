@@ -16,7 +16,7 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class TPMAttestationStatementTest {
     @Test
     void constructor_test() {
 
-        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
 
         TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
@@ -47,7 +47,7 @@ class TPMAttestationStatementTest {
     @Test
     void validate_test() {
 
-        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         assertThrows(ConstraintViolationException.class,
                 () -> new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea()).validate()
@@ -57,9 +57,9 @@ class TPMAttestationStatementTest {
     @Test
     void equals_hashCode_test() {
 
-        RegistrationObject registrationObjectA = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement instanceA = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
-        RegistrationObject registrationObjectB = TestUtil.createRegistrationObjectWithTPMAttestation();
+        RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement instanceB = (TPMAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
         assertAll(

@@ -20,7 +20,7 @@ import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestation
 import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.Response;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.jws.JWAIdentifier;
@@ -42,7 +42,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
         }
         JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, attestationCertificatePath);
         String nonce = null; //TODO
@@ -56,7 +56,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256,apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
 
         String ver = ""; //TODO
-        JWS<Response> responseJWS = new JWS<>(jwsHeader, null, response, null, signature);
+        JWS<Response> responseJWS = null; //TODO new JWS<>(jwsHeader, null, response, null, signature);
         return new AndroidSafetyNetAttestationStatement(ver, responseJWS);
     }
 }

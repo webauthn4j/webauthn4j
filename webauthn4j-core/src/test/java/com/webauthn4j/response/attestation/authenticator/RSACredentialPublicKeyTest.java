@@ -18,7 +18,7 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +36,8 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void equals_hashCode_test() {
-        RSACredentialPublicKey instanceA = TestUtil.createRSCredentialPublicKey();
-        RSACredentialPublicKey instanceB = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey instanceA = TestDataUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey instanceB = TestDataUtil.createRSCredentialPublicKey();
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
@@ -46,7 +46,7 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void cbor_serialize_deserialize_test() {
-        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         RSACredentialPublicKey result = cborConverter.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -54,7 +54,7 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void json_serialize_deserialize_test() {
-        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         RSACredentialPublicKey result = jsonConverter.readValue(serialized, RSACredentialPublicKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -62,13 +62,13 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void validate_test() {
-        RSACredentialPublicKey target = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey target = TestDataUtil.createRSCredentialPublicKey();
         target.validate();
     }
 
     @Test
     void validate_with_null_algorithm_test() {
-        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
                 null,
@@ -84,7 +84,7 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void validate_with_null_n_test() {
-        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
                 original.getAlgorithm(),
@@ -100,7 +100,7 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void validate_with_null_e_test() {
-        RSACredentialPublicKey original = TestUtil.createRSCredentialPublicKey();
+        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
         RSACredentialPublicKey target = new RSACredentialPublicKey(
                 null,
                 original.getAlgorithm(),

@@ -20,7 +20,7 @@ import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuth
 import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -66,9 +66,9 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_ECx5c_test() {
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
 
         validate(clientData, attestationObject);
     }
@@ -76,9 +76,9 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
 
         AttestationCertificatePath x5c = generateCertPath(keyPair, "SHA256withRSA");
@@ -90,18 +90,18 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_ECSelfAttestation_test() {
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedECAttestationStatement(clientDataHash);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedECAttestationStatement(clientDataHash);
 
         validate(clientData, attestationObject);
     }
 
     @Test
     void validate_with_RSASelfAttestation_test() {
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithSelfPackedRSAAttestationStatement(clientDataHash);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedRSAAttestationStatement(clientDataHash);
 
         validate(clientData, attestationObject);
 
@@ -110,9 +110,9 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_ecdaaKeyId_test() throws Exception {
         KeyPair keyPair = KeyUtil.createECKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
         byte[] signature = generateSignature("SHA256withECDSA", keyPair, authenticatorData, clientData);
 
         byte[] ecdaaKeyId = new byte[16];
@@ -125,8 +125,8 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_invalid_AttestationStatement_test() {
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertThrows(IllegalArgumentException.class,
                 () -> validate(clientData, attestationObject)
         );
@@ -134,9 +134,9 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_bad_signature_test() {
-        byte[] clientData = TestUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] clientDataHash = new byte[32];
-        AttestationObject attestationObject = TestUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
 
         assertThrows(BadSignatureException.class,
                 () -> validate(clientData, attestationObject)
