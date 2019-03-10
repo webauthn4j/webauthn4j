@@ -47,6 +47,8 @@ import com.webauthn4j.validator.RegistrationObject;
 
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -154,14 +156,22 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = KeyUtil.createECKeyPair();
-        PrivateKey privateKey = keyPair.getPrivate();
-        return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
+        EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = KeyUtil.createRSAKeyPair();
-        PrivateKey privateKey = keyPair.getPrivate();
-        return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
+        RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] signedData = getSignedData(authenticatorDataBytes, clientDataHash);
+        byte[] signature = calculateSignature(keyPair.getPrivate(), signedData);
+        return new AttestationObject(authenticatorData, TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature));
     }
 
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
