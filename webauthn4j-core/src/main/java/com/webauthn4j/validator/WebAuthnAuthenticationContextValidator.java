@@ -20,6 +20,7 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
@@ -32,9 +33,11 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOu
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.exception.WebAuthnException;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,8 +83,17 @@ public class WebAuthnAuthenticationContextValidator {
 
     // ~ Methods
     // ========================================================================================================
-
-    public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) {
+    /**
+     * validates WebAuthn authentication request
+     * @param authenticationContext authentication context
+     * @param authenticator authenticator to be checked against
+     * @return validation result
+     * @throws DataConversionException if the input cannot be parsed
+     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException if WebAuthn error occurred
+     */
+    @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
+    public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) throws WebAuthnException {
 
         BeanAssertUtil.validate(authenticationContext);
 

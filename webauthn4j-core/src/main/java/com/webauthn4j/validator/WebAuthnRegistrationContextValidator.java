@@ -20,6 +20,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.request.AuthenticatorTransport;
@@ -34,6 +35,7 @@ import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOu
 import com.webauthn4j.response.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.exception.WebAuthnException;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
@@ -50,6 +52,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.*;
 
@@ -174,7 +177,16 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) {
+    /**
+     * validates WebAuthn registration request
+     * @param registrationContext registration context
+     * @return validation result
+     * @throws DataConversionException if the input cannot be parsed
+     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException if WebAuthn error occurred
+     */
+    @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
+    public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) throws WebAuthnException {
 
         BeanAssertUtil.validate(registrationContext);
 
