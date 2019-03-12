@@ -38,14 +38,14 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     // ================================================================================================
 
     private Challenge challenge;
-    private long timeout;
+    private Long timeout;
     private String rpId;
     private List<PublicKeyCredentialDescriptor> allowCredentials;
     private UserVerificationRequirement userVerification;
     private AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
-                                             long timeout,
+                                             Long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
@@ -62,7 +62,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         return challenge;
     }
 
-    public long getTimeout() {
+    public Long getTimeout() {
         return timeout;
     }
 
@@ -87,7 +87,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialRequestOptions that = (PublicKeyCredentialRequestOptions) o;
-        return timeout == that.timeout &&
+        return Objects.equals(timeout, that.timeout) &&
                 Objects.equals(challenge, that.challenge) &&
                 Objects.equals(rpId, that.rpId) &&
                 Objects.equals(allowCredentials, that.allowCredentials) &&
@@ -97,7 +97,6 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(challenge, timeout, rpId, allowCredentials, userVerification, extensions);
     }
 }
