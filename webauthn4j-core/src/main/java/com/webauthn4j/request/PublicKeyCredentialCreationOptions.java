@@ -24,7 +24,6 @@ import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +44,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
 
     private Challenge challenge;
     private List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.emptyList();
-    private BigInteger timeout;
+    private Long timeout;
     private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
@@ -58,7 +57,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
             @JsonProperty("user") PublicKeyCredentialUserEntity user,
             @JsonProperty("challenge") Challenge challenge,
             @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
-            @JsonProperty("timeout") BigInteger timeout,
+            @JsonProperty("timeout") Long timeout,
             @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
             @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
             @JsonProperty("attestation") AttestationConveyancePreference attestation,
@@ -98,7 +97,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         return pubKeyCredParams;
     }
 
-    public BigInteger getTimeout() {
+    public Long getTimeout() {
         return timeout;
     }
 
