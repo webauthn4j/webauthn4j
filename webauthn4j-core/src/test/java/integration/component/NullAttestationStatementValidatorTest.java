@@ -29,6 +29,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
+import com.webauthn4j.validator.WebAuthnContextValidatorFactory;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +38,7 @@ import java.util.Collections;
 class NullAttestationStatementValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
-    private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
+    private WebAuthnRegistrationContextValidator target = WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator();
 
     @Test
     void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {

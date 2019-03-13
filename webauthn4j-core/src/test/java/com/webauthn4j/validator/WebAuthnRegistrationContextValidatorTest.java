@@ -70,27 +70,27 @@ class WebAuthnRegistrationContextValidatorTest {
     void validateAuthenticatorDataField_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
         assertThrows(MaliciousDataException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData)
+                () -> WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData)
         );
     }
 
     @Test
     void validateUVUPFlags_not_required_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, false);
+        WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, false);
     }
 
     @Test
     void validateUVUPFlags_required_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, true);
+        WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, true);
     }
 
     @Test
     void validateUVUPFlags_UserNotVerifiedException_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
         assertThrows(UserNotVerifiedException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false)
+                () -> WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false)
         );
     }
 
@@ -98,7 +98,7 @@ class WebAuthnRegistrationContextValidatorTest {
     void validateUVUPFlags_UserNotPresentException_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
         assertThrows(UserNotPresentException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true)
+                () -> WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true)
         );
     }
 }

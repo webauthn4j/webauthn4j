@@ -149,41 +149,17 @@ public class WebAuthnRegistrationContextValidator {
                 selfAttestationTrustworthinessValidator);
     }
 
-
-    // ~ Factory methods
-    // ========================================================================================================
-
-    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new JsonConverter(), new CborConverter());
-    }
-
-    public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {
-        return new WebAuthnRegistrationContextValidator(
-                Arrays.asList(
-                        new NoneAttestationStatementValidator(),
-                        new NullFIDOU2FAttestationStatementValidator(),
-                        new NullPackedAttestationStatementValidator(),
-                        new NullAndroidKeyAttestationStatementValidator(),
-                        new NullAndroidSafetyNetAttestationStatementValidator()
-                ),
-                new NullCertPathTrustworthinessValidator(),
-                new NullECDAATrustworthinessValidator(),
-                new NullSelfAttestationTrustworthinessValidator(),
-                jsonConverter,
-                cborConverter
-        );
-    }
-
     // ~ Methods
     // ========================================================================================================
 
     /**
      * validates WebAuthn registration request
+     *
      * @param registrationContext registration context
      * @return validation result
      * @throws DataConversionException if the input cannot be parsed
-     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
-     * @throws WebAuthnException if WebAuthn error occurred
+     * @throws ValidationException     if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException       if WebAuthn error occurred
      */
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) throws WebAuthnException {
@@ -274,14 +250,14 @@ public class WebAuthnRegistrationContextValidator {
         // ******* This step is up to library user *******
 
         // validate with custom logic
-        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators){
+        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
         }
 
         return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensions);
     }
 
-    void validateAuthenticatorDataField(AuthenticatorData authenticatorData){
+    void validateAuthenticatorDataField(AuthenticatorData authenticatorData) {
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
             throw new MaliciousDataException("attestedCredentialData must not be null on registration");

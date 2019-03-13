@@ -24,10 +24,7 @@ import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.Origin;
 import com.webauthn4j.response.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
+import com.webauthn4j.validator.*;
 
 import java.util.Set;
 
@@ -54,7 +51,7 @@ class Sample {
         // If you are building enterprise web application and need to validate the attestation statement, use the constructor of
         // WebAuthnRegistrationContextValidator and provide validators you like
         WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-                WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
+                WebAuthnContextValidatorFactory.createNonStrictRegistrationContextValidator();
 
 
         WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
@@ -97,7 +94,7 @@ class Sample {
         Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
         WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
-                new WebAuthnAuthenticationContextValidator();
+                WebAuthnContextValidatorFactory.createDefaultAuthenticationContextValidator();
 
         WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
 
