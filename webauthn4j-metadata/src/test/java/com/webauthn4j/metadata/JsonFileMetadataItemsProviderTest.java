@@ -50,7 +50,7 @@ class JsonFileMetadataItemsProviderTest {
        // read again to run through all branches of JsonFileMetadataItemsProvider.provider(), and confirm it
        Map<AAGUID, Set<MetadataItem>> itemMap = provider.provide();
        readMetadataItem(itemMap);
-       assertThat(itemMap).isEqualTo(itemMapInFirstCall);
+       assertThat(itemMap).isSameAs(itemMapInFirstCall);
     }
 
     @Test
