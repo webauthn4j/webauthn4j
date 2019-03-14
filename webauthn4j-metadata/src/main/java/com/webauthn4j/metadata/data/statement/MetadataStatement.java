@@ -99,6 +99,7 @@ public class MetadataStatement implements Serializable {
         this.aaguid = aaguid;
         this.attestationCertificateKeyIdentifiers = CollectionUtil.unmodifiableList(attestationCertificateKeyIdentifiers);
         this.alternativeDescriptions = alternativeDescriptions;
+        this.description = description;
         this.authenticatorVersion = authenticatorVersion;
         this.protocolFamily = protocolFamily;
         this.upv = CollectionUtil.unmodifiableList(upv);
