@@ -45,9 +45,12 @@ class JsonFileMetadataItemsProviderTest {
        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_uaf.json").toURI()));
        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
        JsonFileMetadataItemsProvider provider = new JsonFileMetadataItemsProvider(jsonConverter, paths);
-       readMetadataItem(provider.provide());
-       // read again
-       readMetadataItem(provider.provide());
+       Map<AAGUID, Set<MetadataItem>> itemMapInFirstCall = provider.provide();
+       readMetadataItem(itemMapInFirstCall);
+       // read again to run through all branches of JsonFileMetadataItemsProvider.provider(), and confirm it
+       Map<AAGUID, Set<MetadataItem>> itemMap = provider.provide();
+       readMetadataItem(itemMap);
+       assertThat(itemMap).isEqualTo(itemMapInFirstCall);
     }
 
     @Test
