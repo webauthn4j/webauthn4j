@@ -18,6 +18,7 @@ package com.webauthn4j.response.attestation.authenticator;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -32,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class EC2CredentialPublicKeyTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void createFromUncompressedECCKey_test() {

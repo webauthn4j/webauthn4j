@@ -23,11 +23,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
 import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
-import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,23 +39,14 @@ public class JsonConverter implements Serializable {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
     private ObjectMapper jsonMapper;
-    private ObjectMapper cborMapper;
 
-    private boolean jsonMapperInitialized = false;
-    private boolean cborMapperInitialized = false;
-
-    private CborConverter cborConverter;
-
-    public JsonConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
-
-        this.jsonMapper = jsonMapper;
-        this.cborMapper = cborMapper;
-    }
 
     public JsonConverter() {
-        this(new ObjectMapper(new JsonFactory()), new ObjectMapper(new CBORFactory()));
+        this.jsonMapper = new ObjectMapper(new JsonFactory());
+
+        jsonMapper.registerModule(new WebAuthnJSONModule(this, ObjectConverterFactory.getCborConverter()));
+        jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     @SuppressWarnings("unchecked")
@@ -119,30 +107,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public ObjectMapper getJsonMapper() {
-        if(!jsonMapperInitialized){
-            jsonMapper.registerModule(new WebAuthnJSONModule(this, getCborConverter()));
-            jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            jsonMapperInitialized = true;
-        }
+    private ObjectMapper getJsonMapper() {
         return jsonMapper;
-    }
-
-    public ObjectMapper getCborMapper() {
-        if(!cborMapperInitialized){
-            cborMapper.registerModule(new WebAuthnCBORModule(this, getCborConverter()));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapperInitialized = true;
-        }
-        return cborMapper;
-    }
-
-    public CborConverter getCborConverter() {
-        if (cborConverter == null) {
-            cborConverter = new CborConverter(jsonMapper, cborMapper);
-        }
-        return cborConverter;
     }
 }

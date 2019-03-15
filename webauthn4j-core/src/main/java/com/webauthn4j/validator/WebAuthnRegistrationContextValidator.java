@@ -23,6 +23,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.attestation.AttestationObject;
@@ -37,24 +38,19 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.packed.NullPackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Validates the specified {@link WebAuthnRegistrationContext} instance
@@ -90,8 +86,8 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                new JsonConverter(),
-                new CborConverter());
+                ObjectConverterFactory.getJsonConverter(),
+                ObjectConverterFactory.getCborConverter());
     }
 
     public WebAuthnRegistrationContextValidator(
@@ -104,8 +100,8 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
-                new JsonConverter(),
-                new CborConverter());
+                ObjectConverterFactory.getJsonConverter(),
+                ObjectConverterFactory.getCborConverter());
     }
 
     public WebAuthnRegistrationContextValidator(

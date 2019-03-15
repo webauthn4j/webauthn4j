@@ -2,6 +2,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.AndroidSafetyNetAttestationStatementValidator;
@@ -24,7 +25,7 @@ public final class WebAuthnContextValidatorFactory {
     }
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new JsonConverter(), new CborConverter());
+        return createNonStrictRegistrationContextValidator(ObjectConverterFactory.getJsonConverter(), ObjectConverterFactory.getCborConverter());
     }
 
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {
@@ -63,7 +64,7 @@ public final class WebAuthnContextValidatorFactory {
     }
 
     public static WebAuthnAuthenticationContextValidator createDefaultAuthenticationContextValidator() {
-        return new WebAuthnAuthenticationContextValidator(new JsonConverter(), new CborConverter());
+        return new WebAuthnAuthenticationContextValidator(ObjectConverterFactory.getJsonConverter(), ObjectConverterFactory.getCborConverter());
     }
 
 }

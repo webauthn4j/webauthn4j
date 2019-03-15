@@ -18,6 +18,7 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
@@ -37,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void convert_test() {

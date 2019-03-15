@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.client.ClientDataType;
 import com.webauthn4j.response.client.CollectedClientData;
 import com.webauthn4j.response.client.Origin;
@@ -31,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CollectedClientDataConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
     private CollectedClientDataConverter target = new CollectedClientDataConverter(jsonConverter);
 

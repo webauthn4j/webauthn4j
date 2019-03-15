@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.attestation.authenticator.*;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
  */
 class AuthenticatorDataSerializerTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void test() {

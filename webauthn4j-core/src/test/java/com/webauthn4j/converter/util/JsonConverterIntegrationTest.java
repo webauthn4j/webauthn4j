@@ -38,7 +38,7 @@ class JsonConverterIntegrationTest {
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
         jsonMapper.registerModule(module);
-        JsonConverter jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter();
         assertThat(jsonConverter.writeValueAsString(new TestData())).isEqualTo("\"serialized by TestDataSerializer\"");
     }
 

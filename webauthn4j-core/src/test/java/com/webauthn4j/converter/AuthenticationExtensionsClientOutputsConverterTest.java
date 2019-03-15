@@ -18,13 +18,14 @@ package com.webauthn4j.converter;
 
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsClientOutputsConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
     private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 

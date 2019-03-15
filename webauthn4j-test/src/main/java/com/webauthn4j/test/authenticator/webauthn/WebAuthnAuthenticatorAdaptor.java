@@ -18,6 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.request.UserVerificationRequirement;
@@ -32,7 +33,7 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
     private WebAuthnAuthenticator webAuthnAuthenticator;
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);

@@ -20,6 +20,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.WebAuthnRegistrationContext;
 import com.webauthn4j.response.client.ClientDataType;
@@ -36,8 +37,8 @@ import static org.mockito.Mockito.mock;
 
 class WebAuthnRegistrationContextTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
 
     @Test

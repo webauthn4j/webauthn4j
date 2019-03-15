@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.test.TestAttestationUtil;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AttestationStatementDeserializerTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void test() {

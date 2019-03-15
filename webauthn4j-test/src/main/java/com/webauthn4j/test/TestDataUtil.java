@@ -23,6 +23,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.*;
@@ -63,8 +64,8 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
  */
 public class TestDataUtil {
 
-    private static JsonConverter jsonConverter = new JsonConverter();
-    private static CborConverter cborConverter = jsonConverter.getCborConverter();
+    private static JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter();
+    private static CborConverter cborConverter = ObjectConverterFactory.getCborConverter();
     private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);

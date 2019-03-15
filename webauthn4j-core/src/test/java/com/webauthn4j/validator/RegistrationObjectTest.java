@@ -21,6 +21,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -41,8 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class RegistrationObjectTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void test() {

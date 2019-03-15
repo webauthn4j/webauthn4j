@@ -18,6 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.extension.Coordinates;
 import com.webauthn4j.response.extension.client.*;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class ExtensionClientOutputDeserializerTest {
 
     @Test
     void deserialize_test_with_JSON_data() {
-        JsonConverter jsonConverter = new JsonConverter();
+        JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
         Map<String, ExtensionClientOutput> extensionOutputs =
                 jsonConverter.readValue(

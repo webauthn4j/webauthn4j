@@ -21,6 +21,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.*;
 import com.webauthn4j.response.AuthenticatorAssertionResponse;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
@@ -54,8 +55,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter();
 
 
     private Origin origin = new Origin("http://example.com");

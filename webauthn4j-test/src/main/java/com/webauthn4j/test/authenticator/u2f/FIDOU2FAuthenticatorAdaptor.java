@@ -20,6 +20,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
@@ -50,8 +51,8 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);

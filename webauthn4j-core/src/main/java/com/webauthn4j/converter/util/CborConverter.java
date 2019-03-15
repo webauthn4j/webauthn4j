@@ -26,9 +26,7 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
-import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,28 +36,22 @@ import java.io.UncheckedIOException;
 /**
  * A utility class for CBOR serialization/deserialization
  */
-public class CborConverter implements Serializable {
+public final class CborConverter implements Serializable {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private ObjectMapper jsonMapper;
     private ObjectMapper cborMapper;
-
-    private boolean jsonMapperInitialized = false;
-    private boolean cborMapperInitialized = false;
 
     private JsonConverter jsonConverter;
 
-    public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
+    public CborConverter() {
+        this.cborMapper = new ObjectMapper(new CBORFactory());
 
-        this.jsonMapper = jsonMapper;
-        this.cborMapper = cborMapper;
-    }
+        cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
+        cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-    public CborConverter(){
-        this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
+        this.jsonConverter = ObjectConverterFactory.getJsonConverter();
     }
 
     @SuppressWarnings("unchecked")
@@ -122,30 +114,11 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public ObjectMapper getJsonMapper() {
-        if(!jsonMapperInitialized){
-            jsonMapper.registerModule(new WebAuthnJSONModule(getJsonConverter(), this));
-            jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            jsonMapperInitialized = true;
-        }
-        return jsonMapper;
-    }
-
-    public ObjectMapper getCborMapper() {
-        if(!cborMapperInitialized){
-            cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapperInitialized = true;
-        }
+    private ObjectMapper getCborMapper() {
         return cborMapper;
     }
 
     public JsonConverter getJsonConverter() {
-        if (jsonConverter == null) {
-            jsonConverter = new JsonConverter(jsonMapper, cborMapper);
-        }
         return jsonConverter;
     }
 }

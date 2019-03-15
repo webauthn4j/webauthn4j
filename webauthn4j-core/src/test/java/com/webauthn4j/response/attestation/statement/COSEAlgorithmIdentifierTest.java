@@ -16,10 +16,10 @@
 
 package com.webauthn4j.response.attestation.statement;
 
-import org.junit.jupiter.api.Test;
-
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class COSEAlgorithmIdentifierTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
     @Test
     void create_test() {

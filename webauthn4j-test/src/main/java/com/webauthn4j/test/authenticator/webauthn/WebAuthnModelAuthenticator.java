@@ -18,6 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.PublicKeyCredentialDescriptor;
 import com.webauthn4j.request.PublicKeyCredentialParameters;
 import com.webauthn4j.request.PublicKeyCredentialRpEntity;
@@ -55,7 +56,7 @@ import static com.webauthn4j.response.attestation.authenticator.AuthenticatorDat
 @WIP
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     AAGUID aaguid;
     private boolean capableOfUserVerification;

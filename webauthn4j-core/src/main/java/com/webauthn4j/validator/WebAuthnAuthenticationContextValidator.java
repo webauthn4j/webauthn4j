@@ -23,6 +23,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.WebAuthnAuthenticationContext;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.client.ClientDataType;
@@ -72,7 +73,7 @@ public class WebAuthnAuthenticationContextValidator {
     // ========================================================================================================
 
     public WebAuthnAuthenticationContextValidator() {
-        this(new JsonConverter(), new CborConverter());
+        this(ObjectConverterFactory.getJsonConverter(), ObjectConverterFactory.getCborConverter());
     }
 
     public WebAuthnAuthenticationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {

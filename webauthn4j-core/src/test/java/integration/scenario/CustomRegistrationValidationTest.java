@@ -19,6 +19,7 @@ package integration.scenario;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.*;
 import com.webauthn4j.response.AuthenticatorAttestationResponse;
 import com.webauthn4j.response.PublicKeyCredential;
@@ -48,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
 
     private Origin origin = new Origin("http://localhost");

@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AttestationObjectConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     private AttestationObjectConverter target = new AttestationObjectConverter(cborConverter);
 

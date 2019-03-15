@@ -18,6 +18,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.response.client.CollectedClientData;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ChallengeDeserializerTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
     @Test
     void test() {

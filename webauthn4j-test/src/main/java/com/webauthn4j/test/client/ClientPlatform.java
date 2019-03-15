@@ -20,6 +20,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AttestationConveyancePreference;
 import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
@@ -54,8 +55,8 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
     private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
 

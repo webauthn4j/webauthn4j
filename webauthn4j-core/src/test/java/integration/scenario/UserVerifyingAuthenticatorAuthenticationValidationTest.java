@@ -21,6 +21,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
@@ -54,8 +55,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter();
 
     private Origin origin = new Origin("http://example.com");
     private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();

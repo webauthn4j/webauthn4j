@@ -5,6 +5,7 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.AuthenticatorTransport;
 import com.webauthn4j.response.attestation.AttestationObject;
 import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
@@ -45,7 +46,10 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,8 +57,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PackedAttestationStatementValidatorTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
 

@@ -20,6 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.request.*;
 import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
@@ -59,7 +60,7 @@ import static org.mockito.Mockito.mock;
 
 class FIDOU2FAuthenticatorRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = ObjectConverterFactory.getJsonConverter(); // new JsonConverter();
 
 
     private Origin origin = new Origin("http://localhost");

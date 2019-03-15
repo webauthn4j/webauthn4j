@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverterFactory;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class CertPathSerializerTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = ObjectConverterFactory.getCborConverter(); // new CborConverter();
 
     @Test
     void test() throws CertificateException {
