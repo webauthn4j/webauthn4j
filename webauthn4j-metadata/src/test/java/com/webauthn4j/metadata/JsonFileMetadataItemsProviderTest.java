@@ -16,22 +16,18 @@
 
 package com.webauthn4j.metadata;
 
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.MetadataItem;
+import org.junit.jupiter.api.Test;
+
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonFileMetadataItemsProviderTest {
 

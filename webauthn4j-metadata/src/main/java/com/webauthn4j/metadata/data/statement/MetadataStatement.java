@@ -39,10 +39,10 @@ public class MetadataStatement implements Serializable {
     private String protocolFamily;
     private List<Version> upv;
     private String assertionScheme;
-    private Integer authenticationAlgorithm;
-    private List<Integer> authenticationAlgorithms;
-    private Integer publicKeyAlgAndEncoding;
-    private List<Integer> publicKeyAlgAndEncodings;
+    private AuthenticationAlgorithm authenticationAlgorithm;
+    private List<AuthenticationAlgorithm> authenticationAlgorithms;
+    private PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
+    private List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
     private List<AttestationType> attestationTypes;
     private List<VerificationMethodANDCombinations> userVerificationDetails;
     private Integer keyProtection;
@@ -73,10 +73,10 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("protocolFamily") String protocolFamily,
             @JsonProperty("upv") List<Version> upv,
             @JsonProperty("assertionScheme") String assertionScheme,
-            @JsonProperty("authenticationAlgorithm") Integer authenticationAlgorithm,
-            @JsonProperty("authenticationAlgorithms") List<Integer> authenticationAlgorithms,
-            @JsonProperty("publicKeyAlgAndEncoding") Integer publicKeyAlgAndEncoding,
-            @JsonProperty("publicKeyAlgAndEncodings") List<Integer> publicKeyAlgAndEncodings,
+            @JsonProperty("authenticationAlgorithm") AuthenticationAlgorithm authenticationAlgorithm,
+            @JsonProperty("authenticationAlgorithms") List<AuthenticationAlgorithm> authenticationAlgorithms,
+            @JsonProperty("publicKeyAlgAndEncoding") PublicKeyRepresentationFormat publicKeyAlgAndEncoding,
+            @JsonProperty("publicKeyAlgAndEncodings") List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
             @JsonProperty("attestationTypes") List<AttestationType> attestationTypes,
             @JsonProperty("userVerificationDetails") List<VerificationMethodANDCombinations> userVerificationDetails,
             @JsonProperty("keyProtection") Integer keyProtection,
@@ -167,19 +167,19 @@ public class MetadataStatement implements Serializable {
         return assertionScheme;
     }
 
-    public Integer getAuthenticationAlgorithm() {
+    public AuthenticationAlgorithm getAuthenticationAlgorithm() {
         return authenticationAlgorithm;
     }
 
-    public List<Integer> getAuthenticationAlgorithms() {
+    public List<AuthenticationAlgorithm> getAuthenticationAlgorithms() {
         return authenticationAlgorithms;
     }
 
-    public Integer getPublicKeyAlgAndEncoding() {
+    public PublicKeyRepresentationFormat getPublicKeyAlgAndEncoding() {
         return publicKeyAlgAndEncoding;
     }
 
-    public List<Integer> getPublicKeyAlgAndEncodings() {
+    public List<PublicKeyRepresentationFormat> getPublicKeyAlgAndEncodings() {
         return publicKeyAlgAndEncodings;
     }
 

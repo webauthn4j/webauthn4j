@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Objects;
 
 /**
@@ -28,14 +27,14 @@ import java.util.Objects;
  */
 public class VerificationMethodDescriptor implements Serializable {
 
-    private BigInteger userVerification;
+    private UserVerificationMethod userVerification;
     private CodeAccuracyDescriptor caDesc;
     private BiometricAccuracyDescriptor baDesc;
     private PatternAccuracyDescriptor paDesc;
 
     @JsonCreator
     public VerificationMethodDescriptor(
-            @JsonProperty("userVerification") BigInteger userVerification,
+            @JsonProperty("userVerification") UserVerificationMethod userVerification,
             @JsonProperty("caDesc") CodeAccuracyDescriptor caDesc,
             @JsonProperty("baDesc") BiometricAccuracyDescriptor baDesc,
             @JsonProperty("paDesc") PatternAccuracyDescriptor paDesc) {
@@ -45,7 +44,7 @@ public class VerificationMethodDescriptor implements Serializable {
         this.paDesc = paDesc;
     }
 
-    public BigInteger getUserVerification() {
+    public UserVerificationMethod getUserVerification() {
         return userVerification;
     }
 
