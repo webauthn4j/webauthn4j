@@ -19,6 +19,9 @@ package com.webauthn4j.response.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.Signature;
+
+import java.util.Arrays;
 
 public enum COSEAlgorithmIdentifier {
     RS1(-65535, "SHA1withRSA", "SHA-1"),
@@ -39,33 +42,18 @@ public enum COSEAlgorithmIdentifier {
         this.messageDigestJcaName = messageDigestJcaName;
     }
 
-    public static COSEAlgorithmIdentifier create(int value)  {
-        switch (value) {
-            case -65535:
-                return RS1;
-            case -257:
-                return RS256;
-            case -258:
-                return RS384;
-            case -259:
-                return RS512;
-            case -7:
-                return ES256;
-            case -35:
-                return ES384;
-            case -36:
-                return ES512;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+    public static COSEAlgorithmIdentifier create(int value) {
+        return Arrays.stream(values())
+                .filter(it -> it.value == (long) value)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("COSE Algorithm '" + value + "' not supported"));
     }
 
     @JsonCreator
     private static COSEAlgorithmIdentifier fromJson(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
         }
     }
@@ -81,5 +69,13 @@ public enum COSEAlgorithmIdentifier {
 
     public String getMessageDigestJcaName() {
         return messageDigestJcaName;
+    }
+
+    public Signature.SignatureVerifierBuilder signatureVerifier() {
+        return Signature.SignatureVerifierBuilder.forAlgorithm(this);
+    }
+
+    public Signature.SignatureBuilder signatureBuilder() {
+        return Signature.SignatureBuilder.forAlgorithm(this);
     }
 }

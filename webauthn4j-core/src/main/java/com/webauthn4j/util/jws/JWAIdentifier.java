@@ -19,6 +19,7 @@ package com.webauthn4j.util.jws;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.Signature;
 
 import java.util.Arrays;
 
@@ -66,5 +67,13 @@ public enum JWAIdentifier {
 
     public String getJcaName() {
         return jcaName;
+    }
+
+    public Signature.SignatureVerifierBuilder signatureVerifier() {
+        return Signature.SignatureVerifierBuilder.forAlgorithm(this);
+    }
+
+    public Signature.SignatureBuilder signatureBuilder() {
+        return Signature.SignatureBuilder.forAlgorithm(this);
     }
 }

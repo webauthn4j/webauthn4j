@@ -19,15 +19,14 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.PublicKey;
 import java.security.cert.Certificate;
 
 public class AndroidKeyAttestationStatementValidator extends AbstractStatementValidator<AndroidKeyAttestationStatement> {
@@ -76,17 +75,11 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
-        try {
-            Signature verifier = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
-            verifier.initVerify(publicKey);
-            verifier.update(signedData);
-            if (verifier.verify(signature)) {
-                return;
-            }
-            throw new BadSignatureException("Bad signature");
-        } catch (SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("Bad signature", e);
-        }
+        attestationStatement.getAlg()
+                .signatureVerifier()
+                .publicKey(publicKey)
+                .update(signedData)
+                .verify(signature);
     }
 
     private byte[] getSignedData(RegistrationObject registrationObject) {

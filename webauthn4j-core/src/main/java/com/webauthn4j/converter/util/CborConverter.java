@@ -42,16 +42,13 @@ public final class CborConverter implements Serializable {
 
     private ObjectMapper cborMapper;
 
-    private JsonConverter jsonConverter;
 
     public CborConverter() {
         this.cborMapper = new ObjectMapper(new CBORFactory());
 
-        cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
+        cborMapper.registerModule(new WebAuthnCBORModule(ObjectConverterFactory.getJsonConverter(), this));
         cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        this.jsonConverter = ObjectConverterFactory.getJsonConverter();
     }
 
     @SuppressWarnings("unchecked")
@@ -116,9 +113,5 @@ public final class CborConverter implements Serializable {
 
     private ObjectMapper getCborMapper() {
         return cborMapper;
-    }
-
-    public JsonConverter getJsonConverter() {
-        return jsonConverter;
     }
 }

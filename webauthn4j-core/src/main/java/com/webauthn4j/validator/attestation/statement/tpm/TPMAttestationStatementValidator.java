@@ -21,12 +21,12 @@ import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.response.attestation.statement.*;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.BadSignatureException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
 
 import javax.naming.NamingException;
@@ -34,7 +34,8 @@ import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.PublicKey;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
@@ -128,17 +129,14 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
+
         try {
-            certInfoSignature.initVerify(aikCert.getPublicKey());
-            certInfoSignature.update(certInfo.getBytes());
-            if(!certInfoSignature.verify(attestationStatement.getSig())){
-                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig");
-            }
-        } catch (SignatureException e) {
+            attestationStatement.getAlg().signatureVerifier()
+                    .publicKey(aikCert.getPublicKey())
+                    .update(certInfo.getBytes())
+                    .verify(attestationStatement.getSig());
+        } catch (BadSignatureException e) {
             throw new BadAttestationStatementException("hash of certInfo doesn't match with sig", e);
-        } catch (InvalidKeyException e) {
-            throw new BadAttestationStatementException("invalid publicKey", e);
         }
 
         /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.

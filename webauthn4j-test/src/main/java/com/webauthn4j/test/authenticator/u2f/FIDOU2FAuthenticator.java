@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.u2f;
 
+import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataConstants;
 import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -23,7 +24,10 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.*;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
+import java.security.SignatureException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
@@ -135,11 +139,11 @@ public class FIDOU2FAuthenticator {
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {
-            Signature signature = SignatureUtil.getES256();
-            signature.initSign(privateKey);
-            signature.update(signedData);
-            return signature.sign();
-        } catch (InvalidKeyException | SignatureException e) {
+            return COSEAlgorithmIdentifier.ES256.signatureBuilder()
+                    .privateKey(privateKey)
+                    .data(signedData)
+                    .sign();
+        } catch (SignatureException e) {
             throw new FIDOU2FException("Signature calculation error", e);
         }
     }
