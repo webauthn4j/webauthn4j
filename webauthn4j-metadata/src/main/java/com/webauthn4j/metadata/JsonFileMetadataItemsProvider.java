@@ -36,8 +36,9 @@ public class JsonFileMetadataItemsProvider implements MetadataItemsProvider<Meta
     private List<Path> paths = Collections.emptyList();
     private Map<AAGUID, Set<MetadataItem>> cachedMetadataItems;
 
-    public JsonFileMetadataItemsProvider(JsonConverter jsonConverter) {
+    public JsonFileMetadataItemsProvider(JsonConverter jsonConverter, List<Path> paths) {
         this.jsonConverter = jsonConverter;
+        this.paths = paths;
     }
 
     @Override
