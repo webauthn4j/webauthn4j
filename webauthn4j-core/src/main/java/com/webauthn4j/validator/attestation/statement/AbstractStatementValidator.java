@@ -14,31 +14,28 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.statement.none;
+package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationType;
-import com.webauthn4j.response.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
-/**
- * Validates the specified {@link AttestationStatement} is a none attestation
- */
-public class NoneAttestationStatementValidator extends AbstractStatementValidator<NoneAttestationStatement> {
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
-    @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
-        if (!supports(registrationObject)) {
-            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
-        }
-
-        return AttestationType.NONE;
-    }
-
+public abstract class AbstractStatementValidator<T extends AttestationStatement> implements AttestationStatementValidator {
     @Override
     public boolean supports(RegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return NoneAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
+
+        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+        Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
+
+        if (actualTypeArgument instanceof Class) {
+            Class<?> aClass = (Class<?>) actualTypeArgument;
+
+            return aClass.isAssignableFrom(attestationStatement.getClass());
+        }
+
+        return false;
     }
 }

@@ -17,12 +17,11 @@
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.response.attestation.statement.AndroidKeyAttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
-public class NullAndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
+public class NullAndroidKeyAttestationStatementValidator extends AbstractStatementValidator<AndroidKeyAttestationStatement> {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -30,11 +29,5 @@ public class NullAndroidKeyAttestationStatementValidator implements AttestationS
         }
 
         return AttestationType.NONE;
-    }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return AndroidKeyAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 }

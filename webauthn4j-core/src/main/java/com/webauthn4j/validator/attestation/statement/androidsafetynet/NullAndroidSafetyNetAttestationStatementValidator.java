@@ -17,12 +17,11 @@
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
 import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
-public class NullAndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
+public class NullAndroidSafetyNetAttestationStatementValidator  extends AbstractStatementValidator<AndroidSafetyNetAttestationStatement> {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -30,11 +29,5 @@ public class NullAndroidSafetyNetAttestationStatementValidator implements Attest
         }
 
         return AttestationType.NONE;
-    }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return AndroidSafetyNetAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 }

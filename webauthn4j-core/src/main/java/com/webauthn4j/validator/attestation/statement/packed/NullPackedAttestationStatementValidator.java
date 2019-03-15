@@ -16,16 +16,15 @@
 
 package com.webauthn4j.validator.attestation.statement.packed;
 
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
 import com.webauthn4j.response.attestation.statement.AttestationType;
 import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
 /**
  * Null validator for {@link PackedAttestationStatement}
  */
-public class NullPackedAttestationStatementValidator implements AttestationStatementValidator {
+public class NullPackedAttestationStatementValidator extends AbstractStatementValidator<PackedAttestationStatement> {
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -33,11 +32,5 @@ public class NullPackedAttestationStatementValidator implements AttestationState
         }
 
         return AttestationType.NONE;
-    }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return PackedAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 }

@@ -24,7 +24,7 @@ import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
@@ -38,7 +38,7 @@ import java.security.interfaces.ECPublicKey;
 /**
  * Validates the specified {@link AttestationStatement} is a valid FIDO-U2F attestation
  */
-public class FIDOU2FAttestationStatementValidator implements AttestationStatementValidator {
+public class FIDOU2FAttestationStatementValidator extends AbstractStatementValidator<FIDOU2FAttestationStatement> {
 
     /**
      * {@link AttestationType}.BASIC is always returned as RP cannot differentiate between BASIC and Attestation CA from the attestation data,
