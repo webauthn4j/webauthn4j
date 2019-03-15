@@ -23,6 +23,8 @@ import com.webauthn4j.util.Signature;
 
 import java.util.Arrays;
 
+import java.util.Arrays;
+
 public enum JWAIdentifier {
     RS1("RS1", "SHA1withRSA"),
     RS256("RS256", "SHA256withRSA"),
