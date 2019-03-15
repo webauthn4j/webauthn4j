@@ -24,11 +24,11 @@ import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.client.challenge.Challenge;
-import com.webauthn4j.response.extension.client.*;
+import com.webauthn4j.data.extension.client.ExtensionClientInput;
+import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
+import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.util.jws.JWS;
 
 import java.security.cert.X509Certificate;

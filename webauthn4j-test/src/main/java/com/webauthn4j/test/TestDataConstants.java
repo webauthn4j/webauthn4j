@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test;
 
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;

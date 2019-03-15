@@ -16,8 +16,8 @@
 
 package com.webauthn4j.test.client;
 
-import com.webauthn4j.response.client.ClientDataType;
-import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.test.TestDataUtil;
 
 public class RegistrationEmulationOption {

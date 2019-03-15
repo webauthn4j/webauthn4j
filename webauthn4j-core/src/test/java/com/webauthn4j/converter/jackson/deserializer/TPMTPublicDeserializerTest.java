@@ -17,7 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 
-import com.webauthn4j.response.attestation.statement.TPMTPublic;
+import com.webauthn4j.data.attestation.statement.TPMTPublic;
 import com.webauthn4j.util.Base64Util;
 import org.junit.jupiter.api.Test;
 

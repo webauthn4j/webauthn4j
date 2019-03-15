@@ -18,9 +18,9 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.ExtensionClientInput;
-import com.webauthn4j.request.extension.client.FIDOAppIDExtensionClientInput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.ExtensionClientInput;
+import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

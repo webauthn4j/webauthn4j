@@ -17,7 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.response.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.WebAuthnAuthenticationContext;
 
 /**
  * Strategy interface to handle malicious counter value

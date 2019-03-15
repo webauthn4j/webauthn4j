@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
-import com.webauthn4j.response.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;

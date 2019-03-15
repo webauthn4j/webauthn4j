@@ -16,10 +16,10 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.Response;
+import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.WIP;

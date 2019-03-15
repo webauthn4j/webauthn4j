@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 

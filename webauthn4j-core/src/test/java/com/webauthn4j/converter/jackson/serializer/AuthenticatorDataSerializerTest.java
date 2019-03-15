@@ -17,13 +17,13 @@
 package com.webauthn4j.converter.jackson.serializer;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.response.attestation.authenticator.*;
+import com.webauthn4j.data.attestation.authenticator.*;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 
-import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
-import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 

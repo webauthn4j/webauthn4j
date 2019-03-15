@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.exception.MaliciousDataException;
 import org.junit.jupiter.api.Test;
 

@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.client.TokenBinding;
-import com.webauthn4j.response.client.TokenBindingStatus;
+import com.webauthn4j.data.client.TokenBinding;
+import com.webauthn4j.data.client.TokenBindingStatus;
 import com.webauthn4j.validator.exception.TokenBindingException;
 import org.junit.jupiter.api.Test;
 

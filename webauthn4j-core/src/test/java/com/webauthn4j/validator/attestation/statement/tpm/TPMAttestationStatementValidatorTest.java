@@ -17,8 +17,8 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
-import com.webauthn4j.response.attestation.statement.TPMEccCurve;
-import com.webauthn4j.response.attestation.statement.TPMIAlgHash;
+import com.webauthn4j.data.attestation.statement.TPMEccCurve;
+import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;

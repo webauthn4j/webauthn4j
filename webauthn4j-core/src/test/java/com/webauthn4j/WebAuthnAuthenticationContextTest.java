@@ -20,8 +20,8 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.response.WebAuthnAuthenticationContext;
-import com.webauthn4j.response.client.ClientDataType;
+import com.webauthn4j.data.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 

@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.response.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.AttestationObject;
 
 public class MakeCredentialResponse {
 

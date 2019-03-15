@@ -20,7 +20,7 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 
 import java.io.IOException;
 import java.io.InputStream;

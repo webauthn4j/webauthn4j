@@ -16,7 +16,7 @@
 
 package com.webauthn4j.anchor;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 
 import java.security.cert.TrustAnchor;
 import java.util.Map;

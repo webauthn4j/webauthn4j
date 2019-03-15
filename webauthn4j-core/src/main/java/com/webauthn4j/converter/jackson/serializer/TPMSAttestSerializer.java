@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.response.attestation.statement.TPMSAttest;
+import com.webauthn4j.data.attestation.statement.TPMSAttest;
 
 import java.io.IOException;
 

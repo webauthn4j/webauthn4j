@@ -16,12 +16,12 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.request.PublicKeyCredentialDescriptor;
-import com.webauthn4j.request.PublicKeyCredentialParameters;
-import com.webauthn4j.request.PublicKeyCredentialRpEntity;
-import com.webauthn4j.request.PublicKeyCredentialUserEntity;
-import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.PublicKeyCredentialDescriptor;
+import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.PublicKeyCredentialRpEntity;
+import com.webauthn4j.data.PublicKeyCredentialUserEntity;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 
 import java.util.List;
 

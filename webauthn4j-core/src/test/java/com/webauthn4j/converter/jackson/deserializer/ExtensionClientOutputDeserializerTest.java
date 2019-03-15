@@ -18,8 +18,8 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.response.extension.Coordinates;
-import com.webauthn4j.response.extension.client.*;
+import com.webauthn4j.data.extension.Coordinates;
+import com.webauthn4j.data.extension.client.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

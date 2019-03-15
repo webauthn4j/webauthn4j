@@ -17,7 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.Base64UrlUtil;
 
 import java.nio.charset.StandardCharsets;

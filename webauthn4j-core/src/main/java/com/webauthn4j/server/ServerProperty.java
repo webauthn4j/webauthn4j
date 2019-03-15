@@ -16,8 +16,8 @@
 
 package com.webauthn4j.server;
 
-import com.webauthn4j.response.client.Origin;
-import com.webauthn4j.response.client.challenge.Challenge;
+import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.data.client.challenge.Challenge;
 
 import java.io.Serializable;
 import java.util.Arrays;
