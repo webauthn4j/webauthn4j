@@ -23,7 +23,7 @@ import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
 import com.webauthn4j.metadata.exception.MDSException;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;

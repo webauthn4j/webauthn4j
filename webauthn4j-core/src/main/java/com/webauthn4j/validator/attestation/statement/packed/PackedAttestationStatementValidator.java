@@ -16,12 +16,12 @@
 
 package com.webauthn4j.validator.attestation.statement.packed;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationType;
-import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;

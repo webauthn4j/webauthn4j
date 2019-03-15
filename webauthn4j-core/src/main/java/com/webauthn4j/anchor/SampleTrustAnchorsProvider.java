@@ -1,6 +1,6 @@
 package com.webauthn4j.anchor;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.io.InputStream;

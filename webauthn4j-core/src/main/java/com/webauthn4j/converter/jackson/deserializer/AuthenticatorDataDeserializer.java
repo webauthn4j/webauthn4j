@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 
 import java.io.IOException;
 

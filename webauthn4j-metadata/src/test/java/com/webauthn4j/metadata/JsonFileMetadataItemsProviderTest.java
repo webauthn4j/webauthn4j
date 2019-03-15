@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 
 class JsonFileMetadataItemsProviderTest {
 

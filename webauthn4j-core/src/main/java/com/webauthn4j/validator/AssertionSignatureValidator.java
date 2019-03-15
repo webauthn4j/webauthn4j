@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.WebAuthnAuthenticationContext;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 

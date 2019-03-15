@@ -17,8 +17,8 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 

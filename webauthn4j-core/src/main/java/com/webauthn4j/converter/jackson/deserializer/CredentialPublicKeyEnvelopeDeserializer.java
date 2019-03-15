@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 
 import java.io.IOException;
 

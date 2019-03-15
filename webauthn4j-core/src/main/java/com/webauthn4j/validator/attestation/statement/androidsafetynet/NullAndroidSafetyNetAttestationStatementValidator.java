@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
-import com.webauthn4j.response.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 

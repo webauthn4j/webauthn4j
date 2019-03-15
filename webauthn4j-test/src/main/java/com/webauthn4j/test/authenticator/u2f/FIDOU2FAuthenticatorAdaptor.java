@@ -20,19 +20,19 @@ import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.request.PublicKeyCredentialDescriptor;
-import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.data.PublicKeyCredentialDescriptor;
+import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -45,8 +45,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
-import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_AT;
-import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.BIT_UP;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_AT;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 

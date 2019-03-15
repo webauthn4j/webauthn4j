@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator.attestation.statement.u2f;
 
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.EC2CredentialPublicKey;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationType;
-import com.webauthn4j.response.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;

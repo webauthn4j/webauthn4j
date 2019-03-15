@@ -17,9 +17,9 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.statement.*;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;

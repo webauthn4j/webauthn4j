@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 

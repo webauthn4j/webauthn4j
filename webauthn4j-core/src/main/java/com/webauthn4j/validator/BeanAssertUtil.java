@@ -16,21 +16,21 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.WebAuthnAuthenticationContext;
-import com.webauthn4j.response.WebAuthnRegistrationContext;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.response.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.response.attestation.authenticator.CredentialPublicKey;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.client.TokenBinding;
-import com.webauthn4j.response.extension.ExtensionOutput;
-import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.response.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.WebAuthnRegistrationContext;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.TokenBinding;
+import com.webauthn4j.data.extension.ExtensionOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;

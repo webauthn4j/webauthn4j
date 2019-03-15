@@ -18,21 +18,21 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.request.PublicKeyCredentialDescriptor;
-import com.webauthn4j.request.PublicKeyCredentialParameters;
-import com.webauthn4j.request.PublicKeyCredentialRpEntity;
-import com.webauthn4j.request.PublicKeyCredentialType;
-import com.webauthn4j.request.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.request.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.request.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.attestation.authenticator.*;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.response.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.response.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
+import com.webauthn4j.data.PublicKeyCredentialDescriptor;
+import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.PublicKeyCredentialRpEntity;
+import com.webauthn4j.data.PublicKeyCredentialType;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.*;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -50,7 +50,7 @@ import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.webauthn4j.response.attestation.authenticator.AuthenticatorData.*;
+import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
 @WIP
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{

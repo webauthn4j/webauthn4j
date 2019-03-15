@@ -16,12 +16,12 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.request.AuthenticatorTransport;
-import com.webauthn4j.response.WebAuthnAuthenticationContext;
-import com.webauthn4j.response.WebAuthnRegistrationContext;
-import com.webauthn4j.response.attestation.AttestationObject;
-import com.webauthn4j.response.client.*;
-import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.WebAuthnRegistrationContext;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.client.*;
+import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;

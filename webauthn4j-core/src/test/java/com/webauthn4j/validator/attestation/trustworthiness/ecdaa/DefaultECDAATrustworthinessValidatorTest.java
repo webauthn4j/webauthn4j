@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
-import com.webauthn4j.response.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.junit.jupiter.api.Test;
 

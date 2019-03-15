@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.response.client.ClientDataType;
-import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.client.Origin;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.BadOriginException;

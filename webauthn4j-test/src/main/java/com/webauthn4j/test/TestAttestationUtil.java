@@ -17,7 +17,7 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.anchor.TrustAnchorsResolver;
-import com.webauthn4j.response.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;

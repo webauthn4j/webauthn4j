@@ -19,7 +19,7 @@ package com.webauthn4j.util.jws;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.response.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 
 import java.io.Serializable;
 import java.util.Objects;

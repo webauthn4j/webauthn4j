@@ -18,10 +18,10 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.request.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.request.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.request.UserVerificationRequirement;
-import com.webauthn4j.response.client.CollectedClientData;
+import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
+import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.data.UserVerificationRequirement;
+import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;

@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
-import com.webauthn4j.response.attestation.authenticator.AAGUID;
-import com.webauthn4j.response.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 
 /**
  * Null validator that bypass x5c trustworthiness check

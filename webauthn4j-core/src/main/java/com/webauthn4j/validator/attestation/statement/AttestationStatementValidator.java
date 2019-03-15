@@ -16,8 +16,8 @@
 
 package com.webauthn4j.validator.attestation.statement;
 
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
-import com.webauthn4j.response.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.RegistrationObject;
 
 /**

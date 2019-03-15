@@ -17,10 +17,10 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.response.client.ClientDataType;
-import com.webauthn4j.response.client.CollectedClientData;
-import com.webauthn4j.response.client.Origin;
-import com.webauthn4j.response.client.challenge.DefaultChallenge;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 

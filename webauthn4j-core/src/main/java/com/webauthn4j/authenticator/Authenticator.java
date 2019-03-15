@@ -16,9 +16,9 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.request.AuthenticatorTransport;
-import com.webauthn4j.response.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.response.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 
 import java.io.Serializable;
 import java.util.Set;
