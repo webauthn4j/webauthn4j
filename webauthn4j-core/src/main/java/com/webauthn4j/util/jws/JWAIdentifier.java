@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+import java.util.Arrays;
+
 public enum JWAIdentifier {
     RS1("RS1", "SHA1withRSA"),
     RS256("RS256", "SHA256withRSA"),
@@ -41,32 +43,18 @@ public enum JWAIdentifier {
         if (value == null) {
             return null;
         }
-        switch (value) {
-            case "ES256":
-                return ES256;
-            case "ES384":
-                return ES384;
-            case "ES512":
-                return ES512;
-            case "RS1":
-                return RS1;
-            case "RS256":
-                return RS256;
-            case "RS384":
-                return RS384;
-            case "RS512":
-                return RS512;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+
+        return Arrays.stream(values())
+                .filter(it -> it.name.equals(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("JWA Identifier '" + value + "' not supported"));
     }
 
     @JsonCreator
     private static JWAIdentifier fromJson(String value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, JWAIdentifier.class);
         }
     }
