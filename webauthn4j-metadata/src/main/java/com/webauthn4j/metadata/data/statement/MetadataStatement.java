@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
@@ -51,7 +50,7 @@ public class MetadataStatement implements Serializable {
     private Integer matcherProtection;
     private Integer cryptoStrength;
     private String operationEnv;
-    private BigInteger attachmentHint;
+    private AttachmentHints attachmentHint;
     private Boolean isSecondFactorOnly;
     private Integer tcDisplay;
     private String tcDisplayContentType;
@@ -85,7 +84,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("matcherProtection") Integer matcherProtection,
             @JsonProperty("cryptoStrength") Integer cryptoStrength,
             @JsonProperty("operationEnv") String operationEnv,
-            @JsonProperty("attachmentHint") BigInteger attachmentHint,
+            @JsonProperty("attachmentHint") AttachmentHints attachmentHint,
             @JsonProperty("isSecondFactorOnly") Boolean isSecondFactorOnly,
             @JsonProperty("tcDisplay") Integer tcDisplay,
             @JsonProperty("tcDisplayContentType") String tcDisplayContentType,
@@ -215,7 +214,7 @@ public class MetadataStatement implements Serializable {
         return operationEnv;
     }
 
-    public BigInteger getAttachmentHint() {
+    public AttachmentHints getAttachmentHint() {
         return attachmentHint;
     }
 

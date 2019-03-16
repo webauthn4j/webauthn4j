@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MetadataStatementTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter;
+
+    public MetadataStatementTest(){
+        jsonConverter = new JsonConverter();
+        jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
+    }
 
     private String data = "{\n" +
             "    \"aaguid\": \"81303c1a-25cf-4f43-be04-0460df5b6c68\",\n" +

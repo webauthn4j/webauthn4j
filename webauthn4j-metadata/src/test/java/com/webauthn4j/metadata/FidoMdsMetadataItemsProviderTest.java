@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.Base64Util;
@@ -36,11 +37,16 @@ import static org.mockito.Mockito.when;
 
 class FidoMdsMetadataItemsProviderTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter;
 
     private HttpClient fidoMDSClient = mock(HttpClient.class);
     private FidoMdsMetadataItemsProvider target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient);
     private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+
+    public FidoMdsMetadataItemsProviderTest(){
+        jsonConverter = new JsonConverter();
+        jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
+    }
 
     @Test
     void needsRefresh_test_with_cache_null() {

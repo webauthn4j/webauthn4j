@@ -18,6 +18,7 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.MetadataItem;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +32,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonFileMetadataItemsProviderTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter;
+
+    public JsonFileMetadataItemsProviderTest(){
+        jsonConverter = new JsonConverter();
+        jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
+    }
 
     @Test
     void fetchMetadata() throws Exception {
