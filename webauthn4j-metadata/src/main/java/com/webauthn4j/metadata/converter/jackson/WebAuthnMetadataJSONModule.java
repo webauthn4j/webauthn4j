@@ -20,12 +20,15 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AttachmentHintsDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.KeyProtectionsDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MatcherProtectionsDeserializer;
+import com.webauthn4j.metadata.converter.jackson.deserializer.TransactionConfirmationDisplaysDeserializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.AttachmentHintsSerializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.KeyProtectionsSerializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.MatcherProtectionsSerializer;
+import com.webauthn4j.metadata.converter.jackson.serializer.TransactionConfirmationDisplaysSerializer;
 import com.webauthn4j.metadata.data.statement.AttachmentHints;
 import com.webauthn4j.metadata.data.statement.KeyProtections;
 import com.webauthn4j.metadata.data.statement.MatcherProtections;
+import com.webauthn4j.metadata.data.statement.TransactionConfirmationDisplays;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 
@@ -35,10 +38,12 @@ public class WebAuthnMetadataJSONModule extends SimpleModule {
         this.addDeserializer(AttachmentHints.class, new AttachmentHintsDeserializer());
         this.addDeserializer(KeyProtections.class, new KeyProtectionsDeserializer());
         this.addDeserializer(MatcherProtections.class, new MatcherProtectionsDeserializer());
+        this.addDeserializer(TransactionConfirmationDisplays.class, new TransactionConfirmationDisplaysDeserializer());
 
         this.addSerializer(AttachmentHints.class, new AttachmentHintsSerializer());
         this.addSerializer(KeyProtections.class, new KeyProtectionsSerializer());
         this.addSerializer(MatcherProtections.class, new MatcherProtectionsSerializer());
+        this.addSerializer(TransactionConfirmationDisplays.class, new TransactionConfirmationDisplaysSerializer());
 
     }
 

@@ -53,7 +53,7 @@ public class MetadataStatement implements Serializable {
     private String operationEnv;
     private AttachmentHints attachmentHint;
     private Boolean isSecondFactorOnly;
-    private Integer tcDisplay;
+    private TransactionConfirmationDisplays tcDisplay;
     private String tcDisplayContentType;
     private List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
     private List<X509Certificate> attestationRootCertificates;
@@ -87,7 +87,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("operationEnv") String operationEnv,
             @JsonProperty("attachmentHint") AttachmentHints attachmentHint,
             @JsonProperty("isSecondFactorOnly") Boolean isSecondFactorOnly,
-            @JsonProperty("tcDisplay") Integer tcDisplay,
+            @JsonProperty("tcDisplay") TransactionConfirmationDisplays tcDisplay,
             @JsonProperty("tcDisplayContentType") String tcDisplayContentType,
             @JsonProperty("tcDisplayPNGCharacteristics") List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics,
             @JsonProperty("attestationRootCertificates") List<X509Certificate> attestationRootCertificates,
@@ -223,7 +223,7 @@ public class MetadataStatement implements Serializable {
         return isSecondFactorOnly;
     }
 
-    public Integer getTcDisplay() {
+    public TransactionConfirmationDisplays getTcDisplay() {
         return tcDisplay;
     }
 
