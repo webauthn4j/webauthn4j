@@ -18,8 +18,11 @@ package com.webauthn4j.metadata.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AttachmentHintsDeserializer;
+import com.webauthn4j.metadata.converter.jackson.deserializer.KeyProtectionsDeserializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.AttachmentHintsSerializer;
+import com.webauthn4j.metadata.converter.jackson.serializer.KeyProtectionsSerializer;
 import com.webauthn4j.metadata.data.statement.AttachmentHints;
+import com.webauthn4j.metadata.data.statement.KeyProtections;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 
@@ -27,8 +30,10 @@ public class WebAuthnMetadataJSONModule extends SimpleModule {
         super("WebAuthnMetadataJSONModule");
 
         this.addDeserializer(AttachmentHints.class, new AttachmentHintsDeserializer());
+        this.addDeserializer(KeyProtections.class, new KeyProtectionsDeserializer());
 
         this.addSerializer(AttachmentHints.class, new AttachmentHintsSerializer());
+        this.addSerializer(KeyProtections.class, new KeyProtectionsSerializer());
 
     }
 

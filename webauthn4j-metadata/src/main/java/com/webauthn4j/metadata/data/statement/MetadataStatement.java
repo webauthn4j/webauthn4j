@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ import java.util.List;
 public class MetadataStatement implements Serializable {
     private String legalHeader;
     private String aaid;
-    private String aaguid;
+    private AAGUID aaguid;
     private List<String> attestationCertificateKeyIdentifiers;
     private String description;
     private AlternativeDescriptions alternativeDescriptions;
@@ -44,7 +45,7 @@ public class MetadataStatement implements Serializable {
     private List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
     private List<AttestationType> attestationTypes;
     private List<VerificationMethodANDCombinations> userVerificationDetails;
-    private Integer keyProtection;
+    private KeyProtections keyProtection;
     private Boolean isKeyRestricted;
     private Boolean isFreshUserVerificationRequired;
     private Integer matcherProtection;
@@ -64,7 +65,7 @@ public class MetadataStatement implements Serializable {
     public MetadataStatement(
             @JsonProperty("legalHeader") String legalHeader,
             @JsonProperty("aaid") String aaid,
-            @JsonProperty("aaguid") String aaguid,
+            @JsonProperty("aaguid") AAGUID aaguid,
             @JsonProperty("attestationCertificateKeyIdentifiers") List<String> attestationCertificateKeyIdentifiers,
             @JsonProperty("description") String description,
             @JsonProperty("alternativeDescriptions") AlternativeDescriptions alternativeDescriptions,
@@ -78,7 +79,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("publicKeyAlgAndEncodings") List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
             @JsonProperty("attestationTypes") List<AttestationType> attestationTypes,
             @JsonProperty("userVerificationDetails") List<VerificationMethodANDCombinations> userVerificationDetails,
-            @JsonProperty("keyProtection") Integer keyProtection,
+            @JsonProperty("keyProtection") KeyProtections keyProtection,
             @JsonProperty("isKeyRestricted") Boolean isKeyRestricted,
             @JsonProperty("isFreshUserVerificationRequired") Boolean isFreshUserVerificationRequired,
             @JsonProperty("matcherProtection") Integer matcherProtection,
@@ -134,7 +135,7 @@ public class MetadataStatement implements Serializable {
         return aaid;
     }
 
-    public String getAaguid() {
+    public AAGUID getAaguid() {
         return aaguid;
     }
 
@@ -190,7 +191,7 @@ public class MetadataStatement implements Serializable {
         return userVerificationDetails;
     }
 
-    public Integer getKeyProtection() {
+    public KeyProtections getKeyProtection() {
         return keyProtection;
     }
 

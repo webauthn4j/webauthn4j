@@ -111,7 +111,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
                 })
                         .filter(Objects::nonNull)
                         .distinct()
-                        .collect(Collectors.groupingBy(item -> new AAGUID(item.getMetadataStatement().getAaguid())))
+                        .collect(Collectors.groupingBy(item -> item.getMetadataStatement().getAaguid()))
                         .entrySet().stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
 

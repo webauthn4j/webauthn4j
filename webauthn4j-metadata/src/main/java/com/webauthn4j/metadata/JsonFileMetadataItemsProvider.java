@@ -59,7 +59,7 @@ public class JsonFileMetadataItemsProvider implements MetadataItemsProvider<Meta
     private AAGUID extractAAGUID(MetadataStatement metadataStatement) {
         switch (metadataStatement.getProtocolFamily()) {
             case "fido2":
-                return new AAGUID(metadataStatement.getAaguid());
+                return metadataStatement.getAaguid();
             case "u2f":
                 return AAGUID.ZERO;
             case "uaf":
