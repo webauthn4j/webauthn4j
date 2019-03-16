@@ -17,7 +17,6 @@
 package com.webauthn4j.metadata.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.metadata.data.statement.KeyProtections;
@@ -30,7 +29,7 @@ public class KeyProtectionsDeserializer extends StdDeserializer<KeyProtections> 
     }
 
     @Override
-    public KeyProtections deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        return new KeyProtections(p.getLongValue());
+    public KeyProtections deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        return new KeyProtections(p.getIntValue());
     }
 }

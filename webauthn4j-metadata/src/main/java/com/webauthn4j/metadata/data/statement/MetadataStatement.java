@@ -48,7 +48,7 @@ public class MetadataStatement implements Serializable {
     private KeyProtections keyProtection;
     private Boolean isKeyRestricted;
     private Boolean isFreshUserVerificationRequired;
-    private Integer matcherProtection;
+    private MatcherProtections matcherProtection;
     private Integer cryptoStrength;
     private String operationEnv;
     private AttachmentHints attachmentHint;
@@ -82,7 +82,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("keyProtection") KeyProtections keyProtection,
             @JsonProperty("isKeyRestricted") Boolean isKeyRestricted,
             @JsonProperty("isFreshUserVerificationRequired") Boolean isFreshUserVerificationRequired,
-            @JsonProperty("matcherProtection") Integer matcherProtection,
+            @JsonProperty("matcherProtection") MatcherProtections matcherProtection,
             @JsonProperty("cryptoStrength") Integer cryptoStrength,
             @JsonProperty("operationEnv") String operationEnv,
             @JsonProperty("attachmentHint") AttachmentHints attachmentHint,
@@ -203,7 +203,7 @@ public class MetadataStatement implements Serializable {
         return isFreshUserVerificationRequired;
     }
 
-    public Integer getMatcherProtection() {
+    public MatcherProtections getMatcherProtection() {
         return matcherProtection;
     }
 

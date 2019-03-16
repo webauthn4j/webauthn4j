@@ -19,18 +19,17 @@ package com.webauthn4j.metadata.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.metadata.data.statement.AttachmentHints;
+import com.webauthn4j.metadata.data.statement.MatcherProtections;
 
 import java.io.IOException;
 
-public class AttachmentHintsDeserializer extends StdDeserializer<AttachmentHints> {
-
-    public AttachmentHintsDeserializer() {
-        super(AttachmentHints.class);
+public class MatcherProtectionsDeserializer extends StdDeserializer<MatcherProtections> {
+    public MatcherProtectionsDeserializer() {
+        super(MatcherProtections.class);
     }
 
     @Override
-    public AttachmentHints deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        return new AttachmentHints(p.getLongValue());
+    public MatcherProtections deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        return new MatcherProtections(p.getIntValue());
     }
 }

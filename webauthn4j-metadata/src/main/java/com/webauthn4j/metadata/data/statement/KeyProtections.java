@@ -27,7 +27,7 @@ public class KeyProtections extends AbstractSet<KeyProtection> {
 
     private Set<KeyProtection> keyProtections;
 
-    public KeyProtections(long value) {
+    public KeyProtections(int value) {
         Set<KeyProtection> set = new HashSet<>();
         if ((value & KeyProtection.SOFTWARE.getValue()) > 0) {
             set.add(KeyProtection.SOFTWARE);
