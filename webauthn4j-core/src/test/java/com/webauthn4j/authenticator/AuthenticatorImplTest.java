@@ -16,11 +16,15 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -29,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AuthenticatorImplTest {
 
     @Test
-    void getter_setter_test() {
+    void constructor_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement();
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestedCredentialData, attestationStatement);
@@ -37,6 +41,25 @@ class AuthenticatorImplTest {
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
                 () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
+                () -> assertThat(authenticator.getCounter()).isEqualTo(1)
+        );
+    }
+
+    @Test
+    void getter_setter_test() {
+        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
+        AttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
+        authenticator.setAttestedCredentialData(attestedCredentialData);
+        authenticator.setAttestationStatement(attestationStatement);
+        authenticator.setTransports(transports);
+        authenticator.setCounter(1);
+
+        assertAll(
+                () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
+                () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
+                () -> assertThat(authenticator.getTransports()).isEqualTo(transports),
                 () -> assertThat(authenticator.getCounter()).isEqualTo(1)
         );
     }

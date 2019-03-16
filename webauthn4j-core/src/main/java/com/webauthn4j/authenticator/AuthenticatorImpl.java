@@ -86,6 +86,10 @@ public class AuthenticatorImpl implements Authenticator {
         return transports;
     }
 
+    public void setTransports(Set<AuthenticatorTransport> transports) {
+        this.transports = transports;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
