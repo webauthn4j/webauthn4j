@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.uaf.AAID;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class MetadataStatement implements Serializable {
     private String legalHeader;
-    private String aaid;
+    private AAID aaid;
     private AAGUID aaguid;
     private List<String> attestationCertificateKeyIdentifiers;
     private String description;
@@ -64,7 +65,7 @@ public class MetadataStatement implements Serializable {
     @JsonCreator
     public MetadataStatement(
             @JsonProperty("legalHeader") String legalHeader,
-            @JsonProperty("aaid") String aaid,
+            @JsonProperty("aaid") AAID aaid,
             @JsonProperty("aaguid") AAGUID aaguid,
             @JsonProperty("attestationCertificateKeyIdentifiers") List<String> attestationCertificateKeyIdentifiers,
             @JsonProperty("description") String description,
@@ -131,7 +132,7 @@ public class MetadataStatement implements Serializable {
         return legalHeader;
     }
 
-    public String getAaid() {
+    public AAID getAaid() {
         return aaid;
     }
 

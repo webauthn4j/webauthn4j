@@ -1,5 +1,5 @@
 {
-    "aaid": "10101010-abcd-1234-abcd-101010101010",
+    "aaid": "abcd#abcd",
     "assertionScheme": "UAFV1TLV",
     "attachmentHint": 2,
     "attestationRootCertificates": [
