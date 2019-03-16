@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.CollectionUtil;

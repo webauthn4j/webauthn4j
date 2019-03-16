@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -28,20 +27,15 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
-import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class WebAuthnRegistrationContextTest {
 
@@ -51,11 +45,6 @@ class WebAuthnRegistrationContextTest {
     private Origin origin = new Origin("http://localhost");
     private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();
     private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
-    private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
@@ -178,9 +167,9 @@ class WebAuthnRegistrationContextTest {
         WebAuthnRegistrationContext instanceE = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
-                transports,
                 clientExtensionJSON,
                 serverProperty,
+                true,
                 true,
                 Collections.emptyList()
         );

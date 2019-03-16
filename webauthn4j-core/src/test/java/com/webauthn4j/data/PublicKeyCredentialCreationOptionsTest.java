@@ -16,18 +16,67 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PublicKeyCredentialCreationOptionsTest {
+
+    @Test
+    void getter_test() {
+        String rpId = "example.com";
+        PublicKeyCredentialRpEntity rp = new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com");
+        PublicKeyCredentialUserEntity user = new PublicKeyCredentialUserEntity();
+        Challenge challenge = new DefaultChallenge();
+
+        PublicKeyCredentialParameters publicKeyCredentialParameters
+                = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
+        List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.singletonList(publicKeyCredentialParameters);
+        long timeout = 10000;
+        List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
+                new AuthenticatorSelectionCriteria(
+                        AuthenticatorAttachment.CROSS_PLATFORM,
+                        true,
+                        UserVerificationRequirement.REQUIRED);
+        AttestationConveyancePreference attestation = AttestationConveyancePreference.DIRECT;
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
+                rp,
+                user,
+                challenge,
+                pubKeyCredParams,
+                timeout,
+                excludeCredentials,
+                authenticatorSelectionCriteria,
+                attestation,
+                extensions
+        );
+
+
+        assertAll(
+                () -> assertThat(credentialCreationOptions.getRp()).isEqualTo(rp),
+                () -> assertThat(credentialCreationOptions.getUser()).isEqualTo(user),
+                () -> assertThat(credentialCreationOptions.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(credentialCreationOptions.getPubKeyCredParams()).isEqualTo(pubKeyCredParams),
+                () -> assertThat(credentialCreationOptions.getTimeout()).isEqualTo(timeout),
+                () -> assertThat(credentialCreationOptions.getExcludeCredentials()).isEqualTo(excludeCredentials),
+                () -> assertThat(credentialCreationOptions.getAuthenticatorSelection()).isEqualTo(authenticatorSelectionCriteria),
+                () -> assertThat(credentialCreationOptions.getAttestation()).isEqualTo(attestation),
+                () -> assertThat(credentialCreationOptions.getExtensions()).isEqualTo(extensions)
+        );
+    }
+
 
     @Test
     void equals_hashCode_test() {
