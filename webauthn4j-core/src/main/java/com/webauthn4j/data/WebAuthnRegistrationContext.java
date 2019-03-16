@@ -97,6 +97,62 @@ public class WebAuthnRegistrationContext extends AbstractWebAuthnContext {
         );
     }
 
+    public WebAuthnRegistrationContext(byte[] clientDataJSON,
+                                       byte[] attestationObject,
+                                       String clientExtensionsJSON,
+                                       ServerProperty serverProperty,
+                                       boolean userVerificationRequired,
+                                       boolean userPresenceRequired,
+                                       List<String> expectedExtensionIds) {
+
+        super(
+                clientDataJSON,
+                clientExtensionsJSON,
+                serverProperty,
+                userVerificationRequired,
+                userPresenceRequired,
+                CollectionUtil.unmodifiableList(expectedExtensionIds)
+        );
+        this.transports = CollectionUtil.unmodifiableSet(Collections.emptySet());
+        this.attestationObject = attestationObject;
+    }
+
+    public WebAuthnRegistrationContext(byte[] clientDataJSON,
+                                       byte[] attestationObject,
+                                       String clientExtensionsJSON,
+                                       ServerProperty serverProperty,
+                                       boolean userVerificationRequired,
+                                       List<String> expectedExtensionIds) {
+
+        this(
+                clientDataJSON,
+                attestationObject,
+                Collections.emptySet(),
+                clientExtensionsJSON,
+                serverProperty,
+                userVerificationRequired,
+                true,
+                expectedExtensionIds
+        );
+    }
+
+    public WebAuthnRegistrationContext(byte[] clientDataJSON,
+                                       byte[] attestationObject,
+                                       ServerProperty serverProperty,
+                                       boolean userVerificationRequired) {
+
+        this(
+                clientDataJSON,
+                attestationObject,
+                Collections.emptySet(),
+                null,
+                serverProperty,
+                userVerificationRequired,
+                Collections.emptyList()
+        );
+    }
+
+
     public byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
