@@ -25,7 +25,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
  * The supported key protection type(s).
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#key-protection-types">§3.2 Key Protection Types</a>
  */
-public enum  KeyProtection {
+public enum KeyProtection {
 
     SOFTWARE(0x0001),
     HARDWARE(0x0002),
@@ -39,6 +39,7 @@ public enum  KeyProtection {
         this.value = value;
     }
 
+    @SuppressWarnings("Duplicates")
     public static KeyProtection create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
