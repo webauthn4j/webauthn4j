@@ -27,7 +27,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.data.jws.JWS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -128,7 +128,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
-        JWS<MetadataTOCPayload> jws = JWS.parse(toc, jsonConverter, MetadataTOCPayload.class);
+        JWS<MetadataTOCPayload> jws = JWS.parse(toc, MetadataTOCPayload.class, jsonConverter);
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }

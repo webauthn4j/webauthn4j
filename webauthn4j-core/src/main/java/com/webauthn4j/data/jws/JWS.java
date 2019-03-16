@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.util.jws;
+package com.webauthn4j.data.jws;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -34,15 +36,13 @@ public class JWS<T extends Serializable> implements Serializable {
     transient Logger logger = LoggerFactory.getLogger(JWS.class);
 
     private JWSHeader header;
-
     private T payload;
-
     private byte[] signature;
 
     private String headerString;
     private String payloadString;
 
-    public static <T extends Serializable> JWS<T> parse(String value, JsonConverter jsonConverter, Class<T> type){
+    public static <T extends Serializable> JWS<T> parse(String value, Class<T> payloadType, JsonConverter jsonConverter){
         String[] data = value.split("\\.");
         if (data.length != 3) {
             throw new IllegalArgumentException("JWS value is not divided by two period.");
@@ -51,9 +51,13 @@ public class JWS<T extends Serializable> implements Serializable {
         String payloadString = data[1];
         String signatureString = data[2];
         JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
-        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), type);
+        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
         return new JWS<>(header, headerString, payload, payloadString, signature);
+    }
+
+    public static <T extends Serializable> JWS<T>  parse(String value, Class<T> payloadType) {
+        return parse(value, payloadType, new JsonConverter());
     }
 
     private JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
@@ -68,20 +72,12 @@ public class JWS<T extends Serializable> implements Serializable {
         return header;
     }
 
-    public String getHeaderString() {
-        return headerString;
-    }
-
     public T getPayload() {
         return payload;
     }
 
-    public String getPayloadString() {
-        return payloadString;
-    }
-
     public byte[] getSignature() {
-        return signature;
+        return ArrayUtil.clone(signature);
     }
 
     public boolean isValidSignature() {
@@ -105,5 +101,13 @@ public class JWS<T extends Serializable> implements Serializable {
         }
     }
 
+    public byte[] getBytes(){
+        return toString().getBytes(StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public String toString(){
+        return headerString + "." + payloadString + "." + Base64UrlUtil.encodeToString(signature);
+    }
 
 }

@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.webauthn4j.util.AbstractImmutableMap;
+import com.webauthn4j.data.AbstractImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 

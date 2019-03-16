@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.util.jws;
+package com.webauthn4j.data.jws;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

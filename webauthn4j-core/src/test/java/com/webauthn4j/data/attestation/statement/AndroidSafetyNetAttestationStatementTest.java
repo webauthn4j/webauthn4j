@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 

@@ -27,7 +27,7 @@ import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.authenticator.*;
-import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.data.jws.JWS;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;

@@ -23,9 +23,9 @@ import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.WIP;
-import com.webauthn4j.util.jws.JWAIdentifier;
-import com.webauthn4j.util.jws.JWS;
-import com.webauthn4j.util.jws.JWSHeader;
+import com.webauthn4j.data.jws.JWAIdentifier;
+import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.data.jws.JWSHeader;
 
 import java.security.PrivateKey;
 

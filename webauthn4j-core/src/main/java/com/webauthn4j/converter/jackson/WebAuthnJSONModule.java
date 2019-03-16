@@ -29,7 +29,7 @@ import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
 import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.*;
-import com.webauthn4j.util.jws.JWS;
+import com.webauthn4j.data.jws.JWS;
 
 import java.security.cert.X509Certificate;
 
