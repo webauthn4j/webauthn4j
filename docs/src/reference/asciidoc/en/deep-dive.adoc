@@ -24,34 +24,35 @@ Contains utility classes used in WebAuthn4J library.
 
 === Classes
 
-==== Request/Response
+==== Data Transfer Objects
 
-Classes under `com.webauthn4j.request`, `com.webauthn4j.request` package are designed as immutable DTO.
+Classes under `com.webauthn4j.data` package are designed as immutable DTO.
 
-==== Converter, WebAuthnModule
+==== Converter, Jackson Modules for WebAuthn
 
-Classes under `com.webauthn4j.request`, `com.webauthn4j.request` package are designed as being serializable and deserializable.
+Classes under `com.webauthn4j.data` package are designed as being serializable and deserializable.
 
-Classes under `converter` package needs custom serializer and deserializer. Jackson's module named `WebAuthnModule`
-consolidates these custom serializer and deserializer. WebAuthn4J’s validators register `WebAuthnModule` onto Jackson's
-`ObjectMapper` automatically.
+Some Classes under `converter` package needs custom serializer and deserializer. Jackson's module named
+`WebAuthnJSONModule` and `WebAuthnCBORModule` consolidates these custom serializer and deserializer.
+WebAuthn4J’s validators register these modules onto Jackson's `ObjectMapper` automatically.
 
 If you want to use WebAuthn4J’s serializer and deserializer outside these WebAuthn4J's validators,
-you can register `WebAuthnModule` onto Jackson's `ObjectMapper`.
+you can register these modules onto Jackson's `ObjectMapper`.
 
-If you want to use your custom serializer and deserializer for WebAuthn4J’s validators,
+If you want to use your custom serializer and deserializer for WebAuthn4J’s validators for parsing custom extensions,
 you can register your custom serializer and deserializer onto `ObjectMapper` and pass it onto WebAuthn4J' validators
 via those constructors.
 
 ==== TrustAnchorsResolver
 
-
+`TrustAnchorsResolver` interface is used by `TrustAnchorCertPathTrustworthinessValidator` to explore root certificates
+in the verification of the authenticity of the attestation statements.
 
 ==== TrustAnchorsProvider
 
-
-==== MetadataItemsResolver
-
+`TrustAnchorsProvider` is an interface that `TrustAnchorsResolverImpl` delegates TrustAnchor load operation to.
+KeyStoreFileTrustAnchorsProvider is provided as an implementation for loading TrustAnchor from Java Key Store file.
+Spring Security WebAuthn also provides `CertFileResourcesTrustAnchorProvider` to load TrustAnchor from Spring Resource.
 
 ==== Exceptions
 

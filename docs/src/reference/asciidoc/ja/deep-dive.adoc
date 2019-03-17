@@ -24,15 +24,15 @@ WebAuthn4Jライブラリで使用されるユーティリティクラスをま�
 
 === クラス
 
-==== Request/Response
+==== Data transfer Objects
 
-`com.webauthn4j.request`, `com.webauthn4j.request` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
+`com.webauthn4j.data` パッケージ配下のクラスはイミュータブルなDTOとして設計されています。
 
 ==== Converter, WebAuthnModule
 
-リクエスト、レスポンスパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。
+データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。
 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。
-カスタムシリアライザ、デシリアライザは `WebAuthnModule` というJacksonのModuleにまとめられています。
+カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。
 WebAuthn4JのValidatorは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、Validatorの外部で
 WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `ObjectMapper` に `WebAuthnModule` を登録すると
 良いでしょう。もしWebAuthn4JのValidatorでカスタムなシリアライザ、デシリアライザを使用したい場合は、WebAuthn4JのValidator
@@ -40,13 +40,15 @@ WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合�
 
 ==== TrustAnchorsResolver
 
-
+`TrustAnchorsResolver` インタフェースは `TrustAnchorCertPathTrustworthinessValidator` で構成証明ステートメントの信頼性の
+検証を行う際に信頼するルート証明書のセットを探索するために使用されます。
 
 ==== TrustAnchorsProvider
 
-
-==== MetadataItemsResolver
-
+`TrustAnchorsProvider` インタフェースは前述の `TrustAnchorsResolver` インタフェースの実装である `TrustAnchorsResolverImpl`
+がTrustAnchorの読込処理を委譲する先のインタフェースです。実装としてJava Key StoreファイルからTrustAnchorを読み込む
+`KeyStoreFileTrustAnchorsProvider` クラスが提供されている他、Spring Security WebAuthnでは、SpringのResourceから
+TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供されています。
 
 
 ==== 例外クラス
