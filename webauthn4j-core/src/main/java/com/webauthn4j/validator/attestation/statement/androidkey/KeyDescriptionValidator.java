@@ -146,18 +146,16 @@ class KeyDescriptionValidator {
     }
 
 
-    BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
+    private BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
         if (!asn1Value.isPrimitive()) {
-            throw new BadAttestationStatementException("ASN1Integer is expected; found "
-                    + asn1Value.getClass().getName()
-                    + " instead.");
+            throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }
         Asn1Integer value = new Asn1Integer();
         value.decode(asn1Value);
         return value.getValue();
     }
 
-    Asn1ParseResult findAuthorizationListEntry(
+    private Asn1ParseResult findAuthorizationListEntry(
             Asn1Container authorizationList, int tag) {
         for (Asn1ParseResult entry : authorizationList.getChildren()) {
             Asn1ParseResult taggedEntry = entry;

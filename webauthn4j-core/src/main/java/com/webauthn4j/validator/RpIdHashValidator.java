@@ -50,7 +50,7 @@ class RpIdHashValidator {
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
             logger.debug("Authentication failed: bad rpId is specified");
-            throw new BadRpIdException("Bad rpId");
+            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.");
         }
     }
 }

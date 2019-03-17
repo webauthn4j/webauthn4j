@@ -42,14 +42,14 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
-            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
+            throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
 
         AndroidKeyAttestationStatement attestationStatement =
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found'.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
         }
 
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
@@ -91,9 +91,9 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
             if (verifier.verify(signature)) {
                 return;
             }
-            throw new BadSignatureException("Bad signature");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         } catch (SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("Bad signature", e);
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", e);
         }
     }
 

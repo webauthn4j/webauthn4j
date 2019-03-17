@@ -61,7 +61,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (!attestationStatement.getVer().equals(TPMAttestationStatement.VERSION_2_0)){
-            throw new BadAttestationStatementException("TPM version is not supported");
+            throw new BadAttestationStatementException("TPM version is not supported.");
         }
 
         TPMSAttest certInfo = attestationStatement.getCertInfo();
@@ -102,7 +102,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
 
         byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
         if(!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())){
-            throw new BadAttestationStatementException("hash of attested doesn't match with name field of certifyInfo");
+            throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo");
         }
 
         /// Note that the remaining fields in the "Standard Attestation Structure" [TPMv2-Part1] section 31.2,
@@ -121,7 +121,7 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
             throw new NotImplementedException();
             // When it is implemented, `AttestationType.ECDAA` is to be returned.
         }
-        throw new BadAttestationStatementException("x5c or ecdaaKeyId must be present");
+        throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }
 
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData authenticatorData) {
@@ -133,12 +133,10 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
             certInfoSignature.initVerify(aikCert.getPublicKey());
             certInfoSignature.update(certInfo.getBytes());
             if(!certInfoSignature.verify(attestationStatement.getSig())){
-                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig");
+                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig.");
             }
-        } catch (SignatureException e) {
-            throw new BadAttestationStatementException("hash of certInfo doesn't match with sig", e);
-        } catch (InvalidKeyException e) {
-            throw new BadAttestationStatementException("invalid publicKey", e);
+        } catch (SignatureException | InvalidKeyException e) {
+            throw new BadAttestationStatementException("Failed to validate the signature.", e);
         }
 
         /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.

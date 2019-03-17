@@ -135,7 +135,7 @@ class AttestationValidator {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
-                throw new BadAaguidException("AAGUID is not 0x00 though it is in U2F attestation.");
+                throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.");
             }
         }
     }
@@ -147,6 +147,6 @@ class AttestationValidator {
             }
         }
 
-        throw new BadAttestationStatementException("Supplied AttestationStatement format is not configured.");
+        throw new BadAttestationStatementException(String.format("AttestationValidator is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()));
     }
 }

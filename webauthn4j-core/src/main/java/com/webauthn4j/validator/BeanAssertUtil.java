@@ -33,7 +33,6 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import com.webauthn4j.validator.exception.BadRpIdException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.util.Map;
@@ -139,7 +138,7 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("rpIdHash must not be null");
         }
         if (rpIdHash.length != 32) {
-            throw new BadRpIdException("rpIdHash must be 32 bytes length");
+            throw new ConstraintViolationException("rpIdHash must be 32 bytes length");
         }
 
         long signCount = authenticatorData.getSignCount();

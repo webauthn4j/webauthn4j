@@ -69,13 +69,13 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private AttestationType validateX5c(RegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found'.");
+            throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
         }
 
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
         // using the attestation public key in x5c with the algorithm specified in alg.
         if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
-            throw new BadSignatureException("Bad signature");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
         // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
         attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
@@ -86,7 +86,7 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         AAGUID aaguidInCertificate = aaguidInCertificateBytes == null ? AAGUID.NULL : new AAGUID(UUIDUtil.fromBytes(aaguidInCertificateBytes));
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
-            throw new BadAttestationStatementException("Bad aaguid");
+            throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
         }
 
         // If successful, return attestation type BASIC and attestation trust path x5c.
@@ -107,11 +107,11 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         // Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = credentialPublicKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
-            throw new BadAlgorithmException("Algorithm doesn't match");
+            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the credentialPublicKey in authenticatorData.");
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
         if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, attrToBeSigned)) {
-            throw new BadSignatureException("Bad signature");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
         // If successful, return attestation type Self and empty attestation trust path.
         return AttestationType.SELF;

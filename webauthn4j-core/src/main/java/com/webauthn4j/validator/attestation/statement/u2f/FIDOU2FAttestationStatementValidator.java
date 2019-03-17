@@ -89,9 +89,9 @@ public class FIDOU2FAttestationStatementValidator implements AttestationStatemen
             if (verifier.verify(signature)) {
                 return;
             }
-            throw new BadSignatureException("Bad signature");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("Bad signature", e);
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
     }
 

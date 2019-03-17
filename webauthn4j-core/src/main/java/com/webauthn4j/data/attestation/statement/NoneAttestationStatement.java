@@ -43,7 +43,8 @@ public class NoneAttestationStatement implements AttestationStatement {
     @Override
     public void validate() {
         if (!unknownProperties.isEmpty()) {
-            throw new BadAttestationStatementException("Unknown property is set.");
+            // This check is required by FIDO Conformance Tools
+            throw new BadAttestationStatementException("Unknown property is set to the none attestation statement.");
         }
     }
 

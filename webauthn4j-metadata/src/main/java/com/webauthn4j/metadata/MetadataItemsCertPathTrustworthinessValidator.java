@@ -53,7 +53,7 @@ public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataIte
         boolean isSurrogate = !attestationTypes.isEmpty() &&
                 attestationTypes.stream().allMatch(type -> type.equals(AttestationType.BASIC_SURROGATE));
         if (isSurrogate && attestationStatement.getX5c() != null) {
-            throw new BadAttestationStatementException("Although aaguid is for surrogate attestation, x5c contains certificates");
+            throw new BadAttestationStatementException("Although AAGUID is registered for surrogate attestation in metadata, x5c contains certificates.");
         }
 
         for (T metadataItem : metadataItems) {

@@ -36,7 +36,7 @@ class AssertionSignatureValidator {
         byte[] signedData = getSignedData(webAuthnAuthenticationContext);
         byte[] signature = webAuthnAuthenticationContext.getSignature();
         if (!credentialPublicKey.verifySignature(signature, signedData)) {
-            throw new BadSignatureException("Bad signature");
+            throw new BadSignatureException("Assertion signature is not valid.");
         }
     }
 

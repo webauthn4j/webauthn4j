@@ -22,7 +22,6 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.BadSignatureException;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -51,7 +50,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found'.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
         }
 
         /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
@@ -83,16 +82,16 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
 
         // Verify the timestampMs doesn't violate backwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).minus(Duration.ofSeconds(backwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates backwardThreshold");
+            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.");
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).plus(Duration.ofSeconds(forwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates forwardThreshold");
+            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.");
         }
 
         if (!attestationStatement.getResponse().isValidSignature()) {
-            throw new BadSignatureException("Bad signature");
+            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.");
         }
 
         /// If successful, return implementation-specific values representing attestation type Basic and attestation trust path attestationCert.
@@ -105,7 +104,7 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
         if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
-            throw new BadAttestationStatementException("Nonce doesn't match");
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.");
         }
     }
 
@@ -148,10 +147,10 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < minimalVersion) {
-                    throw new BadAttestationStatementException("version number doesn't confirm minimal requirement");
+                    throw new BadAttestationStatementException("The version number of Google Play Services responsible for providing the SafetyNet API doesn't conform minimal requirement.");
                 }
             } catch (NumberFormatException e) {
-                throw new BadAttestationStatementException("invalid version number");
+                throw new BadAttestationStatementException("`ver` in android safetynet attestation statement cannot be parsed as number.");
             }
         }
     }
