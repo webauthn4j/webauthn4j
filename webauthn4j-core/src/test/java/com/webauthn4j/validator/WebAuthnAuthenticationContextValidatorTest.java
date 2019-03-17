@@ -18,7 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,7 +47,7 @@ class WebAuthnAuthenticationContextValidatorTest {
     void validateAuthenticatorData_with_invalid_data() {
         WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
         AuthenticatorData authenticatorData = new AuthenticatorData(new byte[32], AuthenticatorData.BIT_AT, 0, new AttestedCredentialData());
-        assertThrows(MaliciousDataException.class,
+        assertThrows(ConstraintViolationException.class,
                 () -> target.validateAuthenticatorData(authenticatorData)
         );
     }

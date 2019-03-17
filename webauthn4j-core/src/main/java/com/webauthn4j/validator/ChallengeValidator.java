@@ -48,7 +48,7 @@ class ChallengeValidator {
 
         if (savedChallenge == null) {
             logger.debug("Authentication failed: challenge is not found in the relying party");
-            throw new MissingChallengeException("Missing challenge");
+            throw new MissingChallengeException("`challenge` doesn't exist in collectedClientData.");
         }
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to

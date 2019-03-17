@@ -36,7 +36,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
 
         if(trustAnchors.isEmpty()){
-            throw new TrustAnchorNotFoundException("TrustAnchors do not found for aaguid: " + aaguid.toString());
+            throw new TrustAnchorNotFoundException("TrustAnchors are not found for AAGUID: " + aaguid.toString());
         }
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
@@ -54,7 +54,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
             throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
-            throw new CertificateException("certpath contains full chain");
+            throw new CertificateException("`certpath` must not contain full chain.");
         }
     }
 

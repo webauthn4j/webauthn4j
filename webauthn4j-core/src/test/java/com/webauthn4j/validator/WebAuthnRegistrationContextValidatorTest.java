@@ -21,7 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.junit.jupiter.api.Test;
@@ -69,7 +69,7 @@ class WebAuthnRegistrationContextValidatorTest {
     @Test
     void validateAuthenticatorDataField_test() {
         AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        assertThrows(MaliciousDataException.class,
+        assertThrows(ConstraintViolationException.class,
                 () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData)
         );
     }

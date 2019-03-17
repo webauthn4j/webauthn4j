@@ -74,7 +74,7 @@ class KeyDescriptionValidator {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
-            throw new KeyDescriptionValidationException("Bad attestation challenge exception");
+            throw new KeyDescriptionValidationException("Attestation challenge doesn't match.");
         }
 
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:

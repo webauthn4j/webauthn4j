@@ -49,10 +49,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrust
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.validator.exception.*;
 
 import java.util.*;
 
@@ -223,7 +220,7 @@ public class WebAuthnRegistrationContextValidator {
 
         /// Verify that the value of C.type is webauthn.create.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
-            throw new MaliciousDataException("Bad client data type");
+            throw new MaliciousDataException("ClientData.type must be 'create' on registration, but it isn't.");
         }
 
         /// Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
@@ -284,19 +281,19 @@ public class WebAuthnRegistrationContextValidator {
     void validateAuthenticatorDataField(AuthenticatorData authenticatorData){
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
-            throw new MaliciousDataException("attestedCredentialData must not be null on registration");
+            throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
         }
     }
 
     void validateUVUPFlags(AuthenticatorData authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
         /// If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("User not verified");
+            throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
         /// Verify that the User Present bit of the flags in authData is set.
         if (isUserPresenceRequired && !authenticatorData.isFlagUP()) {
-            throw new UserNotPresentException("User not present");
+            throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }
     }
 

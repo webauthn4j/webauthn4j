@@ -16,15 +16,15 @@
 
 package com.webauthn4j.metadata;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.statement.AttestationType;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.metadata.exception.MDSException;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.CertificateException;
 
 import java.security.cert.TrustAnchor;
 import java.util.List;
@@ -85,7 +85,7 @@ public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataIte
                 case USER_KEY_PHYSICAL_COMPROMISE:
                 case REVOKED:
                 default:
-                    throw new CertificateException(String.format("error response from fidoMdsMetadataItem service: %s", report.getStatus()));
+                    throw new MDSException(String.format("FIDO Metadata Service reported `%s` for this authenticator.", report.getStatus()));
             }
         });
     }

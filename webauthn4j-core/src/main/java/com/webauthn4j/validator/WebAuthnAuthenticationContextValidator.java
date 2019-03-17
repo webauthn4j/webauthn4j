@@ -34,10 +34,7 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
-import com.webauthn4j.validator.exception.MaliciousDataException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
-import com.webauthn4j.validator.exception.ValidationException;
+import com.webauthn4j.validator.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +123,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         /// Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
-            throw new MaliciousDataException("Bad client data type");
+            throw new MaliciousDataException("ClientData.type must be 'get' on authentication, but it isn't.");
         }
 
         // Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
@@ -146,12 +143,12 @@ public class WebAuthnAuthenticationContextValidator {
 
         // If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
         if (authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("User not verified");
+            throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
         /// Verify that the User Present bit of the flags in authData is set.
         if (authenticationContext.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
-            throw new UserNotPresentException("User not present");
+            throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }
 
         // Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
@@ -193,7 +190,7 @@ public class WebAuthnAuthenticationContextValidator {
 
     void validateAuthenticatorData(AuthenticatorData authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
-            throw new MaliciousDataException("attestedCredentialData must be null on authentication");
+            throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
     }
 
