@@ -33,7 +33,7 @@ Classes under `com.webauthn4j.data` package are designed as immutable DTO.
 Classes under `com.webauthn4j.data` package are designed as being serializable and deserializable.
 
 Some Classes under `converter` package needs custom serializer and deserializer. Jackson's module named
-`WebAuthnJSONModule` and `WebAuthnCBORModule` consolidates these custom serializer and deserializer.
+`WebAuthnJSONModule` and `WebAuthnCBORModule` consolidate these custom serializer and deserializer.
 WebAuthn4J’s validators register these modules onto Jackson's `ObjectMapper` automatically.
 
 If you want to use WebAuthn4J’s serializer and deserializer outside these WebAuthn4J's validators,
