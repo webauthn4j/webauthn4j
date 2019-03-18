@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+import java.util.Arrays;
+
 public enum COSEAlgorithmIdentifier {
     RS1(-65535, "SHA1withRSA", "SHA-1"),
     RS256(-257, "SHA256withRSA", "SHA-256"),
@@ -39,34 +41,19 @@ public enum COSEAlgorithmIdentifier {
         this.messageDigestJcaName = messageDigestJcaName;
     }
 
-    public static COSEAlgorithmIdentifier create(int value)  {
-        switch (value) {
-            case -65535:
-                return RS1;
-            case -257:
-                return RS256;
-            case -258:
-                return RS384;
-            case -259:
-                return RS512;
-            case -7:
-                return ES256;
-            case -35:
-                return ES384;
-            case -36:
-                return ES512;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+    public static COSEAlgorithmIdentifier create(long value) {
+        return Arrays.stream(values())
+                .filter(it -> it.value == value)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid COSE Algorithm identifier provided: " + value));
     }
 
     @JsonCreator
-    private static COSEAlgorithmIdentifier fromJson(int value) throws InvalidFormatException {
-        try{
+    private static COSEAlgorithmIdentifier fromJson(long value) throws InvalidFormatException {
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
-            throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "Invalid COSE Algorithm identifier provided", value, COSEAlgorithmIdentifier.class);
         }
     }
 
