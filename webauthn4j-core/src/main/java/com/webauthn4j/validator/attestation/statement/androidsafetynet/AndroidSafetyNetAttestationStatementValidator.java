@@ -16,11 +16,14 @@
 
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationCertificate;
+import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.nio.ByteBuffer;
@@ -30,7 +33,7 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AndroidSafetyNetAttestationStatementValidator implements AttestationStatementValidator {
+public class AndroidSafetyNetAttestationStatementValidator extends AbstractStatementValidator<AndroidSafetyNetAttestationStatement> {
 
     // ~ Instance fields
     // ================================================================================================
@@ -106,12 +109,6 @@ public class AndroidSafetyNetAttestationStatementValidator implements Attestatio
         if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
             throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.");
         }
-    }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return AndroidSafetyNetAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
     public int getForwardThreshold() {
