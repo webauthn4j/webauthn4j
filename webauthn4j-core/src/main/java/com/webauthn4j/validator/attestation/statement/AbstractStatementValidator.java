@@ -31,10 +31,10 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
 
         if (actualTypeArgument instanceof Class) {
             this.parameterizedTypeClass = (Class<?>) actualTypeArgument;
+        } else {
+            // Throw an exception if the class is not extending AttestationStatement, or if the type is not a Class<?>
+            throw new IllegalStateException("Inheriting class should extend AttestationStatement");
         }
-
-        // Throw an exception if the class is not extending AttestationStatement, or if the type is not a Class<?>
-        throw new IllegalStateException("Inheriting class should extend AttestationStatement");
     }
 
     @Override
