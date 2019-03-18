@@ -18,7 +18,6 @@ package com.webauthn4j.data.jws;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +41,8 @@ class JWAIdentifierTest {
                 () -> assertThat(JWAIdentifier.create("RS512")).isEqualTo(JWAIdentifier.RS512),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> JWAIdentifier.create("invalid")),
+                () -> assertThrows(IllegalArgumentException.class,
+                        () -> JWAIdentifier.create("")),
                 () -> assertThat(JWAIdentifier.create(null)).isNull()
         );
     }

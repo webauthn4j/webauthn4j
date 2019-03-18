@@ -16,10 +16,9 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.junit.jupiter.api.Test;
-
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -68,6 +67,10 @@ class COSEAlgorithmIdentifierTest {
     void fromString_test_with_invalid_value() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"cose_alg_id\":0}", TestDTO.class)
+        );
+
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
         );
     }
 
