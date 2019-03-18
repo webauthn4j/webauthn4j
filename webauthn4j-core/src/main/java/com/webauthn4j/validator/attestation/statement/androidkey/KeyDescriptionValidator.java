@@ -132,6 +132,9 @@ class KeyDescriptionValidator {
 
     private boolean containsValidPurpose(Asn1ParseResult purposes) throws IOException {
         try {
+            if(purposes == null){
+                return false;
+            }
             Asn1Container set = (Asn1Container) purposes;
             for (Asn1ParseResult purpose : set.getChildren()) {
                 if (getIntegerFromAsn1(purpose).equals(BigInteger.valueOf(KM_PURPOSE_SIGN))) {

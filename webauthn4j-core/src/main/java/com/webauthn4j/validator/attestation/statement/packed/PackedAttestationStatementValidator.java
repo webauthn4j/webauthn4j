@@ -26,7 +26,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
@@ -39,7 +39,7 @@ import java.util.Objects;
 /**
  * Validates the specified {@link AttestationStatement} is a valid packed attestation
  */
-public class PackedAttestationStatementValidator implements AttestationStatementValidator {
+public class PackedAttestationStatementValidator extends AbstractStatementValidator<PackedAttestationStatement> {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
@@ -116,13 +116,6 @@ public class PackedAttestationStatementValidator implements AttestationStatement
         // If successful, return attestation type Self and empty attestation trust path.
         return AttestationType.SELF;
     }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return PackedAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
-    }
-
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {

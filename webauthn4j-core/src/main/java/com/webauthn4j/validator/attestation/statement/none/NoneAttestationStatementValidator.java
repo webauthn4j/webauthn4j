@@ -20,12 +20,12 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
 /**
  * Validates the specified {@link AttestationStatement} is a none attestation
  */
-public class NoneAttestationStatementValidator implements AttestationStatementValidator {
+public class NoneAttestationStatementValidator extends AbstractStatementValidator<NoneAttestationStatement> {
 
     @Override
     public AttestationType validate(RegistrationObject registrationObject) {
@@ -34,11 +34,5 @@ public class NoneAttestationStatementValidator implements AttestationStatementVa
         }
 
         return AttestationType.NONE;
-    }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return NoneAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 }

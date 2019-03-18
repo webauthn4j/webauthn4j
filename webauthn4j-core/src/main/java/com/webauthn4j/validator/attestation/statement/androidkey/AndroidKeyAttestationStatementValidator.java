@@ -17,13 +17,12 @@
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.signature.Signature;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
@@ -33,7 +32,7 @@ import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 
-public class AndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
+public class AndroidKeyAttestationStatementValidator extends AbstractStatementValidator<AndroidKeyAttestationStatement> {
 
     // ~ Instance fields
     // ================================================================================================
@@ -70,13 +69,6 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         keyDescriptionValidator.validate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
 
         return AttestationType.BASIC;
-    }
-
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return AndroidKeyAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
     }
 
     private void validateSignature(RegistrationObject registrationObject) {

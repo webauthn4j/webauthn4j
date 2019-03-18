@@ -24,7 +24,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
@@ -45,7 +45,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class TPMAttestationStatementValidator implements AttestationStatementValidator {
+public class TPMAttestationStatementValidator extends AbstractStatementValidator<TPMAttestationStatement> {
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
@@ -226,13 +226,6 @@ public class TPMAttestationStatementValidator implements AttestationStatementVal
                 throw new NotImplementedException();
         }
     }
-
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        return TPMAttestationStatement.class.isAssignableFrom(attestationStatement.getClass());
-    }
-
 
     private void validateAikCert(X509Certificate certificate) {
         try {
