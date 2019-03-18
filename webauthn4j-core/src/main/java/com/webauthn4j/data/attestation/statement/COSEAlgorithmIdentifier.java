@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.signature.Signature;
 
 import java.util.Arrays;
 
@@ -68,5 +69,13 @@ public enum COSEAlgorithmIdentifier {
 
     public String getMessageDigestJcaName() {
         return messageDigestJcaName;
+    }
+
+    public Signature.Verifier getSignatureVerifier() {
+        return Signature.Verifier.forAlgorithm(this);
+    }
+
+    public Signature.Signer getSignatureSigner() {
+        return Signature.Signer.forAlgorithm(this);
     }
 }

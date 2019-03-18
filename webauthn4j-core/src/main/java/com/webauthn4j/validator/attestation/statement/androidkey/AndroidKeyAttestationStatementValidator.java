@@ -19,8 +19,9 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.signature.Signature;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -28,7 +29,8 @@ import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.PublicKey;
 import java.security.cert.Certificate;
 
 public class AndroidKeyAttestationStatementValidator implements AttestationStatementValidator {
@@ -84,16 +86,14 @@ public class AndroidKeyAttestationStatementValidator implements AttestationState
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
-        try {
-            Signature verifier = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
-            verifier.initVerify(publicKey);
-            verifier.update(signedData);
-            if (verifier.verify(signature)) {
-                return;
-            }
+        COSEAlgorithmIdentifier algorithmIdentifier = attestationStatement.getAlg();
+
+        Signature.Verifier verifier = algorithmIdentifier.getSignatureVerifier()
+                .publicKey(publicKey)
+                .update(signedData);
+
+        if (!verifier.verify(signature)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
-        } catch (SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", e);
         }
     }
 

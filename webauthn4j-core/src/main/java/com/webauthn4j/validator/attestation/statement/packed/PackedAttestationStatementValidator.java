@@ -23,7 +23,6 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
@@ -33,7 +32,8 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.MessageDigest;
+import java.security.PublicKey;
 import java.util.Objects;
 
 /**
@@ -126,12 +126,11 @@ public class PackedAttestationStatementValidator implements AttestationStatement
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
-            Signature verifier = SignatureUtil.createSignature(algorithmIdentifier.getJcaName());
-            verifier.initVerify(publicKey);
-            verifier.update(data);
-
-            return verifier.verify(signature);
-        } catch (SignatureException | InvalidKeyException | RuntimeException e) {
+            return algorithmIdentifier.getSignatureVerifier()
+                    .publicKey(publicKey)
+                    .update(data)
+                    .verify(signature);
+        } catch (BadSignatureException e) {
             return false;
         }
     }
