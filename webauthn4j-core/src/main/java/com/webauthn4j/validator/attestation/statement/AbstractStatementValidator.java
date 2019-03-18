@@ -22,18 +22,23 @@ import com.webauthn4j.validator.RegistrationObject;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+@SuppressWarnings({"squid:S2326", "unused"})
 public abstract class AbstractStatementValidator<T extends AttestationStatement> implements AttestationStatementValidator {
     private Class<?> parameterizedTypeClass;
 
     public AbstractStatementValidator() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+        if(parameterizedType.getActualTypeArguments().length == 0){
+            // Throw an exception if the class is not extending AttestationStatement
+            throw new IllegalStateException("Inheriting class must extend AttestationStatement");
+        }
         Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
 
         if (actualTypeArgument instanceof Class) {
             this.parameterizedTypeClass = (Class<?>) actualTypeArgument;
         } else {
-            // Throw an exception if the class is not extending AttestationStatement, or if the type is not a Class<?>
-            throw new IllegalStateException("Inheriting class should extend AttestationStatement");
+            // Throw an exception if the type is not a Class<?>
+            throw new IllegalStateException("Inheriting class must extend AttestationStatement");
         }
     }
 
