@@ -23,19 +23,24 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public abstract class AbstractStatementValidator<T extends AttestationStatement> implements AttestationStatementValidator {
-    @Override
-    public boolean supports(RegistrationObject registrationObject) {
-        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+    private Class<?> parameterizedTypeClass;
 
+    public AbstractStatementValidator() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         Type actualTypeArgument = parameterizedType.getActualTypeArguments()[0];
 
         if (actualTypeArgument instanceof Class) {
-            Class<?> aClass = (Class<?>) actualTypeArgument;
-
-            return aClass.isAssignableFrom(attestationStatement.getClass());
+            this.parameterizedTypeClass = (Class<?>) actualTypeArgument;
         }
 
-        return false;
+        // Throw an exception if the class is not extending AttestationStatement, or if the type is not a Class<?>
+        throw new IllegalStateException("Inheriting class should extend AttestationStatement");
+    }
+
+    @Override
+    public boolean supports(RegistrationObject registrationObject) {
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+
+        return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
     }
 }
