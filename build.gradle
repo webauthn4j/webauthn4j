@@ -34,9 +34,18 @@ plugins {
     id "com.jfrog.artifactory" version "4.7.5"
 }
 
+apply plugin: 'org.owasp.dependencycheck'
+
+check.dependsOn dependencyCheckAggregate
+
 allprojects {
     group 'com.webauthn4j'
     version "${webauthn4jVersion}"
+
+    dependencyCheck {
+        failBuildOnCVSS=4 //midium
+    }
+
 }
 
 subprojects {
@@ -73,6 +82,8 @@ subprojects {
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Werror"
     }
+
+    check.dependsOn dependencyCheckAnalyze
 
     artifacts {
         archives sourcesJar
@@ -205,5 +216,3 @@ asciidoctor {
             numbered: '',
             revnumber: "${webauthn4jVersion}"
 }
-
-apply plugin: 'org.owasp.dependencycheck'
