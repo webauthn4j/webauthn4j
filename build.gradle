@@ -22,6 +22,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${bintrayVersion}")
+        classpath("org.owasp:dependency-check-gradle:${owaspDependencyCheckVersion}")
     }
 
 }
@@ -204,3 +205,5 @@ asciidoctor {
             numbered: '',
             revnumber: "${webauthn4jVersion}"
 }
+
+apply plugin: 'org.owasp.dependencycheck'
