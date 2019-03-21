@@ -1,4 +1,3 @@
-[webauthn-in-a-nutshell]
 == 付録：Web Authentication入門
 
 === パスワード認証の限界 ===

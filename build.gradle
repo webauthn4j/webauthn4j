@@ -16,12 +16,13 @@
 
 buildscript {
     repositories {
+        mavenCentral()
         maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorVersion}")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorGradleVersion}")
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:${artifactoryVersion}")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${bintrayVersion}")
         classpath("org.owasp:dependency-check-gradle:${owaspDependencyCheckVersion}")
@@ -42,7 +43,8 @@ allprojects {
     version "${webauthn4jVersion}"
 
     dependencyCheck {
-        failBuildOnCVSS=4 //midium
+        failBuildOnCVSS=4 //medium
+        suppressionFile="$rootDir/owasp/suppression.xml"
     }
 
 }
@@ -188,7 +190,7 @@ subprojects {
 
 
 asciidoctorj {
-    version = asciidoctorVersion
+    version = asciidoctorJVersion
 }
 
 asciidoctor {

@@ -1,4 +1,3 @@
-[deep-dive]
 == Deep-Dive
 
 === Project Modules
