@@ -42,7 +42,7 @@ allprojects {
     version "${webauthn4jVersion}"
 
     dependencyCheck {
-        failBuildOnCVSS=4 //midium
+        failBuildOnCVSS=4 //medium
     }
 
 }
