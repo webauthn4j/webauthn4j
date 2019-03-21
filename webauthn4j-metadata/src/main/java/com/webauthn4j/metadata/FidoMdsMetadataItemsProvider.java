@@ -17,17 +17,19 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
 import com.webauthn4j.metadata.exception.MDSException;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.http.HttpClient;
+import com.webauthn4j.metadata.http.HttpClientFactory;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.data.jws.JWS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +79,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
     }
 
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter) {
-        this(jsonConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
+        this(jsonConverter, HttpClientFactory.createHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
     @Override

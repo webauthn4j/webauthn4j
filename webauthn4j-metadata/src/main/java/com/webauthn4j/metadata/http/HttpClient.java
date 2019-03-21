@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata;
+package com.webauthn4j.metadata.http;
+
+import com.webauthn4j.metadata.exception.MDSException;
 
 /**
  * HTTP Client for FIDO FidoMdsMetadataItemImpl Service
  */
-public interface HttpClient {
-
-    String fetch(String uri);
-
+public interface HttpClient extends AutoCloseable {
+    String fetch(String uri) throws MDSException;
 }

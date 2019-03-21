@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata;
+package com.webauthn4j.metadata.http;
 
 import com.webauthn4j.metadata.exception.MDSException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,12 +28,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SimpleHttpClient implements HttpClient {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleHttpClient.class);
+
+    private HttpURLConnection urlConnection = null;
+
+    public SimpleHttpClient() {
+    }
 
     @Override
-    public String fetch(String url) {
+    public String fetch(String url) throws MDSException {
         try {
             URL fetchUrl = new URL(url);
-            HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
+            urlConnection = (HttpURLConnection) fetchUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -46,11 +54,26 @@ public class SimpleHttpClient implements HttpClient {
                     buf.write((byte) result);
                     result = bis.read();
                 }
+
                 return buf.toString("UTF-8");
+            } else {
+                String message = urlConnection.getResponseMessage();
+
+                throw new MDSException("Unable to connect to '" + url + "'"
+                        + ", responded with status: " + status
+                        + ", message: '" + message + "'");
             }
-            throw new MDSException("failed to fetch " + url);
         } catch (IOException e) {
-            throw new MDSException("failed to fetch " + url, e);
+            LOGGER.error("Unable to retrieve MDS data from '" + url + "'", e);
+
+            throw new MDSException("Unable to connect to '" + url + "'", e);
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        if(null != urlConnection) {
+            urlConnection.disconnect();
         }
     }
 }
