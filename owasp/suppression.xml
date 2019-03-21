@@ -16,4 +16,24 @@
   -->
 
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+    <!-- supress alerts regarding asciidoctor gradle plugin -->
+    <suppress>
+        <notes><![CDATA[
+   file name: dirgra-0.3.jar
+   ]]></notes>
+        <gav regex="true">^org\.jruby:dirgra:.*$</gav>
+        <cpe>cpe:/a:jruby:jruby</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jruby-stdlib-9.2.6.0.jar: jquery.js
+   ]]></notes>
+        <cve>CVE-2012-6708</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jruby-stdlib-9.2.6.0.jar: jquery.js
+   ]]></notes>
+        <cve>CVE-2015-9251</cve>
+    </suppress>
 </suppressions>
