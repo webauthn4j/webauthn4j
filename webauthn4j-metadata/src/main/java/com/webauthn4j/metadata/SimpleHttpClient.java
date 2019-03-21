@@ -25,6 +25,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Tiny implementation of {@link HttpClient}. If you prefer more powerful one, implement {@link HttpClient} with
+ * your favorite HTTP client library.
+ */
 public class SimpleHttpClient implements HttpClient {
 
     @Override
@@ -46,6 +50,7 @@ public class SimpleHttpClient implements HttpClient {
                     buf.write((byte) result);
                     result = bis.read();
                 }
+                bis.close();
                 return buf.toString("UTF-8");
             }
             throw new MDSException("failed to fetch " + url);
