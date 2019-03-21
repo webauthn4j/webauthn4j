@@ -1,4 +1,3 @@
-[configuration]
 == Configuration
 
 There are two main classes when using WebAuthn4J. One is `WebAuthnRegistrationContextValidator` class, which is

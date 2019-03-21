@@ -1,4 +1,3 @@
-[introduction]
 == Introduction
 
 === Web Authentication
@@ -89,3 +88,4 @@ WebAuthn4J is an open source software licensed under http://www.apache.org/licen
 
 Interested in helping out with WebAuthn4J? Great! Your participation in the community is much appreciated!
 Please feel free to open issues and send pull-requests.
+

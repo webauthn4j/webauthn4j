@@ -1,4 +1,3 @@
-[known-issues]
 == Known Issues
 
 WebAuthn is state of the art technology. Therefore, there are still some limitations products utilizing it have.

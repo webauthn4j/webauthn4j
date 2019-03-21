@@ -1,4 +1,3 @@
-[introduction]
 == 導入
 
 === Web Authenticationとは
@@ -93,3 +92,4 @@ WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license
 
 WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。
 お気軽にIssueやPull Requestをお寄せ下さい。
+

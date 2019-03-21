@@ -1,4 +1,3 @@
-[deep-dive]
 == 詳細
 
 === Project Modules
@@ -60,3 +59,4 @@ TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供さ�
 
 WebAuthn4JはSLF4Jをログインタフェースライブラリとして使用します。
 Logbackなどログ実装ライブラリを構成し、ログをお好みのスタイルで出力してください。
+
