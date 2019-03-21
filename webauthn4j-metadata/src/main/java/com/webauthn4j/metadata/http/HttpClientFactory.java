@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 public class HttpClientFactory {
@@ -45,9 +46,9 @@ public class HttpClientFactory {
 
             // Check if the HttpClient interface is implemented
             if (HttpClient.class.isAssignableFrom(aClass)) {
-                return (HttpClient) aClass.newInstance();
+                return (HttpClient) aClass.getDeclaredConstructor().newInstance();
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
             LOGGER.error("Unable to create new instance of the HttpClient. Falling back to SimpleHttpClient.", e);
         }
 
