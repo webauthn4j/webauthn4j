@@ -34,8 +34,6 @@ import java.net.URL;
 public class SimpleHttpClient implements HttpClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleHttpClient.class);
 
-    private HttpURLConnection urlConnection = null;
-
     public SimpleHttpClient() {
     }
 
@@ -43,7 +41,7 @@ public class SimpleHttpClient implements HttpClient {
     public String fetch(String url) throws MDSException {
         try {
             URL fetchUrl = new URL(url);
-            urlConnection = (HttpURLConnection) fetchUrl.openConnection();
+            HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -76,8 +74,6 @@ public class SimpleHttpClient implements HttpClient {
 
     @Override
     public void close() throws Exception {
-        if(null != urlConnection) {
-            urlConnection.disconnect();
-        }
+        // Not used in this implementation
     }
 }

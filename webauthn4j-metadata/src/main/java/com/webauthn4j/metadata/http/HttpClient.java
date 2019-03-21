@@ -21,7 +21,7 @@ import com.webauthn4j.metadata.exception.MDSException;
 /**
  * HTTP Client for FIDO FidoMdsMetadataItemImpl Service
  */
-public interface HttpClient {
+public interface HttpClient extends AutoCloseable {
 
     String fetch(String uri) throws MDSException;
 
