@@ -41,7 +41,7 @@ class AuthenticationObjectTest {
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    void test() {
+    void getter_test() {
 
         byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
@@ -74,4 +74,44 @@ class AuthenticationObjectTest {
         );
     }
 
-}
+    @Test
+    void equals_hashCode_test() {
+
+        byte[] credentialId = new byte[32];
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        LocalDateTime timestamp = LocalDateTime.now();
+
+        AuthenticationObject instanceA = new AuthenticationObject(
+                credentialId,
+                clientData,
+                clientDataBytes,
+                authenticatorData,
+                authenticatorDataBytes,
+                clientExtensions,
+                serverProperty,
+                timestamp
+        );
+
+        AuthenticationObject instanceB = new AuthenticationObject(
+                credentialId,
+                clientData,
+                clientDataBytes,
+                authenticatorData,
+                authenticatorDataBytes,
+                clientExtensions,
+                serverProperty,
+                timestamp
+        );
+
+        assertAll(
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+        );
+    }
+
+    }

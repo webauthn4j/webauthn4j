@@ -10,6 +10,8 @@ import com.webauthn4j.util.ArrayUtil;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Internal data transfer object for authentication data
@@ -99,5 +101,29 @@ public class AuthenticationObject {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticationObject that = (AuthenticationObject) o;
+        return Arrays.equals(credentialId, that.credentialId) &&
+                Objects.equals(collectedClientData, that.collectedClientData) &&
+                Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
+                Objects.equals(authenticatorData, that.authenticatorData) &&
+                Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
+                Objects.equals(clientExtensions, that.clientExtensions) &&
+                Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(timestamp, that.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(collectedClientData, authenticatorData, clientExtensions, serverProperty, timestamp);
+        result = 31 * result + Arrays.hashCode(credentialId);
+        result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
+        result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
+        return result;
     }
 }

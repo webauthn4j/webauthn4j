@@ -27,6 +27,8 @@ import com.webauthn4j.util.CollectionUtil;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -131,5 +133,30 @@ public class RegistrationObject {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RegistrationObject that = (RegistrationObject) o;
+        return Objects.equals(collectedClientData, that.collectedClientData) &&
+                Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
+                Objects.equals(attestationObject, that.attestationObject) &&
+                Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
+                Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
+                Objects.equals(transports, that.transports) &&
+                Objects.equals(clientExtensions, that.clientExtensions) &&
+                Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(timestamp, that.timestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(collectedClientData, attestationObject, transports, clientExtensions, serverProperty, timestamp);
+        result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
+        result = 31 * result + Arrays.hashCode(attestationObjectBytes);
+        result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
+        return result;
     }
 }

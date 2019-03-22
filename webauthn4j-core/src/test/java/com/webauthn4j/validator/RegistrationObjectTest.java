@@ -45,7 +45,7 @@ class RegistrationObjectTest {
     private CborConverter cborConverter = new CborConverter();
 
     @Test
-    void test() {
+    void getter_test() {
 
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
@@ -79,6 +79,48 @@ class RegistrationObjectTest {
                 () -> assertThat(registrationObject.getClientExtensions()).isEqualTo(clientExtensions),
                 () -> assertThat(registrationObject.getServerProperty()).isEqualTo(serverProperty),
                 () -> assertThat(registrationObject.getTimestamp()).isEqualTo(timestamp)
+        );
+    }
+
+    @Test
+    void equals_hashCode_test(){
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
+        AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        LocalDateTime timestamp = LocalDateTime.now();
+        RegistrationObject instanceA = new RegistrationObject(
+                clientData,
+                clientDataBytes,
+                attestationObject,
+                attestationObjectBytes,
+                authenticatorDataBytes,
+                transports,
+                clientExtensions,
+                serverProperty,
+                timestamp
+        );
+
+        RegistrationObject instanceB = new RegistrationObject(
+                clientData,
+                clientDataBytes,
+                attestationObject,
+                attestationObjectBytes,
+                authenticatorDataBytes,
+                transports,
+                clientExtensions,
+                serverProperty,
+                timestamp
+        );
+
+        assertAll(
+                ()-> assertThat(instanceA).isEqualTo(instanceB),
+                ()-> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
     }
 }
