@@ -56,3 +56,10 @@ FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメ�
 `Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。
 典型的には、 `Authenticator` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。
 
+=== WebAuthn4Jが提供しない機能
+
+WebAuthn4Jは特定のフレームワークに依存しないポータビリティを実現する為、
+WebAuthnのAssertion/Attestationの検証に意図的に機能を絞り込んでおり、HTTPリクエストからのパラメータの取出、
+Challengeの発行・セッションへの保存、カウンタ値の検証は具備していません。
+使用する認証フレームワークに合わせて独自に実装して下さい。Spring Securityをご利用の場合は、
+Spring Security WebAuthnがそれらの認証フレームワーク特化の部分の実装を提供しますので活用をご検討下さい。
