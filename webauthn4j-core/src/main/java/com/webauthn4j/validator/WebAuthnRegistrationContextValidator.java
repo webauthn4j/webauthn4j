@@ -150,10 +150,20 @@ public class WebAuthnRegistrationContextValidator {
     // ~ Factory methods
     // ========================================================================================================
 
+    /**
+     * Creates {@link WebAuthnRegistrationContextValidator} with non strict configuration
+     * @return configured {@link WebAuthnRegistrationContextValidator}
+     */
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
         return createNonStrictRegistrationContextValidator(new JsonConverter(), new CborConverter());
     }
 
+    /**
+     * Creates {@link WebAuthnRegistrationContextValidator} with non strict configuration
+     * @param jsonConverter json converter
+     * @param cborConverter cobr converter
+     * @return configured {@link WebAuthnRegistrationContextValidator}
+     */
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {
         return new WebAuthnRegistrationContextValidator(
                 Arrays.asList(
