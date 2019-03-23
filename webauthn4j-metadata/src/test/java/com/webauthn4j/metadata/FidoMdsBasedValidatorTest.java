@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.validator;
+package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.MetadataItemsCertPathTrustworthinessValidator;
-import com.webauthn4j.metadata.data.MetadataItem;
-import org.junit.jupiter.api.Test;
+        import com.webauthn4j.test.TestDataUtil;
+        import com.webauthn4j.validator.RegistrationObject;
+        import org.junit.jupiter.api.Test;
 
-/**
- * Created by ynojima on 2017/09/24.
- */
-class MetadataItemCertPathTrustworthinessValidatorTest {
+        import static org.mockito.Mockito.mock;
 
-    public MetadataItemsCertPathTrustworthinessValidator<MetadataItem> target = new MetadataItemsCertPathTrustworthinessValidator<>(null);
+class FidoMdsBasedValidatorTest {
+
+    private MetadataItemsResolver metadataItemsResolver = mock(MetadataItemsResolver.class);
+    @SuppressWarnings("unchecked")
+    private FidoMdsBasedValidator target = new FidoMdsBasedValidator(metadataItemsResolver);
 
     @Test
     void test() {
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithPackedAttestation();
+        target.validate(registrationObject);
     }
 }

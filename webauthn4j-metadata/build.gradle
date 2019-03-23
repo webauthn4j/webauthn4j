@@ -36,6 +36,8 @@ dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
+    testCompile project(':webauthn4j-test')
+
 }
 
 dependencyManagement {

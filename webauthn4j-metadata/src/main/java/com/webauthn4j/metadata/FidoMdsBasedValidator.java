@@ -17,52 +17,51 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.statement.AttestationType;
 import com.webauthn4j.metadata.exception.MDSException;
-import com.webauthn4j.util.WIP;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
+import com.webauthn4j.validator.CustomRegistrationValidator;
+import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
-import java.security.cert.TrustAnchor;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * MetadataItemsCertPathTrustworthinessValidator
- */
-@WIP
-public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataItem> extends CertPathTrustworthinessValidatorBase {
+public class FidoMdsBasedValidator implements CustomRegistrationValidator {
 
-    private MetadataItemsResolver<T> metadataItemsResolver;
 
-    public MetadataItemsCertPathTrustworthinessValidator(MetadataItemsResolver<T> metadataItemsResolver) {
+    private MetadataItemsResolver<FidoMdsMetadataItem> metadataItemsResolver;
+
+    public FidoMdsBasedValidator(MetadataItemsResolver<FidoMdsMetadataItem> metadataItemsResolver) {
         this.metadataItemsResolver = metadataItemsResolver;
     }
 
     @Override
-    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
-        Set<T> metadataItems = metadataItemsResolver.resolve(aaguid);
+    public void validate(RegistrationObject registrationObject) {
+        AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 
-        //TODO: this logic should be placed in another class. It is domain violation.
+        Set<FidoMdsMetadataItem> metadataItems = metadataItemsResolver.resolve(aaguid);
+
         List<AttestationType> attestationTypes = metadataItems.stream()
                 .flatMap(item -> item.getMetadataStatement().getAttestationTypes().stream()).collect(Collectors.toList());
+
         boolean isSurrogate = !attestationTypes.isEmpty() &&
                 attestationTypes.stream().allMatch(type -> type.equals(AttestationType.BASIC_SURROGATE));
-        if (isSurrogate && attestationStatement.getX5c() != null) {
-            throw new BadAttestationStatementException("Although AAGUID is registered for surrogate attestation in metadata, x5c contains certificates.");
-        }
 
-        for (T metadataItem : metadataItems) {
-            if (metadataItem instanceof FidoMdsMetadataItem) {
-                FidoMdsMetadataItem fidoMdsMetadataItem = (FidoMdsMetadataItem) metadataItem;
-                doAdditionalValidationForFidoMdsMetadataItem(fidoMdsMetadataItem);
+        if (isSurrogate && attestationStatement instanceof CertificateBaseAttestationStatement){
+            CertificateBaseAttestationStatement certificateBaseAttestationStatement = (CertificateBaseAttestationStatement) attestationStatement;
+            if(certificateBaseAttestationStatement.getX5c() != null) {
+                throw new BadAttestationStatementException("Although AAGUID is registered for surrogate attestation in metadata, x5c contains certificates.");
             }
         }
-        super.validate(aaguid, attestationStatement);
+
+        for (FidoMdsMetadataItem metadataItem : metadataItems) {
+            doAdditionalValidationForFidoMdsMetadataItem(metadataItem);
+        }
     }
 
     private void doAdditionalValidationForFidoMdsMetadataItem(FidoMdsMetadataItem fidoMdsMetadataItem) {
@@ -89,14 +88,5 @@ public class MetadataItemsCertPathTrustworthinessValidator<T extends MetadataIte
             }
         });
     }
-
-    @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
-        return metadataItemsResolver.resolve(aaguid).stream()
-                .flatMap(metadataItem -> metadataItem.getMetadataStatement().getAttestationRootCertificates().stream())
-                .map(certificate -> new TrustAnchor(certificate, null))
-                .collect(Collectors.toSet());
-    }
-
 
 }
