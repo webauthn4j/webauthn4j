@@ -21,7 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
 import com.webauthn4j.metadata.data.statement.AttestationType;
-import com.webauthn4j.metadata.exception.MDSException;
+import com.webauthn4j.metadata.exception.BadStatusException;
 import com.webauthn4j.validator.CustomRegistrationValidator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -84,7 +84,7 @@ public class FidoMdsBasedValidator implements CustomRegistrationValidator {
                 case USER_KEY_PHYSICAL_COMPROMISE:
                 case REVOKED:
                 default:
-                    throw new MDSException(String.format("FIDO Metadata Service reported `%s` for this authenticator.", report.getStatus()));
+                    throw new BadStatusException(String.format("FIDO Metadata Service reported `%s` for this authenticator.", report.getStatus()));
             }
         });
     }
