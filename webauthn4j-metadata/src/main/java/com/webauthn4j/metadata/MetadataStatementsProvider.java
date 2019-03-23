@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public interface FidoMdsMetadataItem extends MetadataItem {
+public interface MetadataStatementsProvider {
 
-    String getAaid();
-
-    AAGUID getAaguid();
-
-    List<String> getAttestationCertificateKeyIdentifiers();
-
-    String getHash();
-
-    List<StatusReport> getStatusReports();
-
-    LocalDate getTimeOfLastStatusChange();
-
+    Map<AAGUID, Set<MetadataStatement>> provide();
 }

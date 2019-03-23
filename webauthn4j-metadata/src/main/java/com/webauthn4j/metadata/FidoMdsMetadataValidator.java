@@ -19,7 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
+import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.statement.AttestationType;
 import com.webauthn4j.metadata.exception.BadStatusException;
 import com.webauthn4j.validator.CustomRegistrationValidator;
@@ -30,12 +30,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FidoMdsBasedValidator implements CustomRegistrationValidator {
+public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
 
 
-    private MetadataItemsResolver<FidoMdsMetadataItem> metadataItemsResolver;
+    private MetadataItemsResolver metadataItemsResolver;
 
-    public FidoMdsBasedValidator(MetadataItemsResolver<FidoMdsMetadataItem> metadataItemsResolver) {
+    public FidoMdsMetadataValidator(MetadataItemsResolver metadataItemsResolver) {
         this.metadataItemsResolver = metadataItemsResolver;
     }
 
@@ -44,7 +44,7 @@ public class FidoMdsBasedValidator implements CustomRegistrationValidator {
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 
-        Set<FidoMdsMetadataItem> metadataItems = metadataItemsResolver.resolve(aaguid);
+        Set<MetadataItem> metadataItems = metadataItemsResolver.resolve(aaguid);
 
         List<AttestationType> attestationTypes = metadataItems.stream()
                 .flatMap(item -> item.getMetadataStatement().getAttestationTypes().stream()).collect(Collectors.toList());
@@ -59,13 +59,13 @@ public class FidoMdsBasedValidator implements CustomRegistrationValidator {
             }
         }
 
-        for (FidoMdsMetadataItem metadataItem : metadataItems) {
+        for (MetadataItem metadataItem : metadataItems) {
             doAdditionalValidationForFidoMdsMetadataItem(metadataItem);
         }
     }
 
-    private void doAdditionalValidationForFidoMdsMetadataItem(FidoMdsMetadataItem fidoMdsMetadataItem) {
-        fidoMdsMetadataItem.getStatusReports().forEach(report -> {
+    private void doAdditionalValidationForFidoMdsMetadataItem(MetadataItem metadataItem) {
+        metadataItem.getStatusReports().forEach(report -> {
             switch (report.getStatus()) {
                 case FIDO_CERTIFIED:
                 case FIDO_CERTIFIED_L1:

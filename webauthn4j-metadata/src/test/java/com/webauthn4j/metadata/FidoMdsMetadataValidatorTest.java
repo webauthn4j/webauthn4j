@@ -22,11 +22,11 @@ package com.webauthn4j.metadata;
 
         import static org.mockito.Mockito.mock;
 
-class FidoMdsBasedValidatorTest {
+class FidoMdsMetadataValidatorTest {
 
     private MetadataItemsResolver metadataItemsResolver = mock(MetadataItemsResolver.class);
     @SuppressWarnings("unchecked")
-    private FidoMdsBasedValidator target = new FidoMdsBasedValidator(metadataItemsResolver);
+    private FidoMdsMetadataValidator target = new FidoMdsMetadataValidator(metadataItemsResolver);
 
     @Test
     void test() {

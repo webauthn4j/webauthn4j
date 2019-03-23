@@ -37,8 +37,8 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
-import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
-import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
+import com.webauthn4j.metadata.data.MetadataItem;
+import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.*;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
@@ -315,8 +315,8 @@ public class TestDataUtil {
         }
     }
 
-    public static FidoMdsMetadataItem createFidoMdsMetadataItem() {
-        return new FidoMdsMetadataItemImpl(
+    public static MetadataItem createFidoMdsMetadataItem() {
+        return new MetadataItemImpl(
             null,
                 new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
                 null,

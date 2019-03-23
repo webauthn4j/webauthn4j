@@ -16,8 +16,8 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,19 +27,19 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AggregatingMetadataItemsProvider<T extends MetadataItem> implements MetadataItemsProvider<T> {
+public class AggregatingMetadataStatementsProvider implements MetadataStatementsProvider {
 
-    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);
+    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataStatementsProvider.class);
 
-    private List<MetadataItemsProvider<T>> metadataItemsProviders;
+    private List<MetadataStatementsProvider> metadataStatementsProviders;
 
-    public AggregatingMetadataItemsProvider(List<MetadataItemsProvider<T>> metadataItemsProviders) {
-        this.metadataItemsProviders = metadataItemsProviders;
+    public AggregatingMetadataStatementsProvider(List<MetadataStatementsProvider> metadataStatementsProviders) {
+        this.metadataStatementsProviders = metadataStatementsProviders;
     }
 
     @Override
-    public Map<AAGUID, Set<T>> provide() {
-        return metadataItemsProviders.stream()
+    public Map<AAGUID, Set<MetadataStatement>> provide() {
+        return metadataStatementsProviders.stream()
                 .flatMap(provider -> {
                     try {
                         return provider.provide().entrySet().stream();

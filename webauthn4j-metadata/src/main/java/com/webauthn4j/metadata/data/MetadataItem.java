@@ -16,12 +16,27 @@
 
 package com.webauthn4j.metadata.data;
 
-
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.List;
 
 public interface MetadataItem extends Serializable {
+
+    String getAaid();
+
+    AAGUID getAaguid();
+
+    List<String> getAttestationCertificateKeyIdentifiers();
+
+    String getHash();
+
+    List<StatusReport> getStatusReports();
+
+    LocalDate getTimeOfLastStatusChange();
 
     MetadataStatement getMetadataStatement();
 

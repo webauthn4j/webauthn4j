@@ -16,12 +16,12 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.MetadataItem;
 
 import java.util.Set;
 
-public interface MetadataItemsResolver<T extends MetadataItem> {
+public interface MetadataItemsResolver {
 
-    Set<T> resolve(AAGUID aaguid);
+    Set<MetadataItem> resolve(AAGUID aaguid);
 }

@@ -19,7 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.metadata.exception.MDSException;
 
 /**
- * HTTP Client for FIDO FidoMdsMetadataItemImpl Service
+ * HTTP Client for FIDO MetadataItemImpl Service
  */
 public interface HttpClient {
 

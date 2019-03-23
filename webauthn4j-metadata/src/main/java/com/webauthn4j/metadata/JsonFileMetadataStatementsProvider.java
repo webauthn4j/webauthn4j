@@ -17,10 +17,8 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.metadata.data.MetadataItemImpl;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,27 +28,27 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class JsonFileMetadataItemsProvider implements MetadataItemsProvider<MetadataItem> {
+public class JsonFileMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private JsonConverter jsonConverter;
     private List<Path> paths = Collections.emptyList();
-    private Map<AAGUID, Set<MetadataItem>> cachedMetadataItems;
+    private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
 
-    public JsonFileMetadataItemsProvider(JsonConverter jsonConverter, List<Path> paths) {
+    public JsonFileMetadataStatementsProvider(JsonConverter jsonConverter, List<Path> paths) {
         this.jsonConverter = jsonConverter;
         this.paths = paths;
     }
 
     @Override
-    public Map<AAGUID, Set<MetadataItem>> provide() {
+    public Map<AAGUID, Set<MetadataStatement>> provide() {
         if (cachedMetadataItems == null) {
             cachedMetadataItems =
                     paths.stream()
-                            .map(path -> new MetadataItemImpl(readJsonFile(path)))
+                            .map(this::readJsonFile)
                             .distinct()
-                            .collect(Collectors.groupingBy(item -> extractAAGUID(item.getMetadataStatement())))
+                            .collect(Collectors.groupingBy(this::extractAAGUID))
                             .entrySet().stream()
-                            .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
+                            .collect(Collectors.toMap(Map.Entry::getKey, entry -> new HashSet<>(entry.getValue())));
 
         }
         return cachedMetadataItems;

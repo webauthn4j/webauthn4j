@@ -35,7 +35,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FidoMdsMetadataItemsProviderTest {
+class MetadataItemsProviderTest {
 
     private JsonConverter jsonConverter;
 
@@ -43,7 +43,7 @@ class FidoMdsMetadataItemsProviderTest {
     private FidoMdsMetadataItemsProvider target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient);
     private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
 
-    public FidoMdsMetadataItemsProviderTest(){
+    public MetadataItemsProviderTest(){
         jsonConverter = new JsonConverter();
         jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
     }

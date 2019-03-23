@@ -18,30 +18,26 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class MetadataItemsResolverImpl implements MetadataItemsResolver {
+public class MetadataItemsMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private MetadataItemsProvider metadataItemsProvider;
 
-    public MetadataItemsResolverImpl(MetadataItemsProvider metadataItemsProvider) {
+    public MetadataItemsMetadataStatementsProvider(MetadataItemsProvider metadataItemsProvider) {
         this.metadataItemsProvider = metadataItemsProvider;
     }
 
     @Override
-    public Set<MetadataItem> resolve(AAGUID aaguid) {
-        AssertUtil.notNull(aaguid, "aaguid must not be null");
-
-        Map<AAGUID, Set<MetadataItem>> metadataItemMap = metadataItemsProvider.provide();
-
-        HashSet<MetadataItem> list = new HashSet<>();
-        list.addAll(metadataItemMap.getOrDefault(AAGUID.NULL, Collections.emptySet()));
-        list.addAll(metadataItemMap.getOrDefault(aaguid, Collections.emptySet()));
-        return list;
+    public Map<AAGUID, Set<MetadataStatement>> provide() {
+        return metadataItemsProvider.provide().entrySet().stream()
+                .collect(Collectors.toMap(
+                            Map.Entry::getKey,
+                            entry-> entry.getValue().stream().map(MetadataItem::getMetadataStatement).collect(Collectors.toSet())
+                        ));
     }
 }

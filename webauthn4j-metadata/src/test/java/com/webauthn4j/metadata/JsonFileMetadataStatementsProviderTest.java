@@ -19,7 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
-import com.webauthn4j.metadata.data.MetadataItem;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
@@ -30,11 +30,11 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class JsonFileMetadataItemsProviderTest {
+class JsonFileMetadataStatementsProviderTest {
 
     private JsonConverter jsonConverter;
 
-    public JsonFileMetadataItemsProviderTest(){
+    public JsonFileMetadataStatementsProviderTest(){
         jsonConverter = new JsonConverter();
         jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
     }
@@ -46,26 +46,26 @@ class JsonFileMetadataItemsProviderTest {
        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toURI()));
        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_uaf.json").toURI()));
        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
-       JsonFileMetadataItemsProvider provider = new JsonFileMetadataItemsProvider(jsonConverter, paths);
-       Map<AAGUID, Set<MetadataItem>> itemMapInFirstCall = provider.provide();
+       JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
+       Map<AAGUID, Set<MetadataStatement>> itemMapInFirstCall = provider.provide();
        readMetadataItem(itemMapInFirstCall);
-       // read again to run through all branches of JsonFileMetadataItemsProvider.provider(), and confirm it
-       Map<AAGUID, Set<MetadataItem>> itemMap = provider.provide();
+       // read again to run through all branches of JsonFileMetadataStatementsProvider.provider(), and confirm it
+       Map<AAGUID, Set<MetadataStatement>> itemMap = provider.provide();
        readMetadataItem(itemMap);
        assertThat(itemMap).isSameAs(itemMapInFirstCall);
     }
 
     @Test
-    void fetchMetadataFromNonExistentFile() throws Exception {
+    void fetchMetadataFromNonExistentFile() {
        Path path = Paths.get("NonExistentFile.json");
        List<Path> paths = Collections.singletonList(path);
-       JsonFileMetadataItemsProvider provider = new JsonFileMetadataItemsProvider(jsonConverter, paths);
+       JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
        assertThrows(UncheckedIOException.class, () -> provider.provide());
     }
 
-    private void readMetadataItem(Map<AAGUID, Set<MetadataItem>> itemMap) {
+    private void readMetadataItem(Map<AAGUID, Set<MetadataStatement>> itemMap) {
         itemMap.keySet().stream()
                 .flatMap(key -> itemMap.get(key).stream())
-                .forEach(item -> assertThat(item.getMetadataStatement().getDescription()).isNotNull());
+                .forEach(item -> assertThat(item.getDescription()).isNotNull());
     }
 }

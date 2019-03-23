@@ -16,13 +16,13 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.MetadataItem;
 
 import java.util.Map;
 import java.util.Set;
 
-public interface MetadataItemsProvider<T extends MetadataItem> {
+public interface MetadataItemsProvider {
 
-    Map<AAGUID, Set<T>> provide();
+    Map<AAGUID, Set<MetadataItem>> provide();
 }

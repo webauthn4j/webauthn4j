@@ -19,8 +19,8 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.jws.JWS;
-import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
-import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
+import com.webauthn4j.metadata.data.MetadataItem;
+import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
@@ -44,7 +44,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoMdsMetadataItem> {
+public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
 
@@ -56,7 +56,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
 
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
 
-    Map<AAGUID, Set<FidoMdsMetadataItem>> cachedMetadataItemMap;
+    Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
 
@@ -81,7 +81,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
     }
 
     @Override
-    public Map<AAGUID, Set<FidoMdsMetadataItem>> provide() {
+    public Map<AAGUID, Set<MetadataItem>> provide() {
         if (needsRefresh()) {
             refresh();
         }
@@ -136,9 +136,9 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider<FidoM
         return jws.getPayload();
     }
 
-    private FidoMdsMetadataItem fetchFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
+    private MetadataItem fetchFidoMdsMetadataItem(MetadataTOCPayloadEntry entry) {
         MetadataStatement metadataStatement = fetchMetadataStatement(entry.getUrl().toString(), Base64UrlUtil.decode(entry.getHash()));
-        return new FidoMdsMetadataItemImpl(
+        return new MetadataItemImpl(
                 entry.getAaid(),
                 new AAGUID(entry.getAaguid()),
                 entry.getAttestationCertificateKeyIdentifiers(),

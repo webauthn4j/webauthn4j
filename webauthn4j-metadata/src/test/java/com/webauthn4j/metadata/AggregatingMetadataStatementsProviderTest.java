@@ -16,8 +16,8 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -26,38 +26,36 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class AggregatingMetadataItemsProviderTest {
+class AggregatingMetadataStatementsProviderTest {
 
 
-    @SuppressWarnings("unchecked")
     @Test
     void provide_test() {
-        MetadataItemsProvider<MetadataItem> providerA = mock(MetadataItemsProvider.class);
-        Map<AAGUID, Set<MetadataItem>> mapA = new HashMap<>();
+        MetadataStatementsProvider providerA = mock(MetadataStatementsProvider.class);
+        Map<AAGUID, Set<MetadataStatement>> mapA = new HashMap<>();
         mapA.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>());
         when(providerA.provide()).thenReturn(mapA);
 
-        MetadataItemsProvider<MetadataItem> providerB = mock(MetadataItemsProvider.class);
-        Map<AAGUID, Set<MetadataItem>> mapB = new HashMap<>();
+        MetadataStatementsProvider providerB = mock(MetadataStatementsProvider.class);
+        Map<AAGUID, Set<MetadataStatement>> mapB = new HashMap<>();
         mapB.put(new AAGUID("d075c221-6a37-4c61-80c7-11254460d5bb"), new HashSet<>());
         when(providerB.provide()).thenReturn(mapB);
 
-        AggregatingMetadataItemsProvider<MetadataItem> target = new AggregatingMetadataItemsProvider<>(Arrays.asList(providerA, providerB));
+        AggregatingMetadataStatementsProvider target = new AggregatingMetadataStatementsProvider(Arrays.asList(providerA, providerB));
         assertThat(target.provide()).containsOnlyKeys(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new AAGUID("d075c221-6a37-4c61-80c7-11254460d5bb"));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void provide_with_one_of_provider_throws_exception_test() {
-        MetadataItemsProvider<MetadataItem> providerA = mock(MetadataItemsProvider.class);
-        Map<AAGUID, Set<MetadataItem>> mapA = new HashMap<>();
+        MetadataStatementsProvider providerA = mock(MetadataStatementsProvider.class);
+        Map<AAGUID, Set<MetadataStatement>> mapA = new HashMap<>();
         mapA.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>());
         when(providerA.provide()).thenReturn(mapA);
 
-        MetadataItemsProvider<MetadataItem> providerB = mock(MetadataItemsProvider.class);
+        MetadataStatementsProvider providerB = mock(MetadataStatementsProvider.class);
         when(providerB.provide()).thenThrow(new RuntimeException("unexpected error"));
 
-        AggregatingMetadataItemsProvider<MetadataItem> target = new AggregatingMetadataItemsProvider<>(Arrays.asList(providerA, providerB));
+        AggregatingMetadataStatementsProvider target = new AggregatingMetadataStatementsProvider(Arrays.asList(providerA, providerB));
         assertThat(target.provide()).containsOnlyKeys(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"));
     }
 }

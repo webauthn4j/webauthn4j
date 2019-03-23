@@ -18,28 +18,27 @@ package com.webauthn4j.metadata;
 
 import com.webauthn4j.anchor.TrustAnchorsProvider;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.data.MetadataItem;
 
 import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class FidoMdsTrustAnchorsProviderAdaptor implements TrustAnchorsProvider {
+public class MetadataStatementsTrustAnchorsProvider implements TrustAnchorsProvider {
 
-    private MetadataItemsProvider<MetadataItem> metadataItemMetadataItemsProvider;
+    private MetadataStatementsProvider metadataStatementsProvider;
 
-    public FidoMdsTrustAnchorsProviderAdaptor(MetadataItemsProvider<MetadataItem> metadataItemMetadataItemsProvider) {
-        this.metadataItemMetadataItemsProvider = metadataItemMetadataItemsProvider;
+    public MetadataStatementsTrustAnchorsProvider(MetadataStatementsProvider metadataStatementsProvider) {
+        this.metadataStatementsProvider = metadataStatementsProvider;
     }
 
     @Override
     public Map<AAGUID, Set<TrustAnchor>> provide() {
-        return metadataItemMetadataItemsProvider.provide().entrySet().stream()
+        return metadataStatementsProvider.provide().entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> entry.getValue().stream().flatMap(metadataItem ->
-                                metadataItem.getMetadataStatement().getAttestationRootCertificates().stream()
+                        entry -> entry.getValue().stream().flatMap(metadataStatement ->
+                                metadataStatement.getAttestationRootCertificates().stream()
                                         .map(certificate -> new TrustAnchor(certificate, null))
                         ).collect(Collectors.toSet())
                 ));

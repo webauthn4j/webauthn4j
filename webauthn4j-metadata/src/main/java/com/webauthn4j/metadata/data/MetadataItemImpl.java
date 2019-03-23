@@ -17,13 +17,72 @@
 package com.webauthn4j.metadata.data;
 
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.WIP;
 
+import java.time.LocalDate;
+import java.util.List;
+
+/**
+ * Created by ynojima on 2017/09/24.
+ */
+@WIP
 public class MetadataItemImpl implements MetadataItem {
 
+    private String aaid;
+    private AAGUID aaguid;
+    private List<String> attestationCertificateKeyIdentifiers;
+    private String hash;
+    private List<StatusReport> statusReports;
+    private LocalDate timeOfLastStatusChange;
     private MetadataStatement metadataStatement;
 
-    public MetadataItemImpl(MetadataStatement metadataStatement) {
+    public MetadataItemImpl(
+            String aaid,
+            AAGUID aaguid,
+            List<String> attestationCertificateKeyIdentifiers,
+            String hash,
+            List<StatusReport> statusReports,
+            LocalDate timeOfLastStatusChange,
+            MetadataStatement metadataStatement) {
+        this.aaid = aaid;
+        this.aaguid = aaguid;
+        this.attestationCertificateKeyIdentifiers = attestationCertificateKeyIdentifiers;
+        this.hash = hash;
+        this.statusReports = statusReports;
+        this.timeOfLastStatusChange = timeOfLastStatusChange;
         this.metadataStatement = metadataStatement;
+    }
+
+    @Override
+    public String getAaid() {
+        return aaid;
+    }
+
+    @Override
+    public AAGUID getAaguid() {
+        return aaguid;
+    }
+
+    @Override
+    public List<String> getAttestationCertificateKeyIdentifiers() {
+        return attestationCertificateKeyIdentifiers;
+    }
+
+    @Override
+    public String getHash() {
+        return hash;
+    }
+
+    @Override
+    public List<StatusReport> getStatusReports() {
+        return statusReports;
+    }
+
+    @Override
+    public LocalDate getTimeOfLastStatusChange() {
+        return timeOfLastStatusChange;
     }
 
     @Override

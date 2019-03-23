@@ -17,7 +17,6 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
@@ -31,16 +30,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class FidoMdsTrustAnchorsProviderAdaptorTest {
+class MetadataStatementsTrustAnchorsProviderTest {
 
-    @SuppressWarnings("unchecked")
     @Test
     void provide_test() {
-        MetadataItemsProvider<MetadataItem> metadataItemsProvider = mock(MetadataItemsProvider.class);
+        MetadataStatementsProvider metadataStatementsProvider = mock(MetadataStatementsProvider.class);
         AAGUID aaguid = new AAGUID("49e25c43-a6d1-49f0-bcfa-23e23a7c0e52");
-        when(metadataItemsProvider.provide()).thenReturn(Collections.singletonMap(aaguid, Collections.singleton(TestDataUtil.createFidoMdsMetadataItem())));
-        FidoMdsTrustAnchorsProviderAdaptor fidoMdsTrustAnchorsProviderAdaptor = new FidoMdsTrustAnchorsProviderAdaptor(metadataItemsProvider);
-        Map<AAGUID, Set<TrustAnchor>> result = fidoMdsTrustAnchorsProviderAdaptor.provide();
+        when(metadataStatementsProvider.provide()).thenReturn(Collections.singletonMap(aaguid, Collections.singleton(TestDataUtil.createMetadataStatement())));
+        MetadataStatementsTrustAnchorsProvider metadataStatementsTrustAnchorsProvider = new MetadataStatementsTrustAnchorsProvider(metadataStatementsProvider);
+        Map<AAGUID, Set<TrustAnchor>> result = metadataStatementsTrustAnchorsProvider.provide();
         assertThat(result.get(aaguid).stream().map(TrustAnchor::getTrustedCert)).contains(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
     }
 
