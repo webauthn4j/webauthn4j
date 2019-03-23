@@ -25,6 +25,8 @@ test {
 
 dependencies {
     compile project(':webauthn4j-core')
+    compile project(':webauthn4j-metadata')
+
     compile("org.springframework:spring-core")
     compile("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")
     compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")

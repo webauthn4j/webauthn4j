@@ -37,12 +37,14 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.metadata.data.FidoMdsMetadataItem;
+import com.webauthn4j.metadata.data.FidoMdsMetadataItemImpl;
+import com.webauthn4j.metadata.data.statement.*;
+import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
+import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
-import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.KeyUtil;
-import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
+import com.webauthn4j.util.*;
 import com.webauthn4j.validator.RegistrationObject;
 
 import java.nio.ByteBuffer;
@@ -313,4 +315,51 @@ public class TestDataUtil {
         }
     }
 
+    public static FidoMdsMetadataItem createFidoMdsMetadataItem() {
+        return new FidoMdsMetadataItemImpl(
+            null,
+                new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
+                null,
+                null,
+                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null)),
+                null,
+                createMetadataStatement()
+        );
+    }
+
+    public static MetadataStatement createMetadataStatement(){
+        return new MetadataStatement(
+            null,
+                null,
+                new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
+                null,
+                "dummy statement",
+                new AlternativeDescriptions(),
+                2,
+                "fido2",
+                Collections.singletonList(new Version(1, 0)),
+                "FIDOV2",
+                AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW,
+                null,
+                PublicKeyRepresentationFormat.COSE,
+                null,
+                Collections.singletonList(AttestationType.BASIC_FULL),
+                null,
+                new KeyProtections(10),
+                null,
+                null,
+                new MatcherProtections(4),
+                128,
+                "Secure Element (SE)",
+                new AttachmentHints(2),
+                false,
+                new TransactionConfirmationDisplays(0),
+                null,
+                null,
+                Collections.singletonList(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate()),
+                null,
+                null,
+                null
+        );
+    }
 }
