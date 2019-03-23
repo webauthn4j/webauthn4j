@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.data.MetadataItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,25 +27,25 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AggregatingMetadataStatementsProvider implements MetadataStatementsProvider {
+public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
 
-    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataStatementsProvider.class);
+    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);
 
-    private List<MetadataStatementsProvider> metadataStatementsProviders;
+    private List<MetadataItemsProvider> metadataItemsProviders;
 
-    public AggregatingMetadataStatementsProvider(List<MetadataStatementsProvider> metadataStatementsProviders) {
-        this.metadataStatementsProviders = metadataStatementsProviders;
+    public AggregatingMetadataItemsProvider(List<MetadataItemsProvider> metadataItemsProviders) {
+        this.metadataItemsProviders = metadataItemsProviders;
     }
 
     @SuppressWarnings("Duplicates")
     @Override
-    public Map<AAGUID, Set<MetadataStatement>> provide() {
-        return metadataStatementsProviders.stream()
+    public Map<AAGUID, Set<MetadataItem>> provide() {
+        return metadataItemsProviders.stream()
                 .flatMap(provider -> {
                     try {
                         return provider.provide().entrySet().stream();
                     } catch (RuntimeException e) {
-                        logger.warn("Failed to load metadata from one of metadataStatementsProviders", e);
+                        logger.warn("Failed to load metadata from one of metadataItemsProviders", e);
                         return null;
                     }
                 })
