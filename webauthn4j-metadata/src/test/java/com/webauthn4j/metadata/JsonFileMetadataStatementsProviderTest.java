@@ -16,6 +16,8 @@
 
 package com.webauthn4j.metadata;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
@@ -35,8 +37,10 @@ class JsonFileMetadataStatementsProviderTest {
     private JsonConverter jsonConverter;
 
     public JsonFileMetadataStatementsProviderTest(){
-        jsonConverter = new JsonConverter();
-        jsonConverter.getJsonMapper().registerModule(new WebAuthnMetadataJSONModule());
+        ObjectMapper jsonMapper = new ObjectMapper();
+        jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
     }
 
     @Test
