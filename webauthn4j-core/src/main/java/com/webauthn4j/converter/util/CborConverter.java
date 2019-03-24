@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -122,21 +123,23 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public ObjectMapper getJsonMapper() {
+    private ObjectMapper getJsonMapper() {
         if(!jsonMapperInitialized){
             jsonMapper.registerModule(new WebAuthnJSONModule(getJsonConverter(), this));
             jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
             jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             jsonMapperInitialized = true;
         }
         return jsonMapper;
     }
 
-    public ObjectMapper getCborMapper() {
+    private ObjectMapper getCborMapper() {
         if(!cborMapperInitialized){
             cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
             cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
             cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             cborMapperInitialized = true;
         }
         return cborMapper;
