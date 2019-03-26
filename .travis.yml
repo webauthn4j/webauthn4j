@@ -33,7 +33,7 @@ deploy:
       jdk: openjdk8
   - provider: script
     skip-cleanup: true
-    script: travis_wait 30 ./gradlew bintrayUpload
+    script: .travis/travis_wait "./gradlew bintrayUpload"
     on:
       jdk: openjdk8
       tags: true
