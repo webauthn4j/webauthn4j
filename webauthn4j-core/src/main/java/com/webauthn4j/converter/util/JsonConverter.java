@@ -131,17 +131,6 @@ public class JsonConverter implements Serializable {
         return jsonMapper;
     }
 
-    private ObjectMapper getCborMapper() {
-        if(!cborMapperInitialized){
-            cborMapper.registerModule(new WebAuthnCBORModule(this, getCborConverter()));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            cborMapperInitialized = true;
-        }
-        return cborMapper;
-    }
-
     public CborConverter getCborConverter() {
         if (cborConverter == null) {
             cborConverter = new CborConverter(jsonMapper, cborMapper);

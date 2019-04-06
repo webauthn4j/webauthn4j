@@ -16,6 +16,7 @@ import java.util.Objects;
 /**
  * Internal data transfer object for authentication data
  */
+@SuppressWarnings("Duplicates")
 public class AuthenticationObject {
 
     //~ Instance fields
@@ -92,7 +93,7 @@ public class AuthenticationObject {
     }
 
     public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensions() {
-        return clientExtensions;
+        return this.clientExtensions;
     }
 
     public ServerProperty getServerProperty() {
