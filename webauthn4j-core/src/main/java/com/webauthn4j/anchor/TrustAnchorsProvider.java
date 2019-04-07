@@ -29,7 +29,7 @@ import java.util.Set;
 public interface TrustAnchorsProvider {
 
     /**
-     * provides {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+     * Provides {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      *
      * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
