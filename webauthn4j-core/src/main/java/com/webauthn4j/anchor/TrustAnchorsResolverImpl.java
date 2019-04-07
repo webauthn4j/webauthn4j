@@ -25,13 +25,26 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A {@link TrustAnchorsResolver} implementation that loads {@link TrustAnchor}s with {@link TrustAnchorsProvider}
+ */
 public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
+
+    // ~ Instance fields
+    // ================================================================================================
 
     private TrustAnchorsProvider trustAnchorsProvider;
 
+    // ~ Constructor
+    // ========================================================================================================
+
     public TrustAnchorsResolverImpl(TrustAnchorsProvider trustAnchorsProvider) {
+        AssertUtil.notNull(trustAnchorsProvider, "trustAnchorsProvider must not be null");
         this.trustAnchorsProvider = trustAnchorsProvider;
     }
+
+    // ~ Methods
+    // ========================================================================================================
 
     /**
      * {@inheritDoc}
@@ -47,6 +60,5 @@ public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
         set.addAll(trustAnchors.getOrDefault(aaguid, Collections.emptySet()));
         return set;
     }
-
 
 }

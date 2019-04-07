@@ -31,7 +31,7 @@ import java.security.cert.X509Certificate;
 import java.util.*;
 
 /**
- * Provides {@link TrustAnchor} {@link Set} backed by Java KeyStore file.
+ * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} from Java KeyStore file.
  */
 public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
@@ -45,9 +45,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
     // ========================================================================================================
 
     /**
-     * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
-     *
-     * @return aaguid {@link TrustAnchor} {@link Set} map
+     * {@inheritDoc}
      */
     @Override
     protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {

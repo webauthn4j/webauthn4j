@@ -24,14 +24,20 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * ServerProperty
+ * Data transfer object that represents relying party server configuration for validators
  */
 public class ServerProperty implements Serializable {
+
+    // ~ Instance fields
+    // ================================================================================================
 
     private final Origin origin;
     private final String rpId;
     private final Challenge challenge;
     private final byte[] tokenBindingId;
+
+    // ~ Constructor
+    // ========================================================================================================
 
     public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
         this.origin = origin;
@@ -39,6 +45,9 @@ public class ServerProperty implements Serializable {
         this.challenge = challenge;
         this.tokenBindingId = tokenBindingId;
     }
+
+    // ~ Methods
+    // ========================================================================================================
 
     public Origin getOrigin() {
         return origin;

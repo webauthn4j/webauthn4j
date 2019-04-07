@@ -22,14 +22,14 @@ import java.security.cert.TrustAnchor;
 import java.util.Set;
 
 /**
- * Provides {@link TrustAnchor} {@link Set}.
+ * Core interface that resolves {@link TrustAnchor} {@link Set} from {@link AAGUID}.
  */
 public interface TrustAnchorsResolver {
 
     /**
-     * Resolve {@link TrustAnchor} {@link Set} from aaguid.
+     * Resolves {@link TrustAnchor} {@link Set} from {@link AAGUID}.
      *
-     * @param aaguid aaguid for authenticator
+     * @param aaguid {@link AAGUID} for authenticator
      * @return {@link TrustAnchor} {@link Set}.
      */
     Set<TrustAnchor> resolve(AAGUID aaguid);

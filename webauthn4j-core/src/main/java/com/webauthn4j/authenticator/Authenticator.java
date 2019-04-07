@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * WebAuthn Authenticator
+ * Core interface that represents WebAuthn authenticator
  */
 public interface Authenticator extends Serializable {
 
@@ -34,8 +34,16 @@ public interface Authenticator extends Serializable {
 
     Set<AuthenticatorTransport> getTransports();
 
+    /**
+     * Returns the counter value
+     * @return the counter value
+     */
     long getCounter();
 
+    /**
+     * Sets the counter value
+     * @param value the counter value
+     */
     void setCounter(long value);
 
 }

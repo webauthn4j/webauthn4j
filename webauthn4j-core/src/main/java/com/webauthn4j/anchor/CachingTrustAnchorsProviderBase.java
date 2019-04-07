@@ -22,7 +22,13 @@ import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * An abstract {@link TrustAnchorsProvider} implementation that provides caching functionality
+ */
 public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsProvider {
+
+    // ~ Instance fields
+    // ================================================================================================
 
     private Map<AAGUID, Set<TrustAnchor>> cachedTrustAnchors;
 
@@ -30,9 +36,9 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
     // ========================================================================================================
 
     /**
-     * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
+     * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} and cache it.
      *
-     * @return aaguid {@link TrustAnchor} {@link Set} map
+     * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
     @Override
     public Map<AAGUID, Set<TrustAnchor>> provide() {
@@ -42,5 +48,9 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
         return cachedTrustAnchors;
     }
 
+    /**
+     * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+     * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+     */
     protected abstract Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();
 }

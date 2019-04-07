@@ -22,13 +22,16 @@ import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Core interface that provides {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+ *
+ */
 public interface TrustAnchorsProvider {
 
     /**
-     * Provides aaguid {@link TrustAnchor} {@link Set} map
-     * TrustAnchors registered for {@link AAGUID}.NULL is used for all authenticators
+     * provides {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      *
-     * @return aaguid {@link TrustAnchor} {@link Set} map
+     * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
     Map<AAGUID, Set<TrustAnchor>> provide();
 }
