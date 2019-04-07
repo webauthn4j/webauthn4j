@@ -97,11 +97,11 @@ public class AuthenticationObject {
     }
 
     public ServerProperty getServerProperty() {
-        return serverProperty;
+        return this.serverProperty;
     }
 
     public LocalDateTime getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     @Override

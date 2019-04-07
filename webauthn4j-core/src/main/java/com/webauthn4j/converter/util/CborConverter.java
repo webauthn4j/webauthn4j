@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
-import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.util.AssertUtil;
 
@@ -44,9 +43,12 @@ public class CborConverter implements Serializable {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
     private ObjectMapper jsonMapper;
+
+    /**
+     * As it may not be initialized, cborMapper must be used through getCborMapper method
+     */
     private ObjectMapper cborMapper;
 
-    private boolean jsonMapperInitialized = false;
     private boolean cborMapperInitialized = false;
 
     private JsonConverter jsonConverter;
@@ -123,6 +125,10 @@ public class CborConverter implements Serializable {
         }
     }
 
+    /**
+     * Returns the {@link ObjectMapper} configured for CBOR processing
+     * @return the {@link ObjectMapper} configured for CBOR processing
+     */
     private ObjectMapper getCborMapper() {
         if(!cborMapperInitialized){
             cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
@@ -134,6 +140,10 @@ public class CborConverter implements Serializable {
         return cborMapper;
     }
 
+    /**
+     * Returns the twined {@link JsonConverter}
+     * @return the twined {@link JsonConverter}
+     */
     public JsonConverter getJsonConverter() {
         if (jsonConverter == null) {
             jsonConverter = new JsonConverter(jsonMapper, cborMapper);

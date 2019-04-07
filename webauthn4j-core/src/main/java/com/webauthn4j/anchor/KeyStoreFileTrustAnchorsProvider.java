@@ -35,10 +35,14 @@ import java.util.*;
  */
 public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
-    //~ Instance fields ================================================================================================
+    // ~ Instance fields
+    // ================================================================================================
 
     private Path keyStore;
     private String password;
+
+    // ~ Methods
+    // ========================================================================================================
 
     /**
      * validate aaguid {@link TrustAnchor} {@link Set} map backed by Java KeyStore file.
