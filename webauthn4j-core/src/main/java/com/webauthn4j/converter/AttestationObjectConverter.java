@@ -26,20 +26,25 @@ import com.webauthn4j.util.JacksonUtil;
  */
 public class AttestationObjectConverter {
 
-    //~ Instance fields
+    // ~ Instance fields
     // ================================================================================================
     private CborConverter cborConverter;
 
-    //~ Constructors
+    // ~ Constructors
     // ================================================================================================
 
     public AttestationObjectConverter(CborConverter cborConverter) {
         this.cborConverter = cborConverter;
     }
 
-    //~ Methods
+    // ~ Methods
     // ================================================================================================
 
+    /**
+     * Converts from a base64url {@link String} to {@link AttestationObject}.
+     * @param source the source byte array to convert
+     * @return the converted object
+     */
     public AttestationObject  convert(String source) {
         if (source == null) {
             return null;
@@ -48,6 +53,11 @@ public class AttestationObjectConverter {
         return convert(value);
     }
 
+    /**
+     * Converts from a byte array to {@link AttestationObject}.
+     * @param source the source byte array to convert
+     * @return the converted object
+     */
     public AttestationObject convert(byte[] source) {
         if (source == null) {
             return null;
@@ -55,15 +65,30 @@ public class AttestationObjectConverter {
         return cborConverter.readValue(source, AttestationObject.class);
     }
 
+    /**
+     * Converts from a {@link AttestationObject} to byte[].
+     * @param source the source object to convert
+     * @return the converted byte array
+     */
     public byte[] convertToBytes(AttestationObject source) {
         return cborConverter.writeValueAsBytes(source);
     }
 
+    /**
+     * Converts from a {@link AttestationObject} to {@link String}.
+     * @param source the source object to convert
+     * @return the converted byte array
+     */
     public String convertToString(AttestationObject source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }
 
+    /**
+     * Extract authenticatorData byte array from a attestationObject byte array.
+     * @param attestationObject the authenticatorData byte array
+     * @return the extracted authenticatorData byte array
+     */
     public byte[] extractAuthenticatorData(byte[] attestationObject) {
         return JacksonUtil.binaryValue(cborConverter.readTree(attestationObject).get("authData"));
     }

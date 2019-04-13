@@ -22,18 +22,18 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 
 public class AuthenticationExtensionsClientOutputsConverter {
 
-    //~ Instance fields
+    // ~ Instance fields
     // ================================================================================================
     private JsonConverter jsonConverter;
 
-    //~ Constructors
+    // ~ Constructors
     // ================================================================================================
 
     public AuthenticationExtensionsClientOutputsConverter(JsonConverter jsonConverter) {
         this.jsonConverter = jsonConverter;
     }
 
-    //~ Methods
+    // ~ Methods
     // ================================================================================================
 
     public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> convert(String value) {

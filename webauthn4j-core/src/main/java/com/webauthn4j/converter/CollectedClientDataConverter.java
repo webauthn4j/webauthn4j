@@ -41,6 +41,12 @@ public class CollectedClientDataConverter {
     //~ Methods
     // ================================================================================================
 
+
+    /**
+     * Converts from a base64url {@link String} to {@link CollectedClientData}.
+     * @param base64UrlString the source byte array to convert
+     * @return the converted object
+     */
     public CollectedClientData convert(String base64UrlString) {
         if (base64UrlString == null) {
             return null;
@@ -49,6 +55,11 @@ public class CollectedClientDataConverter {
         return convert(bytes);
     }
 
+    /**
+     * Converts from a byte array to {@link CollectedClientData}.
+     * @param source the source byte array to convert
+     * @return the converted object
+     */
     public CollectedClientData convert(byte[] source) {
         if (source == null) {
             return null;
@@ -57,10 +68,20 @@ public class CollectedClientDataConverter {
         return jsonConverter.readValue(jsonString, CollectedClientData.class);
     }
 
+    /**
+     * Converts from a {@link CollectedClientData} to byte[].
+     * @param source the source object to convert
+     * @return the converted byte array
+     */
     public byte[] convertToBytes(CollectedClientData source) {
         return jsonConverter.writeValueAsBytes(source);
     }
 
+    /**
+     * Converts from a {@link CollectedClientData} to base64 url {@link String}.
+     * @param source the source object to convert
+     * @return the converted byte array
+     */
     public String convertToBase64UrlString(CollectedClientData source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);

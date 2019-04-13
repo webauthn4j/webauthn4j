@@ -52,6 +52,11 @@ public class AuthenticatorDataConverter {
     //~ Methods
     // ================================================================================================
 
+    /**
+     * Converts from a {@link AuthenticatorData} to byte[].
+     * @param source the source object to convert
+     * @return the converted byte array
+     */
     public byte[] convert(AuthenticatorData source) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -69,19 +74,14 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    private byte[] convert(AttestedCredentialData attestationData) throws IOException {
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
-        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
-        byteArrayOutputStream.write(attestationData.getCredentialId());
-        byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] value) {
+    /**
+     * Converts from a byte array to {@link AuthenticatorData}.
+     * @param source the source byte array to convert
+     * @return the converted object
+     */
+    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] source) {
         try {
-            ByteBuffer byteBuffer = ByteBuffer.wrap(value);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(source);
 
             byte[] rpIdHash = new byte[32];
             byteBuffer.get(rpIdHash, 0, 32);
@@ -109,6 +109,16 @@ public class AuthenticatorDataConverter {
         } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
+    }
+
+    private byte[] convert(AttestedCredentialData attestationData) throws IOException {
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
+        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
+        byteArrayOutputStream.write(attestationData.getCredentialId());
+        byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
+        return byteArrayOutputStream.toByteArray();
     }
 
     private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
