@@ -27,6 +27,9 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+/**
+ * Jackson Deserializer for {@link TPMTPublic}
+ */
 public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
 
     public TPMTPublicDeserializer() {

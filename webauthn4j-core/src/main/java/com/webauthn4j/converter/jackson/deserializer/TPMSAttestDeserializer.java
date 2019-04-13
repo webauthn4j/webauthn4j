@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
+/**
+ * Jackson Deserializer for {@link TPMSAttest}
+ */
 public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
 
     public TPMSAttestDeserializer() {

@@ -23,6 +23,9 @@ import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 
 import java.io.IOException;
 
+/**
+ * Jackson Deserializer for {@link CredentialPublicKeyEnvelope}
+ */
 public class CredentialPublicKeyEnvelopeDeserializer extends StdDeserializer<CredentialPublicKeyEnvelope> {
 
     public CredentialPublicKeyEnvelopeDeserializer() {

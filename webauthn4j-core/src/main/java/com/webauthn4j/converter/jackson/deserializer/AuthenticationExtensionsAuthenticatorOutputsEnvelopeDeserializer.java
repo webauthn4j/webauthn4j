@@ -24,6 +24,9 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link AuthenticationExtensionsAuthenticatorOutputsEnvelope}
+ */
 public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope> {
 
     public AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer() {

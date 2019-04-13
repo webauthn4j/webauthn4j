@@ -19,6 +19,9 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 
+/**
+ * Internal envelope class for {@link AuthenticationExtensionsAuthenticatorOutputs} deserialization
+ */
 public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends ExtensionAuthenticatorOutput> {
 
     private AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;

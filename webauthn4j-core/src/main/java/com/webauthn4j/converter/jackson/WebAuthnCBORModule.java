@@ -32,6 +32,9 @@ import com.webauthn4j.data.jws.JWS;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 
+/**
+ * Jackson Module for WebAuthn CBOR data structures
+ */
 public class WebAuthnCBORModule extends SimpleModule {
 
     public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {

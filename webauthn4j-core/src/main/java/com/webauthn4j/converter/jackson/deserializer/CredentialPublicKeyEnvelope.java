@@ -18,6 +18,9 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 
+/**
+ * Internal envelope class for {@link CredentialPublicKey} deserialization
+ */
 public class CredentialPublicKeyEnvelope {
 
     private CredentialPublicKey credentialPublicKey;

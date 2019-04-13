@@ -23,6 +23,9 @@ import com.webauthn4j.data.jws.JWS;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link JWS}
+ */
 public class JWSSerializer extends StdSerializer<JWS> {
 
     public JWSSerializer() {

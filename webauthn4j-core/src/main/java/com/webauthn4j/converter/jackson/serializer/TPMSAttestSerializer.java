@@ -23,6 +23,9 @@ import com.webauthn4j.data.attestation.statement.TPMSAttest;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link TPMSAttest}
+ */
 public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
     public TPMSAttestSerializer() {
         super(TPMSAttest.class);

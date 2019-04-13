@@ -23,6 +23,9 @@ import com.webauthn4j.data.attestation.statement.TPMTPublic;
 
 import java.io.IOException;
 
+/**
+ * Jackson Serializer for {@link TPMTPublic}
+ */
 public class TPMTPublicSerializer extends StdSerializer<TPMTPublic> {
 
     public TPMTPublicSerializer() {

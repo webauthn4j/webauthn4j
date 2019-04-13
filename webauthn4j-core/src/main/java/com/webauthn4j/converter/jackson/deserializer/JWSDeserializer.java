@@ -27,6 +27,9 @@ import com.webauthn4j.data.jws.JWS;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Jackson Deserializer for {@link JWS}
+ */
 public class JWSDeserializer extends StdDeserializer<JWS> {
 
     private JsonConverter jsonConverter;

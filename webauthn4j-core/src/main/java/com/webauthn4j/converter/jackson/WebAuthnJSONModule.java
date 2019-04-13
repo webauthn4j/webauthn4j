@@ -34,7 +34,7 @@ import com.webauthn4j.data.jws.JWS;
 import java.security.cert.X509Certificate;
 
 /**
- * Jackson Module for WebAuthn classes serialization and deserialization
+ * Jackson Module for WebAuthn JSON data structures
  */
 public class WebAuthnJSONModule extends SimpleModule {
 

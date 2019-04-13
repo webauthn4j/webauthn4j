@@ -20,6 +20,9 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 
+/**
+ * Converter for {@link AuthenticationExtensionsClientOutputs}
+ */
 public class AuthenticationExtensionsClientOutputsConverter {
 
     // ~ Instance fields
