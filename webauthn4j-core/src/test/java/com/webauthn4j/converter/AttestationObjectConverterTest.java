@@ -97,7 +97,7 @@ class AttestationObjectConverterTest {
     @Test
     void convert_serialization_test() {
         AttestationObject input = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        String result = target.convertToString(input);
+        String result = target.convertToBase64urlString(input);
         AttestationObject deserialized = target.convert(result);
         assertThat(deserialized).isEqualTo(input);
     }
