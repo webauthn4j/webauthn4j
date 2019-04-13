@@ -49,18 +49,34 @@ public class ServerProperty implements Serializable {
     // ~ Methods
     // ========================================================================================================
 
+    /**
+     * Returns the {@link Origin}
+     * @return the {@link Origin}
+     */
     public Origin getOrigin() {
         return origin;
     }
 
+    /**
+     * Returns the rpId
+     * @return the rpId
+     */
     public String getRpId() {
         return rpId;
     }
 
+    /**
+     * Returns the {@link Challenge}
+     * @return the {@link Challenge}
+     */
     public Challenge getChallenge() {
         return challenge;
     }
 
+    /**
+     * Returns the tokenBindingId
+     * @return the tokenBindingId
+     */
     public byte[] getTokenBindingId() {
         return tokenBindingId;
     }
