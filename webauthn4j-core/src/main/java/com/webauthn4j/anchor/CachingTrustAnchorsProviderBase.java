@@ -43,7 +43,9 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
     @Override
     public Map<AAGUID, Set<TrustAnchor>> provide() {
         if (cachedTrustAnchors == null) {
-            cachedTrustAnchors = loadTrustAnchors();
+            synchronized (this){
+                cachedTrustAnchors = loadTrustAnchors();
+            }
         }
         return cachedTrustAnchors;
     }
