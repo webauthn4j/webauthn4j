@@ -22,7 +22,6 @@ import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
-import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -32,7 +31,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
 class BeanAssertUtilTest {
 
@@ -43,7 +41,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 new byte[32],
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         BeanAssertUtil.validate(authenticationContext);
@@ -63,7 +61,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 new byte[32],
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
@@ -78,7 +76,7 @@ class BeanAssertUtilTest {
                 null,
                 new byte[512],
                 new byte[32],
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
@@ -93,7 +91,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 null,
                 new byte[32],
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
@@ -108,7 +106,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 null,
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
@@ -138,7 +136,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 new byte[512],
                 transports,
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         BeanAssertUtil.validate(registrationContext);
@@ -158,7 +156,7 @@ class BeanAssertUtilTest {
                 null,
                 new byte[512],
                 transports,
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
@@ -174,7 +172,7 @@ class BeanAssertUtilTest {
                 new byte[512],
                 null,
                 transports,
-                mock(ServerProperty.class),
+                TestDataUtil.createServerProperty(),
                 true
         );
         assertThrows(ConstraintViolationException.class,
