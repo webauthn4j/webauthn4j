@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 
@@ -34,6 +35,9 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
 
     public AuthenticatorDataSerializer(CborConverter cborConverter) {
         super(AuthenticatorData.class);
+
+        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
+
         this.cborConverter = cborConverter;
     }
 

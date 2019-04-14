@@ -19,6 +19,7 @@ package com.webauthn4j.converter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.util.AssertUtil;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientOutputs}
@@ -33,6 +34,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ================================================================================================
 
     public AuthenticationExtensionsClientOutputsConverter(JsonConverter jsonConverter) {
+        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
         this.jsonConverter = jsonConverter;
     }
 

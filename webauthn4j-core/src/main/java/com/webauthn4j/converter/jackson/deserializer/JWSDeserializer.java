@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -36,6 +37,9 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
 
     public JWSDeserializer(JsonConverter jsonConverter) {
         super(JWS.class);
+
+        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
+
         this.jsonConverter = jsonConverter;
     }
 

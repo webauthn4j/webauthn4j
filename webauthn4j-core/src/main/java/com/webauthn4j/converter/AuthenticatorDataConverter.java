@@ -26,6 +26,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -45,6 +46,7 @@ public class AuthenticatorDataConverter {
     // ================================================================================================
 
     public AuthenticatorDataConverter(CborConverter cborConverter) {
+        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
         this.cborConverter = cborConverter;
     }
 

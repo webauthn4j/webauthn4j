@@ -54,6 +54,9 @@ public class CborConverter implements Serializable {
     private JsonConverter jsonConverter;
 
     public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
+        AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
+        AssertUtil.notNull(cborMapper, "cborMapper must not be null");
+
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
