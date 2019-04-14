@@ -81,7 +81,7 @@ public class AttestationObjectConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public String convertToString(AttestationObject source) {
+    public String convertToBase64urlString(AttestationObject source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }
