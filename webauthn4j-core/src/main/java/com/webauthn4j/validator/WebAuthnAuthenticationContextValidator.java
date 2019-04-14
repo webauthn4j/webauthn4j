@@ -35,8 +35,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
 import com.webauthn4j.validator.exception.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +47,6 @@ public class WebAuthnAuthenticationContextValidator {
 
     //~ Instance fields
     // ================================================================================================
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final AuthenticatorDataConverter authenticatorDataConverter;
     private final CollectedClientDataConverter collectedClientDataConverter;

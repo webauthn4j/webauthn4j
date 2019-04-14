@@ -20,8 +20,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -35,7 +33,6 @@ class RpIdHashValidator {
     //~ Instance fields
     // ================================================================================================
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // ~ Methods
     // ========================================================================================================
@@ -49,7 +46,6 @@ class RpIdHashValidator {
         byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
-            logger.debug("Authentication failed: bad rpId is specified");
             throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.");
         }
     }

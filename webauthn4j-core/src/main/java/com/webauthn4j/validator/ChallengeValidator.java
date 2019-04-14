@@ -22,8 +22,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -35,7 +33,6 @@ class ChallengeValidator {
     //~ Instance fields
     // ================================================================================================
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     // ~ Methods
     // ========================================================================================================
@@ -47,8 +44,7 @@ class ChallengeValidator {
         Challenge collectedChallenge = collectedClientData.getChallenge();
 
         if (savedChallenge == null) {
-            logger.debug("Authentication failed: challenge is not found in the relying party");
-            throw new MissingChallengeException("`challenge` doesn't exist in collectedClientData.");
+            throw new MissingChallengeException("The server doesn't have a challenge. The client must request the server to issue the challenge before WebAuthn operations.");
         }
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to
@@ -64,8 +60,7 @@ class ChallengeValidator {
         byte[] actualChallengeBytes = actual.getValue();
 
         if (!Arrays.equals(expectedChallengeBytes, actualChallengeBytes)) {
-            logger.debug("Authentication failed: bad challenge is specified");
-            throw new BadChallengeException("Actual Challenge does not match the expected Challenge");
+            throw new BadChallengeException("The actual challenge does not match the expected challenge");
         }
     }
 }

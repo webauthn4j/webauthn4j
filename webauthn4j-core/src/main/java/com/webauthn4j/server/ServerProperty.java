@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Data transfer object that represents relying party server configuration for validators
+ * Data transfer object that represents relying party server property for validators
  */
 public class ServerProperty implements Serializable {
 
