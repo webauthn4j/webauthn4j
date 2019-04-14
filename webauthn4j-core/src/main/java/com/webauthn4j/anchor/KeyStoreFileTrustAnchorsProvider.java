@@ -17,6 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 
 import java.io.IOException;
@@ -43,12 +44,16 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
 
     // ~ Methods
     // ========================================================================================================
+    private void checkConfig() {
+        AssertUtil.notNull(keyStore, "keyStore must not be null");
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+        checkConfig();
         Path keystore = getKeyStore();
         try (InputStream inputStream = Files.newInputStream(keystore)) {
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());

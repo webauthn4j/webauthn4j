@@ -1,0 +1,62 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            20:f7:63:c0:41:83:b1:05:37:db:e8:50:6a:22:50:f2
+    Signature Algorithm: sha256WithRSAEncryption
+        Issuer: O=SharpLab., CN=spring-security-webauthn 2tier test root CA
+        Validity
+            Not Before: May 20 07:09:55 2018 GMT
+            Not After : Apr 26 07:09:55 2118 GMT
+        Subject: C=JP, O=SharpLab., OU=Attestation Certificate, CN=webauthn4j test 2tier authenticator attestation
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub: 
+                    04:60:e7:5b:ac:89:8e:02:08:d9:37:75:db:f2:e9:
+                    df:1c:78:49:0c:83:5d:23:29:28:96:df:b2:a4:6c:
+                    5c:ae:8a:78:2b:06:ee:8d:7d:b3:be:84:46:66:f7:
+                    68:43:d9:ae:fa:bc:23:01:9b:78:1f:74:8c:b1:2c:
+                    4f:bc:1f:33:f0
+                ASN1 OID: prime256v1
+                NIST CURVE: P-256
+        X509v3 extensions:
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Key Usage: critical
+                Digital Signature
+            X509v3 Subject Key Identifier: 
+                D0:EB:CE:B3:5A:69:AE:EC:74:C4:7D:BB:3B:2F:3B:C3:A8:85:D8:E1
+    Signature Algorithm: sha256WithRSAEncryption
+         ad:1d:ca:f2:a8:d4:87:0f:2b:33:2e:d2:01:c9:ce:40:cc:f6:
+         a6:df:bb:e5:d0:05:5c:85:bd:2a:3b:12:c5:6e:67:54:bb:83:
+         61:ce:4f:bc:ed:87:40:fd:56:6e:bd:52:c8:9e:c2:06:68:2c:
+         24:3f:7a:dd:a8:60:05:63:51:e5:96:09:4c:9e:65:88:a0:6d:
+         ac:2a:39:93:de:fa:49:c9:d9:43:38:36:a1:6b:d1:7f:7d:51:
+         bb:72:ad:a2:e5:9c:76:28:c4:de:52:db:93:90:d7:59:0e:3a:
+         1c:51:41:d7:61:54:a1:80:d9:e0:82:85:16:91:57:8b:04:6d:
+         5c:93:32:b5:b4:09:1b:53:0c:82:85:63:2f:e0:f0:e6:21:40:
+         4d:bf:a0:f0:91:82:3d:a0:14:82:48:02:47:a5:4c:f2:c7:33:
+         2f:09:16:c0:14:02:02:c0:f9:77:83:e4:90:11:47:a2:36:59:
+         f3:26:e1:97:1e:71:f1:bb:e0:c1:e8:90:f6:6f:48:4f:79:80:
+         fa:5f:15:8f:b8:8d:0f:ab:51:bf:ea:11:90:9a:c3:6f:dd:21:
+         76:c9:ed:b2:fc:73:8a:9f:0d:cb:f9:fc:d1:1e:5e:64:b0:e7:
+         55:65:ba:72:f7:15:f3:4d:d2:01:52:9b:d3:98:5b:b0:70:1a:
+         38:1f:04:4c
+-----BEGIN CERTIFICATE-----
+MIICxzCCAa+gAwIBAgIQIPdjwEGDsQU32+hQaiJQ8jANBgkqhkiG9w0BAQsFADBK
+MRIwEAYDVQQKDAlTaGFycExhYi4xNDAyBgNVBAMMK3NwcmluZy1zZWN1cml0eS13
+ZWJhdXRobiAydGllciB0ZXN0IHJvb3QgQ0EwIBcNMTgwNTIwMDcwOTU1WhgPMjEx
+ODA0MjYwNzA5NTVaMH0xCzAJBgNVBAYTAkpQMRIwEAYDVQQKDAlTaGFycExhYi4x
+IDAeBgNVBAsMF0F0dGVzdGF0aW9uIENlcnRpZmljYXRlMTgwNgYDVQQDDC93ZWJh
+dXRobjRqIHRlc3QgMnRpZXIgYXV0aGVudGljYXRvciBhdHRlc3RhdGlvbjBZMBMG
+ByqGSM49AgEGCCqGSM49AwEHA0IABGDnW6yJjgII2Td12/Lp3xx4SQyDXSMpKJbf
+sqRsXK6KeCsG7o19s76ERmb3aEPZrvq8IwGbeB90jLEsT7wfM/CjPzA9MAwGA1Ud
+EwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0GA1UdDgQWBBTQ686zWmmu7HTEfbs7
+LzvDqIXY4TANBgkqhkiG9w0BAQsFAAOCAQEArR3K8qjUhw8rMy7SAcnOQMz2pt+7
+5dAFXIW9KjsSxW5nVLuDYc5PvO2HQP1Wbr1SyJ7CBmgsJD963ahgBWNR5ZYJTJ5l
+iKBtrCo5k976ScnZQzg2oWvRf31Ru3KtouWcdijE3lLbk5DXWQ46HFFB12FUoYDZ
+4IKFFpFXiwRtXJMytbQJG1MMgoVjL+Dw5iFATb+g8JGCPaAUgkgCR6VM8sczLwkW
+wBQCAsD5d4PkkBFHojZZ8ybhlx5x8bvgweiQ9m9IT3mA+l8Vj7iND6tRv+oRkJrD
+b90hdsntsvxzip8Ny/n80R5eZLDnVWW6cvcV803SAVKb05hbsHAaOB8ETA==
+-----END CERTIFICATE-----

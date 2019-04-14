@@ -16,28 +16,31 @@
 
 package com.webauthn4j.anchor;
 
+
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.junit.jupiter.api.Test;
 
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.cert.TrustAnchor;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class KeyStoreFileTrustAnchorsProviderTest {
+class CertFileTrustAnchorsProviderTest {
 
-    private KeyStoreFileTrustAnchorsProvider target;
+    private CertFileTrustAnchorsProvider target;
 
     @Test
     void provide_test() throws Exception {
-        target = new KeyStoreFileTrustAnchorsProvider();
-        Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorsProviderTest/test.jks").toURI());
-        target.setKeyStore(path);
-        target.setPassword("password");
+        target = new CertFileTrustAnchorsProvider();
+        Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/CertFileTrustAnchorsProviderTest/test.crt").toURI());
+        target.setCertificates(Collections.singletonList(path));
 
         Map<AAGUID, Set<TrustAnchor>> trustAnchors = target.provide();
         assertThat(trustAnchors).isNotEmpty();
@@ -45,13 +48,19 @@ class KeyStoreFileTrustAnchorsProviderTest {
 
     @Test
     void provide_test_with_invalid_path() {
-        target = new KeyStoreFileTrustAnchorsProvider();
-        Path path = Paths.get("invalid.path.to.jks");
-        target.setKeyStore(path);
-        target.setPassword("password");
+        target = new CertFileTrustAnchorsProvider(Collections.singletonList(Paths.get("invalid.path.to.crt")));
 
-        assertThrows(KeyStoreException.class,
+        assertThrows(UncheckedIOException.class,
                 () -> target.provide()
         );
     }
+
+    @Test
+    void getter_setter_test() throws Exception {
+        target = new CertFileTrustAnchorsProvider();
+        List<Path> paths = Collections.singletonList(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/CertFileTrustAnchorsProviderTest/test.crt").toURI()));
+        target.setCertificates(paths);
+        assertThat(target.getCertificates()).isEqualTo(paths);
+    }
+
 }
