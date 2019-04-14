@@ -134,6 +134,9 @@ public class WebAuthnRegistrationContextValidator {
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
+        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
+        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
+
 
         collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
         attestationObjectConverter = new AttestationObjectConverter(cborConverter);

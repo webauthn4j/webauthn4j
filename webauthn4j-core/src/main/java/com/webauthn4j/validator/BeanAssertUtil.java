@@ -115,17 +115,14 @@ class BeanAssertUtil {
         if (attestationObject == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
-        if (attestationObject.getAttestationStatement() == null) {
-            throw new ConstraintViolationException("attestationStatement must not be null");
-        }
-        if (attestationObject.getAuthenticatorData() == null) {
-            throw new ConstraintViolationException("authenticatorData must not be null");
-        }
         validate(attestationObject.getAttestationStatement());
         validate(attestationObject.getAuthenticatorData());
     }
 
     public static <T extends ExtensionAuthenticatorOutput> void validate(AuthenticatorData<T> authenticatorData) {
+        if (authenticatorData == null) {
+            throw new ConstraintViolationException("authenticatorData must not be null");
+        }
 
         // attestedCredentialData may be null
         AttestedCredentialData attestedCredentialData = authenticatorData.getAttestedCredentialData();
@@ -150,6 +147,9 @@ class BeanAssertUtil {
     }
 
     public static void validate(AttestedCredentialData attestedCredentialData) {
+        if (attestedCredentialData == null) {
+            throw new ConstraintViolationException("attestedCredentialData must not be null");
+        }
 
         AAGUID aaguid = attestedCredentialData.getAaguid();
         if (aaguid == null) {
@@ -161,9 +161,6 @@ class BeanAssertUtil {
         }
 
         CredentialPublicKey credentialPublicKey = attestedCredentialData.getCredentialPublicKey();
-        if (credentialPublicKey == null) {
-            throw new ConstraintViolationException("credentialPublicKey must not be null");
-        }
         validate(credentialPublicKey);
     }
 
@@ -198,6 +195,9 @@ class BeanAssertUtil {
     }
 
     public static void validate(ServerProperty serverProperty) {
+        if (serverProperty == null) {
+            throw new ConstraintViolationException("serverProperty must not be null");
+        }
         if (serverProperty.getRpId() == null) {
             throw new ConstraintViolationException("rpId must not be null");
         }
@@ -210,10 +210,16 @@ class BeanAssertUtil {
     }
 
     public static void validate(AttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new ConstraintViolationException("attestationStatement must not be null");
+        }
         attestationStatement.validate();
     }
 
     public static void validate(CredentialPublicKey credentialPublicKey) {
+        if (credentialPublicKey == null) {
+            throw new ConstraintViolationException("credentialPublicKey must not be null");
+        }
         credentialPublicKey.validate();
     }
 
