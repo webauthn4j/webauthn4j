@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.attestation.AttestationObject;
@@ -131,7 +130,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_test() {
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 new byte[512],
@@ -151,7 +150,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_clientDataJSON_null_test() {
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 null,
                 new byte[512],
@@ -166,7 +165,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_attestationObject_null_test() {
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
 
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
@@ -182,7 +181,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_serverProperty_null_test() {
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(
                 new byte[512],
                 new byte[512],

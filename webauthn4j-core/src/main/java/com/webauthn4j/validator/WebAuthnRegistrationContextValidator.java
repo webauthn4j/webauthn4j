@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
@@ -63,6 +64,7 @@ public class WebAuthnRegistrationContextValidator {
 
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AttestationObjectConverter attestationObjectConverter;
+    private final AuthenticatorTransportConverter authenticatorTransportConverter;
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
@@ -140,6 +142,7 @@ public class WebAuthnRegistrationContextValidator {
 
         collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
         attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        authenticatorTransportConverter = new AuthenticatorTransportConverter();
         authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
         this.attestationValidator = new AttestationValidator(
@@ -205,7 +208,7 @@ public class WebAuthnRegistrationContextValidator {
 
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
-        Set<AuthenticatorTransport> transports = registrationContext.getTransports();
+        Set<AuthenticatorTransport> transports = authenticatorTransportConverter.convertSet(registrationContext.getTransports());
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 

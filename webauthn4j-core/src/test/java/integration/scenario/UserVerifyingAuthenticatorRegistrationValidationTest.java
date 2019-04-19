@@ -111,7 +111,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
@@ -165,7 +165,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
@@ -221,7 +221,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

@@ -16,8 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
