@@ -18,7 +18,6 @@ package sample;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.client.Origin;
@@ -37,7 +36,7 @@ class Sample {
         // Client properties
         byte[] clientDataJSON = null /* set clientDataJSON */;
         byte[] attestationObject = null /* set attestationObject */;
-        Set<AuthenticatorTransport> transports = null /* set transports */;
+        Set<String> transports = null /* set transports */;
 
         // Server properties
         Origin origin = null /* set origin */;

@@ -20,7 +20,6 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
@@ -44,7 +43,7 @@ class WebAuthnRegistrationContextTest {
     void test() {
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AttestationObjectConverter(cborConverter).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        Set<String> transports = Collections.emptySet();
 
 
         ServerProperty serverProperty = mock(ServerProperty.class);

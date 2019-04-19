@@ -18,6 +18,7 @@ package integration.scenario;
 
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.AuthenticatorAttestationResponse;
@@ -43,6 +44,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,6 +65,7 @@ public class CustomRegistrationValidationTest {
             new DefaultSelfAttestationTrustworthinessValidator()
     );
 
+    private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
@@ -85,12 +88,13 @@ public class CustomRegistrationValidationTest {
         AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext
                 = new WebAuthnRegistrationContext(
                 registrationRequest.getClientDataJSON(),
                 registrationRequest.getAttestationObject(),
-                registrationRequest.getTransports(),
+                transports,
                 clientExtensionJSON,
                 serverProperty,
                 false,

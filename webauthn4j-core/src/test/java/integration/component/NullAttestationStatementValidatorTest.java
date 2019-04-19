@@ -16,6 +16,7 @@
 
 package integration.component;
 
+import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
@@ -33,11 +34,13 @@ import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.Set;
 
 class NullAttestationStatementValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
     private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
+    private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
 
     @Test
     void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {
@@ -67,12 +70,13 @@ class NullAttestationStatementValidatorTest {
                 extensions
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext =
                 new WebAuthnRegistrationContext(
                         registrationRequest.getClientDataJSON(),
                         registrationRequest.getAttestationObject(),
-                        registrationRequest.getTransports(),
+                        transports,
                         serverProperty, false);
         target.validate(registrationContext);
     }
@@ -107,8 +111,9 @@ class NullAttestationStatementValidatorTest {
         );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), registrationRequest.getTransports(), serverProperty, true);
+        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, true);
         target.validate(registrationContext);
     }
 }
