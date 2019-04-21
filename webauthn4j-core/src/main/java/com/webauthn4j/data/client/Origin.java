@@ -83,7 +83,7 @@ public class Origin implements Serializable {
     }
 
     @JsonCreator
-    private static Origin fromJson(String value) throws InvalidFormatException {
+    private static Origin deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }

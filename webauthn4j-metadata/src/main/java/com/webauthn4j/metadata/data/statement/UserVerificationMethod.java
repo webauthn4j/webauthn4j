@@ -72,7 +72,7 @@ public enum UserVerificationMethod {
     }
 
     @JsonCreator
-    private static UserVerificationMethod fromJson(long value) throws InvalidFormatException {
+    private static UserVerificationMethod deserialize(long value) throws InvalidFormatException {
         try{
             return create(value);
         }

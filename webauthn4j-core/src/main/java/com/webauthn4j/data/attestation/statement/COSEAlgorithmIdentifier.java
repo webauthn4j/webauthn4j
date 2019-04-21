@@ -49,7 +49,7 @@ public enum COSEAlgorithmIdentifier {
     }
 
     @JsonCreator
-    private static COSEAlgorithmIdentifier fromJson(long value) throws InvalidFormatException {
+    private static COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

@@ -51,7 +51,7 @@ public enum  TPMIAlgPublic {
 
     @JsonCreator
     @SuppressWarnings("squid:S3776")
-    private static TPMIAlgPublic fromJson(int value) throws InvalidFormatException {
+    private static TPMIAlgPublic deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

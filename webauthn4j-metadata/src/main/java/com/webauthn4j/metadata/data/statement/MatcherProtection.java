@@ -54,7 +54,7 @@ public enum  MatcherProtection {
     }
 
     @JsonCreator
-    private static MatcherProtection fromJson(int value) throws InvalidFormatException {
+    private static MatcherProtection deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

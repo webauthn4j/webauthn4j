@@ -87,7 +87,7 @@ public enum AuthenticatorStatus {
     }
 
     @JsonCreator
-    private static AuthenticatorStatus fromJson(String value) throws InvalidFormatException {
+    private static AuthenticatorStatus deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }

@@ -51,7 +51,7 @@ public enum JWAIdentifier {
     }
 
     @JsonCreator
-    private static JWAIdentifier fromJson(String value) throws InvalidFormatException {
+    private static JWAIdentifier deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

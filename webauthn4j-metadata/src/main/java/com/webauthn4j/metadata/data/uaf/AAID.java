@@ -43,7 +43,7 @@ public class AAID {
     }
 
     @JsonCreator
-    static AAID fromJson(String aaid) throws InvalidFormatException {
+    static AAID deserialize(String aaid) throws InvalidFormatException {
         try{
             return new AAID(aaid);
         }

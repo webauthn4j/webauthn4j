@@ -68,7 +68,7 @@ public enum TPMEccCurve {
     }
 
     @JsonCreator
-    private static TPMEccCurve fromJson(int value) throws InvalidFormatException {
+    private static TPMEccCurve deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

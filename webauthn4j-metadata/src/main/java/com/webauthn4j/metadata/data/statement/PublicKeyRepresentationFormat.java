@@ -60,7 +60,7 @@ public enum PublicKeyRepresentationFormat {
     }
 
     @JsonCreator
-    private static PublicKeyRepresentationFormat fromJson(int value) throws InvalidFormatException {
+    private static PublicKeyRepresentationFormat deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

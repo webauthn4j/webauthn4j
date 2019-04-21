@@ -99,7 +99,7 @@ public enum AuthenticationAlgorithm {
     }
 
     @JsonCreator
-    private static AuthenticationAlgorithm fromJson(int value) throws InvalidFormatException {
+    private static AuthenticationAlgorithm deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

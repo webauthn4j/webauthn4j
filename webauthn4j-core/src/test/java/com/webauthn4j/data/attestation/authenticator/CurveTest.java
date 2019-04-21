@@ -40,9 +40,9 @@ class CurveTest {
     }
 
     @Test
-    void fromJson_with_invalid_value_test() {
+    void deserialize_with_invalid_value_test() {
         assertThrows(InvalidFormatException.class,
-                () -> Curve.fromJson(-1)
+                () -> Curve.deserialize(-1)
         );
     }
 

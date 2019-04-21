@@ -70,7 +70,7 @@ public enum AttachmentHint {
     }
 
     @JsonCreator
-    private static AttachmentHint fromJson(long value) throws InvalidFormatException {
+    private static AttachmentHint deserialize(long value) throws InvalidFormatException {
         try{
             return create(value);
         }

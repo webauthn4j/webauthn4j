@@ -51,7 +51,7 @@ public enum PublicKeyCredentialType {
     }
 
     @JsonCreator
-    private static PublicKeyCredentialType fromJson(String value) throws InvalidFormatException {
+    private static PublicKeyCredentialType deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
