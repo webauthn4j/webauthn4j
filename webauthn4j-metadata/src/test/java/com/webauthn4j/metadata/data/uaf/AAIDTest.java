@@ -57,7 +57,7 @@ class AAIDTest {
     }
 
     @Test
-    void fromJson_with_invalid_value_test() {
+    void deserialize_with_invalid_value_test() {
         assertThatThrownBy(()-> jsonConverter.readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
     }
 

@@ -67,7 +67,7 @@ public enum COSEKeyOperation {
     }
 
     @JsonCreator
-    private static COSEKeyOperation fromJson(int value) throws InvalidFormatException {
+    private static COSEKeyOperation deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

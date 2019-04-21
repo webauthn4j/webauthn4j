@@ -75,7 +75,7 @@ public enum AttestationConveyancePreference {
     }
 
     @JsonCreator
-    private static AttestationConveyancePreference fromJson(String value) throws InvalidFormatException {
+    private static AttestationConveyancePreference deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }

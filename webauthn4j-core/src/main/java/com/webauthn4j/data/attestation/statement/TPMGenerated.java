@@ -42,7 +42,7 @@ public enum TPMGenerated {
     }
 
     @JsonCreator
-    private static TPMGenerated fromJson(byte[] value) throws InvalidFormatException {
+    private static TPMGenerated deserialize(byte[] value) throws InvalidFormatException {
         try{
             return create(value);
         }

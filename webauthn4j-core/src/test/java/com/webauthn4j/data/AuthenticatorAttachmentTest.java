@@ -19,7 +19,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.data.AuthenticatorAttachment;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -55,13 +54,13 @@ public class AuthenticatorAttachmentTest {
     }
 
     @Test
-    public void fromJson_test() throws IOException {
+    public void deserialize_test() throws IOException {
         TestDTO dto = objectMapper.readValue("{\"attachment\": \"platform\"}", TestDTO.class);
         assertThat(dto.attachment).isEqualTo(AuthenticatorAttachment.PLATFORM);
     }
 
     @Test
-    public void fromJson_test_with_invalid() throws IOException {
+    public void deserialize_test_with_invalid() throws IOException {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class)
         );

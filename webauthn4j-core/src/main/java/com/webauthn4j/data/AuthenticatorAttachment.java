@@ -61,7 +61,7 @@ public enum AuthenticatorAttachment {
     }
 
     @JsonCreator
-    private static AuthenticatorAttachment fromJson(String value) throws InvalidFormatException {
+    private static AuthenticatorAttachment deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }

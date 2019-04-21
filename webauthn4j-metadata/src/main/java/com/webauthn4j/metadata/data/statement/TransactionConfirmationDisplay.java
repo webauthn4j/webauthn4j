@@ -61,7 +61,7 @@ public enum TransactionConfirmationDisplay {
     }
 
     @JsonCreator
-    private static TransactionConfirmationDisplay fromJson(int value) throws InvalidFormatException {
+    private static TransactionConfirmationDisplay deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

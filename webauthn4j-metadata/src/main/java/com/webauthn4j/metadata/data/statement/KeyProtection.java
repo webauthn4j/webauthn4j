@@ -61,7 +61,7 @@ public enum KeyProtection {
     }
 
     @JsonCreator
-    private static KeyProtection fromJson(int value) throws InvalidFormatException {
+    private static KeyProtection deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

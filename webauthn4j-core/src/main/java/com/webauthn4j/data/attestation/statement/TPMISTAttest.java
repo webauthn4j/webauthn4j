@@ -66,7 +66,7 @@ public enum  TPMISTAttest {
     }
 
     @JsonCreator
-    private static TPMISTAttest fromJson(byte[] value) throws InvalidFormatException {
+    private static TPMISTAttest deserialize(byte[] value) throws InvalidFormatException {
         try{
             return create(value);
         }

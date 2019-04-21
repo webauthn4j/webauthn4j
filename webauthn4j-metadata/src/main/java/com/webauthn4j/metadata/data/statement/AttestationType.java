@@ -57,7 +57,7 @@ public enum AttestationType {
     }
 
     @JsonCreator
-    private static AttestationType fromJson(int value) throws InvalidFormatException {
+    private static AttestationType deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

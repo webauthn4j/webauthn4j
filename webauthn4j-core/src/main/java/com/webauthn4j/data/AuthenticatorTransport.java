@@ -70,7 +70,7 @@ public enum AuthenticatorTransport {
     }
 
     @JsonCreator
-    private static AuthenticatorTransport fromJson(String value) throws InvalidFormatException {
+    private static AuthenticatorTransport deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

@@ -45,7 +45,7 @@ public enum ClientDataType {
     }
 
     @JsonCreator
-    private static ClientDataType fromJson(String value) throws InvalidFormatException {
+    private static ClientDataType deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }

@@ -67,7 +67,7 @@ public enum UserVerificationRequirement {
     }
 
     @JsonCreator
-    private static UserVerificationRequirement fromJson(String value) throws InvalidFormatException{
+    private static UserVerificationRequirement deserialize(String value) throws InvalidFormatException{
         try{
             return create(value);
         }

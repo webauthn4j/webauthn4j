@@ -51,7 +51,7 @@ public enum COSEKeyType {
     }
 
     @JsonCreator
-    private static COSEKeyType fromJson(int value) throws InvalidFormatException {
+    private static COSEKeyType deserialize(int value) throws InvalidFormatException {
         try{
             return create(value);
         }

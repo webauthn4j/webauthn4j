@@ -63,7 +63,7 @@ public enum TokenBindingStatus {
     }
 
     @JsonCreator
-    private static TokenBindingStatus fromJson(String value) throws InvalidFormatException {
+    private static TokenBindingStatus deserialize(String value) throws InvalidFormatException {
         try{
             return create(value);
         }
