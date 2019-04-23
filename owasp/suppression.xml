@@ -36,4 +36,10 @@
    ]]></notes>
         <cve>CVE-2015-9251</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: jruby-stdlib-9.2.6.0.jar: jquery.js
+   ]]></notes>
+        <cve>CVE-2019-11358</cve>
+    </suppress>
 </suppressions>
