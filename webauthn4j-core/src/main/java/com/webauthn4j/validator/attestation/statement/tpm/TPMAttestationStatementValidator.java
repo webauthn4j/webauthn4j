@@ -29,8 +29,11 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
 
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -40,9 +43,8 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EllipticCurve;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TPMAttestationStatementValidator extends AbstractStatementValidator<TPMAttestationStatement> {
 
@@ -257,11 +259,18 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         try {
             for (List entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {
+
                     LdapName directoryName = new LdapName((String) entry.get(1));
-                    directoryName.getRdns();
-                    byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
-                    byte[] partNumberAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.2").get();
-                    byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.3").get();
+
+                    Map<String, Object> map = directoryName.getRdns().stream()
+                            .map(Rdn::toAttributes) //Stream<Attributes>
+                            .map(this::toKeyValue) //Steam<KeyValue>
+                            .flatMap(Collection::stream)
+                            .collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue));
+
+                    byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
+                    byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
+                    byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
 
                     if (manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null) {
                         Asn1Utf8String manufacturerUtf8String = new Asn1Utf8String();
@@ -290,5 +299,52 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
+    }
+
+
+    private List<KeyValue> toKeyValue(Attributes attributes)  {
+        NamingEnumeration<String> attributesIDs = attributes.getIDs();
+        //Map<String, Object> result = new HashMap<>();
+        List<KeyValue> result = new ArrayList<>();
+
+        try {
+            while (attributesIDs.hasMore()) {
+                String aid = attributesIDs.next();
+                Object value = attributes.get(aid).get(); //casting to byte is a bad idea?
+
+                //result.put(aid, value);
+                result.add(new KeyValue(aid, value));
+            }
+        } catch (Exception e) {
+            //
+        }
+
+        return result;
+    }
+
+    class KeyValue {
+        private String key;
+        private Object value;
+
+        KeyValue(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
     }
 }
