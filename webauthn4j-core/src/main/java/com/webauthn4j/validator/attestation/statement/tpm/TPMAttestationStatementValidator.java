@@ -33,7 +33,6 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -260,31 +259,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                 if (entry.get(0).equals(4)) {
 
                     LdapName directoryName = new LdapName((String) entry.get(1));
-
-                    Map<String, Object> map = directoryName.getRdns().stream()
-                            .map(Rdn::toAttributes) //Stream<Attributes>
-                            .map(this::toKeyValue) //Steam<KeyValue>
-                            .flatMap(Collection::stream)
-                            .collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue));
-
-                    byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
-                    byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
-                    byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
-
-                    if (manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null) {
-                        Asn1Utf8String manufacturerUtf8String = new Asn1Utf8String();
-                        manufacturerUtf8String.decode(manufacturerAttr);
-                        Asn1Utf8String partNumberUtf8String = new Asn1Utf8String();
-                        partNumberUtf8String.decode(partNumberAttr);
-                        Asn1Utf8String firmwareVersionUtf8String = new Asn1Utf8String();
-                        firmwareVersionUtf8String.decode(firmwareVersionAttr);
-
-                        String manufacturer = manufacturerUtf8String.getValue();
-                        String partNumber = partNumberUtf8String.getValue();
-                        String firmwareVersion = firmwareVersionUtf8String.getValue();
-                        tpmDevicePropertyValidator.validate(new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion));
-                        return;
-                    }
+                    TPMDeviceProperty tpmDeviceProperty = parseTPMDeviceProperty(directoryName);
+                    tpmDevicePropertyValidator.validate(tpmDeviceProperty);
+                    return;
                 }
             }
         } catch (NamingException | IOException | RuntimeException e) {
@@ -293,6 +270,51 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate dosn't contain TPM device property");
     }
 
+    TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException, NamingException {
+        Map<String, byte[]> map = directoryName.getRdns().stream()
+                .map(item -> convertAttributesToMap(item.toAttributes()).entrySet())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        byte[] manufacturerAttr = map.get("2.23.133.2.1");
+        byte[] partNumberAttr = map.get("2.23.133.2.2");
+        byte[] firmwareVersionAttr = map.get("2.23.133.2.3");
+
+        String manufacturer = decodeAttr(manufacturerAttr);
+        String partNumber = decodeAttr(partNumberAttr);
+        String firmwareVersion = decodeAttr(firmwareVersionAttr);
+
+        return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
+    }
+
+    private String decodeAttr(byte[] attr) throws IOException {
+        String value = null;
+        if(attr != null){
+            Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
+            attrAsn1Utf8String.decode(attr);
+            value = attrAsn1Utf8String.getValue();
+        }
+        return value;
+    }
+
+    private Map<String, byte[]> convertAttributesToMap(Attributes attributes) {
+        try{
+            NamingEnumeration<String> attributesIDs = attributes.getIDs();
+            Map<String, byte[]> result = new HashMap<>();
+            while (attributesIDs.hasMore()) {
+                String aid = attributesIDs.next();
+                byte[] value = (byte[])attributes.get(aid).get();
+
+                result.put(aid, value);
+            }
+            return result;
+        }
+        catch (NamingException e){
+            throw new BadAttestationStatementException("Failed to parse the TPM attestation attributes", e);
+        }
+    }
+
+
     private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
@@ -300,50 +322,4 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 
-
-    private List<KeyValue> toKeyValue(Attributes attributes)  {
-        NamingEnumeration<String> attributesIDs = attributes.getIDs();
-        //Map<String, Object> result = new HashMap<>();
-        List<KeyValue> result = new ArrayList<>();
-
-        try {
-            while (attributesIDs.hasMore()) {
-                String aid = attributesIDs.next();
-                Object value = attributes.get(aid).get(); //casting to byte is a bad idea?
-
-                //result.put(aid, value);
-                result.add(new KeyValue(aid, value));
-            }
-        } catch (Exception e) {
-            //
-        }
-
-        return result;
-    }
-
-    class KeyValue {
-        private String key;
-        private Object value;
-
-        KeyValue(String key, Object value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public Object getValue() {
-            return value;
-        }
-
-        public void setValue(Object value) {
-            this.value = value;
-        }
-    }
 }

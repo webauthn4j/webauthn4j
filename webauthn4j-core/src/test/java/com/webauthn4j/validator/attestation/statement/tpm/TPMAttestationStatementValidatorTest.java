@@ -24,15 +24,15 @@ import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.apache.kerby.asn1.type.Asn1Utf8String;
 import org.junit.jupiter.api.Test;
 
-import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
 import javax.naming.ldap.LdapName;
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMAttestationStatementValidatorTest {
 
@@ -81,51 +81,24 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    void case01_validateSubjectAlternativeName_test() {
-            try {
-                LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
-                directoryName.getRdns(); // does not do anything
-                byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
-                byte[] partNumberAttr = null;
-                try {
-                    // the next one will cause a NullPointerException, because the index does not move to the next element of the Rdn list
-                    partNumberAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.2").get();
-                } catch(NullPointerException e) {
-                    e.printStackTrace();
-
-                    fail("Failed, because the index is not increased: " + e.getMessage());
-                }
-                byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.3").get();
-
-                if (manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null) {
-                    fail("Should fail");
-                }
-            } catch(NamingException e) {
-                e.printStackTrace();
-
-                fail(e.getMessage());
-            }
+    void parseTpmSAN_test_case1() throws NamingException, IOException {
+        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+        TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
+        assertAll(
+                () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:494E5443"), // Intel
+                () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("SPT"),
+                () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:00020000")
+        );
     }
 
     @Test
-    void case02_bad_solution_validateSubjectAlternativeName_test() {
-        try {
-            LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
-            //being useless: directoryName.getRdns();
-            byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
-            byte[] partNumberAttr =  (byte[]) directoryName.getRdns().get(1).toAttributes().get("2.23.133.2.2").get();
-            byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(2).toAttributes().get("2.23.133.2.3").get();
-
-            assertAll(
-                    () -> assertThat(manufacturerAttr).isNotEmpty(),
-                    () -> assertThat(partNumberAttr).isNotEmpty(),
-                    () -> assertThat(firmwareVersionAttr).isNotEmpty()
-
-            );
-        } catch(NamingException e) {
-            e.printStackTrace();
-
-            fail(e.getMessage());
-        }
+    void parseTpmSAN_test_case2() throws NamingException, IOException {
+        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0569643a3133+2.23.133.2.2=#0c074e504354367878+2.23.133.2.1=#0c0b69643a3445353434333030");
+        TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
+        assertAll(
+                () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:4E544300"), // Nuvoton Technology
+                () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("NPCT6xx"),
+                () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:13")
+        );
     }
 }
