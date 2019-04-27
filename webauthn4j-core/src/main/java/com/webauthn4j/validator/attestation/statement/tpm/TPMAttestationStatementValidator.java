@@ -255,7 +255,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private void validateSubjectAlternativeName(X509Certificate certificate) throws CertificateParsingException {
-
         try {
             for (List entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {

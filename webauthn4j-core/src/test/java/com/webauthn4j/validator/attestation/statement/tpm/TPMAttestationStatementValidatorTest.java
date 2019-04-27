@@ -24,11 +24,15 @@ import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.apache.kerby.asn1.type.Asn1Utf8String;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.InvalidNameException;
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapName;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class TPMAttestationStatementValidatorTest {
 
@@ -74,5 +78,54 @@ class TPMAttestationStatementValidatorTest {
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)
                 )
         );
+    }
+
+    @Test
+    void case01_validateSubjectAlternativeName_test() {
+            try {
+                LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+                directoryName.getRdns(); // does not do anything
+                byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
+                byte[] partNumberAttr = null;
+                try {
+                    // the next one will cause a NullPointerException, because the index does not move to the next element of the Rdn list
+                    partNumberAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.2").get();
+                } catch(NullPointerException e) {
+                    e.printStackTrace();
+
+                    fail("Failed, because the index is not increased: " + e.getMessage());
+                }
+                byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.3").get();
+
+                if (manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null) {
+                    fail("Should fail");
+                }
+            } catch(NamingException e) {
+                e.printStackTrace();
+
+                fail(e.getMessage());
+            }
+    }
+
+    @Test
+    void case02_bad_solution_validateSubjectAlternativeName_test() {
+        try {
+            LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+            //being useless: directoryName.getRdns();
+            byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
+            byte[] partNumberAttr =  (byte[]) directoryName.getRdns().get(1).toAttributes().get("2.23.133.2.2").get();
+            byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(2).toAttributes().get("2.23.133.2.3").get();
+
+            assertAll(
+                    () -> assertThat(manufacturerAttr).isNotEmpty(),
+                    () -> assertThat(partNumberAttr).isNotEmpty(),
+                    () -> assertThat(firmwareVersionAttr).isNotEmpty()
+
+            );
+        } catch(NamingException e) {
+            e.printStackTrace();
+
+            fail(e.getMessage());
+        }
     }
 }
