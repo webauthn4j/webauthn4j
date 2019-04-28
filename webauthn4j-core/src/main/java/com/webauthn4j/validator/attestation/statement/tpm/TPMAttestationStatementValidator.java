@@ -19,7 +19,6 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
-import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -199,7 +198,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         } else if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique) {
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
             TPMSECCParms parms = (TPMSECCParms) pubArea.getParameters();
-            EllipticCurve curveInParms = getCurveFromTPMEccCurve(parms.getCurveId());
+            EllipticCurve curveInParms = parms.getCurveId().getEllipticCurve();
             ECCUnique eccUnique = (ECCUnique) publicKeyInPubArea;
             if (ecPublicKey.getParams().getCurve().equals(curveInParms) &&
                     ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccUnique.getX())) &&
@@ -210,18 +209,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
     }
 
-    EllipticCurve getCurveFromTPMEccCurve(TPMEccCurve curveId) {
-        switch (curveId) {
-            case TPM_ECC_NIST_P256:
-                return ECUtil.P_256_SPEC.getCurve();
-            case TPM_ECC_NIST_P384:
-                return ECUtil.P_384_SPEC.getCurve();
-            case TPM_ECC_NIST_P521:
-                return ECUtil.P_521_SPEC.getCurve();
-            default:
-                throw new NotImplementedException();
-        }
-    }
+
 
     private void validateAikCert(X509Certificate certificate) {
         try {

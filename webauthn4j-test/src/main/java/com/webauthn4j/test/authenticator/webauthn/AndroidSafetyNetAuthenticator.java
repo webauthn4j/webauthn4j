@@ -28,6 +28,7 @@ import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSHeader;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 
 @WIP
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
@@ -37,7 +38,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
 
     @Override
-    protected AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();

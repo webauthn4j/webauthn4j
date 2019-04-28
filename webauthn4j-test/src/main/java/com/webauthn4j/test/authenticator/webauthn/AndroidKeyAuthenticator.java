@@ -22,6 +22,7 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.WIP;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 
 @WIP
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
@@ -36,7 +37,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
     }
 
     @Override
-    protected AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();

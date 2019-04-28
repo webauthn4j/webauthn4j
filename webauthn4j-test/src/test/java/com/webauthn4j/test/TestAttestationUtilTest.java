@@ -19,14 +19,25 @@ package com.webauthn4j.test;
 import org.junit.jupiter.api.Test;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TestUtilTestData {
+class TestAttestationUtilTest {
 
     @Test
     void loadTestAuthenticatorAttestationPrivateKey_test() {
         PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         assertThat(privateKey).isNotNull();
+    }
+
+    @Test
+    void createTPMAttestationCertificate_test(){
+        PrivateKey rootCAPrivateKey = TestAttestationUtil.load3tierTestRootCAPrivateKey();
+        X509Certificate intermediateCertificate = TestAttestationUtil.load3tierTestIntermediateCACertificate();
+        PublicKey authenticatorPublicKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate().getPublicKey();
+        X509Certificate x509Certificate = TestAttestationUtil.createTPMAttestationCertificate(intermediateCertificate, rootCAPrivateKey, authenticatorPublicKey);
+        assertThat(x509Certificate).isNotNull();
     }
 }

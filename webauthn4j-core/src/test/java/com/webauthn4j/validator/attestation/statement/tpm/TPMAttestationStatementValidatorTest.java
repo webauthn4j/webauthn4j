@@ -17,11 +17,8 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
-import com.webauthn4j.data.attestation.statement.TPMEccCurve;
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.util.ECUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
@@ -49,18 +46,6 @@ class TPMAttestationStatementValidatorTest {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
-        );
-    }
-
-    @Test
-    void getCurveFromTPMEccCurve_test() {
-        assertAll(
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P256)).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P384)).isEqualTo(ECUtil.P_384_SPEC.getCurve()),
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P521)).isEqualTo(ECUtil.P_521_SPEC.getCurve()),
-                () -> assertThrows(NotImplementedException.class,
-                        () -> target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P192)
-                )
         );
     }
 

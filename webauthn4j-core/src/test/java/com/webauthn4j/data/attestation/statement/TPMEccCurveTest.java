@@ -19,8 +19,11 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 
+import com.webauthn4j.util.ECUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 import org.junit.jupiter.api.Test;
 
+import static com.webauthn4j.data.attestation.statement.TPMEccCurve.TPM_ECC_NIST_P192;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +36,7 @@ class TPMEccCurveTest {
     void create_test() {
         assertAll(
                 () -> assertThat(TPMEccCurve.create(0x0000)).isEqualTo(TPMEccCurve.TPM_ECC_NONE),
-                () -> assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P192),
+                () -> assertThat(TPMEccCurve.create(0x0001)).isEqualTo(TPM_ECC_NIST_P192),
                 () -> assertThat(TPMEccCurve.create(0x0002)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P224),
                 () -> assertThat(TPMEccCurve.create(0x0003)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P256),
                 () -> assertThat(TPMEccCurve.create(0x0004)).isEqualTo(TPMEccCurve.TPM_ECC_NIST_P384),
@@ -71,6 +74,18 @@ class TPMEccCurveTest {
     void fromString_test_with_invalid_value() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"tpm_ecc_curve\":-1}", TestDTO.class)
+        );
+    }
+
+    @Test
+    void getEllipticCurve() {
+        assertAll(
+                () -> assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getEllipticCurve()).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
+                () -> assertThat(TPMEccCurve.TPM_ECC_NIST_P384.getEllipticCurve()).isEqualTo(ECUtil.P_384_SPEC.getCurve()),
+                () -> assertThat(TPMEccCurve.TPM_ECC_NIST_P521.getEllipticCurve()).isEqualTo(ECUtil.P_521_SPEC.getCurve()),
+                () -> assertThrows(NotImplementedException.class,
+                        TPM_ECC_NIST_P192::getEllipticCurve
+                )
         );
     }
 

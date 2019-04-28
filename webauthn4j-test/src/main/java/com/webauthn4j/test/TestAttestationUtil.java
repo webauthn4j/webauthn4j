@@ -22,6 +22,21 @@ import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
@@ -31,9 +46,14 @@ import org.springframework.util.StreamUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.math.BigInteger;
 import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.cert.CertificateException;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -76,7 +96,7 @@ public class TestAttestationUtil {
     }
 
     public static AttestationStatement createTPMAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = loadTPMCertPath();
+        AttestationCertificatePath certPath = loadTestTPMCertPath();
         TPMSAttest certInfo = null; //TODO
         TPMTPublic pubArea = null; //TODO
         return new TPMAttestationStatement(algorithm, certPath, signature, certInfo, pubArea);
@@ -97,8 +117,8 @@ public class TestAttestationUtil {
         throw new NotImplementedException();
     }
 
-    private static AttestationCertificatePath loadTPMCertPath() {
-        throw new NotImplementedException();
+    public static AttestationCertificatePath loadTestTPMCertPath() {
+        return new AttestationCertificatePath(Arrays.asList(createTPMAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
 
     // ~ Trust Anchors
@@ -215,9 +235,62 @@ public class TestAttestationUtil {
         return CertificateUtil.generateX509Certificate(derEncodedCertificate.getBytes());
     }
 
+    public static X509Certificate createTPMAttestationCertificate() {
+        PublicKey publicKey = load3tierTestAuthenticatorAttestationCertificate().getPublicKey();
+        return createTPMAttestationCertificate(load3tierTestIntermediateCACertificate(), load3tierTestIntermediateCAPrivateKey(), publicKey);
+    }
+
+    public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
+        try {
+            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
+                    issuerCertificate,
+                    BigInteger.valueOf(1),
+                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
+                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
+                    X500Name.getInstance(ASN1OctetString.getInstance("".getBytes())),
+                    publicKey
+            );
+
+            DERSequence subjectAlternativeNames = new DERSequence(new ASN1Encodable[] {
+                    new GeneralName(GeneralName.directoryName, "2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433")
+            });
+            certificateBuilder.addExtension(Extension.subjectAlternativeName, true, subjectAlternativeNames);
+            certificateBuilder.addExtension(
+                    Extension.basicConstraints,
+                    false,
+                    new BasicConstraints(false)
+            );
+            certificateBuilder.addExtension(
+                    Extension.extendedKeyUsage, // Extended Key Usage
+                    true,
+                    new ExtendedKeyUsage(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3"))) // tcg-kp-AIKCertificate OID
+            );
+
+            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
+            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
+            try {
+                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
+            } catch (CertificateException e) {
+                throw new com.webauthn4j.validator.exception.CertificateException(e);
+            }
+        } catch (CertIOException e) {
+            throw new UncheckedIOException(e);
+        } catch (OperatorCreationException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
 
     // ~ Private Keys
     // ========================================================================================================
+
+    public static PrivateKey load3tierTestIntermediateCAPrivateKey() {
+        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-intermediate-CA.der");
+    }
+
+    public static PrivateKey load3tierTestRootCAPrivateKey() {
+        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-root-CA.der");
+    }
 
     public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey() {
         return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-authenticator.der");

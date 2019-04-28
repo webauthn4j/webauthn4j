@@ -45,6 +45,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
@@ -259,7 +260,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
 
 
-        AttestationStatement attestationStatement = generateAttestationStatement(signedData, registrationEmulationOption);
+        AttestationStatement attestationStatement = generateAttestationStatement(signedData, credentialPublicKey.getPublicKey(), registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -391,7 +392,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.countUpEnabled = countUpEnabled;
     }
 
-    protected abstract AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption);
+    protected abstract AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption);
 
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

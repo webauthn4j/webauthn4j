@@ -19,7 +19,11 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
+
+import java.security.spec.EllipticCurve;
 
 public enum TPMEccCurve {
     TPM_ECC_NONE(0x0000),
@@ -67,6 +71,17 @@ public enum TPMEccCurve {
         }
     }
 
+    public static TPMEccCurve create(EllipticCurve value) {
+        if (ECUtil.P_256_SPEC.getCurve().equals(value)) {
+            return TPM_ECC_NIST_P256;
+        } else if (ECUtil.P_384_SPEC.getCurve().equals(value)) {
+            return TPM_ECC_NIST_P384;
+        } else if (ECUtil.P_521_SPEC.getCurve().equals(value)) {
+            return TPM_ECC_NIST_P521;
+        }
+        throw new IllegalArgumentException("value '" + value + "' is out of range");
+    }
+
     @JsonCreator
     private static TPMEccCurve deserialize(int value) throws InvalidFormatException {
         try{
@@ -80,6 +95,19 @@ public enum TPMEccCurve {
     @JsonValue
     public int getValue() {
         return value;
+    }
+
+    public EllipticCurve getEllipticCurve() {
+        switch (this) {
+            case TPM_ECC_NIST_P256:
+                return ECUtil.P_256_SPEC.getCurve();
+            case TPM_ECC_NIST_P384:
+                return ECUtil.P_384_SPEC.getCurve();
+            case TPM_ECC_NIST_P521:
+                return ECUtil.P_521_SPEC.getCurve();
+            default:
+                throw new NotImplementedException();
+        }
     }
 
 }
