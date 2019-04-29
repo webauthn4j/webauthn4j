@@ -17,7 +17,7 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.anchor.TrustAnchorsResolver;
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
@@ -25,16 +25,17 @@ import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v1CertificateBuilder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.core.io.ClassPathResource;
@@ -43,6 +44,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StreamUtils;
 
+import javax.security.auth.x500.X500Principal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -153,18 +155,35 @@ public class TestAttestationUtil {
     }
 
     public static X509Certificate createTPMAttestationCertificate() {
+        return createTPMAttestationCertificate(new CertificateCreationOption());
+    }
+
+    public static X509Certificate createTPMAttestationCertificate(CertificateCreationOption certificateCreationOption) {
         PublicKey publicKey = load3tierTestAuthenticatorAttestationPublicKey();
-        return createTPMAttestationCertificate(load3tierTestIntermediateCACertificate(), load3tierTestIntermediateCAPrivateKey(), publicKey);
+        return createTPMAttestationCertificate(load3tierTestIntermediateCACertificate(), load3tierTestIntermediateCAPrivateKey(), publicKey, certificateCreationOption);
     }
 
     public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
+        return createTPMAttestationCertificate(issuerCertificate, issuerPrivateKey, publicKey, new CertificateCreationOption());
+    }
+
+    public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, CertificateCreationOption certificateCreationOption) {
         try {
+            switch (certificateCreationOption.getX509CertificateVersion()){
+                case 1:
+                    return createV1DummyCertificate();
+                case 3:
+                    break;
+                default:
+                    throw new IllegalArgumentException("Only version 1 or 3 are supported.");
+            }
+
             X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
                     issuerCertificate,
                     BigInteger.valueOf(1),
                     Date.from(Instant.parse("2000-01-01T00:00:00Z")),
                     Date.from(Instant.parse("2999-12-31T23:59:59Z")),
-                    X500Name.getInstance(ASN1OctetString.getInstance("".getBytes())),
+                    new X500Principal(certificateCreationOption.getSubjectDN()),
                     publicKey
             );
 
@@ -175,13 +194,15 @@ public class TestAttestationUtil {
             certificateBuilder.addExtension(
                     Extension.basicConstraints,
                     false,
-                    new BasicConstraints(false)
+                    new BasicConstraints(certificateCreationOption.isCAFlagInBasicConstraints())
             );
-            certificateBuilder.addExtension(
-                    Extension.extendedKeyUsage, // Extended Key Usage
-                    true,
-                    new ExtendedKeyUsage(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3"))) // tcg-kp-AIKCertificate OID
-            );
+            if(certificateCreationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
+                certificateBuilder.addExtension(
+                        Extension.extendedKeyUsage, // Extended Key Usage
+                        true,
+                        new ExtendedKeyUsage(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3"))) // tcg-kp-AIKCertificate OID
+                );
+            }
 
             ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
             X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
@@ -192,6 +213,28 @@ public class TestAttestationUtil {
             }
         } catch (CertIOException e) {
             throw new UncheckedIOException(e);
+        } catch (OperatorCreationException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    private static X509Certificate createV1DummyCertificate(){
+        try{
+            X509v1CertificateBuilder certificateBuilder = new X509v1CertificateBuilder(
+                    new X500Name("O=SharpLab., C=US"),
+                    BigInteger.valueOf(1),
+                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
+                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
+                    new X500Name("O=SharpLab., C=US"),
+                    new SubjectPublicKeyInfo(new DefaultSignatureAlgorithmIdentifierFinder().find("SHA256WITHRSA"), new byte[0])
+            );
+            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA").build(KeyUtil.createRSAKeyPair().getPrivate());
+            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
+            try {
+                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
+            } catch (CertificateException e) {
+                throw new com.webauthn4j.validator.exception.CertificateException(e);
+            }
         } catch (OperatorCreationException e) {
             throw new UnexpectedCheckedException(e);
         }

@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
+import com.webauthn4j.test.CertificateCreationOption;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -29,7 +30,7 @@ import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -93,5 +94,37 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_test(){
         X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate();
         target.validateAikCert(certificate);
+    }
+
+    @Test
+    void validateAikCert_with_non_empty_subjectDN_test(){
+        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
+        certificateCreationOption.setSubjectDN("O=SharpLab., C=US");
+        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_without_tcgKpAIKCertificate_test(){
+        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
+        certificateCreationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
+        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_with_caFlagInBasicConstraints_test(){
+        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
+        certificateCreationOption.setCAFlagInBasicConstraints(true);
+        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_with_version1_test(){
+        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
+        certificateCreationOption.setX509CertificateVersion(1);
+        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

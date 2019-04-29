@@ -225,7 +225,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
             validateSubjectAlternativeName(certificate);
             /// The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
-            if (!certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
+            if (certificate.getExtendedKeyUsage() == null || !certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
                 throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID");
             }
             /// The Basic Constraints extension MUST have the CA component set to false.
