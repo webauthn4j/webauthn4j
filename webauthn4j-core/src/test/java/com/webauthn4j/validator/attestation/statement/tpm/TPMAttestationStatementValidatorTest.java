@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import javax.naming.NamingException;
 import javax.naming.ldap.LdapName;
 import java.io.IOException;
+import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -85,5 +87,11 @@ class TPMAttestationStatementValidatorTest {
                 () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("NPCT6xx"),
                 () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:13")
         );
+    }
+
+    @Test
+    void validateAikCert_test(){
+        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate();
+        target.validateAikCert(certificate);
     }
 }

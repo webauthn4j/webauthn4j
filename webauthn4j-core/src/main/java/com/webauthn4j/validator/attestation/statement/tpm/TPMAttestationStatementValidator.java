@@ -211,7 +211,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
 
 
-    private void validateAikCert(X509Certificate certificate) {
+    void validateAikCert(X509Certificate certificate) {
         try {
             /// TPM attestation certificate MUST have the following fields/extensions:
             /// Version MUST be set to 3.

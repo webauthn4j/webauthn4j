@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.self;
 
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import org.junit.jupiter.api.Test;
 
 class NullSelfAttestationTrustworthinessValidatorTest {
@@ -27,7 +27,7 @@ class NullSelfAttestationTrustworthinessValidatorTest {
 
     @Test
     void validate_test() {
-        PackedAttestationStatement attestationStatement = TestAttestationUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
+        PackedAttestationStatement attestationStatement = TestAttestationStatementUtil.createSelfPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32]);
 
         validator.validate(attestationStatement);
     }

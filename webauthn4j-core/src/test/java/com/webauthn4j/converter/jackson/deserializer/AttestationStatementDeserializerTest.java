@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +31,7 @@ class AttestationStatementDeserializerTest {
 
     @Test
     void test() {
-        AttestationStatement source = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        AttestationStatement source = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         byte[] data = cborConverter.writeValueAsBytes(source);
         AttestationStatement obj = cborConverter.readValue(data, AttestationStatement.class);
 

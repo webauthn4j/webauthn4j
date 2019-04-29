@@ -20,6 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
@@ -49,7 +50,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
                 Collections.singletonList(TestAttestationUtil.load2tierTestRootCACertificate()));
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
         target.validate(aaguid, attestationStatement);
     }
 
@@ -59,7 +60,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
         Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
         assertThrows(TrustAnchorNotFoundException.class,
                 () -> target.validate(aaguid, attestationStatement)
         );
@@ -78,7 +79,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
                 TestAttestationUtil.load3tierTestIntermediateCACertificate(),
                 TestAttestationUtil.load3tierTestRootCACertificate()));
 
-        CertificateBaseAttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
         assertThrows(CertificateException.class,
                 () -> target.validate(aaguid, attestationStatement)

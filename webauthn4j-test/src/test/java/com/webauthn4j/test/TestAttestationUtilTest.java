@@ -36,7 +36,7 @@ class TestAttestationUtilTest {
     void createTPMAttestationCertificate_test(){
         PrivateKey rootCAPrivateKey = TestAttestationUtil.load3tierTestRootCAPrivateKey();
         X509Certificate intermediateCertificate = TestAttestationUtil.load3tierTestIntermediateCACertificate();
-        PublicKey authenticatorPublicKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate().getPublicKey();
+        PublicKey authenticatorPublicKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey();
         X509Certificate x509Certificate = TestAttestationUtil.createTPMAttestationCertificate(intermediateCertificate, rootCAPrivateKey, authenticatorPublicKey);
         assertThat(x509Certificate).isNotNull();
     }
