@@ -35,18 +35,20 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
+import java.util.Objects;
 
-class KeyDescriptionValidator {
+public class KeyDescriptionValidator {
 
-    private static final String ATTESTATION_EXTENSION_OID = "1.3.6.1.4.1.11129.2.1.17";
-    private static final int ATTESTATION_CHALLENGE_INDEX = 4;
-    private static final int SW_ENFORCED_INDEX = 6;
-    private static final int TEE_ENFORCED_INDEX = 7;
-    private static final int KM_TAG_PURPOSE = 1;
-    private static final int KM_TAG_ALL_APPLICATIONS = 600;
-    private static final int KM_TAG_ORIGIN = 702;
-    private static final int KM_ORIGIN_GENERATED = 0;
-    private static final int KM_PURPOSE_SIGN = 2;
+    public static final String ATTESTATION_EXTENSION_OID = "1.3.6.1.4.1.11129.2.1.17";
+    public static final int ATTESTATION_CHALLENGE_INDEX = 4;
+    public static final int SW_ENFORCED_INDEX = 6;
+    public static final int TEE_ENFORCED_INDEX = 7;
+    public static final int KM_TAG_PURPOSE = 1;
+    public static final int KM_TAG_ALL_APPLICATIONS = 600;
+    public static final int KM_TAG_CREATION_DATE_TIME = 701;
+    public static final int KM_TAG_ORIGIN = 702;
+    public static final int KM_ORIGIN_GENERATED = 0;
+    public static final int KM_PURPOSE_SIGN = 2;
 
     // ~ Instance fields
     // ================================================================================================
@@ -65,9 +67,12 @@ class KeyDescriptionValidator {
     Asn1Container extractKeyDescription(X509Certificate x509Certificate) throws IOException {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
-        Asn1OctetString container = new Asn1OctetString();
-        container.decode(attestationExtensionBytes);
-        return  (Asn1Container)Asn1Parser.parse(ByteBuffer.wrap(container.getValue()));
+        Asn1OctetString envelope = new Asn1OctetString();
+        if(attestationExtensionBytes == null){
+            throw new KeyDescriptionValidationException("KeyDescription must not be null");
+        }
+        envelope.decode(attestationExtensionBytes);
+        return  (Asn1Container)Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
     }
 
     void doValidate(Asn1Container keyDescription, byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
@@ -123,7 +128,7 @@ class KeyDescriptionValidator {
 
     private boolean isKeyGeneratedInKeymaster(Asn1ParseResult origin) {
         try {
-            return getIntegerFromAsn1(origin).equals(BigInteger.valueOf(KM_ORIGIN_GENERATED));
+            return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
         } catch (RuntimeException | IOException e) {
             logger.debug("Failed to retrieve origin.", e);
             return false;
@@ -137,7 +142,7 @@ class KeyDescriptionValidator {
             }
             Asn1Container set = (Asn1Container) purposes;
             for (Asn1ParseResult purpose : set.getChildren()) {
-                if (getIntegerFromAsn1(purpose).equals(BigInteger.valueOf(KM_PURPOSE_SIGN))) {
+                if (Objects.equals(getIntegerFromAsn1(purpose), BigInteger.valueOf(KM_PURPOSE_SIGN))) {
                     return true;
                 }
             }
@@ -150,6 +155,9 @@ class KeyDescriptionValidator {
 
 
     private BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
+        if(asn1Value == null){
+            return null;
+        }
         if (!asn1Value.isPrimitive()) {
             throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }

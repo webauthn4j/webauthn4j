@@ -31,8 +31,9 @@ class TPMAuthenticatorTest {
     void generateAttestationStatement_test() {
         byte[] signedData = new byte[32];
         RegistrationEmulationOption option = new RegistrationEmulationOption();
+        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, KeyUtil.createECKeyPair(), new byte[0]);
         assertThatCode(()->{
-            target.generateAttestationStatement(signedData, KeyUtil.createECKeyPair().getPublic(), option);
+            target.generateAttestationStatement(attestationStatementRequest, option);
         }).doesNotThrowAnyException();
     }
 }

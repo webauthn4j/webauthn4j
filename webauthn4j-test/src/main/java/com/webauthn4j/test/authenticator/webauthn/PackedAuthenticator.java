@@ -25,7 +25,6 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 import java.security.PrivateKey;
-import java.security.PublicKey;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
@@ -39,12 +38,12 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    public AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption){
+    public AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption){
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationPrivateKey, attestationStatementRequest.getSignedData());
         }
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
     }

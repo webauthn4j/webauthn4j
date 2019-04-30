@@ -23,9 +23,8 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1ObjectIdentifier;
-import org.bouncycastle.asn1.DERSequence;
+import com.webauthn4j.validator.attestation.statement.androidkey.KeyDescriptionValidator;
+import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.CertIOException;
@@ -74,6 +73,10 @@ public class TestAttestationUtil {
 
     public static AttestationCertificatePath load3tierTestCertPath() {
         return new AttestationCertificatePath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
+    }
+
+    public static AttestationCertificatePath load3tierTestCACertPath() {
+        return new AttestationCertificatePath(Collections.singletonList(load3tierTestIntermediateCACertificate()));
     }
 
     public static AttestationCertificatePath loadAndroidKeyCertPath() {
@@ -165,6 +168,86 @@ public class TestAttestationUtil {
 
     public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
         return createTPMAttestationCertificate(issuerCertificate, issuerPrivateKey, publicKey, new CertificateCreationOption());
+    }
+
+    public static X509Certificate createAndroidKeyAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, byte[] clientDataHash, CertificateCreationOption certificateCreationOption) {
+        try {
+            switch (certificateCreationOption.getX509CertificateVersion()){
+                case 1:
+                    return createV1DummyCertificate();
+                case 3:
+                    break;
+                default:
+                    throw new IllegalArgumentException("Only version 1 or 3 are supported.");
+            }
+
+            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
+                    issuerCertificate,
+                    BigInteger.valueOf(1),
+                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
+                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
+                    new X500Principal("O=SharpLab., C=US"),
+                    publicKey
+            );
+
+            certificateBuilder.addExtension(new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17"), false, createKeyDescriptor(clientDataHash));
+
+            certificateBuilder.addExtension(
+                    Extension.basicConstraints,
+                    false,
+                    new BasicConstraints(certificateCreationOption.isCAFlagInBasicConstraints())
+            );
+            certificateBuilder.addExtension(
+                    Extension.keyUsage, // Key Usage
+                    false,
+                    new KeyUsage(KeyUsage.keyCertSign)
+            );
+
+            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
+            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
+            try {
+                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
+            } catch (CertificateException e) {
+                throw new com.webauthn4j.validator.exception.CertificateException(e);
+            }
+        } catch (CertIOException e) {
+            throw new UncheckedIOException(e);
+        } catch (OperatorCreationException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    public static X509Certificate createAndroidKeyAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, byte[] clientDataHash) {
+        return createAndroidKeyAttestationCertificate(issuerCertificate, issuerPrivateKey, publicKey, clientDataHash, new CertificateCreationOption());
+    }
+
+    public static ASN1Encodable createKeyDescriptor(byte[] clientDataHash){
+        ASN1Integer attestationVersion = new ASN1Integer(2);
+        ASN1Enumerated attestationSecurityLevel = new ASN1Enumerated(0);
+        ASN1Integer keymasterVersion = new ASN1Integer(1);
+        ASN1Enumerated keymasterSecurityLevel = new ASN1Enumerated(0);
+        DEROctetString attestationChallenge = new DEROctetString(clientDataHash);
+        ASN1OctetString reserved = new DEROctetString(new byte[0]);
+
+        ASN1EncodableVector softwareEnforcedVector = new ASN1EncodableVector();
+        DLSequence softwareEnforced = new DLSequence(softwareEnforcedVector);
+
+        ASN1EncodableVector teeEnforcedVector = new ASN1EncodableVector();
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_ORIGIN, new ASN1Integer(KeyDescriptionValidator.KM_ORIGIN_GENERATED)));
+        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_PURPOSE, new DERSet(new ASN1Integer(KeyDescriptionValidator.KM_PURPOSE_SIGN))));
+        DLSequence teeEnforced = new DLSequence(teeEnforcedVector);
+
+        ASN1EncodableVector asn1EncodableVector = new ASN1EncodableVector();
+        asn1EncodableVector.add(attestationVersion);
+        asn1EncodableVector.add(attestationSecurityLevel);
+        asn1EncodableVector.add(keymasterVersion);
+        asn1EncodableVector.add(keymasterSecurityLevel);
+        asn1EncodableVector.add(attestationChallenge);
+        asn1EncodableVector.add(reserved);
+        asn1EncodableVector.add(softwareEnforced);
+        asn1EncodableVector.add(teeEnforced);
+
+        return new DLSequence(asn1EncodableVector);
     }
 
     public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, CertificateCreationOption certificateCreationOption) {

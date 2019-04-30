@@ -22,9 +22,6 @@ import com.webauthn4j.data.PublicKeyCredentialDescriptor;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.PublicKeyCredentialRpEntity;
 import com.webauthn4j.data.PublicKeyCredentialType;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -33,6 +30,9 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -45,7 +45,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
@@ -56,15 +55,18 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 @WIP
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = new CborConverter(); // TODO: inject objectMapper from constructor
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
 
+    // property
     AAGUID aaguid;
-    private boolean capableOfUserVerification;
-    private int counter;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
+    private int counter;
+
+    // feature
+    private boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
 
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter); // TODO: inject objectMapper from constructor
 
     public WebAuthnModelAuthenticator(boolean capableOfUserVerification, AAGUID aaguid, int counter) {
         this.capableOfUserVerification = capableOfUserVerification;
@@ -176,12 +178,13 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // Let (publicKey, privateKey) be a new pair of cryptographic keys using the combination of
         // PublicKeyCredentialType and cryptographic parameters represented by the first item in
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
+        KeyPair credentialKeyPair;
         PrivateKey credentialPrivateKey;
         CredentialPublicKey credentialPublicKey;
         try {
-            KeyPair keyPair = KeyUtil.createECKeyPair();
-            credentialPrivateKey = keyPair.getPrivate();
-            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+            credentialKeyPair = KeyUtil.createECKeyPair();
+            credentialPrivateKey = credentialKeyPair.getPrivate();
+            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) credentialKeyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
@@ -220,17 +223,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
-        if (extensions == null) {
-            extensions = new AuthenticationExtensionsClientInputs<>();
-        }
-        Map<String, RegistrationExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
-        for (Map.Entry<String, RegistrationExtensionClientInput> entry : extensions.entrySet()) {
-            String extensionIdentifier = entry.getKey();
-            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
-                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
-            }
-        }
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput>
+                registrationExtensionAuthenticatorOutputs = processRegistrationExtensions(makeCredentialRequest);
 
         // If the authenticator supports:
         // a per-RP ID signature counter
@@ -246,21 +240,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte flag = BIT_AT;
         if (userConsent) flag |= BIT_UP;
         if (userVerification) flag |= BIT_UV;
-        if (!processedExtensions.isEmpty()) flag |= BIT_ED;
+        if (!registrationExtensionAuthenticatorOutputs.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
-                new AuthenticatorData<>(rpIdHash, flag, counter, attestedCredentialData, new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions));
+                new AuthenticatorData<>(rpIdHash, flag, counter, attestedCredentialData, registrationExtensionAuthenticatorOutputs);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
+        byte[] clientDataHash = makeCredentialRequest.getHash();
 
-
-
-        AttestationStatement attestationStatement = generateAttestationStatement(signedData, credentialPublicKey.getPublicKey(), registrationEmulationOption);
+        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
+        AttestationStatement attestationStatement = generateAttestationStatement(attestationStatementRequest, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -272,6 +266,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         MakeCredentialResponse makeCredentialResponse = new MakeCredentialResponse();
         makeCredentialResponse.setAttestationObject(attestationObject);
         return makeCredentialResponse;
+    }
+
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest){
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
+        if (extensions == null) {
+            extensions = new AuthenticationExtensionsClientInputs<>();
+        }
+        Map<String, RegistrationExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
+        for (Map.Entry<String, RegistrationExtensionClientInput> entry : extensions.entrySet()) {
+            String extensionIdentifier = entry.getKey();
+            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
+                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
+            }
+        }
+        return new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions);
     }
 
     public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
@@ -392,7 +401,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.countUpEnabled = countUpEnabled;
     }
 
-    protected abstract AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption);
+    protected abstract AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

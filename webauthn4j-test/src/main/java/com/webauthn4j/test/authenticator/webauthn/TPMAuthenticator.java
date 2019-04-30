@@ -48,16 +48,16 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    protected AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
 
         COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
 
-        TPMTPublic pubArea = generateTPMTPublic(credentialPublicKey);
+        TPMTPublic pubArea = generateTPMTPublic(attestationStatementRequest.getCredentialKeyPair().getPublic());
 
         TPMGenerated magic = TPMGenerated.TPM_GENERATED_VALUE;
         TPMISTAttest type = TPMISTAttest.TPM_ST_ATTEST_CERTIFY;
         byte[] qualifiedSigner = Base64UrlUtil.decode("AAu8WfTf2aakLcO4Zq_y3w0Zgmu_AUtnqwrW67F2MGuABw");
-        byte[] extraData = MessageDigestUtil.createMessageDigest(alg.getMessageDigestJcaName()).digest(signedData);
+        byte[] extraData = MessageDigestUtil.createMessageDigest(alg.getMessageDigestJcaName()).digest(attestationStatementRequest.getSignedData());
         BigInteger clock = BigInteger.valueOf(7270451399L);
         long resetCount = 1749088739L;
         long restartCount = 3639844613L;

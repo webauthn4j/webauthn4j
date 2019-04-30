@@ -20,15 +20,14 @@ import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStat
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.Response;
-import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.util.WIP;
 import com.webauthn4j.data.jws.JWAIdentifier;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSHeader;
+import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.client.RegistrationEmulationOption;
+import com.webauthn4j.util.WIP;
 
 import java.security.PrivateKey;
-import java.security.PublicKey;
 
 @WIP
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
@@ -38,12 +37,12 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
 
     @Override
-    protected AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationPrivateKey, attestationStatementRequest.getSignedData());
         }
         JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, attestationCertificatePath);
         String nonce = null; //TODO

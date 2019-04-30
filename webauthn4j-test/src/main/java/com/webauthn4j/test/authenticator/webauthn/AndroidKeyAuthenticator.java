@@ -16,35 +16,56 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.util.WIP;
 
 import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
-@WIP
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
 
-    private PrivateKey attestationPrivateKey;
-    private AttestationCertificatePath attestationCertificatePath;
+    private PrivateKey issuerPrivateKey;
+    private AttestationCertificatePath caCertificates;
 
-    public AndroidKeyAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath attestationCertificatePath){
+    public AndroidKeyAuthenticator(PrivateKey issuerPrivateKey, AttestationCertificatePath caCertificates){
         super();
-        this.attestationPrivateKey = attestationPrivateKey;
-        this.attestationCertificatePath = attestationCertificatePath;
+        this.issuerPrivateKey = issuerPrivateKey;
+        this.caCertificates = caCertificates;
+    }
+
+    public AndroidKeyAuthenticator(){
+        this(
+                TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
+                TestAttestationUtil.load3tierTestCACertPath());
     }
 
     @Override
-    protected AttestationStatement generateAttestationStatement(byte[] signedData, PublicKey credentialPublicKey, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(attestationStatementRequest.getCredentialKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
-        return new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath);
+        X509Certificate issuerCertificate = caCertificates.get(0);
+        X509Certificate attestationCertificate =
+                TestAttestationUtil.createAndroidKeyAttestationCertificate(
+                        issuerCertificate,
+                        issuerPrivateKey,
+                        attestationStatementRequest.getCredentialKeyPair().getPublic(),
+                        attestationStatementRequest.getClientDataHash());
+        List<X509Certificate> list = new ArrayList<>();
+        list.add(attestationCertificate);
+        list.addAll(caCertificates);
+        AttestationCertificatePath attestationCertificates = new AttestationCertificatePath(list);
+        return new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificates);
     }
 
 }
