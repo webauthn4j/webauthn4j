@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.jws;
 
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -42,25 +41,7 @@ public class JWS<T extends Serializable> implements Serializable {
     private String headerString;
     private String payloadString;
 
-    public static <T extends Serializable> JWS<T> parse(String value, Class<T> payloadType, JsonConverter jsonConverter){
-        String[] data = value.split("\\.");
-        if (data.length != 3) {
-            throw new IllegalArgumentException("JWS value is not divided by two period.");
-        }
-        String headerString = data[0];
-        String payloadString = data[1];
-        String signatureString = data[2];
-        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
-        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
-        byte[] signature = Base64UrlUtil.decode(signatureString);
-        return new JWS<>(header, headerString, payload, payloadString, signature);
-    }
-
-    public static <T extends Serializable> JWS<T>  parse(String value, Class<T> payloadType) {
-        return parse(value, payloadType, new JsonConverter());
-    }
-
-    private JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
+    JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
         this.header = header;
         this.payload = payload;
         this.signature = signature;
