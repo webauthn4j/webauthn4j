@@ -56,7 +56,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256,apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
 
         String ver = ""; //TODO
-        JWS<Response> responseJWS = null; //TODO new JWS<>(jwsHeader, null, response, null, signature);
+        JWS<Response> responseJWS = new JWS<>(jwsHeader, null, response, null, signature);
         return new AndroidSafetyNetAttestationStatement(ver, responseJWS);
     }
 }
