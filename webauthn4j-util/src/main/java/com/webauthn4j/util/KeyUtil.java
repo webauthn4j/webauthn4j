@@ -80,7 +80,7 @@ public class KeyUtil {
     }
 
     public static KeyPair createRSAKeyPair() {
-        KeyPairGenerator keyPairGenerator = null;
+        KeyPairGenerator keyPairGenerator;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4), SecureRandomFactory.getSecureRandom().get());
