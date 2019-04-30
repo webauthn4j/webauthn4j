@@ -29,7 +29,9 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
 
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -40,9 +42,8 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EllipticCurve;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TPMAttestationStatementValidator extends AbstractStatementValidator<TPMAttestationStatement> {
 
@@ -253,30 +254,14 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private void validateSubjectAlternativeName(X509Certificate certificate) throws CertificateParsingException {
-
         try {
             for (List entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {
+
                     LdapName directoryName = new LdapName((String) entry.get(1));
-                    directoryName.getRdns();
-                    byte[] manufacturerAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.1").get();
-                    byte[] partNumberAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.2").get();
-                    byte[] firmwareVersionAttr = (byte[]) directoryName.getRdns().get(0).toAttributes().get("2.23.133.2.3").get();
-
-                    if (manufacturerAttr != null && partNumberAttr != null && firmwareVersionAttr != null) {
-                        Asn1Utf8String manufacturerUtf8String = new Asn1Utf8String();
-                        manufacturerUtf8String.decode(manufacturerAttr);
-                        Asn1Utf8String partNumberUtf8String = new Asn1Utf8String();
-                        partNumberUtf8String.decode(partNumberAttr);
-                        Asn1Utf8String firmwareVersionUtf8String = new Asn1Utf8String();
-                        firmwareVersionUtf8String.decode(firmwareVersionAttr);
-
-                        String manufacturer = manufacturerUtf8String.getValue();
-                        String partNumber = partNumberUtf8String.getValue();
-                        String firmwareVersion = firmwareVersionUtf8String.getValue();
-                        tpmDevicePropertyValidator.validate(new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion));
-                        return;
-                    }
+                    TPMDeviceProperty tpmDeviceProperty = parseTPMDeviceProperty(directoryName);
+                    tpmDevicePropertyValidator.validate(tpmDeviceProperty);
+                    return;
                 }
             }
         } catch (NamingException | IOException | RuntimeException e) {
@@ -285,10 +270,56 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
     }
 
+    TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException, NamingException {
+        Map<String, byte[]> map = directoryName.getRdns().stream()
+                .map(item -> convertAttributesToMap(item.toAttributes()).entrySet())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        byte[] manufacturerAttr = map.get("2.23.133.2.1");
+        byte[] partNumberAttr = map.get("2.23.133.2.2");
+        byte[] firmwareVersionAttr = map.get("2.23.133.2.3");
+
+        String manufacturer = decodeAttr(manufacturerAttr);
+        String partNumber = decodeAttr(partNumberAttr);
+        String firmwareVersion = decodeAttr(firmwareVersionAttr);
+
+        return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
+    }
+
+    private String decodeAttr(byte[] attr) throws IOException {
+        String value = null;
+        if(attr != null){
+            Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
+            attrAsn1Utf8String.decode(attr);
+            value = attrAsn1Utf8String.getValue();
+        }
+        return value;
+    }
+
+    private Map<String, byte[]> convertAttributesToMap(Attributes attributes) {
+        try{
+            NamingEnumeration<String> attributesIDs = attributes.getIDs();
+            Map<String, byte[]> result = new HashMap<>();
+            while (attributesIDs.hasMore()) {
+                String aid = attributesIDs.next();
+                byte[] value = (byte[])attributes.get(aid).get();
+
+                result.put(aid, value);
+            }
+            return result;
+        }
+        catch (NamingException e){
+            throw new BadAttestationStatementException("Failed to parse the TPM attestation attributes", e);
+        }
+    }
+
+
     private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
+
 }

@@ -26,6 +26,10 @@ import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
 
+import javax.naming.NamingException;
+import javax.naming.ldap.LdapName;
+import java.io.IOException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -73,6 +77,28 @@ class TPMAttestationStatementValidatorTest {
                 () -> assertThrows(BadAttestationStatementException.class,
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)
                 )
+        );
+    }
+
+    @Test
+    void parseTpmSAN_test_case1() throws NamingException, IOException {
+        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+        TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
+        assertAll(
+                () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:494E5443"), // Intel
+                () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("SPT"),
+                () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:00020000")
+        );
+    }
+
+    @Test
+    void parseTpmSAN_test_case2() throws NamingException, IOException {
+        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0569643a3133+2.23.133.2.2=#0c074e504354367878+2.23.133.2.1=#0c0b69643a3445353434333030");
+        TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
+        assertAll(
+                () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:4E544300"), // Nuvoton Technology
+                () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("NPCT6xx"),
+                () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:13")
         );
     }
 }
