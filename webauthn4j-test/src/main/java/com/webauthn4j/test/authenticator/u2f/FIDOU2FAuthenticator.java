@@ -60,9 +60,7 @@ public class FIDOU2FAuthenticator {
         byte[] challengeParameter = registrationRequest.getChallengeParameter();
         byte[] applicationParameter = registrationRequest.getApplicationParameter();
 
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] nonce = new byte[32];
-        secureRandom.nextBytes(nonce);
+        byte[] nonce = SecureRandomFactory.getSecureRandom().randomBytes(32);
         KeyPair keyPair = getKeyPair(applicationParameter, nonce);
 
         byte[] rpPrivateKey = keyPair.getPrivate().getEncoded();

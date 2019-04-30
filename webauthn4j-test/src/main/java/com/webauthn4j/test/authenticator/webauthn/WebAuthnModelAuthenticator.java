@@ -39,13 +39,13 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.SecureRandomFactory;
 import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
-import java.security.SecureRandom;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -196,8 +196,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             // Credential Private Key:
             if (makeCredentialRequest.isRequireResidentKey()) {
                 // Let credentialId be a new credential id.
-                credentialId = new byte[32];
-                new SecureRandom().nextBytes(credentialId);
+                credentialId = SecureRandomFactory.getSecureRandom().randomBytes(32);
                 // Set credentialSource.id to credentialId.
                 credentialSource.setId(credentialId);
                 // Let credentials be this authenticator’s credentials map.

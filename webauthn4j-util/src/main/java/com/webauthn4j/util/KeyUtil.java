@@ -53,13 +53,12 @@ public class KeyUtil {
 
     public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createECKeyPairGenerator();
-        SecureRandom random = null;
+        SecureRandom random;
         try {
             if (seed != null) {
-                random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
-                random.setSeed(seed);
+                random = SecureRandomFactory.createSeededSecureRandom(SecureRandomFactory.SHA1PRNG, seed); // to make it deterministic
             } else {
-                random = SecureRandom.getInstanceStrong();
+                random = SecureRandomFactory.getStrongSecureRandom().get();
             }
             keyPairGenerator.initialize(ecParameterSpec, random);
             return keyPairGenerator.generateKeyPair();
@@ -84,7 +83,7 @@ public class KeyUtil {
         KeyPairGenerator keyPairGenerator = null;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4), new SecureRandom());
+            keyPairGenerator.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4), SecureRandomFactory.getSecureRandom().get());
         } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             throw new UnexpectedCheckedException(e);
         }
