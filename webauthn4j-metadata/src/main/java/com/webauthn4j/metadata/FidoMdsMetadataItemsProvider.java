@@ -19,6 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
@@ -52,6 +53,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
 
     private JsonConverter jsonConverter;
+    private JWSFactory jwsFactory;
     private HttpClient httpClient;
 
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
@@ -64,6 +66,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = jsonConverter;
+        this.jwsFactory = new JWSFactory(jsonConverter);
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
@@ -128,7 +131,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
-        JWS<MetadataTOCPayload> jws = JWS.parse(toc, MetadataTOCPayload.class, jsonConverter);
+        JWS<MetadataTOCPayload> jws = jwsFactory.parse(toc, MetadataTOCPayload.class);
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
