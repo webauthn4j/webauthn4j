@@ -250,6 +250,43 @@ public class TestAttestationUtil {
         return new DLSequence(asn1EncodableVector);
     }
 
+    public static X509Certificate createAndroidSafetyNetAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
+        try {
+            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
+                    issuerCertificate,
+                    BigInteger.valueOf(1),
+                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
+                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
+                    new X500Principal("CN=attest.android.com"),
+                    publicKey
+            );
+
+            certificateBuilder.addExtension(
+                    Extension.basicConstraints,
+                    false,
+                    new BasicConstraints(false)
+            );
+            certificateBuilder.addExtension(
+                    Extension.keyUsage, // Key Usage
+                    false,
+                    new KeyUsage(KeyUsage.keyCertSign)
+            );
+
+            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
+            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
+            try {
+                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
+            } catch (CertificateException e) {
+                throw new com.webauthn4j.validator.exception.CertificateException(e);
+            }
+        } catch (CertIOException e) {
+            throw new UncheckedIOException(e);
+        } catch (OperatorCreationException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+
     public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, CertificateCreationOption certificateCreationOption) {
         try {
             switch (certificateCreationOption.getX509CertificateVersion()){

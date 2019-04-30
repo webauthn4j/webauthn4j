@@ -70,7 +70,7 @@ public class JWS<T extends Serializable> implements Serializable {
             signatureObj.update(signedData.getBytes());
             byte[] sig;
             if(publicKey instanceof ECPublicKey){
-                sig = JWSSignatureUtil.convertJWSSignatureToDerSignature(signature);
+                sig = JWSSignatureUtil.convertJwsSignatureToDerSignature(signature);
             }
             else{
                 sig = signature;

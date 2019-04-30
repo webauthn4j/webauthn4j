@@ -47,7 +47,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
+class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
 

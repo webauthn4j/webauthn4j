@@ -47,12 +47,19 @@ public class JWSFactory {
         try{
             signatureObj.initSign(privateKey);
             signatureObj.update(signedData.getBytes());
-            byte[] signature = signatureObj.sign();
-            return new JWS<>(header, headerString, payload, payloadString, signature);
+            byte[] derSignature = signatureObj.sign();
+            byte[] jwsSignature = JWSSignatureUtil.convertDerSignatureToJwsSignature(derSignature);
+            return new JWS<>(header, headerString, payload, payloadString, jwsSignature);
         }
         catch (InvalidKeyException | SignatureException e){
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, byte[] signature){
+        String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
     public <T extends Serializable> JWS<T> parse(String value, Class<T> payloadType){
