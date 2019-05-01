@@ -18,8 +18,8 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
-import com.webauthn4j.test.CertificateCreationOption;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.authenticator.webauthn.TPMAttestationOption;
 import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -94,39 +94,40 @@ class TPMAttestationStatementValidatorTest {
 
     @Test
     void validateAikCert_test(){
-        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate();
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         target.validateAikCert(certificate);
     }
 
     @Test
     void validateAikCert_with_non_empty_subjectDN_test(){
-        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
-        certificateCreationOption.setSubjectDN("O=SharpLab., C=US");
-        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setSubjectDN("O=SharpLab., C=US");
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
     void validateAikCert_without_tcgKpAIKCertificate_test(){
-        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
-        certificateCreationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
-        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
     void validateAikCert_with_caFlagInBasicConstraints_test(){
-        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
-        certificateCreationOption.setCAFlagInBasicConstraints(true);
-        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setCAFlagInBasicConstraints(true);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
     void validateAikCert_with_version1_test(){
-        CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
-        certificateCreationOption.setX509CertificateVersion(1);
-        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setX509CertificateVersion(1);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

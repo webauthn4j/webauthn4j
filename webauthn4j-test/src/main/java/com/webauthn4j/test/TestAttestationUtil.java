@@ -20,7 +20,6 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -31,7 +30,6 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -60,10 +58,6 @@ public class TestAttestationUtil {
     // ~ Public key certificate chains
     // ========================================================================================================
 
-    public static AttestationCertificatePath create2tierTestAttestationCertificatePath() {
-        return new AttestationCertificatePath(Collections.singletonList(load2tierTestAuthenticatorAttestationCertificate()));
-    }
-
     public static AttestationCertificatePath load3tierTestAttestationCertificatePath() {
         return new AttestationCertificatePath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
@@ -72,8 +66,8 @@ public class TestAttestationUtil {
         return new CACertificatePath(Collections.singletonList(load3tierTestIntermediateCACertificate()));
     }
 
-    public static AttestationCertificatePath loadTestAndroidKeyAttestationCertificatePath() {
-        throw new NotImplementedException();
+    public static AttestationCertificatePath load2tierTestAttestationCertificatePath() {
+        return new AttestationCertificatePath(Collections.singletonList(load2tierTestAuthenticatorAttestationCertificate()));
     }
 
     // ~ Trust Anchors
@@ -168,14 +162,18 @@ public class TestAttestationUtil {
         }
     }
 
-
-    public static X509Certificate loadCertificateFromClassPath(String classPath) {
-        ClassPathResource resource = new ClassPathResource(classPath);
+    public static X509Certificate loadCertificateFromResource(Resource resource) {
         try {
             return CertificateUtil.generateX509Certificate(resource.getInputStream());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static X509Certificate loadCertificateFromResourcePath(String resourcePath) {
+        ResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource(resourcePath);
+        return loadCertificateFromResource(resource);
     }
 
     public static X509Certificate loadFirefoxSWTokenAttestationCertificate() {
@@ -195,23 +193,23 @@ public class TestAttestationUtil {
 
 
     public static X509Certificate load3tierTestRootCACertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-root-CA.crt");
+        return loadCertificateFromResourcePath("classpath:attestation/3tier/certs/3tier-test-root-CA.crt");
     }
 
     public static X509Certificate load3tierTestIntermediateCACertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-intermediate-CA.crt");
+        return loadCertificateFromResourcePath("classpath:attestation/3tier/certs/3tier-test-intermediate-CA.crt");
     }
 
     public static X509Certificate load3tierTestAuthenticatorAttestationCertificate() {
-        return loadCertificateFromClassPath("/attestation/3tier/certs/3tier-test-authenticator.crt");
+        return loadCertificateFromResourcePath("classpath:attestation/3tier/certs/3tier-test-authenticator.crt");
     }
 
     public static X509Certificate load2tierTestRootCACertificate() {
-        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-root-CA.crt");
+        return loadCertificateFromResourcePath("classpath:attestation/2tier/certs/2tier-test-root-CA.crt");
     }
 
     public static X509Certificate load2tierTestAuthenticatorAttestationCertificate() {
-        return loadCertificateFromClassPath("/attestation/2tier/certs/2tier-test-authenticator.crt");
+        return loadCertificateFromResourcePath("classpath:attestation/2tier/certs/2tier-test-authenticator.crt");
     }
 
     // ~ Public Keys
@@ -241,31 +239,23 @@ public class TestAttestationUtil {
     // ========================================================================================================
 
     public static PrivateKey load3tierTestRootCAPrivateKey() {
-        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-root-CA.der");
+        return loadPrivateKeyFromResourcePath("classpath:attestation/3tier/private/3tier-test-root-CA.der");
     }
 
     public static PrivateKey load3tierTestIntermediateCAPrivateKey() {
-        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-intermediate-CA.der");
+        return loadPrivateKeyFromResourcePath("classpath:attestation/3tier/private/3tier-test-intermediate-CA.der");
     }
 
     public static PrivateKey load3tierTestAuthenticatorAttestationPrivateKey() {
-        return loadPrivateKey("classpath:attestation/3tier/private/3tier-test-authenticator.der");
+        return loadPrivateKeyFromResourcePath("classpath:attestation/3tier/private/3tier-test-authenticator.der");
     }
 
     public static PrivateKey load2tierTestRootCAPrivateKey() {
-        return loadPrivateKey("classpath:attestation/2tier/private/2tier-test-root-CA.der");
+        return loadPrivateKeyFromResourcePath("classpath:attestation/2tier/private/2tier-test-root-CA.der");
     }
 
     public static PrivateKey load2tierTestAuthenticatorAttestationPrivateKey() {
-        return loadPrivateKey("classpath:attestation/2tier/private/2tier-test-authenticator.der");
-    }
-
-    public static PrivateKey loadAndroidKeyAttestationPrivateKey() {
-        throw new NotImplementedException();
-    }
-
-    public static PrivateKey loadTPMAttestationPrivateKey() {
-        throw new NotImplementedException();
+        return loadPrivateKeyFromResourcePath("classpath:attestation/2tier/private/2tier-test-authenticator.der");
     }
 
     public static PrivateKey loadPrivateKeyFromResource(Resource resource) {
@@ -278,7 +268,7 @@ public class TestAttestationUtil {
         }
     }
 
-    public static PrivateKey loadPrivateKey(String resourcePath) {
+    public static PrivateKey loadPrivateKeyFromResourcePath(String resourcePath) {
         ResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.getResource(resourcePath);
         return loadPrivateKeyFromResource(resource);

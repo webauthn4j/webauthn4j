@@ -25,27 +25,26 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption){
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
             signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
-        List<X509Certificate> attestationCertificates = new ArrayList<>();
-        attestationCertificates.add(createAttestationCertificate());
-        attestationCertificates.addAll(this.getCACertificatePath());
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificates);
+
+        attestationOption = attestationOption == null ? new PackedAttestationOption() : attestationOption;
+        X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
     }
 
-    private X509Certificate createAttestationCertificate(){
+    @Override
+    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption){
         return TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate(); //TODO
     }
 }

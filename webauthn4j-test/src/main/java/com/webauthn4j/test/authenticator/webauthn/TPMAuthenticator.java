@@ -18,8 +18,6 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
-import com.webauthn4j.test.CertificateCreationOption;
-import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -34,20 +32,59 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
-    private X509Certificate attestationCertificate = createAttestationCertificate();
-
     @Override
-    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
+    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
 
         COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
 
-        TPMTPublic pubArea = generateTPMTPublic(attestationStatementRequest.getCredentialKeyPair().getPublic());
+        TPMTPublic pubArea = createTPMTPublic(attestationStatementRequest.getCredentialKeyPair().getPublic());
+        TPMSAttest certInfo = createTPMSAttest(attestationStatementRequest, alg, pubArea);
 
+        byte[] signature;
+        if (registrationEmulationOption.isSignatureOverrideEnabled()) {
+            signature = registrationEmulationOption.getSignature();
+        } else {
+            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), certInfo.getBytes());
+        }
+
+        attestationOption = attestationOption == null ? new TPMAttestationOption() : attestationOption;
+        AttestationCertificatePath attestationCertificatePath =
+                new AttestationCertificatePath(getAttestationCertificate(attestationStatementRequest, attestationOption), this.getCACertificatePath());
+
+        return new TPMAttestationStatement(alg, attestationCertificatePath, signature, certInfo, pubArea);
+    }
+
+    @Override
+    public X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
+        AttestationCertificateBuilder builder =
+                new AttestationCertificateBuilder(
+                        getAttestationIssuerCertificate(),
+                        new X500Principal(attestationOption.getSubjectDN()),
+                        this.getAttestationKeyPair().getPublic());
+
+        builder.addSubjectAlternativeNamesExtension("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+
+        if(attestationOption.isCAFlagInBasicConstraints()){
+            builder.addBasicConstraintsExtension();
+        }
+        if(attestationOption instanceof TPMAttestationOption){
+            TPMAttestationOption tpmAttestationOption = (TPMAttestationOption) attestationOption;
+            if(tpmAttestationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
+                builder.addExtendedKeyUsageExtension(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3")));
+            }
+        }
+        return builder.build(this.getAttestationIssuerPrivateKey());
+    }
+
+    public X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest) {
+        return createAttestationCertificate(attestationStatementRequest, new TPMAttestationOption());
+    }
+
+
+    private TPMSAttest createTPMSAttest(AttestationStatementRequest attestationStatementRequest, COSEAlgorithmIdentifier alg, TPMTPublic pubArea) {
         TPMGenerated magic = TPMGenerated.TPM_GENERATED_VALUE;
         TPMISTAttest type = TPMISTAttest.TPM_ST_ATTEST_CERTIFY;
         byte[] qualifiedSigner = Base64UrlUtil.decode("AAu8WfTf2aakLcO4Zq_y3w0Zgmu_AUtnqwrW67F2MGuABw");
@@ -63,55 +100,10 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         TPMTHA qualifiedName = new TPMTHA(TPMIAlgHash.TPM_ALG_SHA256, qualifiedNameDigest);
         TPMUAttest attested = new TPMSCertifyInfo(name, qualifiedName);
 
-        TPMSAttest certInfo = new TPMSAttest(magic, type, qualifiedSigner, extraData, clockInfo, firmwareVersion, attested);
-
-        byte[] signature;
-        if (registrationEmulationOption.isSignatureOverrideEnabled()) {
-            signature = registrationEmulationOption.getSignature();
-        } else {
-            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), certInfo.getBytes());
-        }
-
-        List<X509Certificate> attestationCertificates = new ArrayList<>();
-        attestationCertificates.add(attestationCertificate);
-        attestationCertificates.addAll(this.getCACertificatePath());
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificates);
-
-        return new TPMAttestationStatement(alg, attestationCertificatePath, signature, certInfo, pubArea);
+        return new TPMSAttest(magic, type, qualifiedSigner, extraData, clockInfo, firmwareVersion, attested);
     }
 
-    public X509Certificate createAttestationCertificate(CertificateCreationOption certificateCreationOption) {
-        X509Certificate issuerCertificate = this.getCACertificatePath().get(0);
-
-        switch (certificateCreationOption.getX509CertificateVersion()){
-            case 1:
-                return TestAttestationUtil.createV1DummyCertificate();
-            case 3:
-                break;
-            default:
-                throw new IllegalArgumentException("Only version 1 or 3 are supported.");
-        }
-
-        AttestationCertificateBuilder builder = new AttestationCertificateBuilder(
-                issuerCertificate,
-                new X500Principal(certificateCreationOption.getSubjectDN()),
-                this.getAttestationKeyPair().getPublic()
-        );
-        builder.addSubjectAlternativeNamesExtension("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
-        if(certificateCreationOption.isCAFlagInBasicConstraints()){
-            builder.addBasicConstraintsExtension();
-        }
-        if(certificateCreationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
-            builder.addExtendedKeyUsageExtension(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3")));
-        }
-        return builder.build(this.getAttestationIssuerPrivateKey());
-    }
-
-    public X509Certificate createAttestationCertificate() {
-        return createAttestationCertificate(new CertificateCreationOption());
-    }
-
-    private TPMTPublic generateTPMTPublic(PublicKey credentialPublicKey) {
+    private TPMTPublic createTPMTPublic(PublicKey credentialPublicKey) {
         TPMIAlgPublic type = null;
         TPMIAlgHash nameAlg = TPMIAlgHash.TPM_ALG_SHA256;
         TPMAObject objectAttributes = new TPMAObject(394354);

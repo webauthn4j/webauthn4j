@@ -16,20 +16,5 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.test.client.AuthenticationEmulationOption;
-import com.webauthn4j.test.client.RegistrationEmulationOption;
-
-public interface WebAuthnAuthenticator {
-
-    MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
-
-    GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption);
-
-    boolean isCapableOfUserVerification();
-
-    boolean isCapableOfStoringClientSideResidentCredential();
-
-    boolean isCountUpEnabled();
-
-
+public class PackedAttestationOption extends AttestationOption {
 }
