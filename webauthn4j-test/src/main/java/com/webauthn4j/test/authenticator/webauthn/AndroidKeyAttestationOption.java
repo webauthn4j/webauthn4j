@@ -16,20 +16,9 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.test.client.AuthenticationEmulationOption;
-import com.webauthn4j.test.client.RegistrationEmulationOption;
+public class AndroidKeyAttestationOption extends AttestationOption {
 
-public interface WebAuthnAuthenticator {
-
-    MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
-
-    GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption);
-
-    boolean isCapableOfUserVerification();
-
-    boolean isCapableOfStoringClientSideResidentCredential();
-
-    boolean isCountUpEnabled();
-
-
+    public AndroidKeyAttestationOption(){
+        this.subjectDN = "O=SharpLab., C=US";
+    }
 }

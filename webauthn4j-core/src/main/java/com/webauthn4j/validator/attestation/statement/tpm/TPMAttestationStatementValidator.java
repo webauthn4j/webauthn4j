@@ -258,7 +258,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
     }
 
-    TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException, NamingException {
+    TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException {
         Map<String, byte[]> map = directoryName.getRdns().stream()
                 .map(item -> convertAttributesToMap(item.toAttributes()).entrySet())
                 .flatMap(Collection::stream)

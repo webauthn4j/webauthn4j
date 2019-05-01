@@ -19,17 +19,18 @@ package com.webauthn4j.test.authenticator;
 import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
-public interface AuthenticatorAdaptor {
+public interface AuthenticatorAdaptor  {
 
     CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
                                         CollectedClientData collectedClientData);
 
     CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
-                                        CollectedClientData collectedClientData,
-                                        RegistrationEmulationOption registrationEmulationOption);
+                                                                      CollectedClientData collectedClientData,
+                                                                      RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
 
     CredentialRequestResponse authenticate(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
                                            CollectedClientData collectedClientData);

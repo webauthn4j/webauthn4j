@@ -17,7 +17,7 @@
 package com.webauthn4j.test.authenticator.u2f;
 
 import com.webauthn4j.test.KeyUtil;
-import com.webauthn4j.test.TestDataConstants;
+import com.webauthn4j.test.TestConstants;
 import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -54,7 +54,7 @@ public class FIDOU2FAuthenticator {
     }
 
     public FIDOU2FAuthenticator() {
-        this(TestDataConstants.GENERIC_2TIER_ATTESTATION_PRIVATE_KEY, TestDataConstants.GENERIC_2TIER_ATTESTATION_CERTIFICATE, 0);
+        this(TestConstants.GENERIC_2TIER_ATTESTATION_PRIVATE_KEY, TestConstants.GENERIC_2TIER_ATTESTATION_CERTIFICATE, 0);
     }
 
     public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption) {

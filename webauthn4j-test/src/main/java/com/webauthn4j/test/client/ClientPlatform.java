@@ -20,29 +20,17 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.data.AttestationConveyancePreference;
-import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.data.AuthenticatorAssertionResponse;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.PublicKeyCredential;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientOutput;
+import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
@@ -55,7 +43,7 @@ import java.util.Map;
 public class ClientPlatform {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = jsonConverter.getCborConverter();
     private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
 
@@ -72,16 +60,11 @@ public class ClientPlatform {
         this(new Origin("https://example.com"), authenticatorAdaptor);
     }
 
-    public ClientPlatform(Origin origin) {
-        this(origin, new WebAuthnAuthenticatorAdaptor());
-    }
-
-    public ClientPlatform() {
-        this(new Origin("https://example.com"));
-    }
-
-    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
-                                                                        RegistrationEmulationOption registrationEmulationOption) {
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(
+            PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+            RegistrationEmulationOption registrationEmulationOption,
+            AttestationOption attestationOption
+    ) {
         CollectedClientData collectedClientData;
         if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
             collectedClientData = registrationEmulationOption.getCollectedClientData();
@@ -93,7 +76,7 @@ public class ClientPlatform {
             throw new NoAuthenticatorSuccessException();
         }
         CredentialCreationResponse credentialCreationResponse =
-                authenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption);
+                authenticatorAdaptor.register(publicKeyCredentialCreationOptions, collectedClientData, registrationEmulationOption, attestationOption);
 
         AttestationObject attestationObject = credentialCreationResponse.getAttestationObject();
         AttestationStatement attestationStatement = credentialCreationResponse.getAttestationObject().getAttestationStatement();
@@ -124,6 +107,14 @@ public class ClientPlatform {
                 new AuthenticatorAttestationResponse(collectedClientDataBytes, attestationObjectBytes),
                 clientExtensions
         );
+    }
+
+    public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(
+            PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+            RegistrationEmulationOption registrationEmulationOption
+    )
+    {
+        return create(publicKeyCredentialCreationOptions, registrationEmulationOption, null);
     }
 
     private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
@@ -164,7 +155,7 @@ public class ClientPlatform {
 
 
     public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions) {
-        return create(publicKeyCredentialCreationOptions, new RegistrationEmulationOption());
+        return create(publicKeyCredentialCreationOptions, new RegistrationEmulationOption(), null);
     }
 
     public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,

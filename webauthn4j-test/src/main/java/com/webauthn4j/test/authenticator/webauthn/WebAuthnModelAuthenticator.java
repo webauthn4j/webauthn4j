@@ -34,12 +34,12 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.test.CACertificatePath;
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
@@ -47,6 +47,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -122,7 +123,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return null;
     }
 
-    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption) {
+    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
 
         PublicKeyCredentialRpEntity rpEntity = makeCredentialRequest.getRpEntity();
 
@@ -279,7 +280,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte[] clientDataHash = makeCredentialRequest.getHash();
 
         AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
-        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption);
+        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption, attestationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -309,7 +310,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     }
 
     public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
-        return makeCredential(makeCredentialRequest, new RegistrationEmulationOption());
+        return makeCredential(makeCredentialRequest, new RegistrationEmulationOption(), null);
     }
 
     public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption) {
@@ -426,8 +427,6 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.countUpEnabled = countUpEnabled;
     }
 
-    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
-
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
@@ -435,6 +434,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private void countUp() {
         if (isCountUpEnabled()) {
             counter++;
+        }
+    }
+
+    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
+
+    protected abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
+
+    public X509Certificate getAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption){
+        switch (attestationOption.getX509CertificateVersion()){
+            case 1:
+                return TestAttestationUtil.createV1DummyCertificate();
+            case 3:
+                return createAttestationCertificate(attestationStatementRequest, attestationOption);
+            default:
+                throw new IllegalArgumentException("Only version 1 or 3 are supported.");
         }
     }
 
@@ -448,5 +462,12 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public PrivateKey getAttestationIssuerPrivateKey() {
         return attestationIssuerPrivateKey;
+    }
+
+    public X509Certificate getAttestationIssuerCertificate(){
+        if(caCertificatePath.isEmpty()){
+            throw new IllegalStateException("caCertificatePath is empty");
+        }
+        return caCertificatePath.get(0);
     }
 }

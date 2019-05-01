@@ -27,8 +27,8 @@ class JWSHeaderTest {
 
     @Test
     void equals_hashCode_test() {
-        JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.create2tierTestAttestationCertificatePath());
-        JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.create2tierTestAttestationCertificatePath());
+        JWSHeader instanceA = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load2tierTestAttestationCertificatePath());
+        JWSHeader instanceB = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load2tierTestAttestationCertificatePath());
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

@@ -36,6 +36,7 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -53,12 +54,25 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
-    private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
+    private FIDOU2FAuthenticator fidoU2FAuthenticator;
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
 
+    public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator) {
+        this.fidoU2FAuthenticator = fidoU2FAuthenticator;
+    }
+
+    public FIDOU2FAuthenticatorAdaptor() {
+        this(new FIDOU2FAuthenticator());
+    }
+
     @Override
-    public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
+    public CredentialCreationResponse register(
+            PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+            CollectedClientData collectedClientData,
+            RegistrationEmulationOption registrationEmulationOption,
+            AttestationOption attestationOption
+    ) {
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
 
@@ -90,7 +104,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
                                                CollectedClientData collectedClientData) {
-        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
+        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption(), null);
     }
 
     @Override

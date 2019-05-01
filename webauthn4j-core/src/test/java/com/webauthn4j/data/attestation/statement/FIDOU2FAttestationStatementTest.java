@@ -130,7 +130,7 @@ class FIDOU2FAttestationStatementTest {
     void validate_with_null_signature_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
-                        TestAttestationUtil.create2tierTestAttestationCertificatePath(),
+                        TestAttestationUtil.load2tierTestAttestationCertificatePath(),
                         null
                 );
         assertThrows(ConstraintViolationException.class,

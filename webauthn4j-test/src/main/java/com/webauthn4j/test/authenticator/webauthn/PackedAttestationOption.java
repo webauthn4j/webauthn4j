@@ -16,20 +16,10 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.test.client.AuthenticationEmulationOption;
-import com.webauthn4j.test.client.RegistrationEmulationOption;
+public class PackedAttestationOption extends AttestationOption {
 
-public interface WebAuthnAuthenticator {
-
-    MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
-
-    GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption);
-
-    boolean isCapableOfUserVerification();
-
-    boolean isCapableOfStoringClientSideResidentCredential();
-
-    boolean isCountUpEnabled();
-
+    public PackedAttestationOption(){
+        this.subjectDN = "OU=Authenticator Attestation, CN=Dummy Authenticator, O=SharpLab., C=US";
+    }
 
 }

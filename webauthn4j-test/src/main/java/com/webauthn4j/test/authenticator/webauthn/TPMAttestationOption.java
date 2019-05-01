@@ -14,21 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test;
+package com.webauthn4j.test.authenticator.webauthn;
 
-public class CertificateCreationOption {
-    private String subjectDN = "";
+public class TPMAttestationOption extends AttestationOption {
+
     private boolean tcgKpAIKCertificateFlagInExtendedKeyUsage = true;
-    private boolean caFlagInBasicConstraints = false;
-    private int x509CertificateVersion = 3;
-
-    public String getSubjectDN() {
-        return subjectDN;
-    }
-
-    public void setSubjectDN(String subjectDN) {
-        this.subjectDN = subjectDN;
-    }
 
     public boolean isTcgKpAIKCertificateFlagInExtendedKeyUsage() {
         return tcgKpAIKCertificateFlagInExtendedKeyUsage;
@@ -36,21 +26,5 @@ public class CertificateCreationOption {
 
     public void setTcgKpAIKCertificateFlagInExtendedKeyUsage(boolean tcgKpAIKCertificateFlagInExtendedKeyUsage) {
         this.tcgKpAIKCertificateFlagInExtendedKeyUsage = tcgKpAIKCertificateFlagInExtendedKeyUsage;
-    }
-
-    public boolean isCAFlagInBasicConstraints() {
-        return caFlagInBasicConstraints;
-    }
-
-    public void setCAFlagInBasicConstraints(boolean caFlagInBasicConstraints) {
-        this.caFlagInBasicConstraints = caFlagInBasicConstraints;
-    }
-
-    public int getX509CertificateVersion() {
-        return x509CertificateVersion;
-    }
-
-    public void setX509CertificateVersion(int x509CertificateVersion) {
-        this.x509CertificateVersion = x509CertificateVersion;
     }
 }

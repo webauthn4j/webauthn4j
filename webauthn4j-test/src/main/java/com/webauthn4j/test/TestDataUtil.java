@@ -177,7 +177,7 @@ public class TestDataUtil {
     }
 
     public static AttestationObject createAttestationObjectWithAndroidKeyAttestationStatement(byte[] clientDataHash) {
-        PrivateKey privateKey = TestAttestationUtil.loadAndroidKeyAttestationPrivateKey();
+        PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
         return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 

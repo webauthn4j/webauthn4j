@@ -25,32 +25,28 @@ import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.test.AttestationCertificateBuilder;
-import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.WIP;
 
 import javax.security.auth.x500.X500Principal;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
-@WIP
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private JWSFactory jwsFactory;
 
     @Override
-    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
-        X509Certificate attestationCertificate = createAttestationCertificate(TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(), this.getAttestationKeyPair().getPublic());
-        List<X509Certificate> attestationCertificates = new ArrayList<>();
-        attestationCertificates.add(attestationCertificate);
-        attestationCertificates.addAll(this.getCACertificatePath());
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificates);
+    protected AttestationStatement createAttestationStatement(
+            AttestationStatementRequest attestationStatementRequest,
+            RegistrationEmulationOption registrationEmulationOption,
+            AttestationOption attestationOption) {
+
+        attestationOption = attestationOption == null ? new AndroidSafetyNetAttestationOption() : attestationOption;
+        X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
+
         JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, attestationCertificatePath);
         String nonce = Base64Util.encodeToString(MessageDigestUtil.createSHA256().digest(attestationStatementRequest.getSignedData()));
         long timestampMs = Instant.now().toEpochMilli();
@@ -70,14 +66,14 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         return new AndroidSafetyNetAttestationStatement(ver, jws);
     }
 
-    public X509Certificate createAttestationCertificate(PrivateKey issuerPrivateKey, PublicKey publicKey) {
+    @Override
+    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
 
-        X509Certificate issuerCertificate = this.getCACertificatePath().get(0);
-        AttestationCertificateBuilder builder = new AttestationCertificateBuilder(issuerCertificate, new X500Principal("CN=attest.android.com"), publicKey);
+        AttestationCertificateBuilder builder = new AttestationCertificateBuilder(getAttestationIssuerCertificate(), new X500Principal(attestationOption.getSubjectDN()), this.getAttestationKeyPair().getPublic());
 
         builder.addBasicConstraintsExtension();
         builder.addKeyUsageExtension();
-        return builder.build(issuerPrivateKey);
+        return builder.build(this.getAttestationIssuerPrivateKey());
     }
 
     private JWSFactory getJwsFactory(){
