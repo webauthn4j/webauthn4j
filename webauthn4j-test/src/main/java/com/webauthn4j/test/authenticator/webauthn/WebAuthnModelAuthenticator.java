@@ -55,7 +55,7 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
-    private SecureRandom secureRandom = new SecureRandom();
+    private static SecureRandom secureRandom = new SecureRandom();
 
     // property
     private AAGUID aaguid;
