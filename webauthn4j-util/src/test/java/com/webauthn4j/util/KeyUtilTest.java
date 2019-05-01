@@ -16,6 +16,7 @@
 
 package com.webauthn4j.util;
 
+import com.webauthn4j.test.KeyUtil;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;

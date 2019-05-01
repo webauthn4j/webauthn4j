@@ -20,7 +20,6 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;

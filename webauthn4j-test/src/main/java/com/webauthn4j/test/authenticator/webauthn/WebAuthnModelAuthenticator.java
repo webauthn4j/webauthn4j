@@ -37,7 +37,7 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.WIP;
 
