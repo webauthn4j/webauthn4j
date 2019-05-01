@@ -50,7 +50,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
                 Collections.singletonList(TestAttestationUtil.load2tierTestRootCACertificate()));
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAttestationCertificatePath());
         target.validate(aaguid, attestationStatement);
     }
 
@@ -60,7 +60,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
         Set<TrustAnchor> trustAnchors = Collections.emptySet();
         when(trustAnchorsResolver.resolve(aaguid)).thenReturn(trustAnchors);
 
-        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAttestationCertificatePath());
         assertThrows(TrustAnchorNotFoundException.class,
                 () -> target.validate(aaguid, attestationStatement)
         );

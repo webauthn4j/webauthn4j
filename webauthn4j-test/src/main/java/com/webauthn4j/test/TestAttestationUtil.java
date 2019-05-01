@@ -61,19 +61,19 @@ public class TestAttestationUtil {
     // ~ Public key certificate chains
     // ========================================================================================================
 
-    public static AttestationCertificatePath create2tierTestAuthenticatorCertPath() {
+    public static AttestationCertificatePath create2tierTestAttestationCertificatePath() {
         return new AttestationCertificatePath(Collections.singletonList(load2tierTestAuthenticatorAttestationCertificate()));
     }
 
-    public static AttestationCertificatePath load3tierTestCertPath() {
+    public static AttestationCertificatePath load3tierTestAttestationCertificatePath() {
         return new AttestationCertificatePath(Arrays.asList(load3tierTestAuthenticatorAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
 
-    public static AttestationCertificatePath load3tierTestCACertPath() {
-        return new AttestationCertificatePath(Collections.singletonList(load3tierTestIntermediateCACertificate()));
+    public static CACertificatePath load3tierTestCACertificatePath() {
+        return new CACertificatePath(Collections.singletonList(load3tierTestIntermediateCACertificate()));
     }
 
-    public static AttestationCertificatePath loadAndroidKeyCertPath() {
+    public static AttestationCertificatePath loadTestAndroidKeyAttestationCertificatePath() {
         throw new NotImplementedException();
     }
 

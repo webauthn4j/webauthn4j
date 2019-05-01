@@ -27,6 +27,7 @@ import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.test.AttestationCertificateBuilder;
+import com.webauthn4j.test.CACertificatePath;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64Util;
@@ -46,14 +47,14 @@ import java.util.List;
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private KeyPair attestationKeyPair;
-    private AttestationCertificatePath caCertificatePath;
+    private CACertificatePath caCertificatePath;
 
     private JWSFactory jwsFactory;
 
     public AndroidSafetyNetAuthenticator(AAGUID aaguid,
                                          int counter,
                                          KeyPair attestationKeyPair,
-                                         AttestationCertificatePath caCertificatePath,
+                                         CACertificatePath caCertificatePath,
                                          boolean capableOfUserVerification,
                                          CborConverter cborConverter) {
         super(aaguid, counter, capableOfUserVerification, cborConverter);
@@ -67,7 +68,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
                 0,
                 new KeyPair(TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
                         TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
-                TestAttestationUtil.load3tierTestCACertPath(),
+                TestAttestationUtil.load3tierTestCACertificatePath(),
                 true,
                 new CborConverter());
     }

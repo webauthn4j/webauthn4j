@@ -58,7 +58,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private int counter;
 
-    // feature
+    // feature flags
     private boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
 

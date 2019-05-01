@@ -23,7 +23,7 @@ public class TestAttestationStatementUtil
     private TestAttestationStatementUtil(){}
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
-        return createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        return createFIDOU2FAttestationStatement(TestAttestationUtil.create2tierTestAttestationCertificatePath());
     }
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement(AttestationCertificatePath certPath) {
@@ -38,7 +38,7 @@ public class TestAttestationStatementUtil
     }
 
     public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = TestAttestationUtil.load3tierTestCertPath();
+        AttestationCertificatePath certPath = TestAttestationUtil.load3tierTestAttestationCertificatePath();
         return new PackedAttestationStatement(algorithm, signature, certPath, null);
     }
 
@@ -47,7 +47,7 @@ public class TestAttestationStatementUtil
     }
 
     public static AndroidKeyAttestationStatement createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = TestAttestationUtil.loadAndroidKeyCertPath();
+        AttestationCertificatePath certPath = TestAttestationUtil.loadTestAndroidKeyAttestationCertificatePath();
         return new AndroidKeyAttestationStatement(algorithm, signature, certPath);
     }
 

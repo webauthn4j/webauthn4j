@@ -41,11 +41,11 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
     private PrivateKey attestationPrivateKey;
     private PublicKey attestationPublicKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey();
-    private AttestationCertificatePath caCertificatePath;
+    private CACertificatePath caCertificatePath;
     private X509Certificate attestationCertificate;
     private PrivateKey issuerPrivateKey = TestAttestationUtil.load3tierTestIntermediateCAPrivateKey();
 
-    public TPMAuthenticator(PrivateKey attestationPrivateKey, AttestationCertificatePath caCertificatePath){
+    public TPMAuthenticator(PrivateKey attestationPrivateKey, CACertificatePath caCertificatePath){
         super();
         this.attestationPrivateKey = attestationPrivateKey;
         this.caCertificatePath = caCertificatePath;
@@ -53,7 +53,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     public TPMAuthenticator() {
-        this(TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY, TestAttestationUtil.load3tierTestCACertPath());
+        this(TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY, TestAttestationUtil.load3tierTestCACertificatePath());
     }
 
     @Override

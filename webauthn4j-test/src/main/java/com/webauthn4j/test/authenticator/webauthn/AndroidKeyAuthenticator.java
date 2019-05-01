@@ -20,10 +20,7 @@ import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.test.AttestationCertificateBuilder;
-import com.webauthn4j.test.CertificateCreationOption;
-import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.*;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.validator.attestation.statement.androidkey.KeyDescriptionValidator;
 import org.bouncycastle.asn1.*;
@@ -38,9 +35,9 @@ import java.util.List;
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
 
     private PrivateKey issuerPrivateKey;
-    private AttestationCertificatePath caCertificates;
+    private CACertificatePath caCertificates;
 
-    public AndroidKeyAuthenticator(PrivateKey issuerPrivateKey, AttestationCertificatePath caCertificates){
+    public AndroidKeyAuthenticator(PrivateKey issuerPrivateKey, CACertificatePath caCertificates){
         super();
         this.issuerPrivateKey = issuerPrivateKey;
         this.caCertificates = caCertificates;
@@ -49,7 +46,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
     public AndroidKeyAuthenticator(){
         this(
                 TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
-                TestAttestationUtil.load3tierTestCACertPath());
+                TestAttestationUtil.load3tierTestCACertificatePath());
     }
 
     @Override

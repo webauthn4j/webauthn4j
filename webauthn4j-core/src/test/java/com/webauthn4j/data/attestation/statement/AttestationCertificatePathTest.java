@@ -26,7 +26,7 @@ class AttestationCertificatePathTest {
 
     @Test
     void getEndEntityCertificate_test() {
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestAttestationUtil.create2tierTestAuthenticatorCertPath());
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(TestAttestationUtil.create2tierTestAttestationCertificatePath());
         assertThat(attestationCertificatePath.getEndEntityAttestationCertificate()).isEqualTo(attestationCertificatePath.getEndEntityAttestationCertificate());
     }
 

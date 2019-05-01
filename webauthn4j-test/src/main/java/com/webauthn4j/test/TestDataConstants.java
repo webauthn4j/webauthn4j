@@ -29,6 +29,6 @@ public class TestDataConstants {
 
     public static final PrivateKey GENERIC_3TIER_ATTESTATION_PRIVATE_KEY = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
 
-    public static final AttestationCertificatePath GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH = TestAttestationUtil.load3tierTestCertPath();
+    public static final AttestationCertificatePath GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH = TestAttestationUtil.load3tierTestAttestationCertificatePath();
 
 }
