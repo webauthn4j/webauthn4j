@@ -39,7 +39,6 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -52,14 +51,13 @@ import java.util.stream.Collectors;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
-@WIP
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
-    private CborConverter cborConverter = new CborConverter(); // TODO: inject objectMapper from constructor
+    protected CborConverter cborConverter;
     private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
 
     // property
-    AAGUID aaguid;
+    private AAGUID aaguid;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private int counter;
 
@@ -68,18 +66,20 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private boolean countUpEnabled = true;
 
 
-    public WebAuthnModelAuthenticator(boolean capableOfUserVerification, AAGUID aaguid, int counter) {
-        this.capableOfUserVerification = capableOfUserVerification;
+    public WebAuthnModelAuthenticator(AAGUID aaguid, int counter, boolean capableOfUserVerification, CborConverter cborConverter) {
         this.aaguid = aaguid;
-        this.counter = counter;
         this.credentialMap = new HashMap<>();
+        this.counter = counter;
+        this.capableOfUserVerification = capableOfUserVerification;
+        this.cborConverter = cborConverter;
     }
 
     public WebAuthnModelAuthenticator() {
         this(
-                true,
                 AAGUID.ZERO,
-                0
+                0,
+                true,
+                new CborConverter()
         );
     }
 

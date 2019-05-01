@@ -16,7 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
@@ -46,17 +46,26 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private JWSFactory jwsFactory;
 
-    public AndroidSafetyNetAuthenticator(boolean capableOfUserVerification, AAGUID aaguid, int counter, KeyPair attestationKeyPair, AttestationCertificatePath caCertificatePath, JsonConverter jsonConverter) {
-        super(capableOfUserVerification, aaguid, counter);
+    public AndroidSafetyNetAuthenticator(AAGUID aaguid,
+                                         int counter,
+                                         KeyPair attestationKeyPair,
+                                         AttestationCertificatePath caCertificatePath,
+                                         boolean capableOfUserVerification,
+                                         CborConverter cborConverter) {
+        super(aaguid, counter, capableOfUserVerification, cborConverter);
         this.attestationKeyPair = attestationKeyPair;
         this.caCertificatePath = caCertificatePath;
-        this.jwsFactory = new JWSFactory(jsonConverter);
+        this.jwsFactory = new JWSFactory(cborConverter.getJsonConverter());
     }
 
     public AndroidSafetyNetAuthenticator(){
-        this(true, AAGUID.ZERO, 0,
-                new KeyPair(TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(), TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
-                TestAttestationUtil.load3tierTestCACertPath(), new JsonConverter());
+        this(AAGUID.ZERO,
+                0,
+                new KeyPair(TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
+                TestAttestationUtil.load3tierTestCACertPath(),
+                true,
+                new CborConverter());
     }
 
     @Override
