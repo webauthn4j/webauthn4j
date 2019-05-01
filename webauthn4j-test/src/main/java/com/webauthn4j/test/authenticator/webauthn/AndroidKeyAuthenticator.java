@@ -20,34 +20,21 @@ import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.test.*;
+import com.webauthn4j.test.AttestationCertificateBuilder;
+import com.webauthn4j.test.CertificateCreationOption;
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.validator.attestation.statement.androidkey.KeyDescriptionValidator;
 import org.bouncycastle.asn1.*;
 
 import javax.security.auth.x500.X500Principal;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
-
-    private PrivateKey issuerPrivateKey;
-    private CACertificatePath caCertificates;
-
-    public AndroidKeyAuthenticator(PrivateKey issuerPrivateKey, CACertificatePath caCertificates){
-        super();
-        this.issuerPrivateKey = issuerPrivateKey;
-        this.caCertificates = caCertificates;
-    }
-
-    public AndroidKeyAuthenticator(){
-        this(
-                TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
-                TestAttestationUtil.load3tierTestCACertificatePath());
-    }
 
     @Override
     protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
@@ -63,13 +50,13 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
                         attestationStatementRequest.getClientDataHash());
         List<X509Certificate> list = new ArrayList<>();
         list.add(attestationCertificate);
-        list.addAll(caCertificates);
+        list.addAll(this.getCACertificatePath());
         AttestationCertificatePath attestationCertificates = new AttestationCertificatePath(list);
         return new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificates);
     }
 
     public X509Certificate createAttestationCertificate(PublicKey credentialPublicKey, byte[] clientDataHash, CertificateCreationOption certificateCreationOption) {
-        X509Certificate issuerCertificate = caCertificates.get(0);
+        X509Certificate issuerCertificate = this.getCACertificatePath().get(0);
         switch (certificateCreationOption.getX509CertificateVersion()){
             case 1:
                 return TestAttestationUtil.createV1DummyCertificate();
@@ -84,7 +71,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
         attestationCertificateBuilder.addExtension(new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17"), false, createKeyDescriptor(clientDataHash));
         attestationCertificateBuilder.addBasicConstraintsExtension();
         attestationCertificateBuilder.addKeyUsageExtension();
-        return attestationCertificateBuilder.build(issuerPrivateKey);
+        return attestationCertificateBuilder.build(this.getAttestationIssuerPrivateKey());
     }
 
     public X509Certificate createAttestationCertificate(PublicKey publicKey, byte[] clientDataHash) {

@@ -33,6 +33,8 @@ import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionA
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.test.CACertificatePath;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -55,6 +57,11 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     // property
     private AAGUID aaguid;
+
+    private KeyPair attestationKeyPair;
+    private CACertificatePath caCertificatePath;
+    private PrivateKey attestationIssuerPrivateKey;
+
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private int counter;
 
@@ -66,8 +73,18 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     protected CborConverter cborConverter;
     private AuthenticatorDataConverter authenticatorDataConverter;
 
-    public WebAuthnModelAuthenticator(AAGUID aaguid, int counter, boolean capableOfUserVerification, CborConverter cborConverter) {
+    public WebAuthnModelAuthenticator(
+            AAGUID aaguid,
+            KeyPair attestationKeyPair,
+            CACertificatePath caCertificatePath,
+            PrivateKey attestationIssuerPrivateKey,
+            int counter,
+            boolean capableOfUserVerification,
+            CborConverter cborConverter) {
         this.aaguid = aaguid;
+        this.attestationKeyPair = attestationKeyPair;
+        this.caCertificatePath = caCertificatePath;
+        this.attestationIssuerPrivateKey = attestationIssuerPrivateKey;
         this.credentialMap = new HashMap<>();
         this.counter = counter;
         this.capableOfUserVerification = capableOfUserVerification;
@@ -78,6 +95,11 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     public WebAuthnModelAuthenticator() {
         this(
                 AAGUID.ZERO,
+                new KeyPair(
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
+                TestAttestationUtil.load3tierTestCACertificatePath(),
+                TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
                 0,
                 true,
                 new CborConverter()
@@ -412,5 +434,17 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         if (isCountUpEnabled()) {
             counter++;
         }
+    }
+
+    public KeyPair getAttestationKeyPair() {
+        return attestationKeyPair;
+    }
+
+    public CACertificatePath getCACertificatePath() {
+        return caCertificatePath;
+    }
+
+    public PrivateKey getAttestationIssuerPrivateKey() {
+        return attestationIssuerPrivateKey;
     }
 }

@@ -17,17 +17,18 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.statement.*;
-import com.webauthn4j.test.*;
+import com.webauthn4j.test.AttestationCertificateBuilder;
+import com.webauthn4j.test.CertificateCreationOption;
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.WIP;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 
 import javax.security.auth.x500.X500Principal;
 import java.math.BigInteger;
-import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
@@ -36,25 +37,9 @@ import java.security.spec.EllipticCurve;
 import java.util.ArrayList;
 import java.util.List;
 
-@WIP
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
-    private PrivateKey attestationPrivateKey;
-    private PublicKey attestationPublicKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey();
-    private CACertificatePath caCertificatePath;
-    private X509Certificate attestationCertificate;
-    private PrivateKey issuerPrivateKey = TestAttestationUtil.load3tierTestIntermediateCAPrivateKey();
-
-    public TPMAuthenticator(PrivateKey attestationPrivateKey, CACertificatePath caCertificatePath){
-        super();
-        this.attestationPrivateKey = attestationPrivateKey;
-        this.caCertificatePath = caCertificatePath;
-        this.attestationCertificate = createAttestationCertificate();
-    }
-
-    public TPMAuthenticator() {
-        this(TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY, TestAttestationUtil.load3tierTestCACertificatePath());
-    }
+    private X509Certificate attestationCertificate = createAttestationCertificate();
 
     @Override
     protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
@@ -84,19 +69,19 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, certInfo.getBytes());
+            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), certInfo.getBytes());
         }
 
         List<X509Certificate> attestationCertificates = new ArrayList<>();
         attestationCertificates.add(attestationCertificate);
-        attestationCertificates.addAll(caCertificatePath);
+        attestationCertificates.addAll(this.getCACertificatePath());
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificates);
 
         return new TPMAttestationStatement(alg, attestationCertificatePath, signature, certInfo, pubArea);
     }
 
     public X509Certificate createAttestationCertificate(CertificateCreationOption certificateCreationOption) {
-        X509Certificate issuerCertificate = caCertificatePath.get(0);
+        X509Certificate issuerCertificate = this.getCACertificatePath().get(0);
 
         switch (certificateCreationOption.getX509CertificateVersion()){
             case 1:
@@ -110,7 +95,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         AttestationCertificateBuilder builder = new AttestationCertificateBuilder(
                 issuerCertificate,
                 new X500Principal(certificateCreationOption.getSubjectDN()),
-                attestationPublicKey
+                this.getAttestationKeyPair().getPublic()
         );
         builder.addSubjectAlternativeNamesExtension("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
         if(certificateCreationOption.isCAFlagInBasicConstraints()){
@@ -119,7 +104,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         if(certificateCreationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
             builder.addExtendedKeyUsageExtension(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3")));
         }
-        return builder.build(issuerPrivateKey);
+        return builder.build(this.getAttestationIssuerPrivateKey());
     }
 
     public X509Certificate createAttestationCertificate() {

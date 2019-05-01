@@ -20,22 +20,15 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestDataConstants;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
-import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
-
-    private PrivateKey attestationPrivateKey;
-    private AttestationCertificatePath attestationCertificatePath;
-
-    public PackedAuthenticator(){
-        super();
-        this.attestationPrivateKey = TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestDataConstants.GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH;
-    }
 
     @Override
     public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption){
@@ -43,8 +36,16 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, attestationStatementRequest.getSignedData());
+            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
+        List<X509Certificate> attestationCertificates = new ArrayList<>();
+        attestationCertificates.add(createAttestationCertificate());
+        attestationCertificates.addAll(this.getCACertificatePath());
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificates);
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+    }
+
+    private X509Certificate createAttestationCertificate(){
+        return TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate(); //TODO
     }
 }
