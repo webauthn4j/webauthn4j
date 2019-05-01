@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.util;
+package com.webauthn4j.test;
 
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.security.*;
@@ -29,7 +30,7 @@ import java.security.spec.RSAKeyGenParameterSpec;
  */
 public class KeyUtil {
 
-    private static SecureRandom secureRandom = new SecureRandom();
+    private final static SecureRandom secureRandom = new SecureRandom();
 
     private KeyUtil() {
     }

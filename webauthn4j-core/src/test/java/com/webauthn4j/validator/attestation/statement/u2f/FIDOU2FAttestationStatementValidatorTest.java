@@ -22,7 +22,7 @@ import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.ECUtil;
-import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;

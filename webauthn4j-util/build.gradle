@@ -26,6 +26,7 @@ dependencies {
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
+    testCompile project(':webauthn4j-test')
     testCompile('ch.qos.logback:logback-classic')
     testCompile('org.projectlombok:lombok')
     testCompile('org.mockito:mockito-core')
