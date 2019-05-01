@@ -20,7 +20,6 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.x500.X500Name;

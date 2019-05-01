@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.u2f;
 
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestDataConstants;
 import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -34,6 +35,7 @@ public class FIDOU2FAuthenticator {
 
     public static final byte FLAG_OFF = (byte) 0b00000000;
     public static final byte FLAG_UP = (byte) 0b00000001;
+    private SecureRandom secureRandom = new SecureRandom();
 
     private PrivateKey attestationPrivateKey;
     private X509Certificate attestationPublicKeyCertificate;
@@ -60,7 +62,6 @@ public class FIDOU2FAuthenticator {
         byte[] challengeParameter = registrationRequest.getChallengeParameter();
         byte[] applicationParameter = registrationRequest.getApplicationParameter();
 
-        SecureRandom secureRandom = new SecureRandom();
         byte[] nonce = new byte[32];
         secureRandom.nextBytes(nonce);
         KeyPair keyPair = getKeyPair(applicationParameter, nonce);

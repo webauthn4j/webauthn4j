@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.util;
+package com.webauthn4j.test;
 
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.security.*;
@@ -28,6 +29,8 @@ import java.security.spec.RSAKeyGenParameterSpec;
  * A Utility class for key manipulation
  */
 public class KeyUtil {
+
+    private final static SecureRandom secureRandom = new SecureRandom();
 
     private KeyUtil() {
     }
@@ -53,13 +56,13 @@ public class KeyUtil {
 
     public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createECKeyPairGenerator();
-        SecureRandom random = null;
+        SecureRandom random;
         try {
             if (seed != null) {
                 random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
                 random.setSeed(seed);
             } else {
-                random = SecureRandom.getInstanceStrong();
+                random = secureRandom;
             }
             keyPairGenerator.initialize(ecParameterSpec, random);
             return keyPairGenerator.generateKeyPair();

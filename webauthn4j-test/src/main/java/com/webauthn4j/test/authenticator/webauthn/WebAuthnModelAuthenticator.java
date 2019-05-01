@@ -39,7 +39,7 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.util.KeyUtil;
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
@@ -54,6 +54,8 @@ import java.util.stream.Collectors;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
+
+    private SecureRandom secureRandom = new SecureRandom();
 
     // property
     private AAGUID aaguid;
@@ -224,7 +226,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             if (makeCredentialRequest.isRequireResidentKey()) {
                 // Let credentialId be a new credential id.
                 credentialId = new byte[32];
-                new SecureRandom().nextBytes(credentialId);
+                secureRandom.nextBytes(credentialId);
                 // Set credentialSource.id to credentialId.
                 credentialSource.setId(credentialId);
                 // Let credentials be this authenticator’s credentials map.

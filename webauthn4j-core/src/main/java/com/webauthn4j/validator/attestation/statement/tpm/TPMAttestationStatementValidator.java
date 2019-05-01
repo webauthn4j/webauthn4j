@@ -253,9 +253,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                 }
             }
         } catch (NamingException | IOException | RuntimeException e) {
-            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate dosn't contain TPM device property", e);
+            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
         }
-        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate dosn't contain TPM device property");
+        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
     }
 
     TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException, NamingException {
