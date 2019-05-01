@@ -56,6 +56,7 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
     private CborConverter cborConverter = new CborConverter();
+    private SecureRandom secureRandom = new SecureRandom();
 
     AAGUID aaguid;
     private boolean capableOfUserVerification;
@@ -197,7 +198,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             if (makeCredentialRequest.isRequireResidentKey()) {
                 // Let credentialId be a new credential id.
                 credentialId = new byte[32];
-                new SecureRandom().nextBytes(credentialId);
+                secureRandom.nextBytes(credentialId);
                 // Set credentialSource.id to credentialId.
                 credentialSource.setId(credentialId);
                 // Let credentials be this authenticator’s credentials map.

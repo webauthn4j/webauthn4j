@@ -29,6 +29,8 @@ import java.security.spec.RSAKeyGenParameterSpec;
  */
 public class KeyUtil {
 
+    private static SecureRandom secureRandom = new SecureRandom();
+
     private KeyUtil() {
     }
 
@@ -53,13 +55,13 @@ public class KeyUtil {
 
     public static KeyPair createECKeyPair(byte[] seed, ECParameterSpec ecParameterSpec) {
         KeyPairGenerator keyPairGenerator = createECKeyPairGenerator();
-        SecureRandom random = null;
+        SecureRandom random;
         try {
             if (seed != null) {
                 random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
                 random.setSeed(seed);
             } else {
-                random = SecureRandom.getInstanceStrong();
+                random = secureRandom;
             }
             keyPairGenerator.initialize(ecParameterSpec, random);
             return keyPairGenerator.generateKeyPair();
