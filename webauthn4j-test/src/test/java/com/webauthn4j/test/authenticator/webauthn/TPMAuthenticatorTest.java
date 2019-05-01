@@ -17,8 +17,8 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.util.KeyUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
