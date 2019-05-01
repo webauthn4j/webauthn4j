@@ -38,7 +38,7 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    public AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption){
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();

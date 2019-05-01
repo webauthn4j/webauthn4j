@@ -181,10 +181,7 @@ public class TestDataUtil {
         return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
-    public static AttestationObject createAttestationObjectWithTPMAttestationStatement(byte[] clientDataHash) {
-        PrivateKey privateKey = TestAttestationUtil.loadTPMAttestationPrivateKey();
-        return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createTPMAttestationStatement(COSEAlgorithmIdentifier.RS1, signature));
-    }
+
 
     public static AttestationObject createAttestationObject(byte[] clientDataHash, PrivateKey privateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();

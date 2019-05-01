@@ -26,13 +26,17 @@ import com.webauthn4j.data.jws.JWAIdentifier;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.data.jws.JWSHeader;
+import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.WIP;
 
+import javax.security.auth.x500.X500Principal;
 import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -69,8 +73,8 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    protected AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
-        X509Certificate attestationCertificate = TestAttestationUtil.createAndroidSafetyNetAttestationCertificate(caCertificatePath.get(0), TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(), attestationKeyPair.getPublic());
+    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
+        X509Certificate attestationCertificate = createAttestationCertificate(TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(), attestationKeyPair.getPublic());
         List<X509Certificate> attestationCertificates = new ArrayList<>();
         attestationCertificates.add(attestationCertificate);
         attestationCertificates.addAll(caCertificatePath);
@@ -92,5 +96,15 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
             jws = jwsFactory.create(jws.getHeader(), jws.getPayload(), registrationEmulationOption.getSignature());
         }
         return new AndroidSafetyNetAttestationStatement(ver, jws);
+    }
+
+    public X509Certificate createAttestationCertificate(PrivateKey issuerPrivateKey, PublicKey publicKey) {
+
+        X509Certificate issuerCertificate = caCertificatePath.get(0);
+        AttestationCertificateBuilder builder = new AttestationCertificateBuilder(issuerCertificate, new X500Principal("CN=attest.android.com"), publicKey);
+
+        builder.addBasicConstraintsExtension();
+        builder.addKeyUsageExtension();
+        return builder.build(issuerPrivateKey);
     }
 }

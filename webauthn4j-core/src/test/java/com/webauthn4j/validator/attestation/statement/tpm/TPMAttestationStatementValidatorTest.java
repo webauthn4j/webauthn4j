@@ -19,8 +19,8 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.CertificateCreationOption;
-import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
@@ -30,12 +30,14 @@ import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMAttestationStatementValidatorTest {
 
+    private TPMAuthenticator tpmAuthenticator = new TPMAuthenticator();
     private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
 
     @Test
@@ -92,7 +94,7 @@ class TPMAttestationStatementValidatorTest {
 
     @Test
     void validateAikCert_test(){
-        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate();
+        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate();
         target.validateAikCert(certificate);
     }
 
@@ -100,7 +102,7 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_with_non_empty_subjectDN_test(){
         CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
         certificateCreationOption.setSubjectDN("O=SharpLab., C=US");
-        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
@@ -108,7 +110,7 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_without_tcgKpAIKCertificate_test(){
         CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
         certificateCreationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
-        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
@@ -116,7 +118,7 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_with_caFlagInBasicConstraints_test(){
         CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
         certificateCreationOption.setCAFlagInBasicConstraints(true);
-        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
@@ -124,7 +126,7 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_with_version1_test(){
         CertificateCreationOption certificateCreationOption = new CertificateCreationOption();
         certificateCreationOption.setX509CertificateVersion(1);
-        X509Certificate certificate = TestAttestationUtil.createTPMAttestationCertificate(certificateCreationOption);
+        X509Certificate certificate = tpmAuthenticator.createAttestationCertificate(certificateCreationOption);
         assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

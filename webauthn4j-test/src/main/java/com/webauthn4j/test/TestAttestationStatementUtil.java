@@ -51,11 +51,4 @@ public class TestAttestationStatementUtil
         return new AndroidKeyAttestationStatement(algorithm, signature, certPath);
     }
 
-    public static AttestationStatement createTPMAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        AttestationCertificatePath certPath = TestAttestationUtil.loadTestTPMCertPath();
-        TPMSAttest certInfo = null; //TODO
-        TPMTPublic pubArea = null; //TODO
-        return new TPMAttestationStatement(algorithm, certPath, signature, certInfo, pubArea);
-    }
-
 }

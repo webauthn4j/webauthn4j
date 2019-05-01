@@ -23,16 +23,11 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.KeyUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import com.webauthn4j.validator.attestation.statement.androidkey.KeyDescriptionValidator;
-import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.*;
-import org.bouncycastle.cert.CertIOException;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v1CertificateBuilder;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
-import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.DefaultSignatureAlgorithmIdentifierFinder;
 import org.bouncycastle.operator.OperatorCreationException;
@@ -43,7 +38,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StreamUtils;
 
-import javax.security.auth.x500.X500Principal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -81,10 +75,6 @@ public class TestAttestationUtil {
 
     public static AttestationCertificatePath loadAndroidKeyCertPath() {
         throw new NotImplementedException();
-    }
-
-    public static AttestationCertificatePath loadTestTPMCertPath() {
-        return new AttestationCertificatePath(Arrays.asList(createTPMAttestationCertificate(), load3tierTestIntermediateCACertificate()));
     }
 
     // ~ Trust Anchors
@@ -157,188 +147,7 @@ public class TestAttestationUtil {
         return CertificateUtil.generateX509Certificate(derEncodedCertificate.getBytes());
     }
 
-    public static X509Certificate createTPMAttestationCertificate() {
-        return createTPMAttestationCertificate(new CertificateCreationOption());
-    }
-
-    public static X509Certificate createTPMAttestationCertificate(CertificateCreationOption certificateCreationOption) {
-        PublicKey publicKey = load3tierTestAuthenticatorAttestationPublicKey();
-        return createTPMAttestationCertificate(load3tierTestIntermediateCACertificate(), load3tierTestIntermediateCAPrivateKey(), publicKey, certificateCreationOption);
-    }
-
-    public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
-        return createTPMAttestationCertificate(issuerCertificate, issuerPrivateKey, publicKey, new CertificateCreationOption());
-    }
-
-    public static X509Certificate createAndroidKeyAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, byte[] clientDataHash, CertificateCreationOption certificateCreationOption) {
-        try {
-            switch (certificateCreationOption.getX509CertificateVersion()){
-                case 1:
-                    return createV1DummyCertificate();
-                case 3:
-                    break;
-                default:
-                    throw new IllegalArgumentException("Only version 1 or 3 are supported.");
-            }
-
-            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
-                    issuerCertificate,
-                    BigInteger.valueOf(1),
-                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
-                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
-                    new X500Principal("O=SharpLab., C=US"),
-                    publicKey
-            );
-
-            certificateBuilder.addExtension(new ASN1ObjectIdentifier("1.3.6.1.4.1.11129.2.1.17"), false, createKeyDescriptor(clientDataHash));
-
-            certificateBuilder.addExtension(
-                    Extension.basicConstraints,
-                    false,
-                    new BasicConstraints(certificateCreationOption.isCAFlagInBasicConstraints())
-            );
-            certificateBuilder.addExtension(
-                    Extension.keyUsage, // Key Usage
-                    false,
-                    new KeyUsage(KeyUsage.keyCertSign)
-            );
-
-            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
-            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
-            try {
-                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
-            } catch (CertificateException e) {
-                throw new com.webauthn4j.validator.exception.CertificateException(e);
-            }
-        } catch (CertIOException e) {
-            throw new UncheckedIOException(e);
-        } catch (OperatorCreationException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-    }
-
-    public static X509Certificate createAndroidKeyAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, byte[] clientDataHash) {
-        return createAndroidKeyAttestationCertificate(issuerCertificate, issuerPrivateKey, publicKey, clientDataHash, new CertificateCreationOption());
-    }
-
-    public static ASN1Encodable createKeyDescriptor(byte[] clientDataHash){
-        ASN1Integer attestationVersion = new ASN1Integer(2);
-        ASN1Enumerated attestationSecurityLevel = new ASN1Enumerated(0);
-        ASN1Integer keymasterVersion = new ASN1Integer(1);
-        ASN1Enumerated keymasterSecurityLevel = new ASN1Enumerated(0);
-        DEROctetString attestationChallenge = new DEROctetString(clientDataHash);
-        ASN1OctetString reserved = new DEROctetString(new byte[0]);
-
-        ASN1EncodableVector softwareEnforcedVector = new ASN1EncodableVector();
-        DLSequence softwareEnforced = new DLSequence(softwareEnforcedVector);
-
-        ASN1EncodableVector teeEnforcedVector = new ASN1EncodableVector();
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_ORIGIN, new ASN1Integer(KeyDescriptionValidator.KM_ORIGIN_GENERATED)));
-        teeEnforcedVector.add(new DERTaggedObject(KeyDescriptionValidator.KM_TAG_PURPOSE, new DERSet(new ASN1Integer(KeyDescriptionValidator.KM_PURPOSE_SIGN))));
-        DLSequence teeEnforced = new DLSequence(teeEnforcedVector);
-
-        ASN1EncodableVector asn1EncodableVector = new ASN1EncodableVector();
-        asn1EncodableVector.add(attestationVersion);
-        asn1EncodableVector.add(attestationSecurityLevel);
-        asn1EncodableVector.add(keymasterVersion);
-        asn1EncodableVector.add(keymasterSecurityLevel);
-        asn1EncodableVector.add(attestationChallenge);
-        asn1EncodableVector.add(reserved);
-        asn1EncodableVector.add(softwareEnforced);
-        asn1EncodableVector.add(teeEnforced);
-
-        return new DLSequence(asn1EncodableVector);
-    }
-
-    public static X509Certificate createAndroidSafetyNetAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey) {
-        try {
-            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
-                    issuerCertificate,
-                    BigInteger.valueOf(1),
-                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
-                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
-                    new X500Principal("CN=attest.android.com"),
-                    publicKey
-            );
-
-            certificateBuilder.addExtension(
-                    Extension.basicConstraints,
-                    false,
-                    new BasicConstraints(false)
-            );
-            certificateBuilder.addExtension(
-                    Extension.keyUsage, // Key Usage
-                    false,
-                    new KeyUsage(KeyUsage.keyCertSign)
-            );
-
-            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
-            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
-            try {
-                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
-            } catch (CertificateException e) {
-                throw new com.webauthn4j.validator.exception.CertificateException(e);
-            }
-        } catch (CertIOException e) {
-            throw new UncheckedIOException(e);
-        } catch (OperatorCreationException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-    }
-
-
-    public static X509Certificate createTPMAttestationCertificate(X509Certificate issuerCertificate, PrivateKey issuerPrivateKey, PublicKey publicKey, CertificateCreationOption certificateCreationOption) {
-        try {
-            switch (certificateCreationOption.getX509CertificateVersion()){
-                case 1:
-                    return createV1DummyCertificate();
-                case 3:
-                    break;
-                default:
-                    throw new IllegalArgumentException("Only version 1 or 3 are supported.");
-            }
-
-            X509v3CertificateBuilder certificateBuilder = new JcaX509v3CertificateBuilder(
-                    issuerCertificate,
-                    BigInteger.valueOf(1),
-                    Date.from(Instant.parse("2000-01-01T00:00:00Z")),
-                    Date.from(Instant.parse("2999-12-31T23:59:59Z")),
-                    new X500Principal(certificateCreationOption.getSubjectDN()),
-                    publicKey
-            );
-
-            DERSequence subjectAlternativeNames = new DERSequence(new ASN1Encodable[] {
-                    new GeneralName(GeneralName.directoryName, "2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433")
-            });
-            certificateBuilder.addExtension(Extension.subjectAlternativeName, true, subjectAlternativeNames);
-            certificateBuilder.addExtension(
-                    Extension.basicConstraints,
-                    false,
-                    new BasicConstraints(certificateCreationOption.isCAFlagInBasicConstraints())
-            );
-            if(certificateCreationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
-                certificateBuilder.addExtension(
-                        Extension.extendedKeyUsage, // Extended Key Usage
-                        true,
-                        new ExtendedKeyUsage(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3"))) // tcg-kp-AIKCertificate OID
-                );
-            }
-
-            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
-            X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
-            try {
-                return new JcaX509CertificateConverter().getCertificate(certificateHolder);
-            } catch (CertificateException e) {
-                throw new com.webauthn4j.validator.exception.CertificateException(e);
-            }
-        } catch (CertIOException e) {
-            throw new UncheckedIOException(e);
-        } catch (OperatorCreationException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-    }
-
-    private static X509Certificate createV1DummyCertificate(){
+    public static X509Certificate createV1DummyCertificate(){
         try{
             X509v1CertificateBuilder certificateBuilder = new X509v1CertificateBuilder(
                     new X500Name("O=SharpLab., C=US"),

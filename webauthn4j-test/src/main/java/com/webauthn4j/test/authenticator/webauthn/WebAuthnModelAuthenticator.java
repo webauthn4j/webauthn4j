@@ -53,9 +53,6 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
 
-    protected CborConverter cborConverter;
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
-
     // property
     private AAGUID aaguid;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
@@ -65,6 +62,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
 
+    // converter
+    protected CborConverter cborConverter;
+    private AuthenticatorDataConverter authenticatorDataConverter;
 
     public WebAuthnModelAuthenticator(AAGUID aaguid, int counter, boolean capableOfUserVerification, CborConverter cborConverter) {
         this.aaguid = aaguid;
@@ -72,6 +72,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.counter = counter;
         this.capableOfUserVerification = capableOfUserVerification;
         this.cborConverter = cborConverter;
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
     }
 
     public WebAuthnModelAuthenticator() {
@@ -254,7 +255,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte[] clientDataHash = makeCredentialRequest.getHash();
 
         AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
-        AttestationStatement attestationStatement = generateAttestationStatement(attestationStatementRequest, registrationEmulationOption);
+        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -401,7 +402,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.countUpEnabled = countUpEnabled;
     }
 
-    protected abstract AttestationStatement generateAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
+    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
