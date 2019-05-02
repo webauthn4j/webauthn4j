@@ -342,7 +342,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     @Test
     void validate_assertion_with_UP_flag_off_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
-        fidou2FAuthenticatorAdaptor.getFidoU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
+        fidou2FAuthenticatorAdaptor.getFIDOU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
         clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
         String rpId = "example.com";
         long timeout = 0;

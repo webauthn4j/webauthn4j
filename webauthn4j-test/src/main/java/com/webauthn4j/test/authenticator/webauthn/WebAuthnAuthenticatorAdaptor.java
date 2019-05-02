@@ -32,13 +32,16 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-
     private WebAuthnAuthenticator webAuthnAuthenticator;
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+    private CollectedClientDataConverter collectedClientDataConverter;
+
+    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator, JsonConverter jsonConverter) {
+        this.webAuthnAuthenticator = webAuthnAuthenticator;
+        this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+    }
 
     public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator) {
-        this.webAuthnAuthenticator = webAuthnAuthenticator;
+        this(webAuthnAuthenticator, new JsonConverter());
     }
 
     @Override
