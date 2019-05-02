@@ -26,19 +26,19 @@ import java.util.Objects;
 /**
  * Envelope class for WebAuthnRegistrationContext validation result
  */
-public class WebAuthnRegistrationContextValidationResponse {
+public class WebAuthnRegistrationContextValidationResponse<T extends ExtensionClientOutput> {
 
     // ~ Instance fields
     // ================================================================================================
 
     private CollectedClientData collectedClientData;
     private AttestationObject attestationObject;
-    private AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs;
+    private AuthenticationExtensionsClientOutputs<T> registrationExtensionsClientOutputs;
 
     public WebAuthnRegistrationContextValidationResponse(
             CollectedClientData collectedClientData,
             AttestationObject attestationObject,
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> registrationExtensionsClientOutputs) {
+            AuthenticationExtensionsClientOutputs<T> registrationExtensionsClientOutputs) {
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
         this.registrationExtensionsClientOutputs = registrationExtensionsClientOutputs;
@@ -52,7 +52,7 @@ public class WebAuthnRegistrationContextValidationResponse {
         return attestationObject;
     }
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getRegistrationExtensionsClientOutputs() {
+    public AuthenticationExtensionsClientOutputs<T> getRegistrationExtensionsClientOutputs() {
         return registrationExtensionsClientOutputs;
     }
 

@@ -41,7 +41,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> convert(String value) {
+    public <T extends ExtensionClientOutput> AuthenticationExtensionsClientOutputs<T> convert(String value) {
         if (value == null) {
             return null;
         }

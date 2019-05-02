@@ -38,7 +38,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
     private JWSFactory jwsFactory;
 
     @Override
-    protected AttestationStatement createAttestationStatement(
+    public AttestationStatement createAttestationStatement(
             AttestationStatementRequest attestationStatementRequest,
             RegistrationEmulationOption registrationEmulationOption) {
 
@@ -66,7 +66,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
+    X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
 
         AttestationCertificateBuilder builder = new AttestationCertificateBuilder(getAttestationIssuerCertificate(), new X500Principal(attestationOption.getSubjectDN()), this.getAttestationKeyPair().getPublic());
 

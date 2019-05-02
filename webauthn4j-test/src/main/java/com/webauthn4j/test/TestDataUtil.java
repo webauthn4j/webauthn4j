@@ -19,11 +19,14 @@ package com.webauthn4j.test;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.data.AuthenticatorAttestationResponse;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.PublicKeyCredential;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -36,7 +39,7 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.*;
@@ -72,6 +75,8 @@ public class TestDataUtil {
     private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
     private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+    private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     private TestDataUtil() {
     }
@@ -87,7 +92,7 @@ public class TestDataUtil {
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
@@ -98,7 +103,7 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
@@ -109,7 +114,7 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         LocalDateTime timestamp = LocalDateTime.parse("2019-02-02T07:01:00");
         return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty(), timestamp);
     }
@@ -121,7 +126,7 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
@@ -133,7 +138,7 @@ public class TestDataUtil {
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         return new RegistrationObject(
                 collectedClientData,
                 collectedClientDataBytes,
@@ -142,6 +147,27 @@ public class TestDataUtil {
                 authenticatorDataBytes,
                 transports,
                 authenticationExtensionsClientOutputs,
+                TestDataUtil.createServerProperty()
+        );
+    }
+
+    public static RegistrationObject createRegistrationObject(PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential) {
+        AuthenticatorAttestationResponse registrationRequest = publicKeyCredential.getAuthenticatorResponse();
+        byte[] attestationObjectBytes = publicKeyCredential.getAuthenticatorResponse().getAttestationObject();
+
+        CollectedClientData collectedClientData = collectedClientDataConverter.convert(registrationRequest.getClientDataJSON());
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = publicKeyCredential.getClientExtensionResults();
+        byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
+        Set<AuthenticatorTransport> transports = publicKeyCredential.getAuthenticatorResponse().getTransports();
+        AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
+        return new RegistrationObject(
+                collectedClientData,
+                registrationRequest.getClientDataJSON(),
+                attestationObject,
+                attestationObjectBytes,
+                authenticatorDataBytes,
+                transports,
+                clientExtensionResults,
                 TestDataUtil.createServerProperty()
         );
     }
@@ -183,13 +209,17 @@ public class TestDataUtil {
         return createAttestationObject(clientDataHash, privateKey, (signature) -> TestAttestationStatementUtil.createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, signature));
     }
 
-
-    public static AttestationObject createAttestationObject(byte[] clientDataHash, PrivateKey privateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
+    public static AttestationObject createAttestationObject(byte[] clientDataHash, PrivateKey attestationPrivateKey, Function<byte[], AttestationStatement> attestationStatementProvider) {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
-        byte[] signature = calculateSignature(privateKey, signedData);
+        byte[] signature = calculateSignature(attestationPrivateKey, signedData);
         return new AttestationObject(authenticatorData, attestationStatementProvider.apply(signature));
+    }
+
+    public static AttestationObject createAttestationObject(AttestationStatement attestationStatement) {
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData();
+        return new AttestationObject(authenticatorData, attestationStatement);
     }
 
     private static byte[] createSignedData(byte[] authenticatorData, byte[] clientDataHash) {
@@ -360,4 +390,5 @@ public class TestDataUtil {
                 null
         );
     }
+
 }

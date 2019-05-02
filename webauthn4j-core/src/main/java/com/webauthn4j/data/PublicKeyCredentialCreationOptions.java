@@ -43,9 +43,9 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private PublicKeyCredentialUserEntity user;
 
     private Challenge challenge;
-    private List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.emptyList();
+    private List<PublicKeyCredentialParameters> pubKeyCredParams;
     private Long timeout;
-    private List<PublicKeyCredentialDescriptor> excludeCredentials = Collections.emptyList();
+    private List<PublicKeyCredentialDescriptor> excludeCredentials;
     private AuthenticatorSelectionCriteria authenticatorSelection;
     private AttestationConveyancePreference attestation;
     private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;

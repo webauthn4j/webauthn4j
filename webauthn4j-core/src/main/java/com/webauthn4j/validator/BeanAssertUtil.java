@@ -160,12 +160,12 @@ class BeanAssertUtil {
         validate(credentialPublicKey);
     }
 
-    public static void validateAuthenticationExtensionsClientOutputs(
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs) {
+    public static <T extends ExtensionClientOutput> void validateAuthenticationExtensionsClientOutputs(
+            AuthenticationExtensionsClientOutputs<T> authenticationExtensionsClientOutputs) {
         if (authenticationExtensionsClientOutputs == null) {
             return;
         }
-        for (Map.Entry<String, ExtensionClientOutput> set : authenticationExtensionsClientOutputs.entrySet()) {
+        for (Map.Entry<String, T> set : authenticationExtensionsClientOutputs.entrySet()) {
             validate(set.getKey(), set.getValue());
         }
     }

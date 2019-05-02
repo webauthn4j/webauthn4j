@@ -18,7 +18,7 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestDataUtil;
@@ -185,7 +185,7 @@ class PackedAttestationStatementValidatorTest {
         AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
         CollectedClientData collectedClientData = new CollectedClientDataConverter(jsonConverter).convert(clientDataBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
         RegistrationObject registrationObject = new RegistrationObject(
                 collectedClientData,

@@ -33,7 +33,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
@@ -212,7 +212,7 @@ public class WebAuthnRegistrationContextValidator {
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = authenticatorTransportConverter.convertSet(registrationContext.getTransports());
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);

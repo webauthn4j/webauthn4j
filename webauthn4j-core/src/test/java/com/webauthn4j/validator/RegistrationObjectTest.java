@@ -27,7 +27,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
@@ -54,7 +54,7 @@ class RegistrationObjectTest {
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         RegistrationObject registrationObject = new RegistrationObject(
@@ -91,7 +91,7 @@ class RegistrationObjectTest {
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         RegistrationObject instanceA = new RegistrationObject(

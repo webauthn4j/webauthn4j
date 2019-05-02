@@ -22,7 +22,9 @@ import com.webauthn4j.data.PublicKeyCredentialRpEntity;
 import com.webauthn4j.data.PublicKeyCredentialUserEntity;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.util.AssertUtil;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MakeCredentialRequest {
@@ -36,6 +38,56 @@ public class MakeCredentialRequest {
     private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
     private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
+
+    public MakeCredentialRequest(
+            byte[] hash,
+            PublicKeyCredentialRpEntity rpEntity,
+            PublicKeyCredentialUserEntity userEntity,
+            boolean requireResidentKey,
+            boolean requireUserPresence,
+            boolean requireUserVerification,
+            List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs,
+            List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList,
+            AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
+
+        AssertUtil.notNull(credTypesAndPublicKeyAlgs, "credTypesAndPublicKeyAlgs must not be null");
+
+        this.hash = hash;
+        this.rpEntity = rpEntity;
+        this.userEntity = userEntity;
+        this.requireResidentKey = requireResidentKey;
+        this.requireUserPresence = requireUserPresence;
+        this.requireUserVerification = requireUserVerification;
+        this.credTypesAndPublicKeyAlgs = credTypesAndPublicKeyAlgs;
+        this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
+        this.extensions = extensions;
+    }
+
+    public MakeCredentialRequest(
+            byte[] hash,
+            PublicKeyCredentialRpEntity rpEntity,
+            PublicKeyCredentialUserEntity userEntity,
+            boolean requireResidentKey,
+            boolean requireUserPresence,
+            boolean requireUserVerification,
+            List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs,
+            List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList) {
+
+        this(hash, rpEntity, userEntity, requireResidentKey, requireUserPresence, requireUserVerification, credTypesAndPublicKeyAlgs, excludeCredentialDescriptorList, new AuthenticationExtensionsClientInputs<>());
+    }
+
+    public MakeCredentialRequest(
+            byte[] hash,
+            PublicKeyCredentialRpEntity rpEntity,
+            PublicKeyCredentialUserEntity userEntity,
+            boolean requireResidentKey,
+            boolean requireUserPresence,
+            boolean requireUserVerification,
+            List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs) {
+
+        this(hash, rpEntity, userEntity, requireResidentKey, requireUserPresence, requireUserVerification, credTypesAndPublicKeyAlgs, Collections.emptyList(), new AuthenticationExtensionsClientInputs<>());
+    }
+
 
     public byte[] getHash() {
         return hash;
@@ -90,6 +142,7 @@ public class MakeCredentialRequest {
     }
 
     public void setCredTypesAndPublicKeyAlgs(List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs) {
+        AssertUtil.notNull(credTypesAndPublicKeyAlgs, "credTypesAndPublicKeyAlgs must not be null");
         this.credTypesAndPublicKeyAlgs = credTypesAndPublicKeyAlgs;
     }
 

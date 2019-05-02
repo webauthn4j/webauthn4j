@@ -36,7 +36,7 @@ import java.security.spec.EllipticCurve;
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
 
         COSEAlgorithmIdentifier alg = COSEAlgorithmIdentifier.ES256;
 

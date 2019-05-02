@@ -432,9 +432,13 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         }
     }
 
-    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
+    public abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
-    protected abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest){
+        return createAttestationStatement(attestationStatementRequest, new RegistrationEmulationOption());
+    }
+
+    abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
 
     public X509Certificate getAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
         switch (attestationOption.getX509CertificateVersion()) {

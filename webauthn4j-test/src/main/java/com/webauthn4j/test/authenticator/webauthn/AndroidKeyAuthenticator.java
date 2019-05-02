@@ -32,7 +32,7 @@ import java.security.cert.X509Certificate;
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();

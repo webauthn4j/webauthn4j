@@ -20,7 +20,7 @@ import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
@@ -45,7 +45,7 @@ public class RegistrationObject {
     private final byte[] attestationObjectBytes;
     private final byte[] authenticatorDataBytes;
     private final Set<AuthenticatorTransport> transports;
-    private final AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
 
@@ -58,7 +58,7 @@ public class RegistrationObject {
                               byte[] attestationObjectBytes,
                               byte[] authenticatorDataBytes,
                               Set<AuthenticatorTransport> transports,
-                              AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
                               ServerProperty serverProperty) {
 
         this(
@@ -81,7 +81,7 @@ public class RegistrationObject {
                               byte[] attestationObjectBytes,
                               byte[] authenticatorDataBytes,
                               Set<AuthenticatorTransport> transports,
-                              AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
                               ServerProperty serverProperty,
                               LocalDateTime timestamp) {
 
@@ -123,7 +123,7 @@ public class RegistrationObject {
         return transports;
     }
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
