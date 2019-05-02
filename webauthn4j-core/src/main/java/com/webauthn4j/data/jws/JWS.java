@@ -69,10 +69,9 @@ public class JWS<T extends Serializable> implements Serializable {
             signatureObj.initVerify(publicKey);
             signatureObj.update(signedData.getBytes());
             byte[] sig;
-            if(publicKey instanceof ECPublicKey){
+            if (publicKey instanceof ECPublicKey) {
                 sig = JWSSignatureUtil.convertJwsSignatureToDerSignature(signature);
-            }
-            else{
+            } else {
                 sig = signature;
             }
             return signatureObj.verify(sig);
@@ -82,12 +81,12 @@ public class JWS<T extends Serializable> implements Serializable {
         }
     }
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         return toString().getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return headerString + "." + payloadString + "." + Base64UrlUtil.encodeToString(signature);
     }
 

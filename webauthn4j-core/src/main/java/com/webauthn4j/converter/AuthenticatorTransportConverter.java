@@ -24,30 +24,29 @@ import java.util.stream.Collectors;
 
 public class AuthenticatorTransportConverter {
 
-    public AuthenticatorTransport convert(String value){
-        try{
+    public AuthenticatorTransport convert(String value) {
+        try {
             return AuthenticatorTransport.create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
 
     @SuppressWarnings("squid:S1168")
-    public Set<AuthenticatorTransport> convertSet(Set<String> values){
-        if(values == null){
+    public Set<AuthenticatorTransport> convertSet(Set<String> values) {
+        if (values == null) {
             return null;
         }
         return values.stream().map(this::convert).collect(Collectors.toSet());
     }
 
-    public String convertToString(AuthenticatorTransport value){
+    public String convertToString(AuthenticatorTransport value) {
         return value.getValue();
     }
 
     @SuppressWarnings("squid:S1168")
-    public Set<String> convertSetToStringSet(Set<AuthenticatorTransport> values){
-        if(values == null){
+    public Set<String> convertSetToStringSet(Set<AuthenticatorTransport> values) {
+        if (values == null) {
             return null;
         }
         return values.stream().map(this::convertToString).collect(Collectors.toSet());

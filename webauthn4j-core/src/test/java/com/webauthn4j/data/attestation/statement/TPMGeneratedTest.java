@@ -18,14 +18,13 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-
 import org.junit.jupiter.api.Test;
+
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.Base64;
 
 class TPMGeneratedTest {
 
@@ -34,7 +33,7 @@ class TPMGeneratedTest {
     @Test
     void create() {
         assertAll(
-                () -> assertThat(TPMGenerated.create(new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47})).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE),
+                () -> assertThat(TPMGenerated.create(new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47})).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> TPMGenerated.create(new byte[]{}))
         );
@@ -42,14 +41,14 @@ class TPMGeneratedTest {
 
     @Test
     void fromString_test() {
-        byte[] source = new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47};
+        byte[] source = new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47};
         TestDTO dto = jsonConverter.readValue("{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class);
         assertThat(dto.tpm_generated).isEqualTo(TPMGenerated.TPM_GENERATED_VALUE);
     }
 
     @Test
     void fromString_test_with_invalid_value() {
-        byte[] source = new byte[]{(byte)0xff, (byte)0xaa, (byte)0xff, (byte)0xaa};
+        byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa, (byte) 0xff, (byte) 0xaa};
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class)
         );

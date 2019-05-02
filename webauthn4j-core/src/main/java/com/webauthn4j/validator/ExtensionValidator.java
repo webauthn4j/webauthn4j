@@ -34,8 +34,8 @@ class ExtensionValidator {
     // ========================================================================================================
 
     public <T extends ExtensionAuthenticatorOutput> void validate(AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs,
-                         AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs,
-                         List<String> expectedExtensionIdentifiers) {
+                                                                  AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs,
+                                                                  List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
             expected = Collections.emptyList();

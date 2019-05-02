@@ -18,7 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 public class AndroidSafetyNetAttestationOption extends AttestationOption {
 
-    public AndroidSafetyNetAttestationOption(){
+    public AndroidSafetyNetAttestationOption() {
         this.subjectDN = "CN=attest.android.com";
     }
 }

@@ -44,7 +44,7 @@ public class AttestationCertificateBuilder {
 
     private X509v3CertificateBuilder certificateBuilder;
 
-    public AttestationCertificateBuilder(X509Certificate issuerCertificate, X500Principal subject, PublicKey publicKey){
+    public AttestationCertificateBuilder(X509Certificate issuerCertificate, X500Principal subject, PublicKey publicKey) {
         certificateBuilder = new JcaX509v3CertificateBuilder(
                 issuerCertificate,
                 BigInteger.valueOf(1),
@@ -55,9 +55,9 @@ public class AttestationCertificateBuilder {
         );
     }
 
-    public void addSubjectAlternativeNamesExtension(String subjectAlternativeNames){
+    public void addSubjectAlternativeNamesExtension(String subjectAlternativeNames) {
         try {
-            DERSequence derSequence = new DERSequence(new ASN1Encodable[] {
+            DERSequence derSequence = new DERSequence(new ASN1Encodable[]{
                     new GeneralName(GeneralName.directoryName, subjectAlternativeNames)
             });
             certificateBuilder.addExtension(Extension.subjectAlternativeName, true, derSequence);
@@ -66,7 +66,7 @@ public class AttestationCertificateBuilder {
         }
     }
 
-    public void addBasicConstraintsExtension(){
+    public void addBasicConstraintsExtension() {
         try {
             certificateBuilder.addExtension(
                     Extension.basicConstraints,
@@ -78,7 +78,7 @@ public class AttestationCertificateBuilder {
         }
     }
 
-    public void addKeyUsageExtension(){
+    public void addKeyUsageExtension() {
         try {
             certificateBuilder.addExtension(
                     Extension.keyUsage, // Key Usage
@@ -90,7 +90,7 @@ public class AttestationCertificateBuilder {
         }
     }
 
-    public void addExtendedKeyUsageExtension(KeyPurposeId keyPurposeId){
+    public void addExtendedKeyUsageExtension(KeyPurposeId keyPurposeId) {
         try {
             certificateBuilder.addExtension(
                     Extension.extendedKeyUsage, // Extended Key Usage
@@ -102,7 +102,7 @@ public class AttestationCertificateBuilder {
         }
     }
 
-    public X509Certificate build(PrivateKey issuerPrivateKey){
+    public X509Certificate build(PrivateKey issuerPrivateKey) {
         try {
             ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withECDSA").build(issuerPrivateKey);
             X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);

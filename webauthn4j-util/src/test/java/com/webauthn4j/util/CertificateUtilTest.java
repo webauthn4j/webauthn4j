@@ -51,7 +51,7 @@ class CertificateUtilTest {
                 () -> CertificateUtil.createPKIXParameters(trustAnchors)
         );
         assertThat(t).hasMessage("trustAnchors is required; it must not be empty");
-     }
+    }
 
     @Test
     void createKeystore_test() {

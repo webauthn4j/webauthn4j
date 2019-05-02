@@ -34,19 +34,17 @@ public class AAGUID implements Serializable {
     }
 
     public AAGUID(byte[] value) {
-        if(value == null){
+        if (value == null) {
             this.value = null;
-        }
-        else {
+        } else {
             this.value = UUIDUtil.fromBytes(value);
         }
     }
 
     public AAGUID(String value) {
-        if(value == null){
+        if (value == null) {
             this.value = null;
-        }
-        else {
+        } else {
             this.value = UUIDUtil.fromString(value);
         }
     }
@@ -74,7 +72,7 @@ public class AAGUID implements Serializable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return value.toString();
     }
 }

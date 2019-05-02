@@ -18,7 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 public class AndroidKeyAttestationOption extends AttestationOption {
 
-    public AndroidKeyAttestationOption(){
+    public AndroidKeyAttestationOption() {
         this.subjectDN = "O=SharpLab., C=US";
     }
 }

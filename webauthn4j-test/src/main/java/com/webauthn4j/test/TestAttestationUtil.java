@@ -53,7 +53,8 @@ import java.util.Set;
 
 public class TestAttestationUtil {
 
-    private TestAttestationUtil(){}
+    private TestAttestationUtil() {
+    }
 
     // ~ Public key certificate chains
     // ========================================================================================================
@@ -140,8 +141,8 @@ public class TestAttestationUtil {
         return CertificateUtil.generateX509Certificate(derEncodedCertificate.getBytes());
     }
 
-    public static X509Certificate createV1DummyCertificate(){
-        try{
+    public static X509Certificate createV1DummyCertificate() {
+        try {
             X509v1CertificateBuilder certificateBuilder = new X509v1CertificateBuilder(
                     new X500Name("O=SharpLab., C=US"),
                     BigInteger.valueOf(1),

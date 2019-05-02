@@ -80,14 +80,16 @@ public class WebAuthnAuthenticationContextValidator {
 
     // ~ Methods
     // ========================================================================================================
+
     /**
      * validates WebAuthn authentication request
+     *
      * @param authenticationContext authentication context
-     * @param authenticator authenticator to be checked against
+     * @param authenticator         authenticator to be checked against
      * @return validation result
      * @throws DataConversionException if the input cannot be parsed
-     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
-     * @throws WebAuthnException if WebAuthn error occurred
+     * @throws ValidationException     if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException       if WebAuthn error occurred
      */
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) throws WebAuthnException {
@@ -181,7 +183,7 @@ public class WebAuthnAuthenticationContextValidator {
             }
         }
 
-        for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators){
+        for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
             customAuthenticationValidator.validate(authenticationObject);
         }
 

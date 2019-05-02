@@ -43,8 +43,8 @@ allprojects {
     version "${webauthn4jVersion}"
 
     dependencyCheck {
-        failBuildOnCVSS=4 //medium
-        suppressionFile="$rootDir/owasp/suppression.xml"
+        failBuildOnCVSS = 4 //medium
+        suppressionFile = "$rootDir/owasp/suppression.xml"
     }
 
 }

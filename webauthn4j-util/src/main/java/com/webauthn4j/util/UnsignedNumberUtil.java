@@ -39,7 +39,7 @@ public class UnsignedNumberUtil {
     }
 
     public static int getUnsignedShort(byte[] bytes) {
-        if(bytes.length != 2){
+        if (bytes.length != 2) {
             throw new IllegalArgumentException("byte array must be 2 bytes");
         }
         return getUnsignedShort(ByteBuffer.wrap(bytes));
@@ -50,7 +50,7 @@ public class UnsignedNumberUtil {
     }
 
     public static long getUnsignedInt(byte[] bytes) {
-        if(bytes.length != 4){
+        if (bytes.length != 4) {
             throw new IllegalArgumentException("byte array must be 4 bytes");
         }
         return getUnsignedInt(ByteBuffer.wrap(bytes));
@@ -63,7 +63,7 @@ public class UnsignedNumberUtil {
     }
 
     public static byte[] toBytes(int ushortValue) {
-        if(!isWithinUnsignedShort(ushortValue)){
+        if (!isWithinUnsignedShort(ushortValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
         byte[] bytes = new byte[2];
@@ -73,7 +73,7 @@ public class UnsignedNumberUtil {
     }
 
     public static byte[] toBytes(long uintValue) {
-        if(!isWithinUnsignedInt(uintValue)){
+        if (!isWithinUnsignedInt(uintValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
         byte[] bytes = new byte[4];
@@ -85,14 +85,14 @@ public class UnsignedNumberUtil {
     }
 
     public static byte[] toBytes(BigInteger unsignedLongValue) {
-        if(!isWithinUnsignedLong(unsignedLongValue)){
+        if (!isWithinUnsignedLong(unsignedLongValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
         byte[] bytes = unsignedLongValue.toByteArray();
         byte[] buffer = new byte[8];
-        int offset = (8-bytes.length);
-        for (int i=Math.max(0, offset);i<8;i++){
-            buffer[i] = bytes[i-offset];
+        int offset = (8 - bytes.length);
+        for (int i = Math.max(0, offset); i < 8; i++) {
+            buffer[i] = bytes[i - offset];
         }
         return buffer;
     }

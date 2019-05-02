@@ -210,7 +210,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
 
-
     void validateAikCert(X509Certificate certificate) {
         try {
             /// TPM attestation certificate MUST have the following fields/extensions:
@@ -277,7 +276,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private String decodeAttr(byte[] attr) throws IOException {
         String value = null;
-        if(attr != null){
+        if (attr != null) {
             Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
             attrAsn1Utf8String.decode(attr);
             value = attrAsn1Utf8String.getValue();
@@ -286,18 +285,17 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private Map<String, byte[]> convertAttributesToMap(Attributes attributes) {
-        try{
+        try {
             NamingEnumeration<String> attributesIDs = attributes.getIDs();
             Map<String, byte[]> result = new HashMap<>();
             while (attributesIDs.hasMore()) {
                 String aid = attributesIDs.next();
-                byte[] value = (byte[])attributes.get(aid).get();
+                byte[] value = (byte[]) attributes.get(aid).get();
 
                 result.put(aid, value);
             }
             return result;
-        }
-        catch (NamingException e){
+        } catch (NamingException e) {
             throw new BadAttestationStatementException("Failed to parse the TPM attestation attributes", e);
         }
     }

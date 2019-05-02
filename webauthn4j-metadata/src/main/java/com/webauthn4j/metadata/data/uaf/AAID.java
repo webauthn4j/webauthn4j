@@ -27,15 +27,15 @@ public class AAID {
     private int v;
     private int m;
 
-    public AAID(String aaid){
+    public AAID(String aaid) {
         String[] array = aaid.split("#");
-        if(array.length != 2){
+        if (array.length != 2) {
             throw new IllegalArgumentException("AAID value is not divided by single '#' separator.");
         }
-        if(array[0].length() != 4){
+        if (array[0].length() != 4) {
             throw new IllegalArgumentException("V part of AAID must consists of 4 hexadecimal digits.");
         }
-        if(array[1].length() != 4){
+        if (array[1].length() != 4) {
             throw new IllegalArgumentException("M part of AAID must consists of 4 hexadecimal digits.");
         }
         v = Integer.parseInt(array[0], 16);
@@ -44,10 +44,9 @@ public class AAID {
 
     @JsonCreator
     static AAID deserialize(String aaid) throws InvalidFormatException {
-        try{
+        try {
             return new AAID(aaid);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "invalid aaid", aaid, AAID.class);
         }
     }
@@ -62,7 +61,7 @@ public class AAID {
 
     @JsonValue
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("%04X", v) + "#" + String.format("%04X", m);
     }
 

@@ -49,7 +49,7 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
 
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);
-        try{
+        try {
             return jwsFactory.parse(str, Response.class);
         } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(p, "value is not valid as JWS", value, JWS.class);

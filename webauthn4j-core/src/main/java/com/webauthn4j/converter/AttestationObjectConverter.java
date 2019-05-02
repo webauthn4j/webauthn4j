@@ -44,10 +44,11 @@ public class AttestationObjectConverter {
 
     /**
      * Converts from a base64url {@link String} to {@link AttestationObject}.
+     *
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public AttestationObject  convert(String source) {
+    public AttestationObject convert(String source) {
         if (source == null) {
             return null;
         }
@@ -57,6 +58,7 @@ public class AttestationObjectConverter {
 
     /**
      * Converts from a byte array to {@link AttestationObject}.
+     *
      * @param source the source byte array to convert
      * @return the converted object
      */
@@ -69,6 +71,7 @@ public class AttestationObjectConverter {
 
     /**
      * Converts from a {@link AttestationObject} to byte[].
+     *
      * @param source the source object to convert
      * @return the converted byte array
      */
@@ -78,6 +81,7 @@ public class AttestationObjectConverter {
 
     /**
      * Converts from a {@link AttestationObject} to {@link String}.
+     *
      * @param source the source object to convert
      * @return the converted byte array
      */
@@ -88,6 +92,7 @@ public class AttestationObjectConverter {
 
     /**
      * Extract authenticatorData byte array from a attestationObject byte array.
+     *
      * @param attestationObject the authenticatorData byte array
      * @return the extracted authenticatorData byte array
      */

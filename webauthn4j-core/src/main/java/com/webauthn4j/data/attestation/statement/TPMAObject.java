@@ -22,17 +22,17 @@ import java.util.Objects;
 
 public class TPMAObject implements Serializable {
 
-    public  static final int FIXED_TPM_BIT             = 0b00000000000000000000000000000010;
-    public  static final int ST_CLEAR_BIT              = 0b00000000000000000000000000000100;
-    public  static final int FIXED_PARENT_BIT          = 0b00000000000000000000000000010000;
-    public  static final int SENSITIVE_DATA_ORIGIN_BIT = 0b00000000000000000000000000100000;
-    public  static final int USER_WITH_AUTH_BIT        = 0b00000000000000000000000001000000;
-    public  static final int ADMIN_WITH_POLICY_BIT     = 0b00000000000000000000000010000000;
-    public  static final int NO_DA_BIT                 = 0b00000000000000000000010000000000;
-    public  static final int ENCRYPTED_DUPLICATION_BIT = 0b00000000000000000000100000000000;
-    public  static final int RESTRICTED_BIT            = 0b00000000000000010000000000000000;
-    public  static final int DECRYPT_BIT               = 0b00000000000000100000000000000000;
-    public  static final int SIGN_ENCRYPT_BIT          = 0b00000000000001000000000000000000;
+    public static final int FIXED_TPM_BIT = 0b00000000000000000000000000000010;
+    public static final int ST_CLEAR_BIT = 0b00000000000000000000000000000100;
+    public static final int FIXED_PARENT_BIT = 0b00000000000000000000000000010000;
+    public static final int SENSITIVE_DATA_ORIGIN_BIT = 0b00000000000000000000000000100000;
+    public static final int USER_WITH_AUTH_BIT = 0b00000000000000000000000001000000;
+    public static final int ADMIN_WITH_POLICY_BIT = 0b00000000000000000000000010000000;
+    public static final int NO_DA_BIT = 0b00000000000000000000010000000000;
+    public static final int ENCRYPTED_DUPLICATION_BIT = 0b00000000000000000000100000000000;
+    public static final int RESTRICTED_BIT = 0b00000000000000010000000000000000;
+    public static final int DECRYPT_BIT = 0b00000000000000100000000000000000;
+    public static final int SIGN_ENCRYPT_BIT = 0b00000000000001000000000000000000;
 
     private int value;
 
@@ -40,48 +40,48 @@ public class TPMAObject implements Serializable {
         this.value = value;
     }
 
-    public boolean isFixedTPM(){
+    public boolean isFixedTPM() {
         return (value & FIXED_TPM_BIT) != 0;
     }
 
-    public boolean isStClear(){
+    public boolean isStClear() {
         return (value & ST_CLEAR_BIT) != 0;
     }
 
 
-    public boolean isFixedParent(){
+    public boolean isFixedParent() {
         return (value & FIXED_PARENT_BIT) != 0;
     }
 
-    public boolean isSensitiveDataOrigin(){
+    public boolean isSensitiveDataOrigin() {
         return (value & SENSITIVE_DATA_ORIGIN_BIT) != 0;
     }
 
-    public boolean isUserWithAuth(){
+    public boolean isUserWithAuth() {
         return (value & USER_WITH_AUTH_BIT) != 0;
     }
 
-    public boolean isAdminWithPolicy(){
+    public boolean isAdminWithPolicy() {
         return (value & ADMIN_WITH_POLICY_BIT) != 0;
     }
 
-    public boolean isNoDA(){
+    public boolean isNoDA() {
         return (value & NO_DA_BIT) != 0;
     }
 
-    public boolean isEncryptedDuplication(){
+    public boolean isEncryptedDuplication() {
         return (value & ENCRYPTED_DUPLICATION_BIT) != 0;
     }
 
-    public boolean isRestricted(){
+    public boolean isRestricted() {
         return (value & RESTRICTED_BIT) != 0;
     }
 
-    public boolean isDecrypt(){
+    public boolean isDecrypt() {
         return (value & DECRYPT_BIT) != 0;
     }
 
-    public boolean isSignEncrypt(){
+    public boolean isSignEncrypt() {
         return (value & SIGN_ENCRYPT_BIT) != 0;
     }
 

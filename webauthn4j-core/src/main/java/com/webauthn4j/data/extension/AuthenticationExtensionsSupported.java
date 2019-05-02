@@ -27,15 +27,16 @@ import java.util.Objects;
 
 /**
  * List of supported extensions as an array of extension identifier strings.
+ *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#ref-for-typedefdef-authenticationextensionssupported">§10.5. Supported Extensions Extension (exts) - Client extension output</a>
  */
 public class AuthenticationExtensionsSupported extends AbstractList<String> implements Serializable {
 
-    private String[] extensions;
     private final int size;
+    private String[] extensions;
 
     @JsonCreator
-    public AuthenticationExtensionsSupported(List<String> extensions){
+    public AuthenticationExtensionsSupported(List<String> extensions) {
         AssertUtil.notNull(extensions, "extensions must not be null");
         this.size = extensions.size();
         this.extensions = extensions.toArray(new String[this.size]);

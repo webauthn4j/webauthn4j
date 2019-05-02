@@ -23,9 +23,10 @@ import java.io.UncheckedIOException;
 
 public class JacksonUtil {
 
-    private JacksonUtil(){}
+    private JacksonUtil() {
+    }
 
-    public static byte[] binaryValue(JsonNode jsonNode){
+    public static byte[] binaryValue(JsonNode jsonNode) {
         try {
             return jsonNode.binaryValue();
         } catch (IOException e) {

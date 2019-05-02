@@ -24,10 +24,11 @@ import java.io.OutputStream;
 
 class TPMUtil {
 
-    private TPMUtil(){}
+    private TPMUtil() {
+    }
 
     static void writeSizedArray(OutputStream stream, byte[] value) throws IOException {
-        if(value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX){
+        if (value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX) {
             throw new DataConversionException("too large data to write");
         }
         stream.write(UnsignedNumberUtil.toBytes(value.length));

@@ -42,10 +42,10 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     // ~ Constructor
     // ========================================================================================================
 
-    public CertFileTrustAnchorsProvider(){
+    public CertFileTrustAnchorsProvider() {
     }
 
-    public CertFileTrustAnchorsProvider(List<Path> certificates){
+    public CertFileTrustAnchorsProvider(List<Path> certificates) {
         this.certificates = certificates;
     }
 

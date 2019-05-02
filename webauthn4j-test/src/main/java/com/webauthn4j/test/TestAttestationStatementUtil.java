@@ -18,9 +18,9 @@ package com.webauthn4j.test;
 
 import com.webauthn4j.data.attestation.statement.*;
 
-public class TestAttestationStatementUtil
-{
-    private TestAttestationStatementUtil(){}
+public class TestAttestationStatementUtil {
+    private TestAttestationStatementUtil() {
+    }
 
     public static FIDOU2FAttestationStatement createFIDOU2FAttestationStatement() {
         return createFIDOU2FAttestationStatement(TestAttestationUtil.load2tierTestAttestationCertificatePath());

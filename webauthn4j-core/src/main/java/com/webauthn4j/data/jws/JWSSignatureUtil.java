@@ -18,11 +18,12 @@ package com.webauthn4j.data.jws;
 
 class JWSSignatureUtil {
 
-    private JWSSignatureUtil(){}
+    private JWSSignatureUtil() {
+    }
 
     /*
-    * Original License Header
-    */
+     * Original License Header
+     */
 
     /*
      * nimbus-jose-jwt
@@ -46,6 +47,7 @@ class JWSSignatureUtil {
 
     /**
      * convert signature from JWS format to DER format
+     *
      * @param jwsSignature signature in JWS format
      * @return signature in DER format
      * @author Vladimir Dzhuvinov
@@ -119,6 +121,7 @@ class JWSSignatureUtil {
 
     /**
      * convert signature from DER format to JWS format
+     *
      * @param derSignature signature in DER format
      * @return signature in JWS format
      */

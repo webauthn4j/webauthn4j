@@ -16,8 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.PublicKeyCredentialParameters;
-import com.webauthn4j.data.PublicKeyCredentialType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 

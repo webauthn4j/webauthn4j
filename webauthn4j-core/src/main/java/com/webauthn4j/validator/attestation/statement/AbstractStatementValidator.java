@@ -28,7 +28,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
 
     public AbstractStatementValidator() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
-        if(parameterizedType.getActualTypeArguments().length == 0){
+        if (parameterizedType.getActualTypeArguments().length == 0) {
             // Throw an exception if the class is not extending AttestationStatement
             throw new IllegalStateException("Inheriting class must extend AttestationStatement");
         }

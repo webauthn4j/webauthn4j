@@ -50,13 +50,14 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * Constructor for public key
-     * @param keyId keyId
+     *
+     * @param keyId     keyId
      * @param algorithm algorithm
-     * @param keyOpts keyOpts
-     * @param baseIV baseIV
-     * @param curve curve
-     * @param x x
-     * @param y y
+     * @param keyOpts   keyOpts
+     * @param baseIV    baseIV
+     * @param curve     curve
+     * @param x         x
+     * @param y         y
      */
     @SuppressWarnings("squid:S00107")
     @JsonCreator
@@ -76,6 +77,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * create from uncompressed ECC key
+     *
      * @param publicKey publicKey
      * @return {@link EC2CredentialPublicKey}
      */
@@ -98,6 +100,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
 
     /**
      * create from {@code ECPublicKey}
+     *
      * @param publicKey publicKey
      * @return {@link EC2CredentialPublicKey}
      */

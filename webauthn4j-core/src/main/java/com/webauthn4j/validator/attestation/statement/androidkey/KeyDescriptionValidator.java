@@ -68,11 +68,11 @@ public class KeyDescriptionValidator {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
         Asn1OctetString envelope = new Asn1OctetString();
-        if(attestationExtensionBytes == null){
+        if (attestationExtensionBytes == null) {
             throw new KeyDescriptionValidationException("KeyDescription must not be null");
         }
         envelope.decode(attestationExtensionBytes);
-        return  (Asn1Container)Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
+        return (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
     }
 
     void doValidate(Asn1Container keyDescription, byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
@@ -137,7 +137,7 @@ public class KeyDescriptionValidator {
 
     private boolean containsValidPurpose(Asn1ParseResult purposes) throws IOException {
         try {
-            if(purposes == null){
+            if (purposes == null) {
                 return false;
             }
             Asn1Container set = (Asn1Container) purposes;
@@ -155,7 +155,7 @@ public class KeyDescriptionValidator {
 
 
     private BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
-        if(asn1Value == null){
+        if (asn1Value == null) {
             return null;
         }
         if (!asn1Value.isPrimitive()) {
@@ -171,12 +171,11 @@ public class KeyDescriptionValidator {
         for (Asn1ParseResult entry : authorizationList.getChildren()) {
             Asn1ParseResult taggedEntry = entry;
             if (taggedEntry.tagNo() == tag) {
-                return ((Asn1Container)taggedEntry).getChildren().get(0);
+                return ((Asn1Container) taggedEntry).getChildren().get(0);
             }
         }
         return null;
     }
-
 
 
 }

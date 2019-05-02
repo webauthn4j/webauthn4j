@@ -165,7 +165,7 @@ class BeanAssertUtil {
         if (authenticationExtensionsClientOutputs == null) {
             return;
         }
-        for (Map.Entry<String, ExtensionClientOutput> set: authenticationExtensionsClientOutputs.entrySet()){
+        for (Map.Entry<String, ExtensionClientOutput> set : authenticationExtensionsClientOutputs.entrySet()) {
             validate(set.getKey(), set.getValue());
         }
     }
@@ -175,7 +175,7 @@ class BeanAssertUtil {
         if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
         }
-        for (Map.Entry<String, T> set: authenticationExtensionsAuthenticatorOutputs.entrySet()){
+        for (Map.Entry<String, T> set : authenticationExtensionsAuthenticatorOutputs.entrySet()) {
             validate(set.getKey(), set.getValue());
         }
     }

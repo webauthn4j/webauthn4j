@@ -83,7 +83,7 @@ class RegistrationObjectTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
@@ -119,8 +119,8 @@ class RegistrationObjectTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceA).isEqualTo(instanceB),
-                ()-> assertThat(instanceA).hasSameHashCodeAs(instanceB)
+                () -> assertThat(instanceA).isEqualTo(instanceB),
+                () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
     }
 }

@@ -23,6 +23,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported key protection type(s).
+ *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#key-protection-types">§3.2 Key Protection Types</a>
  */
 public enum KeyProtection {
@@ -62,10 +63,9 @@ public enum KeyProtection {
 
     @JsonCreator
     private static KeyProtection deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, KeyProtection.class);
         }
     }

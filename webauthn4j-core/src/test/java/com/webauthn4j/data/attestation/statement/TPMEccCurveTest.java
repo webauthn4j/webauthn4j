@@ -18,7 +18,6 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.junit.jupiter.api.Test;

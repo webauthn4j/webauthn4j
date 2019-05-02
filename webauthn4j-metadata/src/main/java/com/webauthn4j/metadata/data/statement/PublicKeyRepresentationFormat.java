@@ -23,7 +23,8 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported publik key representation format(s).
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#public-key-representation-formats">§3.6.2 Public Key Representation Formats</a> 
+ *
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#public-key-representation-formats">§3.6.2 Public Key Representation Formats</a>
  */
 public enum PublicKeyRepresentationFormat {
 
@@ -35,7 +36,7 @@ public enum PublicKeyRepresentationFormat {
 
     private final int value;
 
-	PublicKeyRepresentationFormat(int value) {
+    PublicKeyRepresentationFormat(int value) {
         this.value = value;
     }
 
@@ -61,10 +62,9 @@ public enum PublicKeyRepresentationFormat {
 
     @JsonCreator
     private static PublicKeyRepresentationFormat deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
         }
     }

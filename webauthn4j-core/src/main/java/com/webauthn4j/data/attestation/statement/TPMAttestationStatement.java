@@ -111,7 +111,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
 
     @Override
     public void validate() {
-        if(x5c == null && ecdaaKeyId == null){
+        if (x5c == null && ecdaaKeyId == null) {
             throw new ConstraintViolationException("x5c or ecdaaKeyId must be present");
         }
     }

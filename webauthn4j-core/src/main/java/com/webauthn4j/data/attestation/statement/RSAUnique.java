@@ -49,7 +49,7 @@ public class RSAUnique implements TPMUPublicId {
 
     @Override
     public byte[] getBytes() {
-        ByteBuffer buffer = ByteBuffer.allocate(2+n.length);
+        ByteBuffer buffer = ByteBuffer.allocate(2 + n.length);
         buffer.put(UnsignedNumberUtil.toBytes(getN().length));
         buffer.put(getN());
         return buffer.array();

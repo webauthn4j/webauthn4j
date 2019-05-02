@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class AlternativeDescriptionsTest {
 
     @Test
-    void put_test(){
+    void put_test() {
         AlternativeDescriptions target = new AlternativeDescriptions();
         assertThrows(UnsupportedOperationException.class,
                 () -> target.put("key", "value")
@@ -34,7 +34,7 @@ class AlternativeDescriptionsTest {
     }
 
     @Test
-    void entrySet_remove_test(){
+    void entrySet_remove_test() {
         Map<String, String> source = new HashMap<>();
         source.put("key", "value");
         AlternativeDescriptions target = new AlternativeDescriptions(source);

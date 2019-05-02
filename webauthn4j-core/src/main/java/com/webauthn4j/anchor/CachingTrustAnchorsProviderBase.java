@@ -43,7 +43,7 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
     @Override
     public Map<AAGUID, Set<TrustAnchor>> provide() {
         if (cachedTrustAnchors == null) {
-            synchronized (this){
+            synchronized (this) {
                 cachedTrustAnchors = loadTrustAnchors();
             }
         }
@@ -52,6 +52,7 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
 
     /**
      * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+     *
      * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
     protected abstract Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();

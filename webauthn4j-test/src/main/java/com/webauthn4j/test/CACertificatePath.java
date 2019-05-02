@@ -25,8 +25,8 @@ import java.util.*;
 
 public class CACertificatePath extends AbstractList<X509Certificate> implements Serializable {
 
-    private X509Certificate[] certificates;
     private final int size;
+    private X509Certificate[] certificates;
 
     @JsonCreator
     public CACertificatePath(List<X509Certificate> certificates) {

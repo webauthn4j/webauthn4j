@@ -37,7 +37,7 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
     private WebAuthnAuthenticator webAuthnAuthenticator;
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
 
-    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator){
+    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator) {
         this.webAuthnAuthenticator = webAuthnAuthenticator;
     }
 

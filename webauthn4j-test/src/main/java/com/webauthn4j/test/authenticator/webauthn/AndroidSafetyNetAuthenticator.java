@@ -56,7 +56,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         boolean ctsProfileMatch = true;
         boolean basicIntegrity = true;
         String advice = null;
-        Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256,apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
+        Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
 
         String ver = "12685023";
         JWS<Response> jws = getJwsFactory().create(jwsHeader, response, this.getAttestationKeyPair().getPrivate());
@@ -76,8 +76,8 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         return builder.build(this.getAttestationIssuerPrivateKey());
     }
 
-    private JWSFactory getJwsFactory(){
-        if(jwsFactory == null){
+    private JWSFactory getJwsFactory() {
+        if (jwsFactory == null) {
             jwsFactory = new JWSFactory(cborConverter.getJsonConverter());
         }
         return jwsFactory;

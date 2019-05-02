@@ -93,41 +93,41 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAikCert_test(){
+    void validateAikCert_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         target.validateAikCert(certificate);
     }
 
     @Test
-    void validateAikCert_with_non_empty_subjectDN_test(){
+    void validateAikCert_with_non_empty_subjectDN_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setSubjectDN("O=SharpLab., C=US");
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateAikCert_without_tcgKpAIKCertificate_test(){
+    void validateAikCert_without_tcgKpAIKCertificate_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateAikCert_with_caFlagInBasicConstraints_test(){
+    void validateAikCert_with_caFlagInBasicConstraints_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setCAFlagInBasicConstraints(true);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateAikCert_with_version1_test(){
+    void validateAikCert_with_version1_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setX509CertificateVersion(1);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(()->target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

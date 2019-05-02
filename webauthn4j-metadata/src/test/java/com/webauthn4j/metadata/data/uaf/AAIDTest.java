@@ -29,7 +29,7 @@ class AAIDTest {
     private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         AAID aaid = new AAID("ABCD#1234");
         assertAll(
                 () -> assertThat(aaid.getV()).isEqualTo(0xABCD),
@@ -38,27 +38,27 @@ class AAIDTest {
     }
 
     @Test
-    void constructor_with_invalid_value_test(){
-        assertThatThrownBy(()->new AAID("1234##1234")).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new AAID("12341234")).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new AAID("123#1234")).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new AAID("1234#123")).isInstanceOf(IllegalArgumentException.class);
+    void constructor_with_invalid_value_test() {
+        assertThatThrownBy(() -> new AAID("1234##1234")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new AAID("12341234")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new AAID("123#1234")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new AAID("1234#123")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         assertThat(new AAID("ABCD#1234")).isEqualTo(new AAID("ABCD#1234"));
         assertThat(new AAID("ABCD#1234")).hasSameHashCodeAs(new AAID("ABCD#1234"));
     }
 
     @Test
-    void toString_test(){
+    void toString_test() {
         assertThat(new AAID("ABCD#1234").toString()).isEqualTo("ABCD#1234");
     }
 
     @Test
     void deserialize_with_invalid_value_test() {
-        assertThatThrownBy(()-> jsonConverter.readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> jsonConverter.readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
     }
 
     static class TestDTO {

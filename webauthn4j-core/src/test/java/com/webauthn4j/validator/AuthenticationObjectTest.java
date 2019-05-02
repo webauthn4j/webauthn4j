@@ -114,4 +114,4 @@ class AuthenticationObjectTest {
         );
     }
 
-    }
+}

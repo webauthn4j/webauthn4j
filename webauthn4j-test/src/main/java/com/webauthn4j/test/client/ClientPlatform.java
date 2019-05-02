@@ -112,8 +112,7 @@ public class ClientPlatform {
     public PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> create(
             PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
             RegistrationEmulationOption registrationEmulationOption
-    )
-    {
+    ) {
         return create(publicKeyCredentialCreationOptions, registrationEmulationOption, null);
     }
 
@@ -138,7 +137,7 @@ public class ClientPlatform {
     }
 
     private AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput>
-        processAuthenticationExtensions(AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
+    processAuthenticationExtensions(AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
 
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs<>();
@@ -159,8 +158,8 @@ public class ClientPlatform {
     }
 
     public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions,
-                                                                   CollectedClientData collectedClientData,
-                                                                   AuthenticationEmulationOption authenticationEmulationOption) {
+                                                                                                        CollectedClientData collectedClientData,
+                                                                                                        AuthenticationEmulationOption authenticationEmulationOption) {
 
         NoAuthenticatorSuccessException noAuthenticatorSuccessException = new NoAuthenticatorSuccessException();
         if (authenticatorAdaptor == null) {

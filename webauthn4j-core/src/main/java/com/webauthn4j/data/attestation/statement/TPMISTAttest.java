@@ -23,14 +23,14 @@ import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
 
-public enum  TPMISTAttest {
-    TPM_ST_ATTEST_CERTIFY(new byte[]{(byte)0x80, (byte)0x17}),
-    TPM_ST_ATTEST_QUOTE(new byte[]{(byte)0x80, (byte)0x18}),
-    TPM_ST_ATTEST_SESSION_AUDIT(new byte[]{(byte)0x80, (byte)0x16}),
-    TPM_ST_ATTEST_COMMAND_AUDIT(new byte[]{(byte)0x80, (byte)0x15}),
-    TPM_ST_ATTEST_TIME(new byte[]{(byte)0x80, (byte)0x19}),
-    TPM_ST_ATTEST_CREATION(new byte[]{(byte)0x80, (byte)0x1A}),
-    TPM_ST_ATTEST_NV(new byte[]{(byte)0x80, (byte)0x14});
+public enum TPMISTAttest {
+    TPM_ST_ATTEST_CERTIFY(new byte[]{(byte) 0x80, (byte) 0x17}),
+    TPM_ST_ATTEST_QUOTE(new byte[]{(byte) 0x80, (byte) 0x18}),
+    TPM_ST_ATTEST_SESSION_AUDIT(new byte[]{(byte) 0x80, (byte) 0x16}),
+    TPM_ST_ATTEST_COMMAND_AUDIT(new byte[]{(byte) 0x80, (byte) 0x15}),
+    TPM_ST_ATTEST_TIME(new byte[]{(byte) 0x80, (byte) 0x19}),
+    TPM_ST_ATTEST_CREATION(new byte[]{(byte) 0x80, (byte) 0x1A}),
+    TPM_ST_ATTEST_NV(new byte[]{(byte) 0x80, (byte) 0x14});
 
     private final byte[] value;
 
@@ -41,36 +41,28 @@ public enum  TPMISTAttest {
     public static TPMISTAttest create(byte[] value) {
         if (Arrays.equals(value, TPM_ST_ATTEST_CERTIFY.value)) {
             return TPM_ST_ATTEST_CERTIFY;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_QUOTE.value)) {
-                return TPM_ST_ATTEST_QUOTE;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_SESSION_AUDIT.value)) {
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_QUOTE.value)) {
+            return TPM_ST_ATTEST_QUOTE;
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_SESSION_AUDIT.value)) {
             return TPM_ST_ATTEST_SESSION_AUDIT;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_COMMAND_AUDIT.value)) {
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_COMMAND_AUDIT.value)) {
             return TPM_ST_ATTEST_COMMAND_AUDIT;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_TIME.value)) {
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_TIME.value)) {
             return TPM_ST_ATTEST_TIME;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_CREATION.value)) {
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_CREATION.value)) {
             return TPM_ST_ATTEST_CREATION;
-        }
-        else if (Arrays.equals(value, TPM_ST_ATTEST_NV.value)) {
+        } else if (Arrays.equals(value, TPM_ST_ATTEST_NV.value)) {
             return TPM_ST_ATTEST_NV;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("value is out of range");
         }
     }
 
     @JsonCreator
     private static TPMISTAttest deserialize(byte[] value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TPMISTAttest.class);
         }
     }

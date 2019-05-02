@@ -87,7 +87,7 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
     }
 
     @Test
-    void test(){
+    void test() {
         assertThat(target.isFullChainProhibited()).isFalse();
     }
 }

@@ -53,7 +53,7 @@ class AuthenticatorDataSerializerTest {
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
         AuthenticatorData restored = cborConverter.readValue(result, AuthenticatorData.class);
-        
+
         //Then
 
         assertAll(

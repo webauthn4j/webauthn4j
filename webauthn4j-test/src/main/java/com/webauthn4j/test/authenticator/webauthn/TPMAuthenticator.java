@@ -67,12 +67,12 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
         builder.addSubjectAlternativeNamesExtension("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
 
-        if(attestationOption.isCAFlagInBasicConstraints()){
+        if (attestationOption.isCAFlagInBasicConstraints()) {
             builder.addBasicConstraintsExtension();
         }
-        if(attestationOption instanceof TPMAttestationOption){
+        if (attestationOption instanceof TPMAttestationOption) {
             TPMAttestationOption tpmAttestationOption = (TPMAttestationOption) attestationOption;
-            if(tpmAttestationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()){
+            if (tpmAttestationOption.isTcgKpAIKCertificateFlagInExtendedKeyUsage()) {
                 builder.addExtendedKeyUsageExtension(KeyPurposeId.getInstance(new ASN1ObjectIdentifier("2.23.133.8.3")));
             }
         }
@@ -110,7 +110,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         byte[] authPolicy = Base64UrlUtil.decode("nf_L82w4OuaZ-5ho3G3LidcVOIS-KAOSLBJBWL-tIq4");
         TPMUPublicId unique = null;
         TPMUPublicParms parameters = null;
-        if(credentialPublicKey instanceof ECPublicKey) {
+        if (credentialPublicKey instanceof ECPublicKey) {
             ECPublicKey ecPublicKey = (ECPublicKey) credentialPublicKey;
             EllipticCurve curve = ecPublicKey.getParams().getCurve();
             parameters = new TPMSECCParms(

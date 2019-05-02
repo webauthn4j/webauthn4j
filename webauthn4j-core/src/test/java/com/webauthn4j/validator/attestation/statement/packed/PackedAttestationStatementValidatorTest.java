@@ -20,9 +20,9 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
@@ -45,7 +45,10 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,6 +66,35 @@ class PackedAttestationStatementValidatorTest {
     private String challengeString = "KG8gySc5IaMvPQOWJz93R4OQQb3mdGjQwkQ89_HPe-E";
     private byte[] tokenBindingId = null;
 
+    private static AttestationCertificatePath generateCertPath(KeyPair pair, String signAlg) {
+
+        try {
+            Provider bcProvider = new BouncyCastleProvider();
+            //Security.addProvider(bcProvider);
+
+            long now = System.currentTimeMillis();
+            Date from = new Date(now);
+            Date to = new Date(from.getTime() + TimeUnit.DAYS.toMillis(1));
+
+            X500Name dnName = new X500Name("C=ORG, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
+            BigInteger certSerialNumber = BigInteger.ZERO;
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(from);
+            calendar.add(Calendar.YEAR, 1);
+
+            ContentSigner contentSigner = new JcaContentSignerBuilder(signAlg).build(pair.getPrivate());
+            JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(dnName, certSerialNumber, from, to, dnName, pair.getPublic());
+
+            BasicConstraints basicConstraints = new BasicConstraints(false);
+            certBuilder.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, basicConstraints);
+
+            X509Certificate certificate = new JcaX509CertificateConverter().setProvider(bcProvider).getCertificate(certBuilder.build(contentSigner));
+            return new AttestationCertificatePath(Collections.singletonList(certificate));
+        } catch (OperatorCreationException | CertificateException | CertIOException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
 
     @Test
     void validate_with_ECx5c_test() {
@@ -168,37 +200,6 @@ class PackedAttestationStatementValidatorTest {
 
         validator.validate(registrationObject);
     }
-
-    private static AttestationCertificatePath generateCertPath(KeyPair pair, String signAlg){
-
-        try {
-            Provider bcProvider = new BouncyCastleProvider();
-            //Security.addProvider(bcProvider);
-
-            long now = System.currentTimeMillis();
-            Date from = new Date(now);
-            Date to = new Date(from.getTime() + TimeUnit.DAYS.toMillis(1));
-
-            X500Name dnName = new X500Name("C=ORG, O=Dummy Org, OU=Authenticator Attestation, CN=Dummy");
-            BigInteger certSerialNumber = BigInteger.ZERO;
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(from);
-            calendar.add(Calendar.YEAR, 1);
-
-            ContentSigner contentSigner = new JcaContentSignerBuilder(signAlg).build(pair.getPrivate());
-            JcaX509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(dnName, certSerialNumber, from, to, dnName, pair.getPublic());
-
-            BasicConstraints basicConstraints = new BasicConstraints(false);
-            certBuilder.addExtension(new ASN1ObjectIdentifier("2.5.29.19"), true, basicConstraints);
-
-            X509Certificate certificate = new JcaX509CertificateConverter().setProvider(bcProvider).getCertificate(certBuilder.build(contentSigner));
-            return new AttestationCertificatePath(Collections.singletonList(certificate));
-        } catch (OperatorCreationException | CertificateException | CertIOException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-    }
-
 
     private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(data);

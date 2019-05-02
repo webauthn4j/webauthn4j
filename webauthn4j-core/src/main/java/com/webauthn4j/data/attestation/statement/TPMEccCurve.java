@@ -42,10 +42,6 @@ public enum TPMEccCurve {
         this.value = value;
     }
 
-    public byte[] getBytes() {
-        return UnsignedNumberUtil.toBytes(getValue());
-    }
-
     public static TPMEccCurve create(int value) {
         switch (value) {
             case 0x0000:
@@ -84,12 +80,15 @@ public enum TPMEccCurve {
 
     @JsonCreator
     private static TPMEccCurve deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TPMEccCurve.class);
         }
+    }
+
+    public byte[] getBytes() {
+        return UnsignedNumberUtil.toBytes(getValue());
     }
 
     @JsonValue

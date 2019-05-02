@@ -56,14 +56,14 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
         TPMSClockInfo clock = extractClockInfo(buffer);
         BigInteger firmwareVersion = UnsignedNumberUtil.getUnsignedLong(buffer);
         TPMUAttest attested = extractTPMUAttest(type, buffer);
-        if(buffer.remaining() > 0){
+        if (buffer.remaining() > 0) {
             throw new InvalidFormatException(p, "input byte array contains surplus data", value, TPMTPublic.class);
         }
 
         return new TPMSAttest(magic, type, qualifiedSigner, extraData, clock, firmwareVersion, attested);
     }
 
-    private TPMSClockInfo extractClockInfo(ByteBuffer buffer){
+    private TPMSClockInfo extractClockInfo(ByteBuffer buffer) {
         BigInteger clock = UnsignedNumberUtil.getUnsignedLong(buffer);
         long resetCount = UnsignedNumberUtil.getUnsignedInt(buffer);
         long restartCount = UnsignedNumberUtil.getUnsignedInt(buffer);
@@ -72,7 +72,7 @@ public class TPMSAttestDeserializer extends StdDeserializer<TPMSAttest> {
     }
 
     private TPMUAttest extractTPMUAttest(TPMISTAttest type, ByteBuffer buffer) {
-        if(type != TPMISTAttest.TPM_ST_ATTEST_CERTIFY){
+        if (type != TPMISTAttest.TPM_ST_ATTEST_CERTIFY) {
             throw new NotImplementedException();
         }
 

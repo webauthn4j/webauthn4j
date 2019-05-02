@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.PublicKeyCredentialUserEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -45,7 +45,7 @@ class MetadataItemsProviderTest {
     private FidoMdsMetadataItemsProvider target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient);
     private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
 
-    public MetadataItemsProviderTest(){
+    public MetadataItemsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());

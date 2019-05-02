@@ -42,7 +42,7 @@ public class TPMTHA implements Serializable {
         return ArrayUtil.clone(digest);
     }
 
-    public byte[] getBytes(){
+    public byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(2 + digest.length);
         buffer.put(UnsignedNumberUtil.toBytes(hashAlg.getValue()));
         buffer.put(digest);

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 /**
  * The supported user verification method(s).
+ *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#user-verification-methods">§3.1 User Verification Methods</a>
  */
 public enum UserVerificationMethod {
@@ -73,10 +74,9 @@ public enum UserVerificationMethod {
 
     @JsonCreator
     private static UserVerificationMethod deserialize(long value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, UserVerificationMethod.class);
         }
     }

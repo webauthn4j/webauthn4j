@@ -62,14 +62,14 @@ public class TPMSECCParms implements TPMUPublicParms {
                 .array();
     }
 
-    public void validate(){
-        if(symmetric.length != 2){
+    public void validate() {
+        if (symmetric.length != 2) {
             throw new IllegalStateException("symmetric must be length 2");
         }
-        if(scheme.length != 2){
+        if (scheme.length != 2) {
             throw new IllegalStateException("scheme must be length 2");
         }
-        if(kdf.length != 2){
+        if (kdf.length != 2) {
             throw new IllegalStateException("kdf must be length 2");
         }
     }

@@ -18,9 +18,9 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *  Options for Credential Creation
+ * Options for Credential Creation
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialcreationoptions">
  * §5.4. Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)</a>

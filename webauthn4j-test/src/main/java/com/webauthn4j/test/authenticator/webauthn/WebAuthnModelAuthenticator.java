@@ -54,26 +54,21 @@ import java.util.stream.Collectors;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
-public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
+public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator {
 
     private static SecureRandom secureRandom = new SecureRandom();
-
+    // converter
+    protected CborConverter cborConverter;
     // property
     private AAGUID aaguid;
-
     private KeyPair attestationKeyPair;
     private CACertificatePath caCertificatePath;
     private PrivateKey attestationIssuerPrivateKey;
-
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private int counter;
-
     // feature flags
     private boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
-
-    // converter
-    protected CborConverter cborConverter;
     private AuthenticatorDataConverter authenticatorDataConverter;
 
     public WebAuthnModelAuthenticator(
@@ -294,7 +289,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return makeCredentialResponse;
     }
 
-    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest){
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest) {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs<>();
@@ -441,8 +436,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     protected abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
 
-    public X509Certificate getAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption){
-        switch (attestationOption.getX509CertificateVersion()){
+    public X509Certificate getAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
+        switch (attestationOption.getX509CertificateVersion()) {
             case 1:
                 return TestAttestationUtil.createV1DummyCertificate();
             case 3:
@@ -464,8 +459,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return attestationIssuerPrivateKey;
     }
 
-    public X509Certificate getAttestationIssuerCertificate(){
-        if(caCertificatePath.isEmpty()){
+    public X509Certificate getAttestationIssuerCertificate() {
+        if (caCertificatePath.isEmpty()) {
             throw new IllegalStateException("caCertificatePath is empty");
         }
         return caCertificatePath.get(0);

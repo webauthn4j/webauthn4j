@@ -51,7 +51,7 @@ class WebAuthnRegistrationContextTest {
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -95,14 +95,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceA.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceA.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceA.getTransports()).isEqualTo(transports),
-                ()-> assertThat(instanceA.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
-                ()-> assertThat(instanceA.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceA.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceA.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceA.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceA.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceA.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceA.getTransports()).isEqualTo(transports),
+                () -> assertThat(instanceA.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
+                () -> assertThat(instanceA.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceA.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceA.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceA.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
         WebAuthnRegistrationContext instanceB = new WebAuthnRegistrationContext(
@@ -116,14 +116,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceB.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceB.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceB.getTransports()).isEqualTo(transports),
-                ()-> assertThat(instanceB.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
-                ()-> assertThat(instanceB.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceB.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceB.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceB.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceB.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceB.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceB.getTransports()).isEqualTo(transports),
+                () -> assertThat(instanceB.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
+                () -> assertThat(instanceB.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceB.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceB.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceB.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
         WebAuthnRegistrationContext instanceC = new WebAuthnRegistrationContext(
@@ -135,14 +135,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceC.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceC.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceC.getTransports()).isEqualTo(transports),
-                ()-> assertThat(instanceC.getClientExtensionsJSON()).isNull(),
-                ()-> assertThat(instanceC.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceC.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceC.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceC.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceC.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceC.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceC.getTransports()).isEqualTo(transports),
+                () -> assertThat(instanceC.getClientExtensionsJSON()).isNull(),
+                () -> assertThat(instanceC.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceC.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceC.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceC.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
         WebAuthnRegistrationContext instanceD = new WebAuthnRegistrationContext(
@@ -155,14 +155,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceD.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceD.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceD.getTransports()).isEqualTo(Collections.emptySet()),
-                ()-> assertThat(instanceD.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
-                ()-> assertThat(instanceD.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceD.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceD.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceD.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceD.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceD.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceD.getTransports()).isEqualTo(Collections.emptySet()),
+                () -> assertThat(instanceD.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
+                () -> assertThat(instanceD.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceD.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceD.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceD.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
         WebAuthnRegistrationContext instanceE = new WebAuthnRegistrationContext(
@@ -176,14 +176,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceE.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceE.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceE.getTransports()).isEqualTo(Collections.emptySet()),
-                ()-> assertThat(instanceE.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
-                ()-> assertThat(instanceE.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceE.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceE.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceE.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceE.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceE.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceE.getTransports()).isEqualTo(Collections.emptySet()),
+                () -> assertThat(instanceE.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON),
+                () -> assertThat(instanceE.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceE.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceE.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceE.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
         WebAuthnRegistrationContext instanceF = new WebAuthnRegistrationContext(
@@ -194,14 +194,14 @@ class WebAuthnRegistrationContextTest {
         );
 
         assertAll(
-                ()-> assertThat(instanceF.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
-                ()-> assertThat(instanceF.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
-                ()-> assertThat(instanceF.getTransports()).isEqualTo(Collections.emptySet()),
-                ()-> assertThat(instanceF.getClientExtensionsJSON()).isNull(),
-                ()-> assertThat(instanceF.getServerProperty()).isEqualTo(serverProperty),
-                ()-> assertThat(instanceF.isUserPresenceRequired()).isEqualTo(true),
-                ()-> assertThat(instanceF.isUserVerificationRequired()).isEqualTo(true),
-                ()-> assertThat(instanceF.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
+                () -> assertThat(instanceF.getClientDataJSON()).isEqualTo(registrationRequest.getClientDataJSON()),
+                () -> assertThat(instanceF.getAttestationObject()).isEqualTo(registrationRequest.getAttestationObject()),
+                () -> assertThat(instanceF.getTransports()).isEqualTo(Collections.emptySet()),
+                () -> assertThat(instanceF.getClientExtensionsJSON()).isNull(),
+                () -> assertThat(instanceF.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(instanceF.isUserPresenceRequired()).isEqualTo(true),
+                () -> assertThat(instanceF.isUserVerificationRequired()).isEqualTo(true),
+                () -> assertThat(instanceF.getExpectedExtensionIds()).isEqualTo(Collections.emptyList())
         );
 
 

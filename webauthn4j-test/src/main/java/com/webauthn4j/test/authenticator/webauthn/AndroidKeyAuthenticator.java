@@ -29,7 +29,7 @@ import org.bouncycastle.asn1.*;
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;
 
-public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
+public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
     protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
@@ -66,7 +66,7 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator{
         return createAttestationCertificate(attestationStatementRequest, new AndroidKeyAttestationOption());
     }
 
-    private ASN1Encodable createKeyDescriptor(byte[] clientDataHash){
+    private ASN1Encodable createKeyDescriptor(byte[] clientDataHash) {
         ASN1Integer attestationVersion = new ASN1Integer(2);
         ASN1Enumerated attestationSecurityLevel = new ASN1Enumerated(0);
         ASN1Integer keymasterVersion = new ASN1Integer(1);

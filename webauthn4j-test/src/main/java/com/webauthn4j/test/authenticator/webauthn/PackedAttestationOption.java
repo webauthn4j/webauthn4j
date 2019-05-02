@@ -18,7 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 public class PackedAttestationOption extends AttestationOption {
 
-    public PackedAttestationOption(){
+    public PackedAttestationOption() {
         this.subjectDN = "OU=Authenticator Attestation, CN=Dummy Authenticator, O=SharpLab., C=US";
     }
 

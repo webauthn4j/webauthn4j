@@ -30,7 +30,7 @@ import java.security.cert.X509Certificate;
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
@@ -45,14 +45,14 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
     }
 
     @Override
-    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption){
+    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
         AttestationCertificateBuilder builder =
                 new AttestationCertificateBuilder(
                         getAttestationIssuerCertificate(),
                         new X500Principal(attestationOption.getSubjectDN()),
                         this.getAttestationKeyPair().getPublic());
 
-        if(attestationOption.isCAFlagInBasicConstraints()){
+        if (attestationOption.isCAFlagInBasicConstraints()) {
             builder.addBasicConstraintsExtension();
         }
         return builder.build(this.getAttestationIssuerPrivateKey());

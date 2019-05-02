@@ -126,10 +126,11 @@ public class JsonConverter implements Serializable {
 
     /**
      * Returns the {@link ObjectMapper} configured for JSON processing
+     *
      * @return the {@link ObjectMapper} configured for JSON processing
      */
     private ObjectMapper getJsonMapper() {
-        if(!jsonMapperInitialized){
+        if (!jsonMapperInitialized) {
             jsonMapper.registerModule(new WebAuthnJSONModule(this, getCborConverter()));
             jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
             jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -141,6 +142,7 @@ public class JsonConverter implements Serializable {
 
     /**
      * Returns the twined {@link CborConverter}
+     *
      * @return the twined {@link CborConverter}
      */
     public CborConverter getCborConverter() {

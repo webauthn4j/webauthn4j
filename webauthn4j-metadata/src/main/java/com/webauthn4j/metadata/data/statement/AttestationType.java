@@ -23,7 +23,8 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported attestation type(s). (e.g. ATTESTATION_BASIC_FULL(0x3E07), ATTESTATION_BASIC_SURROGATE(0x3E08)).
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a> 
+ *
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
  */
 public enum AttestationType {
 
@@ -58,10 +59,9 @@ public enum AttestationType {
 
     @JsonCreator
     private static AttestationType deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
         }
     }

@@ -30,17 +30,17 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  * §5.10.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
 public enum AuthenticatorTransport {
-    
+
     /**
      * Indicates the respective authenticator can be contacted over removable USB.
      */
     USB("usb"),
-    
+
     /**
      * Indicates the respective authenticator can be contacted over Near Field Communication (NFC).
      */
     NFC("nfc"),
-    
+
     /**
      * Indicates the respective authenticator can be contacted over Bluetooth Smart
      * (Bluetooth Low Energy / BLE).
