@@ -33,10 +33,7 @@ import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionA
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.test.CACertificatePath;
-import com.webauthn4j.test.KeyUtil;
-import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.*;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -107,8 +104,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     public PublicKeyCredentialSource lookup(byte[] credentialId) {
 
         if (!isCapableOfStoringClientSideResidentCredential()) {
-            PublicKeyCredentialSource credentialSource = null; //TODO: decrypt credentialId into a credSource;
-            return credentialSource;
+            byte[] cbor = CipherUtil.decrypt(credentialId, attestationKeyPair.getPrivate());
+            return cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
         }
         for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
             if (Arrays.equals(credentialId, entry.getValue().getId())) {
@@ -233,7 +230,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             else {
                 // Let credentialId be the result of serializing and encrypting credentialSource
                 // so that only this authenticator can decrypt it.
-                credentialId = null; // TODO
+
+                byte[] data = cborConverter.writeValueAsBytes(credentialSource);
+                credentialId = CipherUtil.encrypt(data, attestationKeyPair.getPublic());
             }
         }
         // If any error occurred while creating the new credential object,
