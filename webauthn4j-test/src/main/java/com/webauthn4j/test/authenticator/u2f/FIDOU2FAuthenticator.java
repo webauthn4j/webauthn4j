@@ -30,19 +30,20 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.util.Arrays;
 
-@WIP
 public class FIDOU2FAuthenticator {
 
     public static final byte FLAG_OFF = (byte) 0b00000000;
-    public static final byte FLAG_UP = (byte) 0b00000001;
+    public static final byte FLAG_UP = (byte) 0b00000001; // user presence
     private static SecureRandom secureRandom = new SecureRandom();
 
+    // property
     private PrivateKey attestationPrivateKey;
     private X509Certificate attestationPublicKeyCertificate;
-
     private long counter;
-    private boolean countUpEnabled = true;
     private byte flags = FLAG_UP;
+
+    // feature flags
+    private boolean countUpEnabled = true;
 
     public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter) {
         AssertUtil.notNull(attestationPrivateKey, "attestationPrivateKey must not be null");
