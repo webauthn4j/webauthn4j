@@ -29,8 +29,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.test.TestConstants;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
@@ -53,7 +53,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
 
     private Origin origin = new Origin("http://localhost");
-    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(TestConstants.ANDROID_SAFETY_NET_AUTHENTICATOR);
+    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.ANDROID_SAFETY_NET_AUTHENTICATOR);
     private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     private AndroidSafetyNetAttestationStatementValidator androidSafetyNetAttestationStatementValidator = new AndroidSafetyNetAttestationStatementValidator();
     private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();

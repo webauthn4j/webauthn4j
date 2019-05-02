@@ -25,7 +25,7 @@ import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.TestConstants;
+import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
@@ -82,7 +82,7 @@ class NullAttestationStatementValidatorTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
-        WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(TestConstants.PACKED_AUTHENTICATOR);
+        WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
         ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();

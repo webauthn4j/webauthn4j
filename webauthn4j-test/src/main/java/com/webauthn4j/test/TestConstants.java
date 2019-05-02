@@ -17,11 +17,6 @@
 package com.webauthn4j.test;
 
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
-import com.webauthn4j.test.authenticator.webauthn.AndroidKeyAuthenticator;
-import com.webauthn4j.test.authenticator.webauthn.AndroidSafetyNetAuthenticator;
-import com.webauthn4j.test.authenticator.webauthn.PackedAuthenticator;
-import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -35,15 +30,5 @@ public class TestConstants {
     public static final PrivateKey GENERIC_3TIER_ATTESTATION_PRIVATE_KEY = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
 
     public static final AttestationCertificatePath GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH = TestAttestationUtil.load3tierTestAttestationCertificatePath();
-
-    public static final PackedAuthenticator PACKED_AUTHENTICATOR = new PackedAuthenticator();
-
-    public static final AndroidKeyAuthenticator ANDROID_KEY_AUTHENTICATOR = new AndroidKeyAuthenticator();
-
-    public static final AndroidSafetyNetAuthenticator ANDROID_SAFETY_NET_AUTHENTICATOR = new AndroidSafetyNetAuthenticator();
-
-    public static final TPMAuthenticator TPM_AUTHENTICATOR = new TPMAuthenticator();
-
-    public static final FIDOU2FAuthenticator FIDO_U2F_AUTHENTICATOR = new FIDOU2FAuthenticator();
 
 }

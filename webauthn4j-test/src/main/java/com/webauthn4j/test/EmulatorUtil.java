@@ -20,14 +20,18 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
-import com.webauthn4j.test.authenticator.webauthn.PackedAuthenticator;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnModelAuthenticator;
+import com.webauthn4j.test.authenticator.webauthn.*;
 import com.webauthn4j.test.client.ClientPlatform;
 
 public class EmulatorUtil {
 
-    private static Origin origin = new Origin("http://example.com");
+    public static final PackedAuthenticator PACKED_AUTHENTICATOR = new PackedAuthenticator();
+    public static final AndroidKeyAuthenticator ANDROID_KEY_AUTHENTICATOR = new AndroidKeyAuthenticator();
+    public static final AndroidSafetyNetAuthenticator ANDROID_SAFETY_NET_AUTHENTICATOR = new AndroidSafetyNetAuthenticator();
+    public static final TPMAuthenticator TPM_AUTHENTICATOR = new TPMAuthenticator();
+    public static final FIDOU2FAuthenticator FIDO_U2F_AUTHENTICATOR = new FIDOU2FAuthenticator();
+
+    private static final Origin origin = new Origin("http://example.com");
 
     private EmulatorUtil(){}
 
