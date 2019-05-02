@@ -30,7 +30,7 @@ import java.security.cert.X509Certificate;
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
@@ -38,7 +38,7 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
             signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
 
-        attestationOption = attestationOption == null ? new PackedAttestationOption() : attestationOption;
+        AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new PackedAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);

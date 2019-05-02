@@ -40,10 +40,9 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
     @Override
     protected AttestationStatement createAttestationStatement(
             AttestationStatementRequest attestationStatementRequest,
-            RegistrationEmulationOption registrationEmulationOption,
-            AttestationOption attestationOption) {
+            RegistrationEmulationOption registrationEmulationOption) {
 
-        attestationOption = attestationOption == null ? new AndroidSafetyNetAttestationOption() : attestationOption;
+        AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new AndroidSafetyNetAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
 

@@ -118,7 +118,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return null;
     }
 
-    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
+    public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption) {
 
         PublicKeyCredentialRpEntity rpEntity = makeCredentialRequest.getRpEntity();
 
@@ -275,7 +275,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte[] clientDataHash = makeCredentialRequest.getHash();
 
         AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
-        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption, attestationOption);
+        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -305,7 +305,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     }
 
     public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
-        return makeCredential(makeCredentialRequest, new RegistrationEmulationOption(), null);
+        return makeCredential(makeCredentialRequest, new RegistrationEmulationOption());
     }
 
     public GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption) {
@@ -432,7 +432,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         }
     }
 
-    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
+    protected abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
     protected abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
 

@@ -21,7 +21,7 @@ import com.webauthn4j.test.client.RegistrationEmulationOption;
 
 public interface WebAuthnAuthenticator {
 
-    MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption);
+    MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest, RegistrationEmulationOption registrationEmulationOption);
 
     GetAssertionResponse getAssertion(GetAssertionRequest getAssertionRequest, AuthenticationEmulationOption authenticationEmulationOption);
 

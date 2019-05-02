@@ -32,14 +32,14 @@ import java.security.cert.X509Certificate;
 public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
-    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption, AttestationOption attestationOption) {
+    protected AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
             signature = TestDataUtil.calculateSignature(attestationStatementRequest.getCredentialKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
-        attestationOption = attestationOption == null ? new AndroidKeyAttestationOption() : attestationOption;
+        AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new AndroidKeyAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate =
                 getAttestationCertificate(attestationStatementRequest, attestationOption);
 

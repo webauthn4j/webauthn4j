@@ -61,7 +61,7 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
         makeCredentialRequest.setCredTypesAndPublicKeyAlgs(publicKeyCredentialCreationOptions.getPubKeyCredParams());
         makeCredentialRequest.setExcludeCredentialDescriptorList(publicKeyCredentialCreationOptions.getExcludeCredentials());
         makeCredentialRequest.setExtensions(publicKeyCredentialCreationOptions.getExtensions());
-        MakeCredentialResponse makeCredentialResponse = webAuthnAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption, attestationOption);
+        MakeCredentialResponse makeCredentialResponse = webAuthnAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
 
         return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
     }
