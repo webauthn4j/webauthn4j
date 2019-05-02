@@ -87,13 +87,14 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialRequestOptions.getUserVerification());
 
-        GetAssertionRequest getAssertionRequest = new GetAssertionRequest();
-        getAssertionRequest.setRpId(publicKeyCredentialRequestOptions.getRpId());
-        getAssertionRequest.setHash(clientDataHash);
-        getAssertionRequest.setAllowCredentialDescriptorList(publicKeyCredentialRequestOptions.getAllowCredentials());
-        getAssertionRequest.setRequireUserPresence(true);
-        getAssertionRequest.setRequireUserVerification(requireUserVerification);
-        getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
+        GetAssertionRequest getAssertionRequest = new GetAssertionRequest(
+                publicKeyCredentialRequestOptions.getRpId(),
+                clientDataHash,
+                publicKeyCredentialRequestOptions.getAllowCredentials(),
+                true,
+                requireUserVerification,
+                publicKeyCredentialRequestOptions.getExtensions()
+        );
 
         GetAssertionResponse getAssertionResponse = webAuthnAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
 
