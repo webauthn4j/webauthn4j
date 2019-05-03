@@ -19,26 +19,26 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 
 import java.util.Objects;
 
 /**
  * Envelope class for WebAuthnRegistrationContext validation result
  */
-public class WebAuthnRegistrationContextValidationResponse<T extends ExtensionClientOutput> {
+public class WebAuthnRegistrationContextValidationResponse {
 
     // ~ Instance fields
     // ================================================================================================
 
     private CollectedClientData collectedClientData;
     private AttestationObject attestationObject;
-    private AuthenticationExtensionsClientOutputs<T> registrationExtensionsClientOutputs;
+    private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> registrationExtensionsClientOutputs;
 
     public WebAuthnRegistrationContextValidationResponse(
             CollectedClientData collectedClientData,
             AttestationObject attestationObject,
-            AuthenticationExtensionsClientOutputs<T> registrationExtensionsClientOutputs) {
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> registrationExtensionsClientOutputs) {
         this.collectedClientData = collectedClientData;
         this.attestationObject = attestationObject;
         this.registrationExtensionsClientOutputs = registrationExtensionsClientOutputs;
@@ -52,7 +52,7 @@ public class WebAuthnRegistrationContextValidationResponse<T extends ExtensionCl
         return attestationObject;
     }
 
-    public AuthenticationExtensionsClientOutputs<T> getRegistrationExtensionsClientOutputs() {
+    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getRegistrationExtensionsClientOutputs() {
         return registrationExtensionsClientOutputs;
     }
 

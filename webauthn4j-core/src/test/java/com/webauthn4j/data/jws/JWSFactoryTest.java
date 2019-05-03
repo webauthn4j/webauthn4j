@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestAttestationUtil;
-import com.webauthn4j.util.KeyUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -31,7 +31,7 @@ class JWSFactoryTest {
 
     @Test
     void create_test(){
-        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestCertPath());
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestAttestationCertificatePath());
         Payload payload = new Payload();
         KeyPair keyPair = KeyUtil.createECKeyPair();
         JWS<Payload> jws = target.create(header, payload, keyPair.getPrivate());
