@@ -2,7 +2,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
-import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
@@ -17,7 +17,7 @@ import java.util.Objects;
  * Internal data transfer object for authentication data
  */
 @SuppressWarnings("Duplicates")
-public class AuthenticationObject {
+public class AuthenticationObject<A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> {
 
     //~ Instance fields
     // ================================================================================================
@@ -25,9 +25,9 @@ public class AuthenticationObject {
     private final byte[] credentialId;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
-    private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
+    private final AuthenticatorData<A> authenticatorData;
     private final byte[] authenticatorDataBytes;
-    private final AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<C> clientExtensions;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
 
@@ -35,9 +35,9 @@ public class AuthenticationObject {
             byte[] credentialId,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            AuthenticatorData<A> authenticatorData,
             byte[] authenticatorDataBytes,
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+            AuthenticationExtensionsClientOutputs<C> clientExtensions,
             ServerProperty serverProperty
     ) {
 
@@ -57,9 +57,9 @@ public class AuthenticationObject {
             byte[] credentialId,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            AuthenticatorData<A> authenticatorData,
             byte[] authenticatorDataBytes,
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+            AuthenticationExtensionsClientOutputs<C> clientExtensions,
             ServerProperty serverProperty,
             LocalDateTime timestamp) {
         this.credentialId = credentialId;
@@ -84,7 +84,7 @@ public class AuthenticationObject {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public AuthenticatorData<A> getAuthenticatorData() {
         return authenticatorData;
     }
 
@@ -92,7 +92,7 @@ public class AuthenticationObject {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<C> getClientExtensions() {
         return this.clientExtensions;
     }
 

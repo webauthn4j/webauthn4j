@@ -29,8 +29,8 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
@@ -108,7 +108,7 @@ public class WebAuthnAuthenticationContextValidator {
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(aData);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
         ServerProperty serverProperty = authenticationContext.getServerProperty();
 
@@ -118,7 +118,8 @@ public class WebAuthnAuthenticationContextValidator {
 
         validateAuthenticatorData(authenticatorData);
 
-        AuthenticationObject authenticationObject = new AuthenticationObject(
+        AuthenticationObject<AuthenticationExtensionAuthenticatorOutput, AuthenticationExtensionClientOutput>
+                authenticationObject = new AuthenticationObject<>(
                 credentialId, collectedClientData, cData, authenticatorData, aData, clientExtensions, authenticationContext.getServerProperty()
         );
 

@@ -19,8 +19,8 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +33,7 @@ class WebAuthnAuthenticationContextValidationResponseTest {
     void equals_hashCode_test() {
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
         WebAuthnAuthenticationContextValidationResponse instanceA =
                 new WebAuthnAuthenticationContextValidationResponse(clientData, authenticatorData, authenticationExtensionsClientOutputs);
         WebAuthnAuthenticationContextValidationResponse instanceB =
