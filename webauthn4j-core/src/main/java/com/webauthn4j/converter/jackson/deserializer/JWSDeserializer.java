@@ -34,7 +34,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class JWSDeserializer extends StdDeserializer<JWS> {
 
-    private JWSFactory jwsFactory;
+    private transient JWSFactory jwsFactory;
 
     public JWSDeserializer(JsonConverter jsonConverter) {
         super(JWS.class);

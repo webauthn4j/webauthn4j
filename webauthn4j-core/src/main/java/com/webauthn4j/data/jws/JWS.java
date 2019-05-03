@@ -61,6 +61,10 @@ public class JWS<T extends Serializable> implements Serializable {
         return ArrayUtil.clone(signature);
     }
 
+    /**
+     * Validates signature.
+     * @return true if it pass validation
+     */
     public boolean isValidSignature() {
         String signedData = headerString + "." + payloadString;
         try {
