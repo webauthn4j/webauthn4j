@@ -118,8 +118,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         validateAuthenticatorData(authenticatorData);
 
-        AuthenticationObject<AuthenticationExtensionAuthenticatorOutput, AuthenticationExtensionClientOutput>
-                authenticationObject = new AuthenticationObject<>(
+        AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId, collectedClientData, cData, authenticatorData, aData, clientExtensions, authenticationContext.getServerProperty()
         );
 

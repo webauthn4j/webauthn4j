@@ -51,7 +51,7 @@ class AuthenticationObjectTest {
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
-        AuthenticationObject<AuthenticationExtensionAuthenticatorOutput, AuthenticationExtensionClientOutput> authenticationObject = new AuthenticationObject<>(
+        AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
                 clientData,
                 clientDataBytes,
@@ -86,7 +86,7 @@ class AuthenticationObjectTest {
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
 
-        AuthenticationObject<AuthenticationExtensionAuthenticatorOutput, AuthenticationExtensionClientOutput> instanceA = new AuthenticationObject<>(
+        AuthenticationObject instanceA = new AuthenticationObject(
                 credentialId,
                 clientData,
                 clientDataBytes,
@@ -97,7 +97,7 @@ class AuthenticationObjectTest {
                 timestamp
         );
 
-        AuthenticationObject<AuthenticationExtensionAuthenticatorOutput, AuthenticationExtensionClientOutput> instanceB = new AuthenticationObject<>(
+        AuthenticationObject instanceB = new AuthenticationObject(
                 credentialId,
                 clientData,
                 clientDataBytes,
