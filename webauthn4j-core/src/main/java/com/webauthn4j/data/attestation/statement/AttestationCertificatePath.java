@@ -40,11 +40,11 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> im
     public AttestationCertificatePath(X509Certificate attestationCertificate, List<X509Certificate> caCertificates) {
         AssertUtil.notNull(attestationCertificate, "attestationCertificate must not be null");
         AssertUtil.notNull(caCertificates, "caCertificates must not be null");
-        List<X509Certificate> certificates = new ArrayList<>();
-        certificates.add(attestationCertificate);
-        certificates.addAll(caCertificates);
-        this.size = certificates.size();
-        this.certificates = certificates.toArray(new X509Certificate[this.size]);
+        List<X509Certificate> buffer = new ArrayList<>();
+        buffer.add(attestationCertificate);
+        buffer.addAll(caCertificates);
+        this.size = buffer.size();
+        this.certificates = buffer.toArray(new X509Certificate[this.size]);
     }
 
     public AttestationCertificatePath() {

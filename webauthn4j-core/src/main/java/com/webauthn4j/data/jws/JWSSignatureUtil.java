@@ -18,6 +18,8 @@ package com.webauthn4j.data.jws;
 
 class JWSSignatureUtil {
 
+    private static final String INVALID_ECDSA_SIGNATURE_FORMAT = "Invalid ECDSA signature format";
+
     private JWSSignatureUtil() {
     }
 
@@ -86,7 +88,7 @@ class JWSSignatureUtil {
         int len = 2 + j + 2 + l;
 
         if (len > 255) {
-            throw new JWSException("Invalid ECDSA signature format");
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
         int offset;
@@ -127,7 +129,7 @@ class JWSSignatureUtil {
      */
     public static byte[] convertDerSignatureToJwsSignature(byte[] derSignature) {
         if (derSignature.length < 8 || derSignature[0] != 48) {
-            throw new JWSException("Invalid ECDSA signature format");
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
         int offset;
@@ -136,7 +138,7 @@ class JWSSignatureUtil {
         } else if (derSignature[1] == (byte) 0x81) {
             offset = 3;
         } else {
-            throw new JWSException("Invalid ECDSA signature format");
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
         byte rLength = derSignature[offset + 1];
@@ -159,7 +161,7 @@ class JWSSignatureUtil {
                 || (derSignature[offset - 1] & 0xff) != 2 + rLength + 2 + sLength
                 || derSignature[offset] != 2
                 || derSignature[offset + 2 + rLength] != 2) {
-            throw new JWSException("Invalid ECDSA signature format");
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
         final byte[] concatSignature = new byte[2 * rawLen];
