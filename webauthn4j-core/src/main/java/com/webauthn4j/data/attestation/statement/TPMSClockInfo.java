@@ -75,7 +75,7 @@ public class TPMSClockInfo implements Serializable {
         buffer.put(UnsignedNumberUtil.toBytes(getClock()));
         buffer.put(UnsignedNumberUtil.toBytes(getResetCount()));
         buffer.put(UnsignedNumberUtil.toBytes(getRestartCount()));
-        buffer.put(isSafe() ? (byte)0x01 : (byte)0x00);
+        buffer.put(isSafe() ? (byte) 0x01 : (byte) 0x00);
         return buffer.array();
     }
 }

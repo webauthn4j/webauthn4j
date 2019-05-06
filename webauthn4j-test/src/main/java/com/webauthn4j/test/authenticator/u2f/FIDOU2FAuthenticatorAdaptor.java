@@ -36,6 +36,7 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
+import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -50,15 +51,35 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private FIDOU2FAuthenticator fidoU2FAuthenticator;
 
-    private FIDOU2FAuthenticator fidoU2FAuthenticator = new FIDOU2FAuthenticator();
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+    private CollectedClientDataConverter collectedClientDataConverter;
+    private AuthenticatorDataConverter authenticatorDataConverter;
+
+
+    public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator, JsonConverter jsonConverter) {
+        this.fidoU2FAuthenticator = fidoU2FAuthenticator;
+
+        CborConverter cborConverter = jsonConverter.getCborConverter();
+        this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+    }
+
+    public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator) {
+        this(fidoU2FAuthenticator, new JsonConverter());
+    }
+
+    public FIDOU2FAuthenticatorAdaptor() {
+        this(new FIDOU2FAuthenticator());
+    }
 
     @Override
-    public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
+    public CredentialCreationResponse register(
+            PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+            CollectedClientData collectedClientData,
+            RegistrationEmulationOption registrationEmulationOption,
+            AttestationOption attestationOption
+    ) {
         String rpId = publicKeyCredentialCreationOptions.getRp().getId();
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(rpId.getBytes(StandardCharsets.UTF_8));
 
@@ -90,7 +111,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
                                                CollectedClientData collectedClientData) {
-        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
+        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption(), null);
     }
 
     @Override
@@ -131,7 +152,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
         return authenticate(publicKeyCredentialRequestOptions, collectedClientData, new AuthenticationEmulationOption());
     }
 
-    public FIDOU2FAuthenticator getFidoU2FAuthenticator() {
+    public FIDOU2FAuthenticator getFIDOU2FAuthenticator() {
         return fidoU2FAuthenticator;
     }
 }

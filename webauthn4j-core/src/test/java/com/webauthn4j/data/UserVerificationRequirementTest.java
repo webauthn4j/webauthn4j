@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.data.UserVerificationRequirement;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

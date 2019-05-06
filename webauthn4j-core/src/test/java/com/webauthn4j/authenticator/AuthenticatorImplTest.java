@@ -19,7 +19,7 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class AuthenticatorImplTest {
     @Test
     void constructor_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        AttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestedCredentialData, attestationStatement);
 
         assertAll(
@@ -48,7 +48,7 @@ class AuthenticatorImplTest {
     @Test
     void getter_setter_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
-        AttestationStatement attestationStatement = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
         authenticator.setAttestedCredentialData(attestedCredentialData);

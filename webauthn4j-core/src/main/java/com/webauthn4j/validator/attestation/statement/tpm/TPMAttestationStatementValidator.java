@@ -19,7 +19,6 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
-import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -199,7 +198,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         } else if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique) {
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
             TPMSECCParms parms = (TPMSECCParms) pubArea.getParameters();
-            EllipticCurve curveInParms = getCurveFromTPMEccCurve(parms.getCurveId());
+            EllipticCurve curveInParms = parms.getCurveId().getEllipticCurve();
             ECCUnique eccUnique = (ECCUnique) publicKeyInPubArea;
             if (ecPublicKey.getParams().getCurve().equals(curveInParms) &&
                     ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccUnique.getX())) &&
@@ -210,20 +209,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
     }
 
-    EllipticCurve getCurveFromTPMEccCurve(TPMEccCurve curveId) {
-        switch (curveId) {
-            case TPM_ECC_NIST_P256:
-                return ECUtil.P_256_SPEC.getCurve();
-            case TPM_ECC_NIST_P384:
-                return ECUtil.P_384_SPEC.getCurve();
-            case TPM_ECC_NIST_P521:
-                return ECUtil.P_521_SPEC.getCurve();
-            default:
-                throw new NotImplementedException();
-        }
-    }
 
-    private void validateAikCert(X509Certificate certificate) {
+    void validateAikCert(X509Certificate certificate) {
         try {
             /// TPM attestation certificate MUST have the following fields/extensions:
             /// Version MUST be set to 3.
@@ -237,7 +224,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
             validateSubjectAlternativeName(certificate);
             /// The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
-            if (!certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
+            if (certificate.getExtendedKeyUsage() == null || !certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
                 throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID");
             }
             /// The Basic Constraints extension MUST have the CA component set to false.
@@ -289,7 +276,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private String decodeAttr(byte[] attr) throws IOException {
         String value = null;
-        if(attr != null){
+        if (attr != null) {
             Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
             attrAsn1Utf8String.decode(attr);
             value = attrAsn1Utf8String.getValue();
@@ -298,18 +285,17 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private Map<String, byte[]> convertAttributesToMap(Attributes attributes) {
-        try{
+        try {
             NamingEnumeration<String> attributesIDs = attributes.getIDs();
             Map<String, byte[]> result = new HashMap<>();
             while (attributesIDs.hasMore()) {
                 String aid = attributesIDs.next();
-                byte[] value = (byte[])attributes.get(aid).get();
+                byte[] value = (byte[]) attributes.get(aid).get();
 
                 result.put(aid, value);
             }
             return result;
-        }
-        catch (NamingException e){
+        } catch (NamingException e) {
             throw new BadAttestationStatementException("Failed to parse the TPM attestation attributes", e);
         }
     }

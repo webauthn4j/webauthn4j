@@ -17,7 +17,7 @@
 package com.webauthn4j.test.authenticator.u2f;
 
 import com.webauthn4j.test.KeyUtil;
-import com.webauthn4j.test.TestDataConstants;
+import com.webauthn4j.test.TestConstants;
 import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -30,19 +30,20 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.util.Arrays;
 
-@WIP
 public class FIDOU2FAuthenticator {
 
     public static final byte FLAG_OFF = (byte) 0b00000000;
-    public static final byte FLAG_UP = (byte) 0b00000001;
-    private SecureRandom secureRandom = new SecureRandom();
+    public static final byte FLAG_UP = (byte) 0b00000001; // user presence
+    private static SecureRandom secureRandom = new SecureRandom();
 
+    // property
     private PrivateKey attestationPrivateKey;
     private X509Certificate attestationPublicKeyCertificate;
-
     private long counter;
-    private boolean countUpEnabled = true;
     private byte flags = FLAG_UP;
+
+    // feature flags
+    private boolean countUpEnabled = true;
 
     public FIDOU2FAuthenticator(PrivateKey attestationPrivateKey, X509Certificate attestationPublicKeyCertificate, int counter) {
         AssertUtil.notNull(attestationPrivateKey, "attestationPrivateKey must not be null");
@@ -54,7 +55,7 @@ public class FIDOU2FAuthenticator {
     }
 
     public FIDOU2FAuthenticator() {
-        this(TestDataConstants.GENERIC_2TIER_ATTESTATION_PRIVATE_KEY, TestDataConstants.GENERIC_2TIER_ATTESTATION_CERTIFICATE, 0);
+        this(TestConstants.GENERIC_2TIER_ATTESTATION_PRIVATE_KEY, TestConstants.GENERIC_2TIER_ATTESTATION_CERTIFICATE, 0);
     }
 
     public RegistrationResponse register(RegistrationRequest registrationRequest, RegistrationEmulationOption registrationEmulationOption) {

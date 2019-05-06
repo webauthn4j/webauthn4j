@@ -88,10 +88,9 @@ public enum AuthenticatorStatus {
 
     @JsonCreator
     private static AuthenticatorStatus deserialize(String value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorStatus.class);
         }
     }

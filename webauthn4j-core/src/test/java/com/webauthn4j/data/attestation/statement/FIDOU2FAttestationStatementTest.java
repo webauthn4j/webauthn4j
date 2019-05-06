@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -47,25 +48,25 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void getFormat_test() {
-        FIDOU2FAttestationStatement target = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement target = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         assertThat(target.getFormat()).isEqualTo("fido-u2f");
     }
 
 
     @Test
     void equals_test() {
-        FIDOU2FAttestationStatement instanceA = TestAttestationUtil.createFIDOU2FAttestationStatement();
-        FIDOU2FAttestationStatement instanceB = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void equals_test_with_not_equal_certificates() {
-        FIDOU2FAttestationStatement instanceA = TestAttestationUtil.createFIDOU2FAttestationStatement(
+        FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.loadFirefoxSWTokenAttestationCertificate()))
         );
-        FIDOU2FAttestationStatement instanceB = TestAttestationUtil.createFIDOU2FAttestationStatement(
+        FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate()))
         );
 
@@ -74,16 +75,16 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void hashCode_test() {
-        FIDOU2FAttestationStatement instanceA = TestAttestationUtil.createFIDOU2FAttestationStatement();
-        FIDOU2FAttestationStatement instanceB = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
         assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
     }
 
     @Test
     void hashCode_test_with_not_equal_certificates() {
-        FIDOU2FAttestationStatement instanceA = TestAttestationUtil.createFIDOU2FAttestationStatement();
-        FIDOU2FAttestationStatement instanceB = TestAttestationUtil.createFIDOU2FAttestationStatement(
+        FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement(
                 new AttestationCertificatePath(Collections.singletonList(TestAttestationUtil.loadFeitianU2FTokenAttestationCertificate()))
         );
 
@@ -92,7 +93,7 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void validate_test() {
-        FIDOU2FAttestationStatement instance = TestAttestationUtil.createFIDOU2FAttestationStatement();
+        FIDOU2FAttestationStatement instance = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         instance.validate();
     }
 
@@ -129,7 +130,7 @@ class FIDOU2FAttestationStatementTest {
     void validate_with_null_signature_test() {
         FIDOU2FAttestationStatement instance =
                 new FIDOU2FAttestationStatement(
-                        TestAttestationUtil.create2tierTestAuthenticatorCertPath(),
+                        TestAttestationUtil.load2tierTestAttestationCertificatePath(),
                         null
                 );
         assertThrows(ConstraintViolationException.class,

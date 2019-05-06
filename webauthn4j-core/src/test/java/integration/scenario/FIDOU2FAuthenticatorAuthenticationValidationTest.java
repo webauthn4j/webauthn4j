@@ -22,10 +22,6 @@ import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.data.AuthenticatorAssertionResponse;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.PublicKeyCredential;
-import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.ClientDataType;
@@ -346,7 +342,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     @Test
     void validate_assertion_with_UP_flag_off_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
-        fidou2FAuthenticatorAdaptor.getFidoU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
+        fidou2FAuthenticatorAdaptor.getFIDOU2FAuthenticator().setFlags(FIDOU2FAuthenticator.FLAG_OFF);
         clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
         String rpId = "example.com";
         long timeout = 0;

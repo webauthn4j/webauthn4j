@@ -68,10 +68,9 @@ public enum COSEKeyOperation {
 
     @JsonCreator
     private static COSEKeyOperation deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, COSEKeyOperation.class);
         }
     }

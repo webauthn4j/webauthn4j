@@ -19,6 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
@@ -49,21 +50,18 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
 
     transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
-
-
-    private JsonConverter jsonConverter;
-    private HttpClient httpClient;
-
-    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-
     Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
-
+    private JsonConverter jsonConverter;
+    private JWSFactory jwsFactory;
+    private HttpClient httpClient;
+    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
     private TrustAnchor trustAnchor;
 
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = jsonConverter;
+        this.jwsFactory = new JWSFactory(jsonConverter);
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
@@ -80,6 +78,21 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         this(jsonConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
+    private static X509Certificate loadRootCertificateFromPath(Path path) {
+        try {
+            InputStream inputStream = Files.newInputStream(path);
+            return CertificateUtil.generateX509Certificate(inputStream);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
+        InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
+                .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
+        return CertificateUtil.generateX509Certificate(inputStream);
+    }
+
     @Override
     public Map<AAGUID, Set<MetadataItem>> provide() {
         if (needsRefresh()) {
@@ -87,7 +100,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         }
         return cachedMetadataItemMap;
     }
-
 
     public String getFidoMetadataServiceEndpoint() {
         return fidoMetadataServiceEndpoint;
@@ -128,7 +140,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
-        JWS<MetadataTOCPayload> jws = JWS.parse(toc, MetadataTOCPayload.class, jsonConverter);
+        JWS<MetadataTOCPayload> jws = jwsFactory.parse(toc, MetadataTOCPayload.class);
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
@@ -176,21 +188,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
             throw new MDSException("Hash of metadataStatement doesn't match");
         }
         return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
-    }
-
-    private static X509Certificate loadRootCertificateFromPath(Path path) {
-        try {
-            InputStream inputStream = Files.newInputStream(path);
-            return CertificateUtil.generateX509Certificate(inputStream);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
-        InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
-                .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
-        return CertificateUtil.generateX509Certificate(inputStream);
     }
 
 }

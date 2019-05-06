@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 public enum TPMGenerated {
 
-    TPM_GENERATED_VALUE(new byte[]{(byte)0xff, (byte)0x54, (byte)0x43, (byte)0x47});
+    TPM_GENERATED_VALUE(new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47});
 
     private final byte[] value;
 
@@ -43,10 +43,9 @@ public enum TPMGenerated {
 
     @JsonCreator
     private static TPMGenerated deserialize(byte[] value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TPMGenerated.class);
         }
     }

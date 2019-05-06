@@ -56,6 +56,7 @@ public class AuthenticatorDataConverter {
 
     /**
      * Converts from a {@link AuthenticatorData} to byte[].
+     *
      * @param source the source object to convert
      * @return the converted byte array
      */
@@ -78,6 +79,7 @@ public class AuthenticatorDataConverter {
 
     /**
      * Converts from a byte array to {@link AuthenticatorData}.
+     *
      * @param source the source byte array to convert
      * @return the converted object
      */

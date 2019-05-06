@@ -36,8 +36,8 @@ public class MetadataItemsMetadataStatementsProvider implements MetadataStatemen
     public Map<AAGUID, Set<MetadataStatement>> provide() {
         return metadataItemsProvider.provide().entrySet().stream()
                 .collect(Collectors.toMap(
-                            Map.Entry::getKey,
-                            entry-> entry.getValue().stream().map(MetadataItem::getMetadataStatement).collect(Collectors.toSet())
-                        ));
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().stream().map(MetadataItem::getMetadataStatement).collect(Collectors.toSet())
+                ));
     }
 }

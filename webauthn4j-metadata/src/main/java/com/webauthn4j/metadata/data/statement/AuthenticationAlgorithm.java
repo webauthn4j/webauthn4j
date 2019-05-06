@@ -23,7 +23,8 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported authentication algorithm(s).
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authentication-algorithms">§3.6.1 Authentication Algorithms</a> 
+ *
+ * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authentication-algorithms">§3.6.1 Authentication Algorithms</a>
  */
 public enum AuthenticationAlgorithm {
 
@@ -100,10 +101,9 @@ public enum AuthenticationAlgorithm {
 
     @JsonCreator
     private static AuthenticationAlgorithm deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AuthenticationAlgorithm.class);
         }
     }

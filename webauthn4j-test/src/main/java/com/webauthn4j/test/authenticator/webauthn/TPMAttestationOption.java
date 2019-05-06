@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.test;
+package com.webauthn4j.test.authenticator.webauthn;
 
-import org.junit.jupiter.api.Test;
+public class TPMAttestationOption extends AttestationOption {
 
-import java.security.PrivateKey;
+    private boolean tcgKpAIKCertificateFlagInExtendedKeyUsage = true;
 
-import static org.assertj.core.api.Assertions.assertThat;
+    public boolean isTcgKpAIKCertificateFlagInExtendedKeyUsage() {
+        return tcgKpAIKCertificateFlagInExtendedKeyUsage;
+    }
 
-class TestUtilTestData {
-
-    @Test
-    void loadTestAuthenticatorAttestationPrivateKey_test() {
-        PrivateKey privateKey = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
-        assertThat(privateKey).isNotNull();
+    public void setTcgKpAIKCertificateFlagInExtendedKeyUsage(boolean tcgKpAIKCertificateFlagInExtendedKeyUsage) {
+        this.tcgKpAIKCertificateFlagInExtendedKeyUsage = tcgKpAIKCertificateFlagInExtendedKeyUsage;
     }
 }

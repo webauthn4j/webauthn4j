@@ -32,37 +32,37 @@ class AuthenticatorTransportConverterTest {
 
 
     @Test
-    void convert_test(){
+    void convert_test() {
         assertThat(converter.convert("usb")).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test
-    void convert_invalid_value_test(){
-        assertThatThrownBy(()->converter.convert("invalid")).isInstanceOf(DataConversionException.class);
+    void convert_invalid_value_test() {
+        assertThatThrownBy(() -> converter.convert("invalid")).isInstanceOf(DataConversionException.class);
     }
 
     @Test
-    void convertSet_test(){
+    void convertSet_test() {
         assertThat(converter.convertSet(Collections.singleton("usb"))).containsExactly(AuthenticatorTransport.USB);
     }
 
     @Test
-    void convertSet_null_test(){
+    void convertSet_null_test() {
         assertThat(converter.convertSet(null)).isEqualTo(null);
     }
 
     @Test
-    void convertToString_test(){
+    void convertToString_test() {
         assertThat(converter.convertToString(AuthenticatorTransport.USB)).isEqualTo("usb");
     }
 
     @Test
-    void convertSetToStringSet_test(){
+    void convertSetToStringSet_test() {
         assertThat(converter.convertSetToStringSet(Collections.singleton(AuthenticatorTransport.USB))).containsExactly("usb");
     }
 
     @Test
-    void convertSetToStringSet_null_test(){
+    void convertSetToStringSet_null_test() {
         assertThat(converter.convertSetToStringSet(null)).isEqualTo(null);
     }
 

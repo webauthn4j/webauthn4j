@@ -46,6 +46,7 @@ public class CollectedClientDataConverter {
 
     /**
      * Converts from a base64url {@link String} to {@link CollectedClientData}.
+     *
      * @param base64UrlString the source byte array to convert
      * @return the converted object
      */
@@ -59,6 +60,7 @@ public class CollectedClientDataConverter {
 
     /**
      * Converts from a byte array to {@link CollectedClientData}.
+     *
      * @param source the source byte array to convert
      * @return the converted object
      */
@@ -72,6 +74,7 @@ public class CollectedClientDataConverter {
 
     /**
      * Converts from a {@link CollectedClientData} to byte[].
+     *
      * @param source the source object to convert
      * @return the converted byte array
      */
@@ -81,6 +84,7 @@ public class CollectedClientDataConverter {
 
     /**
      * Converts from a {@link CollectedClientData} to base64 url {@link String}.
+     *
      * @param source the source object to convert
      * @return the converted byte array
      */

@@ -148,7 +148,7 @@ public class MetadataStatement implements Serializable {
         return description;
     }
 
-	public AlternativeDescriptions getAlternativeDescriptions() {
+    public AlternativeDescriptions getAlternativeDescriptions() {
         return alternativeDescriptions;
     }
 

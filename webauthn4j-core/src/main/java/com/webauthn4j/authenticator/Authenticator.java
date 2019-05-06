@@ -30,30 +30,35 @@ public interface Authenticator extends Serializable {
 
     /**
      * Returns the {@link AttestedCredentialData}
+     *
      * @return the {@link AttestedCredentialData}
      */
     AttestedCredentialData getAttestedCredentialData();
 
     /**
      * Returns the {@link AttestationStatement}
+     *
      * @return the {@link AttestationStatement}
      */
     AttestationStatement getAttestationStatement();
 
     /**
      * Returns the {@link AuthenticatorTransport} {@link Set}
+     *
      * @return the {@link AuthenticatorTransport} {@link Set}
      */
     Set<AuthenticatorTransport> getTransports();
 
     /**
      * Returns the counter value
+     *
      * @return the counter value
      */
     long getCounter();
 
     /**
      * Sets the counter value
+     *
      * @param value the counter value
      */
     void setCounter(long value);

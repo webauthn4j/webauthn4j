@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.data.AttestationConveyancePreference;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -73,7 +72,7 @@ class AttestationConveyancePreferenceTest {
         );
     }
 
-    static class TestDTO{
+    static class TestDTO {
         @SuppressWarnings("WeakerAccess")
         public AttestationConveyancePreference preference;
     }

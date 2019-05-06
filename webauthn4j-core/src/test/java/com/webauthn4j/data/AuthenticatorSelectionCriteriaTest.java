@@ -16,9 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.AuthenticatorAttachment;
-import com.webauthn4j.data.AuthenticatorSelectionCriteria;
-import com.webauthn4j.data.UserVerificationRequirement;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

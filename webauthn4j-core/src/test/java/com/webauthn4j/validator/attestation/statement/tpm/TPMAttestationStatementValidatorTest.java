@@ -17,11 +17,10 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
-import com.webauthn4j.data.attestation.statement.TPMEccCurve;
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.util.ECUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
+import com.webauthn4j.test.authenticator.webauthn.TPMAttestationOption;
+import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
@@ -29,13 +28,16 @@ import org.junit.jupiter.api.Test;
 import javax.naming.NamingException;
 import javax.naming.ldap.LdapName;
 import java.io.IOException;
+import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMAttestationStatementValidatorTest {
 
+    private TPMAuthenticator tpmAuthenticator = new TPMAuthenticator();
     private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
 
     @Test
@@ -49,18 +51,6 @@ class TPMAttestationStatementValidatorTest {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
-        );
-    }
-
-    @Test
-    void getCurveFromTPMEccCurve_test() {
-        assertAll(
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P256)).isEqualTo(ECUtil.P_256_SPEC.getCurve()),
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P384)).isEqualTo(ECUtil.P_384_SPEC.getCurve()),
-                () -> assertThat(target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P521)).isEqualTo(ECUtil.P_521_SPEC.getCurve()),
-                () -> assertThrows(NotImplementedException.class,
-                        () -> target.getCurveFromTPMEccCurve(TPMEccCurve.TPM_ECC_NIST_P192)
-                )
         );
     }
 
@@ -100,5 +90,44 @@ class TPMAttestationStatementValidatorTest {
                 () -> assertThat(tpmDeviceProperty.getPartNumber()).isEqualTo("NPCT6xx"),
                 () -> assertThat(tpmDeviceProperty.getFirmwareVersion()).isEqualTo("id:13")
         );
+    }
+
+    @Test
+    void validateAikCert_test() {
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
+        target.validateAikCert(certificate);
+    }
+
+    @Test
+    void validateAikCert_with_non_empty_subjectDN_test() {
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setSubjectDN("O=SharpLab., C=US");
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_without_tcgKpAIKCertificate_test() {
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_with_caFlagInBasicConstraints_test() {
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setCAFlagInBasicConstraints(true);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAikCert_with_version1_test() {
+        TPMAttestationOption attestationOption = new TPMAttestationOption();
+        attestationOption.setX509CertificateVersion(1);
+        X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

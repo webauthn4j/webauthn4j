@@ -15,14 +15,13 @@
  */
 package com.webauthn4j.metadata.data.toc;
 
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Test;
-
-import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
 
 class AuthenticatorStatusTest {
 

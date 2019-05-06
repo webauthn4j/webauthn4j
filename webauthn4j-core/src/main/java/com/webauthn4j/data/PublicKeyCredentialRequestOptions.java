@@ -16,9 +16,9 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;

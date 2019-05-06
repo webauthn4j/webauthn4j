@@ -32,34 +32,39 @@ import com.webauthn4j.util.exception.NotImplementedException;
 
 public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-
     private WebAuthnAuthenticator webAuthnAuthenticator;
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+    private CollectedClientDataConverter collectedClientDataConverter;
 
-    public WebAuthnAuthenticatorAdaptor(){
-        webAuthnAuthenticator = new PackedAuthenticator();
+    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator, JsonConverter jsonConverter) {
+        this.webAuthnAuthenticator = webAuthnAuthenticator;
+        this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     }
 
-    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator){
-        this.webAuthnAuthenticator = webAuthnAuthenticator;
+    public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator) {
+        this(webAuthnAuthenticator, new JsonConverter());
     }
 
     @Override
-    public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData, RegistrationEmulationOption registrationEmulationOption) {
+    public CredentialCreationResponse register(
+            PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions,
+            CollectedClientData collectedClientData,
+            RegistrationEmulationOption registrationEmulationOption,
+            AttestationOption attestationOption
+    ) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerification());
-        MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest();
-        makeCredentialRequest.setHash(clientDataHash);
-        makeCredentialRequest.setRpEntity(publicKeyCredentialCreationOptions.getRp());
-        makeCredentialRequest.setUserEntity(publicKeyCredentialCreationOptions.getUser());
-        makeCredentialRequest.setRequireResidentKey(publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey());
-        makeCredentialRequest.setRequireUserPresence(true);
-        makeCredentialRequest.setRequireUserVerification(requireUserVerification);
-        makeCredentialRequest.setCredTypesAndPublicKeyAlgs(publicKeyCredentialCreationOptions.getPubKeyCredParams());
-        makeCredentialRequest.setExcludeCredentialDescriptorList(publicKeyCredentialCreationOptions.getExcludeCredentials());
-        makeCredentialRequest.setExtensions(publicKeyCredentialCreationOptions.getExtensions());
+        MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest(
+                clientDataHash,
+                publicKeyCredentialCreationOptions.getRp(),
+                publicKeyCredentialCreationOptions.getUser(),
+                publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey(),
+                true,
+                requireUserVerification,
+                publicKeyCredentialCreationOptions.getPubKeyCredParams(),
+                publicKeyCredentialCreationOptions.getExcludeCredentials(),
+                publicKeyCredentialCreationOptions.getExtensions()
+        );
         MakeCredentialResponse makeCredentialResponse = webAuthnAuthenticator.makeCredential(makeCredentialRequest, registrationEmulationOption);
 
         return new CredentialCreationResponse(makeCredentialResponse.getAttestationObject());
@@ -67,7 +72,7 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
     @Override
     public CredentialCreationResponse register(PublicKeyCredentialCreationOptions publicKeyCredentialCreationOptions, CollectedClientData collectedClientData) {
-        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption());
+        return register(publicKeyCredentialCreationOptions, collectedClientData, new RegistrationEmulationOption(), null);
     }
 
     @Override
@@ -82,13 +87,14 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialRequestOptions.getUserVerification());
 
-        GetAssertionRequest getAssertionRequest = new GetAssertionRequest();
-        getAssertionRequest.setRpId(publicKeyCredentialRequestOptions.getRpId());
-        getAssertionRequest.setHash(clientDataHash);
-        getAssertionRequest.setAllowCredentialDescriptorList(publicKeyCredentialRequestOptions.getAllowCredentials());
-        getAssertionRequest.setRequireUserPresence(true);
-        getAssertionRequest.setRequireUserVerification(requireUserVerification);
-        getAssertionRequest.setExtensions(publicKeyCredentialRequestOptions.getExtensions());
+        GetAssertionRequest getAssertionRequest = new GetAssertionRequest(
+                publicKeyCredentialRequestOptions.getRpId(),
+                clientDataHash,
+                publicKeyCredentialRequestOptions.getAllowCredentials(),
+                true,
+                requireUserVerification,
+                publicKeyCredentialRequestOptions.getExtensions()
+        );
 
         GetAssertionResponse getAssertionResponse = webAuthnAuthenticator.getAssertion(getAssertionRequest, authenticationEmulationOption);
 

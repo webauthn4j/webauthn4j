@@ -31,14 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class MetadataStatementTest {
 
     private JsonConverter jsonConverter;
-
-    public MetadataStatementTest(){
-        ObjectMapper jsonMapper = new ObjectMapper();
-        jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
-    }
-
     private String data = "{\n" +
             "    \"aaguid\": \"81303c1a-25cf-4f43-be04-0460df5b6c68\",\n" +
             "    \"alternativeDescriptions\": {\n" +
@@ -79,7 +71,6 @@ class MetadataStatementTest {
             "        ]\n" +
             "    ]\n" +
             "}";
-
     private String invalidData = "{\n" +
             "    \"aaguid\": \"81303c1a-25cf-4f43-be04-0460df5b6c68\",\n" +
             "    \"alternativeDescriptions\": {\n" +
@@ -121,20 +112,26 @@ class MetadataStatementTest {
             "    ]\n" +
             "}";
 
+    public MetadataStatementTest() {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+    }
 
     @Test
     void deserialize_test() {
         MetadataStatement metadataStatement = jsonConverter.readValue(data, MetadataStatement.class);
         assertAll(
-                ()-> assertThat(metadataStatement.getAttestationTypes()).containsOnly(AttestationType.BASIC_FULL, AttestationType.BASIC_SURROGATE),
-                ()-> assertThat(metadataStatement.getAuthenticationAlgorithm()).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW),
-                ()-> assertThat(metadataStatement.getPublicKeyAlgAndEncoding()).isEqualTo(PublicKeyRepresentationFormat.COSE)
+                () -> assertThat(metadataStatement.getAttestationTypes()).containsOnly(AttestationType.BASIC_FULL, AttestationType.BASIC_SURROGATE),
+                () -> assertThat(metadataStatement.getAuthenticationAlgorithm()).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW),
+                () -> assertThat(metadataStatement.getPublicKeyAlgAndEncoding()).isEqualTo(PublicKeyRepresentationFormat.COSE)
         );
     }
 
     @Test
     void deserialize_invalid_data_test() {
-        assertThatThrownBy( ()-> jsonConverter.readValue(invalidData, MetadataStatement.class)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> jsonConverter.readValue(invalidData, MetadataStatement.class)).isInstanceOf(DataConversionException.class);
     }
 
 }

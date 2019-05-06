@@ -23,9 +23,10 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported matcher protection type(s).
+ *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#matcher-protection-types">§3.3 Matcher Protection Types</a>
  */
-public enum  MatcherProtection {
+public enum MatcherProtection {
 
     SOFTWARE(0x0001),
     TEE(0x0002),
@@ -55,10 +56,9 @@ public enum  MatcherProtection {
 
     @JsonCreator
     private static MatcherProtection deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, KeyProtection.class);
         }
     }

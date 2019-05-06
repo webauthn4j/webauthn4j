@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.data.AbstractImmutableMap;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -25,13 +26,13 @@ import java.util.Map;
  * This descriptor contains description in alternative languages.
  */
 public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
-	
-	@JsonCreator
-	public AlternativeDescriptions(Map<String, String> map) {
-		super(map);
-	}
-	
-	public AlternativeDescriptions(){
-		this(Collections.emptyMap());
-	}
+
+    @JsonCreator
+    public AlternativeDescriptions(Map<String, String> map) {
+        super(map);
+    }
+
+    public AlternativeDescriptions() {
+        this(Collections.emptyMap());
+    }
 }

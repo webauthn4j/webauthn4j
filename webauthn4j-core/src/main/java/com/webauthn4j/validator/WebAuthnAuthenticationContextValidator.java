@@ -29,8 +29,8 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
@@ -80,14 +80,16 @@ public class WebAuthnAuthenticationContextValidator {
 
     // ~ Methods
     // ========================================================================================================
+
     /**
      * validates WebAuthn authentication request
+     *
      * @param authenticationContext authentication context
-     * @param authenticator authenticator to be checked against
+     * @param authenticator         authenticator to be checked against
      * @return validation result
      * @throws DataConversionException if the input cannot be parsed
-     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
-     * @throws WebAuthnException if WebAuthn error occurred
+     * @throws ValidationException     if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException       if WebAuthn error occurred
      */
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) throws WebAuthnException {
@@ -106,7 +108,7 @@ public class WebAuthnAuthenticationContextValidator {
         // (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(aData);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
         ServerProperty serverProperty = authenticationContext.getServerProperty();
 
@@ -181,7 +183,7 @@ public class WebAuthnAuthenticationContextValidator {
             }
         }
 
-        for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators){
+        for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
             customAuthenticationValidator.validate(authenticationObject);
         }
 

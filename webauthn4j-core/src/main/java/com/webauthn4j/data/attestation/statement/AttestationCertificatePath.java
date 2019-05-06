@@ -27,14 +27,24 @@ import java.util.*;
 
 public class AttestationCertificatePath extends AbstractList<X509Certificate> implements Serializable {
 
-    private X509Certificate[] certificates;
     private final int size;
+    private X509Certificate[] certificates;
 
     @JsonCreator
     public AttestationCertificatePath(List<X509Certificate> certificates) {
         AssertUtil.notNull(certificates, "certificates must not be null");
         this.size = certificates.size();
         this.certificates = certificates.toArray(new X509Certificate[this.size]);
+    }
+
+    public AttestationCertificatePath(X509Certificate attestationCertificate, List<X509Certificate> caCertificates) {
+        AssertUtil.notNull(attestationCertificate, "attestationCertificate must not be null");
+        AssertUtil.notNull(caCertificates, "caCertificates must not be null");
+        List<X509Certificate> buffer = new ArrayList<>();
+        buffer.add(attestationCertificate);
+        buffer.addAll(caCertificates);
+        this.size = buffer.size();
+        this.certificates = buffer.toArray(new X509Certificate[this.size]);
     }
 
     public AttestationCertificatePath() {

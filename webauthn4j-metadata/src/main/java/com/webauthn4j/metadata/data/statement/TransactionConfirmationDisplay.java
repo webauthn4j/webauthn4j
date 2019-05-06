@@ -23,6 +23,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported transaction confirmation display type(s).
+ *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#transaction-confirmation-display-types">§3.2 Key Protection Types</a>
  */
 public enum TransactionConfirmationDisplay {
@@ -62,10 +63,9 @@ public enum TransactionConfirmationDisplay {
 
     @JsonCreator
     private static TransactionConfirmationDisplay deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TransactionConfirmationDisplay.class);
         }
     }

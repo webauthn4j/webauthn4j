@@ -28,19 +28,22 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  * §5.10.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
  */
 public enum UserVerificationRequirement {
-    
-    /** This value indicates that the Relying Party requires user verification for the operation and
-     *  will fail the operation if the response does not have the UV flag set.
+
+    /**
+     * This value indicates that the Relying Party requires user verification for the operation and
+     * will fail the operation if the response does not have the UV flag set.
      */
     REQUIRED("required"),
-    
-    /** This value indicates that the Relying Party prefers user verification for the operation
-     *  if possible, but will not fail the operation if the response does not have the UV flag set.
+
+    /**
+     * This value indicates that the Relying Party prefers user verification for the operation
+     * if possible, but will not fail the operation if the response does not have the UV flag set.
      */
     PREFERRED("preferred"),
-    
-    /** This value indicates that the Relying Party does not want user verification employed during
-     *  the operation (e.g., in the interest of minimizing disruption to the user interaction flow).
+
+    /**
+     * This value indicates that the Relying Party does not want user verification employed during
+     * the operation (e.g., in the interest of minimizing disruption to the user interaction flow).
      */
     DISCOURAGED("discouraged");
 
@@ -67,11 +70,10 @@ public enum UserVerificationRequirement {
     }
 
     @JsonCreator
-    private static UserVerificationRequirement deserialize(String value) throws InvalidFormatException{
-        try{
+    private static UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
         }
     }

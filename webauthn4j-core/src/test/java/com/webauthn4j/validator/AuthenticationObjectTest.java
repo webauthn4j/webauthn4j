@@ -24,8 +24,8 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ class AuthenticationObjectTest {
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         AuthenticationObject authenticationObject = new AuthenticationObject(
@@ -82,7 +82,7 @@ class AuthenticationObjectTest {
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
 
@@ -114,4 +114,4 @@ class AuthenticationObjectTest {
         );
     }
 
-    }
+}

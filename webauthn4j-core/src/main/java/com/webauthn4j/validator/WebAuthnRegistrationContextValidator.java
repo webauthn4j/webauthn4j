@@ -33,7 +33,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
@@ -158,6 +158,7 @@ public class WebAuthnRegistrationContextValidator {
 
     /**
      * Creates {@link WebAuthnRegistrationContextValidator} with non strict configuration
+     *
      * @return configured {@link WebAuthnRegistrationContextValidator}
      */
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
@@ -166,6 +167,7 @@ public class WebAuthnRegistrationContextValidator {
 
     /**
      * Creates {@link WebAuthnRegistrationContextValidator} with non strict configuration
+     *
      * @param jsonConverter json converter
      * @param cborConverter cobr converter
      * @return configured {@link WebAuthnRegistrationContextValidator}
@@ -192,11 +194,12 @@ public class WebAuthnRegistrationContextValidator {
 
     /**
      * validates WebAuthn registration request
+     *
      * @param registrationContext registration context
      * @return validation result
      * @throws DataConversionException if the input cannot be parsed
-     * @throws ValidationException if the input is not valid from the point of WebAuthn validation steps
-     * @throws WebAuthnException if WebAuthn error occurred
+     * @throws ValidationException     if the input is not valid from the point of WebAuthn validation steps
+     * @throws WebAuthnException       if WebAuthn error occurred
      */
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnRegistrationContextValidationResponse validate(WebAuthnRegistrationContext registrationContext) throws WebAuthnException {
@@ -209,7 +212,7 @@ public class WebAuthnRegistrationContextValidator {
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = authenticatorTransportConverter.convertSet(registrationContext.getTransports());
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(registrationContext.getClientExtensionsJSON());
 
         BeanAssertUtil.validate(collectedClientData);
@@ -287,14 +290,14 @@ public class WebAuthnRegistrationContextValidator {
         // ******* This step is up to library user *******
 
         // validate with custom logic
-        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators){
+        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
         }
 
         return new WebAuthnRegistrationContextValidationResponse(collectedClientData, attestationObject, clientExtensions);
     }
 
-    void validateAuthenticatorDataField(AuthenticatorData authenticatorData){
+    void validateAuthenticatorDataField(AuthenticatorData authenticatorData) {
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null on registration");

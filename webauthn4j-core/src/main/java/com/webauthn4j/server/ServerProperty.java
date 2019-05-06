@@ -51,6 +51,7 @@ public class ServerProperty implements Serializable {
 
     /**
      * Returns the {@link Origin}
+     *
      * @return the {@link Origin}
      */
     public Origin getOrigin() {
@@ -59,6 +60,7 @@ public class ServerProperty implements Serializable {
 
     /**
      * Returns the rpId
+     *
      * @return the rpId
      */
     public String getRpId() {
@@ -67,6 +69,7 @@ public class ServerProperty implements Serializable {
 
     /**
      * Returns the {@link Challenge}
+     *
      * @return the {@link Challenge}
      */
     public Challenge getChallenge() {
@@ -75,6 +78,7 @@ public class ServerProperty implements Serializable {
 
     /**
      * Returns the tokenBindingId
+     *
      * @return the tokenBindingId
      */
     public byte[] getTokenBindingId() {

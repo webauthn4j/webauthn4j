@@ -25,14 +25,13 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 
 /**
- * Jackson Deserializer for {@link ExtensionClientOutput}
+ * Jackson Deserializer for {@link ExtensionClientInput}
  */
 public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionClientInput> {
 

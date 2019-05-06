@@ -18,7 +18,6 @@ package com.webauthn4j.data.client;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
-
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

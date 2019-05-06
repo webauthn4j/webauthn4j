@@ -31,51 +31,43 @@ public class GetAssertionRequest {
     private boolean requireUserVerification;
     private AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
-    public String getRpId() {
-        return rpId;
+    public GetAssertionRequest(
+            String rpId,
+            byte[] hash,
+            List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList,
+            boolean requireUserPresence,
+            boolean requireUserVerification,
+            AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
+
+        this.rpId = rpId;
+        this.hash = hash;
+        this.allowCredentialDescriptorList = allowCredentialDescriptorList;
+        this.requireUserPresence = requireUserPresence;
+        this.requireUserVerification = requireUserVerification;
+        this.extensions = extensions;
     }
 
-    public void setRpId(String rpId) {
-        this.rpId = rpId;
+    public String getRpId() {
+        return rpId;
     }
 
     public byte[] getHash() {
         return hash;
     }
 
-    public void setHash(byte[] hash) {
-        this.hash = hash;
-    }
-
     public List<PublicKeyCredentialDescriptor> getAllowCredentialDescriptorList() {
         return allowCredentialDescriptorList;
-    }
-
-    public void setAllowCredentialDescriptorList(List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList) {
-        this.allowCredentialDescriptorList = allowCredentialDescriptorList;
     }
 
     public boolean isRequireUserPresence() {
         return requireUserPresence;
     }
 
-    public void setRequireUserPresence(boolean requireUserPresence) {
-        this.requireUserPresence = requireUserPresence;
-    }
-
     public boolean isRequireUserVerification() {
         return requireUserVerification;
     }
 
-    public void setRequireUserVerification(boolean requireUserVerification) {
-        this.requireUserVerification = requireUserVerification;
-    }
-
     public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
-    }
-
-    public void setExtensions(AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
-        this.extensions = extensions;
     }
 }

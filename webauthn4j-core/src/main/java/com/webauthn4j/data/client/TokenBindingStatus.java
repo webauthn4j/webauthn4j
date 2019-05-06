@@ -23,21 +23,27 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 /**
  * {@link TokenBindingStatus} is one of the following:
  * <ul>
- *     <li>supported</li>
- *     <li>present</li>
+ * <li>supported</li>
+ * <li>present</li>
  * </ul>
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-tokenbindingstatus">§5.10.1. Client Data Used in WebAuthn Signatures - TokenBindingStatus</a>
  */
 public enum TokenBindingStatus {
-    
-    /** Indicates token binding was used when communicating with the Relying Party. In this case, the id member MUST be present. */
+
+    /**
+     * Indicates token binding was used when communicating with the Relying Party. In this case, the id member MUST be present.
+     */
     PRESENT("present"),
- 
-    /** Indicates the client supports token binding, but it was not negotiated when communicating with the Relying Party. */
+
+    /**
+     * Indicates the client supports token binding, but it was not negotiated when communicating with the Relying Party.
+     */
     SUPPORTED("supported"),
-    
-    /** */
+
+    /**
+     *
+     */
     NOT_SUPPORTED("not-supported");
 
     private final String value;
@@ -64,10 +70,9 @@ public enum TokenBindingStatus {
 
     @JsonCreator
     private static TokenBindingStatus deserialize(String value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TokenBindingStatus.class);
         }
     }

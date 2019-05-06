@@ -59,6 +59,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
 
     /**
      * Returns an attestation object, which is opaque to, and cryptographically protected against tampering by, the client.
+     *
      * @return byte array representation of {@link com.webauthn4j.data.attestation.AttestationObject}
      */
     public byte[] getAttestationObject() {
@@ -69,6 +70,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * Returns a sequence of zero or more unique {@link AuthenticatorTransport} values in lexicographical order.
      * These values are the transports that the authenticator is believed to support, or an empty sequence
      * if the information is unavailable.
+     *
      * @return list of {@link AuthenticatorTransport}
      */
     public Set<AuthenticatorTransport> getTransports() {

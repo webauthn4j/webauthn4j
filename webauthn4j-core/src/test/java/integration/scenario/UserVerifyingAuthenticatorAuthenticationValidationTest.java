@@ -22,12 +22,6 @@ import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.AuthenticatorAssertionResponse;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.PublicKeyCredential;
-import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.ClientDataType;
@@ -36,10 +30,12 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
 import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
@@ -58,8 +54,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
     private CborConverter cborConverter = jsonConverter.getCborConverter();
 
     private Origin origin = new Origin("http://example.com");
-    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
+    private ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(EmulatorUtil.PACKED_AUTHENTICATOR);
     private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter

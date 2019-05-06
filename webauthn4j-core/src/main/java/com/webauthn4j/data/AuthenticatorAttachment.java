@@ -23,21 +23,25 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 /**
  * This enumeration’s values describe authenticators' attachment modalities. Relying Parties use this for two purposes:
  * <ul>
- *     <li>to express a preferred authenticator attachment modality when calling navigator.credentials.create()
- *     to create a credential, and</li>
- *     <li>to inform the client of the Relying Party's best belief about how to locate the managing authenticators of
- *     the credentials listed in allowCredentials when calling navigator.credentials.get().</li>
+ * <li>to express a preferred authenticator attachment modality when calling navigator.credentials.create()
+ * to create a credential, and</li>
+ * <li>to inform the client of the Relying Party's best belief about how to locate the managing authenticators of
+ * the credentials listed in allowCredentials when calling navigator.credentials.get().</li>
  * </ul>
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#attachment">
  * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
  */
 public enum AuthenticatorAttachment {
-    
-    /** This value indicates platform attachment. */
+
+    /**
+     * This value indicates platform attachment.
+     */
     PLATFORM("platform"),
-    
-    /** This value indicates cross-platform attachment. */
+
+    /**
+     * This value indicates cross-platform attachment.
+     */
     CROSS_PLATFORM("cross-platform");
 
     private String value;
@@ -62,10 +66,9 @@ public enum AuthenticatorAttachment {
 
     @JsonCreator
     private static AuthenticatorAttachment deserialize(String value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorAttachment.class);
         }
     }

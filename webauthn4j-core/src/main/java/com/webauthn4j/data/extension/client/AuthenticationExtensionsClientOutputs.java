@@ -35,7 +35,7 @@ public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutp
         super(map);
     }
 
-    public AuthenticationExtensionsClientOutputs(){
+    public AuthenticationExtensionsClientOutputs() {
         this(Collections.emptyMap());
     }
 

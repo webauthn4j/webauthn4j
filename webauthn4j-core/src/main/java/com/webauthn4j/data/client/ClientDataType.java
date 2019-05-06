@@ -46,10 +46,9 @@ public enum ClientDataType {
 
     @JsonCreator
     private static ClientDataType deserialize(String value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
         }
     }

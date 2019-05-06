@@ -21,7 +21,7 @@ import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -299,7 +299,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_attestationObject_test() {
-        AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), TestAttestationUtil.createFIDOU2FAttestationStatement());
+        AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
 
         BeanAssertUtil.validate(attestationObject);
     }
@@ -313,7 +313,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_attestationObject_with_authenticatorData_null_test() {
-        AttestationObject attestationObject = new AttestationObject(null, TestAttestationUtil.createFIDOU2FAttestationStatement());
+        AttestationObject attestationObject = new AttestationObject(null, TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
 
         assertThrows(ConstraintViolationException.class,
                 () -> BeanAssertUtil.validate(attestationObject)

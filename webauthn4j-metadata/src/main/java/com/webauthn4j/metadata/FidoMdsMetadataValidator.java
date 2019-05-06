@@ -52,9 +52,9 @@ public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
         boolean isSurrogate = !attestationTypes.isEmpty() &&
                 attestationTypes.stream().allMatch(type -> type.equals(AttestationType.BASIC_SURROGATE));
 
-        if (isSurrogate && attestationStatement instanceof CertificateBaseAttestationStatement){
+        if (isSurrogate && attestationStatement instanceof CertificateBaseAttestationStatement) {
             CertificateBaseAttestationStatement certificateBaseAttestationStatement = (CertificateBaseAttestationStatement) attestationStatement;
-            if(certificateBaseAttestationStatement.getX5c() != null) {
+            if (certificateBaseAttestationStatement.getX5c() != null) {
                 throw new BadAttestationStatementException("Although AAGUID is registered for surrogate attestation in metadata, x5c contains certificates.");
             }
         }

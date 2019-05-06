@@ -52,7 +52,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
             @JsonProperty("4") List<COSEKeyOperation> keyOpts,
             @JsonProperty("5") byte[] baseIV
-    ){
+    ) {
         this.keyId = keyId;
         this.algorithm = algorithm;
         this.keyOpts = keyOpts;

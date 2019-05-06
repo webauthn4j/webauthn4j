@@ -35,7 +35,7 @@ public abstract class AbstractImmutableMap<K extends Serializable, V extends Ser
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        if(this.cachedEntrySet == null){
+        if (this.cachedEntrySet == null) {
             this.cachedEntrySet = Collections.unmodifiableMap(map).entrySet();
         }
         return this.cachedEntrySet;

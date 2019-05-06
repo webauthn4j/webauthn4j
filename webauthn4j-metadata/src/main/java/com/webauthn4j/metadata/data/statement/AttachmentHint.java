@@ -23,6 +23,7 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**
  * The supported attachment hint type(s).
+ *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attachment-hints">§3.4 Authenticator Attachment Hints</a>
  */
 public enum AttachmentHint {
@@ -71,10 +72,9 @@ public enum AttachmentHint {
 
     @JsonCreator
     private static AttachmentHint deserialize(long value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AttachmentHint.class);
         }
     }

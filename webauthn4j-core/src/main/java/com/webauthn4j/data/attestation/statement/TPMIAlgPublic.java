@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
-public enum  TPMIAlgPublic {
+public enum TPMIAlgPublic {
     TPM_ALG_ERROR(0),
     TPM_ALG_RSA(1),
     TPM_ALG_NULL(0x10),
@@ -52,10 +52,9 @@ public enum  TPMIAlgPublic {
     @JsonCreator
     @SuppressWarnings("squid:S3776")
     private static TPMIAlgPublic deserialize(int value) throws InvalidFormatException {
-        try{
+        try {
             return create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, TPMIAlgPublic.class);
         }
     }

@@ -18,7 +18,10 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
-import java.security.*;
+import java.security.AlgorithmParameters;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.spec.*;
 
 /**
@@ -29,6 +32,7 @@ public class ECUtil {
     public static final ECParameterSpec P_256_SPEC = createECParameterSpec("secp256r1");
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
     public static final ECParameterSpec P_521_SPEC = createECParameterSpec("secp521r1");
+
     private ECUtil() {
     }
 

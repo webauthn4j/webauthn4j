@@ -3,8 +3,8 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 
@@ -27,7 +27,7 @@ public class AuthenticationObject {
     private final byte[] collectedClientDataBytes;
     private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
     private final byte[] authenticatorDataBytes;
-    private final AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
 
@@ -37,7 +37,7 @@ public class AuthenticationObject {
             byte[] collectedClientDataBytes,
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
             byte[] authenticatorDataBytes,
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty
     ) {
 
@@ -59,7 +59,7 @@ public class AuthenticationObject {
             byte[] collectedClientDataBytes,
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
             byte[] authenticatorDataBytes,
-            AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientExtensions,
+            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty,
             LocalDateTime timestamp) {
         this.credentialId = credentialId;
@@ -92,7 +92,7 @@ public class AuthenticationObject {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<ExtensionClientOutput> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return this.clientExtensions;
     }
 

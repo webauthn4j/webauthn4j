@@ -21,7 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
-public class TestDataConstants {
+public class TestConstants {
 
     public static final PrivateKey GENERIC_2TIER_ATTESTATION_PRIVATE_KEY = TestAttestationUtil.load2tierTestAuthenticatorAttestationPrivateKey();
 
@@ -29,5 +29,6 @@ public class TestDataConstants {
 
     public static final PrivateKey GENERIC_3TIER_ATTESTATION_PRIVATE_KEY = TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey();
 
-    public static final AttestationCertificatePath GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH = TestAttestationUtil.load3tierTestCertPath();
+    public static final AttestationCertificatePath GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH = TestAttestationUtil.load3tierTestAttestationCertificatePath();
+
 }

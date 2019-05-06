@@ -18,11 +18,14 @@ package com.webauthn4j.data.jws;
 
 class JWSSignatureUtil {
 
-    private JWSSignatureUtil(){}
+    private static final String INVALID_ECDSA_SIGNATURE_FORMAT = "Invalid ECDSA signature format";
+
+    private JWSSignatureUtil() {
+    }
 
     /*
-    * Original License Header
-    */
+     * Original License Header
+     */
 
     /*
      * nimbus-jose-jwt
@@ -46,12 +49,13 @@ class JWSSignatureUtil {
 
     /**
      * convert signature from JWS format to DER format
+     *
      * @param jwsSignature signature in JWS format
      * @return signature in DER format
      * @author Vladimir Dzhuvinov
      * @author Aleksei Doroganov
      */
-    public static byte[] convertJWSSignatureToDerSignature(byte[] jwsSignature) {
+    public static byte[] convertJwsSignatureToDerSignature(byte[] jwsSignature) {
 
         // Adapted from org.apache.xml.security.algorithms.implementations.SignatureECDSA
 
@@ -84,7 +88,7 @@ class JWSSignatureUtil {
         int len = 2 + j + 2 + l;
 
         if (len > 255) {
-            throw new JWSException("Invalid ECDSA signature format");
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 
         int offset;
@@ -115,5 +119,56 @@ class JWSSignatureUtil {
         System.arraycopy(jwsSignature, 2 * rawLen - k, derSignature, (offset + l) - k, k);
 
         return derSignature;
+    }
+
+    /**
+     * convert signature from DER format to JWS format
+     *
+     * @param derSignature signature in DER format
+     * @return signature in JWS format
+     */
+    public static byte[] convertDerSignatureToJwsSignature(byte[] derSignature) {
+        if (derSignature.length < 8 || derSignature[0] != 48) {
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
+        }
+
+        int offset;
+        if (derSignature[1] > 0) {
+            offset = 2;
+        } else if (derSignature[1] == (byte) 0x81) {
+            offset = 3;
+        } else {
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
+        }
+
+        byte rLength = derSignature[offset + 1];
+
+        int i;
+        for (i = rLength; (i > 0) && (derSignature[(offset + 2 + rLength) - i] == 0); i--) {
+            // do nothing
+        }
+
+        byte sLength = derSignature[offset + 2 + rLength + 1];
+
+        int j;
+        for (j = sLength; (j > 0) && (derSignature[(offset + 2 + rLength + 2 + sLength) - j] == 0); j--) {
+            // do nothing
+        }
+
+        int rawLen = Math.max(i, j);
+
+        if ((derSignature[offset - 1] & 0xff) != derSignature.length - offset
+                || (derSignature[offset - 1] & 0xff) != 2 + rLength + 2 + sLength
+                || derSignature[offset] != 2
+                || derSignature[offset + 2 + rLength] != 2) {
+            throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
+        }
+
+        final byte[] concatSignature = new byte[2 * rawLen];
+
+        System.arraycopy(derSignature, (offset + 2 + rLength) - i, concatSignature, rawLen - i, i);
+        System.arraycopy(derSignature, (offset + 2 + rLength + 2 + sLength) - j, concatSignature, 2 * rawLen - j, j);
+
+        return concatSignature;
     }
 }

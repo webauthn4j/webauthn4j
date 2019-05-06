@@ -20,9 +20,11 @@ import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.*;
-import java.security.cert.Certificate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

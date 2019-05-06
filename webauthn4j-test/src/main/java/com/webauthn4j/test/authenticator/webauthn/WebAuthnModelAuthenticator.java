@@ -22,9 +22,6 @@ import com.webauthn4j.data.PublicKeyCredentialDescriptor;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.PublicKeyCredentialRpEntity;
 import com.webauthn4j.data.PublicKeyCredentialType;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -33,59 +30,82 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
-import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
+import com.webauthn4j.test.*;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.WIP;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
-@WIP
-public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator{
+public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator {
 
-    private CborConverter cborConverter = new CborConverter();
-    private SecureRandom secureRandom = new SecureRandom();
-
-    AAGUID aaguid;
-    private boolean capableOfUserVerification;
-    private int counter;
+    private static SecureRandom secureRandom = new SecureRandom();
+    // converter
+    protected CborConverter cborConverter;
+    // property
+    private AAGUID aaguid;
+    private KeyPair attestationKeyPair;
+    private CACertificatePath caCertificatePath;
+    private PrivateKey attestationIssuerPrivateKey;
     private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
+    private int counter;
+    // feature flags
+    private boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
+    private AuthenticatorDataConverter authenticatorDataConverter;
 
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter); // TODO: inject objectMapper from constructor
-
-    public WebAuthnModelAuthenticator(boolean capableOfUserVerification, AAGUID aaguid, int counter) {
-        this.capableOfUserVerification = capableOfUserVerification;
+    public WebAuthnModelAuthenticator(
+            AAGUID aaguid,
+            KeyPair attestationKeyPair,
+            CACertificatePath caCertificatePath,
+            PrivateKey attestationIssuerPrivateKey,
+            int counter,
+            boolean capableOfUserVerification,
+            CborConverter cborConverter) {
         this.aaguid = aaguid;
-        this.counter = counter;
+        this.attestationKeyPair = attestationKeyPair;
+        this.caCertificatePath = caCertificatePath;
+        this.attestationIssuerPrivateKey = attestationIssuerPrivateKey;
         this.credentialMap = new HashMap<>();
+        this.counter = counter;
+        this.capableOfUserVerification = capableOfUserVerification;
+        this.cborConverter = cborConverter;
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
     }
 
     public WebAuthnModelAuthenticator() {
         this(
-                true,
                 AAGUID.ZERO,
-                0
+                new KeyPair(
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationPublicKey(),
+                        TestAttestationUtil.load3tierTestAuthenticatorAttestationPrivateKey()),
+                TestAttestationUtil.load3tierTestCACertificatePath(),
+                TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
+                0,
+                true,
+                new CborConverter()
         );
     }
 
     public PublicKeyCredentialSource lookup(byte[] credentialId) {
 
         if (!isCapableOfStoringClientSideResidentCredential()) {
-            PublicKeyCredentialSource credentialSource = null; //TODO: decrypt credentialId into a credSource;
-            return credentialSource;
+            byte[] cbor = CipherUtil.decrypt(credentialId, attestationKeyPair.getPrivate());
+            return cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
         }
         for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
             if (Arrays.equals(credentialId, entry.getValue().getId())) {
@@ -176,12 +196,13 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // Let (publicKey, privateKey) be a new pair of cryptographic keys using the combination of
         // PublicKeyCredentialType and cryptographic parameters represented by the first item in
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
+        KeyPair credentialKeyPair;
         PrivateKey credentialPrivateKey;
         CredentialPublicKey credentialPublicKey;
         try {
-            KeyPair keyPair = KeyUtil.createECKeyPair();
-            credentialPrivateKey = keyPair.getPrivate();
-            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+            credentialKeyPair = KeyUtil.createECKeyPair();
+            credentialPrivateKey = credentialKeyPair.getPrivate();
+            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) credentialKeyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
@@ -209,7 +230,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             else {
                 // Let credentialId be the result of serializing and encrypting credentialSource
                 // so that only this authenticator can decrypt it.
-                credentialId = null; // TODO
+
+                byte[] data = cborConverter.writeValueAsBytes(credentialSource);
+                credentialId = CipherUtil.encrypt(data, attestationKeyPair.getPublic());
             }
         }
         // If any error occurred while creating the new credential object,
@@ -220,17 +243,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
-        if (extensions == null) {
-            extensions = new AuthenticationExtensionsClientInputs<>();
-        }
-        Map<String, RegistrationExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
-        for (Map.Entry<String, RegistrationExtensionClientInput> entry : extensions.entrySet()) {
-            String extensionIdentifier = entry.getKey();
-            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
-                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
-            }
-        }
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput>
+                registrationExtensionAuthenticatorOutputs = processRegistrationExtensions(makeCredentialRequest);
 
         // If the authenticator supports:
         // a per-RP ID signature counter
@@ -246,21 +260,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte flag = BIT_AT;
         if (userConsent) flag |= BIT_UP;
         if (userVerification) flag |= BIT_UV;
-        if (!processedExtensions.isEmpty()) flag |= BIT_ED;
+        if (!registrationExtensionAuthenticatorOutputs.isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
-                new AuthenticatorData<>(rpIdHash, flag, counter, attestedCredentialData, new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions));
+                new AuthenticatorData<>(rpIdHash, flag, counter, attestedCredentialData, registrationExtensionAuthenticatorOutputs);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = getSignedData(authenticatorDataBytes, makeCredentialRequest.getHash());
+        byte[] clientDataHash = makeCredentialRequest.getHash();
 
-
-
-        AttestationStatement attestationStatement = generateAttestationStatement(signedData, registrationEmulationOption);
+        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, credentialKeyPair, clientDataHash);
+        AttestationStatement attestationStatement = createAttestationStatement(attestationStatementRequest, registrationEmulationOption);
 
         // Return the attestation object for the new credential created by the procedure specified in
         // §6.3.4 Generating an Attestation Object using an authenticator-chosen attestation statement format,
@@ -272,6 +286,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         MakeCredentialResponse makeCredentialResponse = new MakeCredentialResponse();
         makeCredentialResponse.setAttestationObject(attestationObject);
         return makeCredentialResponse;
+    }
+
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest) {
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
+        if (extensions == null) {
+            extensions = new AuthenticationExtensionsClientInputs<>();
+        }
+        Map<String, RegistrationExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
+        for (Map.Entry<String, RegistrationExtensionClientInput> entry : extensions.entrySet()) {
+            String extensionIdentifier = entry.getKey();
+            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
+                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
+            }
+        }
+        return new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions);
     }
 
     public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
@@ -392,8 +421,6 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.countUpEnabled = countUpEnabled;
     }
 
-    protected abstract AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption);
-
     private byte[] getSignedData(byte[] authenticatorData, byte[] clientDataHash) {
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
@@ -402,5 +429,43 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         if (isCountUpEnabled()) {
             counter++;
         }
+    }
+
+    public abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
+
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest){
+        return createAttestationStatement(attestationStatementRequest, new RegistrationEmulationOption());
+    }
+
+    abstract X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption);
+
+    public X509Certificate getAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
+        switch (attestationOption.getX509CertificateVersion()) {
+            case 1:
+                return TestAttestationUtil.createV1DummyCertificate();
+            case 3:
+                return createAttestationCertificate(attestationStatementRequest, attestationOption);
+            default:
+                throw new IllegalArgumentException("Only version 1 or 3 are supported.");
+        }
+    }
+
+    public KeyPair getAttestationKeyPair() {
+        return attestationKeyPair;
+    }
+
+    public CACertificatePath getCACertificatePath() {
+        return caCertificatePath;
+    }
+
+    public PrivateKey getAttestationIssuerPrivateKey() {
+        return attestationIssuerPrivateKey;
+    }
+
+    public X509Certificate getAttestationIssuerCertificate() {
+        if (caCertificatePath.isEmpty()) {
+            throw new IllegalStateException("caCertificatePath is empty");
+        }
+        return caCertificatePath.get(0);
     }
 }

@@ -19,13 +19,24 @@ package com.webauthn4j.test.client;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 
-public class RegistrationEmulationOption {
+public class RegistrationEmulationOption{
+
+    private AttestationOption attestationOption;
 
     private boolean signatureOverrideEnabled = false;
     private byte[] signature = new byte[]{0x01, 0x23, 0x45, 0x67};
     private boolean collectedClientDataOverrideEnabled = false;
     private CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+
+    public AttestationOption getAttestationOption() {
+        return attestationOption;
+    }
+
+    public void setAttestationOption(AttestationOption attestationOption) {
+        this.attestationOption = attestationOption;
+    }
 
     public boolean isSignatureOverrideEnabled() {
         return signatureOverrideEnabled;

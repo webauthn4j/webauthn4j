@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticatorAttestationResponseTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         AuthenticatorAttestationResponse instanceA = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
         AuthenticatorAttestationResponse instanceB = new AuthenticatorAttestationResponse(new byte[0], new byte[1]);
 
@@ -36,7 +36,7 @@ class AuthenticatorAttestationResponseTest {
     }
 
     @Test
-    void getTransports_test(){
+    void getTransports_test() {
         AuthenticatorAttestationResponse target;
         target = new AuthenticatorAttestationResponse(new byte[0], new byte[0], CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB));
         assertThat(target.getTransports()).containsExactly(AuthenticatorTransport.USB);

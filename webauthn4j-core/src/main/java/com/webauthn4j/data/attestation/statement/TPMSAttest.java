@@ -75,8 +75,8 @@ public class TPMSAttest implements Serializable {
         return attested;
     }
 
-    public byte[] getBytes(){
-        try{
+    public byte[] getBytes() {
+        try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             stream.write(getMagic().getValue());
             stream.write(getType().getValue());
@@ -86,8 +86,7 @@ public class TPMSAttest implements Serializable {
             stream.write(UnsignedNumberUtil.toBytes(getFirmwareVersion()));
             stream.write(getAttested().getBytes());
             return stream.toByteArray();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }

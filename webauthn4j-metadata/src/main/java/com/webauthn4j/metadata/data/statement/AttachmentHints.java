@@ -27,33 +27,33 @@ public class AttachmentHints extends AbstractSet<AttachmentHint> {
 
     private Set<AttachmentHint> attachmentHints;
 
-    public AttachmentHints(long value){
+    public AttachmentHints(long value) {
         Set<AttachmentHint> set = new HashSet<>();
-        if((value & AttachmentHint.INTERNAL.getValue()) > 0){
+        if ((value & AttachmentHint.INTERNAL.getValue()) > 0) {
             set.add(AttachmentHint.INTERNAL);
         }
-        if((value & AttachmentHint.EXTERNAL.getValue()) > 0){
+        if ((value & AttachmentHint.EXTERNAL.getValue()) > 0) {
             set.add(AttachmentHint.EXTERNAL);
         }
-        if((value & AttachmentHint.WIRED.getValue()) > 0){
+        if ((value & AttachmentHint.WIRED.getValue()) > 0) {
             set.add(AttachmentHint.WIRED);
         }
-        if((value & AttachmentHint.WIRELESS.getValue()) > 0){
+        if ((value & AttachmentHint.WIRELESS.getValue()) > 0) {
             set.add(AttachmentHint.WIRELESS);
         }
-        if((value & AttachmentHint.NFC.getValue()) > 0){
+        if ((value & AttachmentHint.NFC.getValue()) > 0) {
             set.add(AttachmentHint.NFC);
         }
-        if((value & AttachmentHint.BLUETOOTH.getValue()) > 0){
+        if ((value & AttachmentHint.BLUETOOTH.getValue()) > 0) {
             set.add(AttachmentHint.BLUETOOTH);
         }
-        if((value & AttachmentHint.NETWORK.getValue()) > 0){
+        if ((value & AttachmentHint.NETWORK.getValue()) > 0) {
             set.add(AttachmentHint.NETWORK);
         }
-        if((value & AttachmentHint.READY.getValue()) > 0){
+        if ((value & AttachmentHint.READY.getValue()) > 0) {
             set.add(AttachmentHint.READY);
         }
-        if((value & AttachmentHint.WIFI_DIRECT.getValue()) > 0){
+        if ((value & AttachmentHint.WIFI_DIRECT.getValue()) > 0) {
             set.add(AttachmentHint.WIFI_DIRECT);
         }
         attachmentHints = CollectionUtil.unmodifiableSet(set);

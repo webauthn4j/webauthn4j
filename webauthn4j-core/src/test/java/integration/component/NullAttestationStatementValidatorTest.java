@@ -18,17 +18,16 @@ package integration.component;
 
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.WebAuthnRegistrationContext;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
+import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
+import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.jupiter.api.Test;
@@ -83,7 +82,7 @@ class NullAttestationStatementValidatorTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
-        WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor();
+        WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
         ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();

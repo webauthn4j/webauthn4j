@@ -20,31 +20,41 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.test.TestDataConstants;
+import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 
-import java.security.PrivateKey;
+import javax.security.auth.x500.X500Principal;
+import java.security.cert.X509Certificate;
 
 public class PackedAuthenticator extends WebAuthnModelAuthenticator {
 
-    private PrivateKey attestationPrivateKey;
-    private AttestationCertificatePath attestationCertificatePath;
-
-    public PackedAuthenticator(){
-        super();
-        this.attestationPrivateKey = TestDataConstants.GENERIC_3TIER_ATTESTATION_PRIVATE_KEY;
-        this.attestationCertificatePath = TestDataConstants.GENERIC_3TIER_ATTESTATION_CERTIFICATE_PATH;
-    }
-
     @Override
-    public AttestationStatement generateAttestationStatement(byte[] signedData, RegistrationEmulationOption registrationEmulationOption){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption) {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
         } else {
-            signature = TestDataUtil.calculateSignature(attestationPrivateKey, signedData);
+            signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
+
+        AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new PackedAttestationOption() : registrationEmulationOption.getAttestationOption();
+        X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
         return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+    }
+
+    @Override
+    protected X509Certificate createAttestationCertificate(AttestationStatementRequest attestationStatementRequest, AttestationOption attestationOption) {
+        AttestationCertificateBuilder builder =
+                new AttestationCertificateBuilder(
+                        getAttestationIssuerCertificate(),
+                        new X500Principal(attestationOption.getSubjectDN()),
+                        this.getAttestationKeyPair().getPublic());
+
+        if (attestationOption.isCAFlagInBasicConstraints()) {
+            builder.addBasicConstraintsExtension();
+        }
+        return builder.build(this.getAttestationIssuerPrivateKey());
     }
 }
