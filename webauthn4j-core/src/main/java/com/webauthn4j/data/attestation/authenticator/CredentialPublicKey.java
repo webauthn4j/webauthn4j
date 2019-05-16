@@ -29,7 +29,7 @@ import java.util.List;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
         property = "1")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EC2CredentialPublicKey.class, name = "2"),
