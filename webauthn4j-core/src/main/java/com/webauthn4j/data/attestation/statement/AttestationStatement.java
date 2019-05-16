@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.io.Serializable;
@@ -24,7 +25,16 @@ import java.io.Serializable;
  * Attestation metadata.certs container
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "format")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = AndroidKeyAttestationStatement.class, name = AndroidKeyAttestationStatement.FORMAT),
+        @JsonSubTypes.Type(value = AndroidSafetyNetAttestationStatement.class, name = AndroidSafetyNetAttestationStatement.FORMAT),
+        @JsonSubTypes.Type(value = FIDOU2FAttestationStatement.class, name = FIDOU2FAttestationStatement.FORMAT),
+        @JsonSubTypes.Type(value = NoneAttestationStatement.class, name = NoneAttestationStatement.FORMAT),
+        @JsonSubTypes.Type(value = PackedAttestationStatement.class, name = PackedAttestationStatement.FORMAT),
+        @JsonSubTypes.Type(value = TPMAttestationStatement.class, name = TPMAttestationStatement.FORMAT),
+})
 public interface AttestationStatement extends Serializable {
+
     String getFormat();
 
     /**
