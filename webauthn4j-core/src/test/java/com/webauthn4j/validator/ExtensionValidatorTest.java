@@ -79,8 +79,10 @@ class ExtensionValidatorTest {
     @Test
     void expectedExtensions_null_test() {
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>();
-        extensionValidator.validate(clientOutputs, authenticatorOutputs, null);
+        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
+        authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
+                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
+        extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), null);
     }
 
     @Test

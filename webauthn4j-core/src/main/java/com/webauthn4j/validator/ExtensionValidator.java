@@ -22,7 +22,6 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,10 +35,15 @@ class ExtensionValidator {
     public <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
                                                                   AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
                                                                   List<String> expectedExtensionIdentifiers) {
+        validateExtensionIds(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+    }
+
+    private <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validateExtensionIds(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs, AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
-            expected = Collections.emptyList();
-        } else {
+            return;
+        }
+        else {
             expected = expectedExtensionIdentifiers;
         }
 
