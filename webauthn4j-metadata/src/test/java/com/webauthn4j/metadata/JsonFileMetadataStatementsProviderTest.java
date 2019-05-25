@@ -22,9 +22,11 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.exception.UnknownProtocolFamilyException;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -44,12 +46,11 @@ class JsonFileMetadataStatementsProviderTest {
     }
 
     @Test
-    void fetchMetadata() throws Exception {
+    void fetchMetadata() throws URISyntaxException {
         List<Path> paths = new ArrayList<>(4);
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_fido2.json").toURI()));
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toURI()));
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_uaf.json").toURI()));
-        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
         JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
         Map<AAGUID, Set<MetadataStatement>> itemMapInFirstCall = provider.provide();
         readMetadataItem(itemMapInFirstCall);
@@ -60,11 +61,20 @@ class JsonFileMetadataStatementsProviderTest {
     }
 
     @Test
+    void fetchMetadataFromUnknownProtocolFamilyMetadataStatementFile() throws URISyntaxException {
+        List<Path> paths = new ArrayList<>(4);
+        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
+        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
+        assertThrows(UnknownProtocolFamilyException.class, provider::provide);
+    }
+
+
+    @Test
     void fetchMetadataFromNonExistentFile() {
         Path path = Paths.get("NonExistentFile.json");
         List<Path> paths = Collections.singletonList(path);
         JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
-        assertThrows(UncheckedIOException.class, () -> provider.provide());
+        assertThrows(UncheckedIOException.class, provider::provide);
     }
 
     private void readMetadataItem(Map<AAGUID, Set<MetadataStatement>> itemMap) {

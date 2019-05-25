@@ -26,6 +26,7 @@ import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
 import com.webauthn4j.metadata.exception.MDSException;
+import com.webauthn4j.metadata.validator.MetadataStatementValidator;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -58,6 +59,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private HttpClient httpClient;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
     private TrustAnchor trustAnchor;
+    private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = jsonConverter;
@@ -187,7 +189,9 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         if (!Arrays.equals(hash, expectedHash)) {
             throw new MDSException("Hash of metadataStatement doesn't match");
         }
-        return jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
+        MetadataStatement metadataStatement = jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
+        metadataStatementValidator.validate(metadataStatement);
+        return metadataStatement;
     }
 
 }
