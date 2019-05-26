@@ -22,6 +22,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
  * A Utility class for Message Authentication Code(MAC) manipulation
@@ -32,12 +33,16 @@ public class MACUtil {
     }
 
     public static byte[] calculateHmacSHA256(byte[] message, byte[] secret) {
+        return calculateHmacSHA256(message, secret, 32);
+    }
+
+    public static byte[] calculateHmacSHA256(byte[] message, byte[] secret, int outputLength) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret, "HmacSHA256");
             mac.init(secretKeySpec);
-            return mac.doFinal(message);
-
+            byte[] hmac = mac.doFinal(message);
+            return Arrays.copyOf(hmac, outputLength);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new UnexpectedCheckedException(e);
         }
