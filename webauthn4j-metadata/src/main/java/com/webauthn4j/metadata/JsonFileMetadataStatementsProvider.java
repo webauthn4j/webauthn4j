@@ -19,6 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.metadata.validator.MetadataStatementValidator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +34,7 @@ public class JsonFileMetadataStatementsProvider implements MetadataStatementsPro
     private JsonConverter jsonConverter;
     private List<Path> paths = Collections.emptyList();
     private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
+    private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
     public JsonFileMetadataStatementsProvider(JsonConverter jsonConverter, List<Path> paths) {
         this.jsonConverter = jsonConverter;
@@ -68,7 +70,9 @@ public class JsonFileMetadataStatementsProvider implements MetadataStatementsPro
 
     MetadataStatement readJsonFile(Path path) {
         try (InputStream inputStream = Files.newInputStream(path)) {
-            return jsonConverter.readValue(inputStream, MetadataStatement.class);
+            MetadataStatement metadataStatement = jsonConverter.readValue(inputStream, MetadataStatement.class);
+            metadataStatementValidator.validate(metadataStatement);
+            return metadataStatement;
         } catch (IOException e) {
             throw new UncheckedIOException("Failed to load a metadata statement json file", e);
         }

@@ -108,14 +108,16 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         ECPoint ecPoint = publicKey.getW();
         byte[] x = ecPoint.getAffineX().toByteArray();
         byte[] y = ecPoint.getAffineY().toByteArray();
+        int xOffset = Math.max(x.length-32, 0);
+        int yOffset = Math.max(y.length-32, 0);
         return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
                 null,
                 Curve.SECP256R1,
-                x,
-                y
+                Arrays.copyOfRange(x, xOffset, xOffset+32),
+                Arrays.copyOfRange(y, yOffset, yOffset+32)
         );
     }
 
@@ -165,6 +167,12 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         }
         if (y == null) {
             throw new ConstraintViolationException("y must not be null");
+        }
+        if (x.length != 32) {
+            throw new ConstraintViolationException("x must be 32 bytes");
+        }
+        if (y.length != 32) {
+            throw new ConstraintViolationException("y must be 32 bytes");
         }
     }
 
