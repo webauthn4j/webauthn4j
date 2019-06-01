@@ -20,6 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
@@ -39,11 +40,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.sql.Date;
 import java.time.Instant;
 import java.util.Arrays;
@@ -151,7 +156,7 @@ public class TestAttestationUtil {
                     new X500Name("O=SharpLab., C=US"),
                     new SubjectPublicKeyInfo(new DefaultSignatureAlgorithmIdentifierFinder().find("SHA256WITHRSA"), new byte[0])
             );
-            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA").build(KeyUtil.createRSAKeyPair().getPrivate());
+            ContentSigner contentSigner = new JcaContentSignerBuilder("SHA256withRSA").build(RSAUtil.createKeyPair().getPrivate());
             X509CertificateHolder certificateHolder = certificateBuilder.build(contentSigner);
             try {
                 return new JcaX509CertificateConverter().getCertificate(certificateHolder);
@@ -263,7 +268,7 @@ public class TestAttestationUtil {
         try {
             InputStream inputStream = resource.getInputStream();
             byte[] data = StreamUtils.copyToByteArray(inputStream);
-            return KeyUtil.loadECPrivateKey(data);
+            return loadECPrivateKey(data);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -275,5 +280,15 @@ public class TestAttestationUtil {
         return loadPrivateKeyFromResource(resource);
     }
 
+    private static PrivateKey loadECPrivateKey(byte[] bytes) {
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(bytes);
+        KeyFactory keyFactory;
+        try {
+            keyFactory = KeyFactory.getInstance("EC");
+            return keyFactory.generatePrivate(keySpec);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
 
 }

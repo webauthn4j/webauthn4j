@@ -16,7 +16,6 @@
 
 package com.webauthn4j.test.authenticator.u2f;
 
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestConstants;
 import com.webauthn4j.test.authenticator.u2f.exception.FIDOU2FException;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
@@ -132,7 +131,7 @@ public class FIDOU2FAuthenticator {
 
     private KeyPair getKeyPair(byte[] applicationParameter, byte[] nonce) {
         byte[] seed = ByteBuffer.allocate(64).put(applicationParameter).put(nonce).array();
-        return KeyUtil.createECKeyPair(seed);
+        return ECUtil.createKeyPair(seed);
     }
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {

@@ -20,7 +20,6 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -76,7 +75,7 @@ class FIDOU2FAttestationStatementValidatorTest {
 
     @Test
     void validatePublicKey_with_non_p256_curve_ec_key_test() {
-        KeyPair keyPair = KeyUtil.createECKeyPair(ECUtil.P_521_SPEC);
+        KeyPair keyPair = ECUtil.createKeyPair(ECUtil.P_521_SPEC);
         assertThrows(CertificateException.class,
                 () -> target.validatePublicKey(keyPair.getPublic())
         );

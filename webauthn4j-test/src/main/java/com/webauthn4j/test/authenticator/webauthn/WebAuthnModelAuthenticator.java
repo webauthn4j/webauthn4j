@@ -37,6 +37,7 @@ import com.webauthn4j.test.*;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.nio.ByteBuffer;
@@ -200,7 +201,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         PrivateKey credentialPrivateKey;
         CredentialPublicKey credentialPublicKey;
         try {
-            credentialKeyPair = KeyUtil.createECKeyPair();
+            credentialKeyPair = ECUtil.createKeyPair();
             credentialPrivateKey = credentialKeyPair.getPrivate();
             credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) credentialKeyPair.getPublic());
 

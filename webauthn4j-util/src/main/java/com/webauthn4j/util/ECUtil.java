@@ -18,11 +18,9 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.AlgorithmParameters;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.interfaces.ECPublicKey;
 import java.security.spec.*;
 import java.util.Arrays;
@@ -31,6 +29,8 @@ import java.util.Arrays;
  * A Utility class for Elliptic Curve(EC) manipulation
  */
 public class ECUtil {
+
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     public static final ECParameterSpec P_256_SPEC = createECParameterSpec("secp256r1");
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
@@ -52,6 +52,10 @@ public class ECUtil {
                 .array();
     }
 
+    public static KeyPair createKeyPair() {
+        return createKeyPair((byte[]) null);
+    }
+
     public static PublicKey createPublicKey(ECPublicKeySpec ecPublicKeySpec) {
         try {
             KeyFactory factory = KeyFactory.getInstance("EC");
@@ -59,6 +63,66 @@ public class ECUtil {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
+    }
+
+    private static KeyPairGenerator createKeyPairGenerator() {
+        try {
+            return KeyPairGenerator.getInstance("EC");
+        } catch (NoSuchAlgorithmException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    public static KeyPair createKeyPair(byte[] seed, ECParameterSpec ecParameterSpec) {
+        KeyPairGenerator keyPairGenerator = createKeyPairGenerator();
+        SecureRandom random;
+        try {
+            if (seed != null) {
+                random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
+                random.setSeed(seed);
+            } else {
+                random = secureRandom;
+            }
+            keyPairGenerator.initialize(ecParameterSpec, random);
+            return keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    public static KeyPair createKeyPair(byte[] seed) {
+        return createKeyPair(seed, ECUtil.P_256_SPEC);
+    }
+
+    public static KeyPair createKeyPair(ECParameterSpec ecParameterSpec) {
+        return createKeyPair(null, ecParameterSpec);
+    }
+
+    public static PublicKey createPublicKeyFromUncompressed(byte[] publicKey) {
+        if (publicKey.length != 65) {
+            throw new IllegalArgumentException("publicKey must be 65 bytes length");
+        }
+        return createPublicKey(Arrays.copyOfRange(publicKey, 1, 1 + 32),
+                Arrays.copyOfRange(publicKey, 1 + 32, publicKey.length));
+    }
+
+    private static PublicKey createPublicKey(byte[] x, byte[] y) {
+        try {
+            byte[] encodedPublicKey = ByteBuffer.allocate(1 + x.length + y.length).put(new byte[] {0x04}).put(x).put(y).array();
+            ECPoint point = createECPoint(encodedPublicKey);
+            return KeyFactory.getInstance("ECDSA").generatePublic(new ECPublicKeySpec(point, ECUtil.P_256_SPEC));
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    private static ECPoint createECPoint(byte[] publicKey){
+        byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
+        byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
+        return new ECPoint(
+                new BigInteger(1, x),
+                new BigInteger(1, y)
+        );
     }
 
     private static ECParameterSpec createECParameterSpec(String name) {

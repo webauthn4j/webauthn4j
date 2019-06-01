@@ -18,10 +18,9 @@ package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.RSAPublicKeySpec;
 
 public class RSAUtil {
@@ -36,5 +35,16 @@ public class RSAUtil {
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
+    }
+
+    public static KeyPair createKeyPair() {
+        KeyPairGenerator keyPairGenerator;
+        try {
+            keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(new RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4), new SecureRandom());
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+        return keyPairGenerator.generateKeyPair();
     }
 }
