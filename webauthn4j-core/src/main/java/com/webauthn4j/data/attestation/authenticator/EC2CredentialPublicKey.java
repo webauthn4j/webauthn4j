@@ -106,18 +106,16 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
      */
     public static EC2CredentialPublicKey create(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
-        byte[] x = ecPoint.getAffineX().toByteArray();
-        byte[] y = ecPoint.getAffineY().toByteArray();
-        int xOffset = Math.max(x.length-32, 0);
-        int yOffset = Math.max(y.length-32, 0);
+        byte[] x = ECUtil.convertToFixedByteArray(ecPoint.getAffineX());
+        byte[] y = ECUtil.convertToFixedByteArray(ecPoint.getAffineY());
         return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
                 null,
                 Curve.SECP256R1,
-                Arrays.copyOfRange(x, xOffset, xOffset+32),
-                Arrays.copyOfRange(y, yOffset, yOffset+32)
+                x,
+                y
         );
     }
 
