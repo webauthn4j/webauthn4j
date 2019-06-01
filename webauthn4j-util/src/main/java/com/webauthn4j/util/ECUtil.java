@@ -40,16 +40,29 @@ public class ECUtil {
     }
 
     public static byte[] createUncompressedPublicKey(ECPublicKey ecPublicKey) {
-        byte[] x = ecPublicKey.getW().getAffineX().toByteArray();
-        byte[] y = ecPublicKey.getW().getAffineY().toByteArray();
-        int xOffset = x.length-32;
-        int yOffset = y.length-32;
+        byte[] x = convertToFixedByteArray(ecPublicKey.getW().getAffineX());
+        byte[] y = convertToFixedByteArray(ecPublicKey.getW().getAffineY());
+
         byte format = 0x04;
         return ByteBuffer.allocate(65)
                 .put(format)
-                .put(Arrays.copyOfRange(x, xOffset, xOffset+32))
-                .put(Arrays.copyOfRange(y, yOffset, yOffset+32))
+                .put(x)
+                .put(y)
                 .array();
+    }
+
+    public static byte[] convertToFixedByteArray(BigInteger value){
+        byte[] bytes = value.toByteArray();
+        byte[] adjusted = new byte[32];
+        if (bytes.length <= 32) {
+            System.arraycopy(bytes, 0, adjusted, 32 - bytes.length, bytes.length);
+        }
+        else if (bytes.length == 32 + 1 && bytes[0] == 0) {
+            System.arraycopy(bytes, 1, adjusted, 0, 32);
+        } else {
+            throw new IllegalStateException("x value is too large");
+        }
+        return adjusted;
     }
 
     public static KeyPair createKeyPair() {
