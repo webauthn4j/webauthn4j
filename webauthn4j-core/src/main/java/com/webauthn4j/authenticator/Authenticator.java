@@ -19,8 +19,11 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -62,5 +65,33 @@ public interface Authenticator extends Serializable {
      * @param value the counter value
      */
     void setCounter(long value);
+
+    /**
+     * Returns the client extensions
+     *
+     * @return the client extensions
+     */
+    Map<String, RegistrationExtensionClientOutput> getClientExtensions();
+
+    /**
+     * Sets the client extensions
+     *
+     * @param clientExtensions the client extensions
+     */
+    void setClientExtensions(Map<String, RegistrationExtensionClientOutput> clientExtensions);
+
+    /**
+     * Returns the authenticator extensions
+     *
+     * @return the authenticator extensions
+     */
+    Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions();
+
+    /**
+     * Sets the authenticator extensions
+     *
+     * @param authenticatorExtensions the authenticator extensions
+     */
+    void setAuthenticatorExtensions(Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions);
 
 }
