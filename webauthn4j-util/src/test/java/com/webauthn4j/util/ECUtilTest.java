@@ -19,6 +19,7 @@ package com.webauthn4j.util;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
+import java.security.KeyPair;
 import java.security.interfaces.ECPublicKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +33,20 @@ class ECUtilTest {
         byte[] uncompressed =  ECUtil.createUncompressedPublicKey(publicKey);
         assertThat(uncompressed).hasSize(65);
         assertThat(uncompressed).isEqualTo(Base64UrlUtil.decode("BM13LrnFulQ14TNByrUKAXrIakbDx5QPf5R2W_nKOOtoLboP5lWJSpgo-sE6dY0XGTkXvOkeVmVGjDNBQITd_yI"));
+    }
+
+    @Test
+    void createKeyPair_test() {
+        KeyPair keyPair = ECUtil.createKeyPair();
+        assertThat(keyPair).isNotNull();
+    }
+
+    @Test
+    void createKeyPair_test_with_seed() {
+        byte[] seed = new byte[]{0x01, 0x23, 0x45};
+        KeyPair keyPairA = ECUtil.createKeyPair(seed);
+        KeyPair keyPairB = ECUtil.createKeyPair(seed);
+        assertThat(keyPairA.getPrivate().getEncoded()).isEqualTo(keyPairB.getPrivate().getEncoded());
     }
 
 }

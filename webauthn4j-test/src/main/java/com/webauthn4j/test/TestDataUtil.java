@@ -47,9 +47,7 @@ import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
-import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.util.SignatureUtil;
+import com.webauthn4j.util.*;
 import com.webauthn4j.validator.RegistrationObject;
 
 import java.nio.ByteBuffer;
@@ -185,7 +183,7 @@ public class TestDataUtil {
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
-        KeyPair keyPair = KeyUtil.createECKeyPair();
+        KeyPair keyPair = ECUtil.createKeyPair();
         EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
@@ -195,7 +193,7 @@ public class TestDataUtil {
     }
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
-        KeyPair keyPair = KeyUtil.createRSAKeyPair();
+        KeyPair keyPair = RSAUtil.createKeyPair();
         RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);

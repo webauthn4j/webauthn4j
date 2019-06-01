@@ -17,8 +17,8 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
+import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -31,7 +31,7 @@ class TPMAuthenticatorTest {
     void generateAttestationStatement_test() {
         byte[] signedData = new byte[32];
         RegistrationEmulationOption option = new RegistrationEmulationOption();
-        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, KeyUtil.createECKeyPair(), new byte[0]);
+        AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, ECUtil.createKeyPair(), new byte[0]);
         assertThatCode(() -> {
             target.createAttestationStatement(attestationStatementRequest, option);
         }).doesNotThrowAnyException();

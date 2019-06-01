@@ -20,10 +20,11 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.test.KeyUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.RegistrationObject;
@@ -107,7 +108,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_RSAx5c_test() throws Exception {
-        KeyPair keyPair = KeyUtil.createRSAKeyPair();
+        KeyPair keyPair = RSAUtil.createKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
@@ -141,7 +142,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_ecdaaKeyId_test() throws Exception {
-        KeyPair keyPair = KeyUtil.createECKeyPair();
+        KeyPair keyPair = ECUtil.createKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
