@@ -52,17 +52,7 @@ public class ECUtil {
     }
 
     public static byte[] convertToFixedByteArray(BigInteger value){
-        byte[] bytes = value.toByteArray();
-        byte[] adjusted = new byte[32];
-        if (bytes.length <= 32) {
-            System.arraycopy(bytes, 0, adjusted, 32 - bytes.length, bytes.length);
-        }
-        else if (bytes.length == 32 + 1 && bytes[0] == 0) {
-            System.arraycopy(bytes, 1, adjusted, 0, 32);
-        } else {
-            throw new IllegalStateException("x value is too large");
-        }
-        return adjusted;
+        return convertToFixedByteArray(32, value);
     }
 
     public static byte[] convertToFixedByteArray(int fixedSize, BigInteger value) {
