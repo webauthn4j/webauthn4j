@@ -23,7 +23,10 @@ import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.PublicKeyCredentialRpEntity;
 import com.webauthn4j.data.PublicKeyCredentialType;
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.authenticator.*;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -33,7 +36,10 @@ import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionA
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
-import com.webauthn4j.test.*;
+import com.webauthn4j.test.CACertificatePath;
+import com.webauthn4j.test.CipherUtil;
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.*;
 import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
@@ -203,7 +209,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         try {
             credentialKeyPair = ECUtil.createKeyPair();
             credentialPrivateKey = credentialKeyPair.getPrivate();
-            credentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) credentialKeyPair.getPublic());
+            credentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) credentialKeyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();

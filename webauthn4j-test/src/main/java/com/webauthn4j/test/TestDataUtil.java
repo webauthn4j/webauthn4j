@@ -54,6 +54,8 @@ import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.ECPoint;
+import java.security.spec.EllipticCurve;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
@@ -184,7 +186,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = ECUtil.createKeyPair();
-        EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.create((ECPublicKey) keyPair.getPublic());
+        EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
@@ -270,6 +272,48 @@ public class TestDataUtil {
         return credentialPublicKey;
     }
 
+
+    /**
+     * createECCredentialPublicKey from {@code ECPublicKey}
+     *
+     * @param publicKey publicKey
+     * @return {@link EC2CredentialPublicKey}
+     */
+    public static EC2CredentialPublicKey createECCredentialPublicKey(ECPublicKey publicKey) {
+        ECPoint ecPoint = publicKey.getW();
+        EllipticCurve ellipticCurve = publicKey.getParams().getCurve();
+        Curve curve;
+        COSEAlgorithmIdentifier coseAlgorithmIdentifier;
+
+        switch (ellipticCurve.getField().getFieldSize()) {
+            case 256:
+                curve = Curve.SECP256R1;
+                coseAlgorithmIdentifier = COSEAlgorithmIdentifier.ES256;
+                break;
+            case 384:
+                curve = Curve.SECP384R1;
+                coseAlgorithmIdentifier = COSEAlgorithmIdentifier.ES384;
+                break;
+            case 521:
+                curve = Curve.SECP521R1;
+                coseAlgorithmIdentifier = COSEAlgorithmIdentifier.ES512;
+                break;
+            default:
+                throw new IllegalStateException("We can only support secp256r1, secp384r1 or secp521r1");
+        }
+
+        byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+        byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+        return new EC2CredentialPublicKey(
+                null,
+                coseAlgorithmIdentifier,
+                null,
+                null,
+                curve,
+                x,
+                y
+        );
+    }
 
     public static CollectedClientData createClientData(ClientDataType type) {
         return createClientData(type, TestDataUtil.createChallenge());

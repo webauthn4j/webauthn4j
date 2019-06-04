@@ -30,7 +30,6 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.PublicKey;
-import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
 import java.util.Arrays;
@@ -76,7 +75,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     }
 
     /**
-     * create from uncompressed ECC key
+     * create from uncompressed ECC 256-bit key
      *
      * @param publicKey publicKey
      * @return {@link EC2CredentialPublicKey}
@@ -87,27 +86,6 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new EC2CredentialPublicKey(
-                null,
-                COSEAlgorithmIdentifier.ES256,
-                null,
-                null,
-                Curve.SECP256R1,
-                x,
-                y
-        );
-    }
-
-    /**
-     * create from {@code ECPublicKey}
-     *
-     * @param publicKey publicKey
-     * @return {@link EC2CredentialPublicKey}
-     */
-    public static EC2CredentialPublicKey create(ECPublicKey publicKey) {
-        ECPoint ecPoint = publicKey.getW();
-        byte[] x = ECUtil.convertToFixedByteArray(ecPoint.getAffineX());
-        byte[] y = ECUtil.convertToFixedByteArray(ecPoint.getAffineY());
         return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -166,11 +144,11 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         if (y == null) {
             throw new ConstraintViolationException("y must not be null");
         }
-        if (x.length != 32) {
-            throw new ConstraintViolationException("x must be 32 bytes");
+        if (x.length != curve.getSize()) {
+            throw new ConstraintViolationException("x must be " + curve.getSize() + " bytes");
         }
-        if (y.length != 32) {
-            throw new ConstraintViolationException("y must be 32 bytes");
+        if (y.length != curve.getSize()) {
+            throw new ConstraintViolationException("y must be " + curve.getSize() + " bytes");
         }
     }
 

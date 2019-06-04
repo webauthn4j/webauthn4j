@@ -21,8 +21,14 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.PublicKey;
+import java.security.interfaces.ECPublicKey;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -144,5 +150,47 @@ class EC2CredentialPublicKeyTest {
         assertThrows(ConstraintViolationException.class,
                 () -> target.validate()
         );
+    }
+
+    @Test
+    void validate_from_generated_key_01() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(ECUtil.P_256_SPEC);
+
+        for (int i = 0; i < 1000; i++) {
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            PublicKey publicKey = keyPair.getPublic();
+            EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            ec2CredentialPublicKey.validate();
+        }
+    }
+
+    @Test
+    void validate_from_generated_key_02() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(ECUtil.P_384_SPEC);
+
+        for (int i = 0; i < 1000; i++) {
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            PublicKey publicKey = keyPair.getPublic();
+            EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            ec2CredentialPublicKey.validate();
+        }
+    }
+
+    @Test
+    void validate_from_generated_key_03() throws Exception {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
+        keyPairGenerator.initialize(ECUtil.P_521_SPEC);
+
+        for (int i = 0; i < 1000; i++) {
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+
+            PublicKey publicKey = keyPair.getPublic();
+            EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            ec2CredentialPublicKey.validate();
+        }
     }
 }

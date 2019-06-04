@@ -25,14 +25,18 @@ import java.security.spec.ECParameterSpec;
 
 public enum Curve {
 
-    SECP256R1(1),
-    SECP384R1(2),
-    SECP521R1(3);
+    SECP256R1(1, 32, ECUtil.P_256_SPEC),
+    SECP384R1(2, 48, ECUtil.P_384_SPEC),
+    SECP521R1(3, 66, ECUtil.P_521_SPEC);
 
     private final int value;
+    private final int size;
+    private final ECParameterSpec parameterSpec;
 
-    Curve(int value) {
+    Curve(int value, int size, ECParameterSpec parameterSpec) {
         this.value = value;
+        this.size = size;
+        this.parameterSpec = parameterSpec;
     }
 
     public static Curve create(int value) {
@@ -62,16 +66,11 @@ public enum Curve {
         return value;
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public ECParameterSpec getECParameterSpec() {
-        switch (this.value) {
-            case 1:
-                return ECUtil.P_256_SPEC;
-            case 2:
-                return ECUtil.P_384_SPEC;
-            case 3:
-                return ECUtil.P_521_SPEC;
-            default:
-                throw new IllegalStateException();
-        }
+        return parameterSpec;
     }
 }
