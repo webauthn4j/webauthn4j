@@ -58,13 +58,17 @@ public class ECUtil {
     public static byte[] convertToFixedByteArray(int fixedSize, BigInteger value) {
         byte[] bytes = value.toByteArray();
 
+        return convertToFixedByteArray(fixedSize, bytes);
+    }
+
+    public static byte[] convertToFixedByteArray(int fixedSize, byte[] value) {
         byte[] adjusted = new byte[fixedSize];
-        if (bytes.length <= fixedSize) {
-            System.arraycopy(bytes, 0, adjusted, fixedSize - bytes.length, bytes.length);
-        } else if (bytes.length == fixedSize + 1 && bytes[0] == 0) {
-            System.arraycopy(bytes, 1, adjusted, 0, fixedSize);
+        if (value.length <= fixedSize) {
+            System.arraycopy(value, 0, adjusted, fixedSize - value.length, value.length);
+        } else if (value.length == fixedSize + 1 && value[0] == 0) {
+            System.arraycopy(value, 1, adjusted, 0, fixedSize);
         } else {
-            throw new IllegalStateException("Value is too large, fixedSize: " + fixedSize + ", array size: " + bytes.length + ", starts with 0: " + (bytes[0] == 0 ? "yes" : "no"));
+            throw new IllegalStateException("Value is too large, fixedSize: " + fixedSize + ", array size: " + value.length + ", starts with 0: " + (value[0] == 0 ? "yes" : "no"));
         }
         return adjusted;
     }
