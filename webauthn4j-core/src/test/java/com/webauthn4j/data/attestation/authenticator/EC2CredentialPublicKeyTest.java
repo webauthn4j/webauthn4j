@@ -157,13 +157,7 @@ class EC2CredentialPublicKeyTest {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_256_SPEC);
 
-        for (int i = 0; i < 1000; i++) {
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-            PublicKey publicKey = keyPair.getPublic();
-            EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
-            ec2CredentialPublicKey.validate();
-        }
+        testMultipleValidationWithNewKeyPairs("P_256_SPEC", keyPairGenerator);
     }
 
     @Test
@@ -171,13 +165,7 @@ class EC2CredentialPublicKeyTest {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_384_SPEC);
 
-        for (int i = 0; i < 1000; i++) {
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-
-            PublicKey publicKey = keyPair.getPublic();
-            EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
-            ec2CredentialPublicKey.validate();
-        }
+        testMultipleValidationWithNewKeyPairs("P_384_SPEC", keyPairGenerator);
     }
 
     @Test
@@ -185,12 +173,33 @@ class EC2CredentialPublicKeyTest {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
         keyPairGenerator.initialize(ECUtil.P_521_SPEC);
 
-        for (int i = 0; i < 1000; i++) {
+        testMultipleValidationWithNewKeyPairs("P_521_SPEC", keyPairGenerator);
+    }
+
+    private void testMultipleValidationWithNewKeyPairs(String name, KeyPairGenerator keyPairGenerator) {
+        for (int i = 0; i < 5; i++) {
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
             PublicKey publicKey = keyPair.getPublic();
             EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+
+            byte[] bytesOfX = ((ECPublicKey) publicKey).getW().getAffineX().toByteArray();
+            byte[] bytesOfY = ((ECPublicKey) publicKey).getW().getAffineY().toByteArray();
+
+            System.out.println(i + "(" + name + ") - X (size: " + bytesOfX.length + ", " + asString(bytesOfX));
+            System.out.println(i + "(" + name + ") - Y (size: " + bytesOfY.length + ", " + asString(bytesOfY));
+
             ec2CredentialPublicKey.validate();
         }
+    }
+
+    private String asString(byte[] values) {
+        StringBuffer buffer = new StringBuffer(values.length);
+
+        for (byte value : values) {
+            buffer.append(value);
+        }
+
+        return buffer.toString();
     }
 }

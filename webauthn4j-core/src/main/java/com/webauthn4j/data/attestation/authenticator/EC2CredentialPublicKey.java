@@ -70,8 +70,10 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
             @JsonProperty("-3") byte[] y) {
         super(keyId, algorithm, keyOpts, baseIV);
         this.curve = curve;
-        this.x = curve != null && x != null ? ECUtil.convertToFixedByteArray(curve.getSize(), x) : x;
-        this.y = curve != null && y != null ? ECUtil.convertToFixedByteArray(curve.getSize(), y) : y;
+        this.x = x;
+        this.y = y;
+        //this.y = curve != null && y != null ? ECUtil.convertToFixedByteArray(curve.getSize(), y) : y; this.x = curve != null && x != null ? ECUtil.convertToFixedByteArray(curve.getSize(), x) : x;
+        //this.y = curve != null && y != null ? ECUtil.convertToFixedByteArray(curve.getSize(), y) : y;
     }
 
     /**
