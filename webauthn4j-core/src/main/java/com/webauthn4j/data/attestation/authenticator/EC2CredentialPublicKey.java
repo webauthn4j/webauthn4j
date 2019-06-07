@@ -144,12 +144,6 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         if (y == null) {
             throw new ConstraintViolationException("y must not be null");
         }
-        if (x.length != curve.getSize()) {
-            throw new ConstraintViolationException("x must be " + curve.getSize() + " bytes");
-        }
-        if (y.length != curve.getSize()) {
-            throw new ConstraintViolationException("y must be " + curve.getSize() + " bytes");
-        }
     }
 
     @Override
