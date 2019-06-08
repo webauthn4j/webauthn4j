@@ -19,11 +19,11 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ConstUtil;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An {@link Authenticator} implementation
@@ -36,11 +36,22 @@ public class AuthenticatorImpl implements Authenticator {
     private Set<AuthenticatorTransport> transports;
     private long counter;
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
+    private Map<String, RegistrationExtensionClientOutput> clientExtensions;
+    private Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
+
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports,
+                             Map<String, RegistrationExtensionClientOutput> clientExtensions,
+                             Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         this.transports = Collections.unmodifiableSet(transports);
+        this.clientExtensions = clientExtensions;
+        this.authenticatorExtensions = authenticatorExtensions;
         setCounter(counter);
+    }
+
+    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
+        this(attestedCredentialData, attestationStatement, counter, transports, new HashMap<>(), new HashMap<>());
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
@@ -88,6 +99,24 @@ public class AuthenticatorImpl implements Authenticator {
 
     public void setTransports(Set<AuthenticatorTransport> transports) {
         this.transports = transports;
+    }
+
+    @Override
+    public Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
+        return clientExtensions;
+    }
+
+    public void setClientExtensions(Map<String, RegistrationExtensionClientOutput> clientExtensions) {
+        this.clientExtensions = clientExtensions;
+    }
+
+    @Override
+    public Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+        return authenticatorExtensions;
+    }
+
+    public void setAuthenticatorExtensions(Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+        this.authenticatorExtensions = authenticatorExtensions;
     }
 
     @Override

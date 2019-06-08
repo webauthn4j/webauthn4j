@@ -19,11 +19,14 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,17 +53,23 @@ class AuthenticatorImplTest {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        HashMap<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new HashMap<>();
+        HashMap<String, RegistrationExtensionClientOutput> clientExtensions = new HashMap<>();
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
         authenticator.setAttestedCredentialData(attestedCredentialData);
         authenticator.setAttestationStatement(attestationStatement);
         authenticator.setTransports(transports);
         authenticator.setCounter(1);
+        authenticator.setAuthenticatorExtensions(authenticatorExtensions);
+        authenticator.setClientExtensions(clientExtensions);
 
         assertAll(
                 () -> assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestedCredentialData),
                 () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
                 () -> assertThat(authenticator.getTransports()).isEqualTo(transports),
-                () -> assertThat(authenticator.getCounter()).isEqualTo(1)
+                () -> assertThat(authenticator.getCounter()).isEqualTo(1),
+                () -> assertThat(authenticator.getAuthenticatorExtensions()).isEqualTo(authenticatorExtensions),
+                () -> assertThat(authenticator.getClientExtensions()).isEqualTo(clientExtensions)
         );
     }
 
