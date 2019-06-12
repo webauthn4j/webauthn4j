@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class RSACredentialPublicKeyTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
     void equals_hashCode_test() {

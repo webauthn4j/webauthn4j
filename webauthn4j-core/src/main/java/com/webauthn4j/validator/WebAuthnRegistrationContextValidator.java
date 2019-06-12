@@ -90,7 +90,7 @@ public class WebAuthnRegistrationContextValidator {
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
                 new JsonConverter(),
-                new CborConverter());
+                CborConverter.INSTANCE);
     }
 
     public WebAuthnRegistrationContextValidator(
@@ -104,7 +104,7 @@ public class WebAuthnRegistrationContextValidator {
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 new JsonConverter(),
-                new CborConverter());
+                CborConverter.INSTANCE);
     }
 
     public WebAuthnRegistrationContextValidator(
@@ -162,7 +162,7 @@ public class WebAuthnRegistrationContextValidator {
      * @return configured {@link WebAuthnRegistrationContextValidator}
      */
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new JsonConverter(), new CborConverter());
+        return createNonStrictRegistrationContextValidator(new JsonConverter(), CborConverter.INSTANCE);
     }
 
     /**

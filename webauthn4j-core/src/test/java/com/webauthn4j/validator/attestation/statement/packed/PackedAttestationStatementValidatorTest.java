@@ -58,7 +58,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class PackedAttestationStatementValidatorTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
 

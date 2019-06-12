@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class CertPathSerializerTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
     void test() throws CertificateException {

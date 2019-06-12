@@ -32,7 +32,7 @@ class AttestationObjectDeserializerTest {
 
     @Test
     void test() {
-        CborConverter cborConverter = new CborConverter();
+        CborConverter cborConverter = CborConverter.INSTANCE;
 
         //Given
         //noinspection SpellCheckingInspection

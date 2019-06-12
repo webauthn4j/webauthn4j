@@ -36,7 +36,7 @@ import static org.mockito.Mockito.mock;
 class WebAuthnRegistrationContextTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
 
     @Test

@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class EC2CredentialPublicKeyTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
     void createFromUncompressedECCKey_test() {

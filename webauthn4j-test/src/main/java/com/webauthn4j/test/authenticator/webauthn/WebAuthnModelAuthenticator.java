@@ -104,7 +104,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
                 0,
                 true,
-                new CborConverter()
+                CborConverter.INSTANCE
         );
     }
 

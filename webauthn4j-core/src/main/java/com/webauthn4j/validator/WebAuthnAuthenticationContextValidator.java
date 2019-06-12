@@ -66,7 +66,7 @@ public class WebAuthnAuthenticationContextValidator {
     // ========================================================================================================
 
     public WebAuthnAuthenticationContextValidator() {
-        this(new JsonConverter(), new CborConverter());
+        this(new JsonConverter(), CborConverter.INSTANCE);
     }
 
     public WebAuthnAuthenticationContextValidator(JsonConverter jsonConverter, CborConverter cborConverter) {

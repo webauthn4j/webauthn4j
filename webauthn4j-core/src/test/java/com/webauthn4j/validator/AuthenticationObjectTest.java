@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticationObjectTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
     void getter_test() {

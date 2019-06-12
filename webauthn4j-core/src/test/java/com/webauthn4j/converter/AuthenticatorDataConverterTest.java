@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
     void convert_test() {

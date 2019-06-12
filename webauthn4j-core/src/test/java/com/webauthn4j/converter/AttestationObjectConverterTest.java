@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AttestationObjectConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     private AttestationObjectConverter target = new AttestationObjectConverter(cborConverter);
 
