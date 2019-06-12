@@ -43,8 +43,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
 
     private Origin origin = new Origin("http://example.com");
@@ -116,7 +116,7 @@ public class CustomAuthenticationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

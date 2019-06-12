@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMGeneratedTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void create() {

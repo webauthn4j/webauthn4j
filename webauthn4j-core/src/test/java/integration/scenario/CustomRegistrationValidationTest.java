@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
 
     private Origin origin = new Origin("http://localhost");

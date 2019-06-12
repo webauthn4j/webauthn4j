@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -34,11 +33,10 @@ class JsonConverterIntegrationTest {
     @Test
     void constructor_with_customized_objectMapper_inherits_customization() {
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
         jsonMapper.registerModule(module);
-        JsonConverter jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        JsonConverter jsonConverter = new JsonConverter(jsonMapper);
         assertThat(jsonConverter.writeValueAsString(new TestData())).isEqualTo("\"serialized by TestDataSerializer\"");
     }
 

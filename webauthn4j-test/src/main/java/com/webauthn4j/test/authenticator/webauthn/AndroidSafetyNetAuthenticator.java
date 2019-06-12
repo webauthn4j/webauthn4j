@@ -16,6 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -77,7 +78,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private JWSFactory getJwsFactory() {
         if (jwsFactory == null) {
-            jwsFactory = new JWSFactory(cborConverter.getJsonConverter());
+            jwsFactory = new JWSFactory(JsonConverter.INSTANCE);
         }
         return jwsFactory;
     }

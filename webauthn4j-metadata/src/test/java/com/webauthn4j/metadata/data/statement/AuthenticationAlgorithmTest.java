@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class AuthenticationAlgorithmTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void create_test() {

@@ -37,21 +37,21 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnCBORModule extends SimpleModule {
 
-    public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public WebAuthnCBORModule() {
         super("WebAuthnCBORModule");
 
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(cborConverter));
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer());
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
+        this.addDeserializer(JWS.class, new JWSDeserializer());
 
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
+        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer());
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(JWS.class, new JWSSerializer());

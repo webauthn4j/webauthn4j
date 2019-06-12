@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMEccCurveTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void create_test() {

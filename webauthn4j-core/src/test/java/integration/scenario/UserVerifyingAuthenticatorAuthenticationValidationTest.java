@@ -50,8 +50,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(EmulatorUtil.PACKED_AUTHENTICATOR);
@@ -424,7 +424,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

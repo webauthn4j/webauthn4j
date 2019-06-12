@@ -44,14 +44,11 @@ public class CborConverter implements Serializable {
     public final static CborConverter INSTANCE = new CborConverter();
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
     private final ObjectMapper cborMapper;
-    private final JsonConverter jsonConverter;
 
     private CborConverter() {
-        ObjectMapper jsonMapper = new ObjectMapper();
         this.cborMapper = new ObjectMapper(new CBORFactory());
-        this.jsonConverter = new JsonConverter(jsonMapper, cborMapper);
 
-        cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
+        cborMapper.registerModule(new WebAuthnCBORModule());
         cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -125,14 +122,5 @@ public class CborConverter implements Serializable {
      */
     private ObjectMapper getCborMapper() {
         return cborMapper;
-    }
-
-    /**
-     * Returns the twined {@link JsonConverter}
-     *
-     * @return the twined {@link JsonConverter}
-     */
-    public JsonConverter getJsonConverter() {
-        return jsonConverter;
     }
 }

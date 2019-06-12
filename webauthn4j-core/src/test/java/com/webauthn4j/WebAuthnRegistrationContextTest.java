@@ -35,14 +35,14 @@ import static org.mockito.Mockito.mock;
 
 class WebAuthnRegistrationContextTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
     private CborConverter cborConverter = CborConverter.INSTANCE;
 
 
     @Test
     void test() {
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
-        byte[] authenticatorData = new AttestationObjectConverter(cborConverter).convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
+        byte[] authenticatorData = new AttestationObjectConverter().convertToBytes(createAttestationObjectWithFIDOU2FAttestationStatement());
         Set<String> transports = Collections.emptySet();
 
 

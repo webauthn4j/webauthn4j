@@ -41,7 +41,7 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
     }
 
     public WebAuthnAuthenticatorAdaptor(WebAuthnAuthenticator webAuthnAuthenticator) {
-        this(webAuthnAuthenticator, new JsonConverter());
+        this(webAuthnAuthenticator, JsonConverter.INSTANCE);
     }
 
     @Override

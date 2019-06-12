@@ -30,15 +30,8 @@ import java.io.IOException;
  * Jackson Serializer for {@link AuthenticatorData}
  */
 public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
-
-    private CborConverter cborConverter;
-
-    public AuthenticatorDataSerializer(CborConverter cborConverter) {
+    public AuthenticatorDataSerializer() {
         super(AuthenticatorData.class);
-
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-
-        this.cborConverter = cborConverter;
     }
 
     /**
@@ -46,7 +39,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      */
     @Override
     public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeBinary(new AuthenticatorDataConverter(cborConverter).convert(value));
+        gen.writeBinary(new AuthenticatorDataConverter(CborConverter.INSTANCE).convert(value));
     }
 
 }

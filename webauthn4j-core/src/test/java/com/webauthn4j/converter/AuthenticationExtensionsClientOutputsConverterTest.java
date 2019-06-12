@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsClientOutputsConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TokenBindingStatusTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void create_test() {

@@ -57,7 +57,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PackedAttestationStatementValidatorTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
     private CborConverter cborConverter = CborConverter.INSTANCE;
 
     private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
@@ -178,12 +178,12 @@ class PackedAttestationStatementValidatorTest {
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {
 
-        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter().convertToBytes(attestationObject);
 
         Origin origin = new Origin(originUrl);
         Challenge challenge = (Challenge) () -> Base64UrlUtil.decode(challengeString);
 
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
         CollectedClientData collectedClientData = new CollectedClientDataConverter(jsonConverter).convert(clientDataBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();

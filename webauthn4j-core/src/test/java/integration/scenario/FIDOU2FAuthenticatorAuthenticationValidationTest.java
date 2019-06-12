@@ -50,8 +50,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
 
     private Origin origin = new Origin("http://example.com");
@@ -486,7 +486,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

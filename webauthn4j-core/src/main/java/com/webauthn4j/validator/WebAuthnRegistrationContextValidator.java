@@ -89,7 +89,7 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 new DefaultSelfAttestationTrustworthinessValidator(),
-                new JsonConverter(),
+                JsonConverter.INSTANCE,
                 CborConverter.INSTANCE);
     }
 
@@ -103,7 +103,7 @@ public class WebAuthnRegistrationContextValidator {
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
-                new JsonConverter(),
+                JsonConverter.INSTANCE,
                 CborConverter.INSTANCE);
     }
 
@@ -141,7 +141,7 @@ public class WebAuthnRegistrationContextValidator {
 
 
         collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
-        attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        attestationObjectConverter = new AttestationObjectConverter();
         authenticatorTransportConverter = new AuthenticatorTransportConverter();
         authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 
@@ -162,7 +162,7 @@ public class WebAuthnRegistrationContextValidator {
      * @return configured {@link WebAuthnRegistrationContextValidator}
      */
     public static WebAuthnRegistrationContextValidator createNonStrictRegistrationContextValidator() {
-        return createNonStrictRegistrationContextValidator(new JsonConverter(), CborConverter.INSTANCE);
+        return createNonStrictRegistrationContextValidator(JsonConverter.INSTANCE, CborConverter.INSTANCE);
     }
 
     /**

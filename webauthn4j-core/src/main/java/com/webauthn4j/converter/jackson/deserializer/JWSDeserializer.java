@@ -36,12 +36,10 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
 
     private transient JWSFactory jwsFactory;
 
-    public JWSDeserializer(JsonConverter jsonConverter) {
+    public JWSDeserializer() {
         super(JWS.class);
 
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-
-        this.jwsFactory = new JWSFactory(jsonConverter);
+        this.jwsFactory = new JWSFactory(JsonConverter.INSTANCE);
     }
 
     @Override

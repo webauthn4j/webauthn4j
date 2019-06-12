@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class MatcherProtectionTest {
 
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void create_test() {

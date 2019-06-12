@@ -32,7 +32,7 @@ class AttestationObjectConverterTest {
 
     private CborConverter cborConverter = CborConverter.INSTANCE;
 
-    private AttestationObjectConverter target = new AttestationObjectConverter(cborConverter);
+    private AttestationObjectConverter target = new AttestationObjectConverter();
 
     @Test
     void convert_deserialization_test() {

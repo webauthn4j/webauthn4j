@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class WebAuthnRegistrationContextTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
 
     private Origin origin = new Origin("http://localhost");

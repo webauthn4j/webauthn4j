@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class OriginTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     @Test
     void equals_test() {

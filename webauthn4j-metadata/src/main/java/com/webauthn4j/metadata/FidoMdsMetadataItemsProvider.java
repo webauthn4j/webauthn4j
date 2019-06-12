@@ -63,7 +63,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = jsonConverter;
-        this.jwsFactory = new JWSFactory(jsonConverter);
+        this.jwsFactory = new JWSFactory(JsonConverter.INSTANCE);
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }

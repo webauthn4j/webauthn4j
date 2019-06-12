@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class EC2CredentialPublicKeyTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
     private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test

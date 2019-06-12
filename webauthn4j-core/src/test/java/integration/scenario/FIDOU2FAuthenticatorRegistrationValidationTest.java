@@ -58,7 +58,7 @@ import static org.mockito.Mockito.mock;
 
 class FIDOU2FAuthenticatorRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
 
     private Origin origin = new Origin("http://localhost");

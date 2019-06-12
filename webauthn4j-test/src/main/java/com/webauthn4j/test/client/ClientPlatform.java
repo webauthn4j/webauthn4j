@@ -42,9 +42,9 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
+    private CborConverter cborConverter = CborConverter.INSTANCE;
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter();
     private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
 
     private Origin origin;

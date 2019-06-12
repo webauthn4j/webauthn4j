@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class RegistrationObjectTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
     private CborConverter cborConverter = CborConverter.INSTANCE;
 
     @Test
@@ -50,7 +50,7 @@ class RegistrationObjectTest {
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter().convertToBytes(attestationObject);
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
@@ -87,7 +87,7 @@ class RegistrationObjectTest {
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
-        byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
+        byte[] attestationObjectBytes = new AttestationObjectConverter().convertToBytes(attestationObject);
         AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();

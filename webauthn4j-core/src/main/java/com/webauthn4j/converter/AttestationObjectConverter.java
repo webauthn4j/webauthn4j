@@ -29,14 +29,12 @@ public class AttestationObjectConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private CborConverter cborConverter;
+    private CborConverter cborConverter = CborConverter.INSTANCE;
 
     // ~ Constructors
     // ================================================================================================
 
-    public AttestationObjectConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
+    public AttestationObjectConverter() {
     }
 
     // ~ Methods

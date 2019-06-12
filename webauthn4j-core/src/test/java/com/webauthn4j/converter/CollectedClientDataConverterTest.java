@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CollectedClientDataConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
     private CollectedClientDataConverter target = new CollectedClientDataConverter(jsonConverter);
 

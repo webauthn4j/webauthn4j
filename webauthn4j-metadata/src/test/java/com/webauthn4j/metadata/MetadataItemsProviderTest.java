@@ -48,8 +48,7 @@ class MetadataItemsProviderTest {
     public MetadataItemsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        jsonConverter = new JsonConverter(jsonMapper);
     }
 
     @Test

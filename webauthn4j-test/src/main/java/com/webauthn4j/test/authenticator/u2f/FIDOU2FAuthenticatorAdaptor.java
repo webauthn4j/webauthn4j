@@ -60,13 +60,13 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator, JsonConverter jsonConverter) {
         this.fidoU2FAuthenticator = fidoU2FAuthenticator;
 
-        CborConverter cborConverter = jsonConverter.getCborConverter();
+        CborConverter cborConverter = CborConverter.INSTANCE;
         this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
         this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
     }
 
     public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator) {
-        this(fidoU2FAuthenticator, new JsonConverter());
+        this(fidoU2FAuthenticator, JsonConverter.INSTANCE);
     }
 
     public FIDOU2FAuthenticatorAdaptor() {

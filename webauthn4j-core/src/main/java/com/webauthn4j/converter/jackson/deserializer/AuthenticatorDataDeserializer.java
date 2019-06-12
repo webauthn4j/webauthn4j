@@ -30,15 +30,8 @@ import java.io.IOException;
  * Jackson Deserializer for {@link AuthenticatorData}
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
-
-    private CborConverter cborConverter;
-
-    public AuthenticatorDataDeserializer(CborConverter cborConverter) {
+    public AuthenticatorDataDeserializer() {
         super(AuthenticatorData.class);
-
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-
-        this.cborConverter = cborConverter;
     }
 
     /**
@@ -47,7 +40,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
     @Override
     public AuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
-        return new AuthenticatorDataConverter(cborConverter).convert(value);
+        return new AuthenticatorDataConverter(CborConverter.INSTANCE).convert(value);
     }
 
 

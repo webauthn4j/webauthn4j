@@ -29,14 +29,14 @@ import java.security.SignatureException;
 
 public class JWSFactory {
 
-    private JsonConverter jsonConverter;
+    private final JsonConverter jsonConverter;
 
     public JWSFactory(JsonConverter jsonConverter) {
         this.jsonConverter = jsonConverter;
     }
 
     public JWSFactory() {
-        this(new JsonConverter());
+        this(JsonConverter.INSTANCE);
     }
 
     public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, PrivateKey privateKey) {

@@ -32,7 +32,7 @@ class ExtensionClientOutputDeserializerTest {
 
     @Test
     void deserialize_test_with_JSON_data() {
-        JsonConverter jsonConverter = new JsonConverter();
+        JsonConverter jsonConverter = JsonConverter.INSTANCE;
 
         Map<String, ExtensionClientOutput> extensionOutputs =
                 jsonConverter.readValue(
