@@ -18,6 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.PublicKeyCredentialDescriptor;
 import com.webauthn4j.data.PublicKeyCredentialParameters;
 import com.webauthn4j.data.PublicKeyCredentialRpEntity;
@@ -63,6 +64,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private static SecureRandom secureRandom = new SecureRandom();
     // converter
     protected CborConverter cborConverter;
+    protected JsonConverter jsonConverter;
+
     // property
     private AAGUID aaguid;
     private KeyPair attestationKeyPair;
@@ -82,7 +85,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
             PrivateKey attestationIssuerPrivateKey,
             int counter,
             boolean capableOfUserVerification,
-            CborConverter cborConverter) {
+            CborConverter cborConverter,
+            JsonConverter jsonConverter) {
         this.aaguid = aaguid;
         this.attestationKeyPair = attestationKeyPair;
         this.caCertificatePath = caCertificatePath;
@@ -91,6 +95,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.counter = counter;
         this.capableOfUserVerification = capableOfUserVerification;
         this.cborConverter = cborConverter;
+        this.jsonConverter = jsonConverter;
         this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
     }
 
@@ -104,7 +109,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 TestAttestationUtil.load3tierTestIntermediateCAPrivateKey(),
                 0,
                 true,
-                new CborConverter()
+                new CborConverter(),
+                new JsonConverter()
         );
     }
 

@@ -44,7 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CustomAuthenticationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private CborConverter cborConverter = new CborConverter();
 
 
     private Origin origin = new Origin("http://example.com");

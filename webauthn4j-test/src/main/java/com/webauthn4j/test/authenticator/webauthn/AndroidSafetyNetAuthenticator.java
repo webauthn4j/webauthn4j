@@ -77,7 +77,7 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
     private JWSFactory getJwsFactory() {
         if (jwsFactory == null) {
-            jwsFactory = new JWSFactory(cborConverter.getJsonConverter());
+            jwsFactory = new JWSFactory(this.jsonConverter);
         }
         return jwsFactory;
     }

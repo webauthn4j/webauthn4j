@@ -34,11 +34,10 @@ class JsonConverterIntegrationTest {
     @Test
     void constructor_with_customized_objectMapper_inherits_customization() {
         ObjectMapper jsonMapper = new ObjectMapper(new JsonFactory());
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         SimpleModule module = new SimpleModule();
         module.addSerializer(TestData.class, new TestDataSerializer());
         jsonMapper.registerModule(module);
-        JsonConverter jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        JsonConverter jsonConverter = new JsonConverter(jsonMapper);
         assertThat(jsonConverter.writeValueAsString(new TestData())).isEqualTo("\"serialized by TestDataSerializer\"");
     }
 

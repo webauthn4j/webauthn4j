@@ -22,7 +22,6 @@ import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
 import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
-import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.*;
@@ -35,8 +34,7 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnJSONModule extends SimpleModule {
 
-    @SuppressWarnings("unused")
-    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public WebAuthnJSONModule(JsonConverter jsonConverter) {
         super("WebAuthnJSONModule");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());

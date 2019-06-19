@@ -37,7 +37,7 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnCBORModule extends SimpleModule {
 
-    public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public WebAuthnCBORModule(CborConverter cborConverter) {
         super("WebAuthnCBORModule");
 
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
@@ -49,7 +49,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
+        this.addDeserializer(JWS.class, new JWSDeserializer(new JsonConverter()));
 
         this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
         this.addSerializer(CertPath.class, new CertPathSerializer());

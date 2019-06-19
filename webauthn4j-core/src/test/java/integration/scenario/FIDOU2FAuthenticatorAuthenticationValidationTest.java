@@ -51,7 +51,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private CborConverter cborConverter = new CborConverter();
 
 
     private Origin origin = new Origin("http://example.com");

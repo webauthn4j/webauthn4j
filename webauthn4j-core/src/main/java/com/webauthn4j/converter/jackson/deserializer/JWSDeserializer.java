@@ -46,9 +46,9 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
 
     @Override
     public JWS deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);
+
         try {
             return jwsFactory.parse(str, Response.class);
         } catch (IllegalArgumentException e) {

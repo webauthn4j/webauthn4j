@@ -31,39 +31,34 @@ import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 
 /**
  * A utility class for JSON serialization/deserialization
  */
-public class JsonConverter implements Serializable {
+public class JsonConverter {
+    public static final JsonConverter HELPER = new JsonConverter();
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    /**
-     * As it may not be initialized, jsonMapper must be used through getJsonMapper method
-     */
-    private ObjectMapper jsonMapper;
-    private ObjectMapper cborMapper;
+    ObjectMapper jsonMapper;
 
-    private boolean jsonMapperInitialized = false;
-
-    private CborConverter cborConverter;
-
-    public JsonConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
+    public JsonConverter(ObjectMapper jsonMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
-        AssertUtil.notNull(cborMapper, "cborMapper must not be null");
 
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.jsonMapper = jsonMapper;
-        this.cborMapper = cborMapper;
+
+        this.jsonMapper.registerModule(new WebAuthnJSONModule(this));
+        this.jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        this.jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
     }
 
     public JsonConverter() {
-        this(new ObjectMapper(new JsonFactory()), new ObjectMapper(new CBORFactory()));
+        this(new ObjectMapper(new JsonFactory()));
     }
 
     @SuppressWarnings("unchecked")
@@ -130,25 +125,7 @@ public class JsonConverter implements Serializable {
      * @return the {@link ObjectMapper} configured for JSON processing
      */
     private ObjectMapper getJsonMapper() {
-        if (!jsonMapperInitialized) {
-            jsonMapper.registerModule(new WebAuthnJSONModule(this, getCborConverter()));
-            jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            jsonMapperInitialized = true;
-        }
         return jsonMapper;
     }
 
-    /**
-     * Returns the twined {@link CborConverter}
-     *
-     * @return the twined {@link CborConverter}
-     */
-    public CborConverter getCborConverter() {
-        if (cborConverter == null) {
-            cborConverter = new CborConverter(jsonMapper, cborMapper);
-        }
-        return cborConverter;
-    }
 }

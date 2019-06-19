@@ -32,40 +32,31 @@ import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 
 /**
  * A utility class for CBOR serialization/deserialization
  */
-public class CborConverter implements Serializable {
-
+public class CborConverter {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private ObjectMapper jsonMapper;
-
-    /**
-     * As it may not be initialized, cborMapper must be used through getCborMapper method
-     */
     private ObjectMapper cborMapper;
 
-    private boolean cborMapperInitialized = false;
-
-    private JsonConverter jsonConverter;
-
-    public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
-        AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
+    public CborConverter(ObjectMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
 
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
-        this.jsonMapper = jsonMapper;
         this.cborMapper = cborMapper;
+        this.cborMapper.registerModule(new WebAuthnCBORModule(this));
+        this.cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+        this.cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
     }
 
     public CborConverter() {
-        this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
+        this(new ObjectMapper(new CBORFactory()));
     }
 
     @SuppressWarnings("unchecked")
@@ -134,25 +125,6 @@ public class CborConverter implements Serializable {
      * @return the {@link ObjectMapper} configured for CBOR processing
      */
     private ObjectMapper getCborMapper() {
-        if (!cborMapperInitialized) {
-            cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            cborMapperInitialized = true;
-        }
         return cborMapper;
-    }
-
-    /**
-     * Returns the twined {@link JsonConverter}
-     *
-     * @return the twined {@link JsonConverter}
-     */
-    public JsonConverter getJsonConverter() {
-        if (jsonConverter == null) {
-            jsonConverter = new JsonConverter(jsonMapper, cborMapper);
-        }
-        return jsonConverter;
     }
 }

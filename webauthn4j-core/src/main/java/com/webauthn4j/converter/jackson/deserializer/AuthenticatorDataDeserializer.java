@@ -31,7 +31,7 @@ import java.io.IOException;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
-    private CborConverter cborConverter;
+    private transient CborConverter cborConverter;
 
     public AuthenticatorDataDeserializer(CborConverter cborConverter) {
         super(AuthenticatorData.class);
