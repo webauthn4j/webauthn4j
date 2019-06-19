@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.jws;
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.JWSConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 
@@ -29,19 +29,12 @@ import java.security.SignatureException;
 
 public class JWSFactory {
 
-    private JsonConverter jsonConverter;
-
-    public JWSFactory(JsonConverter jsonConverter) {
-        this.jsonConverter = jsonConverter;
-    }
-
     public JWSFactory() {
-        this(new JsonConverter());
     }
 
     public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, PrivateKey privateKey) {
-        String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(JWSConverter.INSTANCE.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(JWSConverter.INSTANCE.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
         Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
         try {
@@ -56,8 +49,8 @@ public class JWSFactory {
     }
 
     public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, byte[] signature) {
-        String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
-        String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
+        String headerString = Base64UrlUtil.encodeToString(JWSConverter.INSTANCE.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
+        String payloadString = Base64UrlUtil.encodeToString(JWSConverter.INSTANCE.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
@@ -69,8 +62,8 @@ public class JWSFactory {
         String headerString = data[0];
         String payloadString = data[1];
         String signatureString = data[2];
-        JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
-        T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
+        JWSHeader header = JWSConverter.INSTANCE.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
+        T payload = JWSConverter.INSTANCE.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }

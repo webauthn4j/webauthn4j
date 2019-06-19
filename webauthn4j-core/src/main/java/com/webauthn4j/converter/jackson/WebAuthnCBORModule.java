@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.Origin;
@@ -49,7 +48,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(new JsonConverter()));
+        this.addDeserializer(JWS.class, new JWSDeserializer());
 
         this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
         this.addSerializer(CertPath.class, new CertPathSerializer());

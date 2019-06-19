@@ -35,7 +35,7 @@ import java.time.Instant;
 
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
-    private JWSFactory jwsFactory;
+    private JWSFactory jwsFactory = new JWSFactory();
 
     @Override
     public AttestationStatement createAttestationStatement(
@@ -58,9 +58,9 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
 
         String ver = "12685023";
-        JWS<Response> jws = getJwsFactory().create(jwsHeader, response, this.getAttestationKeyPair().getPrivate());
+        JWS<Response> jws = this.jwsFactory.create(jwsHeader, response, this.getAttestationKeyPair().getPrivate());
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
-            jws = getJwsFactory().create(jws.getHeader(), jws.getPayload(), registrationEmulationOption.getSignature());
+            jws = this.jwsFactory.create(jws.getHeader(), jws.getPayload(), registrationEmulationOption.getSignature());
         }
         return new AndroidSafetyNetAttestationStatement(ver, jws);
     }
@@ -73,12 +73,5 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
         builder.addBasicConstraintsExtension();
         builder.addKeyUsageExtension();
         return builder.build(this.getAttestationIssuerPrivateKey());
-    }
-
-    private JWSFactory getJwsFactory() {
-        if (jwsFactory == null) {
-            jwsFactory = new JWSFactory(this.jsonConverter);
-        }
-        return jwsFactory;
     }
 }

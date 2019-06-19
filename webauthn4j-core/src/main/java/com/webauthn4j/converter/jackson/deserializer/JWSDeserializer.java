@@ -20,11 +20,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
-import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,14 +32,10 @@ import java.nio.charset.StandardCharsets;
  */
 public class JWSDeserializer extends StdDeserializer<JWS> {
 
-    private transient JWSFactory jwsFactory;
+    private transient JWSFactory jwsFactory = new JWSFactory();
 
-    public JWSDeserializer(JsonConverter jsonConverter) {
+    public JWSDeserializer() {
         super(JWS.class);
-
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-
-        this.jwsFactory = new JWSFactory(jsonConverter);
     }
 
     @Override
