@@ -1,45 +1,27 @@
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 
-public abstract class AbstractJsonConverter {
+public abstract class AbstractCborConverter {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
-    ObjectMapper jsonMapper;
-
-    AbstractJsonConverter(ObjectMapper mapper,
-                          SimpleModule module,
-                          Boolean wrapExceptions,
-                          Boolean failOnUnknownProperties) {
-        AssertUtil.notNull(mapper, "jsonMapper must not be null");
-
-        AssertUtil.isTrue(!(mapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-
-        this.jsonMapper = mapper;
-
-        this.jsonMapper.registerModule(module);
-        this.jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, wrapExceptions);
-        this.jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, failOnUnknownProperties);
-        this.jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
+    
+     ObjectMapper cborMapper;
 
     @SuppressWarnings("unchecked")
-    public <T> T readValue(String src, Class valueType) {
+    public <T> T readValue(byte[] src, Class valueType) {
         try {
-            return (T) jsonMapper.readValue(src, valueType);
+            return (T) cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -50,7 +32,7 @@ public abstract class AbstractJsonConverter {
     @SuppressWarnings("unchecked")
     public <T> T readValue(InputStream src, Class valueType) {
         try {
-            return (T) jsonMapper.readValue(src, valueType);
+            return (T) cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -58,9 +40,9 @@ public abstract class AbstractJsonConverter {
         }
     }
 
-    public <T> T readValue(String src, TypeReference valueTypeRef) {
+    public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
+            return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -68,9 +50,19 @@ public abstract class AbstractJsonConverter {
         }
     }
 
-    public <T> T readValue(InputStream src, TypeReference valueTypeRef) {
+    public AuthenticationExtensionsAuthenticatorOutputs readValue(InputStream inputStream, TypeReference<AuthenticationExtensionsAuthenticatorOutputs> typeReference) {
         try {
-            return jsonMapper.readValue(src, valueTypeRef);
+            return cborMapper.readValue(inputStream, typeReference);
+        } catch (MismatchedInputException | JsonParseException e) {
+            throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public JsonNode readTree(byte[] bytes) {
+        try {
+            return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -80,17 +72,10 @@ public abstract class AbstractJsonConverter {
 
     public byte[] writeValueAsBytes(Object value) {
         try {
-            return jsonMapper.writeValueAsBytes(value);
+            return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public String writeValueAsString(Object value) {
-        try {
-            return jsonMapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
 }
