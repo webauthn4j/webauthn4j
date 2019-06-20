@@ -16,17 +16,14 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.util.AssertUtil;
 
@@ -41,26 +38,32 @@ public class CborConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private ObjectMapper jsonMapper;
-
     /**
      * As it may not be initialized, cborMapper must be used through getCborMapper method
      */
     private ObjectMapper cborMapper;
 
-    private boolean cborMapperInitialized = false;
-
     private JsonConverter jsonConverter;
 
-    public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
+    CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper, JsonConverter jsonConverter) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
 
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
-        this.jsonMapper = jsonMapper;
         this.cborMapper = cborMapper;
+        this.jsonConverter = jsonConverter;
+
+        if(this.jsonConverter == null){
+            this.jsonConverter = new JsonConverter(jsonMapper, cborMapper, this);
+            ConverterUtil.initializeJsonMapper(jsonMapper, this.jsonConverter, this);
+            ConverterUtil.initializeCborMapper(cborMapper, this.jsonConverter, this);
+        }
+    }
+
+    public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
+        this(jsonMapper, cborMapper, null);
     }
 
     public CborConverter() {
@@ -70,7 +73,7 @@ public class CborConverter {
     @SuppressWarnings("unchecked")
     public <T> T readValue(byte[] src, Class valueType) {
         try {
-            return (T) getCborMapper().readValue(src, valueType);
+            return (T) cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -81,7 +84,7 @@ public class CborConverter {
     @SuppressWarnings("unchecked")
     public <T> T readValue(InputStream src, Class valueType) {
         try {
-            return (T) getCborMapper().readValue(src, valueType);
+            return (T) cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -91,7 +94,7 @@ public class CborConverter {
 
     public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
         try {
-            return getCborMapper().readValue(src, valueTypeRef);
+            return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -101,7 +104,7 @@ public class CborConverter {
 
     public AuthenticationExtensionsAuthenticatorOutputs readValue(InputStream inputStream, TypeReference<AuthenticationExtensionsAuthenticatorOutputs> typeReference) {
         try {
-            return getCborMapper().readValue(inputStream, typeReference);
+            return cborMapper.readValue(inputStream, typeReference);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -111,7 +114,7 @@ public class CborConverter {
 
     public JsonNode readTree(byte[] bytes) {
         try {
-            return getCborMapper().readTree(bytes);
+            return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -121,27 +124,12 @@ public class CborConverter {
 
     public byte[] writeValueAsBytes(Object value) {
         try {
-            return getCborMapper().writeValueAsBytes(value);
+            return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    /**
-     * Returns the {@link ObjectMapper} configured for CBOR processing
-     *
-     * @return the {@link ObjectMapper} configured for CBOR processing
-     */
-    private ObjectMapper getCborMapper() {
-        if (!cborMapperInitialized) {
-            cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            cborMapperInitialized = true;
-        }
-        return cborMapper;
-    }
 
     /**
      * Returns the twined {@link JsonConverter}
@@ -149,9 +137,6 @@ public class CborConverter {
      * @return the twined {@link JsonConverter}
      */
     public JsonConverter getJsonConverter() {
-        if (jsonConverter == null) {
-            jsonConverter = new JsonConverter(jsonMapper, cborMapper);
-        }
         return jsonConverter;
     }
 }
