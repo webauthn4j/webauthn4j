@@ -18,7 +18,7 @@ import java.io.UncheckedIOException;
 
 public abstract class AbstractJsonConverter {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
-    ObjectMapper jsonMapper;
+    private ObjectMapper jsonMapper;
 
     AbstractJsonConverter(ObjectMapper mapper,
                           SimpleModule module,
