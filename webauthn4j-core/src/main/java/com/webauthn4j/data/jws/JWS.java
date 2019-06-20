@@ -32,7 +32,7 @@ import java.security.interfaces.ECPublicKey;
 
 public class JWS<T extends Serializable> implements Serializable {
 
-    transient Logger logger = LoggerFactory.getLogger(JWS.class);
+    private transient Logger logger;
 
     private JWSHeader header;
     private T payload;
@@ -42,6 +42,8 @@ public class JWS<T extends Serializable> implements Serializable {
     private String payloadString;
 
     JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
+        logger = LoggerFactory.getLogger(JWS.class);
+
         this.header = header;
         this.payload = payload;
         this.signature = signature;

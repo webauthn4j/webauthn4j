@@ -50,7 +50,8 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
 
-    transient Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
+    private Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
+
     Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
