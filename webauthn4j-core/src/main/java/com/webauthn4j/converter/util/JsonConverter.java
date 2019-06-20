@@ -25,10 +25,7 @@ import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
  */
 public class JsonConverter extends AbstractJsonConverter {
     public JsonConverter(ObjectMapper jsonMapper) {
-        super(jsonMapper,
-                new WebAuthnJSONModule(),
-                false,
-                false);
+        super(jsonMapper, new WebAuthnJSONModule());
     }
 
     public JsonConverter() {

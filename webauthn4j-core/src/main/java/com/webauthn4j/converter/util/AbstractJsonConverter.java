@@ -20,6 +20,10 @@ public abstract class AbstractJsonConverter {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
     private ObjectMapper jsonMapper;
 
+    AbstractJsonConverter(ObjectMapper mapper, SimpleModule module) {
+        this(mapper, module, false, false);
+    }
+
     AbstractJsonConverter(ObjectMapper mapper,
                           SimpleModule module,
                           Boolean wrapExceptions,

@@ -8,9 +8,6 @@ public class JWSConverter extends AbstractJsonConverter {
     public final static JWSConverter INSTANCE = new JWSConverter();
 
     private JWSConverter() {
-        super(new ObjectMapper(new JsonFactory()),
-                new WebAuthnJWSModule(),
-                false,
-                false);
+        super(new ObjectMapper(new JsonFactory()), new WebAuthnJWSModule());
     }
 }
