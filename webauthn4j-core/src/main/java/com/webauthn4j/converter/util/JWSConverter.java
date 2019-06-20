@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webauthn4j.converter.jackson.WebAuthnJWSModule;
 
-public class JWSConverter extends AbstractJsonConvertor{
+public class JWSConverter extends AbstractJsonConverter {
     public final static JWSConverter INSTANCE = new JWSConverter();
 
     private JWSConverter() {

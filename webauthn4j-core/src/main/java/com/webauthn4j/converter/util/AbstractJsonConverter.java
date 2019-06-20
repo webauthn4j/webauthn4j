@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 
-public abstract class AbstractJsonConvertor {
+public abstract class AbstractJsonConverter {
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
     ObjectMapper jsonMapper;
 
     @SuppressWarnings("unchecked")
     public <T> T readValue(String src, Class valueType) {
         try {
-            return (T) getJsonMapper().readValue(src, valueType);
+            return (T) jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -29,7 +29,7 @@ public abstract class AbstractJsonConvertor {
     @SuppressWarnings("unchecked")
     public <T> T readValue(InputStream src, Class valueType) {
         try {
-            return (T) getJsonMapper().readValue(src, valueType);
+            return (T) jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -39,7 +39,7 @@ public abstract class AbstractJsonConvertor {
 
     public <T> T readValue(String src, TypeReference valueTypeRef) {
         try {
-            return getJsonMapper().readValue(src, valueTypeRef);
+            return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -49,7 +49,7 @@ public abstract class AbstractJsonConvertor {
 
     public <T> T readValue(InputStream src, TypeReference valueTypeRef) {
         try {
-            return getJsonMapper().readValue(src, valueTypeRef);
+            return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public abstract class AbstractJsonConvertor {
 
     public byte[] writeValueAsBytes(Object value) {
         try {
-            return getJsonMapper().writeValueAsBytes(value);
+            return jsonMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
@@ -67,18 +67,9 @@ public abstract class AbstractJsonConvertor {
 
     public String writeValueAsString(Object value) {
         try {
-            return getJsonMapper().writeValueAsString(value);
+            return jsonMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    /**
-     * Returns the {@link ObjectMapper} configured for JSON processing
-     *
-     * @return the {@link ObjectMapper} configured for JSON processing
-     */
-    private ObjectMapper getJsonMapper() {
-        return jsonMapper;
     }
 }

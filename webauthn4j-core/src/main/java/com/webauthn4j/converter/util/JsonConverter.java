@@ -27,7 +27,7 @@ import com.webauthn4j.util.AssertUtil;
 /**
  * A utility class for JSON serialization/deserialization
  */
-public class JsonConverter extends AbstractJsonConvertor {
+public class JsonConverter extends AbstractJsonConverter {
     public JsonConverter(ObjectMapper jsonMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
 
