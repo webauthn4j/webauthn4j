@@ -48,9 +48,12 @@ public class CborConverter {
      */
     private ObjectMapper cborMapper;
 
-    private boolean cborMapperInitialized = false;
+    private volatile boolean cborMapperInitialized = false;
+    private final Object cborMapperInitializationLock = new Object();
 
     private JsonConverter jsonConverter;
+    private volatile boolean jsonConverterInitialized = false;
+    private final Object jsonConverterInitializationLock = new Object();
 
     public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
@@ -134,11 +137,15 @@ public class CborConverter {
      */
     private ObjectMapper getCborMapper() {
         if (!cborMapperInitialized) {
-            cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
-            cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-            cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            cborMapperInitialized = true;
+            synchronized (cborMapperInitializationLock){
+                if(!cborMapperInitialized){ // drop blocked calls
+                    cborMapper.registerModule(new WebAuthnCBORModule(getJsonConverter(), this));
+                    cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
+                    cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                    cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                    cborMapperInitialized = true;
+                }
+            }
         }
         return cborMapper;
     }
@@ -149,8 +156,13 @@ public class CborConverter {
      * @return the twined {@link JsonConverter}
      */
     public JsonConverter getJsonConverter() {
-        if (jsonConverter == null) {
-            jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        if (!jsonConverterInitialized) {
+            synchronized (jsonConverterInitializationLock){
+                if(!jsonConverterInitialized){ // drop blocked calls
+                    jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+                    jsonConverterInitialized = true;
+                }
+            }
         }
         return jsonConverter;
     }
