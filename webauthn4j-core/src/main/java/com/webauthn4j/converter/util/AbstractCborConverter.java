@@ -23,6 +23,10 @@ public abstract class AbstractCborConverter {
 
     private ObjectMapper cborMapper;
 
+    public AbstractCborConverter(ObjectMapper mapper, SimpleModule module) {
+        this(mapper, module, false, false);
+    }
+
     public AbstractCborConverter(ObjectMapper mapper,
                                  SimpleModule module,
                                  Boolean wrapExceptions,

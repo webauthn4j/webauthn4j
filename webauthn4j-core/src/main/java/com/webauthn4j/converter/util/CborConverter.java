@@ -25,10 +25,7 @@ import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
  */
 public class CborConverter extends AbstractCborConverter {
     public CborConverter(ObjectMapper cborMapper) {
-        super(cborMapper,
-                new WebAuthnCBORModule(),
-                false,
-                false);
+        super(cborMapper, new WebAuthnCBORModule());
     }
 
     public CborConverter() {

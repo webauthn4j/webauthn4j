@@ -45,10 +45,12 @@ public class AuthenticatorDataConverter extends AbstractCborConverter {
     // ================================================================================================
 
     public AuthenticatorDataConverter() {
-        super(new ObjectMapper(new CBORFactory()),
-                new WebAuthnAuthenticatorModule(),
-                false,
-                false);
+        this(new ObjectMapper(new CBORFactory()));
+    }
+
+    public AuthenticatorDataConverter(ObjectMapper mapper) {
+        super(mapper, new WebAuthnAuthenticatorModule());
+
     }
 
     //~ Methods
