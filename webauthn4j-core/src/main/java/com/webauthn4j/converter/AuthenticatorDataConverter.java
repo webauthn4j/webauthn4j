@@ -16,17 +16,19 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.WebAuthnAuthenticatorModule;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
-import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.AbstractCborConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -36,20 +38,18 @@ import java.nio.ByteBuffer;
 /**
  * Converter for {@link AuthenticatorData}
  */
-public class AuthenticatorDataConverter {
-
-    //~ Instance fields
-    // ================================================================================================
-    private CborConverter cborConverter;
+public class AuthenticatorDataConverter extends AbstractCborConverter {
+    public static final AuthenticatorDataConverter INSTANCE = new AuthenticatorDataConverter();
 
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticatorDataConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
+    public AuthenticatorDataConverter() {
+        super(new ObjectMapper(new CBORFactory()),
+                new WebAuthnAuthenticatorModule(),
+                false,
+                false);
     }
-
 
     //~ Methods
     // ================================================================================================
@@ -144,7 +144,7 @@ public class AuthenticatorDataConverter {
     }
 
     private CredentialPublicKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
-        return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
+        return this.readValue(inputStream, CredentialPublicKeyEnvelope.class);
     }
 
     private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
@@ -155,7 +155,7 @@ public class AuthenticatorDataConverter {
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                cborConverter.readValue(byteArrayInputStream, AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
+                this.readValue(byteArrayInputStream, AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
         int leftoverLength = remaining.length - envelope.getLength();
         byteBuffer.position(byteBuffer.position() - leftoverLength);
         return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
@@ -165,12 +165,11 @@ public class AuthenticatorDataConverter {
         if (extensions == null || extensions.isEmpty()) {
             return new byte[0];
         } else {
-            return cborConverter.writeValueAsBytes(extensions);
+            return this.writeValueAsBytes(extensions);
         }
     }
 
     byte[] convert(CredentialPublicKey credentialPublicKey) {
-        return cborConverter.writeValueAsBytes(credentialPublicKey);
+        return this.writeValueAsBytes(credentialPublicKey);
     }
-
 }

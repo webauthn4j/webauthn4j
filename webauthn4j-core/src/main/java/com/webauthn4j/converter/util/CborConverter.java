@@ -16,28 +16,19 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
-import com.webauthn4j.util.AssertUtil;
 
 /**
  * A utility class for CBOR serialization/deserialization
  */
 public class CborConverter extends AbstractCborConverter {
     public CborConverter(ObjectMapper cborMapper) {
-        AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
-
-        this.cborMapper = cborMapper;
-        this.cborMapper.registerModule(new WebAuthnCBORModule(this));
-        this.cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
-        this.cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        this.cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
+        super(cborMapper,
+                new WebAuthnCBORModule(),
+                false,
+                false);
     }
 
     public CborConverter() {

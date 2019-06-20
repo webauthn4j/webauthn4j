@@ -73,7 +73,7 @@ public class WebAuthnAuthenticationContextValidator {
         AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
         AssertUtil.notNull(cborConverter, "cborConverter must not be null");
 
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter();
         this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
         this.authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
     }

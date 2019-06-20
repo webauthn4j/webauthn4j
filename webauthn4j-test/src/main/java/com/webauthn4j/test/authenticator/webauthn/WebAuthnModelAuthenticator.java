@@ -96,7 +96,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.capableOfUserVerification = capableOfUserVerification;
         this.cborConverter = cborConverter;
         this.jsonConverter = jsonConverter;
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter();
     }
 
     public WebAuthnModelAuthenticator() {

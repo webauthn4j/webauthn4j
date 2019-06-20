@@ -203,7 +203,7 @@ class PackedAttestationStatementValidatorTest {
     }
 
     private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(data);
+        byte[] authenticatorData = new AuthenticatorDataConverter().convert(data);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientDataJSON);
 
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

@@ -74,7 +74,7 @@ public class TestDataUtil {
     private static CborConverter cborConverter = new CborConverter();
     private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
     private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
-    private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+    private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter();
     private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
 

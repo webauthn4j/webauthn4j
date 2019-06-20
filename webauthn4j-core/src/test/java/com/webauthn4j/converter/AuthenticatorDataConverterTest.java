@@ -46,7 +46,7 @@ class AuthenticatorDataConverterTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
 
         //When
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input));
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter().convert(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -65,7 +65,7 @@ class AuthenticatorDataConverterTest {
 
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input))
+                () -> new AuthenticatorDataConverter().convert(Base64UrlUtil.decode(input))
         );
     }
 
@@ -82,8 +82,8 @@ class AuthenticatorDataConverterTest {
                 new AuthenticatorData<>(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
 
         //When
-        byte[] serialized = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(cborConverter).convert(serialized);
+        byte[] serialized = new AuthenticatorDataConverter().convert(authenticatorData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter().convert(serialized);
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -103,7 +103,7 @@ class AuthenticatorDataConverterTest {
         byte[] bytes = Arrays.copyOf(data, data.length + 1);
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(cborConverter).convert(bytes)
+                () -> new AuthenticatorDataConverter().convert(bytes)
         );
     }
 }
