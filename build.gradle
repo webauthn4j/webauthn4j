@@ -30,7 +30,7 @@ buildscript {
 
 }
 
-ext['jackson.version'] = jacksonVersion // temporary fix for CVE-2019-12086
+ext['jackson.version'] = jacksonVersion // temporary fix for CVE-2019-12814
 
 apply plugin: 'org.sonarqube'
 apply plugin: 'com.jfrog.artifactory'
