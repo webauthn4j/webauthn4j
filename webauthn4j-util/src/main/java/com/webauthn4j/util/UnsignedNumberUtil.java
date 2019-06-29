@@ -34,6 +34,10 @@ public class UnsignedNumberUtil {
     private UnsignedNumberUtil() {
     }
 
+    public static short getUnsignedByte(byte value) {
+        return (short)Byte.toUnsignedInt(value);
+    }
+
     public static int getUnsignedShort(ByteBuffer byteBuffer) {
         return Short.toUnsignedInt(byteBuffer.getShort());
     }
