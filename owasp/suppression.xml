@@ -42,4 +42,7 @@
    ]]></notes>
         <cve>CVE-2019-11358</cve>
     </suppress>
+    <suppress>
+        <cve>CVE-2019-12814</cve>
+    </suppress>
 </suppressions>

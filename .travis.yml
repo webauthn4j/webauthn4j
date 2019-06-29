@@ -6,7 +6,7 @@ jdk:
   - openjdk12
   - oraclejdk8
   - oraclejdk9
-  - oraclejdk11
+# - oraclejdk11
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
