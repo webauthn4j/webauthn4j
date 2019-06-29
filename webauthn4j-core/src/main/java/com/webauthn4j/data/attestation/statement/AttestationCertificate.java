@@ -16,15 +16,14 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.validator.exception.CertificateException;
 
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import java.io.Serializable;
 import java.security.cert.X509Certificate;
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class AttestationCertificate implements Serializable {
@@ -35,14 +34,6 @@ public class AttestationCertificate implements Serializable {
 
     public AttestationCertificate(X509Certificate certificate) {
         this.certificate = certificate;
-    }
-
-    static List<Rdn> getX500Name(String subjectDN) {
-        try {
-            return new LdapName(subjectDN).getRdns();
-        } catch (InvalidNameException e) {
-            throw new CertificateException("invalid subjectDN: " + subjectDN);
-        }
     }
 
     public X509Certificate getCertificate() {
@@ -92,14 +83,14 @@ public class AttestationCertificate implements Serializable {
         }
     }
 
-    private String getValue(String name) {
-        String subjectDN = getCertificate().getSubjectX500Principal().getName();
-        return getX500Name(subjectDN)
-                .stream()
-                .filter(rdn -> rdn.getType().equalsIgnoreCase(name))
-                .findFirst()
-                .map(rdn -> (String) rdn.getValue())
-                .orElse(null);
+    String getValue(String name) {
+        X500Name subjectDN = new X500Name(getCertificate().getSubjectX500Principal().getName());
+        Map<String, String> map = subjectDN.stream().flatMap(attributes -> attributes.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        if(!map.containsKey(name)){
+            throw new CertificateException("invalid subjectDN: " + subjectDN);
+        }
+        return map.get(name);
     }
 
     @Override
