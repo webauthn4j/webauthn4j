@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 
 
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
+import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.TPMAttestationOption;
 import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
@@ -26,7 +27,6 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
 
 import javax.naming.NamingException;
-import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
@@ -72,7 +72,7 @@ class TPMAttestationStatementValidatorTest {
 
     @Test
     void parseTpmSAN_test_case1() throws NamingException, IOException {
-        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
+        X500Name directoryName = new X500Name("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
         TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
         assertAll(
                 () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:494E5443"), // Intel
@@ -83,7 +83,7 @@ class TPMAttestationStatementValidatorTest {
 
     @Test
     void parseTpmSAN_test_case2() throws NamingException, IOException {
-        LdapName directoryName = new LdapName("2.23.133.2.3=#0c0569643a3133+2.23.133.2.2=#0c074e504354367878+2.23.133.2.1=#0c0b69643a3445353434333030");
+        X500Name directoryName = new X500Name("2.23.133.2.3=#0c0569643a3133+2.23.133.2.2=#0c074e504354367878+2.23.133.2.1=#0c0b69643a3445353434333030");
         TPMDeviceProperty tpmDeviceProperty = target.parseTPMDeviceProperty(directoryName);
         assertAll(
                 () -> assertThat(tpmDeviceProperty.getManufacturer()).isEqualTo("id:4E544300"), // Nuvoton Technology

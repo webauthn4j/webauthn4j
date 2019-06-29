@@ -19,6 +19,7 @@ package com.webauthn4j.validator.attestation.statement.tpm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -27,11 +28,8 @@ import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
+import org.apache.kerby.asn1.util.HexUtil;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.ldap.LdapName;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -41,7 +39,10 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EllipticCurve;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TPMAttestationStatementValidator extends AbstractStatementValidator<TPMAttestationStatement> {
@@ -244,28 +245,24 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         try {
             for (List entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {
-
-                    LdapName directoryName = new LdapName((String) entry.get(1));
+                    X500Name directoryName = new X500Name((String) entry.get(1));
                     TPMDeviceProperty tpmDeviceProperty = parseTPMDeviceProperty(directoryName);
                     tpmDevicePropertyValidator.validate(tpmDeviceProperty);
                     return;
                 }
             }
-        } catch (NamingException | IOException | RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
         }
         throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
     }
 
-    TPMDeviceProperty parseTPMDeviceProperty(LdapName directoryName) throws IOException {
-        Map<String, byte[]> map = directoryName.getRdns().stream()
-                .map(item -> convertAttributesToMap(item.toAttributes()).entrySet())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    TPMDeviceProperty parseTPMDeviceProperty(X500Name directoryName) throws IOException {
+        Map<String, String> map = directoryName.stream().flatMap(attributes -> attributes.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        byte[] manufacturerAttr = map.get("2.23.133.2.1");
-        byte[] partNumberAttr = map.get("2.23.133.2.2");
-        byte[] firmwareVersionAttr = map.get("2.23.133.2.3");
+        String manufacturerAttr = map.get("2.23.133.2.1");
+        String partNumberAttr = map.get("2.23.133.2.2");
+        String firmwareVersionAttr = map.get("2.23.133.2.3");
 
         String manufacturer = decodeAttr(manufacturerAttr);
         String partNumber = decodeAttr(partNumberAttr);
@@ -274,30 +271,15 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
     }
 
-    private String decodeAttr(byte[] attr) throws IOException {
+    private String decodeAttr(String attr) throws IOException {
         String value = null;
         if (attr != null) {
+            byte[] bytes = HexUtil.hex2bytes(attr.substring(1));
             Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
-            attrAsn1Utf8String.decode(attr);
+            attrAsn1Utf8String.decode(bytes);
             value = attrAsn1Utf8String.getValue();
         }
         return value;
-    }
-
-    private Map<String, byte[]> convertAttributesToMap(Attributes attributes) {
-        try {
-            NamingEnumeration<String> attributesIDs = attributes.getIDs();
-            Map<String, byte[]> result = new HashMap<>();
-            while (attributesIDs.hasMore()) {
-                String aid = attributesIDs.next();
-                byte[] value = (byte[]) attributes.get(aid).get();
-
-                result.put(aid, value);
-            }
-            return result;
-        } catch (NamingException e) {
-            throw new BadAttestationStatementException("Failed to parse the TPM attestation attributes", e);
-        }
     }
 
 

@@ -43,6 +43,14 @@ class AttestationCertificateTest {
     }
 
     @Test
+    void getValue_with_invalid_subjectDN_test() {
+        AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
+        assertThrows(CertificateException.class,
+                () -> attestationCertificate.getValue("Invalid DN")
+        );
+    }
+
+    @Test
     void validate_test() {
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
         attestationCertificate.validate();
@@ -85,7 +93,7 @@ class AttestationCertificateTest {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, O=SharpLab., C=JP"));
+                .thenReturn(new X500Principal("O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
                 () -> attestationCertificate.validate()
@@ -97,7 +105,7 @@ class AttestationCertificateTest {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, O=SharpLab."));
+                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
                 () -> attestationCertificate.validate()
@@ -109,7 +117,7 @@ class AttestationCertificateTest {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
         when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, O=SharpLab., C=JP"));
+                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
                 () -> attestationCertificate.validate()
@@ -127,10 +135,5 @@ class AttestationCertificateTest {
         );
     }
 
-    @Test
-    void getX500Name_with_invalid_subjectDN_test() {
-        assertThrows(CertificateException.class,
-                () -> AttestationCertificate.getX500Name("Invalid DN")
-        );
-    }
+
 }
