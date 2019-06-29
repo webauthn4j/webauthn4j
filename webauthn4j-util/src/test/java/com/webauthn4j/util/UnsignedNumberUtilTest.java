@@ -30,6 +30,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class UnsignedNumberUtilTest {
 
+
+    @Test
+    void getUnsignedByte() {
+        byte data = (byte)0xFF;
+        short result = UnsignedNumberUtil.getUnsignedByte(data);
+        assertThat(result).isEqualTo((short) 255);
+    }
+
     @Test
     void getUnsignedShort_test1() {
         byte[] bytes = new byte[4];
@@ -187,4 +195,5 @@ class UnsignedNumberUtilTest {
                 () -> assertThat(UnsignedNumberUtil.isWithinUnsignedLong(BigInteger.valueOf(-1))).isFalse()
         );
     }
+
 }
