@@ -101,6 +101,10 @@ public class UnsignedNumberUtil {
         return buffer;
     }
 
+    public static boolean isWithinUnsignedByte(int value) {
+        return value <= UNSIGNED_BYTE_MAX && value >= 0;
+    }
+
     public static boolean isWithinUnsignedShort(int value) {
         return value <= UNSIGNED_SHORT_MAX && value >= 0;
     }
