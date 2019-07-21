@@ -29,7 +29,10 @@ public enum COSEAlgorithmIdentifier {
     RS512(-259, "SHA512withRSA", "SHA-512"),
     ES256(-7, "SHA256withECDSA", "SHA-256"),
     ES384(-35, "SHA384withECDSA", "SHA-384"),
-    ES512(-36, "SHA512withECDSA", "SHA-512");
+    ES512(-36, "SHA512withECDSA", "SHA-512"),
+    PS256(-37, "SHA256withRSA/PSS", "SHA-256"),
+    PS384(-38, "SHA384withRSA/PSS", "SHA-384"),
+    PS512(-39, "SHA512withRSA/PSS", "SHA-512");
 
     private final long value;
     private final String jcaName;
