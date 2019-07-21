@@ -16,6 +16,9 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 /**
@@ -34,18 +37,26 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 
     // ~ Constructor
     // ========================================================================================================
-
-    public PublicKeyCredentialRpEntity(String id, String name, String icon) {
+    @JsonCreator
+    public PublicKeyCredentialRpEntity(
+            @JsonProperty("id") String id,
+            @JsonProperty("name") String name,
+            @JsonProperty("icon") String icon) {
         super(name, icon);
         this.id = id;
     }
 
-    public PublicKeyCredentialRpEntity(String id, String name) {
+    @JsonCreator
+    public PublicKeyCredentialRpEntity(
+            @JsonProperty("id") String id,
+            @JsonProperty("name") String name) {
         super(name);
         this.id = id;
     }
 
-    public PublicKeyCredentialRpEntity(String name) {
+    @JsonCreator
+    public PublicKeyCredentialRpEntity(
+            @JsonProperty("name") String name) {
         super(name);
         this.id = null;
     }
