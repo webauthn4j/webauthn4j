@@ -49,11 +49,7 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         this.displayName = displayName;
     }
 
-    @JsonCreator
-    public PublicKeyCredentialUserEntity(
-            @JsonProperty("id") byte[] id,
-            @JsonProperty("name") String name,
-            @JsonProperty("displayName") String displayName) {
+    public PublicKeyCredentialUserEntity(byte[] id, String name, String displayName) {
         super(name);
         this.id = id;
         this.displayName = displayName;

@@ -46,17 +46,12 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
         this.id = id;
     }
 
-    @JsonCreator
-    public PublicKeyCredentialRpEntity(
-            @JsonProperty("id") String id,
-            @JsonProperty("name") String name) {
+    public PublicKeyCredentialRpEntity(String id, String name) {
         super(name);
         this.id = id;
     }
 
-    @JsonCreator
-    public PublicKeyCredentialRpEntity(
-            @JsonProperty("name") String name) {
+    public PublicKeyCredentialRpEntity(String name) {
         super(name);
         this.id = null;
     }
