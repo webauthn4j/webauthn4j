@@ -1,12 +1,19 @@
 language: java
 
-jdk:
-  - openjdk8
-  - openjdk11
-  - openjdk12
-  - oraclejdk8
-  - oraclejdk9
-# - oraclejdk11
+matrix:
+  include:
+    - jdk: openjdk8
+      dist: xenial
+    - jdk: openjdk11
+      dist: xenial
+    - jdk: openjdk12
+      dist: xenial
+    - jdk: oraclejdk8 # oracleJDK8 is only available on Trusty
+      dist: trusty
+    - jdk: oraclejdk9
+      dist: xenial
+    - jdk: oraclejdk11
+      dist: xenial
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
