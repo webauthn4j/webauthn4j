@@ -45,4 +45,10 @@
     <suppress>
         <cve>CVE-2019-12814</cve>
     </suppress>
+    <suppress>
+        <cve>CVE-2019-14379</cve>
+    </suppress>
+    <suppress>
+        <cve>CVE-2019-14439</cve>
+    </suppress>
 </suppressions>
