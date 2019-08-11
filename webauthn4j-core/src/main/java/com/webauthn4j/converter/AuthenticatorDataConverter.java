@@ -32,11 +32,22 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import java.io.*;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * Converter for {@link AuthenticatorData}
  */
 public class AuthenticatorDataConverter {
+
+    private static final int AAGUID_LENGTH = 16;
+    private static final int FLAGS_LENGTH = 1;
+    private static final int COUNTER_LENGTH = 4;
+    private static final int RPID_HASH_LENGTH = 32;
+    private static final int L_LENGTH = 2;
+
+    private static final int AAGUID_INDEX = RPID_HASH_LENGTH + FLAGS_LENGTH + COUNTER_LENGTH;
+    private static final int L_INDEX = AAGUID_INDEX + AAGUID_LENGTH;
+    private static final int CREDENTIAL_ID_INDEX = L_INDEX + L_LENGTH;
 
     //~ Instance fields
     // ================================================================================================
@@ -87,8 +98,8 @@ public class AuthenticatorDataConverter {
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(source);
 
-            byte[] rpIdHash = new byte[32];
-            byteBuffer.get(rpIdHash, 0, 32);
+            byte[] rpIdHash = new byte[RPID_HASH_LENGTH];
+            byteBuffer.get(rpIdHash, 0, RPID_HASH_LENGTH);
             byte flags = byteBuffer.get();
             long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
@@ -126,8 +137,8 @@ public class AuthenticatorDataConverter {
     }
 
     private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
-        byte[] aaguidBytes = new byte[16];
-        byteBuffer.get(aaguidBytes, 0, 16);
+        byte[] aaguidBytes = new byte[AAGUID_LENGTH];
+        byteBuffer.get(aaguidBytes, 0, AAGUID_LENGTH);
         AAGUID aaguid = new AAGUID(aaguidBytes);
         int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
         byte[] credentialId = new byte[length];
@@ -161,6 +172,35 @@ public class AuthenticatorDataConverter {
         return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
+    /**
+     * Extract credentialId byte array from a authenticatorData byte array.
+     *
+     * @param authenticatorData the authenticatorData byte array
+     * @return the extracted credentialId byte array
+     */
+    public byte[] extractCredentialId(byte[] authenticatorData) {
+        int credentialIdLength = getCredentialIdLength(authenticatorData);
+        return Arrays.copyOfRange(authenticatorData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
+    }
+
+    /**
+     * Extract attestedCredData byte array from a authenticatorData byte array.
+     *
+     * @param authenticatorData the authenticatorData byte array
+     * @return the extracted attestedCredData byte array
+     */
+    public byte[] extractAttestedCredentialData(byte[] authenticatorData) {
+        int credentialIdLength = getCredentialIdLength(authenticatorData);
+        int credentialPublicKeyIndex = CREDENTIAL_ID_INDEX + credentialIdLength;
+
+        byte[] attestedCredentialDataBytes = Arrays.copyOfRange(authenticatorData, credentialPublicKeyIndex, authenticatorData.length);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(attestedCredentialDataBytes);
+        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
+        int credentialPublicKeyLength = credentialPublicKeyEnvelope.getLength();
+        return Arrays.copyOfRange(authenticatorData, AAGUID_INDEX, credentialPublicKeyIndex + credentialPublicKeyLength);
+    }
+
+
     byte[] convert(AuthenticationExtensionsAuthenticatorOutputs extensions) {
         if (extensions == null || extensions.isEmpty()) {
             return new byte[0];
@@ -171,6 +211,11 @@ public class AuthenticatorDataConverter {
 
     byte[] convert(CredentialPublicKey credentialPublicKey) {
         return cborConverter.writeValueAsBytes(credentialPublicKey);
+    }
+
+    private int getCredentialIdLength(byte[] authenticatorData){
+        byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
+        return UnsignedNumberUtil.getUnsignedShort(lengthBytes);
     }
 
 }
