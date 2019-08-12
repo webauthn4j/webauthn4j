@@ -20,16 +20,17 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -39,19 +40,21 @@ import java.util.Arrays;
  */
 public class AuthenticatorDataConverter {
 
-    private static final int AAGUID_LENGTH = 16;
+    private static final int RPID_HASH_LENGTH = 32;
     private static final int FLAGS_LENGTH = 1;
     private static final int COUNTER_LENGTH = 4;
-    private static final int RPID_HASH_LENGTH = 32;
+
+    private static final int AAGUID_LENGTH = 16;
     private static final int L_LENGTH = 2;
 
-    private static final int AAGUID_INDEX = RPID_HASH_LENGTH + FLAGS_LENGTH + COUNTER_LENGTH;
-    private static final int L_INDEX = AAGUID_INDEX + AAGUID_LENGTH;
+    private static final int ATTESTED_CREDENTIAL_DATA_INDEX = RPID_HASH_LENGTH + FLAGS_LENGTH + COUNTER_LENGTH;
+    private static final int L_INDEX = ATTESTED_CREDENTIAL_DATA_INDEX + AAGUID_LENGTH;
     private static final int CREDENTIAL_ID_INDEX = L_INDEX + L_LENGTH;
 
     //~ Instance fields
     // ================================================================================================
     private CborConverter cborConverter;
+    private AttestedCredentialDataConverter attestedCredentialDataConverter;
 
     //~ Constructors
     // ================================================================================================
@@ -59,6 +62,7 @@ public class AuthenticatorDataConverter {
     public AuthenticatorDataConverter(CborConverter cborConverter) {
         AssertUtil.notNull(cborConverter, "cborConverter must not be null");
         this.cborConverter = cborConverter;
+        this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(cborConverter);
     }
 
 
@@ -79,7 +83,7 @@ public class AuthenticatorDataConverter {
             byteArrayOutputStream.write(new byte[]{source.getFlags()});
             byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(source.getSignCount()));
             if (source.getAttestedCredentialData() != null) {
-                byteArrayOutputStream.write(convert(source.getAttestedCredentialData()));
+                byteArrayOutputStream.write(attestedCredentialDataConverter.convert(source.getAttestedCredentialData()));
             }
             byteArrayOutputStream.write(convert(source.getExtensions()));
             return byteArrayOutputStream.toByteArray();
@@ -106,7 +110,7 @@ public class AuthenticatorDataConverter {
             AttestedCredentialData attestationData;
             AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
-                attestationData = convertToAttestedCredentialData(byteBuffer);
+                attestationData = attestedCredentialDataConverter.convert(byteBuffer);
             } else {
                 attestationData = null;
             }
@@ -126,38 +130,6 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    private byte[] convert(AttestedCredentialData attestationData) throws IOException {
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
-        byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
-        byteArrayOutputStream.write(attestationData.getCredentialId());
-        byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
-        return byteArrayOutputStream.toByteArray();
-    }
-
-    private AttestedCredentialData convertToAttestedCredentialData(ByteBuffer byteBuffer) {
-        byte[] aaguidBytes = new byte[AAGUID_LENGTH];
-        byteBuffer.get(aaguidBytes, 0, AAGUID_LENGTH);
-        AAGUID aaguid = new AAGUID(aaguidBytes);
-        int length = UnsignedNumberUtil.getUnsignedShort(byteBuffer);
-        byte[] credentialId = new byte[length];
-        byteBuffer.get(credentialId, 0, length);
-        byte[] remaining = new byte[byteBuffer.remaining()];
-        byteBuffer.get(remaining);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
-        CredentialPublicKey credentialPublicKey = credentialPublicKeyEnvelope.getCredentialPublicKey();
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
-        int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
-        byteBuffer.position(byteBuffer.position() - extensionsBufferLength);
-        return attestedCredentialData;
-    }
-
-    private CredentialPublicKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
-        return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
-    }
-
     private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
@@ -173,33 +145,23 @@ public class AuthenticatorDataConverter {
     }
 
     /**
-     * Extract credentialId byte array from a authenticatorData byte array.
-     *
-     * @param authenticatorData the authenticatorData byte array
-     * @return the extracted credentialId byte array
-     */
-    public byte[] extractCredentialId(byte[] authenticatorData) {
-        int credentialIdLength = getCredentialIdLength(authenticatorData);
-        return Arrays.copyOfRange(authenticatorData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
-    }
-
-    /**
      * Extract attestedCredData byte array from a authenticatorData byte array.
      *
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted attestedCredData byte array
      */
     public byte[] extractAttestedCredentialData(byte[] authenticatorData) {
-        int credentialIdLength = getCredentialIdLength(authenticatorData);
+        byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
+        int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         int credentialPublicKeyIndex = CREDENTIAL_ID_INDEX + credentialIdLength;
 
         byte[] attestedCredentialDataBytes = Arrays.copyOfRange(authenticatorData, credentialPublicKeyIndex, authenticatorData.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(attestedCredentialDataBytes);
-        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
+        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = attestedCredentialDataConverter.convertToCredentialPublicKey(byteArrayInputStream);
         int credentialPublicKeyLength = credentialPublicKeyEnvelope.getLength();
-        return Arrays.copyOfRange(authenticatorData, AAGUID_INDEX, credentialPublicKeyIndex + credentialPublicKeyLength);
+        int attestedCredentialDataLength = AAGUID_LENGTH + L_LENGTH + credentialIdLength + credentialPublicKeyLength;
+        return Arrays.copyOfRange(authenticatorData, ATTESTED_CREDENTIAL_DATA_INDEX, ATTESTED_CREDENTIAL_DATA_INDEX + attestedCredentialDataLength);
     }
-
 
     byte[] convert(AuthenticationExtensionsAuthenticatorOutputs extensions) {
         if (extensions == null || extensions.isEmpty()) {
@@ -209,13 +171,5 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    byte[] convert(CredentialPublicKey credentialPublicKey) {
-        return cborConverter.writeValueAsBytes(credentialPublicKey);
-    }
-
-    private int getCredentialIdLength(byte[] authenticatorData){
-        byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
-        return UnsignedNumberUtil.getUnsignedShort(lengthBytes);
-    }
 
 }
