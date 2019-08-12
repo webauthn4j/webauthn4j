@@ -16,14 +16,11 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
 import java.io.Serializable;
 
 /**
  * Attestation metadata.certs container
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "format")
 public interface AttestationStatement extends Serializable {
     String getFormat();
 

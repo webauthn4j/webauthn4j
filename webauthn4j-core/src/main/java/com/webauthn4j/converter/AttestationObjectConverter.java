@@ -93,11 +93,21 @@ public class AttestationObjectConverter {
     /**
      * Extract authenticatorData byte array from a attestationObject byte array.
      *
-     * @param attestationObject the authenticatorData byte array
+     * @param attestationObject the attestationObject byte array
      * @return the extracted authenticatorData byte array
      */
     public byte[] extractAuthenticatorData(byte[] attestationObject) {
         return JacksonUtil.binaryValue(cborConverter.readTree(attestationObject).get("authData"));
+    }
+
+    /**
+     * Extract attestation statement byte array from a attestationObject byte array.
+     *
+     * @param attestationObject the attestationObject byte array
+     * @return the extracted attestation statement byte array
+     */
+    public byte[] extractAttestationStatement(byte[] attestationObject) {
+        return cborConverter.writeValueAsBytes(cborConverter.readTree(attestationObject).get("attStmt"));
     }
 
 

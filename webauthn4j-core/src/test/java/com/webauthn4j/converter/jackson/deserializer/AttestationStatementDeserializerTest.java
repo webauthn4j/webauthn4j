@@ -33,7 +33,7 @@ class AttestationStatementDeserializerTest {
     void test() {
         AttestationStatement source = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         byte[] data = cborConverter.writeValueAsBytes(source);
-        AttestationStatement obj = cborConverter.readValue(data, AttestationStatement.class);
+        AttestationStatement obj = cborConverter.readValue(data, FIDOU2FAttestationStatement.class);
 
         assertAll(
                 () -> assertThat(obj).isInstanceOf(FIDOU2FAttestationStatement.class),
