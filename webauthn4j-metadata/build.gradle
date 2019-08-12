@@ -15,7 +15,7 @@
  */
 
 group 'com.webauthn4j'
-version "${webauthn4jVersion}"
+version "${webAuthn4JVersion}"
 
 description = "WebAuthn4J Metadata library"
 

@@ -41,7 +41,7 @@ check.dependsOn dependencyCheckAggregate
 
 allprojects {
     group 'com.webauthn4j'
-    version "${webauthn4jVersion}"
+    version "${webAuthn4JVersion}"
 
     dependencyCheck {
         failBuildOnCVSS = 4 //medium
@@ -154,7 +154,7 @@ subprojects {
     }
 
     artifactoryPublish {
-        skip = !"${webauthn4jVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
+        skip = !"${webAuthn4JVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
     }
 
     bintray {
@@ -162,7 +162,7 @@ subprojects {
         key = bintrayToken
         configurations = ['archives']
         publish = true
-        dryRun = !("${webauthn4jVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
+        dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
         publications = ['artifactPublication']
         pkg {
             userOrg = "webauthn4j"
@@ -172,9 +172,9 @@ subprojects {
             licenses = ['Apache-2.0']
             vcsUrl = vcsUrl
             version {
-                name = "${webauthn4jVersion}"
+                name = "${webAuthn4JVersion}"
                 released = new Date()
-                vcsTag = "${webauthn4jVersion}"
+                vcsTag = "${webAuthn4JVersion}"
                 gpg {
                     sign = true
                 }
@@ -189,6 +189,19 @@ subprojects {
 
 }
 
+
+task updateVersionsInDocuments() {
+    group = "documentation"
+    String regex = "<webauthn4j\\.version>.*</webauthn4j\\.version>";
+    String replacement = "<webauthn4j\\.version>" + latestReleasedWebAuthn4JVersion + "</webauthn4j.version>";
+
+    def files = [file('README.md'), file('docs/src/reference/asciidoc/en/introduction.adoc'), file('docs/src/reference/asciidoc/ja/introduction.adoc')]
+    files.each { file ->
+        String updated = file.getText('UTF-8').replaceFirst(regex, replacement)
+        file.setText(updated, 'UTF-8')
+    }
+
+}
 
 asciidoctorj {
     version = asciidoctorJVersion
@@ -215,5 +228,5 @@ asciidoctor {
             idseparator: '-',
             doctype: 'book',
             numbered: '',
-            revnumber: "${webauthn4jVersion}"
+            revnumber: "${webAuthn4JVersion}"
 }
