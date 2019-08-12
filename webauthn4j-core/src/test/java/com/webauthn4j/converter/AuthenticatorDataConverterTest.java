@@ -108,20 +108,6 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
-    void extractCredentialId_test() {
-        //Given
-        //noinspection SpellCheckingInspection
-        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAARlUOS1SqR0CfmpUat2wTATEAIHEiziyGohCFUc_hJJZGdtSu9ThnEb74K6NZC3U-KbwgpQECAyYgASFYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPIlggGQI5ESYAOfR8QM6quTQSoyhjZET806A3yOoCUe2AWJE";
-        byte[] credentialId = new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input)).getAttestedCredentialData().getCredentialId();
-
-        //When
-        byte[] result = new AuthenticatorDataConverter(cborConverter).extractCredentialId(Base64UrlUtil.decode(input));
-
-        assertThat(result).isEqualTo(credentialId);
-
-    }
-
-    @Test
     void extractAttestedCredentialData_test() {
         //Given
         //noinspection SpellCheckingInspection
