@@ -47,6 +47,7 @@ public class AuthenticatorDataConverter {
     private static final int AAGUID_LENGTH = 16;
     private static final int L_LENGTH = 2;
 
+    private static final int COUNTER_INDEX = RPID_HASH_LENGTH + FLAGS_LENGTH;
     private static final int ATTESTED_CREDENTIAL_DATA_INDEX = RPID_HASH_LENGTH + FLAGS_LENGTH + COUNTER_LENGTH;
     private static final int L_INDEX = ATTESTED_CREDENTIAL_DATA_INDEX + AAGUID_LENGTH;
     private static final int CREDENTIAL_ID_INDEX = L_INDEX + L_LENGTH;
@@ -162,6 +163,18 @@ public class AuthenticatorDataConverter {
         int attestedCredentialDataLength = AAGUID_LENGTH + L_LENGTH + credentialIdLength + credentialPublicKeyLength;
         return Arrays.copyOfRange(authenticatorData, ATTESTED_CREDENTIAL_DATA_INDEX, ATTESTED_CREDENTIAL_DATA_INDEX + attestedCredentialDataLength);
     }
+
+    /**
+     * Extract signCount from a authenticatorData byte array.
+     *
+     * @param authenticatorData the authenticatorData byte array
+     * @return the extracted signCount
+     */
+    public long extractSignCount(byte[] authenticatorData) {
+        byte[] counterBytes = Arrays.copyOfRange(authenticatorData, COUNTER_INDEX, COUNTER_INDEX + COUNTER_LENGTH);
+        return UnsignedNumberUtil.getUnsignedInt(counterBytes);
+    }
+
 
     byte[] convert(AuthenticationExtensionsAuthenticatorOutputs extensions) {
         if (extensions == null || extensions.isEmpty()) {
