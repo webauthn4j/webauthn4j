@@ -118,4 +118,17 @@ class AuthenticatorDataConverterTest {
         assertThat(result).isEqualTo(Base64UrlUtil.decode("VQ5LVKpHQJ-alRq3bBMBMQAgcSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCClAQIDJiABIVggLDjE-Yci-q4NHPYpTPLJCVkWFkxuL6Zz9jKUvWjnmM8iWCAZAjkRJgA59HxAzqq5NBKjKGNkRPzToDfI6gJR7YBYkQ"));
 
     }
+
+    @Test
+    void extractSignCount_test() {
+        //Given
+        //noinspection SpellCheckingInspection
+        String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAARlUOS1SqR0CfmpUat2wTATEAIHEiziyGohCFUc_hJJZGdtSu9ThnEb74K6NZC3U-KbwgpQECAyYgASFYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPIlggGQI5ESYAOfR8QM6quTQSoyhjZET806A3yOoCUe2AWJE";
+        //When
+        long signCount = new AuthenticatorDataConverter(cborConverter).extractSignCount(Base64UrlUtil.decode(input));
+
+        assertThat(signCount).isEqualTo(70);
+
+    }
+
 }
