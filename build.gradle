@@ -32,6 +32,7 @@ buildscript {
 
 ext['jackson.version'] = jacksonVersion // temporary fix for CVE-2019-12814
 
+apply plugin: 'java'
 apply plugin: 'org.sonarqube'
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'org.asciidoctor.convert'
@@ -200,6 +201,14 @@ task updateVersionsInDocuments() {
         String updated = file.getText('UTF-8').replaceFirst(regex, replacement)
         file.setText(updated, 'UTF-8')
     }
+
+}
+
+task generateReleaseNote(type: JavaExec){
+    group = "documentation"
+    classpath = files('gradle/lib/github-release-notes-generator.jar')
+
+    args(latestReleasedWebAuthn4JVersion, file("build/release-note.md").absolutePath, "--spring.config.location=file:" + file("github-release-notes-generator.yml").absolutePath)
 
 }
 

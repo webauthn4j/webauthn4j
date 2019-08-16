@@ -1,0 +1,14 @@
+releasenotes:
+  github:
+    organization: "webauthn4j"
+    repository: "webauthn4j"
+  sections:
+    - title: "Breaking Change"
+      emoji: ":warning:"
+      labels: ["breaking change"]
+    - title: "Enhancements"
+      emoji: ":star:"
+      labels: ["enhancement"]
+    - title: "Bugs"
+      emoji: ":beetle:"
+      labels: ["bug"]
