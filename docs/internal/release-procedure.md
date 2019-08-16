@@ -59,7 +59,7 @@ update the release note draft (`build/release-note.md`) properly with your edito
 ##### Create a release tag
 
 ```
-git tag -a <version>.RELEASE -F build/release-note.md
+git tag <version>.RELEASE
 ```
 
 ### Ship the release
@@ -69,6 +69,10 @@ git tag -a <version>.RELEASE -F build/release-note.md
 ```
 git push origin <version>.RELEASE
 ```
+
+##### Update the release note on GitHub
+
+Update the release note on GitHub
 
 ### Declare new version development start
 
@@ -80,17 +84,21 @@ webAuthn4JVersion=<new version>-SNAPSHOT
 latestReleasedWebAuthn4JVersion=<version>.RELEASE
 ```
 
-##### Update versions in documents
-
-```
-./gradlew updateVersionsInDocuments
-```
-
 ##### Commit the change
 
  ```
 git commit -a -m "Start <new version> development"
  ```
+ 
+##### Push the release branch
+
+```
+git push origin release-<version>
+```
+
+##### Check the build status
+
+Check the build status before continue.
 
 ##### Merge the pull request
 
