@@ -105,7 +105,7 @@ class MetadataItemsProviderTest {
                         "mRB91SjJ49dk+sPsn+AKx1/PS3wbHEGnGxDIIcQplYDFcXICMQDi33M/oUlb7RDA" +
                         "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
         target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient, rootCert);
-        target.fetchMetadataTOCPayload();
+        target.fetchMetadataTOCPayload(true); // skip cert path validation as it downloads CRL from the internet and it breaks unit test stability.
     }
 
     @Test
@@ -129,7 +129,7 @@ class MetadataItemsProviderTest {
                         "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
         target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient, rootCert);
         assertThrows(MDSException.class,
-                () -> target.fetchMetadataTOCPayload()
+                () -> target.fetchMetadataTOCPayload(false)
         );
     }
 
@@ -154,7 +154,7 @@ class MetadataItemsProviderTest {
                         "mapRBjJxKK+oh7hlSZv4djmZV3YV0JnF1Ed5E4I0f3C04eP0bjw="));
         target = new FidoMdsMetadataItemsProvider(jsonConverter, fidoMDSClient, rootCert);
         assertThrows(MDSException.class,
-                () -> target.fetchMetadataTOCPayload()
+                () -> target.fetchMetadataTOCPayload(false)
         );
     }
 

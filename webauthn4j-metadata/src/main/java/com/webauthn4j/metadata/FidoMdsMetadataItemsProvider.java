@@ -113,7 +113,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     }
 
     private void refresh() {
-        MetadataTOCPayload tocPayload = fetchMetadataTOCPayload();
+        MetadataTOCPayload tocPayload = fetchMetadataTOCPayload(false);
 
         cachedMetadataItemMap =
                 tocPayload.getEntries().parallelStream().map(entry -> {
@@ -139,7 +139,12 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         return cachedMetadataItemMap == null || (nextUpdate.isBefore(now) && lastRefresh.isBefore(now.minusHours(1)));
     }
 
-    MetadataTOCPayload fetchMetadataTOCPayload() {
+    /**
+     * fetch MetaDataTOCPayload
+     * @param skipCertPathValidation certPath Validation shouldn't be off except testing
+     * @return MetaDataTOCPayload
+     */
+    MetadataTOCPayload fetchMetadataTOCPayload(boolean skipCertPathValidation) {
         String url = fidoMetadataServiceEndpoint;
         String toc = httpClient.fetch(url);
 
@@ -147,7 +152,9 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
-        validateCertPath(jws);
+        if(!skipCertPathValidation){
+            validateCertPath(jws);
+        }
         return jws.getPayload();
     }
 
