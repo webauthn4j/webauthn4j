@@ -30,8 +30,6 @@ buildscript {
 
 }
 
-ext['jackson.version'] = jacksonVersion // temporary fix for CVE-2019-12814
-
 apply plugin: 'java'
 apply plugin: 'org.sonarqube'
 apply plugin: 'com.jfrog.artifactory'
@@ -64,6 +62,15 @@ subprojects {
 
     repositories {
         mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+
+            // Import Jackson Bom independently as Spring Boot 2.1.7 does not provide way to specify Jackson Bom version
+            mavenBom "com.fasterxml.jackson:jackson-bom:${jacksonBomVersion}"
+        }
     }
 
     javadoc {
