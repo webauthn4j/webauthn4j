@@ -37,9 +37,6 @@ public class JsonConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    /**
-     * As it may not be initialized, jsonMapper must be used through getJsonMapper method
-     */
     private ObjectMapper jsonMapper;
 
     private CborConverter cborConverter;
