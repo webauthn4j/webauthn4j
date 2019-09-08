@@ -21,12 +21,13 @@ import com.webauthn4j.converter.util.JsonConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class COSEAlgorithmIdentifierTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private JsonConverter jsonConverter = new JsonConverter();
 
     @Test
     void create_test() {
@@ -37,8 +38,7 @@ class COSEAlgorithmIdentifierTest {
                 () -> assertThat(COSEAlgorithmIdentifier.create(-7)).isEqualTo(COSEAlgorithmIdentifier.ES256),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-35)).isEqualTo(COSEAlgorithmIdentifier.ES384),
                 () -> assertThat(COSEAlgorithmIdentifier.create(-36)).isEqualTo(COSEAlgorithmIdentifier.ES512),
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> COSEAlgorithmIdentifier.create(-1))
+                () -> assertThat(COSEAlgorithmIdentifier.create(-1)).isEqualTo(COSEAlgorithmIdentifier.create(-1))
         );
     }
 
@@ -58,29 +58,33 @@ class COSEAlgorithmIdentifierTest {
     }
 
     @Test
-    void fromString_test() {
+    void deserialize_test() {
         TestDTO dto = jsonConverter.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
         assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);
     }
 
     @Test
-    void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
+    void deserialize_test_with_non_predefined_value() {
+        assertDoesNotThrow(
                 () -> jsonConverter.readValue("{\"cose_alg_id\":0}", TestDTO.class)
-        );
-
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
         );
     }
 
     @Test
-    void fromString_test_with_null() {
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void deserialize_test_with_null() {
         TestDTO data = jsonConverter.readValue("{\"cose_alg_id\":null}", TestDTO.class);
         assertThat(data.cose_alg_id).isNull();
     }
 
     static class TestDTO {
+        @SuppressWarnings("WeakerAccess")
         public COSEAlgorithmIdentifier cose_alg_id;
     }
 }

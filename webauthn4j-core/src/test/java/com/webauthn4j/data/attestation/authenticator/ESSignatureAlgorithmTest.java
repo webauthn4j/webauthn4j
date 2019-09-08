@@ -20,8 +20,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ESSignatureAlgorithmTest {
 
@@ -35,11 +34,8 @@ class ESSignatureAlgorithmTest {
     }
 
     @Test
-    void create_with_invalid_value_test() {
-        //noinspection ResultOfMethodCallIgnored
-        assertThrows(IllegalArgumentException.class,
-                () -> COSEAlgorithmIdentifier.create(0)
-        );
+    void create_with_not_predefined_value_test() {
+        assertDoesNotThrow(() -> COSEAlgorithmIdentifier.create(0));
     }
 
     @Test
