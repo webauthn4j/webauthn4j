@@ -17,15 +17,13 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.assertj.core.api.Java6Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AuthenticatorTransportTest {
 
@@ -48,21 +46,21 @@ class AuthenticatorTransportTest {
 
     @Test
     void create_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> AuthenticatorTransport.create("invalid")
+        assertDoesNotThrow(
+                () -> AuthenticatorTransport.create("unknown")
         );
     }
 
     @Test
-    void fromString_test() throws IOException {
+    void deserialize_test() throws IOException {
         TestDTO dto = objectMapper.readValue("{\"transport\":\"usb\"}", TestDTO.class);
         Java6Assertions.assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test
-    void fromString_test_with_invalid_value() {
-        assertThrows(InvalidFormatException.class,
-                () -> objectMapper.readValue("{\"transport\":\"invalid\"}", TestDTO.class)
+    void deserialize_test_with_unknown_value() {
+        assertDoesNotThrow(
+                () -> objectMapper.readValue("{\"transport\":\"unknown\"}", TestDTO.class)
         );
     }
 
