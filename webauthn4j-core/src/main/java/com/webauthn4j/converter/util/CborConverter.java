@@ -38,9 +38,6 @@ public class CborConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    /**
-     * As it may not be initialized, cborMapper must be used through getCborMapper method
-     */
     private ObjectMapper cborMapper;
 
     private JsonConverter jsonConverter;
