@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+import java.util.Objects;
+
 /**
  * Authenticators may implement various transports for communicating with clients.
  * This enumeration defines hints as to how clients might communicate with a particular authenticator in order to
@@ -29,27 +31,27 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-authenticatortransport">
  * §5.10.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
-public enum AuthenticatorTransport {
+public class AuthenticatorTransport {
 
     /**
      * Indicates the respective authenticator can be contacted over removable USB.
      */
-    USB("usb"),
+    public static final AuthenticatorTransport USB = new AuthenticatorTransport("usb");
 
     /**
      * Indicates the respective authenticator can be contacted over Near Field Communication (NFC).
      */
-    NFC("nfc"),
+    public static final AuthenticatorTransport NFC = new AuthenticatorTransport("nfc");
 
     /**
      * Indicates the respective authenticator can be contacted over Bluetooth Smart
      * (Bluetooth Low Energy / BLE).
      */
-    BLE("ble");
+    public static final AuthenticatorTransport BLE = new AuthenticatorTransport("ble");
 
     private String value;
 
-    AuthenticatorTransport(String value) {
+    private AuthenticatorTransport(String value) {
         this.value = value;
     }
 
@@ -57,25 +59,12 @@ public enum AuthenticatorTransport {
         if (value == null) {
             return null;
         }
-        switch (value) {
-            case "usb":
-                return USB;
-            case "nfc":
-                return NFC;
-            case "ble":
-                return BLE;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+        return new AuthenticatorTransport(value);
     }
 
     @JsonCreator
     private static AuthenticatorTransport deserialize(String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
-        }
+        return create(value);
     }
 
     @JsonValue
@@ -83,4 +72,16 @@ public enum AuthenticatorTransport {
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticatorTransport that = (AuthenticatorTransport) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
 }

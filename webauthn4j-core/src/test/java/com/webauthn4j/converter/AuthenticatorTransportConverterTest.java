@@ -17,14 +17,12 @@
 package com.webauthn4j.converter;
 
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.AuthenticatorTransport;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthenticatorTransportConverterTest {
 
@@ -37,8 +35,8 @@ class AuthenticatorTransportConverterTest {
     }
 
     @Test
-    void convert_invalid_value_test() {
-        assertThatThrownBy(() -> converter.convert("invalid")).isInstanceOf(DataConversionException.class);
+    void convert_unknown_value_test() {
+        assertThat(converter.convert("unknown")).isEqualTo(AuthenticatorTransport.create("unknown"));
     }
 
     @Test
