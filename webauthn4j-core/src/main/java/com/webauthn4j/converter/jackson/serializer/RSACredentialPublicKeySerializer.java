@@ -31,7 +31,7 @@ public class RSACredentialPublicKeySerializer extends AbstractCtapCanonicalCborS
                 new FieldSerializationRule<>(1, RSACredentialPublicKey::getKeyType),
                 new FieldSerializationRule<>(2, RSACredentialPublicKey::getKeyId),
                 new FieldSerializationRule<>(3, RSACredentialPublicKey::getAlgorithm),
-                new FieldSerializationRule<>(4, RSACredentialPublicKey::getKeyOpts),
+                new FieldSerializationRule<>(4, RSACredentialPublicKey::getKeyOps),
                 new FieldSerializationRule<>(5, RSACredentialPublicKey::getBaseIV),
                 new FieldSerializationRule<>(-1, RSACredentialPublicKey::getN),
                 new FieldSerializationRule<>(-2, RSACredentialPublicKey::getE)

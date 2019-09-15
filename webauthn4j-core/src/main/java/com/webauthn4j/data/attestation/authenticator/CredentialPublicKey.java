@@ -48,7 +48,7 @@ public interface CredentialPublicKey extends Serializable {
 
     COSEAlgorithmIdentifier getAlgorithm();
 
-    List<COSEKeyOperation> getKeyOpts();
+    List<COSEKeyOperation> getKeyOps();
 
     byte[] getBaseIV();
 

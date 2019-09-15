@@ -31,7 +31,7 @@ public class EC2CredentialPublicKeySerializer extends AbstractCtapCanonicalCborS
                 new FieldSerializationRule<>(1, EC2CredentialPublicKey::getKeyType),
                 new FieldSerializationRule<>(2, EC2CredentialPublicKey::getKeyId),
                 new FieldSerializationRule<>(3, EC2CredentialPublicKey::getAlgorithm),
-                new FieldSerializationRule<>(4, EC2CredentialPublicKey::getKeyOpts),
+                new FieldSerializationRule<>(4, EC2CredentialPublicKey::getKeyOps),
                 new FieldSerializationRule<>(5, EC2CredentialPublicKey::getBaseIV),
                 new FieldSerializationRule<>(-1, EC2CredentialPublicKey::getCurve),
                 new FieldSerializationRule<>(-2, EC2CredentialPublicKey::getX),

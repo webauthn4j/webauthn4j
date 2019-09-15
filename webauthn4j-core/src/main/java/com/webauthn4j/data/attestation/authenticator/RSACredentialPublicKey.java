@@ -44,11 +44,10 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     public RSACredentialPublicKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
-            @JsonProperty("5") byte[] baseIV,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("-1") byte[] n,
             @JsonProperty("-2") byte[] e) {
-        super(keyId, algorithm, keyOpts, baseIV);
+        super(keyId, algorithm, keyOps, null);
         this.n = n;
         this.e = e;
     }
@@ -57,7 +56,7 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
         publicKey.getPublicExponent();
         byte[] n = publicKey.getModulus().toByteArray();
         byte[] e = publicKey.getPublicExponent().toByteArray();
-        return new RSACredentialPublicKey(null, COSEAlgorithmIdentifier.RS256, null, null, n, e);
+        return new RSACredentialPublicKey(null, COSEAlgorithmIdentifier.RS256, null, n, e);
     }
 
     @Override

@@ -52,8 +52,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
      *
      * @param keyId     keyId
      * @param algorithm algorithm
-     * @param keyOpts   keyOpts
-     * @param baseIV    baseIV
+     * @param keyOps    keyOps
      * @param curve     curve
      * @param x         x
      * @param y         y
@@ -63,12 +62,11 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     public EC2CredentialPublicKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
-            @JsonProperty("5") byte[] baseIV,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("-1") Curve curve,
             @JsonProperty("-2") byte[] x,
             @JsonProperty("-3") byte[] y) {
-        super(keyId, algorithm, keyOpts, baseIV);
+        super(keyId, algorithm, keyOps, null);
         this.curve = curve;
         this.x = x;
         this.y = y;
@@ -89,7 +87,6 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         return new EC2CredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
-                null,
                 null,
                 Curve.SECP256R1,
                 x,

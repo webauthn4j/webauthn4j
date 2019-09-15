@@ -37,7 +37,7 @@ class AuthenticatorDataSerializerTest {
     @Test
     void test() {
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
-        AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey(null, null, null, null, null, null, null);
+        AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey(null, null, null, null, null, null);
 
         AAGUID aaguid = AAGUID.ZERO;
 

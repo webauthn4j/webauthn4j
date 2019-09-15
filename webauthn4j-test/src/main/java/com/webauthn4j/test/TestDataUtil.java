@@ -252,7 +252,6 @@ public class TestDataUtil {
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
-                null,
                 Curve.SECP256R1,
                 new byte[32],
                 new byte[32]
@@ -264,7 +263,6 @@ public class TestDataUtil {
         credentialPublicKey = new RSACredentialPublicKey(
                 null,
                 COSEAlgorithmIdentifier.RS256,
-                null,
                 null,
                 new byte[32],
                 new byte[32]
@@ -307,7 +305,6 @@ public class TestDataUtil {
         return new EC2CredentialPublicKey(
                 null,
                 coseAlgorithmIdentifier,
-                null,
                 null,
                 curve,
                 x,

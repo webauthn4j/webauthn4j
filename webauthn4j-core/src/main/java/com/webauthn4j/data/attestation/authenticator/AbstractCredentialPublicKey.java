@@ -41,7 +41,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private COSEAlgorithmIdentifier algorithm;
 
     @JsonProperty("4")
-    private List<COSEKeyOperation> keyOpts;
+    private List<COSEKeyOperation> keyOps;
 
     @JsonProperty("5")
     private byte[] baseIV;
@@ -50,12 +50,12 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     AbstractCredentialPublicKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("5") byte[] baseIV
     ) {
         this.keyId = keyId;
         this.algorithm = algorithm;
-        this.keyOpts = keyOpts;
+        this.keyOps = keyOps;
         this.baseIV = baseIV;
     }
 
@@ -70,8 +70,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         return algorithm;
     }
 
-    public List<COSEKeyOperation> getKeyOpts() {
-        return keyOpts;
+    public List<COSEKeyOperation> getKeyOps() {
+        return keyOps;
     }
 
     public byte[] getBaseIV() {
@@ -103,14 +103,14 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
         return Arrays.equals(keyId, that.keyId) &&
                 algorithm == that.algorithm &&
-                Objects.equals(keyOpts, that.keyOpts) &&
+                Objects.equals(keyOps, that.keyOps) &&
                 Arrays.equals(baseIV, that.baseIV);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(algorithm, keyOpts);
+        int result = Objects.hash(algorithm, keyOps);
         result = 31 * result + Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(baseIV);
         return result;
