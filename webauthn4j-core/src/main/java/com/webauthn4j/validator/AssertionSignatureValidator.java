@@ -17,7 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 
@@ -25,17 +25,17 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 /**
- * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link CredentialPublicKey}
+ * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link COSEKey}
  */
 class AssertionSignatureValidator {
 
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, CredentialPublicKey credentialPublicKey) {
+    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, COSEKey coseKey) {
         byte[] signedData = getSignedData(webAuthnAuthenticationContext);
         byte[] signature = webAuthnAuthenticationContext.getSignature();
-        if (!credentialPublicKey.verifySignature(signature, signedData)) {
+        if (!coseKey.verifySignature(signature, signedData)) {
             throw new BadSignatureException("Assertion signature is not valid.");
         }
     }

@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
+public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     @JsonProperty("-1")
     private Curve curve;
@@ -59,7 +59,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
      */
     @SuppressWarnings("squid:S00107")
     @JsonCreator
-    public EC2CredentialPublicKey(
+    public EC2COSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
             @JsonProperty("4") List<COSEKeyOperation> keyOps,
@@ -76,15 +76,15 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
      * create from uncompressed ECC 256-bit key
      *
      * @param publicKey publicKey
-     * @return {@link EC2CredentialPublicKey}
+     * @return {@link EC2COSEKey}
      */
-    public static EC2CredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
+    public static EC2COSEKey createFromUncompressedECCKey(byte[] publicKey) {
         if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new EC2CredentialPublicKey(
+        return new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -148,7 +148,7 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        EC2CredentialPublicKey that = (EC2CredentialPublicKey) o;
+        EC2COSEKey that = (EC2COSEKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
                 Arrays.equals(y, that.y);

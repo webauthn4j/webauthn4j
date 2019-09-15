@@ -27,17 +27,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Test for RSACredentialPublicKey
+ * Test for RSACOSEKey
  */
-class RSACredentialPublicKeyTest {
+class RSACOSEKeyTest {
 
     private JsonConverter jsonConverter = new JsonConverter();
     private CborConverter cborConverter = new CborConverter();
 
     @Test
     void equals_hashCode_test() {
-        RSACredentialPublicKey instanceA = TestDataUtil.createRSCredentialPublicKey();
-        RSACredentialPublicKey instanceB = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey instanceA = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey instanceB = TestDataUtil.createRSCredentialPublicKey();
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
@@ -46,30 +46,30 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void cbor_serialize_deserialize_test() {
-        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
-        RSACredentialPublicKey result = cborConverter.readValue(serialized, RSACredentialPublicKey.class);
+        RSACOSEKey result = cborConverter.readValue(serialized, RSACOSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
     @Test
     void json_serialize_deserialize_test() {
-        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
-        RSACredentialPublicKey result = jsonConverter.readValue(serialized, RSACredentialPublicKey.class);
+        RSACOSEKey result = jsonConverter.readValue(serialized, RSACOSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
     }
 
     @Test
     void validate_test() {
-        RSACredentialPublicKey target = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey target = TestDataUtil.createRSCredentialPublicKey();
         target.validate();
     }
 
     @Test
     void validate_with_null_algorithm_test() {
-        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACredentialPublicKey target = new RSACredentialPublicKey(
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey target = new RSACOSEKey(
                 null,
                 null,
                 null,
@@ -84,8 +84,8 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void validate_with_null_n_test() {
-        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACredentialPublicKey target = new RSACredentialPublicKey(
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey target = new RSACOSEKey(
                 null,
                 original.getAlgorithm(),
                 null,
@@ -100,8 +100,8 @@ class RSACredentialPublicKeyTest {
 
     @Test
     void validate_with_null_e_test() {
-        RSACredentialPublicKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACredentialPublicKey target = new RSACredentialPublicKey(
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey target = new RSACOSEKey(
                 null,
                 original.getAlgorithm(),
                 null,

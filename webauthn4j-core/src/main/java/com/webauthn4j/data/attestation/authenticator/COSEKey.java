@@ -32,10 +32,10 @@ import java.util.List;
         include = JsonTypeInfo.As.PROPERTY,
         property = "1")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = EC2CredentialPublicKey.class, name = "2"),
-        @JsonSubTypes.Type(value = RSACredentialPublicKey.class, name = "3")
+        @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
+        @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3")
 })
-public interface CredentialPublicKey extends Serializable {
+public interface COSEKey extends Serializable {
 
     boolean verifySignature(byte[] signature, byte[] data);
 

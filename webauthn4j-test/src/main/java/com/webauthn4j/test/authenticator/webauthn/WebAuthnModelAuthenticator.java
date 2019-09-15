@@ -26,7 +26,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -205,11 +205,11 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
         KeyPair credentialKeyPair;
         PrivateKey credentialPrivateKey;
-        CredentialPublicKey credentialPublicKey;
+        COSEKey coseKey;
         try {
             credentialKeyPair = ECUtil.createKeyPair();
             credentialPrivateKey = credentialKeyPair.getPrivate();
-            credentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) credentialKeyPair.getPublic());
+            coseKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) credentialKeyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
@@ -269,7 +269,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         if (userVerification) flag |= BIT_UV;
         if (!registrationExtensionAuthenticatorOutputs.isEmpty()) flag |= BIT_ED;
 
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, coseKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.

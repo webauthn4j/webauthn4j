@@ -16,23 +16,23 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 
 /**
- * Internal envelope class for {@link CredentialPublicKey} deserialization
+ * Internal envelope class for {@link COSEKey} deserialization
  */
 public class CredentialPublicKeyEnvelope {
 
-    private CredentialPublicKey credentialPublicKey;
+    private COSEKey coseKey;
     private int length;
 
-    public CredentialPublicKeyEnvelope(CredentialPublicKey credentialPublicKey, int length) {
-        this.credentialPublicKey = credentialPublicKey;
+    public CredentialPublicKeyEnvelope(COSEKey coseKey, int length) {
+        this.coseKey = coseKey;
         this.length = length;
     }
 
-    public CredentialPublicKey getCredentialPublicKey() {
-        return credentialPublicKey;
+    public COSEKey getCOSEKey() {
+        return coseKey;
     }
 
     public int getLength() {

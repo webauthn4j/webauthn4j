@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
+public abstract class AbstractCOSEKey implements COSEKey {
 
     @JsonProperty("2")
     private byte[] keyId;
@@ -47,7 +47,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private byte[] baseIV;
 
     @JsonCreator
-    AbstractCredentialPublicKey(
+    AbstractCOSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
             @JsonProperty("4") List<COSEKeyOperation> keyOps,
@@ -100,7 +100,7 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
+        AbstractCOSEKey that = (AbstractCOSEKey) o;
         return Arrays.equals(keyId, that.keyId) &&
                 algorithm == that.algorithm &&
                 Objects.equals(keyOps, that.keyOps) &&

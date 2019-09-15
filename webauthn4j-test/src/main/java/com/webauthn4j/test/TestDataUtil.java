@@ -186,7 +186,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = ECUtil.createKeyPair();
-        EC2CredentialPublicKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) keyPair.getPublic());
+        EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
@@ -196,7 +196,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        RSACredentialPublicKey rsaCredentialPublicKey = RSACredentialPublicKey.create((RSAPublicKey) keyPair.getPublic());
+        RSACOSEKey rsaCredentialPublicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
@@ -234,21 +234,21 @@ public class TestDataUtil {
         return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData());
     }
 
-    public static <T extends RegistrationExtensionAuthenticatorOutput> AuthenticatorData<T> createAuthenticatorData(CredentialPublicKey credentialPublicKey) {
+    public static <T extends RegistrationExtensionAuthenticatorOutput> AuthenticatorData<T> createAuthenticatorData(COSEKey coseKey) {
         byte flags = BIT_UP | BIT_AT;
-        return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData(credentialPublicKey));
+        return new AuthenticatorData<>(new byte[32], flags, 1, createAttestedCredentialData(coseKey));
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {
         return createAttestedCredentialData(createECCredentialPublicKey());
     }
 
-    public static AttestedCredentialData createAttestedCredentialData(CredentialPublicKey credentialPublicKey) {
-        return new AttestedCredentialData(AAGUID.ZERO, new byte[32], credentialPublicKey);
+    public static AttestedCredentialData createAttestedCredentialData(COSEKey coseKey) {
+        return new AttestedCredentialData(AAGUID.ZERO, new byte[32], coseKey);
     }
 
-    public static EC2CredentialPublicKey createECCredentialPublicKey() {
-        return new EC2CredentialPublicKey(
+    public static EC2COSEKey createECCredentialPublicKey() {
+        return new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
@@ -258,9 +258,9 @@ public class TestDataUtil {
         );
     }
 
-    public static RSACredentialPublicKey createRSCredentialPublicKey() {
-        RSACredentialPublicKey credentialPublicKey;
-        credentialPublicKey = new RSACredentialPublicKey(
+    public static RSACOSEKey createRSCredentialPublicKey() {
+        RSACOSEKey credentialPublicKey;
+        credentialPublicKey = new RSACOSEKey(
                 null,
                 COSEAlgorithmIdentifier.RS256,
                 null,
@@ -275,9 +275,9 @@ public class TestDataUtil {
      * createECCredentialPublicKey from {@code ECPublicKey}
      *
      * @param publicKey publicKey
-     * @return {@link EC2CredentialPublicKey}
+     * @return {@link EC2COSEKey}
      */
-    public static EC2CredentialPublicKey createECCredentialPublicKey(ECPublicKey publicKey) {
+    public static EC2COSEKey createECCredentialPublicKey(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
         EllipticCurve ellipticCurve = publicKey.getParams().getCurve();
         Curve curve;
@@ -302,7 +302,7 @@ public class TestDataUtil {
 
         byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
         byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
-        return new EC2CredentialPublicKey(
+        return new EC2COSEKey(
                 null,
                 coseAlgorithmIdentifier,
                 null,

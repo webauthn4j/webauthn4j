@@ -32,7 +32,7 @@ import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 import java.util.List;
 
-public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
+public class RSACOSEKey extends AbstractCOSEKey {
 
     @JsonProperty("-1")
     private byte[] n;
@@ -41,7 +41,7 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
 
     @SuppressWarnings("squid:S00107")
     @JsonCreator
-    public RSACredentialPublicKey(
+    public RSACOSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
             @JsonProperty("4") List<COSEKeyOperation> keyOps,
@@ -52,11 +52,11 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
         this.e = e;
     }
 
-    public static RSACredentialPublicKey create(RSAPublicKey publicKey) {
+    public static RSACOSEKey create(RSAPublicKey publicKey) {
         publicKey.getPublicExponent();
         byte[] n = publicKey.getModulus().toByteArray();
         byte[] e = publicKey.getPublicExponent().toByteArray();
-        return new RSACredentialPublicKey(null, COSEAlgorithmIdentifier.RS256, null, n, e);
+        return new RSACOSEKey(null, COSEAlgorithmIdentifier.RS256, null, n, e);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class RSACredentialPublicKey extends AbstractCredentialPublicKey {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RSACredentialPublicKey that = (RSACredentialPublicKey) o;
+        RSACOSEKey that = (RSACOSEKey) o;
         return Arrays.equals(n, that.n) &&
                 Arrays.equals(e, that.e);
     }

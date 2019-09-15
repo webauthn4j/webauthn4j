@@ -27,7 +27,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.EC2CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
@@ -94,7 +94,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 registrationResponse.getSignature()
         );
 
-        EC2CredentialPublicKey ec2CredentialPublicKey = EC2CredentialPublicKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
+        EC2COSEKey ec2CredentialPublicKey = EC2COSEKey.createFromUncompressedECCKey(registrationResponse.getUserPublicKey());
 
         AAGUID aaguid = AAGUID.ZERO; // zero-filled 16bytes(128bits) array
         AttestedCredentialData attestedCredentialData =

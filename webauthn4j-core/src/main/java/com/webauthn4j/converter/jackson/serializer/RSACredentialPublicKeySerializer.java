@@ -19,27 +19,27 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import com.webauthn4j.data.attestation.authenticator.RSACredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.RSACOSEKey;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public class RSACredentialPublicKeySerializer extends AbstractCtapCanonicalCborSerializer<RSACredentialPublicKey> {
+public class RSACredentialPublicKeySerializer extends AbstractCtapCanonicalCborSerializer<RSACOSEKey> {
 
     public RSACredentialPublicKeySerializer() {
-        super(RSACredentialPublicKey.class, Arrays.asList(
-                new FieldSerializationRule<>(1, RSACredentialPublicKey::getKeyType),
-                new FieldSerializationRule<>(2, RSACredentialPublicKey::getKeyId),
-                new FieldSerializationRule<>(3, RSACredentialPublicKey::getAlgorithm),
-                new FieldSerializationRule<>(4, RSACredentialPublicKey::getKeyOps),
-                new FieldSerializationRule<>(5, RSACredentialPublicKey::getBaseIV),
-                new FieldSerializationRule<>(-1, RSACredentialPublicKey::getN),
-                new FieldSerializationRule<>(-2, RSACredentialPublicKey::getE)
+        super(RSACOSEKey.class, Arrays.asList(
+                new FieldSerializationRule<>(1, RSACOSEKey::getKeyType),
+                new FieldSerializationRule<>(2, RSACOSEKey::getKeyId),
+                new FieldSerializationRule<>(3, RSACOSEKey::getAlgorithm),
+                new FieldSerializationRule<>(4, RSACOSEKey::getKeyOps),
+                new FieldSerializationRule<>(5, RSACOSEKey::getBaseIV),
+                new FieldSerializationRule<>(-1, RSACOSEKey::getN),
+                new FieldSerializationRule<>(-2, RSACOSEKey::getE)
         ));
     }
 
     @Override
-    public void serializeWithType(RSACredentialPublicKey value, JsonGenerator gen,
+    public void serializeWithType(RSACOSEKey value, JsonGenerator gen,
                                   SerializerProvider provider, TypeSerializer typeSer) throws IOException {
         super.serialize(value, gen, provider);
     }
