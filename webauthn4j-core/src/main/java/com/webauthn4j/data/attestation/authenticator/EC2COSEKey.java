@@ -47,6 +47,37 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     @JsonProperty("-3")
     private byte[] y;
 
+    @JsonProperty("-4")
+    private byte[] d;
+
+    /**
+     * Constructor for key pair
+     *
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param curve     curve
+     * @param x         x
+     * @param y         y
+     * @param d         d
+     */
+    @SuppressWarnings("squid:S00107")
+    @JsonCreator
+    public EC2COSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-1") Curve curve,
+            @JsonProperty("-2") byte[] x,
+            @JsonProperty("-3") byte[] y,
+            @JsonProperty("-4") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.curve = curve;
+        this.x = x;
+        this.y = y;
+        this.d = d;
+    }
+
     /**
      * Constructor for public key
      *
@@ -58,7 +89,6 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
      * @param y         y
      */
     @SuppressWarnings("squid:S00107")
-    @JsonCreator
     public EC2COSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
@@ -70,6 +100,27 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         this.curve = curve;
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Constructor for public key
+     *
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param curve     curve
+     * @param d         d
+     */
+    @SuppressWarnings("squid:S00107")
+    public EC2COSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-1") Curve curve,
+            @JsonProperty("-2") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.curve = curve;
+        this.d = d;
     }
 
     /**
@@ -90,7 +141,8 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
                 null,
                 Curve.SECP256R1,
                 x,
-                y
+                y,
+                null
         );
     }
 
@@ -111,8 +163,12 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         return ArrayUtil.clone(y);
     }
 
+    public byte[] getD() {
+        return ArrayUtil.clone(d);
+    }
+
     @JsonIgnore
-    public byte[] getBytes() {
+    public byte[] getPublicKeyBytes() {
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
@@ -135,6 +191,12 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         if (curve == null) {
             throw new ConstraintViolationException("curve must not be null");
         }
+        if (d != null) {
+            return;
+        }
+        if (x == null && y == null) {
+            throw new ConstraintViolationException("x, y or d must be present");
+        }
         if (x == null) {
             throw new ConstraintViolationException("x must not be null");
         }
@@ -151,15 +213,16 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         EC2COSEKey that = (EC2COSEKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
-                Arrays.equals(y, that.y);
+                Arrays.equals(y, that.y) &&
+                Arrays.equals(d, that.d);
     }
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(super.hashCode(), curve);
         result = 31 * result + Arrays.hashCode(x);
         result = 31 * result + Arrays.hashCode(y);
+        result = 31 * result + Arrays.hashCode(d);
         return result;
     }
 }

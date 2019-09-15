@@ -43,7 +43,7 @@ class EC2COSEKeyTest {
 
     @Test
     void createFromUncompressedECCKey_test() {
-        EC2COSEKey key = EC2COSEKey.createFromUncompressedECCKey(TestDataUtil.createECCredentialPublicKey().getBytes());
+        EC2COSEKey key = EC2COSEKey.createFromUncompressedECCKey(TestDataUtil.createECCredentialPublicKey().getPublicKeyBytes());
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }

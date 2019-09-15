@@ -111,7 +111,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
-        byte[] userPublicKeyBytes = credentialPublicKey.getBytes();
+        byte[] userPublicKeyBytes = credentialPublicKey.getPublicKeyBytes();
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
         byteBuffer.put((byte) 0x00); //RFU

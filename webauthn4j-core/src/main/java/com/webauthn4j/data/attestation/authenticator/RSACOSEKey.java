@@ -38,9 +38,42 @@ public class RSACOSEKey extends AbstractCOSEKey {
     private byte[] n;
     @JsonProperty("-2")
     private byte[] e;
+    @JsonProperty("-3")
+    private byte[] d;
 
+    /**
+     * Constructor for key pair
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param n         n
+     * @param e         e
+     * @param d         d
+     */
     @SuppressWarnings("squid:S00107")
     @JsonCreator
+    public RSACOSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-1") byte[] n,
+            @JsonProperty("-2") byte[] e,
+            @JsonProperty("-3") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.n = n;
+        this.e = e;
+        this.d = d;
+    }
+
+    /**
+     * Constructor for public key
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param n         n
+     * @param e         e
+     */
+    @SuppressWarnings("squid:S00107")
     public RSACOSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
@@ -51,6 +84,24 @@ public class RSACOSEKey extends AbstractCOSEKey {
         this.n = n;
         this.e = e;
     }
+
+    /**
+     * Constructor for private key
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param d         d
+     */
+    @SuppressWarnings("squid:S00107")
+    public RSACOSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-3") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.d = d;
+    }
+
 
     public static RSACOSEKey create(RSAPublicKey publicKey) {
         publicKey.getPublicExponent();
@@ -72,6 +123,10 @@ public class RSACOSEKey extends AbstractCOSEKey {
         return ArrayUtil.clone(e);
     }
 
+    public byte[] getD() {
+        return ArrayUtil.clone(d);
+    }
+
     @Override
     public PublicKey getPublicKey() {
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
@@ -86,28 +141,38 @@ public class RSACOSEKey extends AbstractCOSEKey {
         if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null");
         }
-        if (e == null) {
-            throw new ConstraintViolationException("e must not be null");
+        if (d != null) {
+            return;
+        }
+        if (n == null && e == null) {
+            throw new ConstraintViolationException("n, e or d must be present");
         }
         if (n == null) {
             throw new ConstraintViolationException("n must not be null");
         }
+        if (e == null) {
+            throw new ConstraintViolationException("e must not be null");
+        }
+
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         RSACOSEKey that = (RSACOSEKey) o;
         return Arrays.equals(n, that.n) &&
-                Arrays.equals(e, that.e);
+                Arrays.equals(e, that.e) &&
+                Arrays.equals(d, that.d);
     }
 
     @Override
     public int hashCode() {
-
-        int result = Arrays.hashCode(n);
+        int result = super.hashCode();
+        result = 31 * result + Arrays.hashCode(n);
         result = 31 * result + Arrays.hashCode(e);
+        result = 31 * result + Arrays.hashCode(d);
         return result;
     }
 }
