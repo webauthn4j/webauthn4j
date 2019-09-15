@@ -91,13 +91,12 @@ class EC2COSEKeyTest {
                 null,
                 null,
                 null,
-                null,
                 Curve.SECP256R1,
                 original.getX(),
                 original.getY()
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 
@@ -109,12 +108,11 @@ class EC2COSEKeyTest {
                 COSEAlgorithmIdentifier.ES256,
                 null,
                 null,
-                null,
                 original.getX(),
                 original.getY()
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 
@@ -125,13 +123,12 @@ class EC2COSEKeyTest {
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
-                null,
                 Curve.SECP256R1,
                 null,
                 original.getY()
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 
@@ -142,13 +139,12 @@ class EC2COSEKeyTest {
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
-                null,
                 Curve.SECP256R1,
                 original.getX(),
                 null
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 

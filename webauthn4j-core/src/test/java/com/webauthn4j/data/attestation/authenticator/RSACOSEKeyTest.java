@@ -73,12 +73,11 @@ class RSACOSEKeyTest {
                 null,
                 null,
                 null,
-                null,
                 original.getN(),
                 original.getE()
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 
@@ -90,11 +89,10 @@ class RSACOSEKeyTest {
                 original.getAlgorithm(),
                 null,
                 null,
-                null,
                 original.getE()
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 
@@ -105,12 +103,11 @@ class RSACOSEKeyTest {
                 null,
                 original.getAlgorithm(),
                 null,
-                null,
                 original.getN(),
                 null
         );
         assertThrows(ConstraintViolationException.class,
-                () -> target.validate()
+                target::validate
         );
     }
 }
