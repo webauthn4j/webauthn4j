@@ -40,6 +40,16 @@ public class RSACOSEKey extends AbstractCOSEKey {
     private byte[] e;
     @JsonProperty("-3")
     private byte[] d;
+    @JsonProperty("-4")
+    private byte[] p;
+    @JsonProperty("-5")
+    private byte[] q;
+    @JsonProperty("-6")
+    private byte[] dP;
+    @JsonProperty("-7")
+    private byte[] dQ;
+    @JsonProperty("-8")
+    private byte[] qInv;
 
     /**
      * Constructor for key pair
@@ -58,11 +68,22 @@ public class RSACOSEKey extends AbstractCOSEKey {
             @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("-1") byte[] n,
             @JsonProperty("-2") byte[] e,
-            @JsonProperty("-3") byte[] d) {
+            @JsonProperty("-3") byte[] d,
+            @JsonProperty("-4") byte[] p,
+            @JsonProperty("-5") byte[] q,
+            @JsonProperty("-6") byte[] dP,
+            @JsonProperty("-7") byte[] dQ,
+            @JsonProperty("-8") byte[] qInv
+    ) {
         super(keyId, algorithm, keyOps, null);
         this.n = n;
         this.e = e;
         this.d = d;
+        this.p = p;
+        this.q = q;
+        this.dP = dP;
+        this.dQ = dQ;
+        this.qInv = qInv;
     }
 
     /**
@@ -84,24 +105,6 @@ public class RSACOSEKey extends AbstractCOSEKey {
         this.n = n;
         this.e = e;
     }
-
-    /**
-     * Constructor for private key
-     * @param keyId     keyId
-     * @param algorithm algorithm
-     * @param keyOps    keyOps
-     * @param d         d
-     */
-    @SuppressWarnings("squid:S00107")
-    public RSACOSEKey(
-            @JsonProperty("2") byte[] keyId,
-            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOps,
-            @JsonProperty("-3") byte[] d) {
-        super(keyId, algorithm, keyOps, null);
-        this.d = d;
-    }
-
 
     public static RSACOSEKey create(RSAPublicKey publicKey) {
         publicKey.getPublicExponent();
@@ -127,6 +130,26 @@ public class RSACOSEKey extends AbstractCOSEKey {
         return ArrayUtil.clone(d);
     }
 
+    public byte[] getP() {
+        return p;
+    }
+
+    public byte[] getQ() {
+        return q;
+    }
+
+    public byte[] getDP() {
+        return dP;
+    }
+
+    public byte[] getDQ() {
+        return dQ;
+    }
+
+    public byte[] getqInv() {
+        return qInv;
+    }
+
     @Override
     public PublicKey getPublicKey() {
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
@@ -142,7 +165,12 @@ public class RSACOSEKey extends AbstractCOSEKey {
             throw new ConstraintViolationException("algorithm must not be null");
         }
         if (d != null) {
-            return;
+            if(p != null && q != null && dP != null && dQ != null && qInv != null){
+                return;
+            }
+            else {
+                throw new ConstraintViolationException("d, p, q, dP, dQ, and qInv must be present at the same time");
+            }
         }
         if (n == null && e == null) {
             throw new ConstraintViolationException("n, e or d must be present");
@@ -164,7 +192,12 @@ public class RSACOSEKey extends AbstractCOSEKey {
         RSACOSEKey that = (RSACOSEKey) o;
         return Arrays.equals(n, that.n) &&
                 Arrays.equals(e, that.e) &&
-                Arrays.equals(d, that.d);
+                Arrays.equals(d, that.d) &&
+                Arrays.equals(p, that.p) &&
+                Arrays.equals(q, that.q) &&
+                Arrays.equals(dP, that.dP) &&
+                Arrays.equals(dQ, that.dQ) &&
+                Arrays.equals(qInv, that.qInv);
     }
 
     @Override
@@ -173,6 +206,11 @@ public class RSACOSEKey extends AbstractCOSEKey {
         result = 31 * result + Arrays.hashCode(n);
         result = 31 * result + Arrays.hashCode(e);
         result = 31 * result + Arrays.hashCode(d);
+        result = 31 * result + Arrays.hashCode(p);
+        result = 31 * result + Arrays.hashCode(q);
+        result = 31 * result + Arrays.hashCode(dP);
+        result = 31 * result + Arrays.hashCode(dQ);
+        result = 31 * result + Arrays.hashCode(qInv);
         return result;
     }
 }

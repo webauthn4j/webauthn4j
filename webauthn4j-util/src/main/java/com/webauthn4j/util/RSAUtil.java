@@ -19,9 +19,7 @@ package com.webauthn4j.util;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.RSAKeyGenParameterSpec;
-import java.security.spec.RSAPublicKeySpec;
+import java.security.spec.*;
 
 public class RSAUtil {
 
@@ -32,6 +30,15 @@ public class RSAUtil {
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
             return factory.generatePublic(rsaPublicKeySpec);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
+    public static PrivateKey createPrivateKey(RSAPrivateKeySpec rsaPrivateKeySpec) {
+        try {
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            return factory.generatePrivate(rsaPrivateKeySpec);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             throw new UnexpectedCheckedException(e);
         }
