@@ -82,6 +82,15 @@ public class ECUtil {
         }
     }
 
+    public static PrivateKey createPrivateKey(ECPrivateKeySpec ecPrivateKeySpec) {
+        try {
+            KeyFactory factory = KeyFactory.getInstance("EC");
+            return factory.generatePrivate(ecPrivateKeySpec);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            throw new UnexpectedCheckedException(e);
+        }
+    }
+
     private static KeyPairGenerator createKeyPairGenerator() {
         try {
             return KeyPairGenerator.getInstance("EC");
