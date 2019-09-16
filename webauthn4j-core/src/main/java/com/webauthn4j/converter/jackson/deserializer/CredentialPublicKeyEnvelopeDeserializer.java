@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 
 import java.io.IOException;
 
@@ -37,8 +37,8 @@ public class CredentialPublicKeyEnvelopeDeserializer extends StdDeserializer<Cre
      */
     @Override
     public CredentialPublicKeyEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        CredentialPublicKey credentialPublicKey = ctxt.readValue(p, CredentialPublicKey.class);
+        COSEKey coseKey = ctxt.readValue(p, COSEKey.class);
         int length = (int) p.getCurrentLocation().getByteOffset();
-        return new CredentialPublicKeyEnvelope(credentialPublicKey, length);
+        return new CredentialPublicKeyEnvelope(coseKey, length);
     }
 }

@@ -20,7 +20,7 @@ import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -48,7 +48,7 @@ public class AttestedCredentialDataConverter {
             byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
             byteArrayOutputStream.write(UnsignedNumberUtil.toBytes(attestationData.getCredentialId().length));
             byteArrayOutputStream.write(attestationData.getCredentialId());
-            byteArrayOutputStream.write(convert(attestationData.getCredentialPublicKey()));
+            byteArrayOutputStream.write(convert(attestationData.getCOSEKey()));
             return byteArrayOutputStream.toByteArray();
         }
         catch (IOException e){
@@ -67,8 +67,8 @@ public class AttestedCredentialDataConverter {
         attestedCredentialData.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
-        CredentialPublicKey credentialPublicKey = credentialPublicKeyEnvelope.getCredentialPublicKey();
-        AttestedCredentialData result = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
+        COSEKey coseKey = credentialPublicKeyEnvelope.getCOSEKey();
+        AttestedCredentialData result = new AttestedCredentialData(aaguid, credentialId, coseKey);
         int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
         attestedCredentialData.position(attestedCredentialData.position() - extensionsBufferLength);
         return result;
@@ -94,8 +94,8 @@ public class AttestedCredentialDataConverter {
         return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
     }
 
-    byte[] convert(CredentialPublicKey credentialPublicKey) {
-        return cborConverter.writeValueAsBytes(credentialPublicKey);
+    byte[] convert(COSEKey coseKey) {
+        return cborConverter.writeValueAsBytes(coseKey);
     }
 
 }

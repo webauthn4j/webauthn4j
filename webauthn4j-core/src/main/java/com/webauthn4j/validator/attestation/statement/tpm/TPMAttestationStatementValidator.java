@@ -181,7 +181,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData authenticatorData) {
         PublicKey publicKeyInAuthData =
-                authenticatorData.getAttestedCredentialData().getCredentialPublicKey().getPublicKey();
+                authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
         TPMUPublicId publicKeyInPubArea = pubArea.getUnique();
 
         if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_RSA && publicKeyInPubArea instanceof RSAUnique) {

@@ -35,18 +35,18 @@ public class AttestedCredentialData implements Serializable {
 
     private final byte[] credentialId;
 
-    private final CredentialPublicKey credentialPublicKey;
+    private final COSEKey coseKey;
 
-    public AttestedCredentialData(AAGUID aaguid, byte[] credentialId, CredentialPublicKey credentialPublicKey) {
+    public AttestedCredentialData(AAGUID aaguid, byte[] credentialId, COSEKey coseKey) {
         this.aaguid = aaguid;
         this.credentialId = credentialId;
-        this.credentialPublicKey = credentialPublicKey;
+        this.coseKey = coseKey;
     }
 
     public AttestedCredentialData() {
         this.aaguid = null;
         this.credentialId = null;
-        this.credentialPublicKey = null;
+        this.coseKey = null;
     }
 
     public AAGUID getAaguid() {
@@ -57,8 +57,8 @@ public class AttestedCredentialData implements Serializable {
         return ArrayUtil.clone(credentialId);
     }
 
-    public CredentialPublicKey getCredentialPublicKey() {
-        return credentialPublicKey;
+    public COSEKey getCOSEKey() {
+        return coseKey;
     }
 
     @Override
@@ -68,13 +68,13 @@ public class AttestedCredentialData implements Serializable {
         AttestedCredentialData that = (AttestedCredentialData) o;
         return Objects.equals(aaguid, that.aaguid) &&
                 Arrays.equals(credentialId, that.credentialId) &&
-                Objects.equals(credentialPublicKey, that.credentialPublicKey);
+                Objects.equals(coseKey, that.coseKey);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(aaguid, credentialPublicKey);
+        int result = Objects.hash(aaguid, coseKey);
         result = 31 * result + Arrays.hashCode(credentialId);
         return result;
     }

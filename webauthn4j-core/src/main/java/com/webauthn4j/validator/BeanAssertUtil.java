@@ -22,7 +22,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.TokenBinding;
@@ -156,8 +156,8 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("credentialId must not be null");
         }
 
-        CredentialPublicKey credentialPublicKey = attestedCredentialData.getCredentialPublicKey();
-        validate(credentialPublicKey);
+        COSEKey coseKey = attestedCredentialData.getCOSEKey();
+        validate(coseKey);
     }
 
     public static <T extends ExtensionClientOutput> void validateAuthenticationExtensionsClientOutputs(
@@ -212,11 +212,11 @@ class BeanAssertUtil {
         attestationStatement.validate();
     }
 
-    public static void validate(CredentialPublicKey credentialPublicKey) {
-        if (credentialPublicKey == null) {
-            throw new ConstraintViolationException("credentialPublicKey must not be null");
+    public static void validate(COSEKey coseKey) {
+        if (coseKey == null) {
+            throw new ConstraintViolationException("coseKey must not be null");
         }
-        credentialPublicKey.validate();
+        coseKey.validate();
     }
 
 }

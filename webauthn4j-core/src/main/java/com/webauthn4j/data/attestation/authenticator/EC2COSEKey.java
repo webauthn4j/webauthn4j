@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implements Serializable {
+public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     @JsonProperty("-1")
     private Curve curve;
@@ -47,53 +47,102 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
     @JsonProperty("-3")
     private byte[] y;
 
+    @JsonProperty("-4")
+    private byte[] d;
+
+    /**
+     * Constructor for key pair
+     *
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param curve     curve
+     * @param x         x
+     * @param y         y
+     * @param d         d
+     */
+    @SuppressWarnings("squid:S00107")
+    @JsonCreator
+    public EC2COSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-1") Curve curve,
+            @JsonProperty("-2") byte[] x,
+            @JsonProperty("-3") byte[] y,
+            @JsonProperty("-4") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.curve = curve;
+        this.x = x;
+        this.y = y;
+        this.d = d;
+    }
+
     /**
      * Constructor for public key
      *
      * @param keyId     keyId
      * @param algorithm algorithm
-     * @param keyOpts   keyOpts
-     * @param baseIV    baseIV
+     * @param keyOps    keyOps
      * @param curve     curve
      * @param x         x
      * @param y         y
      */
     @SuppressWarnings("squid:S00107")
-    @JsonCreator
-    public EC2CredentialPublicKey(
+    public EC2COSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
-            @JsonProperty("5") byte[] baseIV,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("-1") Curve curve,
             @JsonProperty("-2") byte[] x,
             @JsonProperty("-3") byte[] y) {
-        super(keyId, algorithm, keyOpts, baseIV);
+        super(keyId, algorithm, keyOps, null);
         this.curve = curve;
         this.x = x;
         this.y = y;
     }
 
     /**
+     * Constructor for public key
+     *
+     * @param keyId     keyId
+     * @param algorithm algorithm
+     * @param keyOps    keyOps
+     * @param curve     curve
+     * @param d         d
+     */
+    @SuppressWarnings("squid:S00107")
+    public EC2COSEKey(
+            @JsonProperty("2") byte[] keyId,
+            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @JsonProperty("-1") Curve curve,
+            @JsonProperty("-2") byte[] d) {
+        super(keyId, algorithm, keyOps, null);
+        this.curve = curve;
+        this.d = d;
+    }
+
+    /**
      * create from uncompressed ECC 256-bit key
      *
      * @param publicKey publicKey
-     * @return {@link EC2CredentialPublicKey}
+     * @return {@link EC2COSEKey}
      */
-    public static EC2CredentialPublicKey createFromUncompressedECCKey(byte[] publicKey) {
+    public static EC2COSEKey createFromUncompressedECCKey(byte[] publicKey) {
         if (publicKey.length != 65) {
             throw new IllegalArgumentException("publicKey must be 65 bytes length");
         }
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
-        return new EC2CredentialPublicKey(
+        return new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
                 null,
-                null,
                 Curve.SECP256R1,
                 x,
-                y
+                y,
+                null
         );
     }
 
@@ -114,8 +163,12 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         return ArrayUtil.clone(y);
     }
 
+    public byte[] getD() {
+        return ArrayUtil.clone(d);
+    }
+
     @JsonIgnore
-    public byte[] getBytes() {
+    public byte[] getPublicKeyBytes() {
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
@@ -138,6 +191,12 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         if (curve == null) {
             throw new ConstraintViolationException("curve must not be null");
         }
+        if (d != null) {
+            return;
+        }
+        if (x == null && y == null) {
+            throw new ConstraintViolationException("x, y or d must be present");
+        }
         if (x == null) {
             throw new ConstraintViolationException("x must not be null");
         }
@@ -151,18 +210,19 @@ public class EC2CredentialPublicKey extends AbstractCredentialPublicKey implemen
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        EC2CredentialPublicKey that = (EC2CredentialPublicKey) o;
+        EC2COSEKey that = (EC2COSEKey) o;
         return curve == that.curve &&
                 Arrays.equals(x, that.x) &&
-                Arrays.equals(y, that.y);
+                Arrays.equals(y, that.y) &&
+                Arrays.equals(d, that.d);
     }
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(super.hashCode(), curve);
         result = 31 * result + Arrays.hashCode(x);
         result = 31 * result + Arrays.hashCode(y);
+        result = 31 * result + Arrays.hashCode(d);
         return result;
     }
 }

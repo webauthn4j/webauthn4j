@@ -165,7 +165,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         // Using the credential public key, validate that sig is a valid signature over
         // the binary concatenation of the authenticatorData and the hash of the collectedClientData.
-        assertionSignatureValidator.validate(authenticationContext, authenticator.getAttestedCredentialData().getCredentialPublicKey());
+        assertionSignatureValidator.validate(authenticationContext, authenticator.getAttestedCredentialData().getCOSEKey());
 
         // If the signature counter value adata.signCount is nonzero or the value stored in conjunction with
         // credential’s id attribute is nonzero, then run the following sub-step:

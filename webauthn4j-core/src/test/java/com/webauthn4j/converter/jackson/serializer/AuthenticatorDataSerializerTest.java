@@ -37,7 +37,7 @@ class AuthenticatorDataSerializerTest {
     @Test
     void test() {
         byte[] credentialId = "credentialId".getBytes(StandardCharsets.UTF_8);
-        AbstractCredentialPublicKey credentialPublicKey = new EC2CredentialPublicKey(null, null, null, null, null, null, null);
+        AbstractCOSEKey credentialPublicKey = new EC2COSEKey(null, null, null, null, null, null);
 
         AAGUID aaguid = AAGUID.ZERO;
 
@@ -63,7 +63,7 @@ class AuthenticatorDataSerializerTest {
                 () -> assertThat(restored.getAttestedCredentialData()).isNotNull(),
                 () -> assertThat(restored.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid),
                 () -> assertThat(restored.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId),
-                () -> assertThat(restored.getAttestedCredentialData().getCredentialPublicKey()).isEqualTo(credentialPublicKey),
+                () -> assertThat(restored.getAttestedCredentialData().getCOSEKey()).isEqualTo(credentialPublicKey),
                 () -> assertThat(restored.getExtensions().isEmpty()).isTrue()
         );
     }

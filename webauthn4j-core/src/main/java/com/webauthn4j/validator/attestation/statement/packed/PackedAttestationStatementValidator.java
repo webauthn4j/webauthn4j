@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.attestation.statement.packed;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.authenticator.CredentialPublicKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -102,15 +102,15 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     }
 
     private AttestationType validateSelfAttestation(RegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
-        CredentialPublicKey credentialPublicKey =
-                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialPublicKey();
-        // Validate that alg matches the algorithm of the credentialPublicKey in authenticatorData.
-        COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = credentialPublicKey.getAlgorithm();
+        COSEKey coseKey =
+                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
+        // Validate that alg matches the algorithm of the coseKey in authenticatorData.
+        COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
-            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the credentialPublicKey in authenticatorData.");
+            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
-        if (!verifySignature(credentialPublicKey.getPublicKey(), alg, sig, attrToBeSigned)) {
+        if (!verifySignature(coseKey.getPublicKey(), alg, sig, attrToBeSigned)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
         // If successful, return attestation type Self and empty attestation trust path.

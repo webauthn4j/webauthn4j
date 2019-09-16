@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractCredentialPublicKey implements CredentialPublicKey {
+public abstract class AbstractCOSEKey implements COSEKey {
 
     @JsonProperty("2")
     private byte[] keyId;
@@ -41,21 +41,21 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     private COSEAlgorithmIdentifier algorithm;
 
     @JsonProperty("4")
-    private List<COSEKeyOperation> keyOpts;
+    private List<COSEKeyOperation> keyOps;
 
     @JsonProperty("5")
     private byte[] baseIV;
 
     @JsonCreator
-    AbstractCredentialPublicKey(
+    AbstractCOSEKey(
             @JsonProperty("2") byte[] keyId,
             @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOpts,
+            @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @JsonProperty("5") byte[] baseIV
     ) {
         this.keyId = keyId;
         this.algorithm = algorithm;
-        this.keyOpts = keyOpts;
+        this.keyOps = keyOps;
         this.baseIV = baseIV;
     }
 
@@ -70,8 +70,8 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
         return algorithm;
     }
 
-    public List<COSEKeyOperation> getKeyOpts() {
-        return keyOpts;
+    public List<COSEKeyOperation> getKeyOps() {
+        return keyOps;
     }
 
     public byte[] getBaseIV() {
@@ -100,17 +100,17 @@ public abstract class AbstractCredentialPublicKey implements CredentialPublicKey
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractCredentialPublicKey that = (AbstractCredentialPublicKey) o;
+        AbstractCOSEKey that = (AbstractCOSEKey) o;
         return Arrays.equals(keyId, that.keyId) &&
                 algorithm == that.algorithm &&
-                Objects.equals(keyOpts, that.keyOpts) &&
+                Objects.equals(keyOps, that.keyOps) &&
                 Arrays.equals(baseIV, that.baseIV);
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(algorithm, keyOpts);
+        int result = Objects.hash(algorithm, keyOps);
         result = 31 * result + Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(baseIV);
         return result;

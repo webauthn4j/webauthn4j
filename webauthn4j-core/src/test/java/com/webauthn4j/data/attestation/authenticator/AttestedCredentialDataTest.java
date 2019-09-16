@@ -36,7 +36,7 @@ class AttestedCredentialDataTest {
         assertAll(
                 () -> assertThat(attestedCredentialData.getCredentialId()).isNull(),
                 () -> assertThat(attestedCredentialData.getAaguid()).isNull(),
-                () -> assertThat(attestedCredentialData.getCredentialPublicKey()).isNull()
+                () -> assertThat(attestedCredentialData.getCOSEKey()).isNull()
         );
     }
 
