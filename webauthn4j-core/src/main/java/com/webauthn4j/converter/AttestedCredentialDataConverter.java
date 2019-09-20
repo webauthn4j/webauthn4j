@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
+import com.webauthn4j.converter.jackson.deserializer.COSEKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
@@ -66,10 +66,10 @@ public class AttestedCredentialDataConverter {
         byte[] remaining = new byte[attestedCredentialData.remaining()];
         attestedCredentialData.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
-        COSEKey coseKey = credentialPublicKeyEnvelope.getCOSEKey();
+        COSEKeyEnvelope coseKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
+        COSEKey coseKey = coseKeyEnvelope.getCOSEKey();
         AttestedCredentialData result = new AttestedCredentialData(aaguid, credentialId, coseKey);
-        int extensionsBufferLength = remaining.length - credentialPublicKeyEnvelope.getLength();
+        int extensionsBufferLength = remaining.length - coseKeyEnvelope.getLength();
         attestedCredentialData.position(attestedCredentialData.position() - extensionsBufferLength);
         return result;
     }
@@ -90,8 +90,8 @@ public class AttestedCredentialDataConverter {
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
-    CredentialPublicKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
-        return cborConverter.readValue(inputStream, CredentialPublicKeyEnvelope.class);
+    COSEKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
+        return cborConverter.readValue(inputStream, COSEKeyEnvelope.class);
     }
 
     byte[] convert(COSEKey coseKey) {

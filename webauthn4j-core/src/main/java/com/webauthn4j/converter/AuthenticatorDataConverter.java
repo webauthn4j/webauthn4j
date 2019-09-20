@@ -18,7 +18,7 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
-import com.webauthn4j.converter.jackson.deserializer.CredentialPublicKeyEnvelope;
+import com.webauthn4j.converter.jackson.deserializer.COSEKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -158,8 +158,8 @@ public class AuthenticatorDataConverter {
 
         byte[] attestedCredentialDataBytes = Arrays.copyOfRange(authenticatorData, credentialPublicKeyIndex, authenticatorData.length);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(attestedCredentialDataBytes);
-        CredentialPublicKeyEnvelope credentialPublicKeyEnvelope = attestedCredentialDataConverter.convertToCredentialPublicKey(byteArrayInputStream);
-        int credentialPublicKeyLength = credentialPublicKeyEnvelope.getLength();
+        COSEKeyEnvelope coseKeyEnvelope = attestedCredentialDataConverter.convertToCredentialPublicKey(byteArrayInputStream);
+        int credentialPublicKeyLength = coseKeyEnvelope.getLength();
         int attestedCredentialDataLength = AAGUID_LENGTH + L_LENGTH + credentialIdLength + credentialPublicKeyLength;
         return Arrays.copyOfRange(authenticatorData, ATTESTED_CREDENTIAL_DATA_INDEX, ATTESTED_CREDENTIAL_DATA_INDEX + attestedCredentialDataLength);
     }

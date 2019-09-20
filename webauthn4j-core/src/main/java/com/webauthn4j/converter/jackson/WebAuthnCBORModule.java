@@ -47,7 +47,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(CredentialPublicKeyEnvelope.class, new CredentialPublicKeyEnvelopeDeserializer());
+        this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(cborConverter));
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
@@ -59,10 +59,10 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
-        this.addSerializer(EC2COSEKey.class, new EC2CredentialPublicKeySerializer());
+        this.addSerializer(EC2COSEKey.class, new EC2COSEKeySerializer());
         this.addSerializer(JWS.class, new JWSSerializer());
         this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(RSACOSEKey.class, new RSACredentialPublicKeySerializer());
+        this.addSerializer(RSACOSEKey.class, new RSACOSEKeySerializer());
         this.addSerializer(TPMSAttest.class, new TPMSAttestSerializer());
         this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
