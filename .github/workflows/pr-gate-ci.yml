@@ -1,0 +1,68 @@
+name: Pull Request Gate CI
+
+on: pull_request
+
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: [8]
+        os: [ubuntu-18.04]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      - name: Build with Gradle
+        run: ./gradlew build javadoc asciidoc
+
+  matrix-test:
+    name: Test on java ${{ matrix.java_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: [8, 11] # 12,13 is not yet supported because of gradle limitation
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      - name: Build with Gradle
+        run: ./gradlew check
+
+  code-analysis:
+    name: Code Analysis
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: [8]
+        os: [ubuntu-18.04]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      - name: Build with Gradle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew sonarqube check javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}; fi
+

@@ -4,16 +4,7 @@ matrix:
   include:
     - jdk: openjdk8
       dist: xenial
-    - jdk: openjdk11
-      dist: xenial
-    - jdk: openjdk12
-      dist: xenial
-    - jdk: oraclejdk8 # oracleJDK8 is only available on Trusty
-      dist: trusty
-    - jdk: oraclejdk9
-      dist: xenial
-    - jdk: oraclejdk11
-      dist: xenial
+
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -28,7 +19,6 @@ script:
   - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$SONAR_TOKEN" != "" ]; then git fetch --unshallow --quiet; fi'
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
   - 'if [ "$TRAVIS_JDK_VERSION" != "openjdk8" -o  "$SONAR_TOKEN"  = "" ]; then ./gradlew check javadoc asciidoc; fi'
-  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$SONAR_TOKEN" != "" ]; then ./gradlew sonarqube check javadoc asciidoc -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN; fi'
 deploy:
   - provider: pages
     skip-cleanup: true
@@ -39,19 +29,3 @@ deploy:
     on:
       branch: master
       jdk: openjdk8
-  - provider: script
-    skip-cleanup: true
-    script: .travis/travis_wait "./gradlew bintrayUpload"
-    on:
-      jdk: openjdk8
-      tags: true
-  - provider: script
-    skip-cleanup: true
-    script: ./gradlew artifactoryPublish
-    on:
-      branch: master
-      jdk: openjdk8
-
-addons:
-  sonarcloud:
-    organization: "webauthn4j"
