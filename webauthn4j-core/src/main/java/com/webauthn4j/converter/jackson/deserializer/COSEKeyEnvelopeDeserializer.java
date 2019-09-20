@@ -16,26 +16,29 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 
+import java.io.IOException;
+
 /**
- * Internal envelope class for {@link COSEKey} deserialization
+ * Jackson Deserializer for {@link COSEKeyEnvelope}
  */
-public class CredentialPublicKeyEnvelope {
+public class COSEKeyEnvelopeDeserializer extends StdDeserializer<COSEKeyEnvelope> {
 
-    private COSEKey coseKey;
-    private int length;
-
-    public CredentialPublicKeyEnvelope(COSEKey coseKey, int length) {
-        this.coseKey = coseKey;
-        this.length = length;
+    public COSEKeyEnvelopeDeserializer() {
+        super(COSEKeyEnvelope.class);
     }
 
-    public COSEKey getCOSEKey() {
-        return coseKey;
-    }
-
-    public int getLength() {
-        return length;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public COSEKeyEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        COSEKey coseKey = ctxt.readValue(p, COSEKey.class);
+        int length = (int) p.getCurrentLocation().getByteOffset();
+        return new COSEKeyEnvelope(coseKey, length);
     }
 }

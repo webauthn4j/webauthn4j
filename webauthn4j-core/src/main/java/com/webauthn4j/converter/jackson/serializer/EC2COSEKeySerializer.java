@@ -19,28 +19,31 @@ package com.webauthn4j.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
-import com.webauthn4j.data.attestation.authenticator.RSACOSEKey;
+import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public class RSACredentialPublicKeySerializer extends AbstractCtapCanonicalCborSerializer<RSACOSEKey> {
+public class EC2COSEKeySerializer extends AbstractCtapCanonicalCborSerializer<EC2COSEKey> {
 
-    public RSACredentialPublicKeySerializer() {
-        super(RSACOSEKey.class, Arrays.asList(
-                new FieldSerializationRule<>(1, RSACOSEKey::getKeyType),
-                new FieldSerializationRule<>(2, RSACOSEKey::getKeyId),
-                new FieldSerializationRule<>(3, RSACOSEKey::getAlgorithm),
-                new FieldSerializationRule<>(4, RSACOSEKey::getKeyOps),
-                new FieldSerializationRule<>(5, RSACOSEKey::getBaseIV),
-                new FieldSerializationRule<>(-1, RSACOSEKey::getN),
-                new FieldSerializationRule<>(-2, RSACOSEKey::getE)
+    public EC2COSEKeySerializer() {
+        super(EC2COSEKey.class, Arrays.asList(
+                new FieldSerializationRule<>(1, EC2COSEKey::getKeyType),
+                new FieldSerializationRule<>(2, EC2COSEKey::getKeyId),
+                new FieldSerializationRule<>(3, EC2COSEKey::getAlgorithm),
+                new FieldSerializationRule<>(4, EC2COSEKey::getKeyOps),
+                new FieldSerializationRule<>(5, EC2COSEKey::getBaseIV),
+                new FieldSerializationRule<>(-1, EC2COSEKey::getCurve),
+                new FieldSerializationRule<>(-2, EC2COSEKey::getX),
+                new FieldSerializationRule<>(-3, EC2COSEKey::getY),
+                new FieldSerializationRule<>(-4, EC2COSEKey::getD)
         ));
     }
 
     @Override
-    public void serializeWithType(RSACOSEKey value, JsonGenerator gen,
+    public void serializeWithType(EC2COSEKey value, JsonGenerator gen,
                                   SerializerProvider provider, TypeSerializer typeSer) throws IOException {
         super.serialize(value, gen, provider);
     }
+
 }

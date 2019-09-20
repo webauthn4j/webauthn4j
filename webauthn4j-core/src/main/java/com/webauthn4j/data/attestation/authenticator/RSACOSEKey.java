@@ -56,9 +56,14 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param keyId     keyId
      * @param algorithm algorithm
      * @param keyOps    keyOps
-     * @param n         n
-     * @param e         e
-     * @param d         d
+     * @param n         the RSA modulus n
+     * @param e         the RSA public exponent e
+     * @param d         the RSA private exponent d
+     * @param p         the prime factor p of n
+     * @param q         the prime factor q of n
+     * @param dP        dP is d mod (p - 1)
+     * @param dQ        dQ is d mod (q - 1)
+     * @param qInv      qInv is the CRT coefficient q^(-1) mod p
      */
     @SuppressWarnings("squid:S00107")
     @JsonCreator
