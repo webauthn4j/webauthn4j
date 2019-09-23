@@ -23,9 +23,11 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.RSAUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.math.BigInteger;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
@@ -177,6 +179,11 @@ public class RSACOSEKey extends AbstractCOSEKey {
                 new BigInteger(1, getE())
         );
         return RSAUtil.createPublicKey(spec);
+    }
+
+    @Override
+    public PrivateKey getPrivateKey() {
+        throw new NotImplementedException();
     }
 
     @Override

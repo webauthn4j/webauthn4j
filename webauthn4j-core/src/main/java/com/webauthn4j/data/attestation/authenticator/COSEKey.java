@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.List;
 
@@ -42,6 +43,9 @@ public interface COSEKey extends Serializable {
 
     @JsonIgnore
     PublicKey getPublicKey();
+
+    @JsonIgnore
+    PrivateKey getPrivateKey();
 
     COSEKeyType getKeyType();
 
