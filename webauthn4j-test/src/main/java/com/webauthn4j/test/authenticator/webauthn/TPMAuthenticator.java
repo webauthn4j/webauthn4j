@@ -19,6 +19,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -88,7 +89,15 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         TPMGenerated magic = TPMGenerated.TPM_GENERATED_VALUE;
         TPMISTAttest type = TPMISTAttest.TPM_ST_ATTEST_CERTIFY;
         byte[] qualifiedSigner = Base64UrlUtil.decode("AAu8WfTf2aakLcO4Zq_y3w0Zgmu_AUtnqwrW67F2MGuABw");
-        byte[] extraData = MessageDigestUtil.createMessageDigest(alg.getMessageDigestJcaName()).digest(attestationStatementRequest.getSignedData());
+        String messageDigestJcaName;
+        try{
+            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
+        }
+        catch (IllegalArgumentException e){
+            throw new WebAuthnModelException("alg is not signature algorithm", e);
+        }
+        byte[] extraData = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attestationStatementRequest.getSignedData());
         BigInteger clock = BigInteger.valueOf(7270451399L);
         long resetCount = 1749088739L;
         long restartCount = 3639844613L;

@@ -17,7 +17,6 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
@@ -74,27 +73,19 @@ public abstract class AbstractCOSEKey implements COSEKey {
         return ArrayUtil.clone(baseIV);
     }
 
-    @JsonIgnore
-    private String getAlgorithmName() {
-        return algorithm.getJcaName();
-    }
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractCOSEKey that = (AbstractCOSEKey) o;
         return Arrays.equals(keyId, that.keyId) &&
-                algorithm == that.algorithm &&
+                Objects.equals(algorithm, that.algorithm) &&
                 Objects.equals(keyOps, that.keyOps) &&
                 Arrays.equals(baseIV, that.baseIV);
     }
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(algorithm, keyOps);
         result = 31 * result + Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(baseIV);

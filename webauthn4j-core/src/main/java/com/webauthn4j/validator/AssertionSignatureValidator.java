@@ -18,8 +18,11 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.security.*;
@@ -28,6 +31,8 @@ import java.security.*;
  * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link COSEKey}
  */
 class AssertionSignatureValidator {
+
+    Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
 
     // ~ Methods
     // ========================================================================================================
@@ -50,12 +55,19 @@ class AssertionSignatureValidator {
     private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
-            Signature verifier = Signature.getInstance(coseKey.getAlgorithm().getJcaName());
+            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(coseKey.getAlgorithm());
+            String jcaName = signatureAlgorithm.getJcaName();
+            Signature verifier = Signature.getInstance(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(data);
-
             return verifier.verify(signature);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+        }
+        catch (IllegalArgumentException e){
+            logger.debug("COSE key alg must be signature algorithm.", e);
+            return false;
+        }
+        catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+            logger.debug("Unexpected exception is thrown during signature verification.", e);
             return false;
         }
     }

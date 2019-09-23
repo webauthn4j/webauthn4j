@@ -137,14 +137,11 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         return extensions;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AuthenticatorData that = (AuthenticatorData) o;
+        AuthenticatorData<?> that = (AuthenticatorData<?>) o;
         return flags == that.flags &&
                 signCount == that.signCount &&
                 Arrays.equals(rpIdHash, that.rpIdHash) &&
@@ -152,9 +149,6 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
                 Objects.equals(extensions, that.extensions);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int hashCode() {
         int result = Objects.hash(flags, signCount, attestedCredentialData, extensions);

@@ -122,7 +122,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         if (o == null || getClass() != o.getClass()) return false;
         TPMAttestationStatement that = (TPMAttestationStatement) o;
         return Objects.equals(ver, that.ver) &&
-                alg == that.alg &&
+                Objects.equals(alg, that.alg) &&
                 Objects.equals(x5c, that.x5c) &&
                 Arrays.equals(ecdaaKeyId, that.ecdaaKeyId) &&
                 Arrays.equals(sig, that.sig) &&
@@ -132,7 +132,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(ver, alg, x5c, certInfo, pubArea);
         result = 31 * result + Arrays.hashCode(ecdaaKeyId);
         result = 31 * result + Arrays.hashCode(sig);

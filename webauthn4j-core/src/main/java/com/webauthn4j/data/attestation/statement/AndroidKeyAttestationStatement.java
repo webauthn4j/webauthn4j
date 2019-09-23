@@ -87,14 +87,13 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AndroidKeyAttestationStatement that = (AndroidKeyAttestationStatement) o;
-        return alg == that.alg &&
+        return Objects.equals(alg, that.alg) &&
                 Arrays.equals(sig, that.sig) &&
                 Objects.equals(x5c, that.x5c);
     }
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(alg, x5c);
         result = 31 * result + Arrays.hashCode(sig);
         return result;

@@ -88,7 +88,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         }
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
-        byte[] hash = MessageDigestUtil.createMessageDigest(attestationStatement.getAlg().getMessageDigestJcaName()).digest(attToBeSigned);
+        COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
+        String messageDigestJcaName = getMessageDigestJcaName(alg);
+        byte[] hash = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
         }
@@ -97,9 +99,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         /// whose name field contains a valid Name for pubArea, as computed using the algorithm in the nameAlg field of
         /// pubArea using the procedure specified in [TPMv2-Part1] section 16.
         TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo) certInfo.getAttested();
-        TPMIAlgHash alg = certifyInfo.getName().getHashAlg();
+        TPMIAlgHash hashAlg = certifyInfo.getName().getHashAlg();
         String algJcaName;
-        algJcaName = getAlgJcaName(alg);
+        algJcaName = getAlgJcaName(hashAlg);
 
         byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
         if (!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())) {
@@ -125,11 +127,24 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }
 
+    private String getMessageDigestJcaName(COSEAlgorithmIdentifier alg) {
+        String messageDigestJcaName;
+        try{
+            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException("alg is not signature algorithm", e);
+        }
+        return messageDigestJcaName;
+    }
+
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData authenticatorData) {
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        Signature certInfoSignature = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
+        String jcaName = getJcaName(attestationStatement.getAlg());
+        Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
         try {
             certInfoSignature.initVerify(aikCert.getPublicKey());
             certInfoSignature.update(certInfo.getBytes());
