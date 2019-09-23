@@ -24,10 +24,6 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.security.SignatureException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

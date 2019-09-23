@@ -53,8 +53,6 @@ import com.webauthn4j.validator.RegistrationObject;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
-import java.security.interfaces.RSAKey;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
@@ -188,7 +186,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = ECUtil.createKeyPair();
-        EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) keyPair.getPublic());
+        EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) keyPair.getPublic());
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
@@ -242,14 +240,14 @@ public class TestDataUtil {
     }
 
     public static AttestedCredentialData createAttestedCredentialData() {
-        return createAttestedCredentialData(createECCredentialPublicKey());
+        return createAttestedCredentialData(createEC2COSEPublicKey());
     }
 
     public static AttestedCredentialData createAttestedCredentialData(COSEKey coseKey) {
         return new AttestedCredentialData(AAGUID.ZERO, new byte[32], coseKey);
     }
 
-    public static EC2COSEKey createECCredentialPublicKey() {
+    public static EC2COSEKey createEC2COSEPublicKey() {
         return new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -260,7 +258,7 @@ public class TestDataUtil {
         );
     }
 
-    public static RSACOSEKey createRSCredentialPublicKey() {
+    public static RSACOSEKey createRSACOSEPublicKey() {
         RSACOSEKey credentialPublicKey;
         credentialPublicKey = new RSACOSEKey(
                 null,
@@ -274,12 +272,12 @@ public class TestDataUtil {
 
 
     /**
-     * createECCredentialPublicKey from {@code ECPublicKey}
+     * createEC2COSEPublicKey from {@code ECPublicKey}
      *
      * @param publicKey publicKey
      * @return {@link EC2COSEKey}
      */
-    public static EC2COSEKey createECCredentialPublicKey(ECPublicKey publicKey) {
+    public static EC2COSEKey createEC2COSEPublicKey(ECPublicKey publicKey) {
         ECPoint ecPoint = publicKey.getW();
         EllipticCurve ellipticCurve = publicKey.getParams().getCurve();
         Curve curve;

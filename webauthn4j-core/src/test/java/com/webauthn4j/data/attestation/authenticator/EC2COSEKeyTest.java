@@ -43,7 +43,7 @@ class EC2COSEKeyTest {
 
     @Test
     void createFromUncompressedECCKey_test() {
-        EC2COSEKey key = EC2COSEKey.createFromUncompressedECCKey(TestDataUtil.createECCredentialPublicKey().getPublicKeyBytes());
+        EC2COSEKey key = EC2COSEKey.createFromUncompressedECCKey(TestDataUtil.createEC2COSEPublicKey().getPublicKeyBytes());
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
         assertThat(key.getX()).isEqualTo(Base64UrlUtil.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
     }
@@ -57,14 +57,14 @@ class EC2COSEKeyTest {
 
     @Test
     void equals_test() {
-        EC2COSEKey instanceA = TestDataUtil.createECCredentialPublicKey();
-        EC2COSEKey instanceB = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
+        EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void cbor_serialize_deserialize_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         COSEKey result = cborConverter.readValue(serialized, COSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -72,7 +72,7 @@ class EC2COSEKeyTest {
 
     @Test
     void json_serialize_deserialize_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         COSEKey result = jsonConverter.readValue(serialized, COSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -80,13 +80,13 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_test() {
-        EC2COSEKey target = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
         target.validate();
     }
 
     @Test
     void validate_with_invalid_algorithm_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey target = new EC2COSEKey(
                 null,
                 null,
@@ -102,7 +102,7 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_with_invalid_curve_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey target = new EC2COSEKey(
                 null,
                 COSEAlgorithmIdentifier.ES256,
@@ -142,7 +142,7 @@ class EC2COSEKeyTest {
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
             PublicKey publicKey = keyPair.getPublic();
-            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
             ec2CredentialPublicKey.validate();
         }
     }
@@ -156,7 +156,7 @@ class EC2COSEKeyTest {
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
             PublicKey publicKey = keyPair.getPublic();
-            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
             ec2CredentialPublicKey.validate();
         }
     }
@@ -170,14 +170,14 @@ class EC2COSEKeyTest {
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
             PublicKey publicKey = keyPair.getPublic();
-            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) publicKey);
+            EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) publicKey);
             ec2CredentialPublicKey.validate();
         }
     }
 
     @Test
     void hasPublicKey_test() {
-        EC2COSEKey target = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
         assertThat(target.hasPublicKey()).isTrue();
     }
 
@@ -195,7 +195,7 @@ class EC2COSEKeyTest {
 
     @Test
     void getPublicKey_test() {
-        EC2COSEKey target = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
         assertThat(target.getPublicKey()).isNotNull();
     }
 
@@ -206,7 +206,7 @@ class EC2COSEKeyTest {
     }
 
     private EC2COSEKey createNullXKey() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         return new EC2COSEKey(
                 original.getKeyId(),
                 COSEAlgorithmIdentifier.ES256,
@@ -218,7 +218,7 @@ class EC2COSEKeyTest {
     }
 
     private EC2COSEKey createNullYKey() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         return new EC2COSEKey(
                 original.getKeyId(),
                 COSEAlgorithmIdentifier.ES256,
