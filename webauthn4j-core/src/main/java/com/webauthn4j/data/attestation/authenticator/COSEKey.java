@@ -29,15 +29,12 @@ import java.util.List;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "1")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
         @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3")
 })
 public interface COSEKey extends Serializable {
-
-    boolean verifySignature(byte[] signature, byte[] data);
 
     @JsonIgnore
     PublicKey getPublicKey();

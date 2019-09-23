@@ -151,7 +151,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
         return dQ;
     }
 
-    public byte[] getqInv() {
+    public byte[] getQInv() {
         return qInv;
     }
 

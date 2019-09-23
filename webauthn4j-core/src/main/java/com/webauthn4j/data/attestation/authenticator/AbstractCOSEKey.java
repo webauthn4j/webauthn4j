@@ -83,18 +83,7 @@ public abstract class AbstractCOSEKey implements COSEKey {
         return algorithm.getJcaName();
     }
 
-    @Override
-    public boolean verifySignature(byte[] signature, byte[] data) {
-        try {
-            Signature verifier = Signature.getInstance(getAlgorithmName());
-            verifier.initVerify(getPublicKey());
-            verifier.update(data);
 
-            return verifier.verify(signature);
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
-            return false;
-        }
-    }
 
     @Override
     public boolean equals(Object o) {
