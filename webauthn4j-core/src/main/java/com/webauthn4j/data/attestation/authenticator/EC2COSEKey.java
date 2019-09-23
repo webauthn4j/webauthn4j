@@ -17,7 +17,6 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
@@ -29,7 +28,6 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.ECPoint;
@@ -167,12 +165,6 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     public byte[] getD() {
         return ArrayUtil.clone(d);
-    }
-
-    @JsonIgnore
-    public byte[] getPublicKeyBytes() {
-        byte format = 0x04;
-        return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
 
     @Override
