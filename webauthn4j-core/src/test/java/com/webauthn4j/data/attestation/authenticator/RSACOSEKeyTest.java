@@ -68,14 +68,7 @@ class RSACOSEKeyTest {
 
     @Test
     void validate_with_null_algorithm_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
-                null,
-                null,
-                null,
-                original.getN(),
-                original.getE()
-        );
+        RSACOSEKey target = createNullAlgorithmKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -83,31 +76,78 @@ class RSACOSEKeyTest {
 
     @Test
     void validate_with_null_n_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
-                null,
-                original.getAlgorithm(),
-                null,
-                null,
-                original.getE()
+        RSACOSEKey target = createNullNKey();
+        assertThrows(ConstraintViolationException.class,
+                target::validate
         );
+    }
+
+
+    @Test
+    void validate_with_null_e_test() {
+        RSACOSEKey target = createNullEKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
     }
 
     @Test
-    void validate_with_null_e_test() {
+    void hasPublicKey_test() {
+        RSACOSEKey target = TestDataUtil.createRSCredentialPublicKey();
+        assertThat(target.hasPublicKey()).isTrue();
+    }
+
+    @Test
+    void hasPublicKey_with_null_n_test() {
+        RSACOSEKey target = createNullNKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+    @Test
+    void hasPublicKey_with_null_e_test() {
+        RSACOSEKey target = createNullEKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+
+    @Test
+    void getPublicKey_with_invalidKey_test(){
+        RSACOSEKey target = createNullNKey();
+        assertThat(target.getPublicKey()).isNull();
+    }
+
+    private RSACOSEKey createNullAlgorithmKey() {
         RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
+        return new RSACOSEKey(
+                original.getKeyId(),
                 null,
+                original.getKeyOps(),
+                original.getN(),
+                original.getE()
+        );
+    }
+
+
+    private RSACOSEKey createNullNKey() {
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        return new RSACOSEKey(
+                original.getKeyId(),
                 original.getAlgorithm(),
+                original.getKeyOps(),
                 null,
+                original.getE()
+        );
+    }
+
+    private RSACOSEKey createNullEKey() {
+        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        return new RSACOSEKey(
+                original.getKeyId(),
+                original.getAlgorithm(),
+                original.getKeyOps(),
                 original.getN(),
                 null
         );
-        assertThrows(ConstraintViolationException.class,
-                target::validate
-        );
     }
+
 }

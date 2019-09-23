@@ -53,6 +53,8 @@ import com.webauthn4j.validator.RegistrationObject;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.interfaces.ECPublicKey;
+import java.security.interfaces.RSAKey;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;

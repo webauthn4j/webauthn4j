@@ -118,31 +118,16 @@ class EC2COSEKeyTest {
 
     @Test
     void validate_with_invalid_x_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
-        EC2COSEKey target = new EC2COSEKey(
-                null,
-                COSEAlgorithmIdentifier.ES256,
-                null,
-                Curve.SECP256R1,
-                null,
-                original.getY()
-        );
+        EC2COSEKey target = createNullXKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
     }
 
+
     @Test
     void validate_with_invalid_y_test() {
-        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
-        EC2COSEKey target = new EC2COSEKey(
-                null,
-                COSEAlgorithmIdentifier.ES256,
-                null,
-                Curve.SECP256R1,
-                original.getX(),
-                null
-        );
+        EC2COSEKey target = createNullYKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -189,4 +174,59 @@ class EC2COSEKeyTest {
             ec2CredentialPublicKey.validate();
         }
     }
+
+    @Test
+    void hasPublicKey_test() {
+        EC2COSEKey target = TestDataUtil.createECCredentialPublicKey();
+        assertThat(target.hasPublicKey()).isTrue();
+    }
+
+    @Test
+    void hasPublicKey_with_invalid_x_test() {
+        EC2COSEKey target = createNullXKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+    @Test
+    void hasPublicKey_with_invalid_y_test() {
+        EC2COSEKey target = createNullYKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+    @Test
+    void getPublicKey_test() {
+        EC2COSEKey target = TestDataUtil.createECCredentialPublicKey();
+        assertThat(target.getPublicKey()).isNotNull();
+    }
+
+    @Test
+    void getPublicKey_with_invalid_key_test() {
+        EC2COSEKey target = createNullXKey();
+        assertThat(target.getPublicKey()).isNull();
+    }
+
+    private EC2COSEKey createNullXKey() {
+        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        return new EC2COSEKey(
+                original.getKeyId(),
+                COSEAlgorithmIdentifier.ES256,
+                original.getKeyOps(),
+                Curve.SECP256R1,
+                null,
+                original.getY()
+        );
+    }
+
+    private EC2COSEKey createNullYKey() {
+        EC2COSEKey original = TestDataUtil.createECCredentialPublicKey();
+        return new EC2COSEKey(
+                original.getKeyId(),
+                COSEAlgorithmIdentifier.ES256,
+                original.getKeyOps(),
+                Curve.SECP256R1,
+                original.getX(),
+                null
+        );
+    }
+
 }

@@ -156,7 +156,22 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
+    public boolean hasPublicKey() {
+        return n != null && e != null;
+    }
+
+    @Override
+    public boolean hasPrivateKey() {
+        return hasPublicKey() && d != null;
+    }
+
+    @Override
     public PublicKey getPublicKey() {
+
+        if(!hasPublicKey()){
+            return null;
+        }
+
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
                 new BigInteger(1, getN()),
                 new BigInteger(1, getE())
@@ -169,24 +184,12 @@ public class RSACOSEKey extends AbstractCOSEKey {
         if (getAlgorithm() == null) {
             throw new ConstraintViolationException("algorithm must not be null");
         }
-        if (d != null) {
-            if(p != null && q != null && dP != null && dQ != null && qInv != null){
-                return;
-            }
-            else {
-                throw new ConstraintViolationException("d, p, q, dP, dQ, and qInv must be present at the same time");
-            }
-        }
-        if (n == null && e == null) {
-            throw new ConstraintViolationException("n, e or d must be present");
-        }
         if (n == null) {
             throw new ConstraintViolationException("n must not be null");
         }
         if (e == null) {
             throw new ConstraintViolationException("e must not be null");
         }
-
     }
 
     @Override

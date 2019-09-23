@@ -175,6 +175,11 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     @Override
     public PublicKey getPublicKey() {
+
+        if(!hasPublicKey()){
+            return null;
+        }
+
         ECPoint ecPoint = new ECPoint(
                 new BigInteger(1, getX()),
                 new BigInteger(1, getY())
@@ -182,6 +187,14 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, curve.getECParameterSpec());
 
         return ECUtil.createPublicKey(spec);
+    }
+
+    public boolean hasPublicKey(){
+        return x != null && y != null;
+    }
+
+    public boolean hasPrivateKey(){
+        return d != null;
     }
 
     public void validate() {
@@ -194,7 +207,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         if (d != null) {
             return;
         }
-        if (x == null && y == null) {
+        if (!hasPublicKey() && !hasPrivateKey()) {
             throw new ConstraintViolationException("x, y or d must be present");
         }
         if (x == null) {

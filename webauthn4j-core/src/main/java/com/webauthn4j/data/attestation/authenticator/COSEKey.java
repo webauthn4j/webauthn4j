@@ -36,6 +36,10 @@ import java.util.List;
 })
 public interface COSEKey extends Serializable {
 
+    boolean hasPublicKey();
+
+    boolean hasPrivateKey();
+
     @JsonIgnore
     PublicKey getPublicKey();
 
