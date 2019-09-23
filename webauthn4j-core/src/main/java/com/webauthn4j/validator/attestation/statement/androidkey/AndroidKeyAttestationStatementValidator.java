@@ -77,7 +77,9 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
-            Signature verifier = SignatureUtil.createSignature(attestationStatement.getAlg().getJcaName());
+            String jcaName;
+            jcaName = getJcaName(attestationStatement.getAlg());
+            Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(signedData);
             if (verifier.verify(signature)) {

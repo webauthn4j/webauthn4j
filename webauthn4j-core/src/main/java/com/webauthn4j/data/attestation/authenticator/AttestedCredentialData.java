@@ -73,7 +73,6 @@ public class AttestedCredentialData implements Serializable {
 
     @Override
     public int hashCode() {
-
         int result = Objects.hash(aaguid, coseKey);
         result = 31 * result + Arrays.hashCode(credentialId);
         return result;

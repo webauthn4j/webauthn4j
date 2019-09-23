@@ -18,10 +18,7 @@ package com.webauthn4j.validator.attestation.statement.packed;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.AttestationType;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
@@ -119,7 +116,8 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
-            Signature verifier = SignatureUtil.createSignature(algorithmIdentifier.getJcaName());
+            String jcaName = getJcaName(algorithmIdentifier);
+            Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(data);
 

@@ -16,10 +16,7 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.RegistrationEmulationOption;

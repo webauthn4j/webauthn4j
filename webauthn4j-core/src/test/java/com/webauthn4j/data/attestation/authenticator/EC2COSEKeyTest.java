@@ -206,6 +206,13 @@ class EC2COSEKeyTest {
         assertThat(target.getPublicKey()).isNull();
     }
 
+    @Test
+    void equals_hashCode_test(){
+        EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
+        EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
+        assertThat(instanceA).isEqualTo(instanceB);
+    }
+
     private EC2COSEKey createNullXKey() {
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         return new EC2COSEKey(
