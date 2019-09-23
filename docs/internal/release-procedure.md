@@ -40,9 +40,9 @@ git push origin release-<version>
 
 create a pull request with following title: `Release <version>.RELEASE`
 
-##### Check the build status
+##### Check the build status & Merge the pull request
 
-Check the build status before continue.
+Check the build status & merge the pull request.
 
 ### Prepare a release tag
 
@@ -76,6 +76,12 @@ Update the release note on GitHub
 
 ### Declare new version development start
 
+##### Create a branch
+
+```
+git checkout -b <new version>-development
+```
+
 ##### Update version variables in build.gradle
 
 gradle.properties
@@ -93,7 +99,7 @@ git commit -a -m "Start <new version> development"
 ##### Push the release branch
 
 ```
-git push origin release-<version>
+git push origin <new version>-development
 ```
 
 ##### Check the build status
