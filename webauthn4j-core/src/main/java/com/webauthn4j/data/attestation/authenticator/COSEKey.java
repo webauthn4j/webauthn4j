@@ -24,12 +24,12 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 
 import java.io.Serializable;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.List;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "1")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
@@ -37,10 +37,15 @@ import java.util.List;
 })
 public interface COSEKey extends Serializable {
 
-    boolean verifySignature(byte[] signature, byte[] data);
+    boolean hasPublicKey();
+
+    boolean hasPrivateKey();
 
     @JsonIgnore
     PublicKey getPublicKey();
+
+    @JsonIgnore
+    PrivateKey getPrivateKey();
 
     COSEKeyType getKeyType();
 

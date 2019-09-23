@@ -209,7 +209,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         try {
             credentialKeyPair = ECUtil.createKeyPair();
             credentialPrivateKey = credentialKeyPair.getPrivate();
-            coseKey = TestDataUtil.createECCredentialPublicKey((ECPublicKey) credentialKeyPair.getPublic());
+            coseKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) credentialKeyPair.getPublic());
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();

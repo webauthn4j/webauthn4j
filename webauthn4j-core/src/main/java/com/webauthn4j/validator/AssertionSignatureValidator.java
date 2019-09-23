@@ -22,7 +22,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
+import java.security.*;
 
 /**
  * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link COSEKey}
@@ -35,7 +35,7 @@ class AssertionSignatureValidator {
     public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, COSEKey coseKey) {
         byte[] signedData = getSignedData(webAuthnAuthenticationContext);
         byte[] signature = webAuthnAuthenticationContext.getSignature();
-        if (!coseKey.verifySignature(signature, signedData)) {
+        if (!verifySignature(coseKey, signature, signedData)) {
             throw new BadSignatureException("Assertion signature is not valid.");
         }
     }
@@ -45,6 +45,19 @@ class AssertionSignatureValidator {
         byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
         byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getClientDataJSON());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
+    }
+
+    private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
+        try {
+            PublicKey publicKey = coseKey.getPublicKey();
+            Signature verifier = Signature.getInstance(coseKey.getAlgorithm().getJcaName());
+            verifier.initVerify(publicKey);
+            verifier.update(data);
+
+            return verifier.verify(signature);
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+            return false;
+        }
     }
 
 

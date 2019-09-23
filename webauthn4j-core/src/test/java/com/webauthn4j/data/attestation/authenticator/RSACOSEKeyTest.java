@@ -36,8 +36,8 @@ class RSACOSEKeyTest {
 
     @Test
     void equals_hashCode_test() {
-        RSACOSEKey instanceA = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey instanceB = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey instanceA = TestDataUtil.createRSACOSEPublicKey();
+        RSACOSEKey instanceB = TestDataUtil.createRSACOSEPublicKey();
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
@@ -46,7 +46,7 @@ class RSACOSEKeyTest {
 
     @Test
     void cbor_serialize_deserialize_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         RSACOSEKey result = cborConverter.readValue(serialized, RSACOSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -54,7 +54,7 @@ class RSACOSEKeyTest {
 
     @Test
     void json_serialize_deserialize_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         RSACOSEKey result = jsonConverter.readValue(serialized, RSACOSEKey.class);
         assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
@@ -62,20 +62,13 @@ class RSACOSEKeyTest {
 
     @Test
     void validate_test() {
-        RSACOSEKey target = TestDataUtil.createRSCredentialPublicKey();
+        RSACOSEKey target = TestDataUtil.createRSACOSEPublicKey();
         target.validate();
     }
 
     @Test
     void validate_with_null_algorithm_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
-                null,
-                null,
-                null,
-                original.getN(),
-                original.getE()
-        );
+        RSACOSEKey target = createNullAlgorithmKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
@@ -83,31 +76,78 @@ class RSACOSEKeyTest {
 
     @Test
     void validate_with_null_n_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
-                null,
-                original.getAlgorithm(),
-                null,
-                null,
-                original.getE()
+        RSACOSEKey target = createNullNKey();
+        assertThrows(ConstraintViolationException.class,
+                target::validate
         );
+    }
+
+
+    @Test
+    void validate_with_null_e_test() {
+        RSACOSEKey target = createNullEKey();
         assertThrows(ConstraintViolationException.class,
                 target::validate
         );
     }
 
     @Test
-    void validate_with_null_e_test() {
-        RSACOSEKey original = TestDataUtil.createRSCredentialPublicKey();
-        RSACOSEKey target = new RSACOSEKey(
+    void hasPublicKey_test() {
+        RSACOSEKey target = TestDataUtil.createRSACOSEPublicKey();
+        assertThat(target.hasPublicKey()).isTrue();
+    }
+
+    @Test
+    void hasPublicKey_with_null_n_test() {
+        RSACOSEKey target = createNullNKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+    @Test
+    void hasPublicKey_with_null_e_test() {
+        RSACOSEKey target = createNullEKey();
+        assertThat(target.hasPublicKey()).isFalse();
+    }
+
+
+    @Test
+    void getPublicKey_with_invalidKey_test(){
+        RSACOSEKey target = createNullNKey();
+        assertThat(target.getPublicKey()).isNull();
+    }
+
+    private RSACOSEKey createNullAlgorithmKey() {
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
+        return new RSACOSEKey(
+                original.getKeyId(),
                 null,
+                original.getKeyOps(),
+                original.getN(),
+                original.getE()
+        );
+    }
+
+
+    private RSACOSEKey createNullNKey() {
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
+        return new RSACOSEKey(
+                original.getKeyId(),
                 original.getAlgorithm(),
+                original.getKeyOps(),
                 null,
+                original.getE()
+        );
+    }
+
+    private RSACOSEKey createNullEKey() {
+        RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
+        return new RSACOSEKey(
+                original.getKeyId(),
+                original.getAlgorithm(),
+                original.getKeyOps(),
                 original.getN(),
                 null
         );
-        assertThrows(ConstraintViolationException.class,
-                target::validate
-        );
     }
+
 }

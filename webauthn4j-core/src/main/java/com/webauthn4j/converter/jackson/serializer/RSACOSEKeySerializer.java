@@ -40,7 +40,7 @@ public class RSACOSEKeySerializer extends AbstractCtapCanonicalCborSerializer<RS
                 new FieldSerializationRule<>(-5, RSACOSEKey::getQ),
                 new FieldSerializationRule<>(-6, RSACOSEKey::getDP),
                 new FieldSerializationRule<>(-7, RSACOSEKey::getDQ),
-                new FieldSerializationRule<>(-8, RSACOSEKey::getqInv)
+                new FieldSerializationRule<>(-8, RSACOSEKey::getQInv)
         ));
     }
 

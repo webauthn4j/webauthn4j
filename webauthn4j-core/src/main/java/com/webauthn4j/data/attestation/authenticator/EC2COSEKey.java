@@ -17,18 +17,18 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.ECUtil;
+import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.ECPublicKeySpec;
@@ -167,14 +167,13 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         return ArrayUtil.clone(d);
     }
 
-    @JsonIgnore
-    public byte[] getPublicKeyBytes() {
-        byte format = 0x04;
-        return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
-    }
-
     @Override
     public PublicKey getPublicKey() {
+
+        if(!hasPublicKey()){
+            return null;
+        }
+
         ECPoint ecPoint = new ECPoint(
                 new BigInteger(1, getX()),
                 new BigInteger(1, getY())
@@ -182,6 +181,19 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, curve.getECParameterSpec());
 
         return ECUtil.createPublicKey(spec);
+    }
+
+    @Override
+    public PrivateKey getPrivateKey() {
+        throw new NotImplementedException();
+    }
+
+    public boolean hasPublicKey(){
+        return x != null && y != null;
+    }
+
+    public boolean hasPrivateKey(){
+        return d != null;
     }
 
     public void validate() {
@@ -194,7 +206,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         if (d != null) {
             return;
         }
-        if (x == null && y == null) {
+        if (!hasPublicKey() && !hasPrivateKey()) {
             throw new ConstraintViolationException("x, y or d must be present");
         }
         if (x == null) {
