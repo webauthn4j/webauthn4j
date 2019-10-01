@@ -74,24 +74,10 @@ public interface Authenticator extends Serializable {
     Map<String, RegistrationExtensionClientOutput> getClientExtensions();
 
     /**
-     * Sets the client extensions
-     *
-     * @param clientExtensions the client extensions
-     */
-    void setClientExtensions(Map<String, RegistrationExtensionClientOutput> clientExtensions);
-
-    /**
      * Returns the authenticator extensions
      *
      * @return the authenticator extensions
      */
     Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions();
-
-    /**
-     * Sets the authenticator extensions
-     *
-     * @param authenticatorExtensions the authenticator extensions
-     */
-    void setAuthenticatorExtensions(Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions);
 
 }
