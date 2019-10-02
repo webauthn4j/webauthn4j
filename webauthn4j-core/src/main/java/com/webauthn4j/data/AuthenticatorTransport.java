@@ -49,6 +49,12 @@ public class AuthenticatorTransport {
      */
     public static final AuthenticatorTransport BLE = new AuthenticatorTransport("ble");
 
+    /**
+     * Indicates the respective authenticator is contacted using a client device-specific transport.
+     * These authenticators are not removable from the client device.
+     */
+    public static final AuthenticatorTransport INTERNAL = new AuthenticatorTransport("internal");
+
     private String value;
 
     private AuthenticatorTransport(String value) {
