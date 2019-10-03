@@ -127,12 +127,13 @@ public class AuthenticatorImpl implements Authenticator {
         return counter == that.counter &&
                 Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
                 Objects.equals(attestationStatement, that.attestationStatement) &&
-                Objects.equals(transports, that.transports);
+                Objects.equals(transports, that.transports) &&
+                Objects.equals(clientExtensions, that.clientExtensions) &&
+                Objects.equals(authenticatorExtensions, that.authenticatorExtensions);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(attestedCredentialData, attestationStatement, transports, counter);
+        return Objects.hash(attestedCredentialData, attestationStatement, transports, counter, clientExtensions, authenticatorExtensions);
     }
 }
