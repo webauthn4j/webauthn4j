@@ -22,10 +22,7 @@ import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
-import com.webauthn4j.data.attestation.authenticator.RSACOSEKey;
+import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
@@ -44,6 +41,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         super("WebAuthnCBORModule");
 
         this.addDeserializer(AAGUID.class, new AAGUIDDeserializer());
+        this.addDeserializer(AttestedCredentialData.class, new AttestedCredentialDataDeserializer(cborConverter));
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
@@ -56,6 +54,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
 
         this.addSerializer(AAGUID.class, new AAGUIDSerializer());
+        this.addSerializer(AttestedCredentialData.class, new AttestedCredentialDataSerializer(cborConverter));
         this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
