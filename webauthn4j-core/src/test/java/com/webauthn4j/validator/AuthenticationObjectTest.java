@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
@@ -50,6 +51,7 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        Authenticator authenticator = TestDataUtil.createAuthenticator();
         LocalDateTime timestamp = LocalDateTime.now();
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
@@ -59,6 +61,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
+                authenticator,
                 timestamp
         );
 
@@ -70,6 +73,7 @@ class AuthenticationObjectTest {
                 () -> assertThat(authenticationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
                 () -> assertThat(authenticationObject.getClientExtensions()).isEqualTo(clientExtensions),
                 () -> assertThat(authenticationObject.getServerProperty()).isEqualTo(serverProperty),
+                () -> assertThat(authenticationObject.getAuthenticator()).isEqualTo(authenticator),
                 () -> assertThat(authenticationObject.getTimestamp()).isEqualTo(timestamp)
         );
     }
@@ -84,6 +88,7 @@ class AuthenticationObjectTest {
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
+        Authenticator authenticator = TestDataUtil.createAuthenticator();
         LocalDateTime timestamp = LocalDateTime.now();
 
         AuthenticationObject instanceA = new AuthenticationObject(
@@ -94,6 +99,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
+                authenticator,
                 timestamp
         );
 
@@ -105,6 +111,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
+                authenticator,
                 timestamp
         );
 
