@@ -26,7 +26,7 @@ test {
 dependencies {
     compile project(':webauthn4j-util')
     compile("org.slf4j:slf4j-api")
-    compile('org.apache.kerby:kerby-asn1:1.1.1')
+    compile('org.apache.kerby:kerby-asn1:2.0.0')
 
     //Test
     testCompile project(':webauthn4j-test')
