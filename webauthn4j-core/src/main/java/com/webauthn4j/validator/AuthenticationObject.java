@@ -1,5 +1,6 @@
 package com.webauthn4j.validator;
 
+import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -29,6 +30,9 @@ public class AuthenticationObject {
     private final byte[] authenticatorDataBytes;
     private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
     private final ServerProperty serverProperty;
+
+    private final Authenticator authenticator;
+
     private final LocalDateTime timestamp;
 
     public AuthenticationObject(
@@ -38,7 +42,8 @@ public class AuthenticationObject {
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
             byte[] authenticatorDataBytes,
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
-            ServerProperty serverProperty
+            ServerProperty serverProperty,
+            Authenticator authenticator
     ) {
 
         this(
@@ -49,6 +54,7 @@ public class AuthenticationObject {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
+                authenticator,
                 LocalDateTime.now(Clock.systemUTC()));
     }
 
@@ -61,6 +67,7 @@ public class AuthenticationObject {
             byte[] authenticatorDataBytes,
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty,
+            Authenticator authenticator,
             LocalDateTime timestamp) {
         this.credentialId = credentialId;
         this.collectedClientData = collectedClientData;
@@ -69,6 +76,7 @@ public class AuthenticationObject {
         this.authenticatorDataBytes = authenticatorDataBytes;
         this.clientExtensions = clientExtensions;
         this.serverProperty = serverProperty;
+        this.authenticator = authenticator;
         this.timestamp = timestamp;
     }
 
@@ -100,6 +108,10 @@ public class AuthenticationObject {
         return this.serverProperty;
     }
 
+    public Authenticator getAuthenticator() {
+        return authenticator;
+    }
+
     public LocalDateTime getTimestamp() {
         return this.timestamp;
     }
@@ -116,12 +128,13 @@ public class AuthenticationObject {
                 Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
                 Objects.equals(clientExtensions, that.clientExtensions) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(authenticator, that.authenticator) &&
                 Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(collectedClientData, authenticatorData, clientExtensions, serverProperty, timestamp);
+        int result = Objects.hash(collectedClientData, authenticatorData, clientExtensions, serverProperty, authenticator, timestamp);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
