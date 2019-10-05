@@ -16,9 +16,8 @@ cache:
 
 script:
   # unshallow git repository
-  - 'if [ "$TRAVIS_JDK_VERSION"  = "openjdk8" -a  "$SONAR_TOKEN" != "" ]; then git fetch --unshallow --quiet; fi'
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - 'if [ "$TRAVIS_JDK_VERSION" != "openjdk8" -o  "$SONAR_TOKEN"  = "" ]; then ./gradlew check javadoc asciidoc; fi'
+  - 'git fetch --unshallow --quiet'
+  - './gradlew check javadoc asciidoc'
 deploy:
   - provider: pages
     skip-cleanup: true
