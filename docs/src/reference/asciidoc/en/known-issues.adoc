@@ -14,23 +14,20 @@ Safari's Technology Preview version has supported WebAuthn using CTAP2 Authentic
 Face ID and Touch ID. However, it seems to be expected to integrate them sooner or later.
 
 
-=== Chrome's ResidentKey support
+=== Android's resident key support
 
-Chrome has not yet supported ResidentKey, which means that you cannot use Chrome to experience authentication utilizing
-WebAuthn technology without entering your account's ID
+Android's FIDO API has not supported resident key yet. It means Chrome for Android and Firefox for Android
+don't provide username-less authentication experience at the time of authentication.
 
 NOTE: You can mimic such the experience by storing credentialId onto LocalStorage on registration and read it on
 authentication. However, it doesn't works if a user uses Roaming Authenticator for authentication.
 
-=== Firefox's WebAuthn support
+=== Firefox
 
-Firefox has supported WebAuthn using FIDO U2F Authenticator, and not CTAP2 Authenticator.
+Firefox supports CTAP2 Authenticators by using OS standard WebAuthn API from Windows 10 1903.
+However, on macOS and Linux, only FIDO U2F authenticators are supported.
 
-However, Windows' Firefox implementation plans to use FIDO2 API provided by Windows OS, which will makes users to
-experience authentication utilizing WebAuthn technology with CTAP2 Authenticator and Windows Hello.
-
-
-=== Supporting features' difference between browsers
+=== Implementation differences between browsers
 
 Browser vendors has been struggling to support WebAuthn. However, it is nothing unusual that the feature supported
 by some platforms are not supported by other platforms. Considering it, it is recommended to prepare some fallback
