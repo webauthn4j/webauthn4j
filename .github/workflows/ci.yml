@@ -8,7 +8,7 @@ on:
       - '*'
   schedule:
     # everyday 11AM (UTC)
-    - cron:  * 9 * * *
+    - cron: '* 9 * * *'
 
 jobs:
   build:
