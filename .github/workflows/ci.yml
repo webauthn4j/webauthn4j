@@ -1,6 +1,13 @@
 name: Push CI
 
-on: push
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - '*'
+  schedule:
+      - cron:  * 9 * * * # everyday 11AM (UTC)
 
 jobs:
   build:
