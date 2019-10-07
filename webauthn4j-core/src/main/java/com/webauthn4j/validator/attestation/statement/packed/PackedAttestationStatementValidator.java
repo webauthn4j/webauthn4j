@@ -97,7 +97,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.BASIC;
     }
 
-    private AAGUID extractAAGUIDFromAttestationCertificate(X509Certificate certificate){
+    AAGUID extractAAGUIDFromAttestationCertificate(X509Certificate certificate){
         byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
         if (extensionValue == null) {
             return AAGUID.NULL;
