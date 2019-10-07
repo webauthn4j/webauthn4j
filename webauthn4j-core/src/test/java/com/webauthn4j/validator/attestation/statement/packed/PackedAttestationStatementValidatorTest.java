@@ -7,6 +7,7 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -20,6 +21,7 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.ECUtil;
@@ -52,6 +54,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -121,6 +124,17 @@ class PackedAttestationStatementValidatorTest {
         validate(clientData, attestationObject);
     }
 
+
+    @Test
+    void validate_with_yubikey_fido2_data_test() {
+        byte[] attestationObjectBytes = Base64UrlUtil.decode("o2NmbXRmcGFja2VkaGF1dGhEYXRhWJRJlg3liA6MaHQ0Fw9kdmBbj-SuuaKGMseZXPO6gx2XY0UAAAADbUS6m_bsLkm5MAyP6SDLcwAQpt-LSNKw2Ni2n3k1ltLMrqUBAgMmIAEhWCA6CWZ7k4UFMb5kynCGxmRhRVTvppyLpwBKmZ1m96qSjiJYID1KElygcTfTMT5RRoU0oAbBoZEfjHUZytXNemDDkuZpZ2F0dFN0bXSjY2FsZyZjc2lnWEYwRAIgTqgNTx1zMoc4L1Eb_dOgyqtouZBVfrQscgsGrgE4lRICICLuRuy1T05B1kv86XzP0dnN0-DzRcU1t9tS0FTktASBY3g1Y4FZAsEwggK9MIIBpaADAgECAgQq52JjMA0GCSqGSIb3DQEBCwUAMC4xLDAqBgNVBAMTI1l1YmljbyBVMkYgUm9vdCBDQSBTZXJpYWwgNDU3MjAwNjMxMCAXDTE0MDgwMTAwMDAwMFoYDzIwNTAwOTA0MDAwMDAwWjBuMQswCQYDVQQGEwJTRTESMBAGA1UECgwJWXViaWNvIEFCMSIwIAYDVQQLDBlBdXRoZW50aWNhdG9yIEF0dGVzdGF0aW9uMScwJQYDVQQDDB5ZdWJpY28gVTJGIEVFIFNlcmlhbCA3MTk4MDcwNzUwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAAQqA4ZeYEPZnhH_EKolVFeEvwmvjmseOzIXKSFvVRIajNkQ05ndx2i9_kp7x-PavGLm0kaf9Wdbj_qJDMp0hp4_o2wwajAiBgkrBgEEAYLECgIEFTEuMy42LjEuNC4xLjQxNDgyLjEuMTATBgsrBgEEAYLlHAIBAQQEAwIEMDAhBgsrBgEEAYLlHAEBBAQSBBBtRLqb9uwuSbkwDI_pIMtzMAwGA1UdEwEB_wQCMAAwDQYJKoZIhvcNAQELBQADggEBAHJX0Dzcw-EVaYSQ1vgO-VtTByNz2eZHMmMrEdzcd4rsa9WSbQfhe5xUMHiN4y9OR7RYdv-MVSICm-k4eHlXIzHnJ3AWgopxGznHT9bBJYvR5NnlZtVweQNH2lI1wD8P_kCxQo4FxukXmeR1VHFpAe64i7BXiTWIrYiq0w1xTy8vrDbVTbrXEJxbAnqwyrjPNU7xAIoJCGyghpavDPzbwYOY_N8CMWwmIsle5iK90cAKR4nkocy3SaNUul8nYEIwvv-uBua_AvvAFbzRUd811wqYqOQtykSI_PBxBCGI3-odX3S36niLKvnFFKm6uU_nOJzaGVGQsrEwfb-RGOGpKfg=");
+        byte[] clientDataBytes = Base64UrlUtil.decode("ew0KCSJ0eXBlIiA6ICJ3ZWJhdXRobi5jcmVhdGUiLA0KCSJjaGFsbGVuZ2UiIDogIno5LWxDWmFQUlBtMGFReDlLMnE4a3ciLA0KCSJvcmlnaW4iIDogImh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsDQoJInRva2VuQmluZGluZyIgOiANCgl7DQoJCSJzdGF0dXMiIDogInN1cHBvcnRlZCINCgl9DQp9");
+        AttestationObject attestationObject = new AttestationObjectConverter(new CborConverter()).convert(attestationObjectBytes);
+
+        validate(clientDataBytes, attestationObject);
+    }
+
+
     @Test
     void validate_with_ECSelfAttestation_test() {
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
@@ -174,6 +188,18 @@ class PackedAttestationStatementValidatorTest {
         assertThrows(BadSignatureException.class,
                 () -> validate(clientData, attestationObject)
         );
+    }
+
+    @Test
+    void extractAAGUIDFromAttestationCertificate_with_u2f_attestation_test(){
+        AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyU2FAttestationCertificate());
+        assertThat(aaguid).isEqualTo(AAGUID.NULL);
+    }
+
+    @Test
+    void extractAAGUIDFromAttestationCertificate_with_fido2_attestation_test(){
+        AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyFIDO2AttestationCertificate());
+        assertThat(aaguid).isNotEqualTo(AAGUID.NULL);
     }
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {

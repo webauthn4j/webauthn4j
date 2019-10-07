@@ -18,7 +18,10 @@ package com.webauthn4j.validator.attestation.statement.packed;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
@@ -28,9 +31,13 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
+import org.apache.kerby.asn1.type.Asn1OctetString;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.security.cert.X509Certificate;
 import java.util.Objects;
 
 /**
@@ -79,8 +86,8 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
         // If x5c contains an extension with OID 1.3.6.1.4.1.45724.1.1.4 (id-fido-gen-ce-aaguid) verify that
         // the value of this extension matches the aaguid in authenticatorData.
-        byte[] aaguidInCertificateBytes = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
-        AAGUID aaguidInCertificate = aaguidInCertificateBytes == null ? AAGUID.NULL : new AAGUID(UUIDUtil.fromBytes(aaguidInCertificateBytes));
+        X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
+        AAGUID aaguidInCertificate = extractAAGUIDFromAttestationCertificate(attestationCertificate);
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
             throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
@@ -88,6 +95,22 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
         // If successful, return attestation type BASIC and attestation trust path x5c.
         return AttestationType.BASIC;
+    }
+
+    AAGUID extractAAGUIDFromAttestationCertificate(X509Certificate certificate){
+        byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+        if (extensionValue == null) {
+            return AAGUID.NULL;
+        }
+        try {
+            Asn1OctetString envelope = new Asn1OctetString();
+            envelope.decode(extensionValue);
+            Asn1OctetString innerEnvelope = new Asn1OctetString();
+            innerEnvelope.decode(envelope.getValue());
+            return new AAGUID(UUIDUtil.fromBytes(innerEnvelope.getValue()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     private AttestationType validateEcdaaKeyId() {
