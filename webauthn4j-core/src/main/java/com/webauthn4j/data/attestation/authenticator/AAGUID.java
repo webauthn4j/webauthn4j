@@ -73,6 +73,6 @@ public class AAGUID implements Serializable {
 
     @Override
     public String toString() {
-        return value.toString();
+        return String.valueOf(value);
     }
 }
