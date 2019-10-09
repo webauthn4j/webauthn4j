@@ -43,6 +43,7 @@ class CertFileTrustAnchorsProviderTest {
         target.setCertificates(Collections.singletonList(path));
 
         Map<AAGUID, Set<TrustAnchor>> trustAnchors = target.provide();
+        assertThat(trustAnchors.keySet()).containsExactly(AAGUID.NULL);
         assertThat(trustAnchors).isNotEmpty();
     }
 

@@ -63,7 +63,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
                 X509Certificate certificate = (X509Certificate) keyStoreObject.getCertificate(alias);
                 trustAnchors.add(new TrustAnchor(certificate, null));
             }
-            return Collections.singletonMap(null, trustAnchors);
+            return Collections.singletonMap(AAGUID.NULL, trustAnchors);
         } catch (java.security.KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException e) {
             throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }
