@@ -98,6 +98,27 @@ public class WebAuthnAuthenticationContextValidator {
 
         byte[] credentialId = authenticationContext.getCredentialId();
 
+        //spec| Step1
+        //spec| If the allowCredentials option was given when this authentication ceremony was initiated,
+        //spec| verify that credential.id identifies one of the public key credentials that were listed in allowCredentials.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step2
+        //spec| Identify the user being authenticated and verify that this user is the owner of the public key credential source credentialSource identified by credential.id:
+
+        //spec| If the user was identified before the authentication ceremony was initiated,
+        //spec| verify that the identified user is the owner of credentialSource.
+        //spec| If credential.response.userHandle is present,
+        //spec| verify that this value identifies the same user as was previously identified.
+
+        //spec| the user was not identified before the authentication ceremony was initiated,
+        //spec| verify that credential.response.userHandle is present, and that the user identified by this value is the owner of credentialSource.
+
+        //spec| Step3
+        //spec| Using credential’s id attribute (or the corresponding rawId, if base64url encoding is inappropriate for your use case),
+        //spec| look up the corresponding credential public key.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
         //spec| Step4
         //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         //spec| and signature respectively.
@@ -111,7 +132,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         //      (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(cData);
-        
+
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(aData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(authenticationContext.getClientExtensionsJSON());
