@@ -126,14 +126,15 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         WebAuthnAuthenticationContext that = (WebAuthnAuthenticationContext) o;
-        return Arrays.equals(authenticatorData, that.authenticatorData) &&
+        return Arrays.equals(credentialId, that.credentialId) &&
+                Arrays.equals(authenticatorData, that.authenticatorData) &&
                 Arrays.equals(signature, that.signature);
     }
 
     @Override
     public int hashCode() {
-
         int result = super.hashCode();
+        result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(authenticatorData);
         result = 31 * result + Arrays.hashCode(signature);
         return result;
