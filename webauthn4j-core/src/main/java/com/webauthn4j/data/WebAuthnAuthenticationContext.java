@@ -37,6 +37,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
     private final byte[] credentialId;
     private final byte[] authenticatorData;
     private final byte[] signature;
+    private final byte[] userHandle;
 
     // ~ Constructor
     // ========================================================================================================
@@ -46,6 +47,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
                                          byte[] clientDataJSON,
                                          byte[] authenticatorData,
                                          byte[] signature,
+                                         byte[] userHandle,
                                          String clientExtensionsJSON,
                                          ServerProperty serverProperty,
                                          boolean userVerificationRequired,
@@ -63,7 +65,33 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
 
         this.credentialId = credentialId;
         this.signature = signature;
+        this.userHandle = userHandle;
         this.authenticatorData = authenticatorData;
+    }
+
+    @SuppressWarnings("squid:S00107")
+    public WebAuthnAuthenticationContext(byte[] credentialId,
+                                         byte[] clientDataJSON,
+                                         byte[] authenticatorData,
+                                         byte[] signature,
+                                         String clientExtensionsJSON,
+                                         ServerProperty serverProperty,
+                                         boolean userVerificationRequired,
+                                         boolean userPresenceRequired,
+                                         List<String> expectedExtensionIds) {
+
+        this(
+                credentialId,
+                clientDataJSON,
+                authenticatorData,
+                signature,
+                null,
+                clientExtensionsJSON,
+                serverProperty,
+                userVerificationRequired,
+                userPresenceRequired,
+                expectedExtensionIds
+        );
     }
 
     @SuppressWarnings("squid:S00107")
@@ -120,6 +148,10 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
         return ArrayUtil.clone(signature);
     }
 
+    public byte[] getUserHandle() {
+        return userHandle;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,7 +160,8 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
         WebAuthnAuthenticationContext that = (WebAuthnAuthenticationContext) o;
         return Arrays.equals(credentialId, that.credentialId) &&
                 Arrays.equals(authenticatorData, that.authenticatorData) &&
-                Arrays.equals(signature, that.signature);
+                Arrays.equals(signature, that.signature) &&
+                Arrays.equals(userHandle, that.userHandle);
     }
 
     @Override
@@ -137,6 +170,7 @@ public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(authenticatorData);
         result = 31 * result + Arrays.hashCode(signature);
+        result = 31 * result + Arrays.hashCode(userHandle);
         return result;
     }
 }
