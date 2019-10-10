@@ -40,6 +40,7 @@ class KeyStoreFileTrustAnchorsProviderTest {
         target.setPassword("password");
 
         Map<AAGUID, Set<TrustAnchor>> trustAnchors = target.provide();
+        assertThat(trustAnchors.keySet()).containsExactly(AAGUID.NULL);
         assertThat(trustAnchors).isNotEmpty();
     }
 
