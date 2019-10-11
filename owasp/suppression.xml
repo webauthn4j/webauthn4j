@@ -56,4 +56,7 @@
     <suppress>
         <cve>CVE-2019-16942</cve>
     </suppress>
+    <suppress>
+        <cve>CVE-2019-17267</cve>
+    </suppress>
 </suppressions>
