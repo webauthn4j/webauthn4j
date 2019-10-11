@@ -175,16 +175,16 @@ public class WebAuthnAuthenticationContextValidator {
         //spec| Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
-        //spec| Step13
-        //spec| If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
-        if (authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
-            throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
-        }
-
         //spec| Step12
         //spec| Verify that the User Present bit of the flags in authData is set.
         if (authenticationContext.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
+        }
+
+        //spec| Step13
+        //spec| If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
+        if (authenticationContext.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
+            throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
         //spec| Step14
