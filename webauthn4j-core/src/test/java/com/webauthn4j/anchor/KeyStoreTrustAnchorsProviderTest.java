@@ -46,7 +46,7 @@ public class KeyStoreTrustAnchorsProviderTest {
         Path path = Paths.get(ClassLoader.getSystemResource("com/webauthn4j/anchor/KeyStoreFileTrustAnchorsProviderTest/test.jks").toURI());
         InputStream inputStream = Files.newInputStream(path);
         KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, "password");
-        target.setKeyStoreObject(keyStoreObject);
+        target.setKeyStore(keyStoreObject);
 
         Map<AAGUID, Set<TrustAnchor>> trustAnchors = target.provide();
         assertThat(trustAnchors).isNotEmpty();
@@ -55,7 +55,7 @@ public class KeyStoreTrustAnchorsProviderTest {
     @Test
     void provide_test_with_invalid_object() throws Exception {
         target = new KeyStoreTrustAnchorsProvider();
-        target.setKeyStoreObject(CertificateUtil.createKeyStore());
+        target.setKeyStore(CertificateUtil.createKeyStore());
 
         assertThrows(KeyStoreException.class,
                 () -> target.provide()

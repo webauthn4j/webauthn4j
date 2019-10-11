@@ -29,28 +29,50 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 
 /**
- * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} from Java KeyStore object.
+ * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} from Java KeyStore.
  */
-public class KeyStoreTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
+public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
 
     // ~ Instance fields
     // ================================================================================================
 
-    private KeyStore keyStoreObject;
+    private KeyStore keyStore;
 
     // ~ Methods
     // ========================================================================================================
-    private void checkConfig() {
-        AssertUtil.notNull(keyStoreObject, "keyStore object must not be null");
-    }
-
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+    public Map<AAGUID, Set<TrustAnchor>> provide() {
+        return loadTrustAnchors();
+    }
+
+    /**
+     * Provides keyStore object
+     *
+     * @return keyStore object
+     */
+    public KeyStore getKeyStore() {
+        return keyStore;
+    }
+
+    /**
+     * Sets keyStore object
+     *
+     * @param keyStore keyStore object
+     */
+    public void setKeyStore(KeyStore keyStore) {
+        this.keyStore = keyStore;
+    }
+
+    private void checkConfig() {
+        AssertUtil.notNull(keyStore, "keyStore must not be null");
+    }
+
+    private Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
-        KeyStore keyStoreObject = getKeyStoreObject();
+        KeyStore keyStoreObject = getKeyStore();
         try  {
             List<String> aliases = Collections.list(keyStoreObject.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();
@@ -60,26 +82,8 @@ public class KeyStoreTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
             }
             return Collections.singletonMap(AAGUID.NULL, trustAnchors);
         } catch (java.security.KeyStoreException e) {
-            throw new KeyStoreException("Failed to load TrustAnchor from keystore object", e);
+            throw new KeyStoreException("Failed to load TrustAnchor from keystore", e);
         }
-    }
-
-    /**
-     * Provides keyStore object
-     *
-     * @return keyStore object
-     */
-    public KeyStore getKeyStoreObject() {
-        return keyStoreObject;
-    }
-
-    /**
-     * Sets keyStore object
-     *
-     * @param keyStoreObject keyStore object
-     */
-    public void setKeyStoreObject(KeyStore keyStoreObject) {
-        this.keyStoreObject = keyStoreObject;
     }
 
 }
