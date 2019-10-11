@@ -25,6 +25,9 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.webauthn4j.test.TestDataUtil.createAuthenticatorData;
 import static com.webauthn4j.test.TestDataUtil.createClientData;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,22 +47,39 @@ class WebAuthnAuthenticationContextTest {
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
+        byte[] userHandle = new byte[]{0x45,0x67};
+        String clientExtensionsJSON = "{}";
         ServerProperty serverProperty = mock(ServerProperty.class);
+        List<String> expectedExtensionIds = Collections.emptyList();
         WebAuthnAuthenticationContext target = new WebAuthnAuthenticationContext(
-                credentialId, collectedClientData, authenticatorData, signature, serverProperty, false);
+                credentialId,
+                collectedClientData,
+                authenticatorData,
+                signature,
+                userHandle,
+                clientExtensionsJSON,
+                serverProperty,
+                false,
+                true,
+                expectedExtensionIds);
         assertAll(
                 () -> assertThat(target.getCredentialId()).isEqualTo(credentialId),
                 () -> assertThat(target.getClientDataJSON()).isEqualTo(collectedClientData),
                 () -> assertThat(target.getAuthenticatorData()).isEqualTo(authenticatorData),
                 () -> assertThat(target.getSignature()).isEqualTo(signature),
+                () -> assertThat(target.getUserHandle()).isEqualTo(userHandle),
+                () -> assertThat(target.getClientExtensionsJSON()).isEqualTo(clientExtensionsJSON),
                 () -> assertThat(target.getServerProperty()).isEqualTo(serverProperty),
-                () -> assertThat(target.isUserVerificationRequired()).isFalse()
+                () -> assertThat(target.isUserVerificationRequired()).isFalse(),
+                () -> assertThat(target.isUserPresenceRequired()).isTrue(),
+                () -> assertThat(target.getExpectedExtensionIds()).isEqualTo(expectedExtensionIds)
         );
     }
 
     @Test
     void equals_hashCode_test() {
         byte[] credentialId = new byte[32];
+        byte[] invalidCredentialId = new byte[16];
         byte[] collectedClientData = new CollectedClientDataConverter(jsonConverter).convertToBytes(createClientData(ClientDataType.GET));
         byte[] authenticatorData = new AuthenticatorDataConverter(cborConverter).convert(createAuthenticatorData());
         byte[] signature = new byte[]{0x01, 0x23};
@@ -69,9 +89,13 @@ class WebAuthnAuthenticationContextTest {
         WebAuthnAuthenticationContext webAuthnAuthenticationContextB = new WebAuthnAuthenticationContext(
                 credentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
 
+        WebAuthnAuthenticationContext webAuthnAuthenticationContextC = new WebAuthnAuthenticationContext(
+                invalidCredentialId, collectedClientData, authenticatorData, signature, serverProperty, true);
+
         assertAll(
                 () -> assertThat(webAuthnAuthenticationContextA).isEqualTo(webAuthnAuthenticationContextB),
-                () -> assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB)
+                () -> assertThat(webAuthnAuthenticationContextA).hasSameHashCodeAs(webAuthnAuthenticationContextB),
+                () -> assertThat(webAuthnAuthenticationContextA).isNotEqualTo(webAuthnAuthenticationContextC)
         );
     }
 }
