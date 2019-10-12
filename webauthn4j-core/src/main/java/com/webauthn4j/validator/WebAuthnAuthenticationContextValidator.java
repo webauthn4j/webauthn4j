@@ -110,9 +110,9 @@ public class WebAuthnAuthenticationContextValidator {
         //spec| verify that the identified user is the owner of credentialSource.
         //spec| If credential.response.userHandle is present,
         //spec| verify that this value identifies the same user as was previously identified.
-
-        //spec| the user was not identified before the authentication ceremony was initiated,
+        //spec| If the user was not identified before the authentication ceremony was initiated,
         //spec| verify that credential.response.userHandle is present, and that the user identified by this value is the owner of credentialSource.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         //spec| Step3
         //spec| Using credential’s id attribute (or the corresponding rawId, if base64url encoding is inappropriate for your use case),
