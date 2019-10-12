@@ -237,57 +237,69 @@ public class WebAuthnRegistrationContextValidator {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
         ServerProperty serverProperty = registrationContext.getServerProperty();
 
-        /// Verify that the value of C.type is webauthn.create.
+        //spec| Step3
+        //spec| Verify that the value of C.type is webauthn.create.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
             throw new MaliciousDataException("ClientData.type must be 'create' on registration, but it isn't.");
         }
 
-        /// Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
+        //spec| Step4
+        //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
         challengeValidator.validate(collectedClientData, serverProperty);
 
-        /// Verify that the value of C.origin matches the Relying Party's origin.
+        //spec| Step5
+        //spec| Verify that the value of C.origin matches the Relying Party's origin.
         originValidator.validate(collectedClientData, serverProperty);
 
-        /// Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
-        /// which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
-        /// C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
+        //spec| Step6
+        //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
+        //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
+        //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
         tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
-        /// Compute the hash of response.clientDataJSON using SHA-256.
+        //spec| Step7
+        //spec| Compute the hash of response.clientDataJSON using SHA-256.
 
-        /// Perform CBOR decoding on the attestationObject field of the AuthenticatorAttestationResponse structure to
-        /// obtain the attestation statement format fmt, the authenticator data authData, and the attestation statement attStmt.
+        //spec| Step8
+        //spec| Perform CBOR decoding on the attestationObject field of the AuthenticatorAttestationResponse structure to
+        //spec| obtain the attestation statement format fmt, the authenticator data authData, and the attestation statement attStmt.
 
-        /// Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
+        //spec| Step9
+        //spec| Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
 
+        //spec| Step10, 11
         validateUVUPFlags(authenticatorData, registrationContext.isUserVerificationRequired(), registrationContext.isUserPresenceRequired());
 
-
-        /// Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
-        /// extension outputs in the extensions in authData are as expected, considering the client extension input
-        /// values that were given as the extensions option in the create() call. In particular, any extension identifier
-        /// values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
-        /// identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
-        /// In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
+        //spec| Step12
+        //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
+        //spec| extension outputs in the extensions in authData are as expected, considering the client extension input
+        //spec| values that were given as the extensions option in the create() call. In particular, any extension identifier
+        //spec| values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
+        //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
+        //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationContext.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
-        // Verify attestation
+        //spec| Step13-16,19
         attestationValidator.validate(registrationObject);
 
-        // If the attestation statement attStmt verified successfully and is found to be trustworthy,
-        // then register the new credential with the account that was denoted in the options.user passed to create(),
-        // by associating it with the credential ID and credential public key contained in authData’s attestation data,
-        // as appropriate for the Relying Party's systems.
+        //spec| Step17
+        //spec| Check that the credentialId is not yet registered to any other user. If registration is requested for
+        //spec| a credential that is already registered to a different user, the Relying Party SHOULD fail this registration
+        //spec| ceremony, or it MAY decide to accept the registration, e.g. while deleting the older registration.
 
-        /// Check that the credentialId is not yet registered to any other user. If registration is requested for
-        /// a credential that is already registered to a different user, the Relying Party SHOULD fail this registration
-        /// ceremony, or it MAY decide to accept the registration, e.g. while deleting the older registration.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        // ******* This step is up to library user *******
+        //spec| Step18
+        //spec| If the attestation statement attStmt verified successfully and is found to be trustworthy,
+        //spec| then register the new credential with the account that was denoted in the options.user passed to create(),
+        //spec| by associating it with the credential ID and credential public key contained in authData’s attestation data,
+        //spec| as appropriate for the Relying Party's systems.
+
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         // validate with custom logic
         for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
@@ -305,12 +317,14 @@ public class WebAuthnRegistrationContextValidator {
     }
 
     void validateUVUPFlags(AuthenticatorData authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
-        /// If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
+        //spec| Step10
+        //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
-        /// Verify that the User Present bit of the flags in authData is set.
+        //spec| Step11
+        //spec| Verify that the User Present bit of the flags in authData is set.
         if (isUserPresenceRequired && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }

@@ -68,28 +68,28 @@ class AttestationValidator {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
-        /// Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
-        /// of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered
-        /// WebAuthn Attestation Statement Format Identifier values is maintained in the in the IANA registry of the same
-        /// name [WebAuthn-Registries].
+        //spec| Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
+        //spec| of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered
+        //spec| WebAuthn Attestation Statement Format Identifier values is maintained in the in the IANA registry of the same
+        //spec| name [WebAuthn-Registries].
 
-        /// Verify that attStmt is a correct attestation statement, conveying a valid attestation signature, by using the
-        /// attestation statement format fmt’s verification procedure given attStmt, authData and the hash of the
-        /// serialized client data computed in step 7.
+        //spec| Verify that attStmt is a correct attestation statement, conveying a valid attestation signature, by using the
+        //spec| attestation statement format fmt’s verification procedure given attStmt, authData and the hash of the
+        //spec| serialized client data computed in step 7.
 
-        /// Note: Each attestation statement format specifies its own verification procedure. See §8 Defined Attestation
-        /// Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
+        //spec| Note: Each attestation statement format specifies its own verification procedure. See §8 Defined Attestation
+        //spec| Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
         validateAAGUID(attestationObject);
 
-        /// If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
-        /// ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
-        /// from a trusted source or from policy.
-        /// For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
-        /// using the aaguid in the attestedCredentialData in authData.
-        ///
-        /// Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
+        //spec| If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
+        //spec| ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
+        //spec| from a trusted source or from policy.
+        //spec| For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
+        //spec| using the aaguid in the attestedCredentialData in authData.
+
+        //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
 
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
         switch (attestationType) {
