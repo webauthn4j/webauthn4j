@@ -90,7 +90,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(byte[] src, TypeReference valueTypeRef) {
+    public <T> T readValue(byte[] src, TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {

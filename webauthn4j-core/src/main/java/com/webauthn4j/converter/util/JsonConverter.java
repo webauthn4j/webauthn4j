@@ -89,7 +89,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(String src, TypeReference valueTypeRef) {
+    public <T> T readValue(String src, TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -99,7 +99,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(InputStream src, TypeReference valueTypeRef) {
+    public <T> T readValue(InputStream src, TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
