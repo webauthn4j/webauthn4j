@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -70,7 +69,7 @@ public class AuthenticatorTransport implements Serializable {
     }
 
     @JsonCreator
-    private static AuthenticatorTransport deserialize(String value) throws InvalidFormatException {
+    private static AuthenticatorTransport deserialize(String value) {
         return create(value);
     }
 
