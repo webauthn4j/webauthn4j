@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 
 abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
 
-    private transient List<FieldSerializationRule<T>> rules;
+    private transient List<FieldSerializationRule<T, ?>> rules;
 
-    AbstractCtapCanonicalCborSerializer(Class<T> t, List<FieldSerializationRule<T>> rules) {
+    AbstractCtapCanonicalCborSerializer(Class<T> t, List<FieldSerializationRule<T, ?>> rules) {
         super(t);
         this.rules = rules;
     }
@@ -71,17 +71,17 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
         }
     }
 
-    static class FieldSerializationRule<T> {
+    static class FieldSerializationRule<T, R> {
 
         private Object name;
-        private Function<T, ?> getter;
+        private Function<T, R> getter;
 
-        public FieldSerializationRule(int name, Function<T, ?> getter) {
+        public FieldSerializationRule(int name, Function<T, R> getter) {
             this.name = name;
             this.getter = getter;
         }
 
-        public FieldSerializationRule(String name, Function<T, ?> getter) {
+        public FieldSerializationRule(String name, Function<T, R> getter) {
             this.name = name;
             this.getter = getter;
         }
@@ -90,7 +90,7 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
             return name;
         }
 
-        public Function<T, ?> getGetter() {
+        public Function<T, R> getGetter() {
             return getter;
         }
     }
