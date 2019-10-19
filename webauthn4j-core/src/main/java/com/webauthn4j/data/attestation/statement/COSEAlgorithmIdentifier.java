@@ -18,7 +18,6 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -45,7 +44,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     @JsonCreator
-    private static COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
+    private static COSEAlgorithmIdentifier deserialize(long value) {
         return create(value);
     }
 

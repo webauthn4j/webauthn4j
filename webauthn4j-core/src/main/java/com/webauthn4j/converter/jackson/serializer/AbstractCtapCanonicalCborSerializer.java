@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
 
-    private List<FieldSerializationRule<T>> rules;
+    private transient List<FieldSerializationRule<T>> rules;
 
     AbstractCtapCanonicalCborSerializer(Class<T> t, List<FieldSerializationRule<T>> rules) {
         super(t);

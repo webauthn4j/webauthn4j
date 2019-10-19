@@ -96,6 +96,7 @@ public class AuthenticatorDataConverter {
     /**
      * Converts from a byte array to {@link AuthenticatorData}.
      *
+     * @param <T> ExtensionAuthenticatorOutput
      * @param source the source byte array to convert
      * @return the converted object
      */

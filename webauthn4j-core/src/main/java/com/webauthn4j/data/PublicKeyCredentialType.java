@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
+import java.io.Serializable;
+
 /**
  * {@link PublicKeyCredentialType} defines the valid credential types. It is an extension point;
  * values can be added to it in the future, as more credential types are defined.
@@ -29,7 +31,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#credentialType">
  * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
  */
-public enum PublicKeyCredentialType {
+public enum PublicKeyCredentialType implements Serializable {
 
     PUBLIC_KEY("public-key");
 
