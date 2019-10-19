@@ -35,6 +35,7 @@ public class AuthenticationObject {
 
     private final LocalDateTime timestamp;
 
+    @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
             byte[] credentialId,
             CollectedClientData collectedClientData,

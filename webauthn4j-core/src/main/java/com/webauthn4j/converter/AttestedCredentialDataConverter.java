@@ -27,7 +27,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class AttestedCredentialDataConverter {
+public class AttestedCredentialDataConverter implements Serializable{
 
     private static final int AAGUID_LENGTH = 16;
     private static final int L_LENGTH = 2;
