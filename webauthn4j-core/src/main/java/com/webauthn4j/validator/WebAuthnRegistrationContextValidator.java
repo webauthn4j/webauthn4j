@@ -42,6 +42,7 @@ import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyA
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.packed.NullPackedAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.tpm.NullTPMAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
@@ -178,6 +179,7 @@ public class WebAuthnRegistrationContextValidator {
                         new NoneAttestationStatementValidator(),
                         new NullFIDOU2FAttestationStatementValidator(),
                         new NullPackedAttestationStatementValidator(),
+                        new NullTPMAttestationStatementValidator(),
                         new NullAndroidKeyAttestationStatementValidator(),
                         new NullAndroidSafetyNetAttestationStatementValidator()
                 ),
