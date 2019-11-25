@@ -1,14 +1,18 @@
 # WebAuthn4J
 
+![WebAuthn4J](./docs/image/logo.png)
+
 [![Build Status](https://travis-ci.org/webauthn4j/webauthn4j.svg?branch=master)](https://travis-ci.org/webauthn4j/webauthn4j)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=webauthn4j&metric=coverage)](https://sonarcloud.io/dashboard?id=webauthn4j)
 [![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
-
 A portable Java library for WebAuthn server side verification
 
-**This library hasn't reached version 1. Design may change.**
+### Conformance
+
+All mandatory test cases and optional Android Key attestation test cases of [FIDO2 Test Tools provided by FIDO Alliance](https://fidoalliance.org/certification/functional-certification/conformance/)
+are passed.
 
 ### Supported Attestation statement format
 
@@ -21,10 +25,9 @@ All attestation statement formats are supported.
 * TPM attestation
 * None attestation
 
-### Conformance
+### Projects using WebAuthn4J
 
-All mandatory test cases and optional Android Key attestation test cases of [FIDO2 Test Tools provided by FIDO Alliance](https://fidoalliance.org/certification/functional-certification/conformance/)
-are passed.
+* [Keycloak](https://www.keycloak.org/)
 
 ## Documentation
 
