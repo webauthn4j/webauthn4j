@@ -60,7 +60,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
-            throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
+            throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.", registrationObject);
         }
 
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(registrationObject.getCollectedClientDataBytes());

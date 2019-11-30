@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if the public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData
  */
@@ -30,5 +32,17 @@ public class PublicKeyMismatchException extends ValidationException {
 
     public PublicKeyMismatchException(Throwable cause) {
         super(cause);
+    }
+
+    public PublicKeyMismatchException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public PublicKeyMismatchException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public PublicKeyMismatchException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
     }
 }
