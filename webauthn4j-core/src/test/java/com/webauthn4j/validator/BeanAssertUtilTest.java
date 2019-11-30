@@ -143,8 +143,9 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationContext_with_null_test() {
+        WebAuthnRegistrationContext nullValue = null;
         assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate((WebAuthnRegistrationContext) null)
+                () -> BeanAssertUtil.validate(nullValue)
         );
     }
 

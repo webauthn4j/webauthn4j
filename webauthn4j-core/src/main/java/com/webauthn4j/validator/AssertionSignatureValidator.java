@@ -17,6 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
+import com.webauthn4j.data.WebAuthnAuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -37,18 +38,18 @@ class AssertionSignatureValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, COSEKey coseKey) {
-        byte[] signedData = getSignedData(webAuthnAuthenticationContext);
-        byte[] signature = webAuthnAuthenticationContext.getSignature();
+    public void validate(WebAuthnAuthenticationData webAuthnAuthenticationData, COSEKey coseKey) {
+        byte[] signedData = getSignedData(webAuthnAuthenticationData);
+        byte[] signature = webAuthnAuthenticationData.getSignature();
         if (!verifySignature(coseKey, signature, signedData)) {
             throw new BadSignatureException("Assertion signature is not valid.");
         }
     }
 
-    private byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
+    private byte[] getSignedData(WebAuthnAuthenticationData webAuthnAuthenticationData) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
-        byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
-        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getClientDataJSON());
+        byte[] rawAuthenticatorData = webAuthnAuthenticationData.getAuthenticatorDataBytes();
+        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationData.getCollectedClientDataBytes());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 

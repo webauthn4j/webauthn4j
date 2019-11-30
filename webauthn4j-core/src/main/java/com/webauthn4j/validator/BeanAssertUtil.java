@@ -16,8 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.WebAuthnAuthenticationContext;
-import com.webauthn4j.data.WebAuthnRegistrationContext;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
@@ -48,7 +47,71 @@ class BeanAssertUtil {
     // ~ Static Methods
     // ========================================================================================================
 
-    public static void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
+
+    public static void validate(WebAuthnRegistrationData webAuthnRegistrationData) {
+        if (webAuthnRegistrationData == null) {
+            throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
+        }
+
+        validate(webAuthnRegistrationData.getAttestationObject());
+
+        if (webAuthnRegistrationData.getAttestationObjectBytes() == null) {
+            throw new ConstraintViolationException("attestationObjectBytes must not be null");
+        }
+        validateAuthenticationExtensionsClientOutputs(webAuthnRegistrationData.getClientExtensions());
+
+        validate(webAuthnRegistrationData.getCollectedClientData());
+
+        if (webAuthnRegistrationData.getCollectedClientDataBytes() == null) {
+            throw new ConstraintViolationException("collectedClientData must not be null");
+        }
+        if (webAuthnRegistrationData.getTransports() == null) {
+            throw new ConstraintViolationException("transports must not be null");
+        }
+    }
+
+
+    public static void validate(WebAuthnRegistrationParameters webAuthnRegistrationParameters) {
+        if (webAuthnRegistrationParameters == null) {
+            throw new ConstraintViolationException("webAuthnRegistrationParameters must not be null");
+        }
+        validate(webAuthnRegistrationParameters.getServerProperty());
+    }
+
+    public static void validate(WebAuthnAuthenticationData webAuthnAuthenticationData) {
+        if (webAuthnAuthenticationData == null) {
+            throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
+        }
+
+        if (webAuthnAuthenticationData.getCredentialId() == null) {
+            throw new ConstraintViolationException("credentialId must not be null");
+        }
+        if (webAuthnAuthenticationData.getSignature() == null) {
+            throw new ConstraintViolationException("signature must not be null");
+        }
+        if (webAuthnAuthenticationData.getCollectedClientData() == null) {
+            throw new ConstraintViolationException("collectedClientData must not be null");
+        }
+        validate(webAuthnAuthenticationData.getCollectedClientData());
+        if (webAuthnAuthenticationData.getCollectedClientDataBytes() == null) {
+            throw new ConstraintViolationException("collectedClientData must not be null");
+        }
+        validate(webAuthnAuthenticationData.getAuthenticatorData());
+        if (webAuthnAuthenticationData.getAuthenticatorDataBytes() == null) {
+            throw new ConstraintViolationException("authenticatorDataBytes must not be null");
+        }
+        validateAuthenticationExtensionsClientOutputs(webAuthnAuthenticationData.getClientExtensions());
+    }
+
+    public static void validate(WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) {
+        if (webAuthnAuthenticationParameters == null) {
+            throw new ConstraintViolationException("webAuthnAuthenticationParameters must not be null");
+        }
+        validate(webAuthnAuthenticationParameters.getServerProperty());
+    }
+
+
+    public static void validate(com.webauthn4j.data.WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
 
         if (webAuthnAuthenticationContext == null) {
             throw new ConstraintViolationException("webAuthnAuthenticationContext must not be null");
@@ -218,5 +281,6 @@ class BeanAssertUtil {
         }
         coseKey.validate();
     }
+
 
 }

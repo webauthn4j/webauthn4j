@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.ConstUtil;
 
 import java.util.*;
@@ -44,7 +45,7 @@ public class AuthenticatorImpl implements Authenticator {
                              Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
-        this.transports = Collections.unmodifiableSet(transports);
+        this.transports = CollectionUtil.unmodifiableSet(transports);
         this.clientExtensions = clientExtensions;
         this.authenticatorExtensions = authenticatorExtensions;
         setCounter(counter);

@@ -26,6 +26,7 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -72,7 +73,7 @@ class AuthenticatorTest {
                 @JsonProperty("authenticatorExtensions") Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
             this.attestedCredentialData = attestedCredentialData;
             this.attestationStatement = attestationStatement;
-            this.transports = Collections.unmodifiableSet(transports);
+            this.transports = CollectionUtil.unmodifiableSet(transports);
             this.clientExtensions = clientExtensions;
             this.authenticatorExtensions = authenticatorExtensions;
             setCounter(counter);

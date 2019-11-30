@@ -17,20 +17,15 @@
 package com.webauthn4j.validator;
 
 
-import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 class WebAuthnRegistrationContextValidatorTest {
@@ -42,7 +37,6 @@ class WebAuthnRegistrationContextValidatorTest {
 
     @Test
     void constructor_test() {
-
         WebAuthnRegistrationContextValidator validator1 = new WebAuthnRegistrationContextValidator(
                 Collections.emptyList(),
                 certPathTrustworthinessValidatorMock,
@@ -60,45 +54,11 @@ class WebAuthnRegistrationContextValidatorTest {
                 selfAttestationTrustworthinessValidator);
 
         assertAll(
-                () -> assertThat(validator1).hasFieldOrProperty("attestationValidator").isNotNull(),
-                () -> assertThat(validator2).hasFieldOrProperty("attestationValidator").isNotNull(),
-                () -> assertThat(validator3).hasFieldOrProperty("attestationValidator").isNotNull()
+                () -> assertThat(validator1).hasFieldOrProperty("webAuthnManager").isNotNull(),
+                () -> assertThat(validator2).hasFieldOrProperty("webAuthnManager").isNotNull(),
+                () -> assertThat(validator3).hasFieldOrProperty("webAuthnManager").isNotNull()
         );
     }
 
-    @Test
-    void validateAuthenticatorDataField_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        assertThrows(ConstraintViolationException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateAuthenticatorDataField(authenticatorData)
-        );
-    }
 
-    @Test
-    void validateUVUPFlags_not_required_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, false);
-    }
-
-    @Test
-    void validateUVUPFlags_required_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, true);
-    }
-
-    @Test
-    void validateUVUPFlags_UserNotVerifiedException_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        assertThrows(UserNotVerifiedException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, true, false)
-        );
-    }
-
-    @Test
-    void validateUVUPFlags_UserNotPresentException_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
-        assertThrows(UserNotPresentException.class,
-                () -> WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator().validateUVUPFlags(authenticatorData, false, true)
-        );
-    }
 }
