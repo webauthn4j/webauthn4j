@@ -89,9 +89,9 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
             if (verifier.verify(signature)) {
                 return;
             }
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject);
         } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject);
         }
     }
 

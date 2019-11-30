@@ -91,9 +91,9 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
             if (verifier.verify(signature)) {
                 return;
             }
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject);
         } catch (SignatureException | InvalidKeyException e) {
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", e);
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject, e);
         }
     }
 

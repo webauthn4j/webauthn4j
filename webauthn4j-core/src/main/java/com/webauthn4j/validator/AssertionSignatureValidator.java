@@ -37,22 +37,21 @@ class AssertionSignatureValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(WebAuthnAuthenticationContext webAuthnAuthenticationContext, COSEKey coseKey) {
-        byte[] signedData = getSignedData(webAuthnAuthenticationContext);
-        byte[] signature = webAuthnAuthenticationContext.getSignature();
-        if (!verifySignature(coseKey, signature, signedData)) {
-            throw new BadSignatureException("Assertion signature is not valid.");
+    void validate(AuthenticationObject authenticationObject, byte[] signature, COSEKey coseKey) {
+        byte[] signedData = getSignedData(authenticationObject);
+        if (!isValidSignature(coseKey, signature, signedData)) {
+            throw new BadSignatureException("Assertion signature is not valid.", authenticationObject);
         }
     }
 
-    private byte[] getSignedData(WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
+    private byte[] getSignedData(AuthenticationObject authenticationObject) {
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
-        byte[] rawAuthenticatorData = webAuthnAuthenticationContext.getAuthenticatorData();
-        byte[] clientDataHash = messageDigest.digest(webAuthnAuthenticationContext.getClientDataJSON());
+        byte[] rawAuthenticatorData = authenticationObject.getAuthenticatorDataBytes();
+        byte[] clientDataHash = messageDigest.digest(authenticationObject.getCollectedClientDataBytes());
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 
-    private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
+    private boolean isValidSignature(COSEKey coseKey, byte[] signature, byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(coseKey.getAlgorithm());
