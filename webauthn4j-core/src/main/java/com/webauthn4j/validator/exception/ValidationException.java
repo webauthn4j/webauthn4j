@@ -17,11 +17,17 @@
 package com.webauthn4j.validator.exception;
 
 import com.webauthn4j.util.exception.WebAuthnException;
+import com.webauthn4j.validator.AuthenticationObject;
+import com.webauthn4j.validator.RegistrationObject;
 
 /**
  * An abstract exception for validation violation
  */
 public abstract class ValidationException extends WebAuthnException {
+
+    private RegistrationObject registrationObject;
+    private AuthenticationObject authenticationObject;
+
     public ValidationException(String message, Throwable cause) {
         super(message, cause);
     }
@@ -32,5 +38,43 @@ public abstract class ValidationException extends WebAuthnException {
 
     public ValidationException(Throwable cause) {
         super(cause);
+    }
+
+    public ValidationException(String message, RegistrationObject registrationObject, Throwable cause) {
+        this(message, cause);
+        this.registrationObject = registrationObject;
+    }
+
+    public ValidationException(String message, RegistrationObject registrationObject) {
+        this(message);
+        this.registrationObject = registrationObject;
+    }
+
+    public ValidationException(RegistrationObject registrationObject, Throwable cause) {
+        this(cause);
+        this.registrationObject = registrationObject;
+    }
+
+    public ValidationException(String message, AuthenticationObject authenticationObject, Throwable cause) {
+        this(message, cause);
+        this.authenticationObject = authenticationObject;
+    }
+
+    public ValidationException(String message, AuthenticationObject authenticationObject) {
+        this(message);
+        this.authenticationObject = authenticationObject;
+    }
+
+    public ValidationException(AuthenticationObject authenticationObject, Throwable cause) {
+        this(cause);
+        this.authenticationObject = authenticationObject;
+    }
+
+    public RegistrationObject getRegistrationObject() {
+        return registrationObject;
+    }
+
+    public AuthenticationObject getAuthenticationObject() {
+        return authenticationObject;
     }
 }
