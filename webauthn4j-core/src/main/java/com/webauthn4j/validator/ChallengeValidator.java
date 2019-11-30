@@ -55,7 +55,7 @@ class ChallengeValidator {
         Challenge collectedChallenge = collectedClientData.getChallenge();
 
         if (savedChallenge == null) {
-            throw new MissingChallengeException("The server doesn't have a challenge. The client must request the server to issue the challenge before WebAuthn operations.");
+            throw new MissingChallengeException("The server doesn't have a challenge. The client must request the server to issue the challenge before WebAuthn operations.", registrationObject);
         }
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to

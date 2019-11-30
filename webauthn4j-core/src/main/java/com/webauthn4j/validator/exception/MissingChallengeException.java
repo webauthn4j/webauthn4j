@@ -17,6 +17,8 @@
 package com.webauthn4j.validator.exception;
 
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if challenge doesn't exist in the session
  */
@@ -31,6 +33,18 @@ public class MissingChallengeException extends ValidationException {
 
     public MissingChallengeException(Throwable cause) {
         super(cause);
+    }
+
+    public MissingChallengeException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public MissingChallengeException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public MissingChallengeException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
     }
 
 }
