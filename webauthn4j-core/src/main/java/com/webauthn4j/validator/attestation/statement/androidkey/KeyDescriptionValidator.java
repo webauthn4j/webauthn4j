@@ -153,13 +153,13 @@ public class KeyDescriptionValidator {
         }
     }
 
-
     private BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
         if (asn1Value == null) {
             return null;
         }
         if (!asn1Value.isPrimitive()) {
-            throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
+            String message = String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName());
+            throw new IllegalArgumentException(message);
         }
         Asn1Integer value = new Asn1Integer();
         value.decode(asn1Value);

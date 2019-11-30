@@ -53,14 +53,14 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
 
         FIDOU2FAttestationStatement attestationStatement =
                 (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        validateAttestationStatement(attestationStatement);
+        validateAttestationStatement(registrationObject, attestationStatement);
         validateSignature(registrationObject);
         return AttestationType.BASIC;
     }
 
-    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement) {
+    void validateAttestationStatement(RegistrationObject registrationObject, FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().size() != 1) {
-            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
+            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.", registrationObject);
         }
         PublicKey publicKey = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         validatePublicKey(publicKey);

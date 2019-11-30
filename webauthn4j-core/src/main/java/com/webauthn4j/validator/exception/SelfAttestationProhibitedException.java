@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if self attestation is specified while prohibited
  */
@@ -31,4 +33,17 @@ public class SelfAttestationProhibitedException extends ValidationException {
     public SelfAttestationProhibitedException(Throwable cause) {
         super(cause);
     }
+
+    public SelfAttestationProhibitedException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public SelfAttestationProhibitedException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public SelfAttestationProhibitedException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
+    }
+
 }

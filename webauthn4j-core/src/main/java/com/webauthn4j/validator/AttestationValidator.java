@@ -28,6 +28,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustwort
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
 
 import java.util.List;
 import java.util.Objects;
@@ -98,7 +99,15 @@ class AttestationValidator {
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
-                    selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
+                    try{
+                        selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
+                    }
+                    catch (BadAttestationStatementException e){
+                        throw new BadAttestationStatementException(registrationObject, e);
+                    }
+                    catch (SelfAttestationProhibitedException e){
+                        throw new SelfAttestationProhibitedException(registrationObject, e);
+                    }
                 } else {
                     throw new IllegalStateException();
                 }
@@ -148,6 +157,7 @@ class AttestationValidator {
             }
         }
 
-        throw new BadAttestationStatementException(String.format("AttestationValidator is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()));
+        String message = String.format("AttestationValidator is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat());
+        throw new BadAttestationStatementException(message, registrationObject);
     }
 }

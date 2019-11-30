@@ -52,16 +52,9 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
     }
 
-    protected String getJcaName(COSEAlgorithmIdentifier alg) {
-        String jcaName;
-        try{
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            jcaName = signatureAlgorithm.getJcaName();
-        }
-        catch (IllegalArgumentException e){
-            throw new BadAttestationStatementException("alg is not signature algorithm", e);
-        }
-        return jcaName;
+    protected String getJcaName(COSEAlgorithmIdentifier alg) throws IllegalArgumentException{
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+        return signatureAlgorithm.getJcaName();
     }
 
 }

@@ -62,7 +62,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (!attestationStatement.getVer().equals(TPMAttestationStatement.VERSION_2_0)) {
-            throw new BadAttestationStatementException("TPM version is not supported.");
+            throw new BadAttestationStatementException("TPM version is not supported.", registrationObject);
         }
 
         TPMSAttest certInfo = attestationStatement.getCertInfo();
@@ -70,7 +70,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         AuthenticatorData authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
 
         /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
-        validatePublicKeyEquality(pubArea, authenticatorData);
+        if(!isEqualPublicKey(pubArea, authenticatorData)){
+            throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match", registrationObject);
+        }
 
         /// Concatenate authenticatorData and clientDataHash to form attToBeSigned.
         byte[] attToBeSigned = getAttToBeSigned(registrationObject);
@@ -79,20 +81,26 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that magic is set to TPM_GENERATED_VALUE.
         if (certInfo.getMagic() != TPMGenerated.TPM_GENERATED_VALUE) {
-            throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE");
+            throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE", registrationObject);
         }
 
         /// Verify that type is set to TPM_ST_ATTEST_CERTIFY.
         if (certInfo.getType() != TPMISTAttest.TPM_ST_ATTEST_CERTIFY) {
-            throw new BadAttestationStatementException("type must be TPM_ST_ATTEST_CERTIFY");
+            throw new BadAttestationStatementException("type must be TPM_ST_ATTEST_CERTIFY", registrationObject);
         }
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        String messageDigestJcaName = getMessageDigestJcaName(alg);
+        String messageDigestJcaName;
+        try{
+            messageDigestJcaName = getMessageDigestJcaName(alg);
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException("alg is not signature algorithm", registrationObject, e);
+        }
         byte[] hash = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
-            throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
+            throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned", registrationObject);
         }
 
         /// Verify that attested contains a TPMS_CERTIFY_INFO structure as specified in [TPMv2-Part2] section 10.12.3,
@@ -101,11 +109,16 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         TPMSCertifyInfo certifyInfo = (TPMSCertifyInfo) certInfo.getAttested();
         TPMIAlgHash hashAlg = certifyInfo.getName().getHashAlg();
         String algJcaName;
-        algJcaName = getAlgJcaName(hashAlg);
+        try{
+            algJcaName = getAlgJcaName(hashAlg);
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException(registrationObject, e);
+        }
 
         byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
         if (!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())) {
-            throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo");
+            throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo", registrationObject);
         }
 
         /// Note that the remaining fields in the "Standard Attestation Structure" [TPMv2-Part1] section 31.2,
@@ -113,7 +126,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
         if (attestationStatement.getX5c() != null) {
-            validateX5c(attestationStatement, certInfo, authenticatorData);
+            validateX5c(registrationObject, attestationStatement, certInfo, authenticatorData);
             /// If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
             return AttestationType.ATT_CA;
         }
@@ -124,44 +137,45 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             throw new NotImplementedException();
             // When it is implemented, `AttestationType.ECDAA` is to be returned.
         }
-        throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
+        throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.", registrationObject);
     }
 
     private String getMessageDigestJcaName(COSEAlgorithmIdentifier alg) {
         String messageDigestJcaName;
-        try{
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
-        }
-        catch (IllegalArgumentException e){
-            throw new BadAttestationStatementException("alg is not signature algorithm", e);
-        }
+        SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+        messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
         return messageDigestJcaName;
     }
 
-    private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData authenticatorData) {
+    private void validateX5c(RegistrationObject registrationObject, TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData authenticatorData) {
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        String jcaName = getJcaName(attestationStatement.getAlg());
+        String jcaName;
+        try {
+            jcaName = getJcaName(attestationStatement.getAlg());
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException("alg is not signature algorithm", registrationObject, e);
+        }
         Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
         try {
             certInfoSignature.initVerify(aikCert.getPublicKey());
             certInfoSignature.update(certInfo.getBytes());
             if (!certInfoSignature.verify(attestationStatement.getSig())) {
-                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig.");
+                throw new BadAttestationStatementException("hash of certInfo doesn't match with sig.", registrationObject);
             }
         } catch (SignatureException | InvalidKeyException e) {
-            throw new BadAttestationStatementException("Failed to validate the signature.", e);
+            throw new BadAttestationStatementException("Failed to validate the signature.", registrationObject, e);
         }
 
         /// Verify that aikCert meets the requirements in §8.3.1 TPM Attestation Statement Certificate Requirements.
-        validateAikCert(aikCert);
+        validateAikCert(registrationObject, aikCert);
 
         /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
         byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
         if (aaguidBytes != null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())) {
-            throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
+            throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData", registrationObject);
         }
     }
 
@@ -181,7 +195,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                 algJcaName = "SHA-512";
                 break;
             default:
-                throw new BadAttestationStatementException("nameAlg '" + alg.name() + "' is not supported.");
+                throw new IllegalArgumentException("nameAlg '" + alg.name() + "' is not supported.");
         }
         return algJcaName;
     }
@@ -194,7 +208,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         this.tpmDevicePropertyValidator = tpmDevicePropertyValidator;
     }
 
-    private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData authenticatorData) {
+    private boolean isEqualPublicKey(TPMTPublic pubArea, AuthenticatorData authenticatorData) {
         PublicKey publicKeyInAuthData =
                 authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
         TPMUPublicId publicKeyInPubArea = pubArea.getUnique();
@@ -209,7 +223,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             }
             if (rsaPublicKey.getModulus().equals(new BigInteger(1, rsaUnique.getN())) &&
                     rsaPublicKey.getPublicExponent().equals(BigInteger.valueOf(exponent))) {
-                return;
+                return true;
             }
         } else if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique) {
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
@@ -219,44 +233,44 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             if (ecPublicKey.getParams().getCurve().equals(curveInParms) &&
                     ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccUnique.getX())) &&
                     ecPublicKey.getW().getAffineY().equals(new BigInteger(1, eccUnique.getY()))) {
-                return;
+                return true;
             }
         }
-        throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
+        return false;
     }
 
 
-    void validateAikCert(X509Certificate certificate) {
+    void validateAikCert(RegistrationObject registrationObject, X509Certificate certificate) {
         try {
             /// TPM attestation certificate MUST have the following fields/extensions:
             /// Version MUST be set to 3.
             if (!Objects.equals(certificate.getVersion(), 3)) {
-                throw new BadAttestationStatementException("x5c must be version 3.");
+                throw new BadAttestationStatementException("x5c must be version 3.", registrationObject);
             }
             /// Subject field MUST be set to empty.
             if (!certificate.getSubjectDN().getName().isEmpty()) {
-                throw new BadAttestationStatementException("x5c subject field MUST be set to empty");
+                throw new BadAttestationStatementException("x5c subject field MUST be set to empty", registrationObject);
             }
             /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
-            validateSubjectAlternativeName(certificate);
+            validateSubjectAlternativeName(registrationObject, certificate);
             /// The Extended Key Usage extension MUST contain the "joint-iso-itu-t(2) internationalorganizations(23) 133 tcg-kp(8) tcg-kp-AIKCertificate(3)" OID.
             if (certificate.getExtendedKeyUsage() == null || !certificate.getExtendedKeyUsage().contains("2.23.133.8.3")) {
-                throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID");
+                throw new BadAttestationStatementException("Attestation certificate doesn't contain tcg-kp-AIKCertificate (2.23.133.8.3) OID", registrationObject);
             }
             /// The Basic Constraints extension MUST have the CA component set to false.
             if (certificate.getBasicConstraints() != -1) {
-                throw new BadAttestationStatementException("The Basic Constraints extension of attestation certificate must have the CA component set to false");
+                throw new BadAttestationStatementException("The Basic Constraints extension of attestation certificate must have the CA component set to false", registrationObject);
             }
             /// An Authority Information Access (AIA) extension with entry id-ad-ocsp and a CRL Distribution Point
             /// extension [RFC5280] are both OPTIONAL as the status of many attestation certificates is available
             /// through metadata services. See, for example, the FIDO Metadata Service  [FIDOMetadataService].
 
         } catch (CertificateParsingException e) {
-            throw new BadAttestationStatementException("Failed to parse attestation certificate", e);
+            throw new BadAttestationStatementException("Failed to parse attestation certificate", registrationObject, e);
         }
     }
 
-    private void validateSubjectAlternativeName(X509Certificate certificate) throws CertificateParsingException {
+    private void validateSubjectAlternativeName(RegistrationObject registrationObject, X509Certificate certificate) throws CertificateParsingException {
         try {
             for (List entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {
@@ -267,9 +281,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                 }
             }
         } catch (IOException | RuntimeException e) {
-            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
+            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", registrationObject, e);
         }
-        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
+        throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", registrationObject);
     }
 
     TPMDeviceProperty parseTPMDeviceProperty(X500Name directoryName) throws IOException {

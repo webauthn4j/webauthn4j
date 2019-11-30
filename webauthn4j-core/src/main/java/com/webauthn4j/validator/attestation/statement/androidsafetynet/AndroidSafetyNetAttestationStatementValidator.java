@@ -53,7 +53,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.", registrationObject);
         }
 
         /// Given the verification procedure inputs attStmt, authenticatorData and clientDataHash,
@@ -62,53 +62,58 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         //  to extract the contained fields.
 
         /// Verify that response is a valid SafetyNet response of version ver.
-        versionValidator.validate(attestationStatement.getVer());
+        try{
+            versionValidator.validate(attestationStatement.getVer());
+        }
+        catch (BadAttestationStatementException e){
+            throw new BadAttestationStatementException(registrationObject, e);
+        }
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] collectedClientData = registrationObject.getCollectedClientDataBytes();
-        validateNonce(nonce, authenticatorData, collectedClientData);
+        if(!isValidNonce(nonce, authenticatorData, collectedClientData)){
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.", registrationObject);
+        }
 
         /// Let attestationCert be the attestation certificate.
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
         AttestationCertificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate();
         if (!Objects.equals(attestationCertificate.getSubjectCommonName(), "attest.android.com")) {
-            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.");
+            throw new BadAttestationStatementException("The attestation certificate is not issued to 'attest.android.com'.", registrationObject);
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
         if (!response.isCtsProfileMatch()) {
-            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+            throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.", registrationObject);
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isBefore(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).minus(Duration.ofSeconds(backwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates backwardThreshold.", registrationObject);
         }
 
         // Verify the timestampMs doesn't violate forwardThreshold
         if (Instant.ofEpochMilli(response.getTimestampMs()).isAfter(registrationObject.getTimestamp().toInstant(ZoneOffset.UTC).plus(Duration.ofSeconds(forwardThreshold)))) {
-            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.");
+            throw new BadAttestationStatementException("timestampMs violates forwardThreshold.", registrationObject);
         }
 
         if (!attestationStatement.getResponse().isValidSignature()) {
-            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.");
+            throw new BadAttestationStatementException("Android safetynet response in the attestation statement doesn't have a valid signature.", registrationObject);
         }
 
         /// If successful, return implementation-specific values representing attestation type Basic and attestation trust path attestationCert.
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(String nonce, byte[] authenticatorData, byte[] collectedClientData) {
+    private boolean isValidNonce(String nonce, byte[] authenticatorData, byte[] collectedClientData) {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientData);
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
-        if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
-            throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.");
-        }
+        return Arrays.equals(hash, Base64Util.decode(nonce));
     }
 
     public int getForwardThreshold() {
@@ -144,9 +149,11 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < minimalVersion) {
+                    // registrationObject is added by caller AndroidSafetyNetAttestationStatementValidator
                     throw new BadAttestationStatementException("The version number of Google Play Services responsible for providing the SafetyNet API doesn't conform minimal requirement.");
                 }
             } catch (NumberFormatException e) {
+                // registrationObject is added by caller AndroidSafetyNetAttestationStatementValidator
                 throw new BadAttestationStatementException("`ver` in android safetynet attestation statement cannot be parsed as number.");
             }
         }

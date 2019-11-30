@@ -48,7 +48,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.", registrationObject);
         }
 
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
@@ -76,9 +76,15 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
+        String jcaName;
         try {
-            String jcaName;
             jcaName = getJcaName(attestationStatement.getAlg());
+        }
+        catch (IllegalArgumentException e){
+            throw new BadAttestationStatementException("alg is not signature algorithm", registrationObject, e);
+        }
+
+        try {
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(signedData);

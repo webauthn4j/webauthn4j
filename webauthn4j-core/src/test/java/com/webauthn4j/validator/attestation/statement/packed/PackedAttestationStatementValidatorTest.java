@@ -182,8 +182,8 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_bad_signature_test() {
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
-        byte[] clientDataHash = new byte[32];
-        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
+        byte[] invalidClientDataHash = new byte[32];
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(invalidClientDataHash);
 
         assertThrows(BadSignatureException.class,
                 () -> validate(clientData, attestationObject)

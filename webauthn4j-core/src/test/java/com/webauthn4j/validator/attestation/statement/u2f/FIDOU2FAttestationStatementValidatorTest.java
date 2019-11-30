@@ -17,19 +17,18 @@
 package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.AttestationStatementProvider;
+import com.webauthn4j.test.TestAttestationStatementUtil;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.jupiter.api.Test;
 
 import java.security.KeyPair;
 import java.security.PublicKey;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -52,16 +51,9 @@ class FIDOU2FAttestationStatementValidatorTest {
 
     @Test
     void validateAttestationStatement_test() {
-        FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
-        when(attestationStatement.getX5c()).thenReturn(
-                new AttestationCertificatePath(Arrays.asList(
-                        TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate(),
-                        TestAttestationUtil.load3tierTestIntermediateCACertificate()
-                ))
-        );
-        assertThrows(BadAttestationStatementException.class,
-                () -> target.validateAttestationStatement(attestationStatement)
-        );
+        FIDOU2FAttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObject((AttestationStatementProvider) (collectedClientData)-> attestationStatement);
+        target.validateAttestationStatement(registrationObject, attestationStatement);
     }
 
     @Test

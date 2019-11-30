@@ -32,10 +32,12 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
 
     public void validate(CertificateBaseAttestationStatement attestationStatement) {
         if (!isSelfAttestationAllowed()) {
+            // registrationObject is added by caller AttestationValidator
             throw new SelfAttestationProhibitedException("SELF attestations is prohibited by configuration");
         }
 
         if (attestationStatement.getX5c() != null) {
+            // registrationObject is added by caller AttestationValidator
             throw new BadAttestationStatementException("SELF attestation must not have x5c.");
         }
     }

@@ -130,7 +130,15 @@ public class TestDataUtil {
         return new RegistrationObject(collectedClientData, collectedClientDataBytes, attestationObject, attestationObjectBytes, authenticatorDataBytes, transports, authenticationExtensionsClientOutputs, TestDataUtil.createServerProperty());
     }
 
-    public static RegistrationObject createRegistrationObject(Function<byte[], AttestationObject> attestationObjectProvider) {
+    public static RegistrationObject createRegistrationObject(AttestationStatementProvider attestationStatementProvider) {
+        AttestationObjectProvider attestationObjectProvider = (byte[] collectedClientDataBytes) ->{
+            AttestationStatement attestationStatement = attestationStatementProvider.apply(collectedClientDataBytes);
+            return createAttestationObject(attestationStatement);
+        };
+        return createRegistrationObject(attestationObjectProvider);
+    }
+
+    public static RegistrationObject createRegistrationObject(AttestationObjectProvider attestationObjectProvider) {
         CollectedClientData collectedClientData = createClientData(ClientDataType.CREATE);
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         AttestationObject attestationObject = attestationObjectProvider.apply(collectedClientDataBytes);

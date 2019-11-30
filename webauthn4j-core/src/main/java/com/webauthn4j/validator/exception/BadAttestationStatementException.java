@@ -17,6 +17,8 @@
 package com.webauthn4j.validator.exception;
 
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad attestation statement is specified
  */
@@ -32,4 +34,17 @@ public class BadAttestationStatementException extends ValidationException {
     public BadAttestationStatementException(Throwable cause) {
         super(cause);
     }
+
+    public BadAttestationStatementException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public BadAttestationStatementException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public BadAttestationStatementException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
+    }
+
 }

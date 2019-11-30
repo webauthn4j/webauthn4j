@@ -73,14 +73,13 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     private AttestationType validateX5c(RegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.", registrationObject);
         }
 
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
         // using the attestation public key in x5c with the algorithm specified in alg.
-        if (!verifySignature(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned)) {
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
-        }
+        verifySignature(registrationObject, attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey(), alg, sig, attrToBeSigned);
+
         // Verify that x5c meets the requirements in §8.2.1 Packed attestation statement certificate requirements.
         attestationStatement.getX5c().getEndEntityAttestationCertificate().validate();
 
@@ -90,7 +89,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         AAGUID aaguidInCertificate = extractAAGUIDFromAttestationCertificate(attestationCertificate);
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
-            throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
+            throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.", registrationObject);
         }
 
         // If successful, return attestation type BASIC and attestation trust path x5c.
@@ -127,26 +126,30 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
-            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");
+            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.", registrationObject);
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
-        if (!verifySignature(coseKey.getPublicKey(), alg, sig, attrToBeSigned)) {
-            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
-        }
+        verifySignature(registrationObject, coseKey.getPublicKey(), alg, sig, attrToBeSigned);
+
         // If successful, return attestation type Self and empty attestation trust path.
         return AttestationType.SELF;
     }
 
-    private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
+    private void verifySignature(RegistrationObject registrationObject, PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
+
+        String jcaName = getJcaName(algorithmIdentifier);
+
         try {
-            String jcaName = getJcaName(algorithmIdentifier);
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(data);
 
-            return verifier.verify(signature);
-        } catch (SignatureException | InvalidKeyException | RuntimeException e) {
-            return false;
+            if(!verifier.verify(signature)){
+                throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject);
+            }
+        }
+        catch (SignatureException | InvalidKeyException | RuntimeException e) {
+            throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", registrationObject);
         }
     }
 

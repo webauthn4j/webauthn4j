@@ -17,6 +17,8 @@
 package com.webauthn4j.validator.exception;
 
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad signature is specified
  */
@@ -32,4 +34,17 @@ public class BadSignatureException extends ValidationException {
     public BadSignatureException(Throwable cause) {
         super(cause);
     }
+
+    public BadSignatureException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public BadSignatureException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public BadSignatureException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
+    }
+
 }

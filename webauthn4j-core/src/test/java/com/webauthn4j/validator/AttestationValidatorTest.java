@@ -77,8 +77,10 @@ class AttestationValidatorTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = mock(AuthenticatorData.class, RETURNS_DEEP_STUBS);
         when(authenticatorData.getAttestedCredentialData().getAaguid()).thenReturn(new AAGUID("fea37a71-08ce-479f-bf4b-472a93e2d17d"));
         when(attestationObject.getAuthenticatorData()).thenReturn(authenticatorData);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
         assertThrows(BadAaguidException.class,
-                () -> attestationValidator.validateAAGUID(attestationObject)
+                () -> attestationValidator.validateAAGUID(registrationObject)
         );
     }
 }

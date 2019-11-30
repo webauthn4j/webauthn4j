@@ -34,6 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 class TPMAttestationStatementValidatorTest {
 
@@ -61,10 +62,10 @@ class TPMAttestationStatementValidatorTest {
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA256)).isEqualTo("SHA-256"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA384)).isEqualTo("SHA-384"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA512)).isEqualTo("SHA-512"),
-                () -> assertThrows(BadAttestationStatementException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_ERROR)
                 ),
-                () -> assertThrows(BadAttestationStatementException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)
                 )
         );
@@ -96,7 +97,8 @@ class TPMAttestationStatementValidatorTest {
     void validateAikCert_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        target.validateAikCert(certificate);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        target.validateAikCert(registrationObject, certificate);
     }
 
     @Test
@@ -104,7 +106,8 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setSubjectDN("O=SharpLab., C=US");
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        assertThatThrownBy(() -> target.validateAikCert(registrationObject, certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
@@ -112,7 +115,8 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        assertThatThrownBy(() -> target.validateAikCert(registrationObject, certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
@@ -120,7 +124,8 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setCAFlagInBasicConstraints(true);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        assertThatThrownBy(() -> target.validateAikCert(registrationObject, certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
@@ -128,6 +133,7 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setX509CertificateVersion(1);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+        assertThatThrownBy(() -> target.validateAikCert(registrationObject, certificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

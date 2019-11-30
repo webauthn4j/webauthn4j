@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad algorithm is specified
  */
@@ -31,4 +33,17 @@ public class BadAlgorithmException extends ValidationException {
     public BadAlgorithmException(Throwable cause) {
         super(cause);
     }
+
+    public BadAlgorithmException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public BadAlgorithmException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public BadAlgorithmException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
+    }
+
 }
