@@ -16,6 +16,9 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.AuthenticationObject;
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad origin is specified
  */
@@ -30,5 +33,17 @@ public class BadOriginException extends ValidationException {
 
     public BadOriginException(Throwable cause) {
         super(cause);
+    }
+
+    public BadOriginException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        super(message, registrationObject, authenticationObject, cause);
+    }
+
+    public BadOriginException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject) {
+        super(message, registrationObject, authenticationObject);
+    }
+
+    public BadOriginException(RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        super(registrationObject, authenticationObject, cause);
     }
 }

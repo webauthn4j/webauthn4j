@@ -251,7 +251,7 @@ public class WebAuthnRegistrationContextValidator {
 
         //spec| Step5
         //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
+        originValidator.validate(registrationObject, collectedClientData, serverProperty);
 
         //spec| Step6
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over

@@ -35,13 +35,21 @@ class OriginValidator {
 
     // ~ Methods
     // ========================================================================================================
+    void validate(RegistrationObject registrationObject, CollectedClientData collectedClientData, ServerProperty serverProperty) {
+        validate(registrationObject, null, collectedClientData, serverProperty);
+    }
 
-    public void validate(CollectedClientData collectedClientData, ServerProperty serverProperty) {
+    void validate(AuthenticationObject authenticationObject, CollectedClientData collectedClientData, ServerProperty serverProperty) {
+        validate(null, authenticationObject, collectedClientData, serverProperty);
+    }
+
+    private void validate(RegistrationObject registrationObject, AuthenticationObject authenticationObject,
+                     CollectedClientData collectedClientData, ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
 
         if (!Objects.equals(collectedClientData.getOrigin(), serverProperty.getOrigin())) {
-            throw new BadOriginException("The collectedClientData origin doesn't match the preconfigured server origin.");
+            throw new BadOriginException("The collectedClientData origin doesn't match the preconfigured server origin.", registrationObject, authenticationObject);
         }
     }
 }

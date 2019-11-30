@@ -163,7 +163,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         //spec| Step9
         //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
+        originValidator.validate(authenticationObject, collectedClientData, serverProperty);
 
         //spec| Step10
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over

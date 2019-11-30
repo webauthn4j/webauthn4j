@@ -25,6 +25,7 @@ import com.webauthn4j.validator.exception.BadOriginException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 /**
  * Test for OriginValidator
@@ -38,9 +39,10 @@ class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("https://example.com:14443");
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
-        target.validate(collectedClientData, serverProperty);
+        target.validate(registrationObject, collectedClientData, serverProperty);
     }
 
     @Test
@@ -48,10 +50,11 @@ class OriginValidatorTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
-                () -> target.validate(collectedClientData, serverProperty)
+                () -> target.validate(registrationObject, collectedClientData, serverProperty)
         );
     }
 }
