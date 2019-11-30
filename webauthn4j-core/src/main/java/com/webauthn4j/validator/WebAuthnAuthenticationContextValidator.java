@@ -173,7 +173,7 @@ public class WebAuthnAuthenticationContextValidator {
 
         //spec| Step11
         //spec| Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashValidator.validate(authenticationObject, authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step12
         //spec| Verify that the User Present bit of the flags in authData is set.

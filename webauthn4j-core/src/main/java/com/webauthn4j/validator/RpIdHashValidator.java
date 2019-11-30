@@ -36,8 +36,16 @@ class RpIdHashValidator {
 
     // ~ Methods
     // ========================================================================================================
+    void validate(RegistrationObject registrationObject, byte[] rpIdHash, ServerProperty serverProperty){
+        validate(registrationObject, null, rpIdHash, serverProperty);
+    }
 
-    public void validate(byte[] rpIdHash, ServerProperty serverProperty) {
+    void validate(AuthenticationObject authenticationObject, byte[] rpIdHash, ServerProperty serverProperty) {
+        validate(null, authenticationObject, rpIdHash, serverProperty);
+    }
+
+    private void validate(RegistrationObject registrationObject, AuthenticationObject authenticationObject,
+                          byte[] rpIdHash, ServerProperty serverProperty) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();
         AssertUtil.notNull(rpId, "rpId must not be null");
@@ -46,7 +54,7 @@ class RpIdHashValidator {
         byte[] relyingPartyRpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
         byte[] relyingPartyRpIdHash = messageDigest.digest(relyingPartyRpIdBytes);
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
-            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.");
+            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.", registrationObject, authenticationObject);
         }
     }
 }

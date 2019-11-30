@@ -268,7 +268,7 @@ public class WebAuthnRegistrationContextValidator {
 
         //spec| Step9
         //spec| Verify that the RP ID hash in authData is indeed the SHA-256 hash of the RP ID expected by the RP.
-        rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
+        rpIdHashValidator.validate(registrationObject, authenticatorData.getRpIdHash(), serverProperty);
 
 
         //spec| Step10, 11

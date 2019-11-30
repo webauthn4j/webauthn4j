@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by ynojima on 2017/08/27.
@@ -35,6 +36,8 @@ class RpIdHashValidatorTest {
     @Test
     void verifyRpIdHash_test() {
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
+
         String rpIdA = "example.com";
         String rpIdB = "example.com";
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
@@ -43,11 +46,13 @@ class RpIdHashValidatorTest {
         ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
 
         //When
-        target.validate(rpIdHashA, serverProperty);
+        target.validate(registrationObject, rpIdHashA, serverProperty);
     }
 
     @Test
     void verifyRpIdHash_test_with_different_rpIds() {
+
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
 
         String rpIdA = "sub.example.com";
         String rpIdB = "example.com";
@@ -58,12 +63,14 @@ class RpIdHashValidatorTest {
 
         //When
         assertThrows(BadRpIdException.class,
-                () -> target.validate(rpIdHashA, serverProperty)
+                () -> target.validate(registrationObject, rpIdHashA, serverProperty)
         );
     }
 
     @Test
     void verifyRpIdHash_test_with_relyingParty_null() {
+
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -72,12 +79,14 @@ class RpIdHashValidatorTest {
 
         //When
         assertThrows(IllegalArgumentException.class,
-                () -> target.validate(rpIdHashA, null)
+                () -> target.validate(registrationObject, rpIdHashA, null)
         );
     }
 
     @Test
     void verifyRpIdHash_test_with_relyingParty_rpId_null() {
+
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
 
         String rpIdA = "example.com";
         String rpIdB = "example.com";
@@ -88,7 +97,7 @@ class RpIdHashValidatorTest {
 
         //When
         assertThrows(IllegalArgumentException.class,
-                () -> target.validate(rpIdHashA, serverProperty)
+                () -> target.validate(registrationObject, rpIdHashA, serverProperty)
         );
     }
 }
