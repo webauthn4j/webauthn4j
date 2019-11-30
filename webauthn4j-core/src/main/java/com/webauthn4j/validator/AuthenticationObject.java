@@ -9,6 +9,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 
+import java.io.Serializable;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * Internal data transfer object for authentication data
  */
 @SuppressWarnings("Duplicates")
-public class AuthenticationObject {
+public class AuthenticationObject implements Serializable {
 
     //~ Instance fields
     // ================================================================================================

@@ -20,7 +20,6 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

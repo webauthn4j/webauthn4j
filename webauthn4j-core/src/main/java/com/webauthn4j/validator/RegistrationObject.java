@@ -25,6 +25,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 
+import java.io.Serializable;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -34,7 +35,7 @@ import java.util.Set;
 /**
  * Internal data transfer object for registration data
  */
-public class RegistrationObject {
+public class RegistrationObject implements Serializable {
 
     //~ Instance fields
     // ================================================================================================

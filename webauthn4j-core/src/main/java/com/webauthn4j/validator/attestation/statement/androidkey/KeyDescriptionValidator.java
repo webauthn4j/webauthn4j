@@ -19,7 +19,6 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.KeyDescriptionValidationException;
 import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1ParseResult;
