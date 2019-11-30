@@ -34,4 +34,3 @@ public class MissingChallengeException extends ValidationException {
     }
 
 }
-

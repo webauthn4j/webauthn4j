@@ -81,7 +81,7 @@ class AttestationValidator {
         //spec| Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
-        validateAAGUID(attestationObject);
+        validateAAGUID(registrationObject);
 
         //spec| If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
         //spec| ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
@@ -131,11 +131,12 @@ class AttestationValidator {
 
     }
 
-    void validateAAGUID(AttestationObject attestationObject) {
+    void validateAAGUID(RegistrationObject registrationObject) {
+        AttestationObject attestationObject = registrationObject.getAttestationObject();
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
-                throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.");
+                throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.", registrationObject);
             }
         }
     }

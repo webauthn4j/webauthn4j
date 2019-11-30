@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad aaguid is detected
  */
@@ -30,5 +32,17 @@ public class BadAaguidException extends ValidationException {
 
     public BadAaguidException(Throwable cause) {
         super(cause);
+    }
+
+    public BadAaguidException(String message, RegistrationObject registrationObject, Throwable cause) {
+        super(message, registrationObject, cause);
+    }
+
+    public BadAaguidException(String message, RegistrationObject registrationObject) {
+        super(message, registrationObject);
+    }
+
+    public BadAaguidException(RegistrationObject registrationObject, Throwable cause) {
+        super(registrationObject, cause);
     }
 }
