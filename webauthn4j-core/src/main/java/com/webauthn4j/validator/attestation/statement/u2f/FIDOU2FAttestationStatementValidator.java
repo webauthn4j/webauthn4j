@@ -68,9 +68,11 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
 
     void validatePublicKey(PublicKey publicKey) {
         if (!publicKey.getAlgorithm().equals("EC")) {
+            //TODO add registrationObject
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
         }
         if (!((ECPublicKey) publicKey).getParams().equals(ECUtil.P_256_SPEC)) {
+            //TODO add registrationObject
             throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
         }
     }

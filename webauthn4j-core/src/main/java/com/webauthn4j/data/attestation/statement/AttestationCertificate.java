@@ -58,27 +58,33 @@ public class AttestationCertificate implements Serializable {
 
     public void validate() {
         if (certificate.getVersion() != CERTIFICATE_VERSION_3) {
+            //TODO add registrationObject
             throw new CertificateException("Attestation certificate must be version 3");
         }
 
         String country = getSubjectCountry();
         if (country == null || country.isEmpty()) {
+            //TODO add registrationObject
             throw new CertificateException("Subject-C must be present");
         }
         String organization = getSubjectOrganization();
         if (organization == null || organization.isEmpty()) {
+            //TODO add registrationObject
             throw new CertificateException("Subject-O must be present");
         }
         String organizationUnit = getSubjectOrganizationUnit();
         if (organizationUnit == null || !organizationUnit.equals("Authenticator Attestation")) {
+            //TODO add registrationObject
             throw new CertificateException("Subject-OU must be present");
         }
         String commonName = getSubjectCommonName();
         if (commonName == null || commonName.isEmpty()) {
+            //TODO add registrationObject
             throw new CertificateException("Subject-CN must be present");
         }
 
         if (certificate.getBasicConstraints() != NON_CA) {
+            //TODO add registrationObject
             throw new CertificateException("Attestation certificate must not be CA certificate");
         }
     }
@@ -88,6 +94,7 @@ public class AttestationCertificate implements Serializable {
         Map<String, String> map = subjectDN.stream().flatMap(attributes -> attributes.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         if(!map.containsKey(name)){
+            //TODO add registrationObject
             throw new CertificateException("invalid subjectDN: " + subjectDN);
         }
         return map.get(name);

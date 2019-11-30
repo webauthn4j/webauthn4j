@@ -49,11 +49,14 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         try {
             result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
+            //TODO add registrationObject
             throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
+            //TODO add registrationObject
             throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
+            //TODO add registrationObject
             throw new CertificateException("`certpath` must not contain full chain.");
         }
     }
