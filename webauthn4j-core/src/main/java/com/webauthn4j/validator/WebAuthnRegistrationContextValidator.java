@@ -247,7 +247,7 @@ public class WebAuthnRegistrationContextValidator {
 
         //spec| Step4
         //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
-        challengeValidator.validate(collectedClientData, serverProperty);
+        challengeValidator.validate(registrationObject, collectedClientData, serverProperty);
 
         //spec| Step5
         //spec| Verify that the value of C.origin matches the Relying Party's origin.

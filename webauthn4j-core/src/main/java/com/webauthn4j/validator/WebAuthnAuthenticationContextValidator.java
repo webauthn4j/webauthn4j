@@ -159,7 +159,7 @@ public class WebAuthnAuthenticationContextValidator {
         //spec| Step8
         //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
         //spec| the PublicKeyCredentialRequestOptions passed to the get() call.
-        challengeValidator.validate(collectedClientData, serverProperty);
+        challengeValidator.validate(authenticationObject, collectedClientData, serverProperty);
 
         //spec| Step9
         //spec| Verify that the value of C.origin matches the Relying Party's origin.

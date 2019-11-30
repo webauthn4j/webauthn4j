@@ -16,6 +16,9 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.validator.AuthenticationObject;
+import com.webauthn4j.validator.RegistrationObject;
+
 /**
  * Thrown if bad challenge is detected
  */
@@ -31,5 +34,17 @@ public class BadChallengeException extends ValidationException {
 
     public BadChallengeException(Throwable cause) {
         super(cause);
+    }
+
+    public BadChallengeException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        super(message, registrationObject, authenticationObject, cause);
+    }
+
+    public BadChallengeException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject) {
+        super(message, registrationObject, authenticationObject);
+    }
+
+    public BadChallengeException(RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        super(registrationObject, authenticationObject, cause);
     }
 }

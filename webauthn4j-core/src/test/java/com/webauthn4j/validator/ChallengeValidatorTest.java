@@ -26,6 +26,7 @@ import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 
 /**
@@ -41,11 +42,12 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
-        target.validate(collectedClientData, serverProperty);
+        target.validate(registrationObject, collectedClientData, serverProperty);
     }
 
     @Test
@@ -54,12 +56,13 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
         assertThrows(BadChallengeException.class,
-                () -> target.validate(collectedClientData, serverProperty)
+                () -> target.validate(registrationObject, collectedClientData, serverProperty)
         );
     }
 
@@ -69,12 +72,13 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
+        RegistrationObject registrationObject = mock(RegistrationObject.class);
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
         ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
 
         //When
         assertThrows(MissingChallengeException.class,
-                () -> target.validate(collectedClientData, serverProperty)
+                () -> target.validate(registrationObject, collectedClientData, serverProperty)
         );
     }
 }

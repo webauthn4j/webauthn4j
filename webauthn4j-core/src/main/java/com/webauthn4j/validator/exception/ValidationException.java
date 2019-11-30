@@ -70,6 +70,24 @@ public abstract class ValidationException extends WebAuthnException {
         this.authenticationObject = authenticationObject;
     }
 
+    public ValidationException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        this(message, cause);
+        this.registrationObject = registrationObject;
+        this.authenticationObject = authenticationObject;
+    }
+
+    public ValidationException(String message, RegistrationObject registrationObject, AuthenticationObject authenticationObject) {
+        this(message);
+        this.registrationObject = registrationObject;
+        this.authenticationObject = authenticationObject;
+    }
+
+    public ValidationException(RegistrationObject registrationObject, AuthenticationObject authenticationObject, Throwable cause) {
+        this(cause);
+        this.registrationObject = registrationObject;
+        this.authenticationObject = authenticationObject;
+    }
+
     public RegistrationObject getRegistrationObject() {
         return registrationObject;
     }

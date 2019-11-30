@@ -37,7 +37,18 @@ class ChallengeValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(CollectedClientData collectedClientData, ServerProperty serverProperty) {
+    void validate(RegistrationObject registrationObject,
+                         CollectedClientData collectedClientData, ServerProperty serverProperty){
+        validate(registrationObject, null, collectedClientData, serverProperty);
+    }
+
+    void validate(AuthenticationObject authenticationObject,
+                  CollectedClientData collectedClientData, ServerProperty serverProperty){
+        validate(null, authenticationObject, collectedClientData, serverProperty);
+    }
+
+    private void validate(RegistrationObject registrationObject, AuthenticationObject authenticationObject,
+                         CollectedClientData collectedClientData, ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         Challenge savedChallenge = serverProperty.getChallenge();
@@ -49,18 +60,19 @@ class ChallengeValidator {
 
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to
         // the authenticator in the PublicKeyCredentialRequestOptions passed to the get() call.
-        validate(savedChallenge, collectedChallenge);
+        validate(registrationObject, authenticationObject, savedChallenge, collectedChallenge);
 
     }
 
-    public void validate(Challenge expected, Challenge actual) {
+    private void validate(RegistrationObject registrationObject, AuthenticationObject authenticationObject,
+                         Challenge expected, Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();
         byte[] actualChallengeBytes = actual.getValue();
 
         if (!Arrays.equals(expectedChallengeBytes, actualChallengeBytes)) {
-            throw new BadChallengeException("The actual challenge does not match the expected challenge");
+            throw new BadChallengeException("The actual challenge does not match the expected challenge", registrationObject, authenticationObject);
         }
     }
 }
