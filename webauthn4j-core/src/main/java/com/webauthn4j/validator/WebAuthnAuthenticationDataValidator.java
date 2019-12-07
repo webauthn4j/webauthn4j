@@ -186,7 +186,7 @@ public class WebAuthnAuthenticationDataValidator {
             }
             //spec| less than or equal to the signature counter value stored in conjunction with credential’s id attribute.
             else {
-                maliciousCounterValueHandler.maliciousCounterValueDetected(null, authenticator);
+                maliciousCounterValueHandler.maliciousCounterValueDetected(authenticationObject);
             }
         }
 

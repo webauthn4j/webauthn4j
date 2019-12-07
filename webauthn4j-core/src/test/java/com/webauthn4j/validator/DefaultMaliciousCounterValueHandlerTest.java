@@ -20,6 +20,7 @@ import com.webauthn4j.validator.exception.MaliciousCounterValueException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 class DefaultMaliciousCounterValueHandlerTest {
 
@@ -27,8 +28,9 @@ class DefaultMaliciousCounterValueHandlerTest {
 
     @Test
     void maliciousCounterValueDetected_test() {
+        AuthenticationObject authenticationObject = mock(AuthenticationObject.class);
         assertThrows(MaliciousCounterValueException.class,
-                () -> target.maliciousCounterValueDetected(null, null)
+                () -> target.maliciousCounterValueDetected(authenticationObject)
         );
     }
 }
