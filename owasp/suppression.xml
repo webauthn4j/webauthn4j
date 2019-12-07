@@ -43,23 +43,4 @@
         <cve>CVE-2019-11358</cve>
     </suppress>
 
-    <!-- suppress alerts regarding jackson serializer as it doesn't affect webauthn4j -->
-    <suppress>
-        <cve>CVE-2019-14540</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2019-16335</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2019-16943</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2019-16942</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2019-17267</cve>
-    </suppress>
-    <suppress>
-        <cve>CVE-2019-17531</cve>
-    </suppress>
 </suppressions>
