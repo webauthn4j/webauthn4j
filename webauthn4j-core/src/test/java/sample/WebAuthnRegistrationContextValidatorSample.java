@@ -30,7 +30,7 @@ import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 
 import java.util.Set;
 
-class Sample {
+class WebAuthnRegistrationContextValidatorSample {
 
     public void registrationValidationSample() {
         // Client properties
