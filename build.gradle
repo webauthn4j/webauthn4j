@@ -89,7 +89,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Werror"
+        options.compilerArgs << "-Xlint:unchecked"  << "-Werror"
     }
 
     check.dependsOn dependencyCheckAnalyze

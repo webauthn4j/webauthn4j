@@ -16,9 +16,11 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
+import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +29,9 @@ import java.util.List;
 
 /**
  * WebAuthn authentication context
+ * @deprecated {@link WebAuthnAuthenticationContextValidator} is deprecated. please use {@link WebAuthnManager} instead.
  */
+@Deprecated
 public class WebAuthnAuthenticationContext extends AbstractWebAuthnContext {
 
     // ~ Instance fields

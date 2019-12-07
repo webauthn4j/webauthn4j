@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
@@ -25,7 +26,9 @@ import java.util.Objects;
 
 /**
  * Envelope class for WebAuthnAuthenticationContext validation result
+ * @deprecated {@link WebAuthnAuthenticationContextValidator} is deprecated. please use {@link WebAuthnManager} instead.
  */
+@Deprecated
 public class WebAuthnAuthenticationContextValidationResponse {
 
     // ~ Instance fields

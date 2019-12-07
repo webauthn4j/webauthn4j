@@ -41,7 +41,9 @@ import java.util.List;
 
 /**
  * Validates the specified {@link WebAuthnAuthenticationContext} instance
+ * @deprecated {@link WebAuthnAuthenticationContextValidator} is deprecated. please use {@link WebAuthnManager} instead.
  */
+@Deprecated
 public class WebAuthnAuthenticationContextValidator {
 
     //~ Instance fields
