@@ -54,10 +54,10 @@ class AuthenticationObjectTest {
         Authenticator authenticator = TestDataUtil.createAuthenticator();
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
-                clientData,
-                clientDataBytes,
                 authenticatorData,
                 authenticatorDataBytes,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
                 serverProperty,
                 authenticator
@@ -89,10 +89,10 @@ class AuthenticationObjectTest {
 
         AuthenticationObject instanceA = new AuthenticationObject(
                 credentialId,
-                clientData,
-                clientDataBytes,
                 authenticatorData,
                 authenticatorDataBytes,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
                 serverProperty,
                 authenticator
@@ -100,10 +100,10 @@ class AuthenticationObjectTest {
 
         AuthenticationObject instanceB = new AuthenticationObject(
                 credentialId,
-                clientData,
-                clientDataBytes,
                 authenticatorData,
                 authenticatorDataBytes,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
                 serverProperty,
                 authenticator

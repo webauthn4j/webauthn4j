@@ -209,19 +209,17 @@ class PackedAttestationStatementValidatorTest {
         Origin origin = new Origin(originUrl);
         Challenge challenge = (Challenge) () -> Base64UrlUtil.decode(challengeString);
 
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
         CollectedClientData collectedClientData = new CollectedClientDataConverter(jsonConverter).convert(clientDataBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
         RegistrationObject registrationObject = new RegistrationObject(
-                collectedClientData,
-                clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes),
-                transports,
+                collectedClientData,
+                clientDataBytes,
                 authenticationExtensionsClientOutputs,
+                transports,
                 new ServerProperty(origin, rpId, challenge, tokenBindingId)
         );
 

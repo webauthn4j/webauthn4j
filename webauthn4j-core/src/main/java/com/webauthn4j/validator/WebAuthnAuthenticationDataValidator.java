@@ -33,7 +33,6 @@ import com.webauthn4j.validator.exception.MaliciousDataException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -113,7 +112,7 @@ public class WebAuthnAuthenticationDataValidator {
         Authenticator authenticator = webAuthnAuthenticationParameters.getAuthenticator();
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
-                credentialId, collectedClientData, cData, authenticatorData, aData, clientExtensions,
+                credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
                 serverProperty, authenticator
         );
 

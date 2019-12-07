@@ -69,7 +69,7 @@ public class WebAuthnRegistrationData {
     }
 
     public byte[] getAttestationObjectBytes() {
-        return attestationObjectBytes;
+        return ArrayUtil.clone(attestationObjectBytes);
     }
 
     public CollectedClientData getCollectedClientData() {

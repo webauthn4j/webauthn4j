@@ -105,17 +105,15 @@ public class WebAuthnRegistrationDataValidator {
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
-        byte[] authenticatorDataBytes = attestationObjectConverter.extractAuthenticatorData(attestationObjectBytes);
         ServerProperty serverProperty = webAuthnRegistrationParameters.getServerProperty();
 
         RegistrationObject registrationObject = new RegistrationObject(
-                collectedClientData,
-                clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                authenticatorDataBytes,
-                transports,
+                collectedClientData,
+                clientDataBytes,
                 clientExtensions,
+                transports,
                 serverProperty
         );
 

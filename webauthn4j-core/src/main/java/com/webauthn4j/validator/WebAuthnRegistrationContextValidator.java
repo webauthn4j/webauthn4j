@@ -198,6 +198,7 @@ public class WebAuthnRegistrationContextValidator {
                 webAuthnRegistrationContext.isUserVerificationRequired(),
                 webAuthnRegistrationContext.isUserPresenceRequired(),
                 webAuthnRegistrationContext.getExpectedExtensionIds()
+
         );
 
         WebAuthnRegistrationData webAuthnRegistrationData = webAuthnManager.parseRegistrationRequest(webAuthnRegistrationRequest);
