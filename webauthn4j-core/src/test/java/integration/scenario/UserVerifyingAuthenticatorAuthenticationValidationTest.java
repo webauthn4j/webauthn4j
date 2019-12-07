@@ -195,7 +195,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
-        assertThrows(MaliciousDataException.class,
+        assertThrows(InconsistentClientDataTypeException.class,
                 () -> target.validate(authenticationContext, authenticator)
         );
     }

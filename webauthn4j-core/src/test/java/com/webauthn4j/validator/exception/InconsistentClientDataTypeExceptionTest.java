@@ -22,15 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SuppressWarnings("ThrowableNotThrown")
-class MaliciousDataExceptionTest {
+class InconsistentClientDataTypeExceptionTest {
 
     private RuntimeException cause = new RuntimeException();
 
     @Test
     void test() {
-        MaliciousDataException exception1 = new MaliciousDataException("dummy", cause);
-        MaliciousDataException exception2 = new MaliciousDataException("dummy");
-        MaliciousDataException exception3 = new MaliciousDataException(cause);
+        InconsistentClientDataTypeException exception1 = new InconsistentClientDataTypeException("dummy", cause);
+        InconsistentClientDataTypeException exception2 = new InconsistentClientDataTypeException("dummy");
+        InconsistentClientDataTypeException exception3 = new InconsistentClientDataTypeException(cause);
 
         assertAll(
                 () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),

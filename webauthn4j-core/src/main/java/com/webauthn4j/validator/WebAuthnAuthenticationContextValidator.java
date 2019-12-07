@@ -113,6 +113,7 @@ public class WebAuthnAuthenticationContextValidator {
                 webAuthnAuthenticationData.getCollectedClientData(),
                 webAuthnAuthenticationData.getAuthenticatorData(),
                 webAuthnAuthenticationData.getClientExtensions());
+
     }
 
     void validateAuthenticatorData(AuthenticatorData authenticatorData) {

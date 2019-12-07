@@ -17,18 +17,18 @@
 package com.webauthn4j.validator.exception;
 
 /**
- * Thrown if malicious data is specified
+ * Thrown if inconsistent type is specified for client data
  */
-public class MaliciousDataException extends ValidationException {
-    public MaliciousDataException(String message, Throwable cause) {
+public class InconsistentClientDataTypeException extends ValidationException {
+    public InconsistentClientDataTypeException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public MaliciousDataException(String message) {
+    public InconsistentClientDataTypeException(String message) {
         super(message);
     }
 
-    public MaliciousDataException(Throwable cause) {
+    public InconsistentClientDataTypeException(Throwable cause) {
         super(cause);
     }
 }
