@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata;
 
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
@@ -37,6 +38,16 @@ public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
 
     public FidoMdsMetadataValidator(MetadataItemsResolver metadataItemsResolver) {
         this.metadataItemsResolver = metadataItemsResolver;
+    }
+
+    public FidoMdsMetadataValidator(JsonConverter jsonConverter, String fidoMetadataServiceEndpoint) {
+        FidoMdsMetadataItemsProvider metadataItemsProvider = new FidoMdsMetadataItemsProvider(jsonConverter);
+        metadataItemsProvider.setFidoMetadataServiceEndpoint(fidoMetadataServiceEndpoint);
+        this.metadataItemsResolver = new MetadataItemsResolverImpl(metadataItemsProvider);
+    }
+
+    public FidoMdsMetadataValidator(String fidoMetadataServiceEndpoint) {
+        this(new JsonConverter(), fidoMetadataServiceEndpoint);
     }
 
     @Override
