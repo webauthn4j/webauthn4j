@@ -22,7 +22,7 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -68,7 +68,6 @@ class WebAuthnAuthenticationParametersTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
         Authenticator authenticator = null;
-        LocalDateTime timestamp = LocalDateTime.now();
 
         // expectations
         boolean userVerificationRequired = true;
@@ -79,7 +78,6 @@ class WebAuthnAuthenticationParametersTest {
                 new WebAuthnAuthenticationParameters(
                         serverProperty,
                         authenticator,
-                        timestamp,
                         userVerificationRequired,
                         userPresenceRequired,
                         expectedExtensionIds
@@ -88,7 +86,6 @@ class WebAuthnAuthenticationParametersTest {
                 new WebAuthnAuthenticationParameters(
                         serverProperty,
                         authenticator,
-                        timestamp,
                         userVerificationRequired,
                         userPresenceRequired,
                         expectedExtensionIds

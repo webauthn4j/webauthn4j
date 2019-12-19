@@ -111,11 +111,10 @@ public class WebAuthnAuthenticationDataValidator {
 
         byte[] credentialId = webAuthnAuthenticationData.getCredentialId();
         Authenticator authenticator = webAuthnAuthenticationParameters.getAuthenticator();
-        LocalDateTime timestamp = webAuthnAuthenticationParameters.getTimestamp();
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId, collectedClientData, cData, authenticatorData, aData, clientExtensions,
-                serverProperty, authenticator, timestamp
+                serverProperty, authenticator
         );
 
         //spec| Step7

@@ -30,7 +30,6 @@ public class WebAuthnAuthenticationParameters {
     private final Authenticator authenticator;
 
     // verification condition
-    private final LocalDateTime timestamp;
     private boolean userVerificationRequired;
     private boolean userPresenceRequired;
     private List<String> expectedExtensionIds;
@@ -38,32 +37,14 @@ public class WebAuthnAuthenticationParameters {
     public WebAuthnAuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
-            LocalDateTime timestamp,
             boolean userVerificationRequired,
             boolean userPresenceRequired,
             List<String> expectedExtensionIds) {
         this.serverProperty = serverProperty;
         this.authenticator = authenticator;
-        this.timestamp = timestamp;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
         this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
-    }
-
-    public WebAuthnAuthenticationParameters(
-            ServerProperty serverProperty,
-            Authenticator authenticator,
-            boolean userVerificationRequired,
-            boolean userPresenceRequired,
-            List<String> expectedExtensionIds) {
-        this(
-                serverProperty,
-                authenticator,
-                LocalDateTime.now(),
-                userVerificationRequired,
-                userPresenceRequired,
-                expectedExtensionIds
-        );
     }
 
     public WebAuthnAuthenticationParameters(
@@ -100,10 +81,6 @@ public class WebAuthnAuthenticationParameters {
         return authenticator;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
     public boolean isUserVerificationRequired() {
         return userVerificationRequired;
     }
@@ -125,12 +102,11 @@ public class WebAuthnAuthenticationParameters {
                 userPresenceRequired == that.userPresenceRequired &&
                 Objects.equals(serverProperty, that.serverProperty) &&
                 Objects.equals(authenticator, that.authenticator) &&
-                Objects.equals(timestamp, that.timestamp) &&
                 Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serverProperty, authenticator, timestamp, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+        return Objects.hash(serverProperty, authenticator, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
     }
 }

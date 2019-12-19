@@ -102,7 +102,6 @@ public class WebAuthnAuthenticationContextValidator {
         WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
                 authenticationContext.getServerProperty(),
                 authenticator,
-                LocalDateTime.now(),
                 authenticationContext.isUserVerificationRequired(),
                 authenticationContext.isUserPresenceRequired()  ,
                 authenticationContext.getExpectedExtensionIds()

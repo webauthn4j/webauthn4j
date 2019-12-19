@@ -33,7 +33,6 @@ public class AuthenticationObject {
 
     private final Authenticator authenticator;
 
-    private final LocalDateTime timestamp;
 
     @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
@@ -44,32 +43,7 @@ public class AuthenticationObject {
             byte[] authenticatorDataBytes,
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty,
-            Authenticator authenticator
-    ) {
-
-        this(
-                credentialId,
-                collectedClientData,
-                collectedClientDataBytes,
-                authenticatorData,
-                authenticatorDataBytes,
-                clientExtensions,
-                serverProperty,
-                authenticator,
-                LocalDateTime.now(Clock.systemUTC()));
-    }
-
-    @SuppressWarnings("squid:S00107")
-    public AuthenticationObject(
-            byte[] credentialId,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
-            ServerProperty serverProperty,
-            Authenticator authenticator,
-            LocalDateTime timestamp) {
+            Authenticator authenticator) {
         this.credentialId = credentialId;
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = collectedClientDataBytes;
@@ -78,7 +52,6 @@ public class AuthenticationObject {
         this.clientExtensions = clientExtensions;
         this.serverProperty = serverProperty;
         this.authenticator = authenticator;
-        this.timestamp = timestamp;
     }
 
     public byte[] getCredentialId() {
@@ -113,10 +86,6 @@ public class AuthenticationObject {
         return authenticator;
     }
 
-    public LocalDateTime getTimestamp() {
-        return this.timestamp;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,13 +98,12 @@ public class AuthenticationObject {
                 Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
                 Objects.equals(clientExtensions, that.clientExtensions) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(authenticator, that.authenticator) &&
-                Objects.equals(timestamp, that.timestamp);
+                Objects.equals(authenticator, that.authenticator);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(collectedClientData, authenticatorData, clientExtensions, serverProperty, authenticator, timestamp);
+        int result = Objects.hash(collectedClientData, authenticatorData, clientExtensions, serverProperty, authenticator);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
