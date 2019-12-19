@@ -53,6 +53,10 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
         }
 
+        if (webAuthnRegistrationData.getWebAuthnRegistrationDataValidator() == null) {
+            throw new ConstraintViolationException("webAuthnRegistrationDataValidator must not be null");
+        }
+
         validate(webAuthnRegistrationData.getAttestationObject());
 
         if (webAuthnRegistrationData.getAttestationObjectBytes() == null) {
@@ -64,9 +68,6 @@ class BeanAssertUtil {
 
         if (webAuthnRegistrationData.getCollectedClientDataBytes() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
-        }
-        if (webAuthnRegistrationData.getTransports() == null) {
-            throw new ConstraintViolationException("transports must not be null");
         }
     }
 
@@ -81,6 +82,10 @@ class BeanAssertUtil {
     public static void validate(WebAuthnAuthenticationData webAuthnAuthenticationData) {
         if (webAuthnAuthenticationData == null) {
             throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
+        }
+
+        if (webAuthnAuthenticationData.getWebAuthnAuthenticationDataValidator() == null) {
+            throw new ConstraintViolationException("webAuthnAuthenticationDataValidator must not be null");
         }
 
         if (webAuthnAuthenticationData.getCredentialId() == null) {
@@ -106,6 +111,9 @@ class BeanAssertUtil {
     public static void validate(WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) {
         if (webAuthnAuthenticationParameters == null) {
             throw new ConstraintViolationException("webAuthnAuthenticationParameters must not be null");
+        }
+        if (webAuthnAuthenticationParameters.getAuthenticator() == null) {
+            throw new ConstraintViolationException("authenticator must not be null");
         }
         validate(webAuthnAuthenticationParameters.getServerProperty());
     }
