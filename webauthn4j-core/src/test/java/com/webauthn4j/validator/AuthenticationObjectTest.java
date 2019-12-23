@@ -52,7 +52,6 @@ class AuthenticationObjectTest {
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();
-        LocalDateTime timestamp = LocalDateTime.now();
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId,
                 clientData,
@@ -61,8 +60,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
-                authenticator,
-                timestamp
+                authenticator
         );
 
         assertAll(
@@ -73,8 +71,7 @@ class AuthenticationObjectTest {
                 () -> assertThat(authenticationObject.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes),
                 () -> assertThat(authenticationObject.getClientExtensions()).isEqualTo(clientExtensions),
                 () -> assertThat(authenticationObject.getServerProperty()).isEqualTo(serverProperty),
-                () -> assertThat(authenticationObject.getAuthenticator()).isEqualTo(authenticator),
-                () -> assertThat(authenticationObject.getTimestamp()).isEqualTo(timestamp)
+                () -> assertThat(authenticationObject.getAuthenticator()).isEqualTo(authenticator)
         );
     }
 
@@ -89,7 +86,6 @@ class AuthenticationObjectTest {
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();
-        LocalDateTime timestamp = LocalDateTime.now();
 
         AuthenticationObject instanceA = new AuthenticationObject(
                 credentialId,
@@ -99,8 +95,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
-                authenticator,
-                timestamp
+                authenticator
         );
 
         AuthenticationObject instanceB = new AuthenticationObject(
@@ -111,8 +106,7 @@ class AuthenticationObjectTest {
                 authenticatorDataBytes,
                 clientExtensions,
                 serverProperty,
-                authenticator,
-                timestamp
+                authenticator
         );
 
         assertAll(

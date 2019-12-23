@@ -81,11 +81,13 @@ git clone https://github.com/webauthn4j/webauthn4j
 
 ## How to use
 
-Verification on registration
+Parse and Validation on Registration
 ```java 
 // Client properties
-byte[] clientDataJSON = null /* set clientDataJSON */;
 byte[] attestationObject = null /* set attestationObject */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
+String clientExtensionJSON = null;  /* set clientExtensionJSON */;
+Set<String> transports = null /* set transports */;
 
 // Server properties
 Origin origin = null /* set origin */;
@@ -93,36 +95,49 @@ String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
 byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+// expectations
 boolean userVerificationRequired = false;
+boolean userPresenceRequired = true;
+List<String> expectedExtensionIds = Collections.emptyList();
 
-WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(clientDataJSON, attestationObject, serverProperty, userVerificationRequired);
-
-// WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator() returns a WebAuthnRegistrationContextValidator instance
-// which doesn't validate an attestation statement. It is recommended configuration for most web application.
-// If you are building enterprise web application and need to validate the attestation statement, use the constructor of
-// WebAuthnRegistrationContextValidator and provide validators you like
-WebAuthnRegistrationContextValidator webAuthnRegistrationContextValidator =
-        WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
-
-
-WebAuthnRegistrationContextValidationResponse response = webAuthnRegistrationContextValidator.validate(registrationContext);
+WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
+WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+WebAuthnRegistrationData webAuthnRegistrationData;
+try{
+    webAuthnRegistrationData = webAuthnManager.parseRegistrationRequest(webAuthnRegistrationRequest);
+}
+catch (DataConversionException e){
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
+try{
+    webAuthnRegistrationData.validate(webAuthnRegistrationParameters);
+}
+catch (ValidationException e){
+    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+    throw e;
+}
 
 // please persist Authenticator object, which will be used in the authentication process.
 Authenticator authenticator =
         new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                response.getAttestationObject().getAttestationStatement(),
-                response.getAttestationObject().getAuthenticatorData().getSignCount()
+                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                webAuthnRegistrationData.getAttestationObject().getAttestationStatement(),
+                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
+
 ```
 
-Verification on authentication
+Parse and Validation on authentication
 ```java 
 // Client properties
 byte[] credentialId = null /* set credentialId */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
+byte[] userHandle = null /* set userHandle */;
 byte[] authenticatorData = null /* set authenticatorData */;
+byte[] clientDataJSON = null /* set clientDataJSON */;
+String clientExtensionJSON = null /* set clientExtensionJSON */;
 byte[] signature = null /* set signature */;
 
 // Server properties
@@ -131,28 +146,51 @@ String rpId = null /* set rpId */;
 Challenge challenge = null /* set challenge */;
 byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
-boolean userVerificationRequired = true;
 
-WebAuthnAuthenticationContext authenticationContext =
-        new WebAuthnAuthenticationContext(
-                credentialId,
-                clientDataJSON,
-                authenticatorData,
-                signature,
-                serverProperty,
-                userVerificationRequired
-        );
+// expectations
+boolean userVerificationRequired = true;
+boolean userPresenceRequired = true;
+List<String> expectedExtensionIds = Collections.emptyList();
+
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
-WebAuthnAuthenticationContextValidator webAuthnAuthenticationContextValidator =
-        new WebAuthnAuthenticationContextValidator();
+WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+        new WebAuthnAuthenticationRequest(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                clientDataJSON,
+                clientExtensionJSON,
+                signature
+        );
+WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+        new WebAuthnAuthenticationParameters(
+                serverProperty,
+                authenticator,
+                userVerificationRequired,
+                userPresenceRequired,
+                expectedExtensionIds
+        );
 
-WebAuthnAuthenticationContextValidationResponse response = webAuthnAuthenticationContextValidator.validate(authenticationContext, authenticator);
-
+WebAuthnAuthenticationData webAuthnAuthenticationData;
+try{
+    webAuthnAuthenticationData = webAuthnManager.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+}
+catch (DataConversionException e){
+    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+    throw e;
+}
+try{
+    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+}
+catch (ValidationException e){
+    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+    throw e;
+}
 // please update the counter of the authenticator record
 updateCounter(
-        response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-        response.getAuthenticatorData().getSignCount()
+        webAuthnAuthenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        webAuthnAuthenticationData.getAuthenticatorData().getSignCount()
 );
 ```
 
