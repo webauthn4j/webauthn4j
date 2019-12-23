@@ -192,7 +192,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
-        assertThrows(MaliciousDataException.class,
+        assertThrows(InconsistentClientDataTypeException.class,
                 () -> target.validate(registrationContext)
         );
     }

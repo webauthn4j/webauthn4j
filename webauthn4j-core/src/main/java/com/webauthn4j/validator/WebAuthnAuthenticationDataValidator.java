@@ -29,11 +29,10 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -120,7 +119,7 @@ public class WebAuthnAuthenticationDataValidator {
         //spec| Step7
         //spec| Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
-            throw new MaliciousDataException("ClientData.type must be 'get' on authentication, but it isn't.");
+            throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
         }
 
         //spec| Step8

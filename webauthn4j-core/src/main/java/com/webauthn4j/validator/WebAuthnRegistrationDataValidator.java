@@ -16,11 +16,11 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.WebAuthnRegistrationData;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.WebAuthnRegistrationData;
 import com.webauthn4j.data.WebAuthnRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -37,7 +37,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTru
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.MaliciousDataException;
+import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
@@ -124,7 +124,7 @@ public class WebAuthnRegistrationDataValidator {
         //spec| Step3
         //spec| Verify that the value of C.type is webauthn.create.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
-            throw new MaliciousDataException("ClientData.type must be 'create' on registration, but it isn't.");
+            throw new InconsistentClientDataTypeException("ClientData.type must be 'create' on registration, but it isn't.");
         }
 
         //spec| Step4
