@@ -17,7 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
@@ -31,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthenticationExtensionsClientInputsConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
-    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(jsonConverter);
+    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
 
 
     @Test

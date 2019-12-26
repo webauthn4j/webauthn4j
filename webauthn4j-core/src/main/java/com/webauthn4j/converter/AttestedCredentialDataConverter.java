@@ -18,9 +18,11 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.jackson.deserializer.COSEKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.io.*;
@@ -38,7 +40,17 @@ public class AttestedCredentialDataConverter implements Serializable{
 
     private CborConverter cborConverter;
 
+    public AttestedCredentialDataConverter(ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.cborConverter = objectConverter.getCborConverter();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AttestedCredentialDataConverter(CborConverter cborConverter) {
+        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
         this.cborConverter = cborConverter;
     }
 

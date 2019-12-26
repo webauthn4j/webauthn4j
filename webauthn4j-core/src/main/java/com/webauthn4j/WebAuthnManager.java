@@ -18,8 +18,7 @@ package com.webauthn4j;
 
 import com.webauthn4j.converter.*;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -29,7 +28,10 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.*;
+import com.webauthn4j.validator.CustomAuthenticationValidator;
+import com.webauthn4j.validator.CustomRegistrationValidator;
+import com.webauthn4j.validator.WebAuthnAuthenticationDataValidator;
+import com.webauthn4j.validator.WebAuthnRegistrationDataValidator;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
@@ -69,16 +71,14 @@ public class WebAuthnManager {
                            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
                            List<CustomRegistrationValidator> customRegistrationValidators,
                            List<CustomAuthenticationValidator> customAuthenticationValidators,
-                           JsonConverter jsonConverter,
-                           CborConverter cborConverter) {
+                           ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         webAuthnRegistrationDataValidator = new WebAuthnRegistrationDataValidator(
                 attestationStatementValidators,
@@ -86,16 +86,15 @@ public class WebAuthnManager {
                 ecdaaTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
-                jsonConverter,
-                cborConverter);
+                objectConverter);
 
         webAuthnAuthenticationDataValidator = new WebAuthnAuthenticationDataValidator(customAuthenticationValidators);
 
-        collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
-        attestationObjectConverter = new AttestationObjectConverter(cborConverter);
-        authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+        authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         authenticatorTransportConverter = new AuthenticatorTransportConverter();
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     }
 
@@ -108,7 +107,8 @@ public class WebAuthnManager {
      * @return configured {@link WebAuthnManager}
      */
     public static WebAuthnManager createNonStrictWebAuthnManager() {
-        return createNonStrictWebAuthnManager(new JsonConverter(), new CborConverter());
+        ObjectConverter objectConverter = new ObjectConverter();
+        return createNonStrictWebAuthnManager(objectConverter);
     }
 
     /**
@@ -116,7 +116,7 @@ public class WebAuthnManager {
      *
      * @return configured {@link WebAuthnManager}
      */
-    public static WebAuthnManager createNonStrictWebAuthnManager(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public static WebAuthnManager createNonStrictWebAuthnManager(ObjectConverter objectConverter) {
         return new WebAuthnManager(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
@@ -131,8 +131,7 @@ public class WebAuthnManager {
                 new NullSelfAttestationTrustworthinessValidator(),
                 Collections.emptyList(),
                 Collections.emptyList(),
-                jsonConverter,
-                cborConverter
+                objectConverter
         );
     }
 

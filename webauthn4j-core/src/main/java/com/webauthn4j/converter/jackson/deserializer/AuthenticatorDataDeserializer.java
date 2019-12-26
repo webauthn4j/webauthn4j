@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.util.AssertUtil;
 
@@ -31,14 +32,26 @@ import java.io.IOException;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData> {
 
-    private CborConverter cborConverter;
+    private ObjectConverter objectConverter;
 
+    public AuthenticatorDataDeserializer(ObjectConverter objectConverter) {
+        super(AuthenticatorData.class);
+
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+
+        this.objectConverter = objectConverter;
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AuthenticatorDataDeserializer(CborConverter cborConverter) {
         super(AuthenticatorData.class);
 
         AssertUtil.notNull(cborConverter, "cborConverter must not be null");
 
-        this.cborConverter = cborConverter;
+        this.objectConverter = new ObjectConverter(cborConverter.getJsonConverter(), cborConverter);
     }
 
     /**
@@ -47,7 +60,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
     @Override
     public AuthenticatorData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
-        return new AuthenticatorDataConverter(cborConverter).convert(value);
+        return new AuthenticatorDataConverter(objectConverter).convert(value);
     }
 
 

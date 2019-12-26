@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -35,10 +36,20 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
+    public CollectedClientDataConverter(ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.jsonConverter = objectConverter.getJsonConverter();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public CollectedClientDataConverter(JsonConverter jsonConverter) {
         AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
         this.jsonConverter = jsonConverter;
     }
+
 
     //~ Methods
     // ================================================================================================

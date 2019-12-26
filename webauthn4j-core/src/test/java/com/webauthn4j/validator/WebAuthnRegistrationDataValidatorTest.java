@@ -16,8 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
@@ -45,23 +44,21 @@ class WebAuthnRegistrationDataValidatorTest {
     private WebAuthnRegistrationDataValidator target;
 
     public WebAuthnRegistrationDataValidatorTest(){
-        JsonConverter jsonConverter = new JsonConverter();
-        CborConverter cborConverter = jsonConverter.getCborConverter();
+        ObjectConverter objectConverter = new ObjectConverter();
 
         target = new WebAuthnRegistrationDataValidator(Arrays.asList(
-                new NoneAttestationStatementValidator(),
-                new NullFIDOU2FAttestationStatementValidator(),
-                new NullPackedAttestationStatementValidator(),
-                new NullTPMAttestationStatementValidator(),
-                new NullAndroidKeyAttestationStatementValidator(),
-                new NullAndroidSafetyNetAttestationStatementValidator()
-        ),
+                        new NoneAttestationStatementValidator(),
+                        new NullFIDOU2FAttestationStatementValidator(),
+                        new NullPackedAttestationStatementValidator(),
+                        new NullTPMAttestationStatementValidator(),
+                        new NullAndroidKeyAttestationStatementValidator(),
+                        new NullAndroidSafetyNetAttestationStatementValidator()
+                ),
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
                 Collections.emptyList(),
-                jsonConverter,
-                cborConverter);
+                objectConverter);
     }
 
     @Test

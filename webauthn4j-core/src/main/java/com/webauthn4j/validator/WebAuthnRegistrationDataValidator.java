@@ -17,8 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.WebAuthnRegistrationData;
 import com.webauthn4j.data.WebAuthnRegistrationParameters;
@@ -69,18 +68,16 @@ public class WebAuthnRegistrationDataValidator {
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
             List<CustomRegistrationValidator> customRegistrationValidators,
-            JsonConverter jsonConverter,
-            CborConverter cborConverter
+            ObjectConverter objectConverter
     ) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,

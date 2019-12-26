@@ -17,6 +17,7 @@
 package com.webauthn4j.validator;
 
 
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.WebAuthnRegistrationData;
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.data.WebAuthnRegistrationParameters;
@@ -130,8 +131,7 @@ public class WebAuthnRegistrationContextValidator {
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
                 Collections.emptyList(),
-                jsonConverter,
-                cborConverter);
+                new ObjectConverter(jsonConverter, cborConverter));
     }
 
 

@@ -21,6 +21,7 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.WebAuthnAuthenticationData;
 import com.webauthn4j.data.WebAuthnAuthenticationParameters;
@@ -69,8 +70,7 @@ public class WebAuthnAuthenticationContextValidator {
                 new NullSelfAttestationTrustworthinessValidator(),
                 Collections.emptyList(),
                 customAuthenticationValidators,
-                jsonConverter,
-                cborConverter
+                new ObjectConverter(jsonConverter, cborConverter)
         );
     }
 

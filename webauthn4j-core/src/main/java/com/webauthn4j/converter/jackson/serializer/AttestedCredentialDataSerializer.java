@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 
 import java.io.IOException;
@@ -29,6 +30,15 @@ public class AttestedCredentialDataSerializer extends StdSerializer<AttestedCred
 
     private AttestedCredentialDataConverter attestedCredentialDataConverter;
 
+    public AttestedCredentialDataSerializer(ObjectConverter objectConverter) {
+        super(AttestedCredentialData.class);
+        attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AttestedCredentialDataSerializer(CborConverter cborConverter) {
         super(AttestedCredentialData.class);
         attestedCredentialDataConverter = new AttestedCredentialDataConverter(cborConverter);
