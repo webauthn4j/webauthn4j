@@ -34,7 +34,6 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttesta
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

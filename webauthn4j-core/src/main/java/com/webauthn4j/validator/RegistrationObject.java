@@ -16,6 +16,8 @@
 
 package com.webauthn4j.validator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -24,7 +26,10 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
+import com.webauthn4j.util.JacksonUtil;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -36,76 +41,58 @@ import java.util.Set;
  */
 public class RegistrationObject {
 
+    private static ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+
     //~ Instance fields
     // ================================================================================================
 
-    private final CollectedClientData collectedClientData;
-    private final byte[] collectedClientDataBytes;
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
-    private final byte[] authenticatorDataBytes;
-    private final Set<AuthenticatorTransport> transports;
+    private final CollectedClientData collectedClientData;
+    private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+    private final Set<AuthenticatorTransport> transports;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
 
     // ~ Constructor
     // ========================================================================================================
     @SuppressWarnings("squid:S00107")
-    public RegistrationObject(CollectedClientData collectedClientData,
-                              byte[] collectedClientDataBytes,
-                              AttestationObject attestationObject,
-                              byte[] attestationObjectBytes,
-                              byte[] authenticatorDataBytes,
-                              Set<AuthenticatorTransport> transports,
-                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-                              ServerProperty serverProperty) {
+    public RegistrationObject(
+            AttestationObject attestationObject,
+            byte[] attestationObjectBytes,
+            CollectedClientData collectedClientData,
+            byte[] collectedClientDataBytes,
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            Set<AuthenticatorTransport> transports,
+            ServerProperty serverProperty,
+            LocalDateTime timestamp) {
 
-        this(
-                collectedClientData,
-                collectedClientDataBytes,
-                attestationObject,
-                attestationObjectBytes,
-                authenticatorDataBytes,
-                transports,
-                clientExtensions,
-                serverProperty,
-                LocalDateTime.now(Clock.systemUTC())
-        );
-    }
-
-    @SuppressWarnings("squid:S00107")
-    public RegistrationObject(CollectedClientData collectedClientData,
-                              byte[] collectedClientDataBytes,
-                              AttestationObject attestationObject,
-                              byte[] attestationObjectBytes,
-                              byte[] authenticatorDataBytes,
-                              Set<AuthenticatorTransport> transports,
-                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-                              ServerProperty serverProperty,
-                              LocalDateTime timestamp) {
-
-        this.collectedClientData = collectedClientData;
-        this.collectedClientDataBytes = collectedClientDataBytes;
         this.attestationObject = attestationObject;
-        this.attestationObjectBytes = attestationObjectBytes;
-        this.authenticatorDataBytes = authenticatorDataBytes;
-        this.transports = CollectionUtil.unmodifiableSet(transports);
+        this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
+        this.collectedClientData = collectedClientData;
+        this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
+        this.transports = CollectionUtil.unmodifiableSet(transports);
         this.serverProperty = serverProperty;
         this.timestamp = timestamp;
+    }
+
+    public RegistrationObject(
+            AttestationObject attestationObject,
+            byte[] attestationObjectBytes,
+            CollectedClientData collectedClientData,
+            byte[] collectedClientDataBytes,
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            Set<AuthenticatorTransport> transports,
+            ServerProperty serverProperty) {
+
+        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty,  LocalDateTime.now(Clock.systemUTC()));
     }
 
     // ~ Methods
     // ========================================================================================================
 
-    public CollectedClientData getCollectedClientData() {
-        return collectedClientData;
-    }
-
-    public byte[] getCollectedClientDataBytes() {
-        return ArrayUtil.clone(collectedClientDataBytes);
-    }
 
     public AttestationObject getAttestationObject() {
         return attestationObject;
@@ -116,15 +103,23 @@ public class RegistrationObject {
     }
 
     public byte[] getAuthenticatorDataBytes() {
-        return ArrayUtil.clone(authenticatorDataBytes);
+        return extractAuthenticatorData(attestationObjectBytes);
     }
 
-    public Set<AuthenticatorTransport> getTransports() {
-        return transports;
+    public CollectedClientData getCollectedClientData() {
+        return collectedClientData;
+    }
+
+    public byte[] getCollectedClientDataBytes() {
+        return ArrayUtil.clone(collectedClientDataBytes);
     }
 
     public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
+    }
+
+    public Set<AuthenticatorTransport> getTransports() {
+        return transports;
     }
 
     public ServerProperty getServerProperty() {
@@ -140,23 +135,29 @@ public class RegistrationObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RegistrationObject that = (RegistrationObject) o;
-        return Objects.equals(collectedClientData, that.collectedClientData) &&
-                Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
-                Objects.equals(attestationObject, that.attestationObject) &&
+        return Objects.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
-                Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
-                Objects.equals(transports, that.transports) &&
+                Objects.equals(collectedClientData, that.collectedClientData) &&
+                Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
                 Objects.equals(clientExtensions, that.clientExtensions) &&
+                Objects.equals(transports, that.transports) &&
                 Objects.equals(serverProperty, that.serverProperty) &&
                 Objects.equals(timestamp, that.timestamp);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(collectedClientData, attestationObject, transports, clientExtensions, serverProperty, timestamp);
-        result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
+        int result = Objects.hash(attestationObject, collectedClientData, clientExtensions, transports, serverProperty, timestamp);
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
-        result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
+        result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
+    }
+
+    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
+        try {
+            return JacksonUtil.binaryValue(cborMapper.readTree(attestationObject).get("authData"));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

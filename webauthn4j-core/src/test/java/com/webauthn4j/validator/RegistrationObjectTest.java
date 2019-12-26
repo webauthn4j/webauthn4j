@@ -58,13 +58,12 @@ class RegistrationObjectTest {
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         RegistrationObject registrationObject = new RegistrationObject(
-                clientData,
-                clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                authenticatorDataBytes,
-                transports,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
+                transports,
                 serverProperty,
                 timestamp
         );
@@ -88,32 +87,28 @@ class RegistrationObjectTest {
         byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new AttestationObjectConverter(cborConverter).convertToBytes(attestationObject);
-        AuthenticatorData authenticatorData = TestDataUtil.createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         LocalDateTime timestamp = LocalDateTime.now();
         RegistrationObject instanceA = new RegistrationObject(
-                clientData,
-                clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                authenticatorDataBytes,
-                transports,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
+                transports,
                 serverProperty,
                 timestamp
         );
 
         RegistrationObject instanceB = new RegistrationObject(
-                clientData,
-                clientDataBytes,
                 attestationObject,
                 attestationObjectBytes,
-                authenticatorDataBytes,
-                transports,
+                clientData,
+                clientDataBytes,
                 clientExtensions,
+                transports,
                 serverProperty,
                 timestamp
         );

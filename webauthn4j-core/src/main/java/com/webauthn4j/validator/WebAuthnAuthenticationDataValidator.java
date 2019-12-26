@@ -112,7 +112,7 @@ public class WebAuthnAuthenticationDataValidator {
         Authenticator authenticator = webAuthnAuthenticationParameters.getAuthenticator();
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
-                credentialId, collectedClientData, cData, authenticatorData, aData, clientExtensions,
+                credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
                 serverProperty, authenticator
         );
 
