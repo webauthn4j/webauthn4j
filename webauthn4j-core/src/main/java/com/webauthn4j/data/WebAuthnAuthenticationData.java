@@ -22,14 +22,11 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.validator.WebAuthnAuthenticationDataValidator;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public class WebAuthnAuthenticationData {
-
-    private final WebAuthnAuthenticationDataValidator webAuthnAuthenticationDataValidator;
 
     private final byte[] credentialId;
     private final byte[] userHandle;
@@ -41,7 +38,6 @@ public class WebAuthnAuthenticationData {
     private final byte[] signature;
 
     public WebAuthnAuthenticationData(
-            WebAuthnAuthenticationDataValidator webAuthnAuthenticationDataValidator,
             byte[] credentialId,
             byte[] userHandle,
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
@@ -50,7 +46,6 @@ public class WebAuthnAuthenticationData {
             byte[] collectedClientDataBytes,
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             byte[] signature) {
-        this.webAuthnAuthenticationDataValidator = webAuthnAuthenticationDataValidator;
         this.credentialId = ArrayUtil.clone(credentialId);
         this.userHandle = ArrayUtil.clone(userHandle);
         this.authenticatorData = authenticatorData;
@@ -59,14 +54,6 @@ public class WebAuthnAuthenticationData {
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
         this.signature = ArrayUtil.clone(signature);
-    }
-
-    public void validate(WebAuthnAuthenticationParameters webAuthnAuthenticationParameters){
-        webAuthnAuthenticationDataValidator.validate(this, webAuthnAuthenticationParameters);
-    }
-
-    public WebAuthnAuthenticationDataValidator getWebAuthnAuthenticationDataValidator() {
-        return webAuthnAuthenticationDataValidator;
     }
 
     public byte[] getCredentialId() {
@@ -106,8 +93,7 @@ public class WebAuthnAuthenticationData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WebAuthnAuthenticationData that = (WebAuthnAuthenticationData) o;
-        return Objects.equals(webAuthnAuthenticationDataValidator, that.webAuthnAuthenticationDataValidator) &&
-                Arrays.equals(credentialId, that.credentialId) &&
+        return Arrays.equals(credentialId, that.credentialId) &&
                 Arrays.equals(userHandle, that.userHandle) &&
                 Objects.equals(authenticatorData, that.authenticatorData) &&
                 Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
@@ -119,7 +105,7 @@ public class WebAuthnAuthenticationData {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(webAuthnAuthenticationDataValidator, authenticatorData, collectedClientData, clientExtensions);
+        int result = Objects.hash(authenticatorData, collectedClientData, clientExtensions);
         result = 31 * result + Arrays.hashCode(credentialId);
         result = 31 * result + Arrays.hashCode(userHandle);
         result = 31 * result + Arrays.hashCode(authenticatorDataBytes);

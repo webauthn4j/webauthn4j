@@ -77,7 +77,7 @@ public class WebAuthnManagerSample {
             throw e;
         }
         try{
-            webAuthnRegistrationData.validate(webAuthnRegistrationParameters);
+            webAuthnManager.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
         }
         catch (ValidationException e){
             // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -95,7 +95,7 @@ public class WebAuthnManagerSample {
     }
 
 
-    public void athenticationValidationSample() {
+    public void authenticationValidationSample() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;
         byte[] userHandle = null /* set userHandle */;
@@ -145,7 +145,7 @@ public class WebAuthnManagerSample {
             throw e;
         }
         try{
-            webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+            webAuthnManager.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
         }
         catch (ValidationException e){
             // If you would like to handle WebAuthn data validation error, please catch ValidationException

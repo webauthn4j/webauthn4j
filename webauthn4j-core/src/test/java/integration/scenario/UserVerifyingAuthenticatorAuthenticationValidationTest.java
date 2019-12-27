@@ -100,7 +100,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-        webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
 
         assertAll(
                 () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
@@ -155,7 +155,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-        webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
 
         assertAll(
                 () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
@@ -207,7 +207,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(InconsistentClientDataTypeException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
     }
@@ -254,7 +254,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(BadChallengeException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
     }
@@ -300,7 +300,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(BadOriginException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
     }
@@ -348,7 +348,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(TokenBindingException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
     }
@@ -396,7 +396,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(BadRpIdException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
 
@@ -442,7 +442,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertThrows(UserNotVerifiedException.class,
                 () -> {
                     WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-                    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
                 }
         );
 

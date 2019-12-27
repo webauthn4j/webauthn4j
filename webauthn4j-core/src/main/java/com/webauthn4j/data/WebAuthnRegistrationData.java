@@ -22,15 +22,12 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.validator.WebAuthnRegistrationDataValidator;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
 public class WebAuthnRegistrationData {
-
-    private final WebAuthnRegistrationDataValidator webAuthnRegistrationDataValidator;
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
@@ -40,28 +37,18 @@ public class WebAuthnRegistrationData {
     private final Set<AuthenticatorTransport> transports;
 
     public WebAuthnRegistrationData(
-            WebAuthnRegistrationDataValidator webAuthnRegistrationDataValidator,
             AttestationObject attestationObject,
             byte[] attestationObjectBytes,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports) {
-        this.webAuthnRegistrationDataValidator = webAuthnRegistrationDataValidator;
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
         this.transports = CollectionUtil.unmodifiableSet(transports);
-    }
-
-    public void validate(WebAuthnRegistrationParameters webAuthnRegistrationParameters){
-        webAuthnRegistrationDataValidator.validate(this, webAuthnRegistrationParameters);
-    }
-
-    public WebAuthnRegistrationDataValidator getWebAuthnRegistrationDataValidator() {
-        return webAuthnRegistrationDataValidator;
     }
 
     public AttestationObject getAttestationObject() {
@@ -93,8 +80,7 @@ public class WebAuthnRegistrationData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WebAuthnRegistrationData that = (WebAuthnRegistrationData) o;
-        return Objects.equals(webAuthnRegistrationDataValidator, that.webAuthnRegistrationDataValidator) &&
-                Objects.equals(attestationObject, that.attestationObject) &&
+        return Objects.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
                 Objects.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
@@ -104,7 +90,7 @@ public class WebAuthnRegistrationData {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(webAuthnRegistrationDataValidator, attestationObject, collectedClientData, clientExtensions, transports);
+        int result = Objects.hash(attestationObject, collectedClientData, clientExtensions, transports);
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;

@@ -105,8 +105,7 @@ public class WebAuthnAuthenticationContextValidator {
                 authenticationContext.isUserPresenceRequired()  ,
                 authenticationContext.getExpectedExtensionIds()
         );
-        WebAuthnAuthenticationData webAuthnAuthenticationData = webAuthnManager.parseAuthenticationRequest(webAuthnAuthenticationRequest);
-        webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+        WebAuthnAuthenticationData webAuthnAuthenticationData = webAuthnManager.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
 
         return new WebAuthnAuthenticationContextValidationResponse(
                 webAuthnAuthenticationData.getCollectedClientData(),

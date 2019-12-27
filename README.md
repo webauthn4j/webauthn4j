@@ -112,7 +112,7 @@ catch (DataConversionException e){
     throw e;
 }
 try{
-    webAuthnRegistrationData.validate(webAuthnRegistrationParameters);
+    webAuthnManager.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -127,7 +127,6 @@ Authenticator authenticator =
                 webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
-
 ```
 
 Parse and Validation on authentication
@@ -181,7 +180,7 @@ catch (DataConversionException e){
     throw e;
 }
 try{
-    webAuthnAuthenticationData.validate(webAuthnAuthenticationParameters);
+    webAuthnManager.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -192,6 +191,7 @@ updateCounter(
         webAuthnAuthenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
         webAuthnAuthenticationData.getAuthenticatorData().getSignCount()
 );
+
 ```
 
 ## Sample application

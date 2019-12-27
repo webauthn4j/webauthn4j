@@ -53,10 +53,6 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
         }
 
-        if (webAuthnRegistrationData.getWebAuthnRegistrationDataValidator() == null) {
-            throw new ConstraintViolationException("webAuthnRegistrationDataValidator must not be null");
-        }
-
         validate(webAuthnRegistrationData.getAttestationObject());
 
         if (webAuthnRegistrationData.getAttestationObjectBytes() == null) {
@@ -82,10 +78,6 @@ class BeanAssertUtil {
     public static void validate(WebAuthnAuthenticationData webAuthnAuthenticationData) {
         if (webAuthnAuthenticationData == null) {
             throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
-        }
-
-        if (webAuthnAuthenticationData.getWebAuthnAuthenticationDataValidator() == null) {
-            throw new ConstraintViolationException("webAuthnAuthenticationDataValidator must not be null");
         }
 
         if (webAuthnAuthenticationData.getCredentialId() == null) {

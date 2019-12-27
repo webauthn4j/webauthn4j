@@ -21,7 +21,6 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.validator.WebAuthnAuthenticationDataValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +32,6 @@ class WebAuthnAuthenticationDataTest {
     @Test
     void equals_hashCode_test(){
 
-        WebAuthnAuthenticationDataValidator webAuthnAuthenticationDataValidator = mock(WebAuthnAuthenticationDataValidator.class);
         byte[] credentialId = new byte[32];
         byte[] userHandle = new byte[32];
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
@@ -45,7 +43,6 @@ class WebAuthnAuthenticationDataTest {
         byte[] signature = new byte[32];
 
         WebAuthnAuthenticationData instanceA = new WebAuthnAuthenticationData(
-                webAuthnAuthenticationDataValidator,
                 credentialId,
                 userHandle,
                 authenticatorData,
@@ -56,7 +53,6 @@ class WebAuthnAuthenticationDataTest {
                 signature
         );
         WebAuthnAuthenticationData instanceB = new WebAuthnAuthenticationData(
-                webAuthnAuthenticationDataValidator,
                 credentialId,
                 userHandle,
                 authenticatorData,

@@ -191,7 +191,6 @@ public class WebAuthnManager {
                 authenticationExtensionsClientOutputsConverter.convert(webAuthnRegistrationRequest.getClientExtensionsJSON());
 
         return new WebAuthnRegistrationData(
-                webAuthnRegistrationDataValidator,
                 attestationObject,
                 attestationObjectBytes,
                 collectedClientData,
@@ -202,10 +201,16 @@ public class WebAuthnManager {
 
     }
 
-    public void validate(WebAuthnRegistrationRequest webAuthnRegistrationRequest, WebAuthnRegistrationParameters webAuthnRegistrationParameters) throws DataConversionException, ValidationException {
-        parseRegistrationRequest(webAuthnRegistrationRequest).validate(webAuthnRegistrationParameters);
+    public WebAuthnRegistrationData validate(WebAuthnRegistrationRequest webAuthnRegistrationRequest, WebAuthnRegistrationParameters webAuthnRegistrationParameters) throws DataConversionException, ValidationException {
+        WebAuthnRegistrationData webAuthnRegistrationData = parseRegistrationRequest(webAuthnRegistrationRequest);
+        webAuthnRegistrationDataValidator.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+        return webAuthnRegistrationData;
     }
 
+    public WebAuthnRegistrationData validate(WebAuthnRegistrationData webAuthnRegistrationData, WebAuthnRegistrationParameters webAuthnRegistrationParameters) throws ValidationException{
+        webAuthnRegistrationDataValidator.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+        return webAuthnRegistrationData;
+    }
 
     public WebAuthnAuthenticationData parseAuthenticationRequest(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest) throws DataConversionException{
 
@@ -221,7 +226,6 @@ public class WebAuthnManager {
                 authenticationExtensionsClientOutputsConverter.convert(webAuthnAuthenticationRequest.getClientExtensionsJSON());
 
         return new WebAuthnAuthenticationData(
-                webAuthnAuthenticationDataValidator,
                 credentialId,
                 userHandle,
                 authenticatorData,
@@ -234,8 +238,15 @@ public class WebAuthnManager {
 
     }
 
-    public void validate(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) throws DataConversionException, ValidationException {
-        parseAuthenticationRequest(webAuthnAuthenticationRequest).validate(webAuthnAuthenticationParameters);
+    public WebAuthnAuthenticationData validate(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) throws DataConversionException, ValidationException {
+        WebAuthnAuthenticationData webAuthnAuthenticationData = parseAuthenticationRequest(webAuthnAuthenticationRequest);
+        validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+        return webAuthnAuthenticationData;
+    }
+
+    public WebAuthnAuthenticationData validate(WebAuthnAuthenticationData webAuthnAuthenticationData, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters){
+        webAuthnAuthenticationDataValidator.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+        return webAuthnAuthenticationData;
     }
 
 
