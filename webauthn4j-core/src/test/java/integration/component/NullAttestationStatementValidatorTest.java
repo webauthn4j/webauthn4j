@@ -16,6 +16,7 @@
 
 package integration.component;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -38,7 +39,7 @@ import java.util.Set;
 class NullAttestationStatementValidatorTest {
 
     private Origin origin = new Origin("http://localhost");
-    private WebAuthnRegistrationContextValidator target = WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator();
+    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
     private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
 
     @Test
@@ -71,13 +72,14 @@ class NullAttestationStatementValidatorTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext =
-                new WebAuthnRegistrationContext(
-                        registrationRequest.getClientDataJSON(),
+        WebAuthnRegistrationRequest webAuthnRegistrationRequest =
+                new WebAuthnRegistrationRequest(
                         registrationRequest.getAttestationObject(),
-                        transports,
-                        serverProperty, false);
-        target.validate(registrationContext);
+                        registrationRequest.getClientDataJSON(),
+                        transports);
+        WebAuthnRegistrationParameters webAuthnRegistrationParameters =
+                new WebAuthnRegistrationParameters(serverProperty, false);
+        target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);
     }
 
     @Test
@@ -112,7 +114,14 @@ class NullAttestationStatementValidatorTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, true);
-        target.validate(registrationContext);
+        WebAuthnRegistrationRequest webAuthnRegistrationRequest =
+                new WebAuthnRegistrationRequest(
+                        registrationRequest.getAttestationObject(),
+                        registrationRequest.getClientDataJSON(),
+                        transports);
+        WebAuthnRegistrationParameters webAuthnRegistrationParameters =
+                new WebAuthnRegistrationParameters(serverProperty, false);
+        target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);
+
     }
 }

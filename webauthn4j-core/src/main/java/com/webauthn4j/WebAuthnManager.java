@@ -45,6 +45,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustwort
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
+import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.*;
 
@@ -201,6 +202,11 @@ public class WebAuthnManager {
 
     }
 
+    public void validate(WebAuthnRegistrationRequest webAuthnRegistrationRequest, WebAuthnRegistrationParameters webAuthnRegistrationParameters) throws DataConversionException, ValidationException {
+        parseRegistrationRequest(webAuthnRegistrationRequest).validate(webAuthnRegistrationParameters);
+    }
+
+
     public WebAuthnAuthenticationData parseAuthenticationRequest(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest) throws DataConversionException{
 
         byte[] credentialId = webAuthnAuthenticationRequest.getCredentialId();
@@ -227,6 +233,11 @@ public class WebAuthnManager {
         );
 
     }
+
+    public void validate(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) throws DataConversionException, ValidationException {
+        parseAuthenticationRequest(webAuthnAuthenticationRequest).validate(webAuthnAuthenticationParameters);
+    }
+
 
     public WebAuthnRegistrationDataValidator getWebAuthnRegistrationDataValidator() {
         return webAuthnRegistrationDataValidator;
