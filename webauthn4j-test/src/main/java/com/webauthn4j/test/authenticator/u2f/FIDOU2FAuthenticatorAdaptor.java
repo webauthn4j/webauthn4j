@@ -18,8 +18,7 @@ package com.webauthn4j.test.authenticator.u2f;
 
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.data.PublicKeyCredentialDescriptor;
 import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
@@ -57,16 +56,14 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
     private AuthenticatorDataConverter authenticatorDataConverter;
 
 
-    public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator, JsonConverter jsonConverter) {
+    public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator, ObjectConverter objectConverter) {
         this.fidoU2FAuthenticator = fidoU2FAuthenticator;
-
-        CborConverter cborConverter = jsonConverter.getCborConverter();
-        this.collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        this.collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     }
 
     public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator) {
-        this(fidoU2FAuthenticator, new JsonConverter());
+        this(fidoU2FAuthenticator, new ObjectConverter());
     }
 
     public FIDOU2FAuthenticatorAdaptor() {
