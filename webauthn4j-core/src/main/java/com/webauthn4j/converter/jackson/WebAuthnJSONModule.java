@@ -24,6 +24,7 @@ import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.data.jws.JWS;
@@ -36,13 +37,13 @@ import java.security.cert.X509Certificate;
 public class WebAuthnJSONModule extends SimpleModule {
 
     @SuppressWarnings("unused")
-    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public WebAuthnJSONModule(ObjectConverter objectConverter) {
         super("WebAuthnJSONModule");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
+        this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(Challenge.class, new ChallengeSerializer());
@@ -61,6 +62,14 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientOutput.class, SupportedExtensionsExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(UserVerificationIndexExtensionClientOutput.class, UserVerificationIndexExtensionClientOutput.ID));
 
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+        this(new ObjectConverter(jsonConverter, cborConverter));
     }
 
 }
