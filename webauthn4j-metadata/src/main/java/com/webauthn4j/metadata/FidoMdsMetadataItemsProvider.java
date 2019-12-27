@@ -82,41 +82,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         this(objectConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
-        this.jsonConverter = jsonConverter;
-        this.jwsFactory = new JWSFactory(jsonConverter);
-        this.httpClient = httpClient;
-        this.trustAnchor = new TrustAnchor(rootCertificate, null);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, Path path) {
-        this(jsonConverter, httpClient, loadRootCertificateFromPath(path));
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient) {
-        this(jsonConverter, httpClient, loadEmbeddedFidoMdsRootCertificate());
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter) {
-        this(jsonConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
-    }
-
     private static X509Certificate loadRootCertificateFromPath(Path path) {
         try {
             InputStream inputStream = Files.newInputStream(path);

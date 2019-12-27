@@ -41,16 +41,6 @@ public class CollectedClientDataConverter {
         this.jsonConverter = objectConverter.getJsonConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public CollectedClientDataConverter(JsonConverter jsonConverter) {
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-        this.jsonConverter = jsonConverter;
-    }
-
-
     //~ Methods
     // ================================================================================================
 

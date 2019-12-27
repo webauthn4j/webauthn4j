@@ -20,8 +20,6 @@ import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.*;
@@ -81,14 +79,5 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(UserVerificationIndexExtensionAuthenticatorOutput.class, UserVerificationIndexExtensionAuthenticatorOutput.ID));
 
     }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {
-        this(new ObjectConverter(jsonConverter, cborConverter));
-    }
-
 
 }

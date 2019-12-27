@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -32,7 +33,8 @@ class AttestationObjectDeserializerTest {
 
     @Test
     void test() {
-        CborConverter cborConverter = new CborConverter();
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
 
         //Given
         //noinspection SpellCheckingInspection

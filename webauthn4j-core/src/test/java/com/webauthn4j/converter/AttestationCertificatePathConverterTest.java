@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestationCertificatePathConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void test() {

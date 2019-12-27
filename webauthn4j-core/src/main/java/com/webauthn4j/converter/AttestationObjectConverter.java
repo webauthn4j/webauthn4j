@@ -40,15 +40,6 @@ public class AttestationObjectConverter {
         this.cborConverter = objectConverter.getCborConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AttestationObjectConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
-    }
-
     // ~ Methods
     // ================================================================================================
 

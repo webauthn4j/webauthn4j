@@ -19,6 +19,7 @@ package com.webauthn4j.authenticator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -40,7 +41,9 @@ class AuthenticatorTest {
 
     @Test
     void serialization_deserialization_test(){
-        CborConverter cborConverter = new CborConverter();
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
+
         TestAuthenticator original = new TestAuthenticator(
                 TestDataUtil.createAttestedCredentialData(),
                 TestAttestationStatementUtil.createFIDOU2FAttestationStatement(),

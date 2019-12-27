@@ -2,6 +2,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class AttestationTypeTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void create_test() {

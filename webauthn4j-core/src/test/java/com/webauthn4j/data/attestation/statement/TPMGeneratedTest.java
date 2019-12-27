@@ -18,6 +18,7 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import java.util.Base64;
@@ -28,7 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMGeneratedTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void create() {

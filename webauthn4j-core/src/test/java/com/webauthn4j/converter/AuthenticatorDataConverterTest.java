@@ -17,7 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {
@@ -46,7 +46,7 @@ class AuthenticatorDataConverterTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
 
         //When
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input));
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -65,7 +65,7 @@ class AuthenticatorDataConverterTest {
 
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(cborConverter).convert(Base64UrlUtil.decode(input))
+                () -> new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input))
         );
     }
 
@@ -82,8 +82,8 @@ class AuthenticatorDataConverterTest {
                 new AuthenticatorData<>(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
 
         //When
-        byte[] serialized = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(cborConverter).convert(serialized);
+        byte[] serialized = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(serialized);
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -103,7 +103,7 @@ class AuthenticatorDataConverterTest {
         byte[] bytes = Arrays.copyOf(data, data.length + 1);
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(cborConverter).convert(bytes)
+                () -> new AuthenticatorDataConverter(objectConverter).convert(bytes)
         );
     }
 
@@ -113,7 +113,7 @@ class AuthenticatorDataConverterTest {
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAARlUOS1SqR0CfmpUat2wTATEAIHEiziyGohCFUc_hJJZGdtSu9ThnEb74K6NZC3U-KbwgpQECAyYgASFYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPIlggGQI5ESYAOfR8QM6quTQSoyhjZET806A3yOoCUe2AWJE";
         //When
-        byte[] result = new AuthenticatorDataConverter(cborConverter).extractAttestedCredentialData(Base64UrlUtil.decode(input));
+        byte[] result = new AuthenticatorDataConverter(objectConverter).extractAttestedCredentialData(Base64UrlUtil.decode(input));
 
         assertThat(result).isEqualTo(Base64UrlUtil.decode("VQ5LVKpHQJ-alRq3bBMBMQAgcSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCClAQIDJiABIVggLDjE-Yci-q4NHPYpTPLJCVkWFkxuL6Zz9jKUvWjnmM8iWCAZAjkRJgA59HxAzqq5NBKjKGNkRPzToDfI6gJR7YBYkQ"));
 
@@ -125,7 +125,7 @@ class AuthenticatorDataConverterTest {
         //noinspection SpellCheckingInspection
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2NBAAAARlUOS1SqR0CfmpUat2wTATEAIHEiziyGohCFUc_hJJZGdtSu9ThnEb74K6NZC3U-KbwgpQECAyYgASFYICw4xPmHIvquDRz2KUzyyQlZFhZMbi-mc_YylL1o55jPIlggGQI5ESYAOfR8QM6quTQSoyhjZET806A3yOoCUe2AWJE";
         //When
-        long signCount = new AuthenticatorDataConverter(cborConverter).extractSignCount(Base64UrlUtil.decode(input));
+        long signCount = new AuthenticatorDataConverter(objectConverter).extractSignCount(Base64UrlUtil.decode(input));
 
         assertThat(signCount).isEqualTo(70);
 

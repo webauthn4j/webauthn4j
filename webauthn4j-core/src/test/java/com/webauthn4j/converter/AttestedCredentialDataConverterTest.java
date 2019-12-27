@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestedCredentialDataConverterTest {
 
-    private CborConverter cborConverter = new CborConverter();
-    private AttestedCredentialDataConverter target = new AttestedCredentialDataConverter(cborConverter);
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private AttestedCredentialDataConverter target = new AttestedCredentialDataConverter(objectConverter);
 
     @Test
     void convert_test() {

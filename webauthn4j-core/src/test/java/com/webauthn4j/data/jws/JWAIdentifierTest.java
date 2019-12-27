@@ -18,6 +18,7 @@ package com.webauthn4j.data.jws;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,7 +28,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JWAIdentifierTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+
 
     @Test
     void create_test() {

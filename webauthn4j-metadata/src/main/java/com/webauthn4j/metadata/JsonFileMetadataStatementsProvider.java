@@ -42,15 +42,6 @@ public class JsonFileMetadataStatementsProvider implements MetadataStatementsPro
         this.paths = paths;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public JsonFileMetadataStatementsProvider(JsonConverter jsonConverter, List<Path> paths) {
-        this.jsonConverter = jsonConverter;
-        this.paths = paths;
-    }
-
     @Override
     public Map<AAGUID, Set<MetadataStatement>> provide() {
         if (cachedMetadataItems == null) {

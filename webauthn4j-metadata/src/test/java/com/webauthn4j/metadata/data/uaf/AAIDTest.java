@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata.data.uaf;
 
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AAIDTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void constructor_test() {
@@ -58,7 +58,7 @@ class AAIDTest {
 
     @Test
     void deserialize_with_invalid_value_test() {
-        assertThatThrownBy(() -> jsonConverter.readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> objectConverter.getJsonConverter().readValue("{\"aaid\": \"invalid_value\"}", AAIDTest.TestDTO.class)).isInstanceOf(DataConversionException.class);
     }
 
     static class TestDTO {
