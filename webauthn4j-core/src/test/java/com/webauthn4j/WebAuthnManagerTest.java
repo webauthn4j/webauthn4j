@@ -17,11 +17,42 @@
 package com.webauthn4j;
 
 
+import com.webauthn4j.anchor.TrustAnchorsResolver;
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.validator.attestation.statement.androidkey.AndroidKeyAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WebAuthnManagerTest {
+
+    @Test
+    void constructor_test(){
+        NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
+        PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
+        FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+        AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
+        TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+        WebAuthnManager webAuthnManager = new WebAuthnManager(
+                Arrays.asList(
+                        noneAttestationStatementValidator,
+                        packedAttestationStatementValidator,
+                        fidoU2FAttestationStatementValidator,
+                        androidKeyAttestationStatementValidator),
+                new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
+                new DefaultECDAATrustworthinessValidator(),
+                new DefaultSelfAttestationTrustworthinessValidator()
+        );
+        assertThat(webAuthnManager).isNotNull();
+    }
 
     @Test
     void createNonStrictWebAuthnManager_test(){

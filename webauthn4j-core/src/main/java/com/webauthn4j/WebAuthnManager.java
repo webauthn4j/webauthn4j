@@ -46,10 +46,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrust
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WebAuthnManager {
 
@@ -98,6 +95,53 @@ public class WebAuthnManager {
 
     }
 
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           List<CustomRegistrationValidator> customRegistrationValidators,
+                           List<CustomAuthenticationValidator> customAuthenticationValidators) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                customRegistrationValidators,
+                customAuthenticationValidators,
+                new ObjectConverter()
+        );
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           ObjectConverter objectConverter) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                objectConverter
+        );
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
     // ~ Factory methods
     // ========================================================================================================
 
@@ -129,8 +173,6 @@ public class WebAuthnManager {
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
-                Collections.emptyList(),
-                Collections.emptyList(),
                 objectConverter
         );
     }
