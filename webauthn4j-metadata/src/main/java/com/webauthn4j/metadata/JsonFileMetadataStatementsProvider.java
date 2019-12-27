@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.validator.MetadataStatementValidator;
@@ -36,6 +37,15 @@ public class JsonFileMetadataStatementsProvider implements MetadataStatementsPro
     private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
     private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
+    public JsonFileMetadataStatementsProvider(ObjectConverter objectConverter, List<Path> paths) {
+        this.jsonConverter = objectConverter.getJsonConverter();
+        this.paths = paths;
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public JsonFileMetadataStatementsProvider(JsonConverter jsonConverter, List<Path> paths) {
         this.jsonConverter = jsonConverter;
         this.paths = paths;

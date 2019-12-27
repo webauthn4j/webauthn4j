@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
@@ -62,6 +63,29 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private TrustAnchor trustAnchor;
     private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, X509Certificate rootCertificate) {
+        this.jsonConverter = objectConverter.getJsonConverter();
+        this.jwsFactory = new JWSFactory(objectConverter);
+        this.httpClient = httpClient;
+        this.trustAnchor = new TrustAnchor(rootCertificate, null);
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, Path path) {
+        this(objectConverter, httpClient, loadRootCertificateFromPath(path));
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient) {
+        this(objectConverter, httpClient, loadEmbeddedFidoMdsRootCertificate());
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter) {
+        this(objectConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = jsonConverter;
         this.jwsFactory = new JWSFactory(jsonConverter);
@@ -69,14 +93,26 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient, Path path) {
         this(jsonConverter, httpClient, loadRootCertificateFromPath(path));
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter, HttpClient httpClient) {
         this(jsonConverter, httpClient, loadEmbeddedFidoMdsRootCertificate());
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public FidoMdsMetadataItemsProvider(JsonConverter jsonConverter) {
         this(jsonConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
     }
