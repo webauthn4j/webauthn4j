@@ -20,6 +20,7 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
 import com.webauthn4j.converter.jackson.deserializer.COSEKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
@@ -60,6 +61,16 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
+    public AuthenticatorDataConverter(ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.cborConverter = objectConverter.getCborConverter();
+        this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AuthenticatorDataConverter(CborConverter cborConverter) {
         AssertUtil.notNull(cborConverter, "cborConverter must not be null");
         this.cborConverter = cborConverter;

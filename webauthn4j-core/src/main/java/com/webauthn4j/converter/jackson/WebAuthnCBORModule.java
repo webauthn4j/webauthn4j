@@ -22,6 +22,7 @@ import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.Origin;
@@ -37,25 +38,25 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnCBORModule extends SimpleModule {
 
-    public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+    public WebAuthnCBORModule(ObjectConverter objectConverter) {
         super("WebAuthnCBORModule");
 
         this.addDeserializer(AAGUID.class, new AAGUIDDeserializer());
-        this.addDeserializer(AttestedCredentialData.class, new AttestedCredentialDataDeserializer(cborConverter));
+        this.addDeserializer(AttestedCredentialData.class, new AttestedCredentialDataDeserializer(objectConverter));
         this.addDeserializer(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class, new AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer());
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
-        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(cborConverter));
+        this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(jsonConverter));
+        this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
 
         this.addSerializer(AAGUID.class, new AAGUIDSerializer());
-        this.addSerializer(AttestedCredentialData.class, new AttestedCredentialDataSerializer(cborConverter));
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(cborConverter));
+        this.addSerializer(AttestedCredentialData.class, new AttestedCredentialDataSerializer(objectConverter));
+        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(objectConverter));
         this.addSerializer(CertPath.class, new CertPathSerializer());
         this.addSerializer(Challenge.class, new ChallengeSerializer());
         this.addSerializer(EC2COSEKey.class, new EC2COSEKeySerializer());
@@ -80,5 +81,14 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(UserVerificationIndexExtensionAuthenticatorOutput.class, UserVerificationIndexExtensionAuthenticatorOutput.ID));
 
     }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    public WebAuthnCBORModule(JsonConverter jsonConverter, CborConverter cborConverter) {
+        this(new ObjectConverter(jsonConverter, cborConverter));
+    }
+
 
 }

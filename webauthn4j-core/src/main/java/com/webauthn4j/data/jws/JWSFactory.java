@@ -17,6 +17,7 @@
 package com.webauthn4j.data.jws;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 
@@ -31,12 +32,20 @@ public class JWSFactory {
 
     private JsonConverter jsonConverter;
 
+    public JWSFactory(ObjectConverter objectConverter) {
+        this.jsonConverter = objectConverter.getJsonConverter();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public JWSFactory(JsonConverter jsonConverter) {
         this.jsonConverter = jsonConverter;
     }
 
     public JWSFactory() {
-        this(new JsonConverter());
+        this(new ObjectConverter());
     }
 
     public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, PrivateKey privateKey) {

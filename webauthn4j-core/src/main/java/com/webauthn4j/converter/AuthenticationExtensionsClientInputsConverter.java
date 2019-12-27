@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
@@ -33,6 +34,15 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Constructors
     // ================================================================================================
 
+    public AuthenticationExtensionsClientInputsConverter(ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+        this.jsonConverter = objectConverter.getJsonConverter();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AuthenticationExtensionsClientInputsConverter(JsonConverter jsonConverter) {
         AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
         this.jsonConverter = jsonConverter;

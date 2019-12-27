@@ -43,6 +43,10 @@ public class CborConverter implements Serializable {
 
     private JsonConverter jsonConverter;
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper, JsonConverter jsonConverter) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
@@ -133,7 +137,9 @@ public class CborConverter implements Serializable {
      * Returns the twined {@link JsonConverter}
      *
      * @return the twined {@link JsonConverter}
+     * @deprecated
      */
+    @Deprecated
     public JsonConverter getJsonConverter() {
         return jsonConverter;
     }
