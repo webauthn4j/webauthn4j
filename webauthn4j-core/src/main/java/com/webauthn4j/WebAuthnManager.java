@@ -179,7 +179,7 @@ public class WebAuthnManager {
     }
 
 
-    public WebAuthnRegistrationData parseRegistrationRequest(WebAuthnRegistrationRequest webAuthnRegistrationRequest) throws DataConversionException {
+    public WebAuthnRegistrationData parse(WebAuthnRegistrationRequest webAuthnRegistrationRequest) throws DataConversionException {
 
         byte[] clientDataBytes = webAuthnRegistrationRequest.getClientDataJSON();
         byte[] attestationObjectBytes = webAuthnRegistrationRequest.getAttestationObject();
@@ -202,7 +202,7 @@ public class WebAuthnManager {
     }
 
     public WebAuthnRegistrationData validate(WebAuthnRegistrationRequest webAuthnRegistrationRequest, WebAuthnRegistrationParameters webAuthnRegistrationParameters) throws DataConversionException, ValidationException {
-        WebAuthnRegistrationData webAuthnRegistrationData = parseRegistrationRequest(webAuthnRegistrationRequest);
+        WebAuthnRegistrationData webAuthnRegistrationData = parse(webAuthnRegistrationRequest);
         webAuthnRegistrationDataValidator.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
         return webAuthnRegistrationData;
     }
@@ -212,7 +212,7 @@ public class WebAuthnManager {
         return webAuthnRegistrationData;
     }
 
-    public WebAuthnAuthenticationData parseAuthenticationRequest(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest) throws DataConversionException{
+    public WebAuthnAuthenticationData parse(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest) throws DataConversionException{
 
         byte[] credentialId = webAuthnAuthenticationRequest.getCredentialId();
         byte[] signature = webAuthnAuthenticationRequest.getSignature();
@@ -239,7 +239,7 @@ public class WebAuthnManager {
     }
 
     public WebAuthnAuthenticationData validate(WebAuthnAuthenticationRequest webAuthnAuthenticationRequest, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) throws DataConversionException, ValidationException {
-        WebAuthnAuthenticationData webAuthnAuthenticationData = parseAuthenticationRequest(webAuthnAuthenticationRequest);
+        WebAuthnAuthenticationData webAuthnAuthenticationData = parse(webAuthnAuthenticationRequest);
         validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
         return webAuthnAuthenticationData;
     }

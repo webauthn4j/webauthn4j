@@ -2,9 +2,15 @@
 
 === 各クラスの責務分担
 
-==== `Registry`
+==== `WebAuthnRegistrationRequest`, `WebAuthnAuthenticationRequest`
 
-ObjectMapperなど、外部からインスタンスを登録したい対象を登録するクラス
+登録時、認証時にWebAuthn APIを通じてブラウザから取得するパラメータを集めたクラス
+
+==== `WebAuthnRegistrationParameters`, `WebAuthnAuthenticationParameters`
+
+登録時、認証時に必要なその他の条件（サーバーの状態や、認証対象の永続化されたAuthenticator、期待される検証条件など）を
+集めたクラス
+
 
 ==== `ServerProperty`
 
@@ -12,8 +18,3 @@ ObjectMapperなど、外部からインスタンスを登録したい対象を�
 
 なお、各Validatorクラスの動作のカスタマイズオプションは、各Validatorクラスにオプション用のフィールドを設けて行う。
 一括設定用のクラスは設けない
-
-=== 何故 `WebAuthnAuthenticationContext` に `Authenticator` を含めないのか
-
-`WebAuthnAuthenticationContext` はimmutableなクラスとして設計されていますが、 `Authenticator` はmutableなクラスとして
-設計されている為、 `WebAuthnAuthenticationContext` のフィールドとはしていません。

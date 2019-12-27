@@ -1,18 +1,15 @@
 == Known Issues
 
 WebAuthn is state of the art technology. Therefore, there are still some limitations products utilizing it have.
-This section tells you issues known at the time of Feb 2019 that might be encountered if you try to use products
+This section tells you issues known at the time of Dec 2019 that might be encountered if you try to use products
 utilizing WebAuthn technology.
 
 
 === Safari's WebAuthn support
 
-Safari has not yet supported WebAuthn, which means that you cannot use iPhone/iPad to experience authentication
-utilizing WebAuthn technology.
-
-Safari's Technology Preview version has supported WebAuthn using CTAP2 Authenticator, but it has not yet integrated
-Face ID and Touch ID. However, it seems to be expected to integrate them sooner or later.
-
+On macOS, WebAuthn is supported from Safari 13.
+on iPhone/iPad, WebAuthn is supported from Safari on iOS13.3.
+Both implementation only support external authenticators. TouchID and FaceID is not yet supported at this moment.
 
 === Android's resident key support
 
@@ -35,8 +32,7 @@ mechanism for your users using platforms not supporting the feature you expected
 
 For example, if you utilize ResidentKey to omit entering user account's ID, it might be better to support two-factor
 authentication requiring password authentication for users using Chrome and Firefox, and two-factor authentication
-without WebAuthn for users using Safari.
-
+without WebAuthn for users using browsers without WebAuthn support.
 
 === WebAuthn4J's ECDAA support
 

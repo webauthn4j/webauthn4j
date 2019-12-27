@@ -11,15 +11,40 @@ Attestation/Assertionの検証に関わるコア機能を提供します。
 ==== Metadata webauthn4j-metadata.jar
 
 FIDO Metadata Serviceを用いたTrustAnchorの解決など、追加的な機能を提供します。
+依拠しているFIDO Metadata Statements仕様がドラフトの為、実験的な提供です。
+含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに破壊的変更が入る場合があります。
 
 ==== Test webauthn4j-test.jar
 
 WebAuthn4Jのテストを行うための内部ライブラリです。含まれているクラスは、Publicであっても、セマンティックバージョニングに従わずに
-設計変更されることがあります。
+破壊的変更が入る場合があります。
 
 ==== Util webauthn4j-util.jar
 
 WebAuthn4Jライブラリで使用されるユーティリティクラスをまとめたライブラリです。
+
+=== カスタムなデータ変換ロジックの実装
+
+WebAuthn4Jでは、JSONやCBORのシリアライズ、デシリアライズ処理にJacksonライブラリを使用しています。
+Client ExtensionやAuthenticator Extensionのデータ変換でカスタムな変換を行いたい場合、WebAuthn4Jが内部で使用している
+Jacksonの `ObjectMapper` にカスタムなシリアライザ、デシリアライザを登録することで実現できます。
+
+==== カスタムなデータ変換ロジックの登録
+
+WebAuthn4Jは、Jacksonの `ObjectMapper` を `ObjectConverter` というクラスでラップして使用しており、
+カスタムなシリアライザ、デシリアライザを登録した `ObjectMapper` を `ObjectConverter` インスタンス作成時にコンストラクタから
+インジェクトし、その `ObjectConverter` を `WebAuthnManager` のインスタンス作成時にパラメータとして指定してください。
+
+=== カスタムな検証ロジックの実装
+
+WebAuthn4Jでは、カスタムな検証ロジックを実装し、追加することが可能です。
+登録時の検証にカスタムロジックを追加する場合は、 `CustomRegistrationValidator` を実装してください。
+認証時の検証にカスタムロジックを追加する場合は、 `CustomAuthenticationValidator` を実装してください。
+
+==== カスタム検証ロジックの登録
+
+`CustomRegistrationValidator` と `CustomAuthenticationValidator` の実装は `WebAuthnManager` のコンストラクタの
+`customRegistrationValidators` パラメータおよび `customAuthenticationValidators` パラメータを通じて登録することが出来ます。
 
 === クラス
 
@@ -32,10 +57,9 @@ WebAuthn4Jライブラリで使用されるユーティリティクラスをま�
 データパッケージ配下のクラスはJacksonによってシリアライズ、デシリアライズ可能なように設計されています。
 一部のクラスはカスタムなシリアライザ、デシリアライザが必要であり、 `converter` パッケージ配下に集約されています。
 カスタムシリアライザ、デシリアライザは `WebAuthnJSONModule` と `WebAuthnCBORModule` というJacksonのModuleにまとめられています。
-WebAuthn4JのValidatorは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、Validatorの外部で
+WebAuthn4Jは内部で使用するJacksonの `ObjectMapper` に自動で `WebAuthnModule` を適用しますが、`WebAuthnManager` の外部で
 WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合は、Jacksonの `ObjectMapper` に `WebAuthnModule` を登録すると
-良いでしょう。もしWebAuthn4JのValidatorでカスタムなシリアライザ、デシリアライザを使用したい場合は、WebAuthn4JのValidator
-のコンストラクタに、カスタムなシリアライザ、デシリアライザを登録したObjectMapperを渡すことで使用可能です。
+良いでしょう。
 
 ==== TrustAnchorsResolver
 
@@ -52,8 +76,8 @@ TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供さ�
 
 ==== 例外クラス
 
-検証に失敗した場合、 `ValidationException` のサブクラスがスローされます。
-
+データの変換に失敗した場合、 `DataConversionException` のサブクラスがスローされます。
+データの検証に失敗した場合、 `ValidationException` のサブクラスがスローされます。
 
 === ログ
 

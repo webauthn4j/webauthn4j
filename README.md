@@ -105,7 +105,7 @@ WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrati
 WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
 WebAuthnRegistrationData webAuthnRegistrationData;
 try{
-    webAuthnRegistrationData = webAuthnManager.parseRegistrationRequest(webAuthnRegistrationRequest);
+    webAuthnRegistrationData = webAuthnManager.parse(webAuthnRegistrationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
@@ -173,7 +173,7 @@ WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
 
 WebAuthnAuthenticationData webAuthnAuthenticationData;
 try{
-    webAuthnAuthenticationData = webAuthnManager.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+    webAuthnAuthenticationData = webAuthnManager.parse(webAuthnAuthenticationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
