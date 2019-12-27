@@ -201,8 +201,7 @@ public class WebAuthnRegistrationContextValidator {
 
         );
 
-        WebAuthnRegistrationData webAuthnRegistrationData = webAuthnManager.parseRegistrationRequest(webAuthnRegistrationRequest);
-        webAuthnRegistrationData.validate(webAuthnRegistrationParameters);
+        WebAuthnRegistrationData webAuthnRegistrationData = webAuthnManager.validate(webAuthnRegistrationRequest,webAuthnRegistrationParameters);
 
         return new WebAuthnRegistrationContextValidationResponse(
                 webAuthnRegistrationData.getCollectedClientData(),

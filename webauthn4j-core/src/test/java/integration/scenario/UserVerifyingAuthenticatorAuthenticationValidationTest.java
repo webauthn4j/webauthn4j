@@ -16,11 +16,11 @@
 
 package integration.scenario;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -37,8 +37,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidationResponse;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import com.webauthn4j.validator.exception.*;
 import org.junit.jupiter.api.Test;
 
@@ -50,15 +48,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(EmulatorUtil.PACKED_AUTHENTICATOR);
-    private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
+    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void validate_test() {
@@ -85,26 +82,30 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
-                        authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
-                        clientExtensionJSON,
-                        serverProperty,
-                        true,
-                        Collections.emptyList()
-                );
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
+                        credential.getRawId(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getClientDataJSON(),
+                        clientExtensionJSON,
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        true
+                );
+
+        WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
 
         assertAll(
-                () -> assertThat(response.getCollectedClientData()).isNotNull(),
-                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
-                () -> assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull()
+                () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(webAuthnAuthenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(webAuthnAuthenticationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -135,28 +136,31 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
-
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
-                        authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
-                        clientExtensionJSON,
-                        serverProperty,
-                        true,
-                        Collections.emptyList()
-                );
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContextValidationResponse response = target.validate(authenticationContext, authenticator);
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
+                        credential.getRawId(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getClientDataJSON(),
+                        clientExtensionJSON,
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        true
+                );
+
+        WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
 
         assertAll(
-                () -> assertThat(response.getCollectedClientData()).isNotNull(),
-                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
-                () -> assertThat(response.getAuthenticationExtensionsClientOutputs()).isNotNull()
+                () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(webAuthnAuthenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(webAuthnAuthenticationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -184,19 +188,27 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(InconsistentClientDataTypeException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
     }
 
@@ -223,19 +235,27 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(BadChallengeException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
     }
 
@@ -262,19 +282,26 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(BadOriginException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
     }
 
@@ -303,19 +330,26 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(TokenBindingException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
     }
 
@@ -343,20 +377,29 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, anotherSiteRpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(BadRpIdException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
+
     }
 
     @Test
@@ -381,20 +424,28 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
+                new WebAuthnAuthenticationRequest(
                         credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
+                        authenticationRequest.getClientDataJSON(),
+                        authenticationRequest.getSignature()
+                );
+        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
+                new WebAuthnAuthenticationParameters(
                         serverProperty,
+                        authenticator,
                         true
                 );
-        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
         assertThrows(UserNotVerifiedException.class,
-                () -> target.validate(authenticationContext, authenticator)
+                () -> {
+                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parseAuthenticationRequest(webAuthnAuthenticationRequest);
+                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                }
         );
+
     }
 
 
@@ -424,7 +475,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

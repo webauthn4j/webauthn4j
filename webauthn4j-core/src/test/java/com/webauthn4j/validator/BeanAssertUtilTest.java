@@ -33,14 +33,12 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
 class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationData_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -59,25 +57,8 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_WebAuthnRegistrationData_with_webAuthnRegistrationDataValidator_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                null,
-                TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
-                new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
-                new byte[32],
-                new AuthenticationExtensionsClientOutputs<>(),
-                new HashSet<>()
-        );
-        assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
-        );
-    }
-
-    @Test
     void validate_WebAuthnRegistrationData_with_attestationObject_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 null,
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -93,7 +74,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnRegistrationData_with_attestationObjectBytes_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 null,
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -109,7 +89,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnRegistrationData_with_collectedClientData_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 null,
@@ -125,7 +104,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnRegistrationData_with_clientDataBytes_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -141,7 +119,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnRegistrationData_with_clientExtensions_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -157,7 +134,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnRegistrationData_with_transports_null_test(){
         WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
-                mock(WebAuthnRegistrationDataValidator.class),
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -200,7 +176,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -222,27 +197,8 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_WebAuthnAuthenticationData_with_webAuthnAuthenticationDataValidator_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                null,
-                new byte[32],
-                new byte[32],
-                TestDataUtil.createAuthenticatorData(),
-                new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
-                new byte[32],
-                new AuthenticationExtensionsClientOutputs<>(),
-                new byte[32]
-        );
-        assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
-        );
-    }
-
-    @Test
     void validate_WebAuthnAuthenticationData_with_credentialId_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 null,
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -260,7 +216,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_userHandle_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 null,
                 TestDataUtil.createAuthenticatorData(),
@@ -278,7 +233,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_authenticatorData_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 null,
@@ -295,7 +249,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_authenticatorDataBytes_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -313,7 +266,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_collectedClientData_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -332,7 +284,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_clientDataBytes_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -350,7 +301,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_clientExtensions_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -369,7 +319,6 @@ class BeanAssertUtilTest {
     @Test
     void validate_WebAuthnAuthenticationData_with_signature_null_test(){
         WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
-                mock(WebAuthnAuthenticationDataValidator.class),
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),

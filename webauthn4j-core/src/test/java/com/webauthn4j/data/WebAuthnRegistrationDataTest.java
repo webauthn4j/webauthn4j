@@ -20,7 +20,6 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.validator.WebAuthnRegistrationDataValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -34,7 +33,6 @@ class WebAuthnRegistrationDataTest {
     @Test
     void equals_hashCode_test(){
 
-        WebAuthnRegistrationDataValidator webAuthnRegistrationDataValidator = mock(WebAuthnRegistrationDataValidator.class);
         AttestationObject attestationObject = mock(AttestationObject.class);
         byte[] attestationObjectBytes = new byte[32];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
@@ -44,7 +42,6 @@ class WebAuthnRegistrationDataTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
 
         WebAuthnRegistrationData instanceA = new WebAuthnRegistrationData(
-                webAuthnRegistrationDataValidator,
                 attestationObject,
                 attestationObjectBytes,
                 collectedClientData,
@@ -53,7 +50,6 @@ class WebAuthnRegistrationDataTest {
                 transports
         );
         WebAuthnRegistrationData instanceB = new WebAuthnRegistrationData(
-                webAuthnRegistrationDataValidator,
                 attestationObject,
                 attestationObjectBytes,
                 collectedClientData,
