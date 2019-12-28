@@ -63,10 +63,18 @@ public class JsonConverter implements Serializable {
         }
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public JsonConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
         this(jsonMapper, cborMapper, null);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public JsonConverter() {
         this(new ObjectMapper(new JsonFactory()), new ObjectMapper(new CBORFactory()));
     }

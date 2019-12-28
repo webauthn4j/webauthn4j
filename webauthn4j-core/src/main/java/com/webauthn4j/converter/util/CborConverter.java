@@ -64,10 +64,18 @@ public class CborConverter implements Serializable {
         }
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
         this(jsonMapper, cborMapper, null);
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public CborConverter() {
         this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
     }
