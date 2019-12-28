@@ -1,30 +1,27 @@
 == Configuration
 
-There are two main classes when using WebAuthn4J. One is `WebAuthnRegistrationContextValidator` class, which is
-used to verify the credentials at the time of registration, and the other is `WebAuthnAuthenticationContextValidator` class,
-which is used to verify the credentials during authentication.
-
-`WebAuthnRegistrationContextValidator` delegates attestation statements validation to an implementation of
+WebAuthn4J has a one main entry point class, `WebAuthnManager`.
+It delegates attestation statements validation to an implementation of
 `AttestationStatementValidator` and attestation statements trustworthiness validation to an implementation of
 `CertPathTrustworthinessValidator`.
 
 Since most sites don't require strict attestation statement validation
 (https://www.w3.org/TR/webauthn-1/#sctn-no-attestation-security-attestation[WebAuthn Spec related topic] ),
-WebAuthn4J provides `WebAuthnRegistrationContextValidator.createNonStrictRegistrationContextValidator` factory method
-that returns an instance configured `CertPathTrustworthinessValidator` and  `WebAuthnRegistrationContextValidator`
-not to validate attestation statements.
+WebAuthn4J provides `WebAuthnManager.createNonStrictWebAuthnManager` factory method
+that returns an `WebAuthnManager` instance configured `AttestationStatementValidator` and
+`CertPathTrustworthinessValidator` not to validate attestation statements.
 
-If you are engaging an enterprise use case and strict verification of an authenticator is a requirement,
-Use the constructor of the `WebAuthnRegistrationContextValidator` class and inject validators.
+If you are engaging an enterprise use case and strict authenticator verification is a requirement,
+Use the constructor of the `WebAuthnManager` class and inject validators.
 
 === Attestation statement validation
 
 Attestation statement validation is provided by the implementation of `AttestationStatementValidator` interface.
 For each attestation statement format, corresponding validator classes are provided.
-Please specify its list at the first argument of the constructor of `WebAuthnRegistrationContextValidator` class.
-For example, if you would like to limit the supported format to `packed` only, make the `List` only with
-`PackedAttestationStatementValidator`, and if you would like to support `packed` and `tpm` format, make the `List` with
-`PackedAttestationStatementValidator` and `TPMAttestationStatementValidator`.
+Please specify its list at the first argument of the constructor of `WebAuthnManager` class.
+For example, if you would like to limit the supported format to `packed` only, add only
+`PackedAttestationStatementValidator` to the `List`, and if you would like to support `packed` and `tpm` format,
+make the `List` with `PackedAttestationStatementValidator` and `TPMAttestationStatementValidator`.
 
 ==== Attestation statement trustworthiness validation
 
@@ -35,15 +32,28 @@ Certificate path validation is delegated via `CertPathTrustworthinessValidator` 
 For example, `TrustAnchorCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate
 chains to the root certificate provided as `TrustAnchor` via `TrustAnchorResolver` interface.
 
-===== Attestation statement trustworthiness validation using FIDO Metadata Service
+==== Trust anchor resolution
 
-FIDO Alliance offers FIDO Metadata Service, which delivers Authenticator metadata.
-With this service, Relying Party can judge whether a security issue is reported for the authenticator trying to register.
-When verifying the reliability of the attestation statement with this service, `MetadataItemsCertPathTrustworthinessValidator` in
-`webauthn4j-metadata` module can be used for it.
-As `MetadataItemsCertPathTrustworthinessValidator` resolves the `MetadataItem` list corresponding to
-the AAGUID of the authenticator through the `MetadataItemsResolver` interface, we can verify the reliability with
-the service by a combination of `MetadataItemsResolverImpl` and `FidoMdsMetadataItemsProvider`.
+`TrustAnchorResolver` interface is provided for `TrustAnchor` resolution.
+WebAuthn4J provides a `TrustAnchorResolver` implementation `TrustAnchorResolverImpl`.
+`TrustAnchorResolverImpl` delegates `TrustAnchor` fetching to `TrustAnchorsProvider` interface.
+There are some `TrustAnchorsProvider` implementations - `KeyStoreTrustAnchorsProvider` is to fetch `TrustAnchor`s from
+Java Key Store file, and `MetadataStatementsTrustAnchorsProvider` is to fetch them from
+https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-metadata-statement-v2.0-rd-20180702.html[metadata statement].
+
+===== Trust anchor resolution using FIDO Metadata Service
+
+WARNING: `webauthn4j-meta` module, which provides FIDO Metadata Statement handling is under experimental status.
+
+FIDO Alliance offers FIDO Metadata Service, which provides metadata of authenticators.
+`FidoMdsMetadataItemsProvider` is provided for utilizing the authenticator metadata from the service.
+It can be used for `TrustAnchor` resolution by combining with `MetadataItemsMetadataStatementsProvider`.
+
+===== Authenticator vulnerability announcement check using FIDO Metadata Service
+
+Authenticator vulnerability announcement check is also possible with FIDO Metadata Service by utilizing
+`FidoMdsMetadataValidator`. As it is an implementation of `CustomRegistrationValidator`, please refer
+<<_./deep-dive.adoc#Custom validator registration,Custom validator registration>>.
 
 === Representation of an authenticator
 

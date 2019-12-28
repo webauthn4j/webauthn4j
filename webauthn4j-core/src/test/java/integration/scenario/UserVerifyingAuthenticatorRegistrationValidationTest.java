@@ -120,7 +120,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         );
 
 
-        WebAuthnRegistrationData webAuthnRegistrationData = target.parseRegistrationRequest(webAuthnRegistrationRequest);
+        WebAuthnRegistrationData webAuthnRegistrationData = target.parse(webAuthnRegistrationRequest);
         target.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
 
         assertAll(
@@ -241,7 +241,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         assertThrows(UnexpectedExtensionException.class,
                 () -> {
-                    WebAuthnRegistrationData webAuthnRegistrationData = target.parseRegistrationRequest(webAuthnRegistrationRequest);
+                    WebAuthnRegistrationData webAuthnRegistrationData = target.parse(webAuthnRegistrationRequest);
                     target.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
                 }
         );

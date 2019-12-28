@@ -11,6 +11,8 @@ Provides core features for attestation and assertion verification.
 ==== Metadata webauthn4j-metadata.jar
 
 Provides additional features regarding FIDO Metadata Service.
+As FIDO Metadata Statement specification is still draft, it is in experimental status.
+The included classes don't follow semantic versioning and the design may be changed even though it is public.
 
 ==== Test webauthn4j-test.jar
 
@@ -20,6 +22,28 @@ may be changed even though it is public.
 ==== Util webauthn4j-util.jar
 
 Contains utility classes used in WebAuthn4J library.
+
+=== Custom converter implementation
+
+WebAuthn4J uses Jackson library for JSON and CBOR serialization and deserialization.
+If you would like to custom serialization or deserialization, register custom serializer or deserializer to the
+underlying Jackson `ObjectMapper`.
+
+==== Custom converter registration
+
+Since WebAuthn4J wraps `ObjectMapper` with `ObjectConverter`, inject your customized `ObjectMapper` through `ObjectConverter`
+constructor and specify the `ObjectConverter` instance to the `WebAuthnManager` instance creation parameter.
+
+=== Custom validator implementation
+
+WebAuthn4J can add custom validator.
+For registration validation, implement `CustomRegistrationValidator`.
+For authentication validation, implement `CustomAuthenticationValidator`.
+
+==== Custom validator registration
+
+`CustomRegistrationValidator` and `CustomAuthenticationValidator` implementation can be registered to `WebAuthnManager`
+via its constructor's `customRegistrationValidators` and `customAuthenticationValidators` parameters.
 
 === Classes
 
@@ -35,12 +59,8 @@ Some Classes under `converter` package needs custom serializer and deserializer.
 `WebAuthnJSONModule` and `WebAuthnCBORModule` consolidate these custom serializer and deserializer.
 WebAuthn4J’s validators register these modules onto Jackson's `ObjectMapper` automatically.
 
-If you want to use WebAuthn4J’s serializer and deserializer outside these WebAuthn4J's validators,
+If you want to use WebAuthn4J’s serializer and deserializer outside of WebAuthnManager,
 you can register these modules onto Jackson's `ObjectMapper`.
-
-If you want to use your custom serializer and deserializer for WebAuthn4J’s validators for parsing custom extensions,
-you can register your custom serializer and deserializer onto `ObjectMapper` and pass it onto WebAuthn4J' validators
-via those constructors.
 
 ==== TrustAnchorsResolver
 

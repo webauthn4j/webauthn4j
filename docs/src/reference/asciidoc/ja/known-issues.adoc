@@ -1,11 +1,13 @@
 == 既知の問題
 
 WebAuthnは各ブラウザベンダが実装を進めている最中の新技術であり、仕様で定められていても、残念ながら実際の活用には制約がかかる場面もあります。
-本節では、2019/10 現在のWebAuthnを活用する上での既知の問題を整理します。
+本節では、2019/12 現在のWebAuthnを活用する上での既知の問題を整理します。
 
 === Safariのサポート
 
-Safari 13からmacOSではWebAuthnのサポートが開始されましたが、iPhone/iPadでは現在、WebAuthnは利用できません。
+macOSではSafari 13からWebAuthnのサポートが開始されました。
+iPhone/iPadではiOS 13.3のSafariから、WebAuthnのサポートが開始されました。どちらも外部セキュリティキーのサポートのみであり、
+Touch ID/Face ID のサポートは始まっていません。
 
 === AndroidのResidentKey対応
 
@@ -18,14 +20,14 @@ Roaming Authenticatorを利用して別デバイスで認証を行う場合に�
 === Firefox
 
 FirefoxはWindows 10 1903からOS標準のWebAuthn APIを利用することでCTAP2のAuthenticatorに対応しています。
-但し、macOSや、Linuxでは、FIDO U2FのAuthenticatorのみに対応しています。
+macOSや、Linuxでは、FIDO U2FのAuthenticatorのみに対応しています。
 
 === ブラウザ間でのサポート状況の差異
 
 各ブラウザ、WebAuthnへの対応が進みつつありますが、上記の通りサポート状況には差異があり、あるプラットフォームで
 サポートされている機能が別のプラットフォームでは利用できないことは珍しくなりません。
 ResidentKeyを活用してID入力の省略を実現する場合でも、Chrome、Firefoxユーザーを考慮してパスワードとの二要素認証のサポートを行う、
-Safariユーザーを考慮してWebAuthn以外での二要素認証のサポートを行う、などフォールバック手段の確保に努めましょう。
+WebAuthnが利用できないユーザーを考慮してWebAuthn以外での二要素認証のサポートを行う、などフォールバック手段の確保に努めましょう。
 
 === ECDAAのサポート
 
