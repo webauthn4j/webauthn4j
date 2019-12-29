@@ -62,8 +62,8 @@ class WebAuthnManagerTest {
     @Test
     void getter_test(){
         WebAuthnManager webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
-        assertThat(webAuthnManager.getWebAuthnRegistrationDataValidator()).isNotNull();
-        assertThat(webAuthnManager.getWebAuthnAuthenticationDataValidator()).isNotNull();
+        assertThat(webAuthnManager.getRegistrationDataValidator()).isNotNull();
+        assertThat(webAuthnManager.getAuthenticationDataValidator()).isNotNull();
     }
 
 }

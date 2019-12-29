@@ -48,66 +48,66 @@ class BeanAssertUtil {
     // ========================================================================================================
 
 
-    public static void validate(WebAuthnRegistrationData webAuthnRegistrationData) {
-        if (webAuthnRegistrationData == null) {
-            throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
+    public static void validate(RegistrationData registrationData) {
+        if (registrationData == null) {
+            throw new ConstraintViolationException("registrationData must not be null");
         }
 
-        validate(webAuthnRegistrationData.getAttestationObject());
+        validate(registrationData.getAttestationObject());
 
-        if (webAuthnRegistrationData.getAttestationObjectBytes() == null) {
+        if (registrationData.getAttestationObjectBytes() == null) {
             throw new ConstraintViolationException("attestationObjectBytes must not be null");
         }
-        validateAuthenticationExtensionsClientOutputs(webAuthnRegistrationData.getClientExtensions());
+        validateAuthenticationExtensionsClientOutputs(registrationData.getClientExtensions());
 
-        validate(webAuthnRegistrationData.getCollectedClientData());
+        validate(registrationData.getCollectedClientData());
 
-        if (webAuthnRegistrationData.getCollectedClientDataBytes() == null) {
+        if (registrationData.getCollectedClientDataBytes() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
     }
 
 
-    public static void validate(WebAuthnRegistrationParameters webAuthnRegistrationParameters) {
-        if (webAuthnRegistrationParameters == null) {
-            throw new ConstraintViolationException("webAuthnRegistrationParameters must not be null");
+    public static void validate(RegistrationParameters registrationParameters) {
+        if (registrationParameters == null) {
+            throw new ConstraintViolationException("registrationParameters must not be null");
         }
-        validate(webAuthnRegistrationParameters.getServerProperty());
+        validate(registrationParameters.getServerProperty());
     }
 
-    public static void validate(WebAuthnAuthenticationData webAuthnAuthenticationData) {
-        if (webAuthnAuthenticationData == null) {
+    public static void validate(AuthenticationData authenticationData) {
+        if (authenticationData == null) {
             throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
         }
 
-        if (webAuthnAuthenticationData.getCredentialId() == null) {
+        if (authenticationData.getCredentialId() == null) {
             throw new ConstraintViolationException("credentialId must not be null");
         }
-        if (webAuthnAuthenticationData.getSignature() == null) {
+        if (authenticationData.getSignature() == null) {
             throw new ConstraintViolationException("signature must not be null");
         }
-        if (webAuthnAuthenticationData.getCollectedClientData() == null) {
+        if (authenticationData.getCollectedClientData() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
-        validate(webAuthnAuthenticationData.getCollectedClientData());
-        if (webAuthnAuthenticationData.getCollectedClientDataBytes() == null) {
+        validate(authenticationData.getCollectedClientData());
+        if (authenticationData.getCollectedClientDataBytes() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
-        validate(webAuthnAuthenticationData.getAuthenticatorData());
-        if (webAuthnAuthenticationData.getAuthenticatorDataBytes() == null) {
+        validate(authenticationData.getAuthenticatorData());
+        if (authenticationData.getAuthenticatorDataBytes() == null) {
             throw new ConstraintViolationException("authenticatorDataBytes must not be null");
         }
-        validateAuthenticationExtensionsClientOutputs(webAuthnAuthenticationData.getClientExtensions());
+        validateAuthenticationExtensionsClientOutputs(authenticationData.getClientExtensions());
     }
 
-    public static void validate(WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) {
-        if (webAuthnAuthenticationParameters == null) {
-            throw new ConstraintViolationException("webAuthnAuthenticationParameters must not be null");
+    public static void validate(AuthenticationParameters authenticationParameters) {
+        if (authenticationParameters == null) {
+            throw new ConstraintViolationException("authenticationParameters must not be null");
         }
-        if (webAuthnAuthenticationParameters.getAuthenticator() == null) {
+        if (authenticationParameters.getAuthenticator() == null) {
             throw new ConstraintViolationException("authenticator must not be null");
         }
-        validate(webAuthnAuthenticationParameters.getServerProperty());
+        validate(authenticationParameters.getServerProperty());
     }
 
 

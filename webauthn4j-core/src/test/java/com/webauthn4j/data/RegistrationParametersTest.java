@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WebAuthnRegistrationParametersTest {
+class RegistrationParametersTest {
 
     @Test
     void equals_hashCode_test(){
@@ -38,13 +38,13 @@ class WebAuthnRegistrationParametersTest {
         // expectations
         boolean userVerificationRequired = true;
 
-        WebAuthnRegistrationParameters instanceA =
-                new WebAuthnRegistrationParameters(
+        RegistrationParameters instanceA =
+                new RegistrationParameters(
                         serverProperty,
                         userVerificationRequired
                 );
-        WebAuthnRegistrationParameters instanceB =
-                new WebAuthnRegistrationParameters(
+        RegistrationParameters instanceB =
+                new RegistrationParameters(
                         serverProperty,
                         userVerificationRequired
                 );

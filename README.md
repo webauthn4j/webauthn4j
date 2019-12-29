@@ -101,18 +101,18 @@ boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 List<String> expectedExtensionIds = Collections.emptyList();
 
-WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-WebAuthnRegistrationData webAuthnRegistrationData;
+RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+RegistrationData registrationData;
 try{
-    webAuthnRegistrationData = webAuthnManager.parse(webAuthnRegistrationRequest);
+    registrationData = webAuthnManager.parse(registrationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+    webAuthnManager.validate(registrationData, registrationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -122,9 +122,9 @@ catch (ValidationException e){
 // please persist Authenticator object, which will be used in the authentication process.
 Authenticator authenticator =
         new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                webAuthnRegistrationData.getAttestationObject().getAttestationStatement(),
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount()
+                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                registrationData.getAttestationObject().getAttestationStatement(),
+                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
 ```
@@ -153,8 +153,8 @@ List<String> expectedExtensionIds = Collections.emptyList();
 
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
-WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-        new WebAuthnAuthenticationRequest(
+AuthenticationRequest authenticationRequest =
+        new AuthenticationRequest(
                 credentialId,
                 userHandle,
                 authenticatorData,
@@ -162,8 +162,8 @@ WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
                 clientExtensionJSON,
                 signature
         );
-WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-        new WebAuthnAuthenticationParameters(
+AuthenticationParameters authenticationParameters =
+        new AuthenticationParameters(
                 serverProperty,
                 authenticator,
                 userVerificationRequired,
@@ -171,16 +171,16 @@ WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
                 expectedExtensionIds
         );
 
-WebAuthnAuthenticationData webAuthnAuthenticationData;
+AuthenticationData authenticationData;
 try{
-    webAuthnAuthenticationData = webAuthnManager.parse(webAuthnAuthenticationRequest);
+    authenticationData = webAuthnManager.parse(authenticationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+    webAuthnManager.validate(authenticationData, authenticationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -188,8 +188,8 @@ catch (ValidationException e){
 }
 // please update the counter of the authenticator record
 updateCounter(
-        webAuthnAuthenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-        webAuthnAuthenticationData.getAuthenticatorData().getSignCount()
+        authenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
 );
 
 ```

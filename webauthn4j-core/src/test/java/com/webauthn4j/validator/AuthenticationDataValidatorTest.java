@@ -26,9 +26,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class WebAuthnAuthenticationDataValidatorTest {
+class AuthenticationDataValidatorTest {
 
-    private WebAuthnAuthenticationDataValidator target = new WebAuthnAuthenticationDataValidator();
+    private AuthenticationDataValidator target = new AuthenticationDataValidator();
 
     @Test
     void validateAuthenticatorData_with_non_null_AttestedCredentialData() {

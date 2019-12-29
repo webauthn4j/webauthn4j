@@ -28,7 +28,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WebAuthnAuthenticationParametersTest {
+class AuthenticationParametersTest {
 
     @Test
     void constructor_test(){
@@ -44,18 +44,18 @@ class WebAuthnAuthenticationParametersTest {
         // expectations
         boolean userVerificationRequired = true;
 
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired
                 );
 
-        assertThat(webAuthnAuthenticationParameters.getServerProperty()).isEqualTo(serverProperty);
-        assertThat(webAuthnAuthenticationParameters.getAuthenticator()).isEqualTo(authenticator);
-        assertThat(webAuthnAuthenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
-        assertThat(webAuthnAuthenticationParameters.isUserPresenceRequired()).isTrue();
-        assertThat(webAuthnAuthenticationParameters.getExpectedExtensionIds()).isNull();
+        assertThat(authenticationParameters.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(authenticationParameters.getAuthenticator()).isEqualTo(authenticator);
+        assertThat(authenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
+        assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
+        assertThat(authenticationParameters.getExpectedExtensionIds()).isNull();
     }
 
     @Test
@@ -74,16 +74,16 @@ class WebAuthnAuthenticationParametersTest {
         boolean userPresenceRequired = true;
         List<String> expectedExtensionIds = Collections.emptyList();
 
-        WebAuthnAuthenticationParameters instanceA =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters instanceA =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
                         userPresenceRequired,
                         expectedExtensionIds
                 );
-        WebAuthnAuthenticationParameters instanceB =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters instanceB =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,

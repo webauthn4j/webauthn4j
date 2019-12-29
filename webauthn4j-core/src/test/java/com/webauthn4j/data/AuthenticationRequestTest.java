@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WebAuthnAuthenticationRequestTest {
+class AuthenticationRequestTest {
 
     @Test
     void equals_hashCode_test(){
@@ -32,8 +32,8 @@ class WebAuthnAuthenticationRequestTest {
         String clientExtensionJSON = null /* set clientExtensionJSON */;
         byte[] signature = null /* set signature */;
 
-        WebAuthnAuthenticationRequest instanceA =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest instanceA =
+                new AuthenticationRequest(
                         credentialId,
                         userHandle,
                         authenticatorData,
@@ -41,8 +41,8 @@ class WebAuthnAuthenticationRequestTest {
                         clientExtensionJSON,
                         signature
                 );
-        WebAuthnAuthenticationRequest instanceB =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest instanceB =
+                new AuthenticationRequest(
                         credentialId,
                         userHandle,
                         authenticatorData,

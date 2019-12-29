@@ -2,11 +2,11 @@
 
 === 各クラスの責務分担
 
-==== `WebAuthnRegistrationRequest`, `WebAuthnAuthenticationRequest`
+==== `RegistrationRequest`, `AuthenticationRequest`
 
 登録時、認証時にWebAuthn APIを通じてブラウザから取得するパラメータを集めたクラス
 
-==== `WebAuthnRegistrationParameters`, `WebAuthnAuthenticationParameters`
+==== `RegistrationParameters`, `AuthenticationParameters`
 
 登録時、認証時に必要なその他の条件（サーバーの状態や、認証対象の永続化されたAuthenticator、期待される検証条件など）を
 集めたクラス

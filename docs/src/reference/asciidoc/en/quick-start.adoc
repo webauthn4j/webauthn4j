@@ -8,15 +8,15 @@ the data which contains signature and is sent at authentication is called "asser
 === Attestation verification
 
 To validate an attestation on authenticator registration, call `WebAuthnManager#validate` with a
-`WebAuthnRegistrationRequest` instance as an argument.
+`RegistrationRequest` instance as an argument.
 If you would like to access the parsed data when an validation error occurred, please use `WebAuthnManager#parse` to
-parse the registration request and pass the returned `WebAuthnRegistrationData` instance to `WebAuthnManager#validate`
+parse the registration request and pass the returned `RegistrationData` instance to `WebAuthnManager#validate`
 method.
 
-The members of `WebAuthnRegistrationRequest` are the values obtained by the WebAuthn JS API in the front end side.
+The members of `RegistrationRequest` are the values obtained by the WebAuthn JS API in the front end side.
 Transmit from the front end side to the server side in some way.
 
-`WebAuthnRegistrationParameters` is an another argument for `WebAuthnManager#parse` method, and contains
+`RegistrationParameters` is an another argument for `WebAuthnManager#parse` method, and contains
 server property and validation conditions.
 
 `serverProperty` has following members.
@@ -58,18 +58,18 @@ boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 List<String> expectedExtensionIds = Collections.emptyList();
 
-WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-WebAuthnRegistrationData webAuthnRegistrationData;
+RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+RegistrationData registrationData;
 try{
-    webAuthnRegistrationData = webAuthnManager.parse(webAuthnRegistrationRequest);
+    registrationData = webAuthnManager.parse(registrationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+    webAuthnManager.validate(registrationData, registrationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -79,24 +79,24 @@ catch (ValidationException e){
 // please persist Authenticator object, which will be used in the authentication process.
 Authenticator authenticator =
         new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                webAuthnRegistrationData.getAttestationObject().getAttestationStatement(),
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount()
+                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                registrationData.getAttestationObject().getAttestationStatement(),
+                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
 ```
 
 === Assertion verification
 
-To parse and validate an assertion on authentication, call `WebAuthnManager#parse` with a `WebAuthnRegistrationRequest`
+To parse and validate an assertion on authentication, call `WebAuthnManager#parse` with a `RegistrationRequest`
 instance as an argument. If you would like to access the parsed data when an validation error occurred, please use
-`WebAuthnManager#parse` to parse the authentication request and pass the returned `WebAuthnAuthenticationData` instance
+`WebAuthnManager#parse` to parse the authentication request and pass the returned `AuthenticationData` instance
 to `WebAuthnManager#validate` method.
 
-The members of `WebAuthnAuthenticationRequest` are the values obtained by the WebAuthn JS API in the front end side.
+The members of `AuthenticationRequest` are the values obtained by the WebAuthn JS API in the front end side.
 Transmit from the front end side to the server side in some way.
 
-WebAuthnAuthenticationParameters is an another argument for WebAuthnManager#parse method,
+AuthenticationParameters is an another argument for WebAuthnManager#parse method,
 and contains server property, persisted authenticator and validation conditions.
 
 ```java
@@ -122,8 +122,8 @@ List<String> expectedExtensionIds = Collections.emptyList();
 
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
-WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-        new WebAuthnAuthenticationRequest(
+AuthenticationRequest authenticationRequest =
+        new AuthenticationRequest(
                 credentialId,
                 userHandle,
                 authenticatorData,
@@ -131,8 +131,8 @@ WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
                 clientExtensionJSON,
                 signature
         );
-WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-        new WebAuthnAuthenticationParameters(
+AuthenticationParameters authenticationParameters =
+        new AuthenticationParameters(
                 serverProperty,
                 authenticator,
                 userVerificationRequired,
@@ -140,16 +140,16 @@ WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
                 expectedExtensionIds
         );
 
-WebAuthnAuthenticationData webAuthnAuthenticationData;
+AuthenticationData authenticationData;
 try{
-    webAuthnAuthenticationData = webAuthnManager.parse(webAuthnAuthenticationRequest);
+    authenticationData = webAuthnManager.parse(authenticationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+    webAuthnManager.validate(authenticationData, authenticationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -157,8 +157,8 @@ catch (ValidationException e){
 }
 // please update the counter of the authenticator record
 updateCounter(
-        webAuthnAuthenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-        webAuthnAuthenticationData.getAuthenticatorData().getSignCount()
+        authenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
 );
 
 ```

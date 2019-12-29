@@ -16,46 +16,51 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-class WebAuthnRegistrationDataTest {
+
+class AuthenticationDataTest {
 
     @Test
     void equals_hashCode_test(){
 
-        AttestationObject attestationObject = mock(AttestationObject.class);
-        byte[] attestationObjectBytes = new byte[32];
+        byte[] credentialId = new byte[32];
+        byte[] userHandle = new byte[32];
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
+        byte[] authenticatorDataBytes = new byte[64];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
         String clientExtensionJSON = "";
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
+        byte[] signature = new byte[32];
 
-        WebAuthnRegistrationData instanceA = new WebAuthnRegistrationData(
-                attestationObject,
-                attestationObjectBytes,
+        AuthenticationData instanceA = new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
                 collectedClientData,
                 collectedClientDataBytes,
                 authenticationExtensionsClientOutputs,
-                transports
+                signature
         );
-        WebAuthnRegistrationData instanceB = new WebAuthnRegistrationData(
-                attestationObject,
-                attestationObjectBytes,
+        AuthenticationData instanceB = new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
                 collectedClientData,
                 collectedClientDataBytes,
                 authenticationExtensionsClientOutputs,
-                transports
+                signature
         );
 
         assertThat(instanceA).isEqualTo(instanceB);

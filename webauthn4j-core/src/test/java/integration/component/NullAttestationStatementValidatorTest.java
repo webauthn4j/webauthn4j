@@ -30,7 +30,6 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -72,14 +71,14 @@ class NullAttestationStatementValidatorTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest =
-                new WebAuthnRegistrationRequest(
+        RegistrationRequest webAuthnRegistrationRequest =
+                new RegistrationRequest(
                         registrationRequest.getAttestationObject(),
                         registrationRequest.getClientDataJSON(),
                         transports);
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters =
-                new WebAuthnRegistrationParameters(serverProperty, false);
-        target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);
+        RegistrationParameters registrationParameters =
+                new RegistrationParameters(serverProperty, false);
+        target.validate(webAuthnRegistrationRequest, registrationParameters);
     }
 
     @Test
@@ -114,14 +113,14 @@ class NullAttestationStatementValidatorTest {
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest =
-                new WebAuthnRegistrationRequest(
+        RegistrationRequest webAuthnRegistrationRequest =
+                new RegistrationRequest(
                         registrationRequest.getAttestationObject(),
                         registrationRequest.getClientDataJSON(),
                         transports);
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters =
-                new WebAuthnRegistrationParameters(serverProperty, false);
-        target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);
+        RegistrationParameters registrationParameters =
+                new RegistrationParameters(serverProperty, false);
+        target.validate(webAuthnRegistrationRequest, registrationParameters);
 
     }
 }

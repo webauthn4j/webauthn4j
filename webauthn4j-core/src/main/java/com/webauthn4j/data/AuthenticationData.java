@@ -26,7 +26,7 @@ import com.webauthn4j.util.ArrayUtil;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class WebAuthnAuthenticationData {
+public class AuthenticationData {
 
     private final byte[] credentialId;
     private final byte[] userHandle;
@@ -37,7 +37,7 @@ public class WebAuthnAuthenticationData {
     private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
     private final byte[] signature;
 
-    public WebAuthnAuthenticationData(
+    public AuthenticationData(
             byte[] credentialId,
             byte[] userHandle,
             AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
@@ -92,7 +92,7 @@ public class WebAuthnAuthenticationData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnAuthenticationData that = (WebAuthnAuthenticationData) o;
+        AuthenticationData that = (AuthenticationData) o;
         return Arrays.equals(credentialId, that.credentialId) &&
                 Arrays.equals(userHandle, that.userHandle) &&
                 Objects.equals(authenticatorData, that.authenticatorData) &&

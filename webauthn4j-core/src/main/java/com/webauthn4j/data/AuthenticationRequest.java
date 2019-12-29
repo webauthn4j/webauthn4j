@@ -21,7 +21,7 @@ import com.webauthn4j.util.ArrayUtil;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class WebAuthnAuthenticationRequest {
+public class AuthenticationRequest {
 
     private final byte[] credentialId;
     private final byte[] userHandle;
@@ -30,7 +30,7 @@ public class WebAuthnAuthenticationRequest {
     private final String clientExtensionsJSON;
     private final byte[] signature;
 
-    public WebAuthnAuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
+    public AuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
         this.credentialId = ArrayUtil.clone(credentialId);
         this.userHandle = ArrayUtil.clone(userHandle);
         this.authenticatorData = ArrayUtil.clone(authenticatorData);
@@ -39,15 +39,15 @@ public class WebAuthnAuthenticationRequest {
         this.signature = ArrayUtil.clone(signature);
     }
 
-    public WebAuthnAuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
+    public AuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
         this(credentialId, null, authenticatorData, clientDataJSON, clientExtensionsJSON, signature);
     }
 
-    public WebAuthnAuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
+    public AuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
         this(credentialId, userHandle, authenticatorData, clientDataJSON, null, signature);
     }
 
-    public WebAuthnAuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
+    public AuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
         this(credentialId, null, authenticatorData, clientDataJSON, signature);
     }
 
@@ -79,7 +79,7 @@ public class WebAuthnAuthenticationRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnAuthenticationRequest that = (WebAuthnAuthenticationRequest) o;
+        AuthenticationRequest that = (AuthenticationRequest) o;
         return Arrays.equals(credentialId, that.credentialId) &&
                 Arrays.equals(userHandle, that.userHandle) &&
                 Arrays.equals(authenticatorData, that.authenticatorData) &&
