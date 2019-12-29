@@ -84,28 +84,28 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         clientExtensionJSON,
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
                 );
 
-        WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        target.validate(authenticationData, authenticationParameters);
 
         assertAll(
-                () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
-                () -> assertThat(webAuthnAuthenticationData.getAuthenticatorData()).isNotNull(),
-                () -> assertThat(webAuthnAuthenticationData.getClientExtensions()).isNotNull()
+                () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(authenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(authenticationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -139,28 +139,28 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         clientExtensionJSON,
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
                 );
 
-        WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-        target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        target.validate(authenticationData, authenticationParameters);
 
         assertAll(
-                () -> assertThat(webAuthnAuthenticationData.getCollectedClientData()).isNotNull(),
-                () -> assertThat(webAuthnAuthenticationData.getAuthenticatorData()).isNotNull(),
-                () -> assertThat(webAuthnAuthenticationData.getClientExtensions()).isNotNull()
+                () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(authenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(authenticationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -190,15 +190,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -206,8 +206,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(InconsistentClientDataTypeException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
     }
@@ -237,15 +237,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -253,8 +253,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(BadChallengeException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
     }
@@ -283,15 +283,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -299,8 +299,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(BadOriginException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
     }
@@ -331,15 +331,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -347,8 +347,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(TokenBindingException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
     }
@@ -379,15 +379,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         ServerProperty serverProperty = new ServerProperty(origin, anotherSiteRpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -395,8 +395,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(BadRpIdException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
 
@@ -425,15 +425,15 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-                new WebAuthnAuthenticationRequest(
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
                 );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-                new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         true
@@ -441,8 +441,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         assertThrows(UserNotVerifiedException.class,
                 () -> {
-                    WebAuthnAuthenticationData webAuthnAuthenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+                    target.validate(authenticationData, authenticationParameters);
                 }
         );
 

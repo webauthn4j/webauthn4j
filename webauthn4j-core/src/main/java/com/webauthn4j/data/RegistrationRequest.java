@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class WebAuthnRegistrationRequest {
+public class RegistrationRequest {
 
     // ~ Instance fields
     // ================================================================================================
@@ -34,22 +34,22 @@ public class WebAuthnRegistrationRequest {
     private final String clientExtensionsJSON;
     private final Set<String> transports;
 
-    public WebAuthnRegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON, Set<String> transports) {
+    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON, Set<String> transports) {
         this.attestationObject = ArrayUtil.clone(attestationObject);
         this.clientDataJSON = ArrayUtil.clone(clientDataJSON);
         this.clientExtensionsJSON = clientExtensionsJSON;
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
-    public WebAuthnRegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON) {
+    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON) {
         this(attestationObject, clientDataJSON, clientExtensionsJSON, null);
     }
 
-    public WebAuthnRegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, Set<String> transports) {
+    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, Set<String> transports) {
         this(attestationObject, clientDataJSON, null, transports);
     }
 
-    public WebAuthnRegistrationRequest(byte[] attestationObject, byte[] clientDataJSON) {
+    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON) {
         this(attestationObject, clientDataJSON, null, null);
     }
 
@@ -73,7 +73,7 @@ public class WebAuthnRegistrationRequest {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnRegistrationRequest that = (WebAuthnRegistrationRequest) o;
+        RegistrationRequest that = (RegistrationRequest) o;
         return Arrays.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(clientDataJSON, that.clientDataJSON) &&
                 Objects.equals(clientExtensionsJSON, that.clientExtensionsJSON) &&

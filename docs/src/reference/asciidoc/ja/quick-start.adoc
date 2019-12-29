@@ -6,16 +6,16 @@ WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサー
 
 === 構成証明の検証
 
-認証デバイスの登録時に構成証明を検証する際は、`WebAuthnRegistrationRequest` を引数に
+認証デバイスの登録時に構成証明を検証する際は、`RegistrationRequest` を引数に
 `WebAuthnManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。
 登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
 `WebAuthnManager#parse` メソッドを用いて登録リクエストをパースしたうえで、
-得られた `WebAuthnRegistrationData` のインスタンスを `WebAuthnManager#validate` メソッドに渡して実行してください。
+得られた `RegistrationData` のインスタンスを `WebAuthnManager#validate` メソッドに渡して実行してください。
 
-`WebAuthnRegistrationRequest` のメンバー はフロントエンド側でWebAuthn JS APIを実行して取得した値となります。
+`RegistrationRequest` のメンバー はフロントエンド側でWebAuthn JS APIを実行して取得した値となります。
 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
 
-`WebAuthnRegistrationParameters` は、`WebAuthnManager#validate` メソッドのもう一つの引数であり、
+`RegistrationParameters` は、`WebAuthnManager#validate` メソッドのもう一つの引数であり、
 サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `serverProperty` としてまとめています。
 `ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
@@ -53,18 +53,18 @@ boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
 List<String> expectedExtensionIds = Collections.emptyList();
 
-WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-WebAuthnRegistrationData webAuthnRegistrationData;
+RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+RegistrationData registrationData;
 try{
-    webAuthnRegistrationData = webAuthnManager.parse(webAuthnRegistrationRequest);
+    registrationData = webAuthnManager.parse(registrationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+    webAuthnManager.validate(registrationData, registrationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -74,21 +74,21 @@ catch (ValidationException e){
 // please persist Authenticator object, which will be used in the authentication process.
 Authenticator authenticator =
         new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                webAuthnRegistrationData.getAttestationObject().getAttestationStatement(),
-                webAuthnRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount()
+                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                registrationData.getAttestationObject().getAttestationStatement(),
+                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
 ```
 
 === アサーションの検証
 
-認証時にアサーションを検証する際は、`WebAuthnAuthenticationRequest` を引数に  `WebAuthnManager#validate` メソッドを
-実行してください。`WebAuthnAuthenticationRequest` の
+認証時にアサーションを検証する際は、`AuthenticationRequest` を引数に  `WebAuthnManager#validate` メソッドを
+実行してください。`AuthenticationRequest` の
 コンストラクタの引数に指定する、 `credentialId` と `userHandle` 、 `authenticatorData`  、 `clientDataJSON` 、`signature` は
 フロントエンド側でWebAuthn JS APIを実行して取得した値となります。
 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
-`WebAuthnManager#validate` メソッドのもう一つの引数である `WebAuthnAuthenticationParameters`  の
+`WebAuthnManager#validate` メソッドのもう一つの引数である `AuthenticationParameters`  の
 コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
 
 `userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。
@@ -125,8 +125,8 @@ List<String> expectedExtensionIds = Collections.emptyList();
 
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
-WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
-        new WebAuthnAuthenticationRequest(
+AuthenticationRequest authenticationRequest =
+        new AuthenticationRequest(
                 credentialId,
                 userHandle,
                 authenticatorData,
@@ -134,8 +134,8 @@ WebAuthnAuthenticationRequest webAuthnAuthenticationRequest =
                 clientExtensionJSON,
                 signature
         );
-WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
-        new WebAuthnAuthenticationParameters(
+AuthenticationParameters authenticationParameters =
+        new AuthenticationParameters(
                 serverProperty,
                 authenticator,
                 userVerificationRequired,
@@ -143,16 +143,16 @@ WebAuthnAuthenticationParameters webAuthnAuthenticationParameters =
                 expectedExtensionIds
         );
 
-WebAuthnAuthenticationData webAuthnAuthenticationData;
+AuthenticationData authenticationData;
 try{
-    webAuthnAuthenticationData = webAuthnManager.parse(webAuthnAuthenticationRequest);
+    authenticationData = webAuthnManager.parse(authenticationRequest);
 }
 catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
 try{
-    webAuthnManager.validate(webAuthnAuthenticationData, webAuthnAuthenticationParameters);
+    webAuthnManager.validate(authenticationData, authenticationParameters);
 }
 catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
@@ -160,8 +160,8 @@ catch (ValidationException e){
 }
 // please update the counter of the authenticator record
 updateCounter(
-        webAuthnAuthenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
-        webAuthnAuthenticationData.getAuthenticatorData().getSignCount()
+        authenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        authenticationData.getAuthenticatorData().getSignCount()
 );
 ```
 

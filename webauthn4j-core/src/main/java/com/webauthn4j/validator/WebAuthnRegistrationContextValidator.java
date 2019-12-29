@@ -18,10 +18,10 @@ package com.webauthn4j.validator;
 
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.WebAuthnRegistrationData;
+import com.webauthn4j.data.RegistrationData;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.WebAuthnManager;
-import com.webauthn4j.data.WebAuthnRegistrationParameters;
-import com.webauthn4j.data.WebAuthnRegistrationRequest;
+import com.webauthn4j.data.RegistrationRequest;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
@@ -187,13 +187,13 @@ public class WebAuthnRegistrationContextValidator {
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnRegistrationContextValidationResponse validate(com.webauthn4j.data.WebAuthnRegistrationContext webAuthnRegistrationContext) throws WebAuthnException {
 
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(
+        RegistrationRequest registrationRequest = new RegistrationRequest(
                 webAuthnRegistrationContext.getAttestationObject(),
                 webAuthnRegistrationContext.getClientDataJSON(),
                 webAuthnRegistrationContext.getClientExtensionsJSON(),
                 webAuthnRegistrationContext.getTransports()
         );
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 webAuthnRegistrationContext.getServerProperty(),
                 webAuthnRegistrationContext.isUserVerificationRequired(),
                 webAuthnRegistrationContext.isUserPresenceRequired(),
@@ -201,12 +201,12 @@ public class WebAuthnRegistrationContextValidator {
 
         );
 
-        WebAuthnRegistrationData webAuthnRegistrationData = webAuthnManager.validate(webAuthnRegistrationRequest,webAuthnRegistrationParameters);
+        RegistrationData registrationData = webAuthnManager.validate(registrationRequest, registrationParameters);
 
         return new WebAuthnRegistrationContextValidationResponse(
-                webAuthnRegistrationData.getCollectedClientData(),
-                webAuthnRegistrationData.getAttestationObject(),
-                webAuthnRegistrationData.getClientExtensions());
+                registrationData.getCollectedClientData(),
+                registrationData.getAttestationObject(),
+                registrationData.getClientExtensions());
     }
 
     public List<CustomRegistrationValidator> getCustomRegistrationValidators() {

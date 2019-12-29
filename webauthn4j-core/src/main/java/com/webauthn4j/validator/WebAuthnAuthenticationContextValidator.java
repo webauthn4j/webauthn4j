@@ -22,10 +22,10 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticationData;
+import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.WebAuthnAuthenticationContext;
-import com.webauthn4j.data.WebAuthnAuthenticationData;
-import com.webauthn4j.data.WebAuthnAuthenticationParameters;
-import com.webauthn4j.data.WebAuthnAuthenticationRequest;
+import com.webauthn4j.data.AuthenticationRequest;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.exception.WebAuthnException;
@@ -90,7 +90,7 @@ public class WebAuthnAuthenticationContextValidator {
     @SuppressWarnings("squid:RedundantThrowsDeclarationCheck")
     public WebAuthnAuthenticationContextValidationResponse validate(WebAuthnAuthenticationContext authenticationContext, Authenticator authenticator) throws WebAuthnException {
 
-        WebAuthnAuthenticationRequest webAuthnAuthenticationRequest = new WebAuthnAuthenticationRequest(
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(
                 authenticationContext.getCredentialId(),
                 authenticationContext.getUserHandle(),
                 authenticationContext.getAuthenticatorData(),
@@ -98,19 +98,19 @@ public class WebAuthnAuthenticationContextValidator {
                 authenticationContext.getClientExtensionsJSON(),
                 authenticationContext.getSignature()
         );
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 authenticationContext.getServerProperty(),
                 authenticator,
                 authenticationContext.isUserVerificationRequired(),
                 authenticationContext.isUserPresenceRequired()  ,
                 authenticationContext.getExpectedExtensionIds()
         );
-        WebAuthnAuthenticationData webAuthnAuthenticationData = webAuthnManager.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
+        AuthenticationData authenticationData = webAuthnManager.validate(authenticationRequest, authenticationParameters);
 
         return new WebAuthnAuthenticationContextValidationResponse(
-                webAuthnAuthenticationData.getCollectedClientData(),
-                webAuthnAuthenticationData.getAuthenticatorData(),
-                webAuthnAuthenticationData.getClientExtensions());
+                authenticationData.getCollectedClientData(),
+                authenticationData.getAuthenticatorData(),
+                authenticationData.getClientExtensions());
 
     }
 
@@ -121,12 +121,12 @@ public class WebAuthnAuthenticationContextValidator {
     }
 
     public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {
-        return webAuthnManager.getWebAuthnAuthenticationDataValidator().getMaliciousCounterValueHandler();
+        return webAuthnManager.getAuthenticationDataValidator().getMaliciousCounterValueHandler();
     }
 
     public void setMaliciousCounterValueHandler(MaliciousCounterValueHandler maliciousCounterValueHandler) {
         AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
-        webAuthnManager.getWebAuthnAuthenticationDataValidator().setMaliciousCounterValueHandler(maliciousCounterValueHandler);
+        webAuthnManager.getAuthenticationDataValidator().setMaliciousCounterValueHandler(maliciousCounterValueHandler);
     }
 
     public List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {

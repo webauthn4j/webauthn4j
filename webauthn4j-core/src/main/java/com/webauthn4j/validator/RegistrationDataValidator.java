@@ -19,8 +19,8 @@ package com.webauthn4j.validator;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.WebAuthnRegistrationData;
-import com.webauthn4j.data.WebAuthnRegistrationParameters;
+import com.webauthn4j.data.RegistrationData;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-public class WebAuthnRegistrationDataValidator {
+public class RegistrationDataValidator {
 
     // ~ Instance fields
     // ================================================================================================
@@ -62,7 +62,7 @@ public class WebAuthnRegistrationDataValidator {
 
     private final AttestationObjectConverter attestationObjectConverter;
 
-    public WebAuthnRegistrationDataValidator(
+    public RegistrationDataValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -87,22 +87,22 @@ public class WebAuthnRegistrationDataValidator {
     }
 
 
-    public void validate(WebAuthnRegistrationData webAuthnRegistrationData, WebAuthnRegistrationParameters webAuthnRegistrationParameters) {
+    public void validate(RegistrationData registrationData, RegistrationParameters registrationParameters) {
 
-        BeanAssertUtil.validate(webAuthnRegistrationData);
-        BeanAssertUtil.validate(webAuthnRegistrationParameters);
+        BeanAssertUtil.validate(registrationData);
+        BeanAssertUtil.validate(registrationParameters);
 
-        byte[] clientDataBytes = webAuthnRegistrationData.getCollectedClientDataBytes();
-        byte[] attestationObjectBytes = webAuthnRegistrationData.getAttestationObjectBytes();
+        byte[] clientDataBytes = registrationData.getCollectedClientDataBytes();
+        byte[] attestationObjectBytes = registrationData.getAttestationObjectBytes();
 
-        CollectedClientData collectedClientData = webAuthnRegistrationData.getCollectedClientData();
-        AttestationObject attestationObject = webAuthnRegistrationData.getAttestationObject();
-        Set<AuthenticatorTransport> transports = webAuthnRegistrationData.getTransports();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = webAuthnRegistrationData.getClientExtensions();
+        CollectedClientData collectedClientData = registrationData.getCollectedClientData();
+        AttestationObject attestationObject = registrationData.getAttestationObject();
+        Set<AuthenticatorTransport> transports = registrationData.getTransports();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = registrationData.getClientExtensions();
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
-        ServerProperty serverProperty = webAuthnRegistrationParameters.getServerProperty();
+        ServerProperty serverProperty = registrationParameters.getServerProperty();
 
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
@@ -149,7 +149,7 @@ public class WebAuthnRegistrationDataValidator {
 
 
         //spec| Step10, 11
-        validateUVUPFlags(authenticatorData, webAuthnRegistrationParameters.isUserVerificationRequired(), webAuthnRegistrationParameters.isUserPresenceRequired());
+        validateUVUPFlags(authenticatorData, registrationParameters.isUserVerificationRequired(), registrationParameters.isUserPresenceRequired());
 
         //spec| Step12
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
@@ -159,7 +159,7 @@ public class WebAuthnRegistrationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        List<String> expectedExtensionIdentifiers = webAuthnRegistrationParameters.getExpectedExtensionIds();
+        List<String> expectedExtensionIdentifiers = registrationParameters.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         //spec| Step13-16,19

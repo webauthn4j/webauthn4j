@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class WebAuthnRegistrationData {
+public class RegistrationData {
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
@@ -36,7 +36,7 @@ public class WebAuthnRegistrationData {
     private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
     private final Set<AuthenticatorTransport> transports;
 
-    public WebAuthnRegistrationData(
+    public RegistrationData(
             AttestationObject attestationObject,
             byte[] attestationObjectBytes,
             CollectedClientData collectedClientData,
@@ -79,7 +79,7 @@ public class WebAuthnRegistrationData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnRegistrationData that = (WebAuthnRegistrationData) o;
+        RegistrationData that = (RegistrationData) o;
         return Objects.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
                 Objects.equals(collectedClientData, that.collectedClientData) &&

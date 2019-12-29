@@ -20,11 +20,10 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.CollectionUtil;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-public class WebAuthnAuthenticationParameters {
+public class AuthenticationParameters {
 
     private final ServerProperty serverProperty;
     private final Authenticator authenticator;
@@ -34,7 +33,7 @@ public class WebAuthnAuthenticationParameters {
     private boolean userPresenceRequired;
     private List<String> expectedExtensionIds;
 
-    public WebAuthnAuthenticationParameters(
+    public AuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
             boolean userVerificationRequired,
@@ -47,7 +46,7 @@ public class WebAuthnAuthenticationParameters {
         this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
     }
 
-    public WebAuthnAuthenticationParameters(
+    public AuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
             boolean userVerificationRequired,
@@ -61,7 +60,7 @@ public class WebAuthnAuthenticationParameters {
         );
     }
 
-    public WebAuthnAuthenticationParameters(
+    public AuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
             boolean userVerificationRequired) {
@@ -97,7 +96,7 @@ public class WebAuthnAuthenticationParameters {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnAuthenticationParameters that = (WebAuthnAuthenticationParameters) o;
+        AuthenticationParameters that = (AuthenticationParameters) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
                 Objects.equals(serverProperty, that.serverProperty) &&

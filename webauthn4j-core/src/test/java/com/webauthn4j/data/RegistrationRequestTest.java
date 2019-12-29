@@ -23,7 +23,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WebAuthnRegistrationRequestTest {
+class RegistrationRequestTest {
 
     @Test
     void constructor_test(){
@@ -33,11 +33,11 @@ class WebAuthnRegistrationRequestTest {
         String clientExtensionJSON = "{}";  /* set clientExtensionJSON */;
         Set<String> transports = Collections.singleton("USB");
 
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-        assertThat(webAuthnRegistrationRequest.getAttestationObject()).isEqualTo(attestationObject);
-        assertThat(webAuthnRegistrationRequest.getClientDataJSON()).isEqualTo(clientDataJSON);
-        assertThat(webAuthnRegistrationRequest.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON);
-        assertThat(webAuthnRegistrationRequest.getTransports()).isEqualTo(transports);
+        RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
+        assertThat(registrationRequest.getAttestationObject()).isEqualTo(attestationObject);
+        assertThat(registrationRequest.getClientDataJSON()).isEqualTo(clientDataJSON);
+        assertThat(registrationRequest.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON);
+        assertThat(registrationRequest.getTransports()).isEqualTo(transports);
     }
 
     @Test
@@ -46,8 +46,8 @@ class WebAuthnRegistrationRequestTest {
         byte[] attestationObject = null /* set attestationObject */;
         byte[] clientDataJSON = null /* set clientDataJSON */;
 
-        WebAuthnRegistrationRequest instanceA = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON);
-        WebAuthnRegistrationRequest instanceB = new WebAuthnRegistrationRequest(attestationObject, clientDataJSON);
+        RegistrationRequest instanceA = new RegistrationRequest(attestationObject, clientDataJSON);
+        RegistrationRequest instanceB = new RegistrationRequest(attestationObject, clientDataJSON);
 
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceA).hasSameHashCodeAs(instanceB);

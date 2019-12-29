@@ -22,7 +22,7 @@ import com.webauthn4j.util.CollectionUtil;
 import java.util.List;
 import java.util.Objects;
 
-public class WebAuthnRegistrationParameters {
+public class RegistrationParameters {
 
     // server property
     private final ServerProperty serverProperty;
@@ -32,18 +32,18 @@ public class WebAuthnRegistrationParameters {
     private final boolean userPresenceRequired;
     private final List<String> expectedExtensionIds;
 
-    public WebAuthnRegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
+    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
         this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
     }
 
-    public WebAuthnRegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
         this(serverProperty, userVerificationRequired, userPresenceRequired, null);
     }
 
-    public WebAuthnRegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired) {
+    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired) {
         this(serverProperty, userVerificationRequired, true);
     }
 
@@ -67,7 +67,7 @@ public class WebAuthnRegistrationParameters {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WebAuthnRegistrationParameters that = (WebAuthnRegistrationParameters) o;
+        RegistrationParameters that = (RegistrationParameters) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
                 Objects.equals(serverProperty, that.serverProperty) &&

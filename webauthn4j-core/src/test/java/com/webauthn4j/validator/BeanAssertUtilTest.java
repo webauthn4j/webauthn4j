@@ -38,7 +38,7 @@ class BeanAssertUtilTest {
 
     @Test
     void validate_WebAuthnRegistrationData_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -46,19 +46,19 @@ class BeanAssertUtilTest {
                 new AuthenticationExtensionsClientOutputs<>(),
                 new HashSet<>()
         );
-        BeanAssertUtil.validate(webAuthnRegistrationData);
+        BeanAssertUtil.validate(registrationData);
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_null_test(){
         assertThrows(ConstraintViolationException.class,
-            ()-> BeanAssertUtil.validate((WebAuthnRegistrationData)null)
+            ()-> BeanAssertUtil.validate((RegistrationData)null)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_attestationObject_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 null,
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -67,13 +67,13 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_attestationObjectBytes_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 null,
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -82,13 +82,13 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_collectedClientData_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 null,
@@ -97,13 +97,13 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_clientDataBytes_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -112,13 +112,13 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_clientExtensions_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -127,13 +127,13 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationData_with_transports_null_test(){
-        WebAuthnRegistrationData webAuthnRegistrationData = new WebAuthnRegistrationData(
+        RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
                 TestDataUtil.createClientData(ClientDataType.CREATE),
@@ -142,40 +142,40 @@ class BeanAssertUtilTest {
                 null
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationData)
+                ()-> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationParameters_test(){
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 TestDataUtil.createServerProperty(),
                 true
         );
-        BeanAssertUtil.validate(webAuthnRegistrationParameters);
+        BeanAssertUtil.validate(registrationParameters);
     }
 
     @Test
     void validate_WebAuthnRegistrationParameters_with_null_test(){
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((WebAuthnRegistrationParameters)null)
+                ()-> BeanAssertUtil.validate((RegistrationParameters)null)
         );
     }
 
     @Test
     void validate_WebAuthnRegistrationParameters_with_serverProperty_null_test(){
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 null,
                 true
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnRegistrationParameters)
+                ()-> BeanAssertUtil.validate(registrationParameters)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -185,20 +185,20 @@ class BeanAssertUtilTest {
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
         );
-        BeanAssertUtil.validate(webAuthnAuthenticationData);
+        BeanAssertUtil.validate(authenticationData);
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_null_test(){
 
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((WebAuthnAuthenticationData)null)
+                ()-> BeanAssertUtil.validate((AuthenticationData)null)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_credentialId_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 null,
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -209,13 +209,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_userHandle_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 null,
                 TestDataUtil.createAuthenticatorData(),
@@ -226,13 +226,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_authenticatorData_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 null,
@@ -243,12 +243,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
     @Test
     void validate_WebAuthnAuthenticationData_with_authenticatorDataBytes_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -259,13 +259,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_collectedClientData_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -276,14 +276,14 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
 
     @Test
     void validate_WebAuthnAuthenticationData_with_clientDataBytes_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -294,13 +294,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationData_with_clientExtensions_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -311,14 +311,14 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
 
     @Test
     void validate_WebAuthnAuthenticationData_with_signature_null_test(){
-        WebAuthnAuthenticationData webAuthnAuthenticationData = new WebAuthnAuthenticationData(
+        AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
@@ -329,32 +329,32 @@ class BeanAssertUtilTest {
                 null
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationData)
+                ()-> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationParameters_test(){
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 TestDataUtil.createAuthenticator(),
                 true,
                 true,
                 new ArrayList<>()
         );
-        BeanAssertUtil.validate(webAuthnAuthenticationParameters);
+        BeanAssertUtil.validate(authenticationParameters);
     }
 
     @Test
     void validate_WebAuthnAuthenticationParameters_with_null_test(){
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((WebAuthnAuthenticationParameters)null)
+                ()-> BeanAssertUtil.validate((AuthenticationParameters)null)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationParameters_with_serverProperty_null_test(){
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 null,
                 TestDataUtil.createAuthenticator(),
                 true,
@@ -362,13 +362,13 @@ class BeanAssertUtilTest {
                 new ArrayList<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationParameters)
+                ()-> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationParameters_with_authenticator_null_test(){
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 null,
                 true,
@@ -376,13 +376,13 @@ class BeanAssertUtilTest {
                 new ArrayList<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationParameters)
+                ()-> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 
     @Test
     void validate_WebAuthnAuthenticationParameters_with_expectedExtensionIds_null_test(){
-        WebAuthnAuthenticationParameters webAuthnAuthenticationParameters = new WebAuthnAuthenticationParameters(
+        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 TestDataUtil.createAuthenticator(),
                 true,
@@ -390,7 +390,7 @@ class BeanAssertUtilTest {
                 null
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(webAuthnAuthenticationParameters)
+                ()-> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 

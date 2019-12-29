@@ -39,14 +39,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-class WebAuthnRegistrationDataValidatorTest {
+class RegistrationDataValidatorTest {
 
-    private WebAuthnRegistrationDataValidator target;
+    private RegistrationDataValidator target;
 
-    public WebAuthnRegistrationDataValidatorTest(){
+    public RegistrationDataValidatorTest(){
         ObjectConverter objectConverter = new ObjectConverter();
 
-        target = new WebAuthnRegistrationDataValidator(Arrays.asList(
+        target = new RegistrationDataValidator(Arrays.asList(
                         new NoneAttestationStatementValidator(),
                         new NullFIDOU2FAttestationStatementValidator(),
                         new NullPackedAttestationStatementValidator(),

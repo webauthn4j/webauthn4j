@@ -107,26 +107,26 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest
-                = new WebAuthnRegistrationRequest(
+        RegistrationRequest webAuthnRegistrationRequest
+                = new RegistrationRequest(
                 registrationRequest.getAttestationObject(),
                 registrationRequest.getClientDataJSON(),
                 clientExtensionJSON,
                 transports
         );
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
                 false
         );
 
 
-        WebAuthnRegistrationData webAuthnRegistrationData = target.parse(webAuthnRegistrationRequest);
-        target.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+        RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
+        target.validate(registrationData, registrationParameters);
 
         assertAll(
-                () -> assertThat(webAuthnRegistrationData.getCollectedClientData()).isNotNull(),
-                () -> assertThat(webAuthnRegistrationData.getAttestationObject()).isNotNull(),
-                () -> assertThat(webAuthnRegistrationData.getClientExtensions()).isNotNull()
+                () -> assertThat(registrationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(registrationData.getAttestationObject()).isNotNull(),
+                () -> assertThat(registrationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -164,26 +164,26 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest
-                = new WebAuthnRegistrationRequest(
+        RegistrationRequest webAuthnRegistrationRequest
+                = new RegistrationRequest(
                 registrationRequest.getAttestationObject(),
                 registrationRequest.getClientDataJSON(),
                 clientExtensionJSON,
                 transports
         );
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
                 false
         );
 
 
-        WebAuthnRegistrationData webAuthnRegistrationData = target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);
-        target.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+        RegistrationData registrationData = target.validate(webAuthnRegistrationRequest, registrationParameters);
+        target.validate(registrationData, registrationParameters);
 
         assertAll(
-                () -> assertThat(webAuthnRegistrationData.getCollectedClientData()).isNotNull(),
-                () -> assertThat(webAuthnRegistrationData.getAttestationObject()).isNotNull(),
-                () -> assertThat(webAuthnRegistrationData.getClientExtensions()).isNotNull()
+                () -> assertThat(registrationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(registrationData.getAttestationObject()).isNotNull(),
+                () -> assertThat(registrationData.getClientExtensions()).isNotNull()
         );
     }
 
@@ -225,14 +225,14 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         List<String> expectedExtensions = Collections.singletonList("uvm");
-        WebAuthnRegistrationRequest webAuthnRegistrationRequest
-                = new WebAuthnRegistrationRequest(
+        RegistrationRequest webAuthnRegistrationRequest
+                = new RegistrationRequest(
                 registrationRequest.getAttestationObject(),
                 registrationRequest.getClientDataJSON(),
                 clientExtensionJSON,
                 transports
         );
-        WebAuthnRegistrationParameters webAuthnRegistrationParameters = new WebAuthnRegistrationParameters(
+        RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
                 false,
                 true,
@@ -241,8 +241,8 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
 
         assertThrows(UnexpectedExtensionException.class,
                 () -> {
-                    WebAuthnRegistrationData webAuthnRegistrationData = target.parse(webAuthnRegistrationRequest);
-                    target.validate(webAuthnRegistrationData, webAuthnRegistrationParameters);
+                    RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
+                    target.validate(registrationData, registrationParameters);
                 }
         );
     }

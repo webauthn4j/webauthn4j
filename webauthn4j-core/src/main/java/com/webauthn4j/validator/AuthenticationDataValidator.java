@@ -17,8 +17,8 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.data.WebAuthnAuthenticationData;
-import com.webauthn4j.data.WebAuthnAuthenticationParameters;
+import com.webauthn4j.data.AuthenticationParameters;
+import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class WebAuthnAuthenticationDataValidator {
+public class AuthenticationDataValidator {
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
     private final OriginValidator originValidator = new OriginValidator();
@@ -50,18 +50,18 @@ public class WebAuthnAuthenticationDataValidator {
 
     private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
 
-    public WebAuthnAuthenticationDataValidator(List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public AuthenticationDataValidator(List<CustomAuthenticationValidator> customAuthenticationValidators) {
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 
-    public WebAuthnAuthenticationDataValidator() {
+    public AuthenticationDataValidator() {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
-    public void validate(WebAuthnAuthenticationData webAuthnAuthenticationData, WebAuthnAuthenticationParameters webAuthnAuthenticationParameters) {
+    public void validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
 
-        BeanAssertUtil.validate(webAuthnAuthenticationData);
-        BeanAssertUtil.validate(webAuthnAuthenticationParameters);
+        BeanAssertUtil.validate(authenticationData);
+        BeanAssertUtil.validate(authenticationParameters);
 
         //spec| Step1
         //spec| If the allowCredentials option was given when this authentication ceremony was initiated,
@@ -87,8 +87,8 @@ public class WebAuthnAuthenticationDataValidator {
         //spec| Step4
         //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         //spec| and signature respectively.
-        byte[] cData = webAuthnAuthenticationData.getCollectedClientDataBytes();
-        byte[] aData = webAuthnAuthenticationData.getAuthenticatorDataBytes();
+        byte[] cData = authenticationData.getCollectedClientDataBytes();
+        byte[] aData = authenticationData.getAuthenticatorDataBytes();
 
         //spec| Step5
         //spec| Let JSONtext be the result of running UTF-8 decode on the value of cData.
@@ -96,11 +96,11 @@ public class WebAuthnAuthenticationDataValidator {
         //spec| Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
 
         //      (In the spec, claimed as "C", but use "collectedClientData" here)
-        CollectedClientData collectedClientData = webAuthnAuthenticationData.getCollectedClientData();
+        CollectedClientData collectedClientData = authenticationData.getCollectedClientData();
 
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = webAuthnAuthenticationData.getAuthenticatorData();
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = webAuthnAuthenticationData.getClientExtensions();
-        ServerProperty serverProperty = webAuthnAuthenticationParameters.getServerProperty();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = authenticationData.getClientExtensions();
+        ServerProperty serverProperty = authenticationParameters.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
@@ -108,8 +108,8 @@ public class WebAuthnAuthenticationDataValidator {
 
         validateAuthenticatorData(authenticatorData);
 
-        byte[] credentialId = webAuthnAuthenticationData.getCredentialId();
-        Authenticator authenticator = webAuthnAuthenticationParameters.getAuthenticator();
+        byte[] credentialId = authenticationData.getCredentialId();
+        Authenticator authenticator = authenticationParameters.getAuthenticator();
 
         AuthenticationObject authenticationObject = new AuthenticationObject(
                 credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
@@ -143,13 +143,13 @@ public class WebAuthnAuthenticationDataValidator {
 
         //spec| Step12
         //spec| Verify that the User Present bit of the flags in authData is set.
-        if (webAuthnAuthenticationParameters.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
+        if (authenticationParameters.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }
 
         //spec| Step13
         //spec| If user verification is required for this assertion, verify that the User Verified bit of the flags in aData is set.
-        if (webAuthnAuthenticationParameters.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
+        if (authenticationParameters.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
@@ -161,12 +161,12 @@ public class WebAuthnAuthenticationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        List<String> expectedExtensionIdentifiers = webAuthnAuthenticationParameters.getExpectedExtensionIds();
+        List<String> expectedExtensionIdentifiers = authenticationParameters.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         //spec| Using the credential public key, validate that sig is a valid signature over
         //spec| the binary concatenation of the authenticatorData and the hash of the collectedClientData.
-        assertionSignatureValidator.validate(webAuthnAuthenticationData, authenticator.getAttestedCredentialData().getCOSEKey());
+        assertionSignatureValidator.validate(authenticationData, authenticator.getAttestedCredentialData().getCOSEKey());
 
         //spec| Step17
         //spec| If the signature counter value adata.signCount is nonzero or the value stored in conjunction with
