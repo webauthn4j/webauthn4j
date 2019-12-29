@@ -19,10 +19,11 @@ package com.webauthn4j.data;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.CollectionUtil;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class RegistrationParameters {
+public class RegistrationParameters implements Serializable {
 
     // server property
     private final ServerProperty serverProperty;

@@ -20,10 +20,11 @@ import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.CollectionUtil;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class AuthenticationParameters {
+public class AuthenticationParameters implements Serializable {
 
     private final ServerProperty serverProperty;
     private final Authenticator authenticator;

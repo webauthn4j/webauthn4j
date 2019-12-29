@@ -19,11 +19,12 @@ package com.webauthn4j.data;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class RegistrationRequest {
+public class RegistrationRequest implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================
