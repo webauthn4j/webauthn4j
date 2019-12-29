@@ -23,10 +23,11 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.ArrayUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticationData {
+public class AuthenticationData implements Serializable {
 
     private final byte[] credentialId;
     private final byte[] userHandle;

@@ -18,10 +18,11 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticationRequest {
+public class AuthenticationRequest implements Serializable {
 
     private final byte[] credentialId;
     private final byte[] userHandle;

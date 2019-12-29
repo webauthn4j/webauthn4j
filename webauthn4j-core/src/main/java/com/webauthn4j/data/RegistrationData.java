@@ -23,11 +23,12 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class RegistrationData {
+public class RegistrationData implements Serializable {
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
