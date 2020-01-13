@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
@@ -47,7 +48,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
             @JsonProperty("id") byte[] id,
             @JsonProperty("transports") Set<AuthenticatorTransport> transports) {
         this.type = type;
-        this.id = id;
+        this.id = ArrayUtil.clone(id);
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
@@ -56,7 +57,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
     }
 
     public byte[] getId() {
-        return id.clone();
+        return ArrayUtil.clone(id);
     }
 
     public Set<AuthenticatorTransport> getTransports() {
