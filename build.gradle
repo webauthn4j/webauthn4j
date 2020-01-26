@@ -17,7 +17,7 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://repo.spring.io/plugins-release' }
+        jcenter()
     }
     dependencies {
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}")
