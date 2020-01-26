@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,28 +60,47 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     OffsetDateTime lastRefresh;
     private JsonConverter jsonConverter;
     private JWSFactory jwsFactory;
-    private HttpClient httpClient;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+    private String token = null;
+    private HttpClient httpClient;
     private TrustAnchor trustAnchor;
     private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
-    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, X509Certificate rootCertificate) {
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();
         this.jwsFactory = new JWSFactory(objectConverter);
+        this.token = token;
         this.httpClient = httpClient;
         this.trustAnchor = new TrustAnchor(rootCertificate, null);
     }
 
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, Path path) {
+        this(objectConverter, token, httpClient, loadRootCertificateFromPath(path));
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient) {
+        this(objectConverter, token, httpClient, loadEmbeddedFidoMdsRootCertificate());
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token) {
+        this(objectConverter, token, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
+    }
+
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, X509Certificate rootCertificate) {
+        this(objectConverter, null, httpClient, rootCertificate);
+    }
+
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, Path path) {
-        this(objectConverter, httpClient, loadRootCertificateFromPath(path));
+        this(objectConverter, null, httpClient, path);
     }
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient) {
-        this(objectConverter, httpClient, loadEmbeddedFidoMdsRootCertificate());
+        this(objectConverter, null, httpClient);
     }
 
+
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter) {
-        this(objectConverter, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
+        this(objectConverter, (String)null);
     }
 
     /**
@@ -181,8 +202,9 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
      * @return MetaDataTOCPayload
      */
     MetadataTOCPayload fetchMetadataTOCPayload(boolean skipCertPathValidation) {
-        String url = fidoMetadataServiceEndpoint;
-        String toc = httpClient.fetch(url);
+        String uriWithToken = appendToken(fidoMetadataServiceEndpoint, token);
+
+        String toc = httpClient.fetch(uriWithToken);
 
         JWS<MetadataTOCPayload> jws = jwsFactory.parse(toc, MetadataTOCPayload.class);
         if (!jws.isValidSignature()) {
@@ -227,7 +249,8 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     }
 
     MetadataStatement fetchMetadataStatement(String uri, byte[] expectedHash) {
-        String metadataStatementBase64url = httpClient.fetch(uri);
+        String uriWithToken = appendToken(uri, token);
+        String metadataStatementBase64url = httpClient.fetch(uriWithToken);
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
         byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementBase64url.getBytes(StandardCharsets.UTF_8));
         if (!Arrays.equals(hash, expectedHash)) {
@@ -236,6 +259,28 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         MetadataStatement metadataStatement = jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
         metadataStatementValidator.validate(metadataStatement);
         return metadataStatement;
+    }
+
+    static String appendToken(String url, String token){
+        if(url == null){
+            throw new IllegalArgumentException("url must not be null.");
+        }
+        if(token == null){
+            return url;
+        }
+        try {
+            URI uriObject = new URI(url);
+            String query = uriObject.getQuery();
+            if (query == null) {
+                query = "token=" + token;
+            } else {
+                query += "&" + "token=" + token;
+            }
+            return new URI(uriObject.getScheme(), uriObject.getAuthority(),
+                    uriObject.getPath(), query, uriObject.getFragment()).toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(String.format("Provided url %s is illegal.", url), e);
+        }
     }
 
 }
