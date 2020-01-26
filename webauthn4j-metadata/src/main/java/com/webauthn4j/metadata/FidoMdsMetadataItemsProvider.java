@@ -183,8 +183,9 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
                 })
                         .filter(Objects::nonNull)
                         .distinct()
-                        .collect(Collectors.groupingBy(item -> item.getMetadataStatement().getAaguid()))
-                        .entrySet().stream()
+                        .collect(Collectors.groupingBy(item -> item.getAaguid()))
+                        .entrySet()
+                        .stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));
 
         nextUpdate = tocPayload.getNextUpdate().atStartOfDay().atOffset(ZoneOffset.UTC);
