@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 /**
- * @deprecated Moved to {@link com.webauthn4j.converter.jackson} package
+ * @deprecated Moved to {@code com.webauthn4j.converter.jackson} package
  */
 @Deprecated
 public class JacksonUtil {

@@ -162,6 +162,7 @@ public class WebAuthnManager {
     /**
      * Creates {@link WebAuthnManager} with non strict configuration
      *
+     * @param objectConverter ObjectConverter
      * @return configured {@link WebAuthnManager}
      */
     public static WebAuthnManager createNonStrictWebAuthnManager(ObjectConverter objectConverter) {
