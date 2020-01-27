@@ -34,7 +34,7 @@ public class ObjectConverter implements Serializable {
     private JsonConverter jsonConverter;
     private CborConverter cborConverter;
 
-    public ObjectConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper){
+    public ObjectConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
@@ -47,21 +47,12 @@ public class ObjectConverter implements Serializable {
         initializeCborMapper(cborMapper, this);
     }
 
-    public ObjectConverter(){
+    public ObjectConverter() {
         this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
-    }
-
-    public JsonConverter getJsonConverter() {
-        return jsonConverter;
-    }
-
-    public CborConverter getCborConverter() {
-        return cborConverter;
     }
 
     /**
      * Initialize a {@link ObjectMapper} for WebAuthn JSON type processing
-     *
      */
     private static void initializeJsonMapper(ObjectMapper jsonMapper, ObjectConverter objectConverter) {
         jsonMapper.registerModule(new WebAuthnJSONModule(objectConverter));
@@ -72,13 +63,20 @@ public class ObjectConverter implements Serializable {
 
     /**
      * Initialize a {@link ObjectMapper} for WebAuthn CBOR type processing
-     *
      */
     private static void initializeCborMapper(ObjectMapper cborMapper, ObjectConverter objectConverter) {
         cborMapper.registerModule(new WebAuthnCBORModule(objectConverter));
         cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+
+    public JsonConverter getJsonConverter() {
+        return jsonConverter;
+    }
+
+    public CborConverter getCborConverter() {
+        return cborConverter;
     }
 
 }

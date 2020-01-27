@@ -31,7 +31,7 @@ import static org.mockito.Mockito.mock;
 class RegistrationDataTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
 
         AttestationObject attestationObject = mock(AttestationObject.class);
         byte[] attestationObjectBytes = new byte[32];

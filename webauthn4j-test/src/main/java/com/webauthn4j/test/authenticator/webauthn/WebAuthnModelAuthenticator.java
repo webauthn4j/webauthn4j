@@ -443,7 +443,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
-    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest) {
         return createAttestationStatement(attestationStatementRequest, new RegistrationEmulationOption());
     }
 

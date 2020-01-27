@@ -209,7 +209,7 @@ class EC2COSEKeyTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);

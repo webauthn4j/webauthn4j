@@ -129,11 +129,10 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private String getMessageDigestJcaName(COSEAlgorithmIdentifier alg) {
         String messageDigestJcaName;
-        try{
+        try {
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
             messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);
         }
         return messageDigestJcaName;

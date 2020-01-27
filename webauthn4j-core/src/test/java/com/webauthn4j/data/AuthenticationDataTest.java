@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 class AuthenticationDataTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
 
         byte[] credentialId = new byte[32];
         byte[] userHandle = new byte[32];

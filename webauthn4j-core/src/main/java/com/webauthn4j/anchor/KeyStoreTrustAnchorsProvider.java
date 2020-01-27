@@ -16,17 +16,13 @@
 
 package com.webauthn4j.anchor;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.AssertUtil;
+
 import java.security.KeyStore;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.util.AssertUtil;
+import java.util.*;
 
 /**
  * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} from Java KeyStore.
@@ -40,6 +36,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
 
     // ~ Methods
     // ========================================================================================================
+
     /**
      * {@inheritDoc}
      */
@@ -73,7 +70,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
     private Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         KeyStore keyStoreObject = getKeyStore();
-        try  {
+        try {
             List<String> aliases = Collections.list(keyStoreObject.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();
             for (String alias : aliases) {

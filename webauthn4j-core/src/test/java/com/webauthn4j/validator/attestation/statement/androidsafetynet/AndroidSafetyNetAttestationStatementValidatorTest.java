@@ -48,7 +48,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_test(){
+    void validate_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =

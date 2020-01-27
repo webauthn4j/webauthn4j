@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RegistrationParametersTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         // Server properties
         Origin origin = null /* set origin */;
         String rpId = null /* set rpId */;

@@ -87,7 +87,7 @@ public class AttestationCertificate implements Serializable {
         X500Name subjectDN = new X500Name(getCertificate().getSubjectX500Principal().getName());
         Map<String, String> map = subjectDN.stream().flatMap(attributes -> attributes.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        if(!map.containsKey(name)){
+        if (!map.containsKey(name)) {
             throw new CertificateException("invalid subjectDN: " + subjectDN);
         }
         return map.get(name);

@@ -30,7 +30,7 @@ class JWSFactoryTest {
     private JWSFactory target = new JWSFactory();
 
     @Test
-    void create_with_private_key_test(){
+    void create_with_private_key_test() {
         JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestAttestationCertificatePath());
         Payload payload = new Payload();
         KeyPair keyPair = ECUtil.createKeyPair();
@@ -39,7 +39,7 @@ class JWSFactoryTest {
     }
 
     @Test
-    void create_with_signature_test(){
+    void create_with_signature_test() {
         JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestAttestationCertificatePath());
         Payload payload = new Payload();
         byte[] signature = new byte[32];

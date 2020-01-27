@@ -170,7 +170,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     @Override
     public PublicKey getPublicKey() {
 
-        if(!hasPublicKey()){
+        if (!hasPublicKey()) {
             return null;
         }
 
@@ -188,11 +188,11 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         throw new NotImplementedException();
     }
 
-    public boolean hasPublicKey(){
+    public boolean hasPublicKey() {
         return x != null && y != null;
     }
 
-    public boolean hasPrivateKey(){
+    public boolean hasPrivateKey() {
         return d != null;
     }
 

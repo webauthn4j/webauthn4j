@@ -28,9 +28,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ECUtilTest {
 
     @Test
-    void createUncompressedPublicKey_test(){
-        ECPublicKey publicKey = (ECPublicKey)TestAttestationUtil.load2tierTestRootCAPublicKey();
-        byte[] uncompressed =  ECUtil.createUncompressedPublicKey(publicKey);
+    void createUncompressedPublicKey_test() {
+        ECPublicKey publicKey = (ECPublicKey) TestAttestationUtil.load2tierTestRootCAPublicKey();
+        byte[] uncompressed = ECUtil.createUncompressedPublicKey(publicKey);
         assertThat(uncompressed).hasSize(65);
         assertThat(uncompressed).isEqualTo(Base64UrlUtil.decode("BM13LrnFulQ14TNByrUKAXrIakbDx5QPf5R2W_nKOOtoLboP5lWJSpgo-sE6dY0XGTkXvOkeVmVGjDNBQITd_yI"));
     }

@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class AuthenticationExtensionsClientOutputsTest {
 
     @Test
-    void instance_can_store_concrete_extension_test(){
+    void instance_can_store_concrete_extension_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg value = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("dummy", new byte[32]);
         GenericTransactionAuthorizationExtensionClientOutput genericTransactionAuthorizationExtensionClientOutput = new GenericTransactionAuthorizationExtensionClientOutput(value);
-        assertThatCode(()->{
+        assertThatCode(() -> {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
                     new AuthenticationExtensionsClientOutputs<>(Collections.singletonMap(GenericTransactionAuthorizationExtensionClientOutput.ID, genericTransactionAuthorizationExtensionClientOutput));
             assertThat(clientExtensions.size()).isEqualTo(1);

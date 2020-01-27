@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ObjectConverterTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new CBORMapper(new CBORFactory());
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);

@@ -26,11 +26,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RegistrationRequestTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         // Client properties
         byte[] attestationObject = new byte[32];
         byte[] clientDataJSON = new byte[64];
-        String clientExtensionJSON = "{}";  /* set clientExtensionJSON */;
+        String clientExtensionJSON = "{}";  /* set clientExtensionJSON */
+        ;
         Set<String> transports = Collections.singleton("USB");
 
         RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
@@ -41,7 +42,7 @@ class RegistrationRequestTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         // Client properties
         byte[] attestationObject = null /* set attestationObject */;
         byte[] clientDataJSON = null /* set clientDataJSON */;

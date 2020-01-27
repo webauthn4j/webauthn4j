@@ -26,6 +26,6 @@ public class Attributes extends AbstractImmutableMap<String, String> {
     Attributes(String value) {
         super(Arrays.stream(value.split("\\+"))
                 .map(entry -> entry.split("="))
-                .collect(Collectors.toMap(entry -> entry[0], entry->entry[1])));
+                .collect(Collectors.toMap(entry -> entry[0], entry -> entry[1])));
     }
 }

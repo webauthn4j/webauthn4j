@@ -43,17 +43,17 @@ class RegistrationDataValidatorTest {
 
     private RegistrationDataValidator target;
 
-    public RegistrationDataValidatorTest(){
+    public RegistrationDataValidatorTest() {
         ObjectConverter objectConverter = new ObjectConverter();
 
         target = new RegistrationDataValidator(Arrays.asList(
-                        new NoneAttestationStatementValidator(),
-                        new NullFIDOU2FAttestationStatementValidator(),
-                        new NullPackedAttestationStatementValidator(),
-                        new NullTPMAttestationStatementValidator(),
-                        new NullAndroidKeyAttestationStatementValidator(),
-                        new NullAndroidSafetyNetAttestationStatementValidator()
-                ),
+                new NoneAttestationStatementValidator(),
+                new NullFIDOU2FAttestationStatementValidator(),
+                new NullPackedAttestationStatementValidator(),
+                new NullTPMAttestationStatementValidator(),
+                new NullAndroidKeyAttestationStatementValidator(),
+                new NullAndroidSafetyNetAttestationStatementValidator()
+        ),
                 new NullCertPathTrustworthinessValidator(),
                 new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),

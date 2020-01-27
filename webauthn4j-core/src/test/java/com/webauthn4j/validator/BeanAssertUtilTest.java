@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class BeanAssertUtilTest {
 
     @Test
-    void validate_RegistrationData_test(){
+    void validate_RegistrationData_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
@@ -51,14 +51,14 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_RegistrationData_with_null_test(){
+    void validate_RegistrationData_with_null_test() {
         assertThrows(ConstraintViolationException.class,
-            ()-> BeanAssertUtil.validate((RegistrationData)null)
+                () -> BeanAssertUtil.validate((RegistrationData) null)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_attestationObject_null_test(){
+    void validate_RegistrationData_with_attestationObject_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 null,
                 new byte[32],
@@ -68,12 +68,12 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_attestationObjectBytes_null_test(){
+    void validate_RegistrationData_with_attestationObjectBytes_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 null,
@@ -83,12 +83,12 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_collectedClientData_null_test(){
+    void validate_RegistrationData_with_collectedClientData_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
@@ -98,12 +98,12 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_clientDataBytes_null_test(){
+    void validate_RegistrationData_with_clientDataBytes_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
@@ -113,12 +113,12 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_clientExtensions_null_test(){
+    void validate_RegistrationData_with_clientExtensions_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
@@ -128,12 +128,12 @@ class BeanAssertUtilTest {
                 new HashSet<>()
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationData_with_transports_null_test(){
+    void validate_RegistrationData_with_transports_null_test() {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
@@ -143,12 +143,12 @@ class BeanAssertUtilTest {
                 null
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(registrationData)
+                () -> BeanAssertUtil.validate(registrationData)
         );
     }
 
     @Test
-    void validate_RegistrationParameters_test(){
+    void validate_RegistrationParameters_test() {
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 TestDataUtil.createServerProperty(),
                 true
@@ -157,25 +157,25 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_RegistrationParameters_with_null_test(){
+    void validate_RegistrationParameters_with_null_test() {
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((RegistrationParameters)null)
+                () -> BeanAssertUtil.validate((RegistrationParameters) null)
         );
     }
 
     @Test
-    void validate_RegistrationParameters_with_serverProperty_null_test(){
+    void validate_RegistrationParameters_with_serverProperty_null_test() {
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 null,
                 true
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(registrationParameters)
+                () -> BeanAssertUtil.validate(registrationParameters)
         );
     }
 
     @Test
-    void validate_AuthenticationData_test(){
+    void validate_AuthenticationData_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -190,15 +190,15 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_AuthenticationData_with_null_test(){
+    void validate_AuthenticationData_with_null_test() {
 
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((AuthenticationData)null)
+                () -> BeanAssertUtil.validate((AuthenticationData) null)
         );
     }
 
     @Test
-    void validate_AuthenticationData_with_credentialId_null_test(){
+    void validate_AuthenticationData_with_credentialId_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 null,
                 new byte[32],
@@ -210,12 +210,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
-    void validate_AuthenticationData_with_userHandle_null_test(){
+    void validate_AuthenticationData_with_userHandle_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 null,
@@ -227,12 +227,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
-    void validate_AuthenticationData_with_authenticatorData_null_test(){
+    void validate_AuthenticationData_with_authenticatorData_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -244,11 +244,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
+
     @Test
-    void validate_AuthenticationData_with_authenticatorDataBytes_null_test(){
+    void validate_AuthenticationData_with_authenticatorDataBytes_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -260,12 +261,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
-    void validate_AuthenticationData_with_collectedClientData_null_test(){
+    void validate_AuthenticationData_with_collectedClientData_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -277,13 +278,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
 
     @Test
-    void validate_AuthenticationData_with_clientDataBytes_null_test(){
+    void validate_AuthenticationData_with_clientDataBytes_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -295,12 +296,12 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
-    void validate_AuthenticationData_with_clientExtensions_null_test(){
+    void validate_AuthenticationData_with_clientExtensions_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -312,13 +313,13 @@ class BeanAssertUtilTest {
                 new byte[32]
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
 
     @Test
-    void validate_AuthenticationData_with_signature_null_test(){
+    void validate_AuthenticationData_with_signature_null_test() {
         AuthenticationData authenticationData = new AuthenticationData(
                 new byte[32],
                 new byte[32],
@@ -330,12 +331,12 @@ class BeanAssertUtilTest {
                 null
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationData)
+                () -> BeanAssertUtil.validate(authenticationData)
         );
     }
 
     @Test
-    void validate_AuthenticationParameters_test(){
+    void validate_AuthenticationParameters_test() {
         AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 TestDataUtil.createAuthenticator(),
@@ -347,14 +348,14 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_AuthenticationParameters_with_null_test(){
+    void validate_AuthenticationParameters_with_null_test() {
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate((AuthenticationParameters)null)
+                () -> BeanAssertUtil.validate((AuthenticationParameters) null)
         );
     }
 
     @Test
-    void validate_AuthenticationParameters_with_serverProperty_null_test(){
+    void validate_AuthenticationParameters_with_serverProperty_null_test() {
         AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 null,
                 TestDataUtil.createAuthenticator(),
@@ -363,12 +364,12 @@ class BeanAssertUtilTest {
                 new ArrayList<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationParameters)
+                () -> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 
     @Test
-    void validate_AuthenticationParameters_with_authenticator_null_test(){
+    void validate_AuthenticationParameters_with_authenticator_null_test() {
         AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 null,
@@ -377,12 +378,12 @@ class BeanAssertUtilTest {
                 new ArrayList<>()
         );
         assertThrows(ConstraintViolationException.class,
-                ()-> BeanAssertUtil.validate(authenticationParameters)
+                () -> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 
     @Test
-    void validate_AuthenticationParameters_with_expectedExtensionIds_null_test(){
+    void validate_AuthenticationParameters_with_expectedExtensionIds_null_test() {
         AuthenticationParameters authenticationParameters = new AuthenticationParameters(
                 TestDataUtil.createServerProperty(),
                 TestDataUtil.createAuthenticator(),
@@ -391,7 +392,7 @@ class BeanAssertUtilTest {
                 null
         );
         assertDoesNotThrow(
-                ()-> BeanAssertUtil.validate(authenticationParameters)
+                () -> BeanAssertUtil.validate(authenticationParameters)
         );
     }
 

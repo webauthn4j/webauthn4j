@@ -55,6 +55,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     /**
      * Constructor for key pair
+     *
      * @param keyId     keyId
      * @param algorithm algorithm
      * @param keyOps    keyOps
@@ -95,6 +96,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     /**
      * Constructor for public key
+     *
      * @param keyId     keyId
      * @param algorithm algorithm
      * @param keyOps    keyOps
@@ -170,7 +172,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     @Override
     public PublicKey getPublicKey() {
 
-        if(!hasPublicKey()){
+        if (!hasPublicKey()) {
             return null;
         }
 

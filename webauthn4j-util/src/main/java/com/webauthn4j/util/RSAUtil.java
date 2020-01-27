@@ -19,7 +19,10 @@ package com.webauthn4j.util;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 
 import java.security.*;
-import java.security.spec.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAKeyGenParameterSpec;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 
 public class RSAUtil {
 

@@ -87,12 +87,19 @@ public class RegistrationObject {
             Set<AuthenticatorTransport> transports,
             ServerProperty serverProperty) {
 
-        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty,  LocalDateTime.now(Clock.systemUTC()));
+        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty, LocalDateTime.now(Clock.systemUTC()));
     }
 
     // ~ Methods
     // ========================================================================================================
 
+    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
+        try {
+            return JacksonUtil.binaryValue(cborMapper.readTree(attestationObject).get("authData"));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     public AttestationObject getAttestationObject() {
         return attestationObject;
@@ -151,13 +158,5 @@ public class RegistrationObject {
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
-    }
-
-    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
-        try {
-            return JacksonUtil.binaryValue(cborMapper.readTree(attestationObject).get("authData"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
     }
 }

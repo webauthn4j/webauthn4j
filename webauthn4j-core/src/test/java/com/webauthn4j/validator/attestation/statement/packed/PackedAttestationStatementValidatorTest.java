@@ -189,13 +189,13 @@ class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    void extractAAGUIDFromAttestationCertificate_with_u2f_attestation_test(){
+    void extractAAGUIDFromAttestationCertificate_with_u2f_attestation_test() {
         AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyU2FAttestationCertificate());
         assertThat(aaguid).isEqualTo(AAGUID.NULL);
     }
 
     @Test
-    void extractAAGUIDFromAttestationCertificate_with_fido2_attestation_test(){
+    void extractAAGUIDFromAttestationCertificate_with_fido2_attestation_test() {
         AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyFIDO2AttestationCertificate());
         assertThat(aaguid).isNotEqualTo(AAGUID.NULL);
     }

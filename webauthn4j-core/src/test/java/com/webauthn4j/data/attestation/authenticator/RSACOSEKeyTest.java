@@ -113,7 +113,7 @@ class RSACOSEKeyTest {
 
 
     @Test
-    void getPublicKey_with_invalidKey_test(){
+    void getPublicKey_with_invalidKey_test() {
         RSACOSEKey target = createNullNKey();
         assertThat(target.getPublicKey()).isNull();
     }
