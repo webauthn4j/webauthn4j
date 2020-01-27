@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestAttestationUtil;
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +30,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class X509CertificateDeserializerTest {
 
+
     @Test
     void deserialize_test() throws CertificateEncodingException {
-        CborConverter cborConverter = new CborConverter();
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", TestAttestationUtil.load2tierTestAuthenticatorAttestationCertificate().getEncoded());
@@ -43,7 +46,8 @@ class X509CertificateDeserializerTest {
 
     @Test
     void deserialize_empty_byte_array_test() {
-        CborConverter cborConverter = new CborConverter();
+        ObjectConverter objectConverter = new ObjectConverter();
+        CborConverter cborConverter = objectConverter.getCborConverter();
 
         Map<String, byte[]> source = new HashMap<>();
         source.put("certificate", new byte[0]);

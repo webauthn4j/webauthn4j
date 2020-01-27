@@ -18,6 +18,7 @@ package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -31,8 +32,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class RSACOSEKeyTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void equals_hashCode_test() {

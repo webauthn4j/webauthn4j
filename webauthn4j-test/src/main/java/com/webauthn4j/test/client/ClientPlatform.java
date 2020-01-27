@@ -18,8 +18,7 @@ package com.webauthn4j.test.client;
 
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -42,10 +41,9 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
 
     private Origin origin;
     //TODO: support multiple authenticators

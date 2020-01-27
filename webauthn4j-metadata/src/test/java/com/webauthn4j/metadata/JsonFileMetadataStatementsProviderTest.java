@@ -18,7 +18,7 @@ package com.webauthn4j.metadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
@@ -36,13 +36,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonFileMetadataStatementsProviderTest {
 
-    private JsonConverter jsonConverter;
+    private ObjectConverter objectConverter;
 
-    public JsonFileMetadataStatementsProviderTest() {
+    JsonFileMetadataStatementsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        objectConverter = new ObjectConverter(jsonMapper, cborMapper);
     }
 
     @Test
@@ -51,7 +51,7 @@ class JsonFileMetadataStatementsProviderTest {
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_fido2.json").toURI()));
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toURI()));
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_uaf.json").toURI()));
-        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
+        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(objectConverter, paths);
         Map<AAGUID, Set<MetadataStatement>> itemMapInFirstCall = provider.provide();
         readMetadataItem(itemMapInFirstCall);
         // read again to run through all branches of JsonFileMetadataStatementsProvider.provider(), and confirm it
@@ -64,7 +64,7 @@ class JsonFileMetadataStatementsProviderTest {
     void fetchMetadataFromUnknownProtocolFamilyMetadataStatementFile() throws URISyntaxException {
         List<Path> paths = new ArrayList<>(4);
         paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
-        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
+        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(objectConverter, paths);
         assertThrows(UnknownProtocolFamilyException.class, provider::provide);
     }
 
@@ -73,7 +73,7 @@ class JsonFileMetadataStatementsProviderTest {
     void fetchMetadataFromNonExistentFile() {
         Path path = Paths.get("NonExistentFile.json");
         List<Path> paths = Collections.singletonList(path);
-        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(jsonConverter, paths);
+        JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(objectConverter, paths);
         assertThrows(UncheckedIOException.class, provider::provide);
     }
 

@@ -18,6 +18,7 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.exception.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMEccCurveTest {
 
-    JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void create_test() {

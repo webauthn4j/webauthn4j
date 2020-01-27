@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.util;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -40,43 +39,11 @@ public class JsonConverter implements Serializable {
 
     private ObjectMapper jsonMapper;
 
-    private CborConverter cborConverter;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    JsonConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper, CborConverter cborConverter) {
+    JsonConverter(ObjectMapper jsonMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
-        AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
-        AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.jsonMapper = jsonMapper;
-        this.cborConverter = cborConverter;
-
-        if(this.cborConverter == null){
-            this.cborConverter = new CborConverter(jsonMapper, cborMapper, this);
-            ConverterUtil.initializeJsonMapper(jsonMapper, this, this.cborConverter);
-            ConverterUtil.initializeCborMapper(cborMapper, this, this.cborConverter);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public JsonConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
-        this(jsonMapper, cborMapper, null);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public JsonConverter() {
-        this(new ObjectMapper(new JsonFactory()), new ObjectMapper(new CBORFactory()));
     }
 
     @SuppressWarnings("unchecked")
@@ -137,16 +104,4 @@ public class JsonConverter implements Serializable {
         }
     }
 
-
-
-    /**
-     * Returns the twined {@link CborConverter}
-     *
-     * @return the twined {@link CborConverter}
-     * @deprecated
-     */
-    @Deprecated
-    public CborConverter getCborConverter() {
-        return cborConverter;
-    }
 }

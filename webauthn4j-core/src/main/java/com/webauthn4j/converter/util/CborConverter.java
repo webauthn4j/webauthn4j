@@ -41,43 +41,11 @@ public class CborConverter implements Serializable {
 
     private ObjectMapper cborMapper;
 
-    private JsonConverter jsonConverter;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper, JsonConverter jsonConverter) {
-        AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
+    CborConverter(ObjectMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
-
-        AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.cborMapper = cborMapper;
-        this.jsonConverter = jsonConverter;
-
-        if(this.jsonConverter == null){
-            this.jsonConverter = new JsonConverter(jsonMapper, cborMapper, this);
-            ConverterUtil.initializeJsonMapper(jsonMapper, this.jsonConverter, this);
-            ConverterUtil.initializeCborMapper(cborMapper, this.jsonConverter, this);
-        }
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public CborConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
-        this(jsonMapper, cborMapper, null);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public CborConverter() {
-        this(new ObjectMapper(), new ObjectMapper(new CBORFactory()));
     }
 
     @SuppressWarnings("unchecked")
@@ -140,15 +108,4 @@ public class CborConverter implements Serializable {
         }
     }
 
-
-    /**
-     * Returns the twined {@link JsonConverter}
-     *
-     * @return the twined {@link JsonConverter}
-     * @deprecated
-     */
-    @Deprecated
-    public JsonConverter getJsonConverter() {
-        return jsonConverter;
-    }
 }

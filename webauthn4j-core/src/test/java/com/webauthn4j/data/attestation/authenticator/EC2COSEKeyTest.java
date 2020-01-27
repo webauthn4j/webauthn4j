@@ -18,6 +18,7 @@ package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
@@ -38,8 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class EC2COSEKeyTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void createFromUncompressedECCKey_test() {

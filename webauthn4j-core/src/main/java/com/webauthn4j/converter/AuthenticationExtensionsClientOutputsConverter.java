@@ -39,15 +39,6 @@ public class AuthenticationExtensionsClientOutputsConverter {
         this.jsonConverter = objectConverter.getJsonConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AuthenticationExtensionsClientOutputsConverter(JsonConverter jsonConverter) {
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-        this.jsonConverter = jsonConverter;
-    }
-
     // ~ Methods
     // ================================================================================================
 

@@ -22,8 +22,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorAttestationResponse;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.PublicKeyCredential;
@@ -70,13 +69,12 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
  */
 public class TestDataUtil {
 
-    private static JsonConverter jsonConverter = new JsonConverter();
-    private static CborConverter cborConverter = jsonConverter.getCborConverter();
-    private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(jsonConverter);
-    private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
-    private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+    private static ObjectConverter objectConverter = new ObjectConverter();
+    private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+    private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     private TestDataUtil() {
     }

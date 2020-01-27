@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
@@ -29,7 +28,7 @@ import java.nio.ByteBuffer;
 import java.security.*;
 
 /**
- * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link COSEKey}
+ * Validates the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
  */
 class AssertionSignatureValidator {
 

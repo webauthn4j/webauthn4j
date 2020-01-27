@@ -67,17 +67,6 @@ public class AuthenticatorDataConverter {
         this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AuthenticatorDataConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
-        this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(cborConverter);
-    }
-
-
     //~ Methods
     // ================================================================================================
 

@@ -19,8 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -31,24 +30,21 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AuthenticationObjectTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = new CborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void getter_test() {
 
         byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
-        byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
+        byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();
@@ -80,9 +76,9 @@ class AuthenticationObjectTest {
 
         byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
-        byte[] clientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(clientData);
+        byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
-        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(cborConverter).convert(authenticatorData);
+        byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();

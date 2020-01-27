@@ -45,15 +45,6 @@ public class AttestedCredentialDataConverter implements Serializable{
         this.cborConverter = objectConverter.getCborConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AttestedCredentialDataConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
-    }
-
     public byte[] convert(AttestedCredentialData attestationData){
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

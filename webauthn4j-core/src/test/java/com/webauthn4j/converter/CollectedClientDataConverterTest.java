@@ -16,7 +16,7 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
@@ -31,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CollectedClientDataConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
-    private CollectedClientDataConverter target = new CollectedClientDataConverter(jsonConverter);
+    private CollectedClientDataConverter target = new CollectedClientDataConverter(objectConverter);
 
     @Test
     void convert_deserialization_test() {
@@ -43,7 +43,6 @@ class CollectedClientDataConverterTest {
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
                 () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.GET),
-                //noinspection SpellCheckingInspection
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("tk31UH1ETGGTPj33OhOMzw")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"))
         );
@@ -65,7 +64,6 @@ class CollectedClientDataConverterTest {
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
                 () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
-                //noinspection SpellCheckingInspection
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("Tgup0LZZQKinvtQcZFYdRw")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"))
         );

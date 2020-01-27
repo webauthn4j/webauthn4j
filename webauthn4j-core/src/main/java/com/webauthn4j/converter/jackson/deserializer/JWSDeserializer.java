@@ -20,7 +20,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
@@ -44,18 +43,6 @@ public class JWSDeserializer extends StdDeserializer<JWS> {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         this.jwsFactory = new JWSFactory(objectConverter);
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public JWSDeserializer(JsonConverter jsonConverter) {
-        super(JWS.class);
-
-        AssertUtil.notNull(jsonConverter, "jsonConverter must not be null");
-
-        this.jwsFactory = new JWSFactory(jsonConverter);
     }
 
     @Override

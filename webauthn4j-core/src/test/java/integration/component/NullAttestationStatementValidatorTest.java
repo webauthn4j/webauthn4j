@@ -42,7 +42,7 @@ class NullAttestationStatementValidatorTest {
     private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_fido_u2f_attestation_statement_test() {
+    void validate_RegistrationRequest_with_fido_u2f_attestation_statement_test() {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor();
         ClientPlatform clientPlatform = new ClientPlatform(origin, fidou2FAuthenticatorAdaptor);
         String rpId = "example.com";
@@ -82,7 +82,7 @@ class NullAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
+    void validate_RegistrationRequest_with_packed_attestation_statement_test() {
         WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
         ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
         String rpId = "example.com";

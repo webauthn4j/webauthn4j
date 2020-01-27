@@ -17,16 +17,16 @@
 package com.webauthn4j.converter;
 
 
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsClientOutputsConverterTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
-    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void convert_null_test() {
