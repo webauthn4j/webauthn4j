@@ -18,6 +18,7 @@ package com.webauthn4j.validator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -26,10 +27,7 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.util.JacksonUtil;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -93,14 +91,6 @@ public class RegistrationObject {
     // ~ Methods
     // ========================================================================================================
 
-    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
-        try {
-            return JacksonUtil.binaryValue(cborMapper.readTree(attestationObject).get("authData"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
     public AttestationObject getAttestationObject() {
         return attestationObject;
     }
@@ -158,5 +148,9 @@ public class RegistrationObject {
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
+    }
+
+    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
+        return JacksonUtil.binaryValue(JacksonUtil.readTree(cborMapper, attestationObject).get("authData"));
     }
 }

@@ -21,6 +21,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 
+/**
+ * @deprecated Moved to {@link com.webauthn4j.converter.jackson} package
+ */
+@Deprecated
 public class JacksonUtil {
 
     private JacksonUtil() {
