@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class COSEAlgorithmIdentifier implements Serializable {
 
-    public static final COSEAlgorithmIdentifier RS1   = new COSEAlgorithmIdentifier(-65535);
+    public static final COSEAlgorithmIdentifier RS1 = new COSEAlgorithmIdentifier(-65535);
     public static final COSEAlgorithmIdentifier RS256 = new COSEAlgorithmIdentifier(-257);
     public static final COSEAlgorithmIdentifier RS384 = new COSEAlgorithmIdentifier(-258);
     public static final COSEAlgorithmIdentifier RS512 = new COSEAlgorithmIdentifier(-259);

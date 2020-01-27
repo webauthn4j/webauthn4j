@@ -27,19 +27,19 @@ public class MetadataStatementValidator {
     private List<String> KNOWN_PROTOCOL_FAMILY = Arrays.asList("uaf", "u2f", "fido2");
     private List<String> KNOWN_ASSERTION_SCHEME = Arrays.asList("FIDOV2", "U2FV1BIN", "UAFV1TLV");
 
-    public void validate(MetadataStatement metadataStatement){
+    public void validate(MetadataStatement metadataStatement) {
         validateProtocolFamily(metadataStatement.getProtocolFamily());
         validateAssertionScheme(metadataStatement.getAssertionScheme());
     }
 
-    private void validateProtocolFamily(String protocolFamily){
-        if(!KNOWN_PROTOCOL_FAMILY.contains(protocolFamily)){
+    private void validateProtocolFamily(String protocolFamily) {
+        if (!KNOWN_PROTOCOL_FAMILY.contains(protocolFamily)) {
             throw new UnknownProtocolFamilyException(String.format("Unknown protocol family '%s' is provided", protocolFamily));
         }
     }
 
-    private void validateAssertionScheme(String assertionScheme){
-        if(!KNOWN_ASSERTION_SCHEME.contains(assertionScheme)){
+    private void validateAssertionScheme(String assertionScheme) {
+        if (!KNOWN_ASSERTION_SCHEME.contains(assertionScheme)) {
             throw new UnknownProtocolFamilyException(String.format("Unknown assertion scheme '%s' is provided", assertionScheme));
         }
     }

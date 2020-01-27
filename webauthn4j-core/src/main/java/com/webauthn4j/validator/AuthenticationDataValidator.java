@@ -17,8 +17,8 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.AuthenticationData;
+import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -195,7 +195,6 @@ public class AuthenticationDataValidator {
 
         //spec| Step18
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
-
 
 
     }

@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AuthenticatorTest {
 
     @Test
-    void serialization_deserialization_test(){
+    void serialization_deserialization_test() {
         ObjectConverter objectConverter = new ObjectConverter();
         CborConverter cborConverter = objectConverter.getCborConverter();
 
@@ -57,7 +57,7 @@ class AuthenticatorTest {
         assertThat(deserialized).isEqualTo(original);
     }
 
-    private static class TestAuthenticator implements Authenticator{
+    private static class TestAuthenticator implements Authenticator {
 
         private AttestedCredentialData attestedCredentialData;
         private AttestationStatement attestationStatement;

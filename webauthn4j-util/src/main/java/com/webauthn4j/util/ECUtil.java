@@ -30,11 +30,10 @@ import java.util.Arrays;
  */
 public class ECUtil {
 
-    private static final SecureRandom secureRandom = new SecureRandom();
-
     public static final ECParameterSpec P_256_SPEC = createECParameterSpec("secp256r1");
     public static final ECParameterSpec P_384_SPEC = createECParameterSpec("secp384r1");
     public static final ECParameterSpec P_521_SPEC = createECParameterSpec("secp521r1");
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     private ECUtil() {
     }
@@ -51,7 +50,7 @@ public class ECUtil {
                 .array();
     }
 
-    public static byte[] convertToFixedByteArray(BigInteger value){
+    public static byte[] convertToFixedByteArray(BigInteger value) {
         return convertToFixedByteArray(32, value);
     }
 
@@ -134,7 +133,7 @@ public class ECUtil {
 
     private static PublicKey createPublicKey(byte[] x, byte[] y) {
         try {
-            byte[] encodedPublicKey = ByteBuffer.allocate(1 + x.length + y.length).put(new byte[] {0x04}).put(x).put(y).array();
+            byte[] encodedPublicKey = ByteBuffer.allocate(1 + x.length + y.length).put(new byte[]{0x04}).put(x).put(y).array();
             ECPoint point = createECPoint(encodedPublicKey);
             return KeyFactory.getInstance("ECDSA").generatePublic(new ECPublicKeySpec(point, ECUtil.P_256_SPEC));
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
@@ -142,7 +141,7 @@ public class ECUtil {
         }
     }
 
-    private static ECPoint createECPoint(byte[] publicKey){
+    private static ECPoint createECPoint(byte[] publicKey) {
         byte[] x = Arrays.copyOfRange(publicKey, 1, 1 + 32);
         byte[] y = Arrays.copyOfRange(publicKey, 1 + 32, 1 + 32 + 32);
         return new ECPoint(

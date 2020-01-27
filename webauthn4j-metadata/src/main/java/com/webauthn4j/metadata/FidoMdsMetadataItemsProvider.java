@@ -52,12 +52,10 @@ import java.util.stream.Collectors;
 public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
-
-    private Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
-
     Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
+    private Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
     private JsonConverter jsonConverter;
     private JWSFactory jwsFactory;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
@@ -100,7 +98,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter) {
-        this(objectConverter, (String)null);
+        this(objectConverter, (String) null);
     }
 
     private static X509Certificate loadRootCertificateFromPath(Path path) {
@@ -116,6 +114,28 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
         return CertificateUtil.generateX509Certificate(inputStream);
+    }
+
+    static String appendToken(String url, String token) {
+        if (url == null) {
+            throw new IllegalArgumentException("url must not be null.");
+        }
+        if (token == null) {
+            return url;
+        }
+        try {
+            URI uriObject = new URI(url);
+            String query = uriObject.getQuery();
+            if (query == null) {
+                query = "token=" + token;
+            } else {
+                query += "&" + "token=" + token;
+            }
+            return new URI(uriObject.getScheme(), uriObject.getAuthority(),
+                    uriObject.getPath(), query, uriObject.getFragment()).toString();
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(String.format("Provided url %s is illegal.", url), e);
+        }
     }
 
     @Override
@@ -164,6 +184,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     /**
      * fetch MetaDataTOCPayload
+     *
      * @param skipCertPathValidation certPath Validation shouldn't be off except testing
      * @return MetaDataTOCPayload
      */
@@ -176,7 +197,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         if (!jws.isValidSignature()) {
             throw new MDSException("invalid signature");
         }
-        if(!skipCertPathValidation){
+        if (!skipCertPathValidation) {
             validateCertPath(jws);
         }
         return jws.getPayload();
@@ -225,28 +246,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         MetadataStatement metadataStatement = jsonConverter.readValue(metadataStatementStr, MetadataStatement.class);
         metadataStatementValidator.validate(metadataStatement);
         return metadataStatement;
-    }
-
-    static String appendToken(String url, String token){
-        if(url == null){
-            throw new IllegalArgumentException("url must not be null.");
-        }
-        if(token == null){
-            return url;
-        }
-        try {
-            URI uriObject = new URI(url);
-            String query = uriObject.getQuery();
-            if (query == null) {
-                query = "token=" + token;
-            } else {
-                query += "&" + "token=" + token;
-            }
-            return new URI(uriObject.getScheme(), uriObject.getAuthority(),
-                    uriObject.getPath(), query, uriObject.getFragment()).toString();
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException(String.format("Provided url %s is illegal.", url), e);
-        }
     }
 
 }

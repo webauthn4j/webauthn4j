@@ -33,7 +33,7 @@ class UnsignedNumberUtilTest {
 
     @Test
     void getUnsignedByte() {
-        byte data = (byte)0xFF;
+        byte data = (byte) 0xFF;
         short result = UnsignedNumberUtil.getUnsignedByte(data);
         assertThat(result).isEqualTo((short) 255);
     }

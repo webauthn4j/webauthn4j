@@ -202,7 +202,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         authenticationRequest.getSignature()
-                        );
+                );
         AuthenticationParameters webAuthnAuthenticationParameters =
                 new AuthenticationParameters(
                         serverProperty,
@@ -252,7 +252,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticatorAssertionResponse.getAuthenticatorData(),
                         authenticatorAssertionResponse.getClientDataJSON(),
                         authenticatorAssertionResponse.getSignature()
-                        );
+                );
         AuthenticationParameters authenticationParameters =
                 new AuthenticationParameters(
                         serverProperty,
@@ -350,7 +350,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         authenticatorAssertionResponse.getAuthenticatorData(),
                         authenticatorAssertionResponse.getClientDataJSON(),
                         authenticatorAssertionResponse.getSignature()
-                        );
+                );
         AuthenticationParameters authenticationParameters =
                 new AuthenticationParameters(
                         serverProperty,

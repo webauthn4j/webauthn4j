@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 class CustomAuthenticationValidatorTest {
 
     @Test
-    void parameter_test(){
+    void parameter_test() {
 
         CustomAuthenticationValidator target = authenticationObject -> {
             assertThat(authenticationObject).hasFieldOrProperty("serverProperty");

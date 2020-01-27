@@ -28,17 +28,19 @@ public class HKDFUtil {
 
     private static final int HASH_LENGTH = 32;
 
-    private HKDFUtil(){}
+    private HKDFUtil() {
+    }
 
     /**
      * calculate HKDF with SHA256
-     * @param ikm input keying material
-     * @param salt salt
-     * @param info context and application specific information
+     *
+     * @param ikm          input keying material
+     * @param salt         salt
+     * @param info         context and application specific information
      * @param outputLength length of output keying material in bytes
      * @return output keying material
      */
-    public static byte[] calculateHKDFSHA256(byte[] ikm, byte[] salt, byte[] info, int outputLength){
+    public static byte[] calculateHKDFSHA256(byte[] ikm, byte[] salt, byte[] info, int outputLength) {
         byte[] pseudoRandomKey = extract(salt, ikm);
         return expand(pseudoRandomKey, info, outputLength);
     }
@@ -46,7 +48,7 @@ public class HKDFUtil {
     /**
      * HKDF extract
      *
-     * @param ikm input keying material
+     * @param ikm  input keying material
      * @param salt salt
      * @return a pseudo random key
      */
@@ -71,8 +73,8 @@ public class HKDFUtil {
     /**
      * HKDF expand
      *
-     * @param key a pseudo random key
-     * @param info context and application specific information
+     * @param key          a pseudo random key
+     * @param info         context and application specific information
      * @param outputLength length of output keying material in bytes
      * @return output keying material
      */
@@ -103,7 +105,7 @@ public class HKDFUtil {
             mac.reset();
             byte[] secret = ByteBuffer
                     .allocate(hashRound.length + info.length + 1)
-                    .put(hashRound).put(info).put((byte)roundNum)
+                    .put(hashRound).put(info).put((byte) roundNum)
                     .array();
             hashRound = mac.doFinal(secret);
             generatedBytes.put(hashRound);

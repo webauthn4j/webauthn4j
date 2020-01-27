@@ -33,23 +33,24 @@ public class EmulatorUtil {
 
     private static final Origin origin = new Origin("http://example.com");
 
-    private EmulatorUtil(){}
+    private EmulatorUtil() {
+    }
 
-    public static ClientPlatform createClientPlatform(AuthenticatorAdaptor authenticatorAdaptor){
+    public static ClientPlatform createClientPlatform(AuthenticatorAdaptor authenticatorAdaptor) {
         return new ClientPlatform(origin, authenticatorAdaptor);
     }
 
-    public static ClientPlatform createClientPlatform(WebAuthnModelAuthenticator webAuthnModelAuthenticator){
+    public static ClientPlatform createClientPlatform(WebAuthnModelAuthenticator webAuthnModelAuthenticator) {
         WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(webAuthnModelAuthenticator);
         return createClientPlatform(webAuthnAuthenticatorAdaptor);
     }
 
-    public static ClientPlatform createClientPlatform(FIDOU2FAuthenticator fidoU2FAuthenticator){
+    public static ClientPlatform createClientPlatform(FIDOU2FAuthenticator fidoU2FAuthenticator) {
         FIDOU2FAuthenticatorAdaptor fidou2FAuthenticatorAdaptor = new FIDOU2FAuthenticatorAdaptor(fidoU2FAuthenticator);
         return createClientPlatform(fidou2FAuthenticatorAdaptor);
     }
 
-    public static ClientPlatform createClientPlatform(){
+    public static ClientPlatform createClientPlatform() {
         return createClientPlatform(new PackedAuthenticator());
     }
 }

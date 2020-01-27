@@ -38,7 +38,7 @@ public class WebAuthnManagerSample {
 
     private WebAuthnManager webAuthnManager;
 
-    public WebAuthnManagerSample(){
+    public WebAuthnManagerSample() {
         // WebAuthnManager.createNonStrictWebAuthnManager() returns a WebAuthnManager instance
         // which doesn't validate an attestation statement. It is recommended configuration for most web application.
         // If you are building enterprise web application and need to validate the attestation statement, use the constructor of
@@ -51,7 +51,8 @@ public class WebAuthnManagerSample {
         // Client properties
         byte[] attestationObject = null /* set attestationObject */;
         byte[] clientDataJSON = null /* set clientDataJSON */;
-        String clientExtensionJSON = null;  /* set clientExtensionJSON */;
+        String clientExtensionJSON = null;  /* set clientExtensionJSON */
+        ;
         Set<String> transports = null /* set transports */;
 
         // Server properties
@@ -69,17 +70,15 @@ public class WebAuthnManagerSample {
         RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
         RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
         RegistrationData registrationData;
-        try{
+        try {
             registrationData = webAuthnManager.parse(registrationRequest);
-        }
-        catch (DataConversionException e){
+        } catch (DataConversionException e) {
             // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
             throw e;
         }
-        try{
+        try {
             webAuthnManager.validate(registrationData, registrationParameters);
-        }
-        catch (ValidationException e){
+        } catch (ValidationException e) {
             // If you would like to handle WebAuthn data validation error, please catch ValidationException
             throw e;
         }
@@ -137,17 +136,15 @@ public class WebAuthnManagerSample {
                 );
 
         AuthenticationData authenticationData;
-        try{
+        try {
             authenticationData = webAuthnManager.parse(authenticationRequest);
-        }
-        catch (DataConversionException e){
+        } catch (DataConversionException e) {
             // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
             throw e;
         }
-        try{
+        try {
             webAuthnManager.validate(authenticationData, authenticationParameters);
-        }
-        catch (ValidationException e){
+        } catch (ValidationException e) {
             // If you would like to handle WebAuthn data validation error, please catch ValidationException
             throw e;
         }

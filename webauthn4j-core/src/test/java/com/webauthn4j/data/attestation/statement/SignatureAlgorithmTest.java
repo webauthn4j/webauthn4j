@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class SignatureAlgorithmTest {
 
     @Test
-    void create_with_invalid_alg_test(){
-        assertThatThrownBy(()-> SignatureAlgorithm.create(new COSEAlgorithmIdentifier(-16))).isInstanceOf(IllegalArgumentException.class);
+    void create_with_invalid_alg_test() {
+        assertThatThrownBy(() -> SignatureAlgorithm.create(new COSEAlgorithmIdentifier(-16))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -40,7 +40,7 @@ class SignatureAlgorithmTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         assertThat(SignatureAlgorithm.ES256).isEqualTo(SignatureAlgorithm.ES256);
         assertThat(SignatureAlgorithm.ES256).hasSameHashCodeAs(SignatureAlgorithm.ES256);
         assertThat(SignatureAlgorithm.ES256).isNotEqualTo(SignatureAlgorithm.RS512);

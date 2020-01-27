@@ -65,6 +65,7 @@ public class JWS<T extends Serializable> implements Serializable {
 
     /**
      * Validates signature.
+     *
      * @return true if it pass validation
      */
     public boolean isValidSignature() {
