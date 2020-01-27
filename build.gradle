@@ -99,6 +99,12 @@ subprojects {
         archives javadocJar
     }
 
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+
     apply from: "../helper.gradle"
 
     def projectUrl = "https://github.com/webauthn4j/webauthn4j"
