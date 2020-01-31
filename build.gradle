@@ -36,7 +36,7 @@ apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'org.owasp.dependencycheck'
 
-//check.dependsOn dependencyCheckAggregate
+check.dependsOn dependencyCheckAggregate
 
 allprojects {
     group 'com.webauthn4j'
@@ -92,7 +92,7 @@ subprojects {
         options.compilerArgs << "-Xlint:unchecked"  << "-Werror"
     }
 
-//    check.dependsOn dependencyCheckAnalyze
+    check.dependsOn dependencyCheckAnalyze
 
     artifacts {
         archives sourcesJar
