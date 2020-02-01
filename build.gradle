@@ -188,6 +188,7 @@ subprojects {
                 }
                 //Optional configuration for Maven Central sync of the version
                 mavenCentralSync {
+                    sync = false
                     user = mavenCentralUser
                     password = mavenCentralPassword
                 }
