@@ -169,7 +169,7 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = hasProperty('bintray.publish') ? property('bintray.publish') : false // Do not publish automatically on bintrayUpload.
+        publish = true
         dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
         publications = ['artifactPublication']
         pkg {
@@ -197,18 +197,30 @@ subprojects {
 
 }
 
+task bintrayWaitStabilize() {
+    group = "publishing"
+    doLast {
+        sleep(30000);
+    }
+}
+
+bintrayPublish.dependsOn bintrayWaitStabilize
+bintrayWaitStabilize.mustRunAfter bintrayUpload
+
+
 
 task updateVersionsInDocuments() {
     group = "documentation"
-    String regex = "<webauthn4j\\.version>.*</webauthn4j\\.version>";
-    String replacement = "<webauthn4j\\.version>" + latestReleasedWebAuthn4JVersion + "</webauthn4j.version>";
+    doLast {
+        String regex = "<webauthn4j\\.version>.*</webauthn4j\\.version>";
+        String replacement = "<webauthn4j\\.version>" + latestReleasedWebAuthn4JVersion + "</webauthn4j.version>";
 
-    def files = [file('README.md'), file('docs/src/reference/asciidoc/en/introduction.adoc'), file('docs/src/reference/asciidoc/ja/introduction.adoc')]
-    files.each { file ->
-        String updated = file.getText('UTF-8').replaceFirst(regex, replacement)
-        file.setText(updated, 'UTF-8')
+        def files = [file('README.md'), file('docs/src/reference/asciidoc/en/introduction.adoc'), file('docs/src/reference/asciidoc/ja/introduction.adoc')]
+        files.each { file ->
+            String updated = file.getText('UTF-8').replaceFirst(regex, replacement)
+            file.setText(updated, 'UTF-8')
+        }
     }
-
 }
 
 task generateReleaseNote(type: JavaExec){
