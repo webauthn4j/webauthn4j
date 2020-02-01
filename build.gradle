@@ -169,7 +169,7 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = false // Do not publish automatically on bintrayUpload. Only on dedicated bintrayPublish task
+        publish = hasProperty('bintray.publish') ? property('bintray.publish') : false // Do not publish automatically on bintrayUpload.
         dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
         publications = ['artifactPublication']
         pkg {

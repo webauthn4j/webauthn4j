@@ -45,4 +45,4 @@ jobs:
           MAVEN_CENTRAL_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
-          ./gradlew bintrayPublish
+          ./gradlew bintrayPublish -Pbintray.publish=true
