@@ -169,7 +169,7 @@ subprojects {
         user = bintrayUser
         key = bintrayToken
         configurations = ['archives']
-        publish = true
+        publish = false // Do not publish automatically on bintrayUpload. Only on dedicated bintrayPublish task
         dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
         publications = ['artifactPublication']
         pkg {
@@ -188,7 +188,6 @@ subprojects {
                 }
                 //Optional configuration for Maven Central sync of the version
                 mavenCentralSync {
-                    sync = false
                     user = mavenCentralUser
                     password = mavenCentralPassword
                 }
