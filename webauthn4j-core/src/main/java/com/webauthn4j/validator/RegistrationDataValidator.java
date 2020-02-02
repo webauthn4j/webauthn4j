@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.RegistrationData;
@@ -60,8 +59,6 @@ public class RegistrationDataValidator {
 
     private final AttestationValidator attestationValidator;
 
-    private final AttestationObjectConverter attestationObjectConverter;
-
     public RegistrationDataValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
@@ -76,8 +73,6 @@ public class RegistrationDataValidator {
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-
-        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
 
         this.attestationValidator = new AttestationValidator(
                 attestationStatementValidators,
