@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 buildscript {
     repositories {
         mavenCentral()
@@ -26,6 +27,7 @@ buildscript {
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:${artifactoryVersion}")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${bintrayVersion}")
         classpath("org.owasp:dependency-check-gradle:${owaspDependencyCheckVersion}")
+        classpath ("org.codehaus.groovy.modules.http-builder:http-builder:0.7.2")
     }
 
 }
@@ -146,6 +148,20 @@ subprojects {
     def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
     def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
     def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
+
+    task bintrayGpgSign(){
+        group = "publishing"
+        doLast{
+            signArtifactsOnBintray(bintrayUser, bintrayToken);
+        }
+    }
+
+    task bintrayMavenCentralSync(){
+        group = "publishing"
+        doLast{
+            syncMavenCentralToBintray(bintrayUser, bintrayToken);
+        }
+    }
 
     artifactory {
         contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
