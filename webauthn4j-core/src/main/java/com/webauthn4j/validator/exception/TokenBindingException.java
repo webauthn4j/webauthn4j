@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if tokenBinding error happen
  */
+@SuppressWarnings("S110")
 public class TokenBindingException extends ValidationException {
 
     public TokenBindingException(String message, Throwable cause) {

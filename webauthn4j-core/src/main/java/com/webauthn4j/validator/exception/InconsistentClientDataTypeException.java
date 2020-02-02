@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if inconsistent type is specified for client data
  */
+@SuppressWarnings("S110")
 public class InconsistentClientDataTypeException extends ValidationException {
     public InconsistentClientDataTypeException(String message, Throwable cause) {
         super(message, cause);

@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if the counter value is lower than expected value
  */
+@SuppressWarnings("S110")
 public class MaliciousCounterValueException extends ValidationException {
     public MaliciousCounterValueException(String message) {
         super(message);

@@ -38,7 +38,6 @@ def signArtifactsOnBintray(String user, String pass){
     http.request(POST, JSON) {
         uri.path = "/gpg/${bintray.pkg.userOrg}/${bintray.pkg.repo}/${bintray.pkg.name}/versions/${bintray.pkg.version.name}"
         logger.info(uri.path)
-        //body = [passphrase: signKeyPassphrase]
         response.success = { res ->
             logger.info("Signed version ${bintray.pkg.version.name}")
         }
@@ -57,7 +56,6 @@ def syncMavenCentralToBintray(String user, String pass){
     http.request(POST, JSON) {
         uri.path = "/maven_central_sync/${bintray.pkg.userOrg}/${bintray.pkg.repo}/${bintray.pkg.name}/versions/${bintray.pkg.version.name}"
         logger.info(uri.path)
-        //body = [passphrase: signKeyPassphrase]
         response.success = { res ->
             logger.info("Synced version ${bintray.pkg.version.name}")
         }
