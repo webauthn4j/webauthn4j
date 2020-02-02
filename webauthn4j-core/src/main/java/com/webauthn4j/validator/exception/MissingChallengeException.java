@@ -20,7 +20,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if challenge doesn't exist in the session
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class MissingChallengeException extends ValidationException {
     public MissingChallengeException(String message, Throwable cause) {
         super(message, cause);

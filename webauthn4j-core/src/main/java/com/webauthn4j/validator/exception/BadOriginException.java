@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if bad origin is specified
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class BadOriginException extends ValidationException {
     public BadOriginException(String message, Throwable cause) {
         super(message, cause);

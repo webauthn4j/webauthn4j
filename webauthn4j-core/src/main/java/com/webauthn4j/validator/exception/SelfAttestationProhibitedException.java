@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if self attestation is specified while prohibited
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class SelfAttestationProhibitedException extends ValidationException {
     public SelfAttestationProhibitedException(String message, Throwable cause) {
         super(message, cause);

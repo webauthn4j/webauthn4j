@@ -183,7 +183,7 @@ public class WebAuthnManager {
     }
 
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public RegistrationData parse(RegistrationRequest registrationRequest) throws DataConversionException {
 
         byte[] clientDataBytes = registrationRequest.getClientDataJSON();
@@ -206,20 +206,20 @@ public class WebAuthnManager {
 
     }
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public RegistrationData validate(RegistrationRequest registrationRequest, RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
         RegistrationData registrationData = parse(registrationRequest);
         registrationDataValidator.validate(registrationData, registrationParameters);
         return registrationData;
     }
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public RegistrationData validate(RegistrationData registrationData, RegistrationParameters registrationParameters) throws ValidationException {
         registrationDataValidator.validate(registrationData, registrationParameters);
         return registrationData;
     }
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public AuthenticationData parse(AuthenticationRequest authenticationRequest) throws DataConversionException {
 
         byte[] credentialId = authenticationRequest.getCredentialId();
@@ -246,14 +246,14 @@ public class WebAuthnManager {
 
     }
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public AuthenticationData validate(AuthenticationRequest authenticationRequest, AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         AuthenticationData authenticationData = parse(authenticationRequest);
         validate(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
-    @SuppressWarnings("S1130")
+    @SuppressWarnings("squid:S1130")
     public AuthenticationData validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) throws ValidationException {
         authenticationDataValidator.validate(authenticationData, authenticationParameters);
         return authenticationData;

@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if user is to be present but not present
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class UserNotPresentException extends ValidationException {
 
     public UserNotPresentException(String message, Throwable cause) {
