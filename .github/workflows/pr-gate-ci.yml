@@ -21,7 +21,7 @@ jobs:
           java-version: ${{ matrix.java_version }}
 
       - name: Build with Gradle
-        run: ./gradlew build javadoc asciidoc
+        run: ./gradlew build javadoc asciidoc -PfailBuildOnCVSS=4
 
   matrix-test:
     name: Test on java ${{ matrix.java_version }} and ${{ matrix.os }}
