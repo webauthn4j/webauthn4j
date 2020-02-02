@@ -18,7 +18,6 @@ package com.webauthn4j.converter.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
-import com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +27,7 @@ class ObjectConverterTest {
     @Test
     void constructor_test() {
         ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new CBORMapper(new CBORFactory());
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         ObjectConverter objectConverter = new ObjectConverter(jsonMapper, cborMapper);
         assertThat(objectConverter.getJsonConverter()).isNotNull();
         assertThat(objectConverter.getCborConverter()).isNotNull();

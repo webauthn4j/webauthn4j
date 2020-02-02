@@ -28,8 +28,8 @@ dependencies {
     compile project(':webauthn4j-metadata')
 
     compile("org.springframework:spring-core")
-    compile("org.bouncycastle:bcprov-jdk15on:${bouncyCastleVersion}")
-    compile("org.bouncycastle:bcpkix-jdk15on:${bouncyCastleVersion}")
+    compile("org.bouncycastle:bcprov-jdk15on")
+    compile("org.bouncycastle:bcpkix-jdk15on")
 
     //Test
     testCompile('ch.qos.logback:logback-classic')
