@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if no trust anchor chained to the attestation certificate is found
  */
+@SuppressWarnings("S110")
 public class TrustAnchorNotFoundException extends ValidationException {
     public TrustAnchorNotFoundException(String message, Throwable cause) {
         super(message, cause);

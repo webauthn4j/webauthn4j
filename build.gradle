@@ -21,12 +21,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarqubeVersion}")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("org.asciidoctor:asciidoctor-gradle-plugin:${asciidoctorGradleVersion}")
-        classpath("org.jfrog.buildinfo:build-info-extractor-gradle:${artifactoryVersion}")
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:${bintrayVersion}")
-        classpath("org.owasp:dependency-check-gradle:${owaspDependencyCheckVersion}")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubeVersion")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        classpath("org.asciidoctor:asciidoctor-gradle-plugin:$asciidoctorGradleVersion")
+        classpath("org.jfrog.buildinfo:build-info-extractor-gradle:$artifactoryVersion")
+        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
+        classpath("org.owasp:dependency-check-gradle:$owaspDependencyCheckVersion")
         classpath ("org.codehaus.groovy.modules.http-builder:http-builder:0.7.2")
     }
 
@@ -42,7 +42,7 @@ check.dependsOn dependencyCheckAggregate
 
 allprojects {
     group 'com.webauthn4j'
-    version "${webAuthn4JVersion}"
+    version "$webAuthn4JVersion"
 
     dependencyCheck {
         failBuildOnCVSS = project.hasProperty("failBuildOnCVSS") ? project.property("failBuildOnCVSS").toInteger() : 11 // Never fail with this value. CI build argument updates this property for blocking vulnerable release.

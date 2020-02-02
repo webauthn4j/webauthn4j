@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if the value violates constraints
  */
+@SuppressWarnings("S110")
 public class ConstraintViolationException extends ValidationException {
 
     public ConstraintViolationException(String message, Throwable cause) {

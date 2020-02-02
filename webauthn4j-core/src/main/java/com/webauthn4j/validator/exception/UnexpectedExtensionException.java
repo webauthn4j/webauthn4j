@@ -19,6 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if unexpected extension is contained
  */
+@SuppressWarnings("S110")
 public class UnexpectedExtensionException extends ValidationException {
     public UnexpectedExtensionException(String message, Throwable cause) {
         super(message, cause);

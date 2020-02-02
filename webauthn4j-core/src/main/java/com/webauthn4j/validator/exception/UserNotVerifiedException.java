@@ -20,6 +20,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if user is to be verified but not verified
  */
+@SuppressWarnings("S110")
 public class UserNotVerifiedException extends ValidationException {
 
     public UserNotVerifiedException(String message, Throwable cause) {

@@ -20,6 +20,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if bad attestation statement is specified
  */
+@SuppressWarnings("S110")
 public class BadAttestationStatementException extends ValidationException {
     public BadAttestationStatementException(String message, Throwable cause) {
         super(message, cause);
