@@ -15,21 +15,30 @@
  */
 
 
+
 buildscript {
+
+    def springBootVersion = "2.1.12.RELEASE"
+    def sonarqubeVersion = "2.8"
+    def asciidoctorGradleVersion="1.5.11"
+    def artifactoryVersion="4.9.3"
+    def bintrayVersion = "1.8.4"
+    def owaspDependencyCheckVersion = "5.3.0"
+    def httpBuilderVersion = "0.7.2"
+
     repositories {
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubeVersion")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubeVersion")
         classpath("org.asciidoctor:asciidoctor-gradle-plugin:$asciidoctorGradleVersion")
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:$artifactoryVersion")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
         classpath("org.owasp:dependency-check-gradle:$owaspDependencyCheckVersion")
-        classpath ("org.codehaus.groovy.modules.http-builder:http-builder:0.7.2")
+        classpath("org.codehaus.groovy.modules.http-builder:http-builder:$httpBuilderVersion")
     }
-
 }
 
 apply plugin: 'java'
@@ -37,8 +46,6 @@ apply plugin: 'org.sonarqube'
 apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'org.owasp.dependencycheck'
-
-check.dependsOn dependencyCheckAggregate
 
 allprojects {
     group 'com.webauthn4j'
@@ -54,7 +61,7 @@ allprojects {
 subprojects {
 
     apply plugin: 'java'
-    apply plugin: "io.spring.dependency-management"
+    apply plugin: 'io.spring.dependency-management'
     apply plugin: 'jacoco'
     apply plugin: 'com.jfrog.bintray'
     apply plugin: "maven-publish"
@@ -66,12 +73,18 @@ subprojects {
         mavenCentral()
     }
 
+    def springBootVersion = "2.1.12.RELEASE"
+    def bouncyCastleVersion = "1.60"
+    def kerbyVersion = "2.0.0"
+
     dependencyManagement {
+        dependencies {
+            dependency("org.apache.kerby:kerby-asn1:$kerbyVersion")
+            dependency("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
+            dependency("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
+        }
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
-
-            // Import Jackson Bom independently as Spring Boot 2.1.7 does not provide way to specify Jackson Bom version
-            mavenBom "com.fasterxml.jackson:jackson-bom:${jacksonBomVersion}"
         }
     }
 
@@ -219,6 +232,7 @@ subprojects {
 
 }
 
+check.dependsOn dependencyCheckAggregate
 
 task updateVersionsInDocuments() {
     group = "documentation"
@@ -242,7 +256,7 @@ task generateReleaseNote(type: JavaExec) {
 }
 
 asciidoctorj {
-    version = asciidoctorJVersion
+    version = "1.6.2"
 }
 
 asciidoctor {
