@@ -16,12 +16,12 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.JacksonUtil;
 
 /**
  * Converter for {@link AttestationObject}
@@ -38,15 +38,6 @@ public class AttestationObjectConverter {
     public AttestationObjectConverter(ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AttestationObjectConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
     }
 
     // ~ Methods

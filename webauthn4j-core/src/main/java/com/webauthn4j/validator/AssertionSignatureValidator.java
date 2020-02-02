@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.WebAuthnAuthenticationContext;
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
@@ -29,7 +28,7 @@ import java.nio.ByteBuffer;
 import java.security.*;
 
 /**
- * Validates the assertion signature in {@link WebAuthnAuthenticationContext} based on {@link COSEKey}
+ * Validates the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
  */
 class AssertionSignatureValidator {
 
@@ -62,12 +61,10 @@ class AssertionSignatureValidator {
             verifier.initVerify(publicKey);
             verifier.update(data);
             return verifier.verify(signature);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             logger.debug("COSE key alg must be signature algorithm.", e);
             return false;
-        }
-        catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
+        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
             logger.debug("Unexpected exception is thrown during signature verification.", e);
             return false;
         }

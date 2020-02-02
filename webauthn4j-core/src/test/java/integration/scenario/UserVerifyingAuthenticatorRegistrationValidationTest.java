@@ -75,7 +75,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_none_attestation_statement_test() {
+    void validate_RegistrationRequest_with_none_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -131,7 +131,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_packed_attestation_statement_test() {
+    void validate_RegistrationRequest_with_packed_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -188,7 +188,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_unexpected_extension_test() {
+    void validate_RegistrationRequest_with_unexpected_extension_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =

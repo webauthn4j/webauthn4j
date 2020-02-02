@@ -27,8 +27,8 @@ class NoneAttestationStatementValidatorTest {
     private NoneAttestationStatementValidator target = new NoneAttestationStatementValidator();
 
     @Test
-    void validate_test(){
-        assertThatThrownBy(()->target.validate(TestDataUtil.createRegistrationObjectWithPackedAttestation())).isInstanceOf(IllegalArgumentException.class);
+    void validate_test() {
+        assertThatThrownBy(() -> target.validate(TestDataUtil.createRegistrationObjectWithPackedAttestation())).isInstanceOf(IllegalArgumentException.class);
     }
 
 }

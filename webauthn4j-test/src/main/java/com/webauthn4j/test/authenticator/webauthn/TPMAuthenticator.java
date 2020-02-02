@@ -90,11 +90,10 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         TPMISTAttest type = TPMISTAttest.TPM_ST_ATTEST_CERTIFY;
         byte[] qualifiedSigner = Base64UrlUtil.decode("AAu8WfTf2aakLcO4Zq_y3w0Zgmu_AUtnqwrW67F2MGuABw");
         String messageDigestJcaName;
-        try{
+        try {
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
             messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new WebAuthnModelException("alg is not signature algorithm", e);
         }
         byte[] extraData = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attestationStatementRequest.getSignedData());

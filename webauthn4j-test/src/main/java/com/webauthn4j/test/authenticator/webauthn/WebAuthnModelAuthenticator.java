@@ -63,7 +63,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     private static SecureRandom secureRandom = new SecureRandom();
     // converter
-    protected CborConverter cborConverter;
+    protected ObjectConverter objectConverter;
+    private CborConverter cborConverter;
     // property
     private AAGUID aaguid;
     private KeyPair attestationKeyPair;
@@ -91,8 +92,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.credentialMap = new HashMap<>();
         this.counter = counter;
         this.capableOfUserVerification = capableOfUserVerification;
+        this.objectConverter = objectConverter;
         this.cborConverter = objectConverter.getCborConverter();
-        this.authenticatorDataConverter = new AuthenticatorDataConverter(cborConverter);
+        this.authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     }
 
     public WebAuthnModelAuthenticator() {
@@ -441,7 +443,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public abstract AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest, RegistrationEmulationOption registrationEmulationOption);
 
-    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest){
+    public AttestationStatement createAttestationStatement(AttestationStatementRequest attestationStatementRequest) {
         return createAttestationStatement(attestationStatementRequest, new RegistrationEmulationOption());
     }
 

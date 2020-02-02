@@ -25,7 +25,7 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", "SHA-256");
     public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", "SHA-384");
     public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("SHA512withECDSA", "SHA-512");
-    public static final SignatureAlgorithm RS1   = new SignatureAlgorithm("SHA1withRSA", "SHA-1");
+    public static final SignatureAlgorithm RS1 = new SignatureAlgorithm("SHA1withRSA", "SHA-1");
     public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("SHA256withRSA", "SHA-256");
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", "SHA-384");
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", "SHA-512");
@@ -36,7 +36,7 @@ public class SignatureAlgorithm {
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES256, ES256);
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES384, ES384);
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES512, ES512);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS1,   RS1);
+        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS1, RS1);
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS256, RS256);
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS384, RS384);
         predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS512, RS512);
@@ -45,14 +45,14 @@ public class SignatureAlgorithm {
     private final String jcaName;
     private final String messageDigestJcaName;
 
-    private SignatureAlgorithm(String jcaName, String messageDigestJcaName){
+    private SignatureAlgorithm(String jcaName, String messageDigestJcaName) {
         this.jcaName = jcaName;
         this.messageDigestJcaName = messageDigestJcaName;
     }
 
-    public static SignatureAlgorithm create(COSEAlgorithmIdentifier coseAlgorithmIdentifier){
+    public static SignatureAlgorithm create(COSEAlgorithmIdentifier coseAlgorithmIdentifier) {
         SignatureAlgorithm signatureAlgorithm = predefinedAlgorithmMap.get(coseAlgorithmIdentifier);
-        if(signatureAlgorithm == null){
+        if (signatureAlgorithm == null) {
             throw new IllegalArgumentException("provided algorithm is not supported.");
         }
         return signatureAlgorithm;

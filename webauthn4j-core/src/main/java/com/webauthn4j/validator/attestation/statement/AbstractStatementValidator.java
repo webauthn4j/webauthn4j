@@ -54,11 +54,10 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
 
     protected String getJcaName(COSEAlgorithmIdentifier alg) {
         String jcaName;
-        try{
+        try {
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
             jcaName = signatureAlgorithm.getJcaName();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);
         }
         return jcaName;

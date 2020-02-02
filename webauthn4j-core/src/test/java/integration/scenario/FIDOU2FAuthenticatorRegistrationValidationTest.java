@@ -16,11 +16,12 @@
 
 package integration.scenario;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.ClientDataType;
@@ -37,8 +38,6 @@ import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
@@ -58,7 +57,7 @@ import static org.mockito.Mockito.mock;
 
 class FIDOU2FAuthenticatorRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
 
     private Origin origin = new Origin("http://localhost");
@@ -66,7 +65,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
-    private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+    private WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
@@ -75,7 +74,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void validate_test() {
@@ -93,28 +92,32 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext
-                = new WebAuthnRegistrationContext(
-                registrationRequest.getClientDataJSON(),
-                registrationRequest.getAttestationObject(),
-                transports,
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
                 clientExtensionJSON,
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
                 serverProperty,
                 false,
+                true,
                 Collections.emptyList()
         );
 
-        WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
+        RegistrationData response = target.validate(registrationRequest, registrationParameters);
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
                 () -> assertThat(response.getAttestationObject()).isNotNull(),
-                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+                () -> assertThat(response.getClientExtensions()).isNotNull()
         );
     }
 
@@ -144,28 +147,33 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 extensions
         );
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext
-                = new WebAuthnRegistrationContext(
-                registrationRequest.getClientDataJSON(),
-                registrationRequest.getAttestationObject(),
-                transports,
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
                 clientExtensionJSON,
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
                 serverProperty,
                 false,
+                true,
                 Collections.emptyList()
         );
 
-        WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
+        RegistrationData response = target.validate(registrationRequest, registrationParameters);
+
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
                 () -> assertThat(response.getAttestationObject()).isNotNull(),
-                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+                () -> assertThat(response.getClientExtensions()).isNotNull()
         );
     }
 
@@ -187,13 +195,27 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
         registrationEmulationOption.setCollectedClientData(collectedClientData);
         registrationEmulationOption.setCollectedClientDataOverrideEnabled(true);
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
+
         assertThrows(InconsistentClientDataTypeException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -212,13 +234,26 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
 
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
         assertThrows(BadChallengeException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -237,13 +272,26 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
 
         clientPlatform.setOrigin(badOrigin); //bad origin
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
         assertThrows(BadOriginException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -260,12 +308,25 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
         assertThrows(BadRpIdException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -282,18 +343,31 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
 
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(registrationRequest.getClientDataJSON(), registrationRequest.getAttestationObject(), transports, serverProperty, false);
-        WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+        WebAuthnManager target = new WebAuthnManager(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
                 new TrustAnchorCertPathTrustworthinessValidator(mock(TrustAnchorsResolver.class)),
                 new DefaultECDAATrustworthinessValidator(),
                 new DefaultSelfAttestationTrustworthinessValidator()
         );
+
         assertThrows(BadAttestationStatementException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -327,19 +401,26 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
         registrationEmulationOption.setSignatureOverrideEnabled(true);
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions, registrationEmulationOption).getAuthenticatorResponse();
 
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext =
-                new WebAuthnRegistrationContext(
-                        registrationRequest.getClientDataJSON(),
-                        registrationRequest.getAttestationObject(),
-                        transports,
-                        serverProperty,
-                        false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
         assertThrows(BadSignatureException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 
@@ -375,16 +456,28 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 extensions
         );
 
-        AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
         CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
-        byte[] maliciousClientDataBytes = new CollectedClientDataConverter(jsonConverter).convertToBytes(maliciousClientData);
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        byte[] maliciousClientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(maliciousClientData);
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext = new WebAuthnRegistrationContext(maliciousClientDataBytes,
-                registrationRequest.getAttestationObject(), transports, serverProperty, false);
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                maliciousClientDataBytes,
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
+                serverProperty,
+                false,
+                true,
+                Collections.emptyList()
+        );
+
         assertThrows(BadSignatureException.class,
-                () -> target.validate(registrationContext)
+                () -> target.validate(registrationRequest, registrationParameters)
         );
     }
 }

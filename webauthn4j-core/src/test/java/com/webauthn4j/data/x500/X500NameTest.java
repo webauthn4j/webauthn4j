@@ -23,12 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class X500NameTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         assertThat(new X500Name().size()).isEqualTo(0);
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         X500Name nameA = new X500Name("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
         X500Name nameB = new X500Name("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
 

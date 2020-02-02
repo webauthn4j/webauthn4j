@@ -24,7 +24,7 @@ class FidoMdsMetadataItemsProviderTest {
 
 
     @Test
-    void appendToken(){
+    void appendToken() {
         assertThat(FidoMdsMetadataItemsProvider.appendToken("https://mds2.fidoalliance.org/", "dummyToken")).isEqualTo("https://mds2.fidoalliance.org/?token=dummyToken");
         assertThat(FidoMdsMetadataItemsProvider.appendToken("https://mds2.fidoalliance.org/metadata/4e4e%234005/", "dummyToken")).isEqualTo("https://mds2.fidoalliance.org/metadata/4e4e%234005/?token=dummyToken");
     }

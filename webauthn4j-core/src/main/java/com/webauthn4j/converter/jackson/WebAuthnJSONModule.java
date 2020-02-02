@@ -22,8 +22,6 @@ import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
 import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.*;
@@ -62,14 +60,6 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientOutput.class, SupportedExtensionsExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(UserVerificationIndexExtensionClientOutput.class, UserVerificationIndexExtensionClientOutput.ID));
 
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public WebAuthnJSONModule(JsonConverter jsonConverter, CborConverter cborConverter) {
-        this(new ObjectConverter(jsonConverter, cborConverter));
     }
 
 }

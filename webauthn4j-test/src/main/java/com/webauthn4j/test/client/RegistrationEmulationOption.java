@@ -21,7 +21,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.AttestationOption;
 
-public class RegistrationEmulationOption{
+public class RegistrationEmulationOption {
 
     private AttestationOption attestationOption;
 

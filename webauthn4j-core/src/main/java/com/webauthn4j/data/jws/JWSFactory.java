@@ -36,14 +36,6 @@ public class JWSFactory {
         this.jsonConverter = objectConverter.getJsonConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public JWSFactory(JsonConverter jsonConverter) {
-        this.jsonConverter = jsonConverter;
-    }
-
     public JWSFactory() {
         this(new ObjectConverter());
     }

@@ -33,8 +33,8 @@ class ExtensionValidator {
     // ========================================================================================================
 
     public <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
-                                                                  AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
-                                                                  List<String> expectedExtensionIdentifiers) {
+                                                                                                   AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
+                                                                                                   List<String> expectedExtensionIdentifiers) {
         validateExtensionIds(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
     }
 
@@ -42,8 +42,7 @@ class ExtensionValidator {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
             return;
-        }
-        else {
+        } else {
             expected = expectedExtensionIdentifiers;
         }
 

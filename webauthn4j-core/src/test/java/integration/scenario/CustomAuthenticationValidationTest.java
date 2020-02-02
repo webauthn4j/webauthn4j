@@ -16,11 +16,11 @@
 
 package integration.scenario;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
-import com.webauthn4j.converter.util.CborConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
@@ -34,7 +34,6 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
 import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.validator.WebAuthnAuthenticationContextValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -43,16 +42,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomAuthenticationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
-    private CborConverter cborConverter = jsonConverter.getCborConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
 
     private Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
-    private WebAuthnAuthenticationContextValidator target = new WebAuthnAuthenticationContextValidator();
+    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void CustomAuthenticationValidator_test() {
@@ -79,30 +77,35 @@ public class CustomAuthenticationValidationTest {
                 null
         );
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
-        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-
-        WebAuthnAuthenticationContext authenticationContext =
-                new WebAuthnAuthenticationContext(
-                        credential.getRawId(),
-                        authenticationRequest.getClientDataJSON(),
-                        authenticationRequest.getAuthenticatorData(),
-                        authenticationRequest.getSignature(),
-                        clientExtensionJSON,
-                        serverProperty,
-                        false,
-                        Collections.emptyList()
-                );
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
+        AuthenticationRequest authenticationRequest =
+                new AuthenticationRequest(
+                        credential.getRawId(),
+                        authenticatorAssertionResponse.getAuthenticatorData(),
+                        authenticatorAssertionResponse.getClientDataJSON(),
+                        clientExtensionJSON,
+                        authenticatorAssertionResponse.getSignature()
+                );
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        false,
+                        true,
+                        Collections.emptyList()
+                );
+
         // You can add custom authentication validator
-        target.getCustomAuthenticationValidators().add(authenticationObject ->
+        target.getAuthenticationDataValidator().getCustomAuthenticationValidators().add(authenticationObject ->
                 assertThat(authenticationObject).isNotNull()
         );
-        target.validate(authenticationContext, authenticator);
+        target.validate(authenticationRequest, authenticationParameters);
     }
 
     private AttestationObject createAttestationObject(String rpId, Challenge challenge) {
@@ -116,7 +119,7 @@ public class CustomAuthenticationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         AuthenticatorAttestationResponse registrationRequest = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
-        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(cborConverter);
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         return attestationObjectConverter.convert(registrationRequest.getAttestationObject());
     }
 }

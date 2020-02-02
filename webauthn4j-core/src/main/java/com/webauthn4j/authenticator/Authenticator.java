@@ -43,7 +43,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the {@link AttestationStatement}
      */
-    default AttestationStatement getAttestationStatement(){
+    default AttestationStatement getAttestationStatement() {
         return null;
     }
 
@@ -53,7 +53,7 @@ public interface Authenticator extends Serializable {
      * @return the {@link AuthenticatorTransport} {@link Set}
      */
     @SuppressWarnings("squid:S1168")
-    default Set<AuthenticatorTransport> getTransports(){
+    default Set<AuthenticatorTransport> getTransports() {
         return null;
     }
 
@@ -76,7 +76,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the client extensions
      */
-    default Map<String, RegistrationExtensionClientOutput> getClientExtensions(){
+    default Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
         return null;
     }
 
@@ -85,7 +85,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the authenticator extensions
      */
-    default Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions(){
+    default Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return null;
     }
 

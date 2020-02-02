@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AuthenticationRequestTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;
         byte[] userHandle = null /* set userHandle */;
@@ -54,7 +54,6 @@ class AuthenticationRequestTest {
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
-
 
 
 }

@@ -20,7 +20,7 @@ import com.webauthn4j.metadata.data.MetadataItem;
 
 public class MetadataItemValidator {
 
-    public void validate(MetadataItem metadataItem){
+    public void validate(MetadataItem metadataItem) {
 
     }
 }

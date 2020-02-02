@@ -16,7 +16,10 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.*;
+import com.webauthn4j.data.AuthenticationData;
+import com.webauthn4j.data.AuthenticationParameters;
+import com.webauthn4j.data.RegistrationData;
+import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
@@ -108,41 +111,6 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("authenticator must not be null");
         }
         validate(authenticationParameters.getServerProperty());
-    }
-
-
-    public static void validate(com.webauthn4j.data.WebAuthnAuthenticationContext webAuthnAuthenticationContext) {
-
-        if (webAuthnAuthenticationContext == null) {
-            throw new ConstraintViolationException("webAuthnAuthenticationContext must not be null");
-        }
-        if (webAuthnAuthenticationContext.getCredentialId() == null) {
-            throw new ConstraintViolationException("credentialId must not be null");
-        }
-        if (webAuthnAuthenticationContext.getClientDataJSON() == null) {
-            throw new ConstraintViolationException("clientDataJSON must not be null");
-        }
-        if (webAuthnAuthenticationContext.getAuthenticatorData() == null) {
-            throw new ConstraintViolationException("authenticatorData must not be null");
-        }
-        if (webAuthnAuthenticationContext.getSignature() == null) {
-            throw new ConstraintViolationException("signature must not be null");
-        }
-        validate(webAuthnAuthenticationContext.getServerProperty());
-    }
-
-    public static void validate(WebAuthnRegistrationContext webAuthnRegistrationContext) {
-
-        if (webAuthnRegistrationContext == null) {
-            throw new ConstraintViolationException("webAuthnRegistrationContext must not be null");
-        }
-        if (webAuthnRegistrationContext.getAttestationObject() == null) {
-            throw new ConstraintViolationException("attestationObject must not be null");
-        }
-        if (webAuthnRegistrationContext.getClientDataJSON() == null) {
-            throw new ConstraintViolationException("clientDataJSON must not be null");
-        }
-        validate(webAuthnRegistrationContext.getServerProperty());
     }
 
     public static void validate(CollectedClientData collectedClientData) {

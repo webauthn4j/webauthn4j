@@ -29,7 +29,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class AttestedCredentialDataConverter implements Serializable{
+public class AttestedCredentialDataConverter implements Serializable {
 
     private static final int AAGUID_LENGTH = 16;
     private static final int L_LENGTH = 2;
@@ -45,16 +45,7 @@ public class AttestedCredentialDataConverter implements Serializable{
         this.cborConverter = objectConverter.getCborConverter();
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AttestedCredentialDataConverter(CborConverter cborConverter) {
-        AssertUtil.notNull(cborConverter, "cborConverter must not be null");
-        this.cborConverter = cborConverter;
-    }
-
-    public byte[] convert(AttestedCredentialData attestationData){
+    public byte[] convert(AttestedCredentialData attestationData) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
@@ -62,8 +53,7 @@ public class AttestedCredentialDataConverter implements Serializable{
             byteArrayOutputStream.write(attestationData.getCredentialId());
             byteArrayOutputStream.write(convert(attestationData.getCOSEKey()));
             return byteArrayOutputStream.toByteArray();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }

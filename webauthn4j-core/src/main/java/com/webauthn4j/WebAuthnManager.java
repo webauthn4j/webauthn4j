@@ -28,9 +28,9 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
 import com.webauthn4j.validator.CustomRegistrationValidator;
-import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.RegistrationDataValidator;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
@@ -47,7 +47,10 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttesta
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class WebAuthnManager {
 
@@ -159,6 +162,7 @@ public class WebAuthnManager {
     /**
      * Creates {@link WebAuthnManager} with non strict configuration
      *
+     * @param objectConverter ObjectConverter
      * @return configured {@link WebAuthnManager}
      */
     public static WebAuthnManager createNonStrictWebAuthnManager(ObjectConverter objectConverter) {
@@ -207,12 +211,12 @@ public class WebAuthnManager {
         return registrationData;
     }
 
-    public RegistrationData validate(RegistrationData registrationData, RegistrationParameters registrationParameters) throws ValidationException{
+    public RegistrationData validate(RegistrationData registrationData, RegistrationParameters registrationParameters) throws ValidationException {
         registrationDataValidator.validate(registrationData, registrationParameters);
         return registrationData;
     }
 
-    public AuthenticationData parse(AuthenticationRequest authenticationRequest) throws DataConversionException{
+    public AuthenticationData parse(AuthenticationRequest authenticationRequest) throws DataConversionException {
 
         byte[] credentialId = authenticationRequest.getCredentialId();
         byte[] signature = authenticationRequest.getSignature();
@@ -244,7 +248,7 @@ public class WebAuthnManager {
         return authenticationData;
     }
 
-    public AuthenticationData validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters){
+    public AuthenticationData validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
         authenticationDataValidator.validate(authenticationData, authenticationParameters);
         return authenticationData;
     }

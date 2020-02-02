@@ -16,10 +16,11 @@
 
 package integration.scenario;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorTransportConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.Origin;
@@ -31,7 +32,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
@@ -47,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
 
     private Origin origin = new Origin("http://localhost");
@@ -55,7 +55,7 @@ public class CustomRegistrationValidationTest {
     private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
     private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
     private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
-    private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+    private WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
@@ -64,7 +64,7 @@ public class CustomRegistrationValidationTest {
 
     private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void CustomRegistrationValidator_test() {
@@ -82,25 +82,29 @@ public class CustomRegistrationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
-        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(registrationRequest.getTransports());
+        Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext
-                = new WebAuthnRegistrationContext(
-                registrationRequest.getClientDataJSON(),
-                registrationRequest.getAttestationObject(),
-                transports,
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
                 clientExtensionJSON,
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
                 serverProperty,
                 false,
+                true,
                 Collections.emptyList()
         );
 
-        target.getCustomRegistrationValidators().add(registrationObject ->
+        target.getRegistrationDataValidator().getCustomRegistrationValidators().add(registrationObject ->
                 assertThat(registrationObject).isNotNull());
-        target.validate(registrationContext);
+        target.validate(registrationRequest, registrationParameters);
 
     }
 

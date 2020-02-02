@@ -16,8 +16,9 @@
 
 package com.webauthn4j.anchor;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.util.CertificateUtil;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,10 +32,8 @@ import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.Test;
-
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.util.CertificateUtil;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KeyStoreTrustAnchorsProviderTest {
 

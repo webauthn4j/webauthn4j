@@ -29,9 +29,10 @@ import java.security.PublicKey;
 
 public class CipherUtil {
 
-    private CipherUtil(){}
+    private CipherUtil() {
+    }
 
-    public static byte[] encrypt(byte[] data, PublicKey publicKey){
+    public static byte[] encrypt(byte[] data, PublicKey publicKey) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
@@ -41,7 +42,7 @@ public class CipherUtil {
         }
     }
 
-    public static byte[] decrypt(byte[] encrypted, PrivateKey privateKey){
+    public static byte[] decrypt(byte[] encrypted, PrivateKey privateKey) {
         try {
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.DECRYPT_MODE, privateKey);

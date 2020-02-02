@@ -16,9 +16,10 @@
 
 package integration.scenario;
 
+import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.Origin;
@@ -33,8 +34,6 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidationResponse;
-import com.webauthn4j.validator.WebAuthnRegistrationContextValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.AndroidSafetyNetAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
@@ -49,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
-    private JsonConverter jsonConverter = new JsonConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
 
     private Origin origin = new Origin("http://localhost");
@@ -57,7 +56,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
     private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
     private AndroidSafetyNetAttestationStatementValidator androidSafetyNetAttestationStatementValidator = new AndroidSafetyNetAttestationStatementValidator();
     private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
-    private WebAuthnRegistrationContextValidator target = new WebAuthnRegistrationContextValidator(
+    private WebAuthnManager target = new WebAuthnManager(
             Collections.singletonList(androidSafetyNetAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
@@ -65,10 +64,10 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
     );
 
     private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(jsonConverter);
+            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
-    void validate_WebAuthnRegistrationContext_with_android_safety_net_attestation_statement_test() {
+    void validate_RegistrationContext_with_android_safety_net_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
@@ -96,28 +95,32 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
         );
 
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
+        AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
         Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        WebAuthnRegistrationContext registrationContext
-                = new WebAuthnRegistrationContext(
-                registrationRequest.getClientDataJSON(),
-                registrationRequest.getAttestationObject(),
-                transports,
+        RegistrationRequest registrationRequest
+                = new RegistrationRequest(
+                authenticatorAttestationResponse.getAttestationObject(),
+                authenticatorAttestationResponse.getClientDataJSON(),
                 clientExtensionJSON,
+                transports
+        );
+        RegistrationParameters registrationParameters
+                = new RegistrationParameters(
                 serverProperty,
                 false,
+                true,
                 Collections.emptyList()
         );
 
-        WebAuthnRegistrationContextValidationResponse response = target.validate(registrationContext);
+        RegistrationData response = target.validate(registrationRequest, registrationParameters);
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
                 () -> assertThat(response.getAttestationObject()).isNotNull(),
-                () -> assertThat(response.getRegistrationExtensionsClientOutputs()).isNotNull()
+                () -> assertThat(response.getClientExtensions()).isNotNull()
         );
     }
 }

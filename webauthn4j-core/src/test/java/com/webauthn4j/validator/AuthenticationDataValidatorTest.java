@@ -35,7 +35,7 @@ class AuthenticationDataValidatorTest {
         AuthenticatorData authenticatorData = mock(AuthenticatorData.class);
         AttestedCredentialData attestedCredentialData = mock(AttestedCredentialData.class);
         when(authenticatorData.getAttestedCredentialData()).thenReturn(attestedCredentialData);
-        assertThatThrownBy(()-> target.validateAuthenticatorData(authenticatorData)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> target.validateAuthenticatorData(authenticatorData)).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test

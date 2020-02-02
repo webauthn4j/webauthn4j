@@ -91,7 +91,7 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked"  << "-Werror"
+        options.compilerArgs << "-Xlint:unchecked" << "-Werror" << "-Xlint:deprecation"
     }
 
     check.dependsOn dependencyCheckAnalyze
@@ -99,6 +99,12 @@ subprojects {
     artifacts {
         archives sourcesJar
         archives javadocJar
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
     }
 
     apply from: "../helper.gradle"
@@ -227,7 +233,7 @@ task updateVersionsInDocuments() {
 
 }
 
-task generateReleaseNote(type: JavaExec){
+task generateReleaseNote(type: JavaExec) {
     group = "documentation"
     classpath = files('gradle/lib/github-release-notes-generator.jar')
 

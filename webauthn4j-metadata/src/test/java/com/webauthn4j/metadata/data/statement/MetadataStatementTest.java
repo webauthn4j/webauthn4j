@@ -20,7 +20,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MetadataStatementTest {
 
-    private JsonConverter jsonConverter;
+    private ObjectConverter objectConverter;
     private String data = "{\n" +
             "    \"aaguid\": \"81303c1a-25cf-4f43-be04-0460df5b6c68\",\n" +
             "    \"alternativeDescriptions\": {\n" +
@@ -116,12 +116,12 @@ class MetadataStatementTest {
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.registerModule(new WebAuthnMetadataJSONModule());
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        jsonConverter = new JsonConverter(jsonMapper, cborMapper);
+        objectConverter = new ObjectConverter(jsonMapper, cborMapper);
     }
 
     @Test
     void deserialize_test() {
-        MetadataStatement metadataStatement = jsonConverter.readValue(data, MetadataStatement.class);
+        MetadataStatement metadataStatement = objectConverter.getJsonConverter().readValue(data, MetadataStatement.class);
         assertAll(
                 () -> assertThat(metadataStatement.getAttestationTypes()).containsOnly(AttestationType.BASIC_FULL, AttestationType.BASIC_SURROGATE),
                 () -> assertThat(metadataStatement.getAuthenticationAlgorithm()).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW),
@@ -131,7 +131,7 @@ class MetadataStatementTest {
 
     @Test
     void deserialize_invalid_data_test() {
-        assertThatThrownBy(() -> jsonConverter.readValue(invalidData, MetadataStatement.class)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> objectConverter.getJsonConverter().readValue(invalidData, MetadataStatement.class)).isInstanceOf(DataConversionException.class);
     }
 
 }

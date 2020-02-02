@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WebAuthnManagerTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
         PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
         FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
@@ -55,12 +55,12 @@ class WebAuthnManagerTest {
     }
 
     @Test
-    void createNonStrictWebAuthnManager_test(){
+    void createNonStrictWebAuthnManager_test() {
         assertThat(WebAuthnManager.createNonStrictWebAuthnManager()).isNotNull();
     }
 
     @Test
-    void getter_test(){
+    void getter_test() {
         WebAuthnManager webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
         assertThat(webAuthnManager.getRegistrationDataValidator()).isNotNull();
         assertThat(webAuthnManager.getAuthenticationDataValidator()).isNotNull();
