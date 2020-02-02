@@ -20,7 +20,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if bad signature is specified
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class BadSignatureException extends ValidationException {
     public BadSignatureException(String message, Throwable cause) {
         super(message, cause);

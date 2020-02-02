@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if an invalid TPM key description is detected
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class KeyDescriptionValidationException extends BadAttestationStatementException {
     public KeyDescriptionValidationException(String message, Throwable cause) {
         super(message, cause);

@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if bad challenge is detected
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class BadChallengeException extends ValidationException {
 
     public BadChallengeException(String message, Throwable cause) {

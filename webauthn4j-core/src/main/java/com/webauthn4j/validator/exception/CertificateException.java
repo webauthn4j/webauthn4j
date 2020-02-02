@@ -19,7 +19,7 @@ package com.webauthn4j.validator.exception;
 /**
  * Thrown if certificate problems happen
  */
-@SuppressWarnings("S110")
+@SuppressWarnings("squid:S110")
 public class CertificateException extends ValidationException {
     public CertificateException(String message, Throwable cause) {
         super(message, cause);
