@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -66,7 +66,7 @@ class BeanAssertUtil {
         validate(registrationData.getCollectedClientData());
 
         if (registrationData.getCollectedClientDataBytes() == null) {
-            throw new ConstraintViolationException("collectedClientData must not be null");
+            throw new ConstraintViolationException("collectedClientDataBytes must not be null");
         }
     }
 
@@ -80,7 +80,7 @@ class BeanAssertUtil {
 
     public static void validate(AuthenticationData authenticationData) {
         if (authenticationData == null) {
-            throw new ConstraintViolationException("webAuthnRegistrationData must not be null");
+            throw new ConstraintViolationException("authenticationData must not be null");
         }
 
         if (authenticationData.getCredentialId() == null) {
@@ -94,7 +94,7 @@ class BeanAssertUtil {
         }
         validate(authenticationData.getCollectedClientData());
         if (authenticationData.getCollectedClientDataBytes() == null) {
-            throw new ConstraintViolationException("collectedClientData must not be null");
+            throw new ConstraintViolationException("collectedClientDataBytes must not be null");
         }
         validate(authenticationData.getAuthenticatorData());
         if (authenticationData.getAuthenticatorDataBytes() == null) {
