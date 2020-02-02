@@ -25,7 +25,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build javadoc asciidoc
+          ./gradlew build javadoc asciidoc -PfailBuildOnCVSS=4
 
       - name: Upload to bintray
         env:

@@ -25,7 +25,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build
+          ./gradlew build -PfailBuildOnCVSS=4
 
       - name: Upload to OSS Snapshot artifactory
         env:

@@ -45,7 +45,7 @@ allprojects {
     version "${webAuthn4JVersion}"
 
     dependencyCheck {
-        failBuildOnCVSS = 4 //medium
+        failBuildOnCVSS = project.hasProperty("failBuildOnCVSS") ? project.property("failBuildOnCVSS").toInteger() : 11 // Never fail with this value. CI build argument updates this property for blocking vulnerable release.
         suppressionFile = "$rootDir/owasp/suppression.xml"
     }
 
