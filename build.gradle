@@ -74,6 +74,7 @@ subprojects {
     }
 
     def springBootVersion = "2.1.12.RELEASE"
+    def jacksonBomVersion = "2.10.2"
     def bouncyCastleVersion = "1.64"
     def kerbyVersion = "2.0.0"
 
@@ -85,6 +86,8 @@ subprojects {
         }
         imports {
             mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+            // Import Jackson Bom independently as Spring Boot Bom 2.2.x does not depend Jackson 2.10.x series
+            mavenBom "com.fasterxml.jackson:jackson-bom:${jacksonBomVersion}"
         }
     }
 
