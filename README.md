@@ -188,7 +188,7 @@ catch (ValidationException e){
 }
 // please update the counter of the authenticator record
 updateCounter(
-        authenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+        authenticationData.getCredentialId(),
         authenticationData.getAuthenticatorData().getSignCount()
 );
 
