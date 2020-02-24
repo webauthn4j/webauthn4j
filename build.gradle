@@ -74,7 +74,7 @@ subprojects {
     }
 
     def springBootVersion = "2.1.12.RELEASE"
-    def jacksonBomVersion = "2.10.2"
+    def jacksonBomVersion = "2.10.2.20200130"
     def bouncyCastleVersion = "1.64"
     def kerbyVersion = "2.0.0"
 
