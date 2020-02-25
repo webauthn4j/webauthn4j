@@ -107,7 +107,7 @@ class RegistrationContextValidatorSample {
 
         // please update the counter of the authenticator record
         updateCounter(
-                response.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+                response.getCredentialId(),
                 response.getAuthenticatorData().getSignCount()
         );
     }
@@ -123,5 +123,7 @@ class RegistrationContextValidatorSample {
 
     private void updateCounter(byte[] credentialId, long signCount) {
         // please update the counter of the authenticator record
+        // authenticator should be resolved using following comparision:
+        // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), credentialId)
     }
 }

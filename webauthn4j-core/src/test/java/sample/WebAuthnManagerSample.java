@@ -150,7 +150,7 @@ public class WebAuthnManagerSample {
         }
         // please update the counter of the authenticator record
         updateCounter(
-                authenticationData.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+                authenticationData.getCredentialId(),
                 authenticationData.getAuthenticatorData().getSignCount()
         );
     }
@@ -166,5 +166,7 @@ public class WebAuthnManagerSample {
 
     private void updateCounter(byte[] credentialId, long signCount) {
         // please update the counter of the authenticator record
+        // authenticator should be resolved using following comparision:
+        // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), credentialId)
     }
 }
