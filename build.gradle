@@ -97,12 +97,12 @@ subprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
+        archiveClassifier = 'sources'
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
+        archiveClassifier = 'javadoc'
         from javadoc.destinationDir
     }
 
@@ -125,40 +125,37 @@ subprojects {
 
     apply from: "../helper.gradle"
 
-    def projectUrl = "https://github.com/webauthn4j/webauthn4j"
-    def vcsUrl = "https://github.com/webauthn4j/webauthn4j"
+    def githubUrl = "https://github.com/webauthn4j/webauthn4j"
 
     publishing {
         publications {
-            artifactPublication(MavenPublication) {
+            standard(MavenPublication) {
                 from components.java
                 artifact sourcesJar
-                pom.withXml {
-                    def node = asNode()
-                    node.children().last() + {
-                        resolveStrategy = Closure.DELEGATE_FIRST
-
-                        name project.name
-                        description project.description
-                        url projectUrl
-                        scm {
-                            url vcsUrl
-                        }
-                        developers {
-                            developer {
-                                id 'ynojima'
-                                name 'Yoshikazu Nojima'
-                                email 'mail@ynojima.net'
-                            }
-                        }
-                        licenses {
-                            license {
-                                name 'The Apache Software License, Version 2.0'
-                                url 'http://www.apache.org/license/LICENSE-2.0.txt'
-                                distribution 'repo'
-                            }
+                artifact javadocJar
+                pom {
+                    name = project.name
+                    description = project.description
+                    url = githubUrl
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/license/LICENSE-2.0.txt'
+                            distribution = 'repo'
                         }
                     }
+                    developers {
+                        developer {
+                            id = 'ynojima'
+                            name = 'Yoshikazu Nojima'
+                            email = 'mail@ynojima.net'
+                        }
+                    }
+                    scm {
+                        url = githubUrl
+                    }
+
+                    resolveStrategy = DELEGATE_FIRST
                 }
             }
         }
@@ -194,7 +191,7 @@ subprojects {
                 password = artifactoryPassword
             }
             defaults {
-                publications('artifactPublication')
+                publications('standard')
             }
         }
     }
@@ -209,14 +206,14 @@ subprojects {
         configurations = ['archives']
         publish = true
         dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
-        publications = ['artifactPublication']
+        publications = ['standard']
         pkg {
             userOrg = "webauthn4j"
             repo = "webauthn4j"
             name = project.name
             desc = project.description
             licenses = ['Apache-2.0']
-            vcsUrl = vcsUrl
+            vcsUrl = githubUrl
             version {
                 name = "${webAuthn4JVersion}"
                 released = new Date()
