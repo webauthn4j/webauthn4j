@@ -25,16 +25,18 @@ test {
 
 dependencies {
 
-    compile("com.fasterxml.jackson.core:jackson-databind")
-    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
-    testCompile project(':webauthn4j-test')
-    testCompile('ch.qos.logback:logback-classic')
-    testCompile('org.projectlombok:lombok')
-    testCompile('org.mockito:mockito-core')
-    testCompile('org.assertj:assertj-core')
-    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testImplementation project(':webauthn4j-test')
+    implementation("org.bouncycastle:bcprov-jdk15on")
+    implementation("org.bouncycastle:bcpkix-jdk15on")
+    testImplementation('ch.qos.logback:logback-classic')
+    testImplementation('org.projectlombok:lombok')
+    testImplementation('org.mockito:mockito-core')
+    testImplementation('org.assertj:assertj-core')
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 
 }

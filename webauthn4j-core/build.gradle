@@ -24,17 +24,22 @@ test {
 }
 
 dependencies {
-    compile project(':webauthn4j-util')
-    compile("org.slf4j:slf4j-api")
-    compile("org.apache.kerby:kerby-asn1")
+    api project(':webauthn4j-util')
+    implementation("org.slf4j:slf4j-api")
+    implementation("org.apache.kerby:kerby-asn1")
+
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
     //Test
-    testCompile project(':webauthn4j-test')
-    testCompile('ch.qos.logback:logback-classic')
-    testCompile('org.projectlombok:lombok')
-    testCompile('org.mockito:mockito-core')
-    testCompile('org.assertj:assertj-core')
-    testCompile("org.springframework:spring-core")
-    testCompile('org.junit.jupiter:junit-jupiter-api')
+    testImplementation project(':webauthn4j-test')
+    testImplementation("org.bouncycastle:bcprov-jdk15on")
+    testImplementation("org.bouncycastle:bcpkix-jdk15on")
+    testImplementation('ch.qos.logback:logback-classic')
+    testImplementation('org.projectlombok:lombok')
+    testImplementation('org.mockito:mockito-core')
+    testImplementation('org.assertj:assertj-core')
+    testImplementation("org.springframework:spring-core")
+    testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntime('org.junit.jupiter:junit-jupiter-engine')
 }
