@@ -139,7 +139,7 @@ subprojects {
                 }
                 pom {
                     name = project.name
-                    description = project.description
+//                    description = project.description //TODO: this doesn't work. to be fixed. https://github.com/gradle/gradle/issues/12259
                     url = githubUrl
                     licenses {
                         license {
@@ -160,6 +160,9 @@ subprojects {
                     }
 
                     resolveStrategy = DELEGATE_FIRST
+                }
+                pom.withXml { pom ->
+                    pom.asNode().appendNode("description", project.description) // workaround for https://github.com/gradle/gradle/issues/12259
                 }
             }
         }
