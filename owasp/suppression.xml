@@ -54,6 +54,10 @@
    ]]></notes>
         <cve>CVE-2018-1000613</cve>
     </suppress>
-
-
+    <suppress>
+        <cve>CVE-2011-4838</cve>
+    </suppress>
+    <suppress>
+        <cve>CVE-2010-1330</cve>
+    </suppress>
 </suppressions>
