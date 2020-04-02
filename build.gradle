@@ -129,14 +129,6 @@ subprojects {
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
-                versionMapping {
-                    usage('java-api') {
-                        fromResolutionOf('runtimeClasspath')
-                    }
-                    usage('java-runtime') {
-                        fromResolutionResult()
-                    }
-                }
                 pom {
                     name = project.name
 //                    description = project.description //TODO: this doesn't work. to be fixed. https://github.com/gradle/gradle/issues/12259
