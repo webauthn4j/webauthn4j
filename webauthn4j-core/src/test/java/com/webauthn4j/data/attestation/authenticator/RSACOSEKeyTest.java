@@ -51,7 +51,7 @@ class RSACOSEKeyTest {
         RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         RSACOSEKey result = cborConverter.readValue(serialized, RSACOSEKey.class);
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
+        assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
@@ -59,7 +59,7 @@ class RSACOSEKeyTest {
         RSACOSEKey original = TestDataUtil.createRSACOSEPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         RSACOSEKey result = jsonConverter.readValue(serialized, RSACOSEKey.class);
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
+        assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test

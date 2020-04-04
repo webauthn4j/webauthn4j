@@ -70,7 +70,7 @@ class EC2COSEKeyTest {
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         byte[] serialized = cborConverter.writeValueAsBytes(original);
         COSEKey result = cborConverter.readValue(serialized, COSEKey.class);
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
+        assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
@@ -78,7 +78,7 @@ class EC2COSEKeyTest {
         EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
         String serialized = jsonConverter.writeValueAsString(original);
         COSEKey result = jsonConverter.readValue(serialized, COSEKey.class);
-        assertThat(result).isEqualToComparingFieldByFieldRecursively(original);
+        assertThat(result).usingRecursiveComparison().isEqualTo(original);
     }
 
     @Test
