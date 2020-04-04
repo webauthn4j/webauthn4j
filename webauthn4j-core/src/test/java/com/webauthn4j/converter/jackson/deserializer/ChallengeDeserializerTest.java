@@ -61,7 +61,6 @@ class ChallengeDeserializerTest {
         CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
 
         //Then
-        assertThat(result).extracting("challenge").isNotNull();
         assertThat(result.getChallenge()).isNull();
     }
 
