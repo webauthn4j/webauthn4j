@@ -71,8 +71,7 @@ subprojects {
         mavenCentral()
     }
 
-    def springBootVersion = "2.1.12.RELEASE"
-    def jacksonBomVersion = "2.10.3"
+    def springBootVersion = "2.2.6.RELEASE"
     def bouncyCastleVersion = "1.64"
     def kerbyVersion = "2.0.0"
 
@@ -84,7 +83,6 @@ subprojects {
 
         // BOM
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-        implementation platform("com.fasterxml.jackson:jackson-bom:${jacksonBomVersion}")
     }
 
     javadoc {

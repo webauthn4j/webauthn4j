@@ -17,7 +17,6 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Java6Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -56,7 +55,7 @@ class AuthenticatorTransportTest {
     @Test
     void deserialize_test() throws IOException {
         TestDTO dto = objectMapper.readValue("{\"transport\":\"usb\"}", TestDTO.class);
-        Java6Assertions.assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
+        assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test
