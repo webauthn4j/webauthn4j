@@ -29,10 +29,16 @@ import org.junit.jupiter.api.Test;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PublicKey;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.EllipticCurve;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test for EC2COSEKey
@@ -42,6 +48,13 @@ class EC2COSEKeyTest {
     private ObjectConverter objectConverter = new ObjectConverter();
     private JsonConverter jsonConverter = objectConverter.getJsonConverter();
     private CborConverter cborConverter = objectConverter.getCborConverter();
+
+    @Test
+    void create_with_null_keyPair_test(){
+        assertThatThrownBy(()->{
+            EC2COSEKey.create((KeyPair)null);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void createFromUncompressedECCKey_test() {
@@ -180,8 +193,22 @@ class EC2COSEKeyTest {
 
     @Test
     void hasPublicKey_test() {
-        EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
-        assertThat(target.hasPublicKey()).isTrue();
+        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+        assertThat(keyPair.hasPublicKey()).isTrue();
+        assertThat(privateKey.hasPublicKey()).isFalse();
+        assertThat(publicKey.hasPublicKey()).isTrue();
+    }
+
+    @Test
+    void hasPrivateKey_test(){
+        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+        assertThat(keyPair.hasPrivateKey()).isTrue();
+        assertThat(privateKey.hasPrivateKey()).isTrue();
+        assertThat(publicKey.hasPrivateKey()).isFalse();
     }
 
     @Test
@@ -197,9 +224,23 @@ class EC2COSEKeyTest {
     }
 
     @Test
-    void getPublicKey_test() {
-        EC2COSEKey target = TestDataUtil.createEC2COSEPublicKey();
-        assertThat(target.getPublicKey()).isNotNull();
+    void getPublicKey_test(){
+        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+        assertThat(keyPair.getPublicKey()).isNotNull();
+        assertThat(privateKey.getPublicKey()).isNull();
+        assertThat(publicKey.getPublicKey()).isNotNull();
+    }
+
+    @Test
+    void getPrivateKey_test(){
+        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
+        EC2COSEKey privateKey = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        EC2COSEKey publicKey = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic());
+        assertThat(keyPair.getPrivateKey()).isNotNull();
+        assertThat(privateKey.getPrivateKey()).isNotNull();
+        assertThat(publicKey.getPrivateKey()).isNull();
     }
 
     @Test
@@ -213,6 +254,17 @@ class EC2COSEKeyTest {
         EC2COSEKey instanceA = TestDataUtil.createEC2COSEPublicKey();
         EC2COSEKey instanceB = TestDataUtil.createEC2COSEPublicKey();
         assertThat(instanceA).isEqualTo(instanceB);
+    }
+
+    @Test
+    void getCurve_test(){
+        assertThat(EC2COSEKey.getCurve(ECUtil.P_256_SPEC)).isEqualTo(Curve.SECP256R1);
+        assertThat(EC2COSEKey.getCurve(ECUtil.P_384_SPEC)).isEqualTo(Curve.SECP384R1);
+        assertThat(EC2COSEKey.getCurve(ECUtil.P_521_SPEC)).isEqualTo(Curve.SECP521R1);
+        assertThatThrownBy(()->EC2COSEKey.getCurve(null)).isInstanceOf(IllegalArgumentException.class);
+        ECParameterSpec mock = mock(ECParameterSpec.class);
+        when(mock.getCurve()).thenReturn(mock(EllipticCurve.class));
+        assertThatThrownBy(()->EC2COSEKey.getCurve(mock)).isInstanceOf(IllegalArgumentException.class);
     }
 
     private EC2COSEKey createNullXKey() {

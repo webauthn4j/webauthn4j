@@ -23,13 +23,15 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.RSAUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAPrivateKeySpec;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Arrays;
 import java.util.List;
@@ -115,11 +117,33 @@ public class RSACOSEKey extends AbstractCOSEKey {
         this.e = e;
     }
 
+    public static RSACOSEKey create(RSAPrivateKey privateKey) {
+        byte[] n = privateKey.getModulus().toByteArray();
+        byte[] d = privateKey.getPrivateExponent().toByteArray();
+        return new RSACOSEKey(null,null,null, n, null, d, null, null, null, null, null);
+    }
+
+
     public static RSACOSEKey create(RSAPublicKey publicKey) {
         publicKey.getPublicExponent();
         byte[] n = publicKey.getModulus().toByteArray();
         byte[] e = publicKey.getPublicExponent().toByteArray();
         return new RSACOSEKey(null, COSEAlgorithmIdentifier.RS256, null, n, e);
+    }
+
+    public static RSACOSEKey create(KeyPair keyPair) {
+        if(keyPair != null && keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey){
+            RSAPublicKey rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
+            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
+
+            byte[] n = rsaPublicKey.getModulus().toByteArray();
+            byte[] e = rsaPublicKey.getPublicExponent().toByteArray();
+            byte[] d = rsaPrivateKey.getPrivateExponent().toByteArray();
+            return new RSACOSEKey(null, COSEAlgorithmIdentifier.RS256, null, n, e, d, null, null, null, null, null);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -166,16 +190,14 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     @Override
     public boolean hasPrivateKey() {
-        return hasPublicKey() && d != null;
+        return n != null && d != null;
     }
 
     @Override
     public PublicKey getPublicKey() {
-
         if (!hasPublicKey()) {
             return null;
         }
-
         RSAPublicKeySpec spec = new RSAPublicKeySpec(
                 new BigInteger(1, getN()),
                 new BigInteger(1, getE())
@@ -185,7 +207,14 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     @Override
     public PrivateKey getPrivateKey() {
-        throw new NotImplementedException();
+        if(!hasPrivateKey()){
+            return null;
+        }
+        RSAPrivateKeySpec rsaPrivateKeySpec = new RSAPrivateKeySpec(
+                new BigInteger(1, getN()),
+                new BigInteger(1, getD())
+        );
+        return RSAUtil.createPrivateKey(rsaPrivateKeySpec);
     }
 
     @Override

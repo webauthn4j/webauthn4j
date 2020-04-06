@@ -20,10 +20,16 @@ import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
+import java.security.KeyPair;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -35,6 +41,13 @@ class RSACOSEKeyTest {
     private ObjectConverter objectConverter = new ObjectConverter();
     private JsonConverter jsonConverter = objectConverter.getJsonConverter();
     private CborConverter cborConverter = objectConverter.getCborConverter();
+
+    @Test
+    void create_with_null_keyPair_test(){
+        assertThatThrownBy(()->{
+            RSACOSEKey.create((KeyPair)null);
+        }).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void equals_hashCode_test() {
@@ -95,8 +108,22 @@ class RSACOSEKeyTest {
 
     @Test
     void hasPublicKey_test() {
-        RSACOSEKey target = TestDataUtil.createRSACOSEPublicKey();
-        assertThat(target.hasPublicKey()).isTrue();
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        assertThat(keyPair.hasPublicKey()).isTrue();
+        assertThat(privateKey.hasPublicKey()).isFalse();
+        assertThat(publicKey.hasPublicKey()).isTrue();
+    }
+
+    @Test
+    void hasPrivateKey_test(){
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        assertThat(keyPair.hasPrivateKey()).isTrue();
+        assertThat(privateKey.hasPrivateKey()).isTrue();
+        assertThat(publicKey.hasPrivateKey()).isFalse();
     }
 
     @Test
@@ -109,6 +136,27 @@ class RSACOSEKeyTest {
     void hasPublicKey_with_null_e_test() {
         RSACOSEKey target = createNullEKey();
         assertThat(target.hasPublicKey()).isFalse();
+    }
+
+
+    @Test
+    void getPublicKey_test(){
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        assertThat(keyPair.getPublicKey()).isNotNull();
+        assertThat(privateKey.getPublicKey()).isNull();
+        assertThat(publicKey.getPublicKey()).isNotNull();
+    }
+
+    @Test
+    void getPrivateKey_test(){
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        assertThat(keyPair.getPrivateKey()).isNotNull();
+        assertThat(privateKey.getPrivateKey()).isNotNull();
+        assertThat(publicKey.getPrivateKey()).isNull();
     }
 
 
