@@ -72,7 +72,7 @@ subprojects {
     }
 
     def springBootVersion = "2.2.6.RELEASE"
-    def bouncyCastleVersion = "1.64"
+    def bouncyCastleVersion = "1.65"
     def kerbyVersion = "2.0.0"
 
     dependencies {
