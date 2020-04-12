@@ -23,15 +23,16 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.ECUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.security.spec.ECPoint;
-import java.security.spec.ECPublicKeySpec;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.security.spec.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -101,6 +102,38 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         this.x = x;
         this.y = y;
     }
+
+    public static EC2COSEKey create(ECPrivateKey privateKey) {
+        Curve curve = getCurve(privateKey.getParams());
+        byte[] d = privateKey.getS().toByteArray();
+        return new EC2COSEKey(null,null,null, curve, null, null, d);
+    }
+
+    public static EC2COSEKey create(ECPublicKey publicKey) {
+        ECPoint ecPoint = publicKey.getW();
+        Curve curve = getCurve(publicKey.getParams());
+        byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+        byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+        return new EC2COSEKey(null,null,null, curve, x, y);
+    }
+
+    public static EC2COSEKey create(KeyPair keyPair) {
+        if(keyPair != null && keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
+            ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
+            ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
+            ECPoint ecPoint = ecPublicKey.getW();
+            Curve curve = getCurve(ecPrivateKey.getParams());
+            byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+            byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+            byte[] d = ecPrivateKey.getS().toByteArray();
+            return new EC2COSEKey(null,null,null, curve, x, y, d);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
 
     /**
      * Constructor for public key
@@ -185,7 +218,12 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     @Override
     public PrivateKey getPrivateKey() {
-        throw new NotImplementedException();
+        if(!hasPrivateKey()){
+            return null;
+        }
+        BigInteger s = new BigInteger(1, d);
+        ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(s, getCurve().getECParameterSpec());
+        return ECUtil.createPrivateKey(ecPrivateKeySpec);
     }
 
     public boolean hasPublicKey() {
@@ -237,4 +275,23 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         result = 31 * result + Arrays.hashCode(d);
         return result;
     }
+
+    static Curve getCurve(ECParameterSpec params) {
+        if(params == null){
+            throw new IllegalArgumentException("params must not be null");
+        }
+        else if(params.getCurve().equals(ECUtil.P_256_SPEC.getCurve())){
+            return Curve.SECP256R1;
+        }
+        else if(params.getCurve().equals(ECUtil.P_384_SPEC.getCurve())){
+            return Curve.SECP384R1;
+        }
+        else if(params.getCurve().equals(ECUtil.P_521_SPEC.getCurve())){
+            return Curve.SECP521R1;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
 }
