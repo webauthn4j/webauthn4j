@@ -103,22 +103,22 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         this.y = y;
     }
 
-    public static EC2COSEKey create(ECPrivateKey privateKey) {
+    public static EC2COSEKey create(ECPrivateKey privateKey, COSEAlgorithmIdentifier alg) {
         Curve curve = getCurve(privateKey.getParams());
         byte[] d = privateKey.getS().toByteArray();
-        return new EC2COSEKey(null,null,null, curve, null, null, d);
+        return new EC2COSEKey(null, alg, null, curve, null, null, d);
     }
 
-    public static EC2COSEKey create(ECPublicKey publicKey) {
+    public static EC2COSEKey create(ECPublicKey publicKey, COSEAlgorithmIdentifier alg) {
         ECPoint ecPoint = publicKey.getW();
         Curve curve = getCurve(publicKey.getParams());
         byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
         byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
-        return new EC2COSEKey(null,null,null, curve, x, y);
+        return new EC2COSEKey(null, alg, null, curve, x, y);
     }
 
-    public static EC2COSEKey create(KeyPair keyPair) {
-        if(keyPair != null && keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
+    public static EC2COSEKey create(KeyPair keyPair, COSEAlgorithmIdentifier alg) {
+        if (keyPair != null && keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
             ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
             ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
             ECPoint ecPoint = ecPublicKey.getW();
@@ -126,14 +126,23 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
             byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
             byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
             byte[] d = ecPrivateKey.getS().toByteArray();
-            return new EC2COSEKey(null,null,null, curve, x, y, d);
-        }
-        else {
+            return new EC2COSEKey(null, alg, null, curve, x, y, d);
+        } else {
             throw new IllegalArgumentException();
         }
     }
 
+    public static EC2COSEKey create(ECPrivateKey privateKey) {
+        return create(privateKey, null);
+    }
 
+    public static EC2COSEKey create(ECPublicKey publicKey) {
+        return create(publicKey, null);
+    }
+
+    public static EC2COSEKey create(KeyPair keyPair) {
+        return create(keyPair, null);
+    }
 
     /**
      * Constructor for public key

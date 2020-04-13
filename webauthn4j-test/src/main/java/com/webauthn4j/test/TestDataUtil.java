@@ -175,7 +175,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedECAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = ECUtil.createKeyPair();
-        EC2COSEKey ec2CredentialPublicKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) keyPair.getPublic());
+        EC2COSEKey ec2CredentialPublicKey = EC2COSEKey.create((ECPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.ES256);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(ec2CredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);
@@ -185,7 +185,7 @@ public class TestDataUtil {
 
     public static AttestationObject createAttestationObjectWithSelfPackedRSAAttestationStatement(byte[] clientDataHash) {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        RSACOSEKey rsaCredentialPublicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic());
+        RSACOSEKey rsaCredentialPublicKey = RSACOSEKey.create((RSAPublicKey) keyPair.getPublic(), COSEAlgorithmIdentifier.RS256);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = createAuthenticatorData(rsaCredentialPublicKey);
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signedData = createSignedData(authenticatorDataBytes, clientDataHash);

@@ -50,6 +50,17 @@ class EC2COSEKeyTest {
     private CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
+    void create_with_alg_test(){
+        EC2COSEKey key;
+        key= EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.ES256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        key = EC2COSEKey.create((ECPublicKey) ECUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.ES256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+        key = EC2COSEKey.create(ECUtil.createKeyPair(), COSEAlgorithmIdentifier.ES256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.ES256);
+    }
+
+    @Test
     void create_with_null_keyPair_test(){
         assertThatThrownBy(()->{
             EC2COSEKey.create((KeyPair)null);
