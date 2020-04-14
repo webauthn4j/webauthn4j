@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.authenticator;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -43,9 +44,20 @@ class RSACOSEKeyTest {
     private CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
+    void create_with_alg_test(){
+        RSACOSEKey key;
+        key = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.RS256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.RS256);
+        key = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.RS256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.RS256);
+        key = RSACOSEKey.create(RSAUtil.createKeyPair(), COSEAlgorithmIdentifier.RS256);
+        assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.RS256);
+    }
+
+    @Test
     void create_with_null_keyPair_test(){
         assertThatThrownBy(()->{
-            RSACOSEKey.create((KeyPair)null);
+            RSACOSEKey.create((KeyPair)null, COSEAlgorithmIdentifier.RS256);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -108,9 +120,9 @@ class RSACOSEKeyTest {
 
     @Test
     void hasPublicKey_test() {
-        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
-        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
-        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair(), COSEAlgorithmIdentifier.RS256);
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.RS256);
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.RS256);
         assertThat(keyPair.hasPublicKey()).isTrue();
         assertThat(privateKey.hasPublicKey()).isFalse();
         assertThat(publicKey.hasPublicKey()).isTrue();
@@ -118,9 +130,9 @@ class RSACOSEKeyTest {
 
     @Test
     void hasPrivateKey_test(){
-        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
-        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
-        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
+        RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair(), COSEAlgorithmIdentifier.RS256);
+        RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.RS256);
+        RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.RS256);
         assertThat(keyPair.hasPrivateKey()).isTrue();
         assertThat(privateKey.hasPrivateKey()).isTrue();
         assertThat(publicKey.hasPrivateKey()).isFalse();

@@ -117,21 +117,21 @@ public class RSACOSEKey extends AbstractCOSEKey {
         this.e = e;
     }
 
-    public static RSACOSEKey create(RSAPrivateKey privateKey) {
+    public static RSACOSEKey create(RSAPrivateKey privateKey, COSEAlgorithmIdentifier alg) {
         byte[] n = privateKey.getModulus().toByteArray();
         byte[] d = privateKey.getPrivateExponent().toByteArray();
-        return new RSACOSEKey(null,null,null, n, null, d, null, null, null, null, null);
+        return new RSACOSEKey(null,alg,null, n, null, d, null, null, null, null, null);
     }
 
 
-    public static RSACOSEKey create(RSAPublicKey publicKey) {
+    public static RSACOSEKey create(RSAPublicKey publicKey, COSEAlgorithmIdentifier alg) {
         publicKey.getPublicExponent();
         byte[] n = publicKey.getModulus().toByteArray();
         byte[] e = publicKey.getPublicExponent().toByteArray();
-        return new RSACOSEKey(null, COSEAlgorithmIdentifier.RS256, null, n, e);
+        return new RSACOSEKey(null, alg, null, n, e);
     }
 
-    public static RSACOSEKey create(KeyPair keyPair) {
+    public static RSACOSEKey create(KeyPair keyPair, COSEAlgorithmIdentifier alg) {
         if(keyPair != null && keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey){
             RSAPublicKey rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
             RSAPrivateKey rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
@@ -139,11 +139,24 @@ public class RSACOSEKey extends AbstractCOSEKey {
             byte[] n = rsaPublicKey.getModulus().toByteArray();
             byte[] e = rsaPublicKey.getPublicExponent().toByteArray();
             byte[] d = rsaPrivateKey.getPrivateExponent().toByteArray();
-            return new RSACOSEKey(null, COSEAlgorithmIdentifier.RS256, null, n, e, d, null, null, null, null, null);
+            return new RSACOSEKey(null, alg, null, n, e, d, null, null, null, null, null);
         }
         else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public static RSACOSEKey create(RSAPrivateKey privateKey) {
+        return create(privateKey, null);
+    }
+
+
+    public static RSACOSEKey create(RSAPublicKey publicKey) {
+        return create(publicKey, null);
+    }
+
+    public static RSACOSEKey create(KeyPair keyPair) {
+        return create(keyPair, null);
     }
 
     @Override
