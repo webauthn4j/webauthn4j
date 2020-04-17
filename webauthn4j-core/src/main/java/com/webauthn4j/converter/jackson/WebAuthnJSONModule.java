@@ -41,6 +41,8 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
+        this.addDeserializer(UnknownExtensionClientInput.class, new UnknownExtensionClientInputDeserializer());
+        this.addDeserializer(UnknownExtensionClientOutput.class, new UnknownExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
@@ -48,9 +50,11 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(JWS.class, new JWSSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
+        // client extension inputs
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientInput.class, SupportedExtensionsExtensionClientInput.ID));
 
+        // client extension outputs
         this.registerSubtypes(new NamedType(AuthenticatorSelectionExtensionClientOutput.class, AuthenticatorSelectionExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.class, BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientOutput.class, FIDOAppIDExtensionClientOutput.ID));

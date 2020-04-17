@@ -47,6 +47,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(UnknownExtensionAuthenticatorOutput.class, new UnknownExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -65,6 +66,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
+        // attestation statements
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(PackedAttestationStatement.class, PackedAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AndroidKeyAttestationStatement.class, AndroidKeyAttestationStatement.FORMAT));
@@ -72,6 +74,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(TPMAttestationStatement.class, TPMAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
+        // authenticator extension outputs
         this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionAuthenticatorOutput.class, GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID));
         this.registerSubtypes(new NamedType(LocationExtensionAuthenticatorOutput.class, LocationExtensionAuthenticatorOutput.ID));
         this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID));

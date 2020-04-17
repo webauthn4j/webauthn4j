@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
@@ -27,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AuthenticationExtensionsClientInputsConverterTest {
 
@@ -63,7 +62,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @Test
     void convert_with_invalid_extension_test() {
         String source = "{\"invalid\":\"\"}";
-        assertThrows(DataConversionException.class,
+        assertDoesNotThrow(
                 () -> authenticationExtensionsClientInputsConverter.convert(source)
         );
     }
