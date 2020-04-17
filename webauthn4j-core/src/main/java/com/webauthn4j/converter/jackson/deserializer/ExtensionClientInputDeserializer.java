@@ -20,11 +20,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationConfig;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClassResolver;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
+import com.webauthn4j.data.extension.client.UnknownExtensionClientInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -33,7 +35,9 @@ import java.util.Objects;
 /**
  * Jackson Deserializer for {@link ExtensionClientInput}
  */
-public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionClientInput> {
+public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionClientInput<?>> {
+
+    private transient Logger logger = LoggerFactory.getLogger(ExtensionClientInputDeserializer.class);
 
     public ExtensionClientInputDeserializer() {
         super(ExtensionClientInput.class);
@@ -43,7 +47,7 @@ public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionC
      * {@inheritDoc}
      */
     @Override
-    public ExtensionClientInput deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public ExtensionClientInput<?> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
 
         String name = p.getParsingContext().getCurrentName();
         if (name == null) {
@@ -56,10 +60,11 @@ public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionC
 
         for (NamedType namedType : namedTypes) {
             if (Objects.equals(namedType.getName(), name)) {
-                return (ExtensionClientInput) ctxt.readValue(p, namedType.getType());
+                return (ExtensionClientInput<?>) ctxt.readValue(p, namedType.getType());
             }
         }
 
-        throw new InvalidFormatException(p, "value is out of range", name, ExtensionClientInput.class);
+        logger.warn("Unknown extension '{}' is contained.", name);
+        return ctxt.readValue(p, UnknownExtensionClientInput.class);
     }
 }

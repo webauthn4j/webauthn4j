@@ -41,6 +41,8 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
         this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
+        this.addDeserializer(UnknownExtensionClientInput.class, new UnknownExtensionClientInputDeserializer());
+        this.addDeserializer(UnknownExtensionClientOutput.class, new UnknownExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 

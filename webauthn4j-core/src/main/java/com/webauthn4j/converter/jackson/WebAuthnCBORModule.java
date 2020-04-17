@@ -47,6 +47,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
         this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
+        this.addDeserializer(UnknownExtensionAuthenticatorOutput.class, new UnknownExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
