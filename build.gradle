@@ -127,6 +127,19 @@ subprojects {
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
+
+                // "Resolved versions" strategy is used to define dependency version because WebAuthn4J use dependencyManagement (BOM) feature
+                // to define its dependency versions. Without "Resolved versions" strategy, version will not be exposed
+                // to dependencies.dependency.version in POM file, and it cause warning in the library consumer environment.
+                versionMapping {
+                    usage('java-api') {
+                        fromResolutionOf('runtimeClasspath')
+                    }
+                    usage('java-runtime') {
+                        fromResolutionResult()
+                    }
+                }
+
                 pom {
                     name = project.name
 //                    description = project.description //TODO: this doesn't work. to be fixed. https://github.com/gradle/gradle/issues/12259
