@@ -18,16 +18,32 @@ package com.webauthn4j.util.exception;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class NotImplementedExceptionTest {
 
     @Test
     void constructor_test() {
-        assertThrows(NotImplementedException.class,
-                () -> {
-                    throw new NotImplementedException();
-                }
+        RuntimeException cause = new RuntimeException();
+
+        NotImplementedException exception1 = new NotImplementedException("dummy", cause);
+        NotImplementedException exception2 = new NotImplementedException("dummy");
+        NotImplementedException exception3 = new NotImplementedException(cause);
+        NotImplementedException exception4 = new NotImplementedException();
+
+        assertAll(
+                () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getCause()).isEqualTo(cause),
+
+                () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception2.getCause()).isNull(),
+
+                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause),
+
+                () -> assertThat(exception4.getMessage()).isNotNull(),
+                () -> assertThat(exception4.getCause()).isNull()
         );
     }
 }

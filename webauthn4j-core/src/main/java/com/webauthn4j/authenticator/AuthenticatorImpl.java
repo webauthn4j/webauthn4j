@@ -17,6 +17,7 @@
 package com.webauthn4j.authenticator;
 
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
@@ -57,6 +58,14 @@ public class AuthenticatorImpl implements Authenticator {
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
         this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
+    }
+
+    public static AuthenticatorImpl createFromRegistrationData(RegistrationData registrationData){
+        return new AuthenticatorImpl(
+                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                registrationData.getAttestationObject().getAttestationStatement(),
+                registrationData.getAttestationObject().getAuthenticatorData().getSignCount(),
+                registrationData.getTransports());
     }
 
     @Override
