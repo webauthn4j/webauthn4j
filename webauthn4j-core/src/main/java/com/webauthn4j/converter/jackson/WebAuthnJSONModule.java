@@ -51,12 +51,14 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
 
         // client extension inputs
+        this.registerSubtypes(new NamedType(CredentialPropertiesExtensionClientInput.class, CredentialPropertiesExtensionClientInput.ID));
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
         this.registerSubtypes(new NamedType(SupportedExtensionsExtensionClientInput.class, SupportedExtensionsExtensionClientInput.ID));
 
         // client extension outputs
         this.registerSubtypes(new NamedType(AuthenticatorSelectionExtensionClientOutput.class, AuthenticatorSelectionExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.class, BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID));
+        this.registerSubtypes(new NamedType(CredentialPropertiesExtensionClientOutput.class, CredentialPropertiesExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientOutput.class, FIDOAppIDExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionClientOutput.class, GenericTransactionAuthorizationExtensionClientOutput.ID));
         this.registerSubtypes(new NamedType(LocationExtensionClientOutput.class, LocationExtensionClientOutput.ID));
