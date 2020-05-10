@@ -40,6 +40,7 @@ class ExtensionClientOutputDeserializerTest {
                 jsonConverter.readValue(
                         "{ " +
                                 "\"appid\": true, " +
+                                "\"credProps\": {\"rk\": true }, " +
                                 "\"txAuthSimple\": \"authorization message\", " +
                                 "\"txAuthGeneric\": { \"contentType\": \"image/png\", \"content\": null }, " +
                                 "\"authnSel\": true, " +
@@ -55,6 +56,7 @@ class ExtensionClientOutputDeserializerTest {
         assertAll(
                 () -> assertThat(extensionOutputs).containsKeys(
                         FIDOAppIDExtensionClientOutput.ID,
+                        CredentialPropertiesExtensionClientOutput.ID,
                         SimpleTransactionAuthorizationExtensionClientOutput.ID,
                         GenericTransactionAuthorizationExtensionClientOutput.ID,
                         AuthenticatorSelectionExtensionClientOutput.ID,
@@ -65,6 +67,7 @@ class ExtensionClientOutputDeserializerTest {
                 ),
                 () -> assertThat(extensionOutputs).containsValues(
                         new FIDOAppIDExtensionClientOutput(true),
+                        new CredentialPropertiesExtensionClientOutput(new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true)),
                         new SimpleTransactionAuthorizationExtensionClientOutput("authorization message"),
                         new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("image/png", null)),
                         new AuthenticatorSelectionExtensionClientOutput(true),
