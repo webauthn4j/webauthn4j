@@ -34,7 +34,7 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnJSONModule extends SimpleModule {
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "deprecation"})
     public WebAuthnJSONModule(ObjectConverter objectConverter) {
         super("WebAuthnJSONModule");
 

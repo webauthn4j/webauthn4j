@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
+@Deprecated
 public class GenericTransactionAuthorizationExtensionClientOutput
         extends AbstractExtensionOutput<GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg>
         implements AuthenticationExtensionClientOutput<GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg> {

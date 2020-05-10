@@ -22,7 +22,6 @@ import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionA
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientOutput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientOutput;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.jupiter.api.Test;
 
@@ -35,11 +34,12 @@ class ExtensionValidatorTest {
     private ExtensionValidator extensionValidator = new ExtensionValidator();
 
     @Test
+    @SuppressWarnings("deprecation")
     void expected_extension_does_not_exist_test() {
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
         Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
-        authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
-                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
+        authenticatorOutputs.put(com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput.ID,
+                new com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Arrays.asList(FIDOAppIDExtensionClientOutput.ID, SupportedExtensionsExtensionAuthenticatorOutput.ID);
         extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), expectedExtensions);
     }
@@ -65,11 +65,12 @@ class ExtensionValidatorTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void unexpected_authenticator_extension_does_exist_test() {
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
         Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
-                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
+                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Collections.emptyList();
         assertThrows(UnexpectedExtensionException.class,
                 () -> extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), expectedExtensions)
@@ -77,11 +78,12 @@ class ExtensionValidatorTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void expectedExtensions_null_test() {
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
         Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
-                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
+                new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientOutput.ID)));
         extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), null);
     }
 

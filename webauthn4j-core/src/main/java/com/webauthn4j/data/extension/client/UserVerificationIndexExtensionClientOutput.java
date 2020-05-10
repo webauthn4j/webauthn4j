@@ -21,6 +21,7 @@ import com.webauthn4j.data.extension.AbstractExtensionOutput;
 
 import java.util.Arrays;
 
+@Deprecated
 public class UserVerificationIndexExtensionClientOutput
         extends AbstractExtensionOutput<byte[]>
         implements RegistrationExtensionClientOutput<byte[]>, AuthenticationExtensionClientOutput<byte[]> {

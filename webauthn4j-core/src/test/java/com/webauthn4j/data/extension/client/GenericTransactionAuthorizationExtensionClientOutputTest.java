@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class GenericTransactionAuthorizationExtensionClientOutputTest {
 
     @Test
+    @SuppressWarnings("deprecation")
     void test() {
         GenericTransactionAuthorizationExtensionClientOutput target
                 = new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg());
@@ -31,6 +32,7 @@ class GenericTransactionAuthorizationExtensionClientOutputTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void TxAuthnGenericArg_getter_setter_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg target
                 = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("type", new byte[32]);
@@ -41,6 +43,7 @@ class GenericTransactionAuthorizationExtensionClientOutputTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void TxAuthnGenericArg_equals_hashCode_test() {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceA = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg instanceB = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg();

@@ -19,6 +19,7 @@ package com.webauthn4j.data.extension.authenticator;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.data.extension.AbstractExtensionOutput;
 
+@Deprecated
 public class UserVerificationIndexExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<byte[]>
         implements RegistrationExtensionAuthenticatorOutput<byte[]>, AuthenticationExtensionAuthenticatorOutput<byte[]> {

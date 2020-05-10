@@ -22,6 +22,7 @@ import com.webauthn4j.data.extension.AuthenticationExtensionsSupported;
 
 import java.util.List;
 
+@Deprecated
 public class SupportedExtensionsExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<AuthenticationExtensionsSupported>
         implements RegistrationExtensionAuthenticatorOutput<AuthenticationExtensionsSupported> {

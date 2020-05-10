@@ -18,6 +18,7 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.AbstractExtensionInput;
 
+@Deprecated
 public class SupportedExtensionsExtensionClientInput extends AbstractExtensionInput<Boolean> implements RegistrationExtensionClientInput<Boolean> {
 
     public static final String ID = "exts";

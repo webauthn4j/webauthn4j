@@ -70,6 +70,7 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void serialize_deserialize_test() {
         //Given
         byte[] rpIdHash = new byte[32];

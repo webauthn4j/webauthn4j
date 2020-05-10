@@ -36,6 +36,7 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnCBORModule extends SimpleModule {
 
+    @SuppressWarnings("deprecation")
     public WebAuthnCBORModule(ObjectConverter objectConverter) {
         super("WebAuthnCBORModule");
 

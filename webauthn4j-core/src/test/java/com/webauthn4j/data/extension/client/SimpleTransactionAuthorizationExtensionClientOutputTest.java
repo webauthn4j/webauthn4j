@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SimpleTransactionAuthorizationExtensionClientOutputTest {
 
     @Test
+    @SuppressWarnings("deprecation")
     void test() {
         SimpleTransactionAuthorizationExtensionClientOutput target = new SimpleTransactionAuthorizationExtensionClientOutput("dummy");
         assertThat(target.getIdentifier()).isEqualTo(SimpleTransactionAuthorizationExtensionClientOutput.ID);

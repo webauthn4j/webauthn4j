@@ -114,6 +114,7 @@ public class ClientPlatform {
         return create(publicKeyCredentialCreationOptions, registrationEmulationOption, null);
     }
 
+    @SuppressWarnings("deprecation")
     private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> processRegistrationExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
 
         if (extensions == null) {

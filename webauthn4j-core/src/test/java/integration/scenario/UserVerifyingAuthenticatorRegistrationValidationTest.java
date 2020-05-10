@@ -188,6 +188,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void validate_RegistrationRequest_with_unexpected_extension_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
@@ -202,7 +203,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
         Map<String, RegistrationExtensionClientInput> extensions = new HashMap<>();
-        extensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionClientInput(true));
+        extensions.put(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput.ID, new com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput(true));
 
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(

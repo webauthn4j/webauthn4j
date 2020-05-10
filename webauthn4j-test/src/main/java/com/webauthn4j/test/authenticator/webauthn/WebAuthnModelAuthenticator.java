@@ -33,10 +33,8 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.test.CACertificatePath;
 import com.webauthn4j.test.CipherUtil;
 import com.webauthn4j.test.TestAttestationUtil;
@@ -298,6 +296,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return makeCredentialResponse;
     }
 
+    @SuppressWarnings("deprecation")
     private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest) {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
         if (extensions == null) {
@@ -306,8 +305,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         Map<String, RegistrationExtensionAuthenticatorOutput> processedExtensions = new HashMap<>();
         for (Map.Entry<String, RegistrationExtensionClientInput> entry : extensions.entrySet()) {
             String extensionIdentifier = entry.getKey();
-            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
-                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
+            if (extensionIdentifier.equals(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput.ID)) {
+                processedExtensions.put(com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput.ID, new com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
             }
         }
         return new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions);
