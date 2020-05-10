@@ -38,17 +38,45 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     @SuppressWarnings("UnusedAssignment")
     private boolean requireResidentKey = false;
+
+    private ResidentKeyRequirement residentKey = null;
+
     @SuppressWarnings("UnusedAssignment")
     private UserVerificationRequirement userVerification = UserVerificationRequirement.PREFERRED;
 
+    /**
+     * Constructor for Jackson deserializer
+     */
     @JsonCreator
     public AuthenticatorSelectionCriteria(
             @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
             @JsonProperty("requireResidentKey") boolean requireResidentKey,
+            @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
             @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
         this.requireResidentKey = requireResidentKey;
+        this.residentKey = residentKey;
         this.userVerification = userVerification;
+    }
+
+    /**
+     * Constructor for WebAuthn Level2 spec
+     */
+    public AuthenticatorSelectionCriteria(
+            AuthenticatorAttachment authenticatorAttachment,
+            ResidentKeyRequirement residentKey,
+            UserVerificationRequirement userVerification) {
+        this(authenticatorAttachment, false, residentKey, userVerification);
+    }
+
+    /**
+     * Constructor for WebAuthn Level1 spec backward-compatibility
+     */
+    public AuthenticatorSelectionCriteria(
+            AuthenticatorAttachment authenticatorAttachment,
+            boolean requireResidentKey,
+            UserVerificationRequirement userVerification) {
+        this(authenticatorAttachment, requireResidentKey, null, userVerification);
     }
 
     public AuthenticatorAttachment getAuthenticatorAttachment() {
@@ -57,6 +85,10 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     public boolean isRequireResidentKey() {
         return requireResidentKey;
+    }
+
+    public ResidentKeyRequirement getResidentKey() {
+        return residentKey;
     }
 
     public UserVerificationRequirement getUserVerification() {
@@ -70,12 +102,12 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
         return requireResidentKey == that.requireResidentKey &&
                 authenticatorAttachment == that.authenticatorAttachment &&
+                residentKey == that.residentKey &&
                 userVerification == that.userVerification;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(authenticatorAttachment, requireResidentKey, userVerification);
+        return Objects.hash(authenticatorAttachment, requireResidentKey, residentKey, userVerification);
     }
 }

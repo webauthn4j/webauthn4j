@@ -53,12 +53,31 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
     ) {
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
+        boolean effectiveResidentKeyRequirement;
+        if(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey() == null){
+            effectiveResidentKeyRequirement = publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey();
+        }
+        else {
+            switch (publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey()){
+                case REQUIRED:
+                    effectiveResidentKeyRequirement = true;
+                    break;
+                case PREFERRED:
+                    effectiveResidentKeyRequirement = webAuthnAuthenticator.isCapableOfStoringClientSideResidentCredential();
+                    break;
+                case DISCOURAGED:
+                    effectiveResidentKeyRequirement = false;
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
+        }
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerification());
         MakeCredentialRequest makeCredentialRequest = new MakeCredentialRequest(
                 clientDataHash,
                 publicKeyCredentialCreationOptions.getRp(),
                 publicKeyCredentialCreationOptions.getUser(),
-                publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey(),
+                effectiveResidentKeyRequirement,
                 true,
                 requireUserVerification,
                 publicKeyCredentialCreationOptions.getPubKeyCredParams(),

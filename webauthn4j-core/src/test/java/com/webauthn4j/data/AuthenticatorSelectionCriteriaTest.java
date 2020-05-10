@@ -24,12 +24,37 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AuthenticatorSelectionCriteriaTest {
 
     @Test
-    void getter_test() {
+    void webauthn_level2_compatible_constructor_test() {
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria
+                = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, ResidentKeyRequirement.REQUIRED, UserVerificationRequirement.REQUIRED);
+        assertAll(
+                () -> assertThat(authenticatorSelectionCriteria.getAuthenticatorAttachment()).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM),
+                () -> assertThat(authenticatorSelectionCriteria.isRequireResidentKey()).isEqualTo(false), // inconsistent configuration is possible by design. consumer code must care it
+                () -> assertThat(authenticatorSelectionCriteria.getResidentKey()).isEqualTo(ResidentKeyRequirement.REQUIRED),
+                () -> assertThat(authenticatorSelectionCriteria.getUserVerification()).isEqualTo(UserVerificationRequirement.REQUIRED)
+        );
+    }
+
+    @Test
+    void webauthn_level1_compatible_constructor_test() {
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria
                 = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, true, UserVerificationRequirement.REQUIRED);
         assertAll(
                 () -> assertThat(authenticatorSelectionCriteria.getAuthenticatorAttachment()).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM),
                 () -> assertThat(authenticatorSelectionCriteria.isRequireResidentKey()).isEqualTo(true),
+                () -> assertThat(authenticatorSelectionCriteria.getResidentKey()).isEqualTo(null),
+                () -> assertThat(authenticatorSelectionCriteria.getUserVerification()).isEqualTo(UserVerificationRequirement.REQUIRED)
+        );
+    }
+
+    @Test
+    void getter_test() {
+        AuthenticatorSelectionCriteria authenticatorSelectionCriteria
+                = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, true, ResidentKeyRequirement.REQUIRED, UserVerificationRequirement.REQUIRED);
+        assertAll(
+                () -> assertThat(authenticatorSelectionCriteria.getAuthenticatorAttachment()).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM),
+                () -> assertThat(authenticatorSelectionCriteria.isRequireResidentKey()).isEqualTo(true),
+                () -> assertThat(authenticatorSelectionCriteria.getResidentKey()).isEqualTo(ResidentKeyRequirement.REQUIRED),
                 () -> assertThat(authenticatorSelectionCriteria.getUserVerification()).isEqualTo(UserVerificationRequirement.REQUIRED)
         );
     }
