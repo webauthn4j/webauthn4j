@@ -36,7 +36,8 @@ class AttestationConveyancePreferenceTest {
         assertAll(
                 () -> assertThat(AttestationConveyancePreference.create("none")).isEqualTo(AttestationConveyancePreference.NONE),
                 () -> assertThat(AttestationConveyancePreference.create("direct")).isEqualTo(AttestationConveyancePreference.DIRECT),
-                () -> assertThat(AttestationConveyancePreference.create("indirect")).isEqualTo(AttestationConveyancePreference.INDIRECT)
+                () -> assertThat(AttestationConveyancePreference.create("indirect")).isEqualTo(AttestationConveyancePreference.INDIRECT),
+                () -> assertThat(AttestationConveyancePreference.create("enterprise")).isEqualTo(AttestationConveyancePreference.ENTERPRISE)
         );
     }
 
@@ -57,7 +58,8 @@ class AttestationConveyancePreferenceTest {
         assertAll(
                 () -> assertThat(AttestationConveyancePreference.NONE.getValue()).isEqualTo("none"),
                 () -> assertThat(AttestationConveyancePreference.DIRECT.getValue()).isEqualTo("direct"),
-                () -> assertThat(AttestationConveyancePreference.INDIRECT.getValue()).isEqualTo("indirect")
+                () -> assertThat(AttestationConveyancePreference.INDIRECT.getValue()).isEqualTo("indirect"),
+                () -> assertThat(AttestationConveyancePreference.ENTERPRISE.getValue()).isEqualTo("enterprise")
         );
     }
 
