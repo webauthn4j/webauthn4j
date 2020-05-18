@@ -192,7 +192,7 @@ public class WebAuthnManager {
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = authenticatorTransportConverter.convertSet(registrationRequest.getTransports());
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(registrationRequest.getClientExtensionsJSON());
 
         return new RegistrationData(
@@ -228,9 +228,9 @@ public class WebAuthnManager {
         byte[] clientDataBytes = authenticationRequest.getClientDataJSON();
         CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
         byte[] authenticatorDataBytes = authenticationRequest.getAuthenticatorData();
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
 
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions =
                 authenticationExtensionsClientOutputsConverter.convert(authenticationRequest.getClientExtensionsJSON());
 
         return new AuthenticationData(

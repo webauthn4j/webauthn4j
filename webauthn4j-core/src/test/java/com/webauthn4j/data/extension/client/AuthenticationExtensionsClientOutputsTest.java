@@ -30,7 +30,7 @@ class AuthenticationExtensionsClientOutputsTest {
         GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg value = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("dummy", new byte[32]);
         GenericTransactionAuthorizationExtensionClientOutput genericTransactionAuthorizationExtensionClientOutput = new GenericTransactionAuthorizationExtensionClientOutput(value);
         assertThatCode(() -> {
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
+            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions =
                     new AuthenticationExtensionsClientOutputs<>(Collections.singletonMap(GenericTransactionAuthorizationExtensionClientOutput.ID, genericTransactionAuthorizationExtensionClientOutput));
             assertThat(clientExtensions.size()).isEqualTo(1);
         }).doesNotThrowAnyException();

@@ -16,9 +16,11 @@
 
 package com.webauthn4j.converter.jackson.serializer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.*;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -48,13 +50,13 @@ class AuthenticatorDataSerializerTest {
         long counter = 325;
 
         AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, flags, counter, attestationData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(rpIdHash, flags, counter, attestationData);
 
         //Given
 
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
-        AuthenticatorData restored = cborConverter.readValue(result, AuthenticatorData.class);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>>>() {});
 
         //Then
 

@@ -36,8 +36,8 @@ class ExtensionValidatorTest {
 
     @Test
     void expected_extension_does_not_exist_test() {
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        Map<String, ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
                 new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Arrays.asList(FIDOAppIDExtensionClientOutput.ID, SupportedExtensionsExtensionAuthenticatorOutput.ID);
@@ -46,8 +46,8 @@ class ExtensionValidatorTest {
 
     @Test
     void expected_extension_does_exist_test() {
-        Map<String, ExtensionClientOutput> clientOutputs = new HashMap<>();
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>();
+        Map<String, ExtensionClientOutput<?>> clientOutputs = new HashMap<>();
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>();
         clientOutputs.put(FIDOAppIDExtensionClientOutput.ID, new FIDOAppIDExtensionClientOutput(true));
         List<String> expectedExtensions = Collections.singletonList(FIDOAppIDExtensionClientOutput.ID);
         extensionValidator.validate(new AuthenticationExtensionsClientOutputs<>(clientOutputs), authenticatorOutputs, expectedExtensions);
@@ -55,8 +55,8 @@ class ExtensionValidatorTest {
 
     @Test
     void unexpected_extension_does_exist_test() {
-        Map<String, ExtensionClientOutput> clientOutputs = new HashMap<>();
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>();
+        Map<String, ExtensionClientOutput<?>> clientOutputs = new HashMap<>();
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>();
         clientOutputs.put(FIDOAppIDExtensionClientOutput.ID, new FIDOAppIDExtensionClientOutput(true));
         List<String> expectedExtensions = Collections.emptyList();
         assertThrows(UnexpectedExtensionException.class,
@@ -66,8 +66,8 @@ class ExtensionValidatorTest {
 
     @Test
     void unexpected_authenticator_extension_does_exist_test() {
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        Map<String, ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
                 new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
         List<String> expectedExtensions = Collections.emptyList();
@@ -78,8 +78,8 @@ class ExtensionValidatorTest {
 
     @Test
     void expectedExtensions_null_test() {
-        AuthenticationExtensionsClientOutputs<ExtensionClientOutput> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        Map<String, ExtensionAuthenticatorOutput> authenticatorOutputs = new HashMap<>();
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        Map<String, ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new HashMap<>();
         authenticatorOutputs.put(SupportedExtensionsExtensionAuthenticatorOutput.ID,
                 new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList(SupportedExtensionsExtensionClientOutput.ID)));
         extensionValidator.validate(clientOutputs, new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputs), null);

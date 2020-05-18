@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
@@ -48,10 +47,9 @@ public class CborConverter implements Serializable {
         this.cborMapper = cborMapper;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T readValue(byte[] src, Class valueType) {
+    public <T> T readValue(byte[] src, Class<T> valueType) {
         try {
-            return (T) cborMapper.readValue(src, valueType);
+            return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -59,10 +57,9 @@ public class CborConverter implements Serializable {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T readValue(InputStream src, Class valueType) {
+    public <T> T readValue(InputStream src, Class<T> valueType) {
         try {
-            return (T) cborMapper.readValue(src, valueType);
+            return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -80,9 +77,9 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public AuthenticationExtensionsAuthenticatorOutputs readValue(InputStream inputStream, TypeReference<AuthenticationExtensionsAuthenticatorOutputs> typeReference) {
+    public <T> T readValue(InputStream src, TypeReference<T> valueTypeRef) {
         try {
-            return cborMapper.readValue(inputStream, typeReference);
+            return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {

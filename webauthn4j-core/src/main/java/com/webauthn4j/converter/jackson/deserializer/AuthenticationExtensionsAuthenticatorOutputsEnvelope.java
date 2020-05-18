@@ -22,7 +22,7 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 /**
  * Internal envelope class for {@link AuthenticationExtensionsAuthenticatorOutputs} deserialization
  */
-public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends ExtensionAuthenticatorOutput> {
+public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends ExtensionAuthenticatorOutput<?>> {
 
     private AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;
     private int length;

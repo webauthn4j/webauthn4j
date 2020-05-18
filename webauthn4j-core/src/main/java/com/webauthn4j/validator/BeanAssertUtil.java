@@ -146,7 +146,7 @@ class BeanAssertUtil {
         validate(attestationObject.getAuthenticatorData());
     }
 
-    public static <T extends ExtensionAuthenticatorOutput> void validate(AuthenticatorData<T> authenticatorData) {
+    public static <T extends ExtensionAuthenticatorOutput<?>> void validate(AuthenticatorData<T> authenticatorData) {
         if (authenticatorData == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
         }
@@ -191,7 +191,7 @@ class BeanAssertUtil {
         validate(coseKey);
     }
 
-    public static <T extends ExtensionClientOutput> void validateAuthenticationExtensionsClientOutputs(
+    public static <T extends ExtensionClientOutput<?>> void validateAuthenticationExtensionsClientOutputs(
             AuthenticationExtensionsClientOutputs<T> authenticationExtensionsClientOutputs) {
         if (authenticationExtensionsClientOutputs == null) {
             return;
@@ -201,7 +201,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static <T extends ExtensionAuthenticatorOutput> void validateAuthenticatorExtensionsOutputs(
+    public static <T extends ExtensionAuthenticatorOutput<?>> void validateAuthenticatorExtensionsOutputs(
             AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs) {
         if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
@@ -211,7 +211,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(String identifier, ExtensionOutput extensionOutput) {
+    public static void validate(String identifier, ExtensionOutput<?> extensionOutput) {
         if (identifier == null) {
             throw new ConstraintViolationException("identifier must not be null");
         }

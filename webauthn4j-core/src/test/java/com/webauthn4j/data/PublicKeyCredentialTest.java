@@ -55,7 +55,7 @@ class PublicKeyCredentialTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
@@ -68,7 +68,7 @@ class PublicKeyCredentialTest {
                 AttestationConveyancePreference.NONE,
                 extensions
         );
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput<?>> credential = clientPlatform.create(credentialCreationOptions);
         assertAll(
                 () -> assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue()),
                 () -> assertThat(credential.getId()).isNotEmpty(),
@@ -81,8 +81,8 @@ class PublicKeyCredentialTest {
     @Test
     void equals_hashCode_test() {
 
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput<?>> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput<?>> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

@@ -31,6 +31,7 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
@@ -98,7 +99,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
                 new AttestedCredentialData(aaguid, registrationResponse.getKeyHandle(), ec2CredentialPublicKey);
 
         byte flag = BIT_AT | BIT_UP;
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(rpIdHash, flag, 0, attestedCredentialData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(rpIdHash, flag, 0, attestedCredentialData);
 
         AttestationObject attestationObject = new AttestationObject(authenticatorData, attestationStatement);
 
@@ -136,7 +137,7 @@ public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
         byte[] credentialId = publicKeyCredentialDescriptor.getId();
         long counter = ByteBuffer.allocate(8).put(new byte[4]).put(authenticationResponse.getCounter()).getLong(0);
-        AuthenticatorData authenticatorData = new AuthenticatorData(rpIdHash, authenticationResponse.getUserPresence(), counter);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(rpIdHash, authenticationResponse.getUserPresence(), counter);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
         byte[] signature = authenticationResponse.getSignature();

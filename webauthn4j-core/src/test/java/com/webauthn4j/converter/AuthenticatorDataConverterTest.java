@@ -46,7 +46,7 @@ class AuthenticatorDataConverterTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
 
         //When
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input));
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> result = new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -74,16 +74,16 @@ class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        Map<String, RegistrationExtensionAuthenticatorOutput> extensionOutputMap = new HashMap<>();
+        Map<String, RegistrationExtensionAuthenticatorOutput<?>> extensionOutputMap = new HashMap<>();
         List<String> extension = Collections.singletonList("uvm");
         SupportedExtensionsExtensionAuthenticatorOutput extensionOutput = new SupportedExtensionsExtensionAuthenticatorOutput(extension);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData =
                 new AuthenticatorData<>(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
 
         //When
         byte[] serialized = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(serialized);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> result = new AuthenticatorDataConverter(objectConverter).convert(serialized);
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();

@@ -22,18 +22,19 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.jws.JWS;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Jackson Serializer for {@link JWS}
  */
-public class JWSSerializer extends StdSerializer<JWS> {
+public class JWSSerializer extends StdSerializer<JWS<? extends Serializable>> {
 
     public JWSSerializer() {
-        super(JWS.class);
+        super(JWS.class, false);
     }
 
     @Override
-    public void serialize(JWS value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(JWS<? extends Serializable> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeBinary(value.getBytes());
     }
 }

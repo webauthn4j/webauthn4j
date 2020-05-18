@@ -80,7 +80,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
@@ -94,9 +94,9 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
                 extensions
         );
 
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput<?>> credential = clientPlatform.create(credentialCreationOptions);
         AuthenticatorAttestationResponse authenticatorAttestationResponse = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensionResults = credential.getClientExtensionResults();
         Set<String> transports = Collections.emptySet();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

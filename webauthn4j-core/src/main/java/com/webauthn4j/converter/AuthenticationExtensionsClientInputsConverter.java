@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
@@ -42,14 +43,14 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputs<ExtensionClientInput> convert(String value) {
+    public <T extends ExtensionClientInput<?>> AuthenticationExtensionsClientInputs<T> convert(String value) {
         if (value == null) {
             return null;
         }
-        return jsonConverter.readValue(value, AuthenticationExtensionsClientInputs.class);
+        return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {});
     }
 
-    public String convertToString(AuthenticationExtensionsClientInputs value) {
+    public <T extends ExtensionClientInput<?>> String convertToString(AuthenticationExtensionsClientInputs<T> value) {
         if (value == null) {
             return null;
         }

@@ -40,7 +40,7 @@ public abstract class AbstractExtensionInput<T extends Serializable> implements 
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractExtensionInput that = (AbstractExtensionInput) o;
+        AbstractExtensionInput<?> that = (AbstractExtensionInput<?>) o;
         return Objects.equals(value, that.value);
     }
 

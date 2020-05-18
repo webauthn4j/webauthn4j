@@ -16,9 +16,12 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.data.extension.client.UnknownExtensionClientInput;
 import org.junit.jupiter.api.Test;
 
@@ -31,14 +34,32 @@ class UnknownExtensionClientInputDeserializerTest {
     private JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
-    void test() {
+    void unknown_registration_extension_test() {
 
 
         //Given
         String input = "{\"unexpected\": true}";
 
         //When
-        AuthenticationExtensionsClientInputs result = jsonConverter.readValue(input, AuthenticationExtensionsClientInputs.class);
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> result = jsonConverter.readValue(input, new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>>>() {});
+
+        //Then
+        assertAll(
+                ()-> assertThat(result.get("unexpected")).isInstanceOf(UnknownExtensionClientInput.class),
+                ()-> assertThat(((UnknownExtensionClientInput)result.get("unexpected")).getIdentifier()).isEqualTo("unexpected"),
+                ()-> assertThat(((UnknownExtensionClientInput)result.get("unexpected")).getValue()).isEqualTo(true)
+        );
+    }
+
+    @Test
+    void unknown_authentication_extension_test() {
+
+
+        //Given
+        String input = "{\"unexpected\": true}";
+
+        //When
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> result = jsonConverter.readValue(input, new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>>>() {});
 
         //Then
         assertAll(

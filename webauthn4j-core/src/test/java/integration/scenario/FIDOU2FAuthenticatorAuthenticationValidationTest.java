@@ -81,9 +81,9 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -140,7 +140,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 null
         );
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -190,7 +190,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -240,7 +240,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 null
         );
         clientPlatform.setOrigin(new Origin("https://bad.origin.example.com")); //bad origin
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -290,7 +290,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -338,7 +338,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -389,7 +389,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -438,7 +438,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -487,7 +487,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

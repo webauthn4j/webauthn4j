@@ -16,16 +16,18 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.data.extension.client.UnknownExtensionClientOutput;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class UnknownExtensionClientOutputSerializerTest {
+class UnknownExtensionClientOutputDeserializerTest {
 
     private ObjectConverter objectConverter = new ObjectConverter();
     private JsonConverter jsonConverter = objectConverter.getJsonConverter();
@@ -38,7 +40,7 @@ class UnknownExtensionClientOutputSerializerTest {
         String input = "{\"unexpected\": true}";
 
         //When
-        AuthenticationExtensionsClientOutputs result = jsonConverter.readValue(input, AuthenticationExtensionsClientOutputs.class);
+        AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>> result = jsonConverter.readValue(input, new TypeReference<AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>>>() {});
 
         //Then
         assertAll(

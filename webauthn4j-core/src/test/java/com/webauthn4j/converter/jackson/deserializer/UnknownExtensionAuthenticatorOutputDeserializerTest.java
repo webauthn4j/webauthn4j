@@ -16,9 +16,11 @@
 
 package com.webauthn4j.converter.jackson.deserializer;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.UnknownExtensionAuthenticatorOutput;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
@@ -39,12 +41,12 @@ class UnknownExtensionAuthenticatorOutputDeserializerTest {
         byte[] input = HexUtil.decode("A16A756E6578706563746564F5"); // {"unexpected": true}
 
         //When
-        AuthenticationExtensionsAuthenticatorOutputs result = cborConverter.readValue(input, AuthenticationExtensionsAuthenticatorOutputs.class);
+        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput<?>> result = cborConverter.readValue(input, new TypeReference<AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput<?>>>() {});
 
         //Then
         assertAll(
                 ()-> assertThat(result.get("unexpected")).isInstanceOf(UnknownExtensionAuthenticatorOutput.class),
-                ()-> assertThat(((UnknownExtensionAuthenticatorOutput)result.get("unexpected")).getIdentifier()).isEqualTo("unexpected"),
+                ()-> assertThat(result.get("unexpected").getIdentifier()).isEqualTo("unexpected"),
                 ()-> assertThat(((UnknownExtensionAuthenticatorOutput)result.get("unexpected")).getValue()).isEqualTo(true)
         );
     }

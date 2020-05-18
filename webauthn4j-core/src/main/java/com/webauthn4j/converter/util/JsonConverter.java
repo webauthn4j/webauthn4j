@@ -46,10 +46,9 @@ public class JsonConverter implements Serializable {
         this.jsonMapper = jsonMapper;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T readValue(String src, Class valueType) {
+    public <T> T readValue(String src, Class<T> valueType) {
         try {
-            return (T) jsonMapper.readValue(src, valueType);
+            return jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
@@ -57,10 +56,9 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T readValue(InputStream src, Class valueType) {
+    public <T> T readValue(InputStream src, Class<T> valueType) {
         try {
-            return (T) jsonMapper.readValue(src, valueType);
+            return jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {

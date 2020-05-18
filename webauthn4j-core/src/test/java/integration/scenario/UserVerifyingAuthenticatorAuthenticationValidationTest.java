@@ -76,9 +76,9 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 null
         );
 
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -131,9 +131,9 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
 
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
@@ -184,7 +184,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 null
         );
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -231,7 +231,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.REQUIRED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -278,7 +278,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 null
         );
         clientPlatform.setOrigin(new Origin("https://bad.origin.example.com")); //bad origin
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -326,7 +326,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
         CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -373,7 +373,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.REQUIRED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, anotherSiteRpId, challenge, null);
@@ -420,7 +420,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
@@ -460,7 +460,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
