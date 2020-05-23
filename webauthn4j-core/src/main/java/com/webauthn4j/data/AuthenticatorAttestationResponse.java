@@ -35,8 +35,8 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     // ~ Instance fields
     // ================================================================================================
 
-    private byte[] attestationObject;
-    private Set<AuthenticatorTransport> transports;
+    private final byte[] attestationObject;
+    private final Set<AuthenticatorTransport> transports;
 
     // ~ Constructor
     // ========================================================================================================

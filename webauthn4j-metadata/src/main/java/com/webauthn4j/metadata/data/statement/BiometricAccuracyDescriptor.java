@@ -28,11 +28,11 @@ import java.util.Objects;
 @SuppressWarnings("squid:S00116")
 public class BiometricAccuracyDescriptor implements Serializable {
 
-    private double selfAttestedFAR;
-    private double selfAttestedFRR;
-    private Integer maxTemplate;
-    private Integer maxRetries;
-    private Integer blockSlowdown;
+    private final double selfAttestedFAR;
+    private final double selfAttestedFRR;
+    private final Integer maxTemplate;
+    private final Integer maxRetries;
+    private final Integer blockSlowdown;
 
     @JsonCreator
     public BiometricAccuracyDescriptor(

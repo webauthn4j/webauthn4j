@@ -24,7 +24,7 @@ public enum ClientDataType {
     CREATE("webauthn.create"),
     GET("webauthn.get");
 
-    private String value;
+    private final String value;
 
     ClientDataType(String value) {
         this.value = value;

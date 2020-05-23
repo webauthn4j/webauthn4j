@@ -56,8 +56,8 @@ public class AuthenticatorDataConverter {
 
     //~ Instance fields
     // ================================================================================================
-    private CborConverter cborConverter;
-    private AttestedCredentialDataConverter attestedCredentialDataConverter;
+    private final CborConverter cborConverter;
+    private final AttestedCredentialDataConverter attestedCredentialDataConverter;
 
     //~ Constructors
     // ================================================================================================

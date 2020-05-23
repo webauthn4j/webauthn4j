@@ -44,7 +44,7 @@ public enum AuthenticatorAttachment {
      */
     CROSS_PLATFORM("cross-platform");
 
-    private String value;
+    private final String value;
 
     AuthenticatorAttachment(String value) {
         this.value = value;

@@ -27,10 +27,10 @@ import java.util.Objects;
  */
 public class CodeAccuracyDescriptor implements Serializable {
 
-    private Integer base;
-    private Integer minLength;
-    private Integer maxRetries;
-    private Integer blockSlowdown;
+    private final Integer base;
+    private final Integer minLength;
+    private final Integer maxRetries;
+    private final Integer blockSlowdown;
 
     @JsonCreator
     public CodeAccuracyDescriptor(

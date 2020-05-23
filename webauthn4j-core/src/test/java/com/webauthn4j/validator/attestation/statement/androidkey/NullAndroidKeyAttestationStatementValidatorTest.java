@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NullAndroidKeyAttestationStatementValidatorTest {
 
-    private NullAndroidKeyAttestationStatementValidator target = new NullAndroidKeyAttestationStatementValidator();
+    private final NullAndroidKeyAttestationStatementValidator target = new NullAndroidKeyAttestationStatementValidator();
 
     @Test
     void validate_test() {

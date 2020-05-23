@@ -24,7 +24,7 @@ import java.util.*;
 
 public abstract class AbstractImmutableMap<K extends Serializable, V extends Serializable> extends AbstractMap<K, V> implements Serializable {
 
-    private HashMap<K, V> map;
+    private final HashMap<K, V> map;
     private transient Set<Entry<K, V>> cachedEntrySet;
 
     @JsonCreator

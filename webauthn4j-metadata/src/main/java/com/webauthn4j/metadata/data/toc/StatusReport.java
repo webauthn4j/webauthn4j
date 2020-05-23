@@ -34,16 +34,16 @@ import java.util.Objects;
  */
 public class StatusReport implements Serializable {
     @JsonProperty
-    private AuthenticatorStatus status;
+    private final AuthenticatorStatus status;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
-    private LocalDate effectiveDate;
+    private final LocalDate effectiveDate;
     @JsonProperty
-    private X509Certificate certificate;
+    private final X509Certificate certificate;
     @JsonProperty
-    private String url;
+    private final String url;
 
     @JsonCreator
     public StatusReport(

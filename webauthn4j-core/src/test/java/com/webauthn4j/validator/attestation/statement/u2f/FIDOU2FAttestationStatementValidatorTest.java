@@ -36,7 +36,7 @@ import static org.mockito.Mockito.when;
 
 class FIDOU2FAttestationStatementValidatorTest {
 
-    private FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
+    private final FIDOU2FAttestationStatementValidator target = new FIDOU2FAttestationStatementValidator();
 
     @Test
     void validate_invalid_attestation_statement_test() {

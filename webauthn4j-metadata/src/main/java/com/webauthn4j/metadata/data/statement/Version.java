@@ -27,8 +27,8 @@ import java.util.Objects;
  */
 public class Version implements Serializable {
 
-    private Integer major;
-    private Integer minor;
+    private final Integer major;
+    private final Integer minor;
 
     @JsonCreator
     public Version(

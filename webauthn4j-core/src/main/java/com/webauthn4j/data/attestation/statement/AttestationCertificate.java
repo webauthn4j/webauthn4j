@@ -30,7 +30,7 @@ public class AttestationCertificate implements Serializable {
 
     private static final int CERTIFICATE_VERSION_3 = 3;
     private static final int NON_CA = -1;
-    private X509Certificate certificate;
+    private final X509Certificate certificate;
 
     public AttestationCertificate(X509Certificate certificate) {
         this.certificate = certificate;

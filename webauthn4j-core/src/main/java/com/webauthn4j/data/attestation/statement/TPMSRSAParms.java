@@ -23,10 +23,10 @@ import java.util.Arrays;
 
 public class TPMSRSAParms implements TPMUPublicParms {
 
-    private byte[] symmetric;
-    private byte[] scheme;
-    private byte[] keyBits;
-    private byte[] exponent;
+    private final byte[] symmetric;
+    private final byte[] scheme;
+    private final byte[] keyBits;
+    private final byte[] exponent;
 
     public TPMSRSAParms(byte[] symmetric, byte[] scheme, byte[] keyBits, byte[] exponent) {
         this.symmetric = symmetric;

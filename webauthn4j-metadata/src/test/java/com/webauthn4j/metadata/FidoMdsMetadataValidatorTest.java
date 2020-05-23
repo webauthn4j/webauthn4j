@@ -24,8 +24,8 @@ import static org.mockito.Mockito.mock;
 
 class FidoMdsMetadataValidatorTest {
 
-    private MetadataItemsResolver metadataItemsResolver = mock(MetadataItemsResolver.class);
-    private FidoMdsMetadataValidator target = new FidoMdsMetadataValidator(metadataItemsResolver);
+    private final MetadataItemsResolver metadataItemsResolver = mock(MetadataItemsResolver.class);
+    private final FidoMdsMetadataValidator target = new FidoMdsMetadataValidator(metadataItemsResolver);
 
     @Test
     void test() {

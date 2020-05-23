@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class TransactionConfirmationDisplays extends AbstractSet<TransactionConfirmationDisplay> {
 
-    private Set<TransactionConfirmationDisplay> transactionConfirmationDisplays;
+    private final Set<TransactionConfirmationDisplay> transactionConfirmationDisplays;
 
     public TransactionConfirmationDisplays(int value) {
         Set<TransactionConfirmationDisplay> set = new HashSet<>();

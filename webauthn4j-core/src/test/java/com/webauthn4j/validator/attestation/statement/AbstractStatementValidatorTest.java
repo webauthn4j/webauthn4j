@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AbstractStatementValidatorTest {
 
-    private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
+    private final PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
 
     @Test
     void getJcaName() {

@@ -30,8 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UnknownExtensionClientInputDeserializerTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void unknown_registration_extension_test() {

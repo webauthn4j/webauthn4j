@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JWSTest {
 
-    private JWSFactory jwsFactory = new JWSFactory();
+    private final JWSFactory jwsFactory = new JWSFactory();
 
     @Test
     void getter_test() {

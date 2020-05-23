@@ -42,7 +42,7 @@ public class CredentialPropertiesExtensionClientOutput
 
     public static class CredentialPropertiesOutput implements Serializable {
 
-        Boolean rk;
+        final Boolean rk;
 
         @JsonCreator
         public CredentialPropertiesOutput(

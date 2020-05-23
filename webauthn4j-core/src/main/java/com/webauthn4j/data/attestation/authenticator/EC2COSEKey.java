@@ -40,7 +40,7 @@ import java.util.Objects;
 public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     @JsonProperty("-1")
-    private Curve curve;
+    private final Curve curve;
 
     @JsonProperty("-2")
     private byte[] x;

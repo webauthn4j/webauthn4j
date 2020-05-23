@@ -55,14 +55,14 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
-    private Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
-    private JsonConverter jsonConverter;
-    private JWSFactory jwsFactory;
+    private final Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
+    private final JsonConverter jsonConverter;
+    private final JWSFactory jwsFactory;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
     private String token = null;
-    private HttpClient httpClient;
-    private TrustAnchor trustAnchor;
-    private MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
+    private final HttpClient httpClient;
+    private final TrustAnchor trustAnchor;
+    private final MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();
@@ -168,7 +168,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
                 })
                         .filter(Objects::nonNull)
                         .distinct()
-                        .collect(Collectors.groupingBy(item -> item.getAaguid()))
+                        .collect(Collectors.groupingBy(MetadataItem::getAaguid))
                         .entrySet()
                         .stream()
                         .collect(Collectors.toMap(Map.Entry::getKey, entry -> Collections.unmodifiableSet(new HashSet<>(entry.getValue()))));

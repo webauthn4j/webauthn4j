@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonFileMetadataStatementsProviderTest {
 
-    private ObjectConverter objectConverter;
+    private final ObjectConverter objectConverter;
 
     JsonFileMetadataStatementsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();

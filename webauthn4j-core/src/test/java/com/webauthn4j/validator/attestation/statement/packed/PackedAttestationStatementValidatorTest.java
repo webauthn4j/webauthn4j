@@ -60,14 +60,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PackedAttestationStatementValidatorTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
+    private final PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
 
-    private String originUrl = "http://localhost:8800";
-    private String rpId = "localhost";
-    private String challengeString = "KG8gySc5IaMvPQOWJz93R4OQQb3mdGjQwkQ89_HPe-E";
-    private byte[] tokenBindingId = null;
+    private final String originUrl = "http://localhost:8800";
+    private final String rpId = "localhost";
+    private final String challengeString = "KG8gySc5IaMvPQOWJz93R4OQQb3mdGjQwkQ89_HPe-E";
+    private final byte[] tokenBindingId = null;
 
     private static AttestationCertificatePath generateCertPath(KeyPair pair, String signAlg) {
 

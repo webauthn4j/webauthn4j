@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ResidentKeyRequirementTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void create_test() {

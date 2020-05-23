@@ -31,7 +31,6 @@ class RegistrationRequestTest {
         byte[] attestationObject = new byte[32];
         byte[] clientDataJSON = new byte[64];
         String clientExtensionJSON = "{}";  /* set clientExtensionJSON */
-        ;
         Set<String> transports = Collections.singleton("USB");
 
         RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);

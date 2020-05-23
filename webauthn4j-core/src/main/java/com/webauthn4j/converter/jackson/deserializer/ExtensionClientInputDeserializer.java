@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public class ExtensionClientInputDeserializer extends StdDeserializer<ExtensionClientInput<?>> {
 
-    private transient Logger logger = LoggerFactory.getLogger(ExtensionClientInputDeserializer.class);
+    private final transient Logger logger = LoggerFactory.getLogger(ExtensionClientInputDeserializer.class);
 
     public ExtensionClientInputDeserializer() {
         super(ExtensionClientInput.class);

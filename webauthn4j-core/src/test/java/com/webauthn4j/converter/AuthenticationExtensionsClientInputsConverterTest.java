@@ -31,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AuthenticationExtensionsClientInputsConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
+    private final AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
 
 
     @Test

@@ -24,10 +24,10 @@ import java.util.Objects;
 
 public class TPMSECCParms implements TPMUPublicParms {
 
-    private byte[] symmetric;
-    private byte[] scheme;
-    private TPMEccCurve curveId;
-    private byte[] kdf;
+    private final byte[] symmetric;
+    private final byte[] scheme;
+    private final TPMEccCurve curveId;
+    private final byte[] kdf;
 
     public TPMSECCParms(byte[] symmetric, byte[] scheme, TPMEccCurve curveId, byte[] kdf) {
         this.symmetric = symmetric;

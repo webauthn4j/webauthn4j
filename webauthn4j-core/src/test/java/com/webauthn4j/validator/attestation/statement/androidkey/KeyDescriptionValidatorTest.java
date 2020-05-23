@@ -15,7 +15,7 @@ import static org.mockito.Mockito.spy;
 
 class KeyDescriptionValidatorTest {
 
-    private KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
+    private final KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
 
     @Test
     void validate_test() {

@@ -20,7 +20,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 
 public class CredentialCreationResponse {
 
-    private AttestationObject attestationObject;
+    private final AttestationObject attestationObject;
 
     public CredentialCreationResponse(AttestationObject attestationObject) {
         this.attestationObject = attestationObject;

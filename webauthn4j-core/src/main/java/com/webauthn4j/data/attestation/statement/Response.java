@@ -25,21 +25,21 @@ import java.io.Serializable;
 public class Response implements Serializable {
 
     @JsonProperty
-    private String nonce;
+    private final String nonce;
     @JsonProperty
-    private long timestampMs;
+    private final long timestampMs;
     @JsonProperty
-    private String apkPackageName;
+    private final String apkPackageName;
     @JsonProperty
-    private String[] apkCertificateDigestSha256;
+    private final String[] apkCertificateDigestSha256;
     @JsonProperty
-    private String apkDigestSha256;
+    private final String apkDigestSha256;
     @JsonProperty
-    private boolean ctsProfileMatch;
+    private final boolean ctsProfileMatch;
     @JsonProperty
-    private boolean basicIntegrity;
+    private final boolean basicIntegrity;
     @JsonProperty
-    private String advice;
+    private final String advice;
 
     @JsonCreator
     public Response(

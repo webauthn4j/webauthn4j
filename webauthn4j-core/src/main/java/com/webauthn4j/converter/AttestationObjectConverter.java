@@ -30,7 +30,7 @@ public class AttestationObjectConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private CborConverter cborConverter;
+    private final CborConverter cborConverter;
 
     // ~ Constructors
     // ================================================================================================

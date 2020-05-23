@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class AuthenticationDataValidatorTest {
 
-    private AuthenticationDataValidator target = new AuthenticationDataValidator();
+    private final AuthenticationDataValidator target = new AuthenticationDataValidator();
 
     @Test
     void validateAuthenticatorData_with_non_null_AttestedCredentialData(@Mock AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData) {

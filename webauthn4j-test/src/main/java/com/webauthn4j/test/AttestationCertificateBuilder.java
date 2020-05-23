@@ -42,7 +42,7 @@ import java.time.Instant;
 
 public class AttestationCertificateBuilder {
 
-    private X509v3CertificateBuilder certificateBuilder;
+    private final X509v3CertificateBuilder certificateBuilder;
 
     public AttestationCertificateBuilder(X509Certificate issuerCertificate, X500Principal subject, PublicKey publicKey) {
         certificateBuilder = new JcaX509v3CertificateBuilder(

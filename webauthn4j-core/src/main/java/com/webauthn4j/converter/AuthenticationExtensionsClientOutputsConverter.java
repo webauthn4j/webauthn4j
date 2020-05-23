@@ -30,7 +30,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
 
     // ~ Instance fields
     // ================================================================================================
-    private JsonConverter jsonConverter;
+    private final JsonConverter jsonConverter;
 
     // ~ Constructors
     // ================================================================================================

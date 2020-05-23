@@ -34,7 +34,7 @@ public class TPMAObject implements Serializable {
     public static final int DECRYPT_BIT = 0b00000000000000100000000000000000;
     public static final int SIGN_ENCRYPT_BIT = 0b00000000000001000000000000000000;
 
-    private int value;
+    private final int value;
 
     public TPMAObject(int value) {
         this.value = value;

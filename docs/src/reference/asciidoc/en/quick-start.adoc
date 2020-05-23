@@ -39,7 +39,8 @@ If validation fails, an exception inheriting `ValidationException` is thrown.
 If validation succeeds, please create an `Authenticator` instance from the returned value and persist it to the database
 or something in your application manner. The instance is required at the time of authentication.
 
-```java
+[source,java]
+----
 // Client properties
 byte[] attestationObject = null /* set attestationObject */;
 byte[] clientDataJSON = null /* set clientDataJSON */;
@@ -84,7 +85,7 @@ Authenticator authenticator =
                 registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
-```
+----
 
 === Assertion verification
 
@@ -99,7 +100,8 @@ Transmit from the front end side to the server side in some way.
 AuthenticationParameters is an another argument for WebAuthnManager#parse method,
 and contains server property, persisted authenticator and validation conditions.
 
-```java
+[source,java]
+----
 // Client properties
 byte[] credentialId = null /* set credentialId */;
 byte[] userHandle = null /* set userHandle */;
@@ -161,5 +163,5 @@ updateCounter(
         authenticationData.getAuthenticatorData().getSignCount()
 );
 
-```
+----
 

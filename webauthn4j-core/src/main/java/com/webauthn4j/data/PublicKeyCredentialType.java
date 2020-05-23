@@ -35,7 +35,7 @@ public enum PublicKeyCredentialType implements Serializable {
 
     PUBLIC_KEY("public-key");
 
-    private String value;
+    private final String value;
 
     PublicKeyCredentialType(String value) {
         this.value = value;

@@ -55,7 +55,7 @@ public class AuthenticatorTransport implements Serializable {
      */
     public static final AuthenticatorTransport INTERNAL = new AuthenticatorTransport("internal");
 
-    private String value;
+    private final String value;
 
     private AuthenticatorTransport(String value) {
         this.value = value;

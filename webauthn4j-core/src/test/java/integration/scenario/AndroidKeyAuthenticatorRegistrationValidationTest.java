@@ -48,21 +48,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AndroidKeyAuthenticatorRegistrationValidationTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private Origin origin = new Origin("http://localhost");
-    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.ANDROID_KEY_AUTHENTICATOR);
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
-    private WebAuthnManager target = new WebAuthnManager(
+    private final Origin origin = new Origin("http://localhost");
+    private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.ANDROID_KEY_AUTHENTICATOR);
+    private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
+    private final AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
+    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private final WebAuthnManager target = new WebAuthnManager(
             Collections.singletonList(androidKeyAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
 
-    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test

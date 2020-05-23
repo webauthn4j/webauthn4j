@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonConverterTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void readValue_test() {

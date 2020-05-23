@@ -32,7 +32,7 @@ import java.io.IOException;
  */
 public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData<? extends ExtensionAuthenticatorOutput<?>>> {
 
-    private ObjectConverter objectConverter;
+    private final ObjectConverter objectConverter;
 
     public AuthenticatorDataDeserializer(ObjectConverter objectConverter) {
         super(AuthenticatorData.class);

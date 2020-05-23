@@ -25,15 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 class TPMAuthenticatorTest {
 
-    private TPMAuthenticator target = new TPMAuthenticator();
+    private final TPMAuthenticator target = new TPMAuthenticator();
 
     @Test
     void generateAttestationStatement_test() {
         byte[] signedData = new byte[32];
         RegistrationEmulationOption option = new RegistrationEmulationOption();
         AttestationStatementRequest attestationStatementRequest = new AttestationStatementRequest(signedData, ECUtil.createKeyPair(), new byte[0]);
-        assertThatCode(() -> {
-            target.createAttestationStatement(attestationStatementRequest, option);
-        }).doesNotThrowAnyException();
+        assertThatCode(() -> target.createAttestationStatement(attestationStatementRequest, option)).doesNotThrowAnyException();
     }
 }

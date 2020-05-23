@@ -30,16 +30,16 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     public static final String FORMAT = "packed";
 
     @JsonProperty
-    private COSEAlgorithmIdentifier alg;
+    private final COSEAlgorithmIdentifier alg;
 
     @JsonProperty
-    private byte[] sig;
+    private final byte[] sig;
 
     @JsonProperty
-    private AttestationCertificatePath x5c;
+    private final AttestationCertificatePath x5c;
 
     @JsonProperty
-    private byte[] ecdaaKeyId;
+    private final byte[] ecdaaKeyId;
 
     @JsonCreator
     public PackedAttestationStatement(

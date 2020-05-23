@@ -59,13 +59,13 @@ class AuthenticatorTest {
 
     private static class TestAuthenticator implements Authenticator {
 
-        private AttestedCredentialData attestedCredentialData;
-        private AttestationStatement attestationStatement;
-        private Set<AuthenticatorTransport> transports;
+        private final AttestedCredentialData attestedCredentialData;
+        private final AttestationStatement attestationStatement;
+        private final Set<AuthenticatorTransport> transports;
         private long counter;
 
-        private Map<String, RegistrationExtensionClientOutput<?>> clientExtensions;
-        private Map<String, RegistrationExtensionAuthenticatorOutput<?>> authenticatorExtensions;
+        private final Map<String, RegistrationExtensionClientOutput<?>> clientExtensions;
+        private final Map<String, RegistrationExtensionAuthenticatorOutput<?>> authenticatorExtensions;
 
         public TestAuthenticator(
                 @JsonProperty("attestedCredentialData") AttestedCredentialData attestedCredentialData,

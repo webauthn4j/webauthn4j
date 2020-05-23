@@ -32,7 +32,7 @@ public class AttachmentHintsSerializer extends StdSerializer<AttachmentHints> {
 
     @Override
     public void serialize(AttachmentHints value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(AttachmentHint::getValue).reduce(0L, (left, right) -> left + right);
+        long sum = value.stream().map(AttachmentHint::getValue).reduce(0L, Long::sum);
         gen.writeNumber(sum);
     }
 }

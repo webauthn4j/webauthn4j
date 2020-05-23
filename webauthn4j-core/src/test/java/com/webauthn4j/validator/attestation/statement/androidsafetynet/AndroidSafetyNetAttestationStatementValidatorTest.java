@@ -36,8 +36,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AndroidSafetyNetAttestationStatementValidatorTest {
 
-    private ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(new AndroidSafetyNetAuthenticator());
-    private AndroidSafetyNetAttestationStatementValidator target = new AndroidSafetyNetAttestationStatementValidator();
+    private final ClientPlatform clientPlatform = EmulatorUtil.createClientPlatform(new AndroidSafetyNetAuthenticator());
+    private final AndroidSafetyNetAttestationStatementValidator target = new AndroidSafetyNetAttestationStatementValidator();
 
     @Test
     void validate_non_AndroidSafetyNetAttestation_test() {

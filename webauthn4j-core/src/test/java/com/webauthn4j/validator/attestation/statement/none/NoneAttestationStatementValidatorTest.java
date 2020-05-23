@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class NoneAttestationStatementValidatorTest {
 
-    private NoneAttestationStatementValidator target = new NoneAttestationStatementValidator();
+    private final NoneAttestationStatementValidator target = new NoneAttestationStatementValidator();
 
     @Test
     void validate_test() {

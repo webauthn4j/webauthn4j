@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class UnknownExtensionClientInput extends AbstractExtensionInput<Serializable> implements RegistrationExtensionClientInput<Serializable>, AuthenticationExtensionClientInput<Serializable> {
 
-    private String name;
+    private final String name;
 
     public UnknownExtensionClientInput(String name, Serializable value) {
         super(value);

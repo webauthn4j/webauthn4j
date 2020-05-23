@@ -26,8 +26,8 @@ import java.util.Objects;
 
 public class TPMTHA implements Serializable {
 
-    private TPMIAlgHash hashAlg;
-    private byte[] digest;
+    private final TPMIAlgHash hashAlg;
+    private final byte[] digest;
 
     public TPMTHA(TPMIAlgHash hashAlg, byte[] digest) {
         this.hashAlg = hashAlg;

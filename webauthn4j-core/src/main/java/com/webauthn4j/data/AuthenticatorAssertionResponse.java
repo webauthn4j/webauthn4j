@@ -32,9 +32,9 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     // ~ Instance fields
     // ================================================================================================
 
-    private byte[] authenticatorData;
-    private byte[] signature;
-    private byte[] userHandle;
+    private final byte[] authenticatorData;
+    private final byte[] signature;
+    private final byte[] userHandle;
 
     // ~ Constructor
     // ========================================================================================================

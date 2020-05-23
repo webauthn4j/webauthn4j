@@ -21,8 +21,8 @@ import java.util.Objects;
 
 public class CredentialMapKey {
 
-    private String rpId;
-    private byte[] userHandle;
+    private final String rpId;
+    private final byte[] userHandle;
 
     public CredentialMapKey(String rpId, byte[] userHandle) {
         this.rpId = rpId;

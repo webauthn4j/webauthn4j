@@ -27,10 +27,10 @@ import java.util.Objects;
  */
 public class VerificationMethodDescriptor implements Serializable {
 
-    private UserVerificationMethod userVerification;
-    private CodeAccuracyDescriptor caDesc;
-    private BiometricAccuracyDescriptor baDesc;
-    private PatternAccuracyDescriptor paDesc;
+    private final UserVerificationMethod userVerification;
+    private final CodeAccuracyDescriptor caDesc;
+    private final BiometricAccuracyDescriptor baDesc;
+    private final PatternAccuracyDescriptor paDesc;
 
     @JsonCreator
     public VerificationMethodDescriptor(

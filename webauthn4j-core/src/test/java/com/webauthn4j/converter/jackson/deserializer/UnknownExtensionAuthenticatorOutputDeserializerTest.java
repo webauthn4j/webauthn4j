@@ -30,8 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UnknownExtensionAuthenticatorOutputDeserializerTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private CborConverter cborConverter = objectConverter.getCborConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void test() {

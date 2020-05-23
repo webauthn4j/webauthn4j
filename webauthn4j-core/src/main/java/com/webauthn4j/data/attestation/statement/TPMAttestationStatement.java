@@ -34,19 +34,19 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     public static final String VERSION_2_0 = "2.0";
 
     @JsonProperty
-    private String ver;
+    private final String ver;
     @JsonProperty
-    private COSEAlgorithmIdentifier alg;
+    private final COSEAlgorithmIdentifier alg;
     @JsonProperty
-    private AttestationCertificatePath x5c;
+    private final AttestationCertificatePath x5c;
     @JsonProperty
     private byte[] ecdaaKeyId;
     @JsonProperty
-    private byte[] sig;
+    private final byte[] sig;
     @JsonProperty
-    private TPMSAttest certInfo;
+    private final TPMSAttest certInfo;
     @JsonProperty
-    private TPMTPublic pubArea;
+    private final TPMTPublic pubArea;
 
     @JsonCreator
     public TPMAttestationStatement(

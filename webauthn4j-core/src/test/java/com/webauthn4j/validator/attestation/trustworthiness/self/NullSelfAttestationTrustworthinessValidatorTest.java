@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 class NullSelfAttestationTrustworthinessValidatorTest {
 
-    private NullSelfAttestationTrustworthinessValidator validator = new NullSelfAttestationTrustworthinessValidator();
+    private final NullSelfAttestationTrustworthinessValidator validator = new NullSelfAttestationTrustworthinessValidator();
 
     @Test
     void validate_test() {

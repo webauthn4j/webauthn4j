@@ -34,7 +34,7 @@ class AttestationCertificatePathTest {
     void getEndEntityCertificate_test_with_no_certificates() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
         assertThrows(IllegalStateException.class,
-                () -> attestationCertificatePath.getEndEntityAttestationCertificate()
+                attestationCertificatePath::getEndEntityAttestationCertificate
         );
     }
 }

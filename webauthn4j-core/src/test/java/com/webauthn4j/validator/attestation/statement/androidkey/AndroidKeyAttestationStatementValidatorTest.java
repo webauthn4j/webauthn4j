@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 class AndroidKeyAttestationStatementValidatorTest {
 
-    private AndroidKeyAttestationStatementValidator target = new AndroidKeyAttestationStatementValidator();
+    private final AndroidKeyAttestationStatementValidator target = new AndroidKeyAttestationStatementValidator();
 
     @Test
     void validate_test() {

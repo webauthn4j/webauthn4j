@@ -45,9 +45,9 @@ import static org.mockito.Mockito.when;
  */
 class EC2COSEKeyTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
-    private CborConverter cborConverter = objectConverter.getCborConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void create_with_alg_test(){
@@ -62,9 +62,7 @@ class EC2COSEKeyTest {
 
     @Test
     void create_with_null_keyPair_test(){
-        assertThatThrownBy(()->{
-            EC2COSEKey.create((KeyPair)null);
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()-> EC2COSEKey.create((KeyPair)null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

@@ -30,9 +30,9 @@ public class AuthenticationParameters implements Serializable {
     private final Authenticator authenticator;
 
     // verification condition
-    private boolean userVerificationRequired;
-    private boolean userPresenceRequired;
-    private List<String> expectedExtensionIds;
+    private final boolean userVerificationRequired;
+    private final boolean userPresenceRequired;
+    private final List<String> expectedExtensionIds;
 
     public AuthenticationParameters(
             ServerProperty serverProperty,

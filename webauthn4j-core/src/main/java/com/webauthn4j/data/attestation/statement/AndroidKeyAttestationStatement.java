@@ -33,13 +33,13 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
     public static final String FORMAT = "android-key";
 
     @JsonProperty
-    private COSEAlgorithmIdentifier alg;
+    private final COSEAlgorithmIdentifier alg;
 
     @JsonProperty
-    private byte[] sig;
+    private final byte[] sig;
 
     @JsonProperty
-    private AttestationCertificatePath x5c;
+    private final AttestationCertificatePath x5c;
 
     @JsonCreator
     public AndroidKeyAttestationStatement(

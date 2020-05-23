@@ -24,8 +24,8 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
  */
 public class AuthenticationExtensionsAuthenticatorOutputsEnvelope<T extends ExtensionAuthenticatorOutput<?>> {
 
-    private AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;
-    private int length;
+    private final AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs;
+    private final int length;
 
     AuthenticationExtensionsAuthenticatorOutputsEnvelope(AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs, int length) {
         this.authenticationExtensionsAuthenticatorOutputs = authenticationExtensionsAuthenticatorOutputs;

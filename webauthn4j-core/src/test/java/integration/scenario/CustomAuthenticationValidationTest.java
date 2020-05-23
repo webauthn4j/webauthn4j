@@ -42,14 +42,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomAuthenticationValidationTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
 
-    private Origin origin = new Origin("http://example.com");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
-    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
+    private final Origin origin = new Origin("http://example.com");
+    private final ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
+    private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
 
-    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test

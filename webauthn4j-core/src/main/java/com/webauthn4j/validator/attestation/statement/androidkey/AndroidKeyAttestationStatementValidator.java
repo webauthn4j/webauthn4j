@@ -35,7 +35,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
     // ~ Instance fields
     // ================================================================================================
 
-    private KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
+    private final KeyDescriptionValidator keyDescriptionValidator = new KeyDescriptionValidator();
     private boolean teeEnforcedOnly = true;
 
     @Override

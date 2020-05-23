@@ -51,10 +51,10 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
 
 public class FIDOU2FAuthenticatorAdaptor implements AuthenticatorAdaptor {
 
-    private FIDOU2FAuthenticator fidoU2FAuthenticator;
+    private final FIDOU2FAuthenticator fidoU2FAuthenticator;
 
-    private CollectedClientDataConverter collectedClientDataConverter;
-    private AuthenticatorDataConverter authenticatorDataConverter;
+    private final CollectedClientDataConverter collectedClientDataConverter;
+    private final AuthenticatorDataConverter authenticatorDataConverter;
 
 
     public FIDOU2FAuthenticatorAdaptor(FIDOU2FAuthenticator fidoU2FAuthenticator, ObjectConverter objectConverter) {

@@ -49,17 +49,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserVerifyingAuthenticatorRegistrationValidationTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private Origin origin = new Origin("http://localhost");
-    private WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
-    private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
-    private WebAuthnManager target = new WebAuthnManager(
+    private final Origin origin = new Origin("http://localhost");
+    private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.PACKED_AUTHENTICATOR);
+    private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
+    private final NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
+    private final PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
+    private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+    private final AndroidKeyAttestationStatementValidator androidKeyAttestationStatementValidator = new AndroidKeyAttestationStatementValidator();
+    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
+    private final WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(
                     noneAttestationStatementValidator,
                     packedAttestationStatementValidator,
@@ -71,7 +71,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
             objectConverter
     );
 
-    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test

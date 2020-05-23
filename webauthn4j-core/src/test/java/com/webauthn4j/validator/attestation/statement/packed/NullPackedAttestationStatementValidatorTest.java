@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NullPackedAttestationStatementValidatorTest {
 
-    private NullPackedAttestationStatementValidator target = new NullPackedAttestationStatementValidator();
+    private final NullPackedAttestationStatementValidator target = new NullPackedAttestationStatementValidator();
 
     @Test
     void validate_test() {

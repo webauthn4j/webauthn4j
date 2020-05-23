@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class MetadataItemsResolverImpl implements MetadataItemsResolver {
 
-    private MetadataItemsProvider metadataItemsProvider;
+    private final MetadataItemsProvider metadataItemsProvider;
 
     public MetadataItemsResolverImpl(MetadataItemsProvider metadataItemsProvider) {
         this.metadataItemsProvider = metadataItemsProvider;

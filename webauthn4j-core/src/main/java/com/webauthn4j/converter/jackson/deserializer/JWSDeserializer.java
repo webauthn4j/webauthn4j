@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
 public class JWSDeserializer extends StdDeserializer<JWS<? extends Serializable>> {
 
     @SuppressWarnings("squid:S1948")
-    private JWSFactory jwsFactory;
+    private final JWSFactory jwsFactory;
 
     public JWSDeserializer(ObjectConverter objectConverter) {
         super(JWS.class);

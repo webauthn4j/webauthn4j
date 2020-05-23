@@ -33,10 +33,10 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     public static final String FORMAT = "fido-u2f";
 
     @JsonProperty
-    private AttestationCertificatePath x5c;
+    private final AttestationCertificatePath x5c;
 
     @JsonProperty
-    private byte[] sig;
+    private final byte[] sig;
 
     @JsonCreator
     public FIDOU2FAttestationStatement(

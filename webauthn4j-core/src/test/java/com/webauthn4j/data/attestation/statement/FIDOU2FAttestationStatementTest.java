@@ -102,7 +102,7 @@ class FIDOU2FAttestationStatementTest {
     void validate_with_null_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(null, new byte[0]);
         assertThrows(ConstraintViolationException.class,
-                () -> instance.validate()
+                instance::validate
         );
     }
 
@@ -110,7 +110,7 @@ class FIDOU2FAttestationStatementTest {
     void validate_with_empty_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
         assertThrows(ConstraintViolationException.class,
-                () -> instance.validate()
+                instance::validate
         );
     }
 
@@ -122,7 +122,7 @@ class FIDOU2FAttestationStatementTest {
                         new byte[0]
                 );
         assertThrows(ConstraintViolationException.class,
-                () -> instance.validate()
+                instance::validate
         );
     }
 
@@ -134,7 +134,7 @@ class FIDOU2FAttestationStatementTest {
                         null
                 );
         assertThrows(ConstraintViolationException.class,
-                () -> instance.validate()
+                instance::validate
         );
     }
 }

@@ -23,8 +23,8 @@ import java.util.Objects;
 
 public class TPMSCertifyInfo implements TPMUAttest {
 
-    private TPMTHA name;
-    private TPMTHA qualifiedName;
+    private final TPMTHA name;
+    private final TPMTHA qualifiedName;
 
     public TPMSCertifyInfo(TPMTHA name, TPMTHA qualifiedName) {
         this.name = name;

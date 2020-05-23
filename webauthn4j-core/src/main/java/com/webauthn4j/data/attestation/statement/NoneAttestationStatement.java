@@ -32,7 +32,7 @@ public class NoneAttestationStatement implements AttestationStatement {
     public static final String FORMAT = "none";
 
     @JsonIgnore
-    private transient Map<String, Object> unknownProperties = new HashMap<>();
+    private final transient Map<String, Object> unknownProperties = new HashMap<>();
 
     @JsonIgnore
     @Override

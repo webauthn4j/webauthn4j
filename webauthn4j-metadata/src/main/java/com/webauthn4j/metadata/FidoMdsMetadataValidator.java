@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
 
 
-    private MetadataItemsResolver metadataItemsResolver;
+    private final MetadataItemsResolver metadataItemsResolver;
 
     public FidoMdsMetadataValidator(MetadataItemsResolver metadataItemsResolver) {
         this.metadataItemsResolver = metadataItemsResolver;
