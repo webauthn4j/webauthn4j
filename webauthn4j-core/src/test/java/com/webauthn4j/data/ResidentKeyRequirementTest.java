@@ -30,7 +30,7 @@ class ResidentKeyRequirementTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void create_test() {
+    void create_test() {
         assertAll(
                 () -> assertThat(ResidentKeyRequirement.create(null)).isNull(),
                 () -> assertThat(ResidentKeyRequirement.create("discouraged")).isEqualTo(ResidentKeyRequirement.DISCOURAGED),
@@ -40,25 +40,25 @@ class ResidentKeyRequirementTest {
     }
 
     @Test
-    public void create_invalid_value_test() {
+    void create_invalid_value_test() {
         assertThrows(IllegalArgumentException.class,
                 () -> ResidentKeyRequirement.create("invalid")
         );
     }
 
     @Test
-    public void getValue_test() {
+    void getValue_test() {
         assertThat(ResidentKeyRequirement.REQUIRED.getValue()).isEqualTo("required");
     }
 
     @Test
-    public void deserialize_test() throws IOException {
+    void deserialize_test() throws IOException {
         ResidentKeyRequirementTest.TestDTO dto = objectMapper.readValue("{\"residentKey\": \"required\"}", ResidentKeyRequirementTest.TestDTO.class);
         assertThat(dto.residentKey).isEqualTo(ResidentKeyRequirement.REQUIRED);
     }
 
     @Test
-    public void deserialize_test_with_invalid() {
+    void deserialize_test_with_invalid() {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"residentKey\": \"invalid\"}", ResidentKeyRequirementTest.TestDTO.class)
         );

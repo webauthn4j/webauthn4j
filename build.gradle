@@ -296,10 +296,12 @@ asciidoctor {
 sonarqube {
     properties {
         property 'sonar.projectKey', 'webauthn4j'
-        property 'sonar.issue.ignore.multicriteria', 'e1,e2'
+        property 'sonar.issue.ignore.multicriteria', 'e1,e2,e3'
         property 'sonar.issue.ignore.multicriteria.e1.ruleKey', 'java:S110'
         property 'sonar.issue.ignore.multicriteria.e1.resourceKey', '**/*.java'
         property 'sonar.issue.ignore.multicriteria.e2.ruleKey', 'java:S1452'
         property 'sonar.issue.ignore.multicriteria.e2.resourceKey', '**/*.java'
+        property 'sonar.issue.ignore.multicriteria.e3.ruleKey', 'common-java:DuplicatedBlocks'
+        property 'sonar.issue.ignore.multicriteria.e3.resourceKey', '**/*.java'
     }
 }

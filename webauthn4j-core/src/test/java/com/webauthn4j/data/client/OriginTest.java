@@ -75,7 +75,7 @@ class OriginTest {
     }
 
     @Test
-    public void constructor_test_with_null_input() {
+    void constructor_test_with_null_input() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Origin(null, "example.com", 80)
         );

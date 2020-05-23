@@ -40,7 +40,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomAuthenticationValidationTest {
+class CustomAuthenticationValidationTest {
 
     private ObjectConverter objectConverter = new ObjectConverter();
 
