@@ -69,10 +69,10 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
  */
 public class TestDataUtil {
 
-    private static ObjectConverter objectConverter = new ObjectConverter();
-    private static CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
-    private static AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-    private static AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+    private static final ObjectConverter objectConverter = new ObjectConverter();
+    private static final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+    private static final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private static final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 

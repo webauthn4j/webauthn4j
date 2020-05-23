@@ -20,9 +20,9 @@ import java.security.KeyPair;
 
 public class AttestationStatementRequest {
 
-    private byte[] signedData;
-    private KeyPair credentialKeyPair;
-    private byte[] clientDataHash;
+    private final byte[] signedData;
+    private final KeyPair credentialKeyPair;
+    private final byte[] clientDataHash;
 
     public AttestationStatementRequest(byte[] signedData, KeyPair credentialKeyPair, byte[] clientDataHash) {
         this.signedData = signedData;

@@ -30,7 +30,7 @@ import java.security.SignatureException;
 
 public class JWSFactory {
 
-    private JsonConverter jsonConverter;
+    private final JsonConverter jsonConverter;
 
     public JWSFactory(ObjectConverter objectConverter) {
         this.jsonConverter = objectConverter.getJsonConverter();

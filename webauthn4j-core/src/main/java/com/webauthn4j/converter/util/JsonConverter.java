@@ -37,7 +37,7 @@ public class JsonConverter implements Serializable {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private ObjectMapper jsonMapper;
+    private final ObjectMapper jsonMapper;
 
     JsonConverter(ObjectMapper jsonMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");

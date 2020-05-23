@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class AttachmentHints extends AbstractSet<AttachmentHint> {
 
-    private Set<AttachmentHint> attachmentHints;
+    private final Set<AttachmentHint> attachmentHints;
 
     public AttachmentHints(long value) {
         Set<AttachmentHint> set = new HashSet<>();

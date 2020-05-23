@@ -23,8 +23,8 @@ import com.webauthn4j.data.attestation.authenticator.COSEKey;
  */
 public class COSEKeyEnvelope {
 
-    private COSEKey coseKey;
-    private int length;
+    private final COSEKey coseKey;
+    private final int length;
 
     COSEKeyEnvelope(COSEKey coseKey, int length) {
         this.coseKey = coseKey;

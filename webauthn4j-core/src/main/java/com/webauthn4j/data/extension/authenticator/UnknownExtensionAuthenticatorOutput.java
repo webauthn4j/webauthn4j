@@ -31,7 +31,7 @@ public class UnknownExtensionAuthenticatorOutput
         extends AbstractExtensionOutput<Serializable>
         implements AuthenticationExtensionAuthenticatorOutput<Serializable>  {
 
-    private String name;
+    private final String name;
 
     public UnknownExtensionAuthenticatorOutput(String name, Serializable value) {
         super(value);

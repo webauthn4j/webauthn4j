@@ -31,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CollectedClientDataConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private CollectedClientDataConverter target = new CollectedClientDataConverter(objectConverter);
+    private final CollectedClientDataConverter target = new CollectedClientDataConverter(objectConverter);
 
     @Test
     void convert_deserialization_test() {

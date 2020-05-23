@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class SampleTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
-    private List<String> classPaths;
+    private final List<String> classPaths;
 
     public SampleTrustAnchorsProvider() {
         this.classPaths = Collections.singletonList("attestation/google/google-root-CA.crt");

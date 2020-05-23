@@ -24,8 +24,8 @@ import java.util.Arrays;
 
 public class ECCUnique implements TPMUPublicId {
 
-    private byte[] x;
-    private byte[] y;
+    private final byte[] x;
+    private final byte[] y;
 
     public ECCUnique(byte[] x, byte[] y) {
         this.x = x;

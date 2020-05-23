@@ -39,9 +39,9 @@ import java.util.List;
 public class RSACOSEKey extends AbstractCOSEKey {
 
     @JsonProperty("-1")
-    private byte[] n;
+    private final byte[] n;
     @JsonProperty("-2")
-    private byte[] e;
+    private final byte[] e;
     @JsonProperty("-3")
     private byte[] d;
     @JsonProperty("-4")

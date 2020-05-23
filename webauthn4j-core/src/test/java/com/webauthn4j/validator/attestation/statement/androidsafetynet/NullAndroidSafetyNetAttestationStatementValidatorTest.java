@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NullAndroidSafetyNetAttestationStatementValidatorTest {
 
-    private NullAndroidSafetyNetAttestationStatementValidator target = new NullAndroidSafetyNetAttestationStatementValidator();
+    private final NullAndroidSafetyNetAttestationStatementValidator target = new NullAndroidSafetyNetAttestationStatementValidator();
 
     @Test
     void validate_test() {

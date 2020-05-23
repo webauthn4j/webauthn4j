@@ -36,7 +36,7 @@ class PackedAttestationStatementTest {
     void validate_invalid_instance_test() {
         PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(null, null, null, null);
         assertThrows(ConstraintViolationException.class,
-                () -> packedAttestationStatement.validate()
+                packedAttestationStatement::validate
         );
     }
 

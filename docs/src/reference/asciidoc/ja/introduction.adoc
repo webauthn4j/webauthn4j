@@ -57,7 +57,8 @@ WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常�
 === Maven Centralからの取得
 Mavenを使用している場合、webauthn4jを依存関係として追加して使用してください：
 
-```
+[source, xml]
+----
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
@@ -74,7 +75,7 @@ Mavenを使用している場合、webauthn4jを依存関係として追加し�
   </dependency>
   ...
 </dependencies>
-```
+----
 
 === ソースコード
 

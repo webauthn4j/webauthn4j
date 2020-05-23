@@ -48,13 +48,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private Origin origin = new Origin("http://example.com");
+    private final Origin origin = new Origin("http://example.com");
     private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
-    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
+    private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
 
-    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test

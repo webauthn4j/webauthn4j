@@ -39,9 +39,9 @@ import static org.mockito.Mockito.when;
 
 class TrustAnchorCertPathTrustworthinessValidatorTest {
 
-    private TrustAnchorsResolver trustAnchorsResolver = mock(TrustAnchorsResolver.class);
-    private TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver);
-    private AAGUID aaguid = AAGUID.ZERO;
+    private final TrustAnchorsResolver trustAnchorsResolver = mock(TrustAnchorsResolver.class);
+    private final TrustAnchorCertPathTrustworthinessValidator target = new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver);
+    private final AAGUID aaguid = AAGUID.ZERO;
 
     @Test
     void validate_test() {

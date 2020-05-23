@@ -30,37 +30,37 @@ import java.util.List;
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  */
 public class MetadataStatement implements Serializable {
-    private String legalHeader;
-    private AAID aaid;
-    private AAGUID aaguid;
-    private List<String> attestationCertificateKeyIdentifiers;
-    private String description;
-    private AlternativeDescriptions alternativeDescriptions;
-    private Integer authenticatorVersion;
-    private String protocolFamily;
-    private List<Version> upv;
-    private String assertionScheme;
-    private AuthenticationAlgorithm authenticationAlgorithm;
-    private List<AuthenticationAlgorithm> authenticationAlgorithms;
-    private PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
-    private List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
-    private List<AttestationType> attestationTypes;
-    private List<VerificationMethodANDCombinations> userVerificationDetails;
-    private KeyProtections keyProtection;
-    private Boolean isKeyRestricted;
-    private Boolean isFreshUserVerificationRequired;
-    private MatcherProtections matcherProtection;
-    private Integer cryptoStrength;
-    private String operationEnv;
-    private AttachmentHints attachmentHint;
-    private Boolean isSecondFactorOnly;
-    private TransactionConfirmationDisplays tcDisplay;
-    private String tcDisplayContentType;
-    private List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
-    private List<X509Certificate> attestationRootCertificates;
-    private List<EcdaaTrustAnchor> ecdaaTrustAnchors;
-    private String icon;
-    private List<ExtensionDescriptor> supportedExtensions;
+    private final String legalHeader;
+    private final AAID aaid;
+    private final AAGUID aaguid;
+    private final List<String> attestationCertificateKeyIdentifiers;
+    private final String description;
+    private final AlternativeDescriptions alternativeDescriptions;
+    private final Integer authenticatorVersion;
+    private final String protocolFamily;
+    private final List<Version> upv;
+    private final String assertionScheme;
+    private final AuthenticationAlgorithm authenticationAlgorithm;
+    private final List<AuthenticationAlgorithm> authenticationAlgorithms;
+    private final PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
+    private final List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
+    private final List<AttestationType> attestationTypes;
+    private final List<VerificationMethodANDCombinations> userVerificationDetails;
+    private final KeyProtections keyProtection;
+    private final Boolean isKeyRestricted;
+    private final Boolean isFreshUserVerificationRequired;
+    private final MatcherProtections matcherProtection;
+    private final Integer cryptoStrength;
+    private final String operationEnv;
+    private final AttachmentHints attachmentHint;
+    private final Boolean isSecondFactorOnly;
+    private final TransactionConfirmationDisplays tcDisplay;
+    private final String tcDisplayContentType;
+    private final List<DisplayPNGCharacteristicsDescriptor> tcDisplayPNGCharacteristics;
+    private final List<X509Certificate> attestationRootCertificates;
+    private final List<EcdaaTrustAnchor> ecdaaTrustAnchors;
+    private final String icon;
+    private final List<ExtensionDescriptor> supportedExtensions;
 
     @JsonCreator
     public MetadataStatement(

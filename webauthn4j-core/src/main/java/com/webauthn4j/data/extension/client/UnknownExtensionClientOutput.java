@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class UnknownExtensionClientOutput extends AbstractExtensionOutput<Serializable> implements RegistrationExtensionClientOutput<Serializable> {
 
-    private String name;
+    private final String name;
 
     public UnknownExtensionClientOutput(String name, Serializable value) {
         super(value);

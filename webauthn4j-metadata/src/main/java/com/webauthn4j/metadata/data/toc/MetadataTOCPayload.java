@@ -35,18 +35,18 @@ import java.util.Objects;
 public class MetadataTOCPayload implements Serializable {
 
     @JsonProperty
-    private String legalHeader;
+    private final String legalHeader;
 
     @JsonProperty
-    private Integer no;
+    private final Integer no;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
-    private LocalDate nextUpdate;
+    private final LocalDate nextUpdate;
 
     @JsonProperty
-    private List<MetadataTOCPayloadEntry> entries;
+    private final List<MetadataTOCPayloadEntry> entries;
 
     @JsonCreator
     public MetadataTOCPayload(

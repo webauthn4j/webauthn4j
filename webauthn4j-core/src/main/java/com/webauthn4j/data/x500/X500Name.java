@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class X500Name extends AbstractList<Attributes> implements Serializable {
 
     private final int size;
-    private Attributes[] attributes;
+    private final Attributes[] attributes;
 
     public X500Name(String value) {
         this(Arrays.stream(value.split(","))

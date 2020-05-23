@@ -24,7 +24,7 @@ import java.util.*;
 public class VerificationMethodANDCombinations extends AbstractList<VerificationMethodDescriptor> {
 
     private final int size;
-    private VerificationMethodDescriptor[] descriptors;
+    private final VerificationMethodDescriptor[] descriptors;
 
     @JsonCreator
     public VerificationMethodANDCombinations(List<VerificationMethodDescriptor> descriptors) {

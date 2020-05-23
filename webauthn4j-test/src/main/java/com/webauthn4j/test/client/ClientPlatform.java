@@ -41,9 +41,9 @@ import java.util.Map;
 @WIP
 public class ClientPlatform {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-    private CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
 
     private Origin origin;
     //TODO: support multiple authenticators

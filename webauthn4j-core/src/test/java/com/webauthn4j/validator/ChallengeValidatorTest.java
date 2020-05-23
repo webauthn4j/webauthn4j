@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ChallengeValidatorTest {
 
-    private ChallengeValidator target = new ChallengeValidator();
+    private final ChallengeValidator target = new ChallengeValidator();
 
     @Test
     void verifyChallenge_test1() {

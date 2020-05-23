@@ -29,13 +29,13 @@ import java.util.Objects;
 
 public class TPMSAttest implements Serializable {
 
-    private TPMGenerated magic;
-    private TPMISTAttest type;
-    private byte[] qualifiedSigner;
-    private byte[] extraData;
-    private TPMSClockInfo clockInfo;
-    private BigInteger firmwareVersion;
-    private TPMUAttest attested;
+    private final TPMGenerated magic;
+    private final TPMISTAttest type;
+    private final byte[] qualifiedSigner;
+    private final byte[] extraData;
+    private final TPMSClockInfo clockInfo;
+    private final BigInteger firmwareVersion;
+    private final TPMUAttest attested;
 
     public TPMSAttest(TPMGenerated magic, TPMISTAttest type, byte[] qualifiedSigner, byte[] extraData, TPMSClockInfo clockInfo, BigInteger firmwareVersion, TPMUAttest attested) {
         this.magic = magic;

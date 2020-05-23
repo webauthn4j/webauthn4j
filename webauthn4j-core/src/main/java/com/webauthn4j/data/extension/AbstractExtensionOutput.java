@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public abstract class AbstractExtensionOutput<T extends Serializable> implements ExtensionOutput<T> {
 
-    private T value;
+    private final T value;
 
     @JsonCreator
     public AbstractExtensionOutput(T value) {

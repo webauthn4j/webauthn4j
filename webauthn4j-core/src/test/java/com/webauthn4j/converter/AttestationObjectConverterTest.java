@@ -31,9 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AttestationObjectConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private AttestationObjectConverter target = new AttestationObjectConverter(objectConverter);
+    private final AttestationObjectConverter target = new AttestationObjectConverter(objectConverter);
 
     @Test
     void convert_deserialization_test() {

@@ -33,7 +33,7 @@ public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
     // ~ Instance fields
     // ================================================================================================
 
-    private TrustAnchorsProvider trustAnchorsProvider;
+    private final TrustAnchorsProvider trustAnchorsProvider;
 
     // ~ Constructor
     // ========================================================================================================

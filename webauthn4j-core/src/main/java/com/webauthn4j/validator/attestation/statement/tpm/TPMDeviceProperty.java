@@ -20,9 +20,9 @@ import java.util.Objects;
 
 public class TPMDeviceProperty {
 
-    private String manufacturer;
-    private String partNumber;
-    private String firmwareVersion;
+    private final String manufacturer;
+    private final String partNumber;
+    private final String firmwareVersion;
 
     public TPMDeviceProperty(String manufacturer, String partNumber, String firmwareVersion) {
         this.manufacturer = manufacturer;

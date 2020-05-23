@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PublicKeyMismatchExceptionTest {
 
-    private RuntimeException cause = new RuntimeException();
+    private final RuntimeException cause = new RuntimeException();
 
     @Test
     void test() {

@@ -58,21 +58,21 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.*;
 
 public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticator {
 
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static final SecureRandom secureRandom = new SecureRandom();
     // converter
-    protected ObjectConverter objectConverter;
-    private CborConverter cborConverter;
+    protected final ObjectConverter objectConverter;
+    private final CborConverter cborConverter;
     // property
-    private AAGUID aaguid;
-    private KeyPair attestationKeyPair;
-    private CACertificatePath caCertificatePath;
-    private PrivateKey attestationIssuerPrivateKey;
-    private Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
+    private final AAGUID aaguid;
+    private final KeyPair attestationKeyPair;
+    private final CACertificatePath caCertificatePath;
+    private final PrivateKey attestationIssuerPrivateKey;
+    private final Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
     private int counter;
     // feature flags
-    private boolean capableOfUserVerification;
+    private final boolean capableOfUserVerification;
     private boolean countUpEnabled = true;
-    private AuthenticatorDataConverter authenticatorDataConverter;
+    private final AuthenticatorDataConverter authenticatorDataConverter;
 
     public WebAuthnModelAuthenticator(
             AAGUID aaguid,

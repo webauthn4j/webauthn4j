@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class MatcherProtections extends AbstractSet<MatcherProtection> {
 
-    private Set<MatcherProtection> matcherProtections;
+    private final Set<MatcherProtection> matcherProtections;
 
     public MatcherProtections(int value) {
         Set<MatcherProtection> set = new HashSet<>();

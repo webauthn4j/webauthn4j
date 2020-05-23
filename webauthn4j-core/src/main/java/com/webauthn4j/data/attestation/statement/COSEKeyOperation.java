@@ -32,7 +32,7 @@ public enum COSEKeyOperation {
     MAC_CREATE(9),
     MAC_VERIFY(10);
 
-    private int value;
+    private final int value;
 
     COSEKeyOperation(int value) {
         this.value = value;

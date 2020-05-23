@@ -33,11 +33,11 @@ public class FIDOU2FAuthenticator {
 
     public static final byte FLAG_OFF = (byte) 0b00000000;
     public static final byte FLAG_UP = (byte) 0b00000001; // user presence
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static final SecureRandom secureRandom = new SecureRandom();
 
     // property
-    private PrivateKey attestationPrivateKey;
-    private X509Certificate attestationPublicKeyCertificate;
+    private final PrivateKey attestationPrivateKey;
+    private final X509Certificate attestationPublicKeyCertificate;
     private long counter;
     private byte flags = FLAG_UP;
 

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SuppressWarnings("ThrowableNotThrown")
 class KeyStoreExceptionTest {
 
-    private RuntimeException cause = new RuntimeException();
+    private final RuntimeException cause = new RuntimeException();
 
     @Test
     void test() {

@@ -37,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TPMAttestationStatementValidatorTest {
 
-    private TPMAuthenticator tpmAuthenticator = new TPMAuthenticator();
-    private TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
+    private final TPMAuthenticator tpmAuthenticator = new TPMAuthenticator();
+    private final TPMAttestationStatementValidator target = new TPMAttestationStatementValidator();
 
     @Test
     void validate_test() {

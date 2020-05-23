@@ -34,8 +34,8 @@ public class PublicKeyCredentialParameters implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private PublicKeyCredentialType type;
-    private COSEAlgorithmIdentifier alg;
+    private final PublicKeyCredentialType type;
+    private final COSEAlgorithmIdentifier alg;
 
     @JsonCreator
     public PublicKeyCredentialParameters(

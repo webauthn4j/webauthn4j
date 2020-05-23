@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AuthenticationObjectTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void getter_test() {

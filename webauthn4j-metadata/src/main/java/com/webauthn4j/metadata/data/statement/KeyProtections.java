@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class KeyProtections extends AbstractSet<KeyProtection> {
 
-    private Set<KeyProtection> keyProtections;
+    private final Set<KeyProtection> keyProtections;
 
     public KeyProtections(int value) {
         Set<KeyProtection> set = new HashSet<>();

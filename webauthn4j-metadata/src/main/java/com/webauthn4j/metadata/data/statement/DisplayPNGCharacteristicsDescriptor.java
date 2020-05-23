@@ -30,14 +30,14 @@ import java.util.Objects;
  */
 public class DisplayPNGCharacteristicsDescriptor implements Serializable {
 
-    private BigInteger width;
-    private BigInteger height;
-    private Short bitDepth;
-    private Short colorType;
-    private Short compression;
-    private Short filter;
-    private Short interlace;
-    private List<RGBPaletteEntry> plte;
+    private final BigInteger width;
+    private final BigInteger height;
+    private final Short bitDepth;
+    private final Short colorType;
+    private final Short compression;
+    private final Short filter;
+    private final Short interlace;
+    private final List<RGBPaletteEntry> plte;
 
     @JsonCreator
     public DisplayPNGCharacteristicsDescriptor(

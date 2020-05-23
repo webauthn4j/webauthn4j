@@ -34,7 +34,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private AuthenticatorAttachment authenticatorAttachment;
+    private final AuthenticatorAttachment authenticatorAttachment;
 
     @SuppressWarnings("UnusedAssignment")
     private boolean requireResidentKey = false;

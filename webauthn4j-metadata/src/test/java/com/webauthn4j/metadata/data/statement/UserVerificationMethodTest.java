@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 class UserVerificationMethodTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {

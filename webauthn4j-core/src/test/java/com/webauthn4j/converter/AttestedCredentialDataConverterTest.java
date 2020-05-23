@@ -25,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestedCredentialDataConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private AttestedCredentialDataConverter target = new AttestedCredentialDataConverter(objectConverter);
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final AttestedCredentialDataConverter target = new AttestedCredentialDataConverter(objectConverter);
 
     @Test
     void convert_test() {

@@ -31,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ChallengeDeserializerTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void test() {

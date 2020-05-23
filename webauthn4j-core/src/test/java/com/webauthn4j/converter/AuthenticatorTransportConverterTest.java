@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticatorTransportConverterTest {
 
-    private AuthenticatorTransportConverter converter = new AuthenticatorTransportConverter();
+    private final AuthenticatorTransportConverter converter = new AuthenticatorTransportConverter();
 
 
     @Test

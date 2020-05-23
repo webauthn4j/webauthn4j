@@ -37,9 +37,9 @@ import java.util.Set;
 
 class NullAttestationStatementValidatorTest {
 
-    private Origin origin = new Origin("http://localhost");
-    private WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
-    private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
+    private final Origin origin = new Origin("http://localhost");
+    private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager();
+    private final AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
 
     @Test
     void validate_RegistrationRequest_with_fido_u2f_attestation_statement_test() {

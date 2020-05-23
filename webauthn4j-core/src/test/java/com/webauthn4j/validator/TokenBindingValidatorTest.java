@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TokenBindingValidatorTest {
 
-    private TokenBindingValidator target = new TokenBindingValidator();
+    private final TokenBindingValidator target = new TokenBindingValidator();
 
     @Test
     void validate_test() {

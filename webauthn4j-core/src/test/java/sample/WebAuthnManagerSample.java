@@ -36,7 +36,7 @@ public class WebAuthnManagerSample {
 
     private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
 
-    private WebAuthnManager webAuthnManager;
+    private final WebAuthnManager webAuthnManager;
 
     public WebAuthnManagerSample() {
         // WebAuthnManager.createNonStrictWebAuthnManager() returns a WebAuthnManager instance
@@ -52,7 +52,6 @@ public class WebAuthnManagerSample {
         byte[] attestationObject = null /* set attestationObject */;
         byte[] clientDataJSON = null /* set clientDataJSON */;
         String clientExtensionJSON = null;  /* set clientExtensionJSON */
-        ;
         Set<String> transports = null /* set transports */;
 
         // Server properties

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class MetadataStatementsTrustAnchorsProvider implements TrustAnchorsProvider {
 
-    private MetadataStatementsProvider metadataStatementsProvider;
+    private final MetadataStatementsProvider metadataStatementsProvider;
 
     public MetadataStatementsTrustAnchorsProvider(MetadataStatementsProvider metadataStatementsProvider) {
         this.metadataStatementsProvider = metadataStatementsProvider;

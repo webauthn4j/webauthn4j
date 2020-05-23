@@ -28,9 +28,9 @@ import java.util.Objects;
  */
 public class PatternAccuracyDescriptor implements Serializable {
 
-    private BigInteger minComplexity;
-    private Integer maxRetries;
-    private Integer blockSlowdown;
+    private final BigInteger minComplexity;
+    private final Integer maxRetries;
+    private final Integer blockSlowdown;
 
     @JsonCreator
     public PatternAccuracyDescriptor(

@@ -30,7 +30,7 @@ abstract class AuthenticatorResponse implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private byte[] clientDataJSON;
+    private final byte[] clientDataJSON;
 
     // ~ Constructor
     // ========================================================================================================

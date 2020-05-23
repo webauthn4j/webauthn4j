@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 
 public class AggregatingMetadataStatementsProvider implements MetadataStatementsProvider {
 
-    private Logger logger = LoggerFactory.getLogger(AggregatingMetadataStatementsProvider.class);
+    private final Logger logger = LoggerFactory.getLogger(AggregatingMetadataStatementsProvider.class);
 
-    private List<MetadataStatementsProvider> metadataStatementsProviders;
+    private final List<MetadataStatementsProvider> metadataStatementsProviders;
 
     public AggregatingMetadataStatementsProvider(List<MetadataStatementsProvider> metadataStatementsProviders) {
         this.metadataStatementsProviders = metadataStatementsProviders;

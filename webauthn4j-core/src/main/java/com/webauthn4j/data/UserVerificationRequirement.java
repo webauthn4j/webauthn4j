@@ -47,7 +47,7 @@ public enum UserVerificationRequirement {
      */
     DISCOURAGED("discouraged");
 
-    private String value;
+    private final String value;
 
     UserVerificationRequirement(String value) {
         this.value = value;

@@ -27,13 +27,13 @@ import java.util.Objects;
  * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
  */
 public class BiometricStatusReport implements Serializable {
-    private Integer certLevel;
-    private BigInteger modality;
-    private String effectiveData;
-    private String certificationDescriptor;
-    private String certificateNumber;
-    private String certificationPolicyVersion;
-    private String certificationRequirementsVersion;
+    private final Integer certLevel;
+    private final BigInteger modality;
+    private final String effectiveData;
+    private final String certificationDescriptor;
+    private final String certificateNumber;
+    private final String certificationPolicyVersion;
+    private final String certificationRequirementsVersion;
 
     @JsonCreator
     public BiometricStatusReport(

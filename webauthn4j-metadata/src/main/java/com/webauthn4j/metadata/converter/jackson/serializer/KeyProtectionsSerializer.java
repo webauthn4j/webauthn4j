@@ -31,7 +31,7 @@ public class KeyProtectionsSerializer extends StdSerializer<KeyProtections> {
 
     @Override
     public void serialize(KeyProtections value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(KeyProtection::getValue).reduce(0, (left, right) -> left + right);
+        long sum = value.stream().map(KeyProtection::getValue).reduce(0, Integer::sum);
         gen.writeNumber(sum);
     }
 }

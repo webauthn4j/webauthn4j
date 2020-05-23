@@ -27,9 +27,9 @@ import java.util.Objects;
  */
 public class RGBPaletteEntry implements Serializable {
 
-    private Integer r;
-    private Integer g;
-    private Integer b;
+    private final Integer r;
+    private final Integer g;
+    private final Integer b;
 
     @JsonCreator
     public RGBPaletteEntry(

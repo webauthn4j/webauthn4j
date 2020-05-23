@@ -39,9 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class RSACOSEKeyTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
-    private CborConverter cborConverter = objectConverter.getCborConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void create_with_alg_test(){
@@ -56,9 +56,7 @@ class RSACOSEKeyTest {
 
     @Test
     void create_with_null_keyPair_test(){
-        assertThatThrownBy(()->{
-            RSACOSEKey.create((KeyPair)null, COSEAlgorithmIdentifier.RS256);
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(()-> RSACOSEKey.create((KeyPair)null, COSEAlgorithmIdentifier.RS256)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

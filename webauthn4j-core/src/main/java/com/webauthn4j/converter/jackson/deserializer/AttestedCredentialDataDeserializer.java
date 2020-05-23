@@ -27,7 +27,7 @@ import java.io.IOException;
 
 public class AttestedCredentialDataDeserializer extends StdDeserializer<AttestedCredentialData> {
 
-    private AttestedCredentialDataConverter attestedCredentialDataConverter;
+    private final AttestedCredentialDataConverter attestedCredentialDataConverter;
 
     public AttestedCredentialDataDeserializer(ObjectConverter objectConverter) {
         super(AttestedCredentialData.class);

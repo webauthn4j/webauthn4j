@@ -39,16 +39,16 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private PublicKeyCredentialRpEntity rp;
-    private PublicKeyCredentialUserEntity user;
+    private final PublicKeyCredentialRpEntity rp;
+    private final PublicKeyCredentialUserEntity user;
 
-    private Challenge challenge;
-    private List<PublicKeyCredentialParameters> pubKeyCredParams;
-    private Long timeout;
-    private List<PublicKeyCredentialDescriptor> excludeCredentials;
-    private AuthenticatorSelectionCriteria authenticatorSelection;
-    private AttestationConveyancePreference attestation;
-    private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions;
+    private final Challenge challenge;
+    private final List<PublicKeyCredentialParameters> pubKeyCredParams;
+    private final Long timeout;
+    private final List<PublicKeyCredentialDescriptor> excludeCredentials;
+    private final AuthenticatorSelectionCriteria authenticatorSelection;
+    private final AttestationConveyancePreference attestation;
+    private final AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions;
 
     @SuppressWarnings("squid:S00107")
     @JsonCreator

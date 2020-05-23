@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public class RegistrationObject {
 
-    private static ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+    private static final ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
 
     //~ Instance fields
     // ================================================================================================

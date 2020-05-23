@@ -26,8 +26,8 @@ import java.util.Objects;
 
 public class JWSHeader implements Serializable {
 
-    private JWAIdentifier alg;
-    private AttestationCertificatePath x5c;
+    private final JWAIdentifier alg;
+    private final AttestationCertificatePath x5c;
 
     @JsonCreator
     public JWSHeader(

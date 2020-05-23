@@ -39,11 +39,11 @@ import static org.mockito.Mockito.when;
 
 class MetadataItemsProviderTest {
 
-    private ObjectConverter objectConverter;
+    private final ObjectConverter objectConverter;
 
-    private HttpClient fidoMDSClient = mock(HttpClient.class);
+    private final HttpClient fidoMDSClient = mock(HttpClient.class);
     private FidoMdsMetadataItemsProvider target;
-    private OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+    private final OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
 
     MetadataItemsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();

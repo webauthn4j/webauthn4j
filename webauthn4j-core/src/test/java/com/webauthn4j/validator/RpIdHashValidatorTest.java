@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class RpIdHashValidatorTest {
 
-    private RpIdHashValidator target = new RpIdHashValidator();
+    private final RpIdHashValidator target = new RpIdHashValidator();
 
     @Test
     void verifyRpIdHash_test() {

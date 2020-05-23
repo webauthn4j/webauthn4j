@@ -31,7 +31,7 @@ public enum ResidentKeyRequirement {
     PREFERRED("preferred"),
     REQUIRED("required");
 
-    private String value;
+    private final String value;
 
     ResidentKeyRequirement(String value) {
         this.value = value;

@@ -37,7 +37,7 @@ import java.util.Objects;
  */
 public class ExtensionAuthenticatorOutputDeserializer extends StdDeserializer<ExtensionAuthenticatorOutput<?>> {
 
-    private transient Logger logger = LoggerFactory.getLogger(ExtensionAuthenticatorOutputDeserializer.class);
+    private final transient Logger logger = LoggerFactory.getLogger(ExtensionAuthenticatorOutputDeserializer.class);
 
     public ExtensionAuthenticatorOutputDeserializer() {
         super(ExtensionAuthenticatorOutput.class);

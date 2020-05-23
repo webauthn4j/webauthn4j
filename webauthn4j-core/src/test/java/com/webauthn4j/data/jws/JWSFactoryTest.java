@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JWSFactoryTest {
 
-    private JWSFactory target = new JWSFactory();
+    private final JWSFactory target = new JWSFactory();
 
     @Test
     void create_with_private_key_test() {
@@ -47,7 +47,7 @@ class JWSFactoryTest {
         assertThat(jws).isNotNull();
     }
 
-    private class Payload implements Serializable {
+    private static class Payload implements Serializable {
         private String dummy;
 
         public String getDummy() {

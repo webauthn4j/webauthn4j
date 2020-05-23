@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AAIDTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void constructor_test() {

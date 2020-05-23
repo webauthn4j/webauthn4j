@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TPMTPublicDeserializerTest {
 
-    private TPMTPublicDeserializer deserializer = new TPMTPublicDeserializer();
+    private final TPMTPublicDeserializer deserializer = new TPMTPublicDeserializer();
 
     @Test
     void deserialize_test() throws IOException {

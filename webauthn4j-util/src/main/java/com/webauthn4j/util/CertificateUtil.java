@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 public class CertificateUtil {
 
-    private static CertificateFactory certificateFactory;
+    private static final CertificateFactory certificateFactory;
 
     static {
         try {

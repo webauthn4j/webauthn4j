@@ -38,7 +38,7 @@ public class AttestedCredentialDataConverter implements Serializable {
     private static final int L_INDEX = AAGUID_INDEX + AAGUID_LENGTH;
     private static final int CREDENTIAL_ID_INDEX = L_INDEX + L_LENGTH;
 
-    private CborConverter cborConverter;
+    private final CborConverter cborConverter;
 
     public AttestedCredentialDataConverter(ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");

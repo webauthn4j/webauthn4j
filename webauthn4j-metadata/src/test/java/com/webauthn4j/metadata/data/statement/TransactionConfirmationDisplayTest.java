@@ -28,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TransactionConfirmationDisplayTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private JsonConverter jsonConverter = objectConverter.getJsonConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
     void create_test() {

@@ -24,12 +24,12 @@ import java.util.List;
 
 public class GetAssertionRequest {
 
-    private String rpId;
-    private byte[] hash;
-    private List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList;
-    private boolean requireUserPresence;
-    private boolean requireUserVerification;
-    private AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
+    private final String rpId;
+    private final byte[] hash;
+    private final List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList;
+    private final boolean requireUserPresence;
+    private final boolean requireUserVerification;
+    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
 
     public GetAssertionRequest(
             String rpId,

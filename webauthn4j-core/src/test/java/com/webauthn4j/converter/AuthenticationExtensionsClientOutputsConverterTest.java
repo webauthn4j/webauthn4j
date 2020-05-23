@@ -24,9 +24,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsClientOutputsConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    private final AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
     void convert_null_test() {

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExtensionValidatorTest {
 
-    private ExtensionValidator extensionValidator = new ExtensionValidator();
+    private final ExtensionValidator extensionValidator = new ExtensionValidator();
 
     @Test
     void expected_extension_does_not_exist_test() {

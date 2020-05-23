@@ -27,8 +27,8 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
     public static final String FORMAT = "android-safetynet";
 
-    private String ver;
-    private JWS<Response> response;
+    private final String ver;
+    private final JWS<Response> response;
 
     @JsonCreator
     public AndroidSafetyNetAttestationStatement(

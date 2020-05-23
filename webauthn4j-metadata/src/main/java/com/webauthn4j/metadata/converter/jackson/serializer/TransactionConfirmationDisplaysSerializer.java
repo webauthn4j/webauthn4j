@@ -31,7 +31,7 @@ public class TransactionConfirmationDisplaysSerializer extends StdSerializer<Tra
 
     @Override
     public void serialize(TransactionConfirmationDisplays value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(TransactionConfirmationDisplay::getValue).reduce(0, (left, right) -> left + right);
+        long sum = value.stream().map(TransactionConfirmationDisplay::getValue).reduce(0, Integer::sum);
         gen.writeNumber(sum);
     }
 }

@@ -34,7 +34,7 @@ import java.util.Objects;
 public class AuthenticationExtensionsSupported extends AbstractList<String> implements Serializable {
 
     private final int size;
-    private String[] extensions;
+    private final String[] extensions;
 
     @JsonCreator
     public AuthenticationExtensionsSupported(List<String> extensions) {

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 class NullCertPathTrustworthinessValidatorTest {
 
-    private NullCertPathTrustworthinessValidator validator = new NullCertPathTrustworthinessValidator();
+    private final NullCertPathTrustworthinessValidator validator = new NullCertPathTrustworthinessValidator();
 
     @Test
     void validate() {

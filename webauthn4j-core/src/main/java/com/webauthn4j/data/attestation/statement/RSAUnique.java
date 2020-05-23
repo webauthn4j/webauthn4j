@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 public class RSAUnique implements TPMUPublicId {
 
-    private byte[] n;
+    private final byte[] n;
 
     public RSAUnique(byte[] n) {
         this.n = n;

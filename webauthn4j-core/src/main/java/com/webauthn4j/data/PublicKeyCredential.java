@@ -36,10 +36,10 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
     // ~ Instance fields
     // ================================================================================================
 
-    private String id;
-    private byte[] rawId;
-    private R authenticatorResponse;
-    private AuthenticationExtensionsClientOutputs<E> clientExtensionResults;
+    private final String id;
+    private final byte[] rawId;
+    private final R authenticatorResponse;
+    private final AuthenticationExtensionsClientOutputs<E> clientExtensionResults;
 
     // ~ Constructor
     // ========================================================================================================

@@ -37,12 +37,12 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private Challenge challenge;
-    private Long timeout;
-    private String rpId;
-    private List<PublicKeyCredentialDescriptor> allowCredentials;
-    private UserVerificationRequirement userVerification;
-    private AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
+    private final Challenge challenge;
+    private final Long timeout;
+    private final String rpId;
+    private final List<PublicKeyCredentialDescriptor> allowCredentials;
+    private final UserVerificationRequirement userVerification;
+    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              Long timeout,

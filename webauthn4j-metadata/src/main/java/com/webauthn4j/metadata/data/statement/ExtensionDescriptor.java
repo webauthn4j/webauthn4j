@@ -28,10 +28,10 @@ import java.util.Objects;
  */
 public class ExtensionDescriptor implements Serializable {
 
-    private String id;
-    private Integer tag;
-    private String data;
-    private Boolean failIfUnknown;
+    private final String id;
+    private final Integer tag;
+    private final String data;
+    private final Boolean failIfUnknown;
 
     @JsonCreator
     public ExtensionDescriptor(

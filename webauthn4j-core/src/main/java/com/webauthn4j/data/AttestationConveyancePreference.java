@@ -65,7 +65,7 @@ public enum AttestationConveyancePreference {
      */
     ENTERPRISE("enterprise");
 
-    private String value;
+    private final String value;
 
     AttestationConveyancePreference(String value) {
         this.value = value;

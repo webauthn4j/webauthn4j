@@ -54,7 +54,8 @@ it is executed through the REST API implementation provided by Spring Security W
 === Getting from Maven Central
 If you are using Maven, just add the webauthn4j as a dependency:
 
-```
+[source, xml]
+----
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
@@ -71,7 +72,7 @@ If you are using Maven, just add the webauthn4j as a dependency:
   </dependency>
   ...
 </dependencies>
-```
+----
 
 === Source code
 

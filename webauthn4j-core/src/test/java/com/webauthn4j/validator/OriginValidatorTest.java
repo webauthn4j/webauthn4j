@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class OriginValidatorTest {
 
-    private OriginValidator target = new OriginValidator();
+    private final OriginValidator target = new OriginValidator();
 
     @Test
     void test() {

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.mock;
 
 class DefaultMaliciousCounterValueHandlerTest {
 
-    private DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
+    private final DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
 
     @Test
     void maliciousCounterValueDetected_test() {

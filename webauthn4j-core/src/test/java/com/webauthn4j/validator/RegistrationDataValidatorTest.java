@@ -42,7 +42,7 @@ import static org.mockito.Mockito.mock;
 
 class RegistrationDataValidatorTest {
 
-    private RegistrationDataValidator target;
+    private final RegistrationDataValidator target;
 
     public RegistrationDataValidatorTest() {
         ObjectConverter objectConverter = new ObjectConverter();

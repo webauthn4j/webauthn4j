@@ -47,23 +47,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CustomRegistrationValidationTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
 
-    private Origin origin = new Origin("http://localhost");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
-    private NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
-    private FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
-    private TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
-    private WebAuthnManager target = new WebAuthnManager(
+    private final Origin origin = new Origin("http://localhost");
+    private final ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
+    private final NoneAttestationStatementValidator noneAttestationStatementValidator = new NoneAttestationStatementValidator();
+    private final FIDOU2FAttestationStatementValidator fidoU2FAttestationStatementValidator = new FIDOU2FAttestationStatementValidator();
+    private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith2tierTestRootCACertificate();
+    private final WebAuthnManager target = new WebAuthnManager(
             Arrays.asList(noneAttestationStatementValidator, fidoU2FAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
 
-    private AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
-    private AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
+    private final AuthenticatorTransportConverter authenticatorTransportConverter = new AuthenticatorTransportConverter();
+    private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test

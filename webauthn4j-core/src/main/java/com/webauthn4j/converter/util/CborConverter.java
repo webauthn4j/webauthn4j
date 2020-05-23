@@ -38,7 +38,7 @@ public class CborConverter implements Serializable {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 
-    private ObjectMapper cborMapper;
+    private final ObjectMapper cborMapper;
 
     CborConverter(ObjectMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");

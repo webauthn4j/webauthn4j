@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthenticatorStatusTest {
 
-    JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {

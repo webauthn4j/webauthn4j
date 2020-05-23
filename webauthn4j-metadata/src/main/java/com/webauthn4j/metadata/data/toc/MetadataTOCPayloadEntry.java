@@ -36,28 +36,28 @@ import java.util.Objects;
 public class MetadataTOCPayloadEntry implements Serializable {
 
     @JsonProperty
-    private String aaid;
+    private final String aaid;
     @JsonProperty
-    private String aaguid;
+    private final String aaguid;
     @JsonProperty
-    private List<String> attestationCertificateKeyIdentifiers;
+    private final List<String> attestationCertificateKeyIdentifiers;
     @JsonProperty
-    private String hash;
+    private final String hash;
     @JsonProperty
-    private URI url;
+    private final URI url;
     @JsonProperty
-    private List<BiometricStatusReport> biometricStatusReports;
+    private final List<BiometricStatusReport> biometricStatusReports;
     @JsonProperty
-    private List<StatusReport> statusReports;
+    private final List<StatusReport> statusReports;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonProperty
-    private LocalDate timeOfLastStatusChange;
+    private final LocalDate timeOfLastStatusChange;
     @JsonProperty
-    private String rogueListURL;
+    private final String rogueListURL;
     @JsonProperty
-    private String rogueListHash;
+    private final String rogueListHash;
 
     @JsonCreator
     public MetadataTOCPayloadEntry(

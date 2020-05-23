@@ -95,9 +95,7 @@ public class UnsignedNumberUtil {
         byte[] bytes = unsignedLongValue.toByteArray();
         byte[] buffer = new byte[8];
         int offset = (8 - bytes.length);
-        for (int i = Math.max(0, offset); i < 8; i++) {
-            buffer[i] = bytes[i - offset];
-        }
+        System.arraycopy(bytes, Math.max(0, offset) - offset, buffer, Math.max(0, offset), 8 - Math.max(0, offset));
         return buffer;
     }
 

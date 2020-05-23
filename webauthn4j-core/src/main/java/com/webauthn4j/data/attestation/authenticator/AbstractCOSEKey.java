@@ -30,16 +30,16 @@ import java.util.Objects;
 public abstract class AbstractCOSEKey implements COSEKey {
 
     @JsonProperty("2")
-    private byte[] keyId;
+    private final byte[] keyId;
 
     @JsonProperty("3")
-    private COSEAlgorithmIdentifier algorithm;
+    private final COSEAlgorithmIdentifier algorithm;
 
     @JsonProperty("4")
-    private List<COSEKeyOperation> keyOps;
+    private final List<COSEKeyOperation> keyOps;
 
     @JsonProperty("5")
-    private byte[] baseIV;
+    private final byte[] baseIV;
 
     @JsonCreator
     AbstractCOSEKey(

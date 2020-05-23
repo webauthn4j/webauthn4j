@@ -62,7 +62,7 @@ class AttestationCertificateTest {
         when(certificate.getVersion()).thenReturn(2); //v2
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 
@@ -73,7 +73,7 @@ class AttestationCertificateTest {
         when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 
@@ -84,7 +84,7 @@ class AttestationCertificateTest {
         when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, CN=webauthn4j test 3tier authenticator attestation, C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 
@@ -96,7 +96,7 @@ class AttestationCertificateTest {
                 .thenReturn(new X500Principal("O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 
@@ -108,7 +108,7 @@ class AttestationCertificateTest {
                 .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 
@@ -120,7 +120,7 @@ class AttestationCertificateTest {
                 .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
-                () -> attestationCertificate.validate()
+                attestationCertificate::validate
         );
     }
 

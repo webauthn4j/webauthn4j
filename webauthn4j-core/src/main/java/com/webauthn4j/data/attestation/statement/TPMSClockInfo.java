@@ -25,10 +25,10 @@ import java.util.Objects;
 
 public class TPMSClockInfo implements Serializable {
 
-    private BigInteger clock;
-    private long resetCount;
-    private long restartCount;
-    private boolean safe;
+    private final BigInteger clock;
+    private final long resetCount;
+    private final long restartCount;
+    private final boolean safe;
 
     public TPMSClockInfo(BigInteger clock, long resetCount, long restartCount, boolean safe) {
         this.clock = clock;

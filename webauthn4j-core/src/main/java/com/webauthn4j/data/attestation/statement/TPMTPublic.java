@@ -28,12 +28,12 @@ import java.util.Objects;
 
 public class TPMTPublic implements Serializable {
 
-    private TPMIAlgPublic type;
-    private TPMIAlgHash nameAlg;
-    private TPMAObject objectAttributes;
-    private byte[] authPolicy;
-    private TPMUPublicParms parameters;
-    private TPMUPublicId unique;
+    private final TPMIAlgPublic type;
+    private final TPMIAlgHash nameAlg;
+    private final TPMAObject objectAttributes;
+    private final byte[] authPolicy;
+    private final TPMUPublicParms parameters;
+    private final TPMUPublicId unique;
 
     public TPMTPublic(TPMIAlgPublic type, TPMIAlgHash nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
         this.type = type;

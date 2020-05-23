@@ -36,7 +36,7 @@ public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")
-    private AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData;
+    private final AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData;
 
     @JsonProperty("attStmt")
     @JsonTypeInfo(
@@ -44,7 +44,7 @@ public class AttestationObject implements Serializable {
             include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
             property = "fmt"
     )
-    private AttestationStatement attestationStatement;
+    private final AttestationStatement attestationStatement;
 
     @JsonCreator
     public AttestationObject(

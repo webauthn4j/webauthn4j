@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {

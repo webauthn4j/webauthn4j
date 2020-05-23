@@ -27,12 +27,12 @@ import java.util.Objects;
  * In the case of ECDAA attestation, the ECDAA-Issuer's trust anchor must be specified in this field.
  */
 public class EcdaaTrustAnchor implements Serializable {
-    private String x;
-    private String y;
-    private String c;
-    private String sx;
-    private String sy;
-    private String g1Curve;
+    private final String x;
+    private final String y;
+    private final String c;
+    private final String sx;
+    private final String sy;
+    private final String g1Curve;
 
     @JsonCreator
     public EcdaaTrustAnchor(

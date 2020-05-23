@@ -30,13 +30,13 @@ import java.util.List;
 @WIP
 public class MetadataItemImpl implements MetadataItem {
 
-    private String aaid;
-    private AAGUID aaguid;
-    private List<String> attestationCertificateKeyIdentifiers;
-    private String hash;
-    private List<StatusReport> statusReports;
-    private LocalDate timeOfLastStatusChange;
-    private MetadataStatement metadataStatement;
+    private final String aaid;
+    private final AAGUID aaguid;
+    private final List<String> attestationCertificateKeyIdentifiers;
+    private final String hash;
+    private final List<StatusReport> statusReports;
+    private final LocalDate timeOfLastStatusChange;
+    private final MetadataStatement metadataStatement;
 
     public MetadataItemImpl(
             String aaid,

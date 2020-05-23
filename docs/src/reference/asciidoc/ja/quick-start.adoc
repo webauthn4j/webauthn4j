@@ -34,7 +34,8 @@ ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれ
 検証に成功した場合は、返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
 認証時に必要となります。
 
-```java
+[source,java]
+----
 // Client properties
 byte[] attestationObject = null /* set attestationObject */;
 byte[] clientDataJSON = null /* set clientDataJSON */;
@@ -79,7 +80,7 @@ Authenticator authenticator =
                 registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
         );
 save(authenticator); // please persist authenticator in your manner
-```
+----
 
 === アサーションの検証
 
@@ -102,7 +103,8 @@ save(authenticator); // please persist authenticator in your manner
 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
-```java
+[source,java]
+----
 // Client properties
 byte[] credentialId = null /* set credentialId */;
 byte[] userHandle = null /* set userHandle */;
@@ -163,5 +165,5 @@ updateCounter(
         authenticationData.getCredentialId(),
         authenticationData.getAuthenticatorData().getSignCount()
 );
-```
+----
 

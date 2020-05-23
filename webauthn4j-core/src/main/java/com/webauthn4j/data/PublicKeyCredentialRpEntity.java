@@ -33,7 +33,7 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
     // ~ Instance fields
     // ================================================================================================
 
-    private String id;
+    private final String id;
 
     // ~ Constructor
     // ========================================================================================================

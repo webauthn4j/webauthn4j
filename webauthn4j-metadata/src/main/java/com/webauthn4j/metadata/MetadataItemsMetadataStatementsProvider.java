@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class MetadataItemsMetadataStatementsProvider implements MetadataStatementsProvider {
 
-    private MetadataItemsProvider metadataItemsProvider;
+    private final MetadataItemsProvider metadataItemsProvider;
 
     public MetadataItemsMetadataStatementsProvider(MetadataItemsProvider metadataItemsProvider) {
         this.metadataItemsProvider = metadataItemsProvider;

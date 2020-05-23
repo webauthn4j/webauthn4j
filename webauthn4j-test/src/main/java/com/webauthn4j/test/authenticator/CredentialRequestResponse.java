@@ -18,11 +18,11 @@ package com.webauthn4j.test.authenticator;
 
 public class CredentialRequestResponse {
 
-    private byte[] credentialId;
-    private byte[] collectedClientDataBytes;
-    private byte[] authenticatorDataBytes;
-    private byte[] signature;
-    private byte[] userHandle;
+    private final byte[] credentialId;
+    private final byte[] collectedClientDataBytes;
+    private final byte[] authenticatorDataBytes;
+    private final byte[] signature;
+    private final byte[] userHandle;
 
     public CredentialRequestResponse(byte[] credentialId, byte[] collectedClientDataBytes, byte[] authenticatorDataBytes, byte[] signature, byte[] userHandle) {
         this.credentialId = credentialId;

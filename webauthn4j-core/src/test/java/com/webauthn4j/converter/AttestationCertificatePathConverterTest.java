@@ -28,8 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestationCertificatePathConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private CborConverter cborConverter = objectConverter.getCborConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
     void test() {

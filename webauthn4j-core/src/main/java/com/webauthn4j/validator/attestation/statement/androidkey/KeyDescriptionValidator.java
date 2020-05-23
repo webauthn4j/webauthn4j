@@ -53,7 +53,7 @@ public class KeyDescriptionValidator {
     // ~ Instance fields
     // ================================================================================================
 
-    private Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
+    private final Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
 
     public void validate(X509Certificate x509Certificate, byte[] clientDataHash, boolean teeEnforcedOnly) {
         try {

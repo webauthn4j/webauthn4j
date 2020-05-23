@@ -38,9 +38,9 @@ public class PublicKeyCredentialDescriptor implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private PublicKeyCredentialType type;
-    private byte[] id;
-    private Set<AuthenticatorTransport> transports;
+    private final PublicKeyCredentialType type;
+    private final byte[] id;
+    private final Set<AuthenticatorTransport> transports;
 
     @JsonCreator
     public PublicKeyCredentialDescriptor(

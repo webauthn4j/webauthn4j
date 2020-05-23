@@ -31,8 +31,8 @@ import java.io.Serializable;
  */
 public class ObjectConverter implements Serializable {
 
-    private JsonConverter jsonConverter;
-    private CborConverter cborConverter;
+    private final JsonConverter jsonConverter;
+    private final CborConverter cborConverter;
 
     public ObjectConverter(ObjectMapper jsonMapper, ObjectMapper cborMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");

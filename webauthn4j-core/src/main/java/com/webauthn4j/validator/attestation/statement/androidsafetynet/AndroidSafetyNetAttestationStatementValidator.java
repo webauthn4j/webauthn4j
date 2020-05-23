@@ -135,15 +135,15 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         this.versionValidator = versionValidator;
     }
 
-    private class DefaultVersionValidator implements GooglePlayServiceVersionValidator {
+    private static class DefaultVersionValidator implements GooglePlayServiceVersionValidator {
 
-        private int minimalVersion = 0;
+        private static final int MINIMAL_VERSION = 0;
 
         @Override
         public void validate(String version) {
             try {
                 int versionNumber = Integer.parseInt(version);
-                if (versionNumber < minimalVersion) {
+                if (versionNumber < MINIMAL_VERSION) {
                     throw new BadAttestationStatementException("The version number of Google Play Services responsible for providing the SafetyNet API doesn't conform minimal requirement.");
                 }
             } catch (NumberFormatException e) {
