@@ -70,6 +70,14 @@ git tag <version>.RELEASE
 git push origin <version>.RELEASE
 ```
 
+##### Retry maven central sync (if release job failed)
+Sometimes release job invoked by tag push fails because of some files are not signed by bintray.
+Following command resolves GPG signing problem and syncs to Maven Central.
+
+```
+BINTRAY_USER=<BINTRAY_USER> BINTRAY_TOKEN=<BINTRAY_TOKEN> ./gradlew bintrayGpgSign bintrayMavenCentralSync
+```
+
 ##### Update the release note on GitHub
 
 Update the release note on GitHub
