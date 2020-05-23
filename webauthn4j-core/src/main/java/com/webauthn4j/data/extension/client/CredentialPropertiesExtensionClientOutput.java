@@ -25,7 +25,7 @@ import java.util.Objects;
 
 public class CredentialPropertiesExtensionClientOutput
         extends AbstractExtensionOutput<CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput>
-        implements AuthenticationExtensionClientOutput<CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput> {
+        implements RegistrationExtensionClientOutput<CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput> {
 
     public static final String ID = "credProps";
 
