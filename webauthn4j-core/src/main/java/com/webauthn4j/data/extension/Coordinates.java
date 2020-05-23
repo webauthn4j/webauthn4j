@@ -23,8 +23,10 @@ import java.util.Objects;
  * Location information in the authenticator extension output as a Coordinates value,
  * as defined by [Geolocation-API].
  *
+ * @deprecated
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientoutputs">§10.7. Location Extension (loc) - Client extension output</a>
  */
+@Deprecated
 public class Coordinates implements Serializable {
 
     private Double latitude;

@@ -20,6 +20,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.data.extension.AbstractExtensionOutput;
 import com.webauthn4j.data.extension.Coordinates;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class LocationExtensionClientOutput
         extends AbstractExtensionOutput<Coordinates>
         implements RegistrationExtensionClientOutput<Coordinates>, AuthenticationExtensionClientOutput<Coordinates> {
