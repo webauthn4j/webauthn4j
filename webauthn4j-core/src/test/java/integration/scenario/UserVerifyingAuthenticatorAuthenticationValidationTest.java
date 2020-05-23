@@ -205,11 +205,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(InconsistentClientDataTypeException.class,
-                () -> {
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        assertThrows(InconsistentClientDataTypeException.class, () -> target.validate(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -251,12 +247,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
-        assertThrows(BadChallengeException.class,
-                () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        assertThrows(BadChallengeException.class, () -> target.validate(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -297,12 +289,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
-        assertThrows(BadOriginException.class,
-                () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        assertThrows(BadOriginException.class, () -> target.validate(authenticationData, authenticationParameters));
     }
 
     @Test
@@ -345,12 +333,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
-        assertThrows(TokenBindingException.class,
-                () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        assertThrows(TokenBindingException.class, () -> target.validate(authenticationData, authenticationParameters));
     }
 
 
@@ -394,11 +378,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(BadRpIdException.class,
-                () -> {
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        assertThrows(BadRpIdException.class, () -> target.validate(authenticationData, authenticationParameters));
 
     }
 
@@ -440,11 +420,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 );
 
         AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        assertThrows(UserNotVerifiedException.class,
-                () -> {
-                    target.validate(authenticationData, authenticationParameters);
-                }
-        );
+        assertThrows(UserNotVerifiedException.class, () -> target.validate(authenticationData, authenticationParameters));
 
     }
 

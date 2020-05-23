@@ -32,7 +32,7 @@ public class UnknownExtensionClientInput extends AbstractExtensionInput<Serializ
 
     @Override
     public String getIdentifier() {
-        return name;
+        return this.name;
     }
 
     @Override
