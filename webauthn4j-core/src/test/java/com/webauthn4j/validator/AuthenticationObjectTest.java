@@ -43,9 +43,9 @@ class AuthenticationObjectTest {
         byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();
         AuthenticationObject authenticationObject = new AuthenticationObject(
@@ -77,9 +77,9 @@ class AuthenticationObjectTest {
         byte[] credentialId = new byte[32];
         CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         Authenticator authenticator = TestDataUtil.createAuthenticator();
 

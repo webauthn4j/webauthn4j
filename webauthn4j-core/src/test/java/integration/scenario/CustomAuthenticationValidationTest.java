@@ -76,9 +76,9 @@ public class CustomAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput<?>> credential = clientPlatform.get(credentialRequestOptions);
         AuthenticatorAssertionResponse authenticatorAssertionResponse = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs clientExtensionResults = credential.getClientExtensionResults();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);

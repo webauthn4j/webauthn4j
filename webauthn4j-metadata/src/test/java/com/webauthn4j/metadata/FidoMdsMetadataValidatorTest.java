@@ -25,7 +25,6 @@ import static org.mockito.Mockito.mock;
 class FidoMdsMetadataValidatorTest {
 
     private MetadataItemsResolver metadataItemsResolver = mock(MetadataItemsResolver.class);
-    @SuppressWarnings("unchecked")
     private FidoMdsMetadataValidator target = new FidoMdsMetadataValidator(metadataItemsResolver);
 
     @Test

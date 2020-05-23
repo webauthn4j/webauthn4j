@@ -29,7 +29,7 @@ import java.util.Map;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientinputs">
  * §5.7. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>
  */
-public class AuthenticationExtensionsClientInputs<V extends ExtensionClientInput> extends AbstractImmutableMap<String, V> {
+public class AuthenticationExtensionsClientInputs<V extends ExtensionClientInput<?>> extends AbstractImmutableMap<String, V> {
 
 
     @JsonCreator

@@ -34,7 +34,7 @@ public class RegistrationData implements Serializable {
     private final byte[] attestationObjectBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
-    private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions;
     private final Set<AuthenticatorTransport> transports;
 
     public RegistrationData(
@@ -42,7 +42,7 @@ public class RegistrationData implements Serializable {
             byte[] attestationObjectBytes,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions,
             Set<AuthenticatorTransport> transports) {
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
@@ -68,7 +68,7 @@ public class RegistrationData implements Serializable {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> getClientExtensions() {
         return clientExtensions;
     }
 

@@ -41,7 +41,7 @@ public class UserVerificationIndexExtensionClientOutput
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractExtensionOutput that = (AbstractExtensionOutput) o;
+        AbstractExtensionOutput<?> that = (AbstractExtensionOutput<?>) o;
         return Arrays.equals(this.getValue(), (byte[]) that.getValue());
     }
 

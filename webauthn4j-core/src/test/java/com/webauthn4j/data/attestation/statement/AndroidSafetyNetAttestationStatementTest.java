@@ -19,24 +19,26 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 class AndroidSafetyNetAttestationStatementTest {
 
-    @SuppressWarnings("unchecked")
     @Test
-    void validate() {
-        new AndroidSafetyNetAttestationStatement("dummy", mock(JWS.class)).validate();
+    void validate(@Mock JWS<Response> jwsMock) {
+        new AndroidSafetyNetAttestationStatement("dummy", jwsMock).validate();
         assertAll(
                 () -> assertThrows(ConstraintViolationException.class,
                         () -> new AndroidSafetyNetAttestationStatement("dummy", null).validate()
                 ),
                 () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidSafetyNetAttestationStatement(null, mock(JWS.class)).validate()
+                        () -> new AndroidSafetyNetAttestationStatement(null, jwsMock).validate()
                 ),
                 () -> assertThrows(ConstraintViolationException.class,
                         () -> new AndroidSafetyNetAttestationStatement(null, null).validate()
@@ -45,11 +47,9 @@ class AndroidSafetyNetAttestationStatementTest {
     }
 
     @Test
-    void equals_hashCode_test() {
-        @SuppressWarnings("unchecked")
-        JWS<Response> jws = mock(JWS.class);
-        AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jws);
-        AndroidSafetyNetAttestationStatement instanceB = new AndroidSafetyNetAttestationStatement("dummy", jws);
+    void equals_hashCode_test(@Mock JWS<Response> jwsMock) {
+        AndroidSafetyNetAttestationStatement instanceA = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
+        AndroidSafetyNetAttestationStatement instanceB = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

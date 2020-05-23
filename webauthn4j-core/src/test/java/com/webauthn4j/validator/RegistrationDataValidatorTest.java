@@ -18,6 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatementValidator;
@@ -63,7 +64,7 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateAuthenticatorDataField_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
         assertThrows(ConstraintViolationException.class,
                 () -> target.validateAuthenticatorDataField(authenticatorData)
         );
@@ -71,19 +72,19 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateUVUPFlags_not_required_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
         target.validateUVUPFlags(authenticatorData, false, false);
     }
 
     @Test
     void validateUVUPFlags_required_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
         target.validateUVUPFlags(authenticatorData, true, true);
     }
 
     @Test
     void validateUVUPFlags_UserNotVerifiedException_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
         assertThrows(UserNotVerifiedException.class,
                 () -> target.validateUVUPFlags(authenticatorData, true, false)
         );
@@ -91,7 +92,7 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateUVUPFlags_UserNotPresentException_test() {
-        AuthenticatorData authenticatorData = new AuthenticatorData(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
         assertThrows(UserNotPresentException.class,
                 () -> target.validateUVUPFlags(authenticatorData, false, true)
         );

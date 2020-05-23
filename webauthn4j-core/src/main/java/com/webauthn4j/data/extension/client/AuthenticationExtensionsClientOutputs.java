@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientoutputs">§5.8. Authentication Extensions Client Outputs</a>
  */
-public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutput> extends AbstractImmutableMap<String, V> {
+public class AuthenticationExtensionsClientOutputs<V extends ExtensionClientOutput<?>> extends AbstractImmutableMap<String, V> {
 
     @JsonCreator
     public AuthenticationExtensionsClientOutputs(Map<String, V> map) {

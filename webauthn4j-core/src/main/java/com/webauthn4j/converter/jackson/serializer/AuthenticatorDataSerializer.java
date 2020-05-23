@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorInput;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.IOException;
@@ -29,12 +30,12 @@ import java.io.IOException;
 /**
  * Jackson Serializer for {@link AuthenticatorData}
  */
-public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData> {
+public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData<? extends ExtensionAuthenticatorInput<?>>> {
 
     private ObjectConverter objectConverter;
 
     public AuthenticatorDataSerializer(ObjectConverter objectConverter) {
-        super(AuthenticatorData.class);
+        super(AuthenticatorData.class, false);
 
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
@@ -45,7 +46,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      * {@inheritDoc}
      */
     @Override
-    public void serialize(AuthenticatorData value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(AuthenticatorData<? extends ExtensionAuthenticatorInput<?>> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeBinary(new AuthenticatorDataConverter(objectConverter).convert(value));
     }
 

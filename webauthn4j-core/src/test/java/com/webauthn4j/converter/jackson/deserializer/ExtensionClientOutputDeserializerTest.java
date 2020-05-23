@@ -36,7 +36,7 @@ class ExtensionClientOutputDeserializerTest {
         ObjectConverter objectConverter = new ObjectConverter();
         JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
-        Map<String, ExtensionClientOutput> extensionOutputs =
+        Map<String, ExtensionClientOutput<?>> extensionOutputs =
                 jsonConverter.readValue(
                         "{ " +
                                 "\"appid\": true, " +
@@ -49,7 +49,7 @@ class ExtensionClientOutputDeserializerTest {
                                 "\"loc\": { \"latitude\": 0, \"longitude\":0, \"accuracy\": 1 }, " +
                                 "\"biometricPerfBounds\": true " +
                                 "}",
-                        new TypeReference<Map<String, ExtensionClientOutput>>() {
+                        new TypeReference<Map<String, ExtensionClientOutput<?>>>() {
                         }
                 );
 

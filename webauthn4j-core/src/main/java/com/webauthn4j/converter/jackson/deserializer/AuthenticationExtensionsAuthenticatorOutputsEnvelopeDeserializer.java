@@ -18,7 +18,9 @@ package com.webauthn4j.converter.jackson.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.type.SimpleType;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 
@@ -27,7 +29,7 @@ import java.io.IOException;
 /**
  * Jackson Serializer for {@link AuthenticationExtensionsAuthenticatorOutputsEnvelope}
  */
-public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope> {
+public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput<?>>> {
 
     public AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer() {
         super(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
@@ -36,11 +38,11 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public AuthenticationExtensionsAuthenticatorOutputsEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, AuthenticationExtensionsAuthenticatorOutputs.class);
+    public AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput<?>> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        JavaType javaType = SimpleType.constructUnsafe(AuthenticationExtensionsAuthenticatorOutputs.class);
+        AuthenticationExtensionsAuthenticatorOutputs<? extends ExtensionAuthenticatorOutput<?>> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, javaType);
         int length = (int) p.getCurrentLocation().getByteOffset();
-        return new AuthenticationExtensionsAuthenticatorOutputsEnvelope(authenticationExtensionsAuthenticatorOutputs, length);
+        return new AuthenticationExtensionsAuthenticatorOutputsEnvelope<>(authenticationExtensionsAuthenticatorOutputs, length);
     }
 }

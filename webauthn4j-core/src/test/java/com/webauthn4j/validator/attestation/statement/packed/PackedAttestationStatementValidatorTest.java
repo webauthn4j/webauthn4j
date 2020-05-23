@@ -16,6 +16,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
+import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
@@ -110,7 +111,7 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
 
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
@@ -155,7 +156,7 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_ecdaaKeyId_test() throws Exception {
         KeyPair keyPair = ECUtil.createKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
 
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
         byte[] signature = generateSignature("SHA256withECDSA", keyPair, authenticatorData, clientData);
@@ -209,7 +210,7 @@ class PackedAttestationStatementValidatorTest {
 
         CollectedClientData collectedClientData = new CollectedClientDataConverter(objectConverter).convert(clientDataBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
@@ -224,7 +225,7 @@ class PackedAttestationStatementValidatorTest {
         validator.validate(registrationObject);
     }
 
-    private byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    private <T extends ExtensionAuthenticatorOutput<?>> byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData<T> data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         byte[] authenticatorData = new AuthenticatorDataConverter(objectConverter).convert(data);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientDataJSON);
 

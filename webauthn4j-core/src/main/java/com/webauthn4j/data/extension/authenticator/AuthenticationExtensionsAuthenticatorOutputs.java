@@ -22,7 +22,7 @@ import com.webauthn4j.data.AbstractImmutableMap;
 import java.util.Collections;
 import java.util.Map;
 
-public class AuthenticationExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutput> extends AbstractImmutableMap<String, V> {
+public class AuthenticationExtensionsAuthenticatorOutputs<V extends ExtensionAuthenticatorOutput<?>> extends AbstractImmutableMap<String, V> {
 
     @JsonCreator
     public AuthenticationExtensionsAuthenticatorOutputs(Map<String, V> map) {

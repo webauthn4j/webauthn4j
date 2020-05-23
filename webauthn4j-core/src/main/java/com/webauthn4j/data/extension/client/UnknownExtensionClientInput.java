@@ -21,7 +21,7 @@ import com.webauthn4j.data.extension.AbstractExtensionInput;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UnknownExtensionClientInput extends AbstractExtensionInput<Serializable> implements RegistrationExtensionClientInput<Serializable> {
+public class UnknownExtensionClientInput extends AbstractExtensionInput<Serializable> implements RegistrationExtensionClientInput<Serializable>, AuthenticationExtensionClientInput<Serializable> {
 
     private String name;
 

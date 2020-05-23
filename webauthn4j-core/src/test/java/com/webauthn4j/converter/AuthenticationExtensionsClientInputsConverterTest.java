@@ -20,6 +20,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientInput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -37,12 +38,13 @@ class AuthenticationExtensionsClientInputsConverterTest {
 
     @Test
     void convert_null_test() {
-        assertThat(authenticationExtensionsClientInputsConverter.convert(null)).isNull();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<Boolean>> value = authenticationExtensionsClientInputsConverter.convert(null);
+        assertThat(value).isNull();
     }
 
     @Test
     void convertToString_test() {
-        Map<String, ExtensionClientInput> clientInputs = new HashMap<>();
+        Map<String, ExtensionClientInput<?>> clientInputs = new HashMap<>();
         clientInputs.put(FIDOAppIDExtensionClientInput.ID, new FIDOAppIDExtensionClientInput("test"));
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(new AuthenticationExtensionsClientInputs<>(clientInputs))).isEqualTo("{\"appid\":\"test\"}");
     }
@@ -55,7 +57,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @Test
     void convert_test() {
         String source = "{\"appid\":\"dummy\"}";
-        AuthenticationExtensionsClientInputs clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        AuthenticationExtensionsClientInputs<ExtensionClientInput<?>> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
         assertThat(clientInputs.get(FIDOAppIDExtensionClientInput.ID)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
     }
 

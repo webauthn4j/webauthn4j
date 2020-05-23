@@ -55,7 +55,7 @@ class AssertUtilTest {
     @Test
     void notEmpty_test_with_null_as_set() {
         Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty((Set) null, "message")
+                () -> AssertUtil.notEmpty((Set<?>) null, "message")
         );
         assertThat(t).hasMessage("message");
     }

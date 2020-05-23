@@ -64,16 +64,16 @@ class AuthenticatorTest {
         private Set<AuthenticatorTransport> transports;
         private long counter;
 
-        private Map<String, RegistrationExtensionClientOutput> clientExtensions;
-        private Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
+        private Map<String, RegistrationExtensionClientOutput<?>> clientExtensions;
+        private Map<String, RegistrationExtensionAuthenticatorOutput<?>> authenticatorExtensions;
 
         public TestAuthenticator(
                 @JsonProperty("attestedCredentialData") AttestedCredentialData attestedCredentialData,
                 @JsonProperty("attestationStatement") AttestationStatement attestationStatement,
                 @JsonProperty("counter") long counter,
                 @JsonProperty("transports") Set<AuthenticatorTransport> transports,
-                @JsonProperty("clientExtensions") Map<String, RegistrationExtensionClientOutput> clientExtensions,
-                @JsonProperty("authenticatorExtensions") Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+                @JsonProperty("clientExtensions") Map<String, RegistrationExtensionClientOutput<?>> clientExtensions,
+                @JsonProperty("authenticatorExtensions") Map<String, RegistrationExtensionAuthenticatorOutput<?>> authenticatorExtensions) {
             this.attestedCredentialData = attestedCredentialData;
             this.attestationStatement = attestationStatement;
             this.transports = CollectionUtil.unmodifiableSet(transports);
@@ -118,12 +118,12 @@ class AuthenticatorTest {
         }
 
         @Override
-        public Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
+        public Map<String, RegistrationExtensionClientOutput<?>> getClientExtensions() {
             return clientExtensions;
         }
 
         @Override
-        public Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+        public Map<String, RegistrationExtensionAuthenticatorOutput<?>> getAuthenticatorExtensions() {
             return authenticatorExtensions;
         }
 

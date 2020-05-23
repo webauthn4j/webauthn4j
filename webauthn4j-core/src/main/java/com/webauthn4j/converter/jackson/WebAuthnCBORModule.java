@@ -21,9 +21,10 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.*;
 import com.webauthn4j.converter.jackson.serializer.*;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.attestation.authenticator.*;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
-import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.data.jws.JWS;
@@ -53,18 +54,18 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
 
-        this.addSerializer(AAGUID.class, new AAGUIDSerializer());
-        this.addSerializer(AttestedCredentialData.class, new AttestedCredentialDataSerializer(objectConverter));
-        this.addSerializer(AuthenticatorData.class, new AuthenticatorDataSerializer(objectConverter));
-        this.addSerializer(CertPath.class, new CertPathSerializer());
-        this.addSerializer(Challenge.class, new ChallengeSerializer());
-        this.addSerializer(EC2COSEKey.class, new EC2COSEKeySerializer());
-        this.addSerializer(JWS.class, new JWSSerializer());
-        this.addSerializer(Origin.class, new OriginSerializer());
-        this.addSerializer(RSACOSEKey.class, new RSACOSEKeySerializer());
-        this.addSerializer(TPMSAttest.class, new TPMSAttestSerializer());
-        this.addSerializer(TPMTPublic.class, new TPMTPublicSerializer());
-        this.addSerializer(X509Certificate.class, new X509CertificateSerializer());
+        this.addSerializer(new AAGUIDSerializer());
+        this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
+        this.addSerializer(new AuthenticatorDataSerializer(objectConverter));
+        this.addSerializer(new CertPathSerializer());
+        this.addSerializer(new ChallengeSerializer());
+        this.addSerializer(new EC2COSEKeySerializer());
+        this.addSerializer(new JWSSerializer());
+        this.addSerializer(new OriginSerializer());
+        this.addSerializer(new RSACOSEKeySerializer());
+        this.addSerializer(new TPMSAttestSerializer());
+        this.addSerializer(new TPMTPublicSerializer());
+        this.addSerializer(new X509CertificateSerializer());
 
         // attestation statements
         this.registerSubtypes(new NamedType(FIDOU2FAttestationStatement.class, FIDOU2FAttestationStatement.FORMAT));

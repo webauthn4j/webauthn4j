@@ -34,12 +34,12 @@ class AuthenticationDataTest {
 
         byte[] credentialId = new byte[32];
         byte[] userHandle = new byte[32];
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = null;
         byte[] authenticatorDataBytes = new byte[64];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
         String clientExtensionJSON = "";
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> authenticationExtensionsClientOutputs = null;
         byte[] signature = new byte[32];
 
         AuthenticationData instanceA = new AuthenticationData(

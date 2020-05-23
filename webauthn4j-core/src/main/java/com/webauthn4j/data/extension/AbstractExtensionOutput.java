@@ -45,7 +45,7 @@ public abstract class AbstractExtensionOutput<T extends Serializable> implements
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractExtensionOutput that = (AbstractExtensionOutput) o;
+        AbstractExtensionOutput<?> that = (AbstractExtensionOutput<?>) o;
         return Objects.equals(value, that.value);
     }
 
