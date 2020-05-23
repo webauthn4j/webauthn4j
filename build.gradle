@@ -101,7 +101,9 @@ subprojects {
     }
 
     tasks.withType(JavaCompile) {
-        options.compilerArgs << "-Xlint:unchecked" << "-Werror" << "-Xlint:deprecation"
+        options.compilerArgs << "-Xlint:unchecked"
+        options.compilerArgs << "-Werror"
+        // options.compilerArgs << "-Xlint:deprecation" //TODO: uncomment when deprecated extensions are removed
     }
 
     check.dependsOn dependencyCheckAnalyze

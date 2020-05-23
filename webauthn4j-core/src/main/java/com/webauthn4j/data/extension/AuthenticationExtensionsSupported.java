@@ -27,9 +27,10 @@ import java.util.Objects;
 
 /**
  * List of supported extensions as an array of extension identifier strings.
- *
+ * @deprecated
  * @see <a href="https://www.w3.org/TR/webauthn-1/#ref-for-typedefdef-authenticationextensionssupported">§10.5. Supported Extensions Extension (exts) - Client extension output</a>
  */
+@Deprecated
 public class AuthenticationExtensionsSupported extends AbstractList<String> implements Serializable {
 
     private final int size;

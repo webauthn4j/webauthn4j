@@ -19,6 +19,10 @@ package com.webauthn4j.data.extension.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.data.extension.AbstractExtensionOutput;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class SimpleTransactionAuthorizationExtensionClientOutput
         extends AbstractExtensionOutput<String>
         implements AuthenticationExtensionClientOutput<String> {
