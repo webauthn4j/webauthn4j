@@ -32,7 +32,7 @@ public class UnknownExtensionClientOutput extends AbstractExtensionOutput<Serial
 
     @Override
     public String getIdentifier() {
-        return name;
+        return this.name;
     }
 
     @Override

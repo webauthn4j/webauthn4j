@@ -239,11 +239,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
                 expectedExtensions
         );
 
-        assertThrows(UnexpectedExtensionException.class,
-                () -> {
-                    RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
-                    target.validate(registrationData, registrationParameters);
-                }
-        );
+        RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
+        assertThrows(UnexpectedExtensionException.class, () -> target.validate(registrationData, registrationParameters));
     }
 }

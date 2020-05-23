@@ -45,16 +45,15 @@ class JsonConverterTest {
 
     @Test
     void readValue_with_TypeReference_test() {
-        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
-        });
+        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {});
         assertThat(dto.getValue()).isEqualTo("dummy");
     }
 
     @Test
     void readValue_with_invalid_json_and_TypeReference_test() {
+        TypeReference<ConverterTestDto> typeReference = new TypeReference<ConverterTestDto>() {};
         assertThrows(DataConversionException.class, () ->
-                jsonConverter.readValue("{value:\"dummy\"}", new TypeReference<ConverterTestDto>() {
-                })
+                jsonConverter.readValue("{value:\"dummy\"}", typeReference)
         );
     }
 

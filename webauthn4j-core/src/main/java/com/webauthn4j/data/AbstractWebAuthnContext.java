@@ -65,27 +65,27 @@ abstract class AbstractWebAuthnContext implements Serializable {
     }
 
     public byte[] getClientDataJSON() {
-        return ArrayUtil.clone(clientDataJSON);
+        return ArrayUtil.clone(this.clientDataJSON);
     }
 
     public String getClientExtensionsJSON() {
-        return clientExtensionsJSON;
+        return this.clientExtensionsJSON;
     }
 
     public ServerProperty getServerProperty() {
-        return serverProperty;
+        return this.serverProperty;
     }
 
     public boolean isUserVerificationRequired() {
-        return userVerificationRequired;
+        return this.userVerificationRequired;
     }
 
     public boolean isUserPresenceRequired() {
-        return userPresenceRequired;
+        return this.userPresenceRequired;
     }
 
     public List<String> getExpectedExtensionIds() {
-        return expectedExtensionIds;
+        return this.expectedExtensionIds;
     }
 
     @Override
