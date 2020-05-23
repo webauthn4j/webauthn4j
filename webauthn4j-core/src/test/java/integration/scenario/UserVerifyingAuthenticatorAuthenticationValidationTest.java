@@ -204,9 +204,9 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
         assertThrows(InconsistentClientDataTypeException.class,
                 () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
                     target.validate(authenticationData, authenticationParameters);
                 }
         );
@@ -393,9 +393,9 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
         assertThrows(BadRpIdException.class,
                 () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
                     target.validate(authenticationData, authenticationParameters);
                 }
         );
@@ -439,9 +439,9 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         true
                 );
 
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
         assertThrows(UserNotVerifiedException.class,
                 () -> {
-                    AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
                     target.validate(authenticationData, authenticationParameters);
                 }
         );

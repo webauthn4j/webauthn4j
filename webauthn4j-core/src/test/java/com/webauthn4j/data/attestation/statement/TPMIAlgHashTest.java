@@ -44,6 +44,7 @@ class TPMIAlgHashTest {
 
     @Test
     void create_with_invalid_value_test() {
+        //noinspection ResultOfMethodCallIgnored
         assertThrows(IllegalArgumentException.class,
                 () -> TPMIAlgHash.create(0x2)
         );

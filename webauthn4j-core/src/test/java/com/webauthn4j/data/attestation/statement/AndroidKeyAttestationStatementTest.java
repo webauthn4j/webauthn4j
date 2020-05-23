@@ -32,15 +32,18 @@ class AndroidKeyAttestationStatementTest {
     void validate_test() {
         new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()).validate();
         assertAll(
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null).validate()
-                ),
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, new AttestationCertificatePath()).validate()
-                ),
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath()).validate()
-                )
+                () -> {
+                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
+                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
+                },
+                () -> {
+                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, new AttestationCertificatePath());
+                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
+                },
+                () -> {
+                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath());
+                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
+                }
         );
     }
 

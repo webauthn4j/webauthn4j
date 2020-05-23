@@ -35,7 +35,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class KeyStoreTrustAnchorsProviderTest {
+class KeyStoreTrustAnchorsProviderTest {
 
     private KeyStoreTrustAnchorsProvider target;
 

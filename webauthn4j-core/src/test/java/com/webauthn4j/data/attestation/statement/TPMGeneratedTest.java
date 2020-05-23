@@ -51,8 +51,9 @@ class TPMGeneratedTest {
     @Test
     void fromString_test_with_invalid_value() {
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa, (byte) 0xff, (byte) 0xaa};
+        String sourceString = "{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
         assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"tpm_generated\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class)
+                () -> jsonConverter.readValue(sourceString, TestDTO.class)
         );
     }
 

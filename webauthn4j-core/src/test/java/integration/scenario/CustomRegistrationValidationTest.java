@@ -45,7 +45,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomRegistrationValidationTest {
+class CustomRegistrationValidationTest {
 
     private ObjectConverter objectConverter = new ObjectConverter();
 

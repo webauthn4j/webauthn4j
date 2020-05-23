@@ -62,8 +62,9 @@ class TPMISTAttestTest {
     @Test
     void fromString_test_with_invalid_value() {
         byte[] source = new byte[]{(byte) 0xff, (byte) 0xaa};
+        String sourceString = "{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}";
         assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"tpmi_st_attest\":\"" + Base64.getEncoder().encodeToString(source) + "\"}", TestDTO.class)
+                () -> jsonConverter.readValue(sourceString, TestDTO.class)
         );
     }
 

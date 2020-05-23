@@ -34,15 +34,18 @@ class AndroidSafetyNetAttestationStatementTest {
     void validate(@Mock JWS<Response> jwsMock) {
         new AndroidSafetyNetAttestationStatement("dummy", jwsMock).validate();
         assertAll(
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidSafetyNetAttestationStatement("dummy", null).validate()
-                ),
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidSafetyNetAttestationStatement(null, jwsMock).validate()
-                ),
-                () -> assertThrows(ConstraintViolationException.class,
-                        () -> new AndroidSafetyNetAttestationStatement(null, null).validate()
-                )
+                () -> {
+                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement("dummy", null);
+                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
+                },
+                () -> {
+                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement(null, jwsMock);
+                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
+                },
+                () -> {
+                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement(null, null);
+                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
+                }
         );
     }
 

@@ -27,7 +27,6 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.jupiter.api.Test;
 
-import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.Arrays;
 
@@ -75,9 +74,9 @@ class FIDOU2FAttestationStatementValidatorTest {
 
     @Test
     void validatePublicKey_with_non_p256_curve_ec_key_test() {
-        KeyPair keyPair = ECUtil.createKeyPair(ECUtil.P_521_SPEC);
+        PublicKey publicKey = ECUtil.createKeyPair(ECUtil.P_521_SPEC).getPublic();
         assertThrows(CertificateException.class,
-                () -> target.validatePublicKey(keyPair.getPublic())
+                () -> target.validatePublicKey(publicKey)
         );
     }
 }

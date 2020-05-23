@@ -35,8 +35,9 @@ class KeyDescriptionValidatorTest {
     void validate_with_IOException_test() throws IOException {
         KeyDescriptionValidator target = spy(KeyDescriptionValidator.class);
         doThrow(new IOException()).when(target).extractKeyDescription(any());
+        X509Certificate x509Certificate = TestAttestationUtil.loadAndroidKeyAttestationCertificate();
         assertThrows(UncheckedIOException.class,
-                () -> target.validate(TestAttestationUtil.loadAndroidKeyAttestationCertificate(), null, false)
+                () -> target.validate(x509Certificate, null, false)
         );
     }
 }

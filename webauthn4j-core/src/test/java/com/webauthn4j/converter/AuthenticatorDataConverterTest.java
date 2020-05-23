@@ -61,11 +61,12 @@ class AuthenticatorDataConverterTest {
     void convert_too_short_data_test() {
         //Given
         //noinspection SpellCheckingInspection
-        String input = "SZYN5YgOjGh0NBcP";
+        byte[] input = Base64UrlUtil.decode("SZYN5YgOjGh0NBcP");
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
 
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input))
+                () -> authenticatorDataConverter.convert(input)
         );
     }
 
@@ -101,9 +102,10 @@ class AuthenticatorDataConverterTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
         byte[] data = Base64UrlUtil.decode(input);
         byte[] bytes = Arrays.copyOf(data, data.length + 1);
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         //When
         assertThrows(DataConversionException.class,
-                () -> new AuthenticatorDataConverter(objectConverter).convert(bytes)
+                () -> authenticatorDataConverter.convert(bytes)
         );
     }
 
