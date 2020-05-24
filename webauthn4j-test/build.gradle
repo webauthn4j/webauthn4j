@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-group 'com.webauthn4j'
-version "${webAuthn4JVersion}"
-
 description = "Package that contains testing classes for WebAuthn4J"
-
-test {
-    useJUnitPlatform()
-}
 
 dependencies {
     implementation project(':webauthn4j-core')
