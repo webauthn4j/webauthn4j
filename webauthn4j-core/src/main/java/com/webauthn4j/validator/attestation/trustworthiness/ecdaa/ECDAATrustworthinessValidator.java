@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 /**
  * Validates the specified {@link AttestationStatement} trustworthiness based on ECDAA algorithm
  */
+@Deprecated
 public interface ECDAATrustworthinessValidator {
 
     void validate(AttestationStatement attestationStatement);

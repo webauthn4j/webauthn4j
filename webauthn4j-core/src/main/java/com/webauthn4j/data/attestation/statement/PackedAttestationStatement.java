@@ -41,7 +41,8 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @JsonProperty
     private final byte[] ecdaaKeyId;
 
-    @JsonCreator
+    @Deprecated
+    @JsonCreator //TODO: this annotation need to be moved to another when this constructor is removed
     public PackedAttestationStatement(
             @JsonProperty("alg") COSEAlgorithmIdentifier alg,
             @JsonProperty("sig") byte[] sig,
@@ -51,6 +52,16 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         this.sig = sig;
         this.x5c = x5c;
         this.ecdaaKeyId = ecdaaKeyId;
+    }
+
+    public PackedAttestationStatement(
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @JsonProperty("sig") byte[] sig,
+            @JsonProperty("x5c") AttestationCertificatePath x5c) {
+        this.alg = alg;
+        this.sig = sig;
+        this.x5c = x5c;
+        this.ecdaaKeyId = null;
     }
 
     public COSEAlgorithmIdentifier getAlg() {
@@ -66,6 +77,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         return x5c;
     }
 
+    @Deprecated
     public byte[] getEcdaaKeyId() {
         return ArrayUtil.clone(ecdaaKeyId);
     }

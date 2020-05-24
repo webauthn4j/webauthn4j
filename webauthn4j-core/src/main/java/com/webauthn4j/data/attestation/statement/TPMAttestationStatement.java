@@ -48,7 +48,24 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     @JsonProperty
     private final TPMTPublic pubArea;
 
-    @JsonCreator
+    public TPMAttestationStatement(
+            @JsonProperty("ver") String ver,
+            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @JsonProperty("sig") byte[] sig,
+            @JsonProperty("certInfo") TPMSAttest certInfo,
+            @JsonProperty("pubArea") TPMTPublic pubArea) {
+        this.ver = ver;
+        this.alg = alg;
+        this.x5c = x5c;
+        this.ecdaaKeyId = null;
+        this.sig = sig;
+        this.certInfo = certInfo;
+        this.pubArea = pubArea;
+    }
+
+    @Deprecated
+    @JsonCreator //TODO: this annotation need to be moved to another when this constructor is removed
     public TPMAttestationStatement(
             @JsonProperty("ver") String ver,
             @JsonProperty("alg") COSEAlgorithmIdentifier alg,
@@ -65,6 +82,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.certInfo = certInfo;
         this.pubArea = pubArea;
     }
+
 
     public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
         this.ver = VERSION_2_0;
@@ -88,6 +106,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         return x5c;
     }
 
+    @Deprecated
     public byte[] getEcdaaKeyId() {
         return ArrayUtil.clone(ecdaaKeyId);
     }

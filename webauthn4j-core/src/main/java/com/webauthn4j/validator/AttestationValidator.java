@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
+import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
@@ -51,6 +52,7 @@ class AttestationValidator {
     // ~ Constructor
     // ========================================================================================================
 
+    @Deprecated
     AttestationValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
@@ -63,6 +65,19 @@ class AttestationValidator {
         this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
+
+    AttestationValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
+    ) {
+        this.attestationStatementValidators = attestationStatementValidators;
+
+        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
+        this.ecdaaTrustworthinessValidator = new DefaultECDAATrustworthinessValidator();
+        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
+    }
+
 
     public void validate(RegistrationObject registrationObject) {
 

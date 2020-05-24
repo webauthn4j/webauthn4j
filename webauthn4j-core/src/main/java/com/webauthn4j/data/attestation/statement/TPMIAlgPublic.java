@@ -25,7 +25,7 @@ public enum TPMIAlgPublic {
     TPM_ALG_RSA(1),
     TPM_ALG_NULL(0x10),
     TPM_ALG_ECDSA(0x18),
-    TPM_ALG_ECDAA(0x1A);
+    @Deprecated TPM_ALG_ECDAA(0x1A);
 
     private final int value;
 
