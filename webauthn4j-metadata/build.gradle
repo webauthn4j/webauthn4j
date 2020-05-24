@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-group 'com.webauthn4j'
-version "${webAuthn4JVersion}"
-
 description = "WebAuthn4J Metadata library"
-
-test {
-    useJUnitPlatform()
-}
 
 dependencies {
     api project(':webauthn4j-core')
