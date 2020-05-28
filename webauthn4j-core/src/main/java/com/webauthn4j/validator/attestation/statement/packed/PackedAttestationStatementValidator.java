@@ -113,6 +113,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
+    @Deprecated
     private AttestationType validateEcdaaKeyId() {
         /// Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
         /// using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).

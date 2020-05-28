@@ -59,6 +59,7 @@ public class RegistrationDataValidator {
 
     private final AttestationValidator attestationValidator;
 
+    @Deprecated
     public RegistrationDataValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
@@ -78,6 +79,24 @@ public class RegistrationDataValidator {
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator);
+    }
+
+    public RegistrationDataValidator(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            List<CustomRegistrationValidator> customRegistrationValidators,
+            ObjectConverter objectConverter) {
+        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
+        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
+        AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+
+        this.attestationValidator = new AttestationValidator(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator);
     }
 

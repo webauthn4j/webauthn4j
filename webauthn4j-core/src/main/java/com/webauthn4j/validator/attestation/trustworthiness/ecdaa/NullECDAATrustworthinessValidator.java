@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 /**
  * Null validator that bypass ECDAA algorithm check
  */
+@Deprecated
 public class NullECDAATrustworthinessValidator implements ECDAATrustworthinessValidator {
     @Override
     public void validate(AttestationStatement attestationStatement) {

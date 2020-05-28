@@ -65,6 +65,7 @@ public class WebAuthnRegistrationManager {
 
     private final RegistrationDataValidator registrationDataValidator;
 
+    @Deprecated
     public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -94,6 +95,7 @@ public class WebAuthnRegistrationManager {
 
     }
 
+    @Deprecated
     public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -109,6 +111,7 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    @Deprecated
     public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -124,6 +127,7 @@ public class WebAuthnRegistrationManager {
         );
     }
 
+    @Deprecated
     public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -136,6 +140,70 @@ public class WebAuthnRegistrationManager {
                 Collections.emptyList()
         );
     }
+
+    public WebAuthnRegistrationManager(
+            List<AttestationStatementValidator> attestationStatementValidators,
+            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            List<CustomRegistrationValidator> customRegistrationValidators,
+            ObjectConverter objectConverter) {
+        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
+        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
+        AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
+
+        registrationDataValidator = new RegistrationDataValidator(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                customRegistrationValidators,
+                objectConverter);
+
+
+        collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+        authenticatorTransportConverter = new AuthenticatorTransportConverter();
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    }
+
+    public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
+                                       CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                                       SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                                       List<CustomRegistrationValidator> customRegistrationValidators) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                customRegistrationValidators,
+                new ObjectConverter()
+        );
+    }
+
+    public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
+                                       CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                                       SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                                       ObjectConverter objectConverter) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                Collections.emptyList(),
+                objectConverter
+        );
+    }
+
+    public WebAuthnRegistrationManager(List<AttestationStatementValidator> attestationStatementValidators,
+                                       CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                                       SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                Collections.emptyList()
+        );
+    }
+
 
     // ~ Factory methods
     // ========================================================================================================

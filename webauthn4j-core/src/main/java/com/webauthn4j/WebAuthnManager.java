@@ -50,6 +50,7 @@ public class WebAuthnManager {
     private final WebAuthnRegistrationManager webAuthnRegistrationManager;
     private final WebAuthnAuthenticationManager webAuthnAuthenticationManager;
 
+    @Deprecated
     public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -70,6 +71,7 @@ public class WebAuthnManager {
                 objectConverter);
     }
 
+    @Deprecated
     public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -87,6 +89,7 @@ public class WebAuthnManager {
         );
     }
 
+    @Deprecated
     public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -103,6 +106,7 @@ public class WebAuthnManager {
         );
     }
 
+    @Deprecated
     public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
                            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
@@ -111,6 +115,65 @@ public class WebAuthnManager {
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 ecdaaTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           List<CustomRegistrationValidator> customRegistrationValidators,
+                           List<CustomAuthenticationValidator> customAuthenticationValidators,
+                           ObjectConverter objectConverter) {
+
+        this.webAuthnRegistrationManager = new WebAuthnRegistrationManager(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                customRegistrationValidators,
+                objectConverter);
+        this.webAuthnAuthenticationManager = new WebAuthnAuthenticationManager(
+                customAuthenticationValidators,
+                objectConverter);
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           List<CustomRegistrationValidator> customRegistrationValidators,
+                           List<CustomAuthenticationValidator> customAuthenticationValidators) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                customRegistrationValidators,
+                customAuthenticationValidators,
+                new ObjectConverter()
+        );
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           ObjectConverter objectConverter) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
+                selfAttestationTrustworthinessValidator,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                objectConverter
+        );
+    }
+
+    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
+                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
+        this(
+                attestationStatementValidators,
+                certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 new ArrayList<>(),
                 new ArrayList<>()

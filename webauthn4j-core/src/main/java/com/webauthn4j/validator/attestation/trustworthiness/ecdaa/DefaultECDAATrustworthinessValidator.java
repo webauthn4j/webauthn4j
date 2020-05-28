@@ -17,13 +17,12 @@
 package com.webauthn4j.validator.attestation.trustworthiness.ecdaa;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 
 /**
  * Default implementation of {@link ECDAATrustworthinessValidator}
  */
-@WIP
+@Deprecated
 public class DefaultECDAATrustworthinessValidator implements ECDAATrustworthinessValidator {
 
     public void validate(AttestationStatement attestationStatement) {
