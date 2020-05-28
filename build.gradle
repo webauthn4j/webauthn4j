@@ -102,8 +102,16 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked"
-        options.compilerArgs << "-Werror"
+        options.compilerArgs << "-Xlint:cast"
+        options.compilerArgs << "-Xlint:classfile"
+        options.compilerArgs << "-Xlint:dep-ann"
+        options.compilerArgs << "-Xlint:divzero"
+        options.compilerArgs << "-Xlint:fallthrough"
+        options.compilerArgs << "-Xlint:overrides"
+        options.compilerArgs << "-Xlint:rawtypes"
+        options.compilerArgs << "-Xlint:static"
         // options.compilerArgs << "-Xlint:deprecation" //TODO: uncomment when deprecated extensions are removed
+        options.compilerArgs << "-Werror"
     }
 
     check.dependsOn dependencyCheckAnalyze
