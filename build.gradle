@@ -124,7 +124,7 @@ subprojects {
         options.compilerArgs << "-Xlint:overrides"
         options.compilerArgs << "-Xlint:rawtypes"
         options.compilerArgs << "-Xlint:static"
-        // options.compilerArgs << "-Xlint:deprecation" //TODO: uncomment when deprecated extensions are removed
+        options.compilerArgs << "-Xlint:deprecation"
         options.compilerArgs << "-Werror"
     }
 

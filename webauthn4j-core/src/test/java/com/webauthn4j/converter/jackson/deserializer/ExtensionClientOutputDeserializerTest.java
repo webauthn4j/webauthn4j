@@ -19,11 +19,11 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.extension.Coordinates;
-import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.extension.client.CredentialPropertiesExtensionClientOutput;
+import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientOutput;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -56,25 +56,11 @@ class ExtensionClientOutputDeserializerTest {
         assertAll(
                 () -> assertThat(extensionOutputs).containsKeys(
                         FIDOAppIDExtensionClientOutput.ID,
-                        CredentialPropertiesExtensionClientOutput.ID,
-                        SimpleTransactionAuthorizationExtensionClientOutput.ID,
-                        GenericTransactionAuthorizationExtensionClientOutput.ID,
-                        AuthenticatorSelectionExtensionClientOutput.ID,
-                        SupportedExtensionsExtensionClientOutput.ID,
-                        UserVerificationIndexExtensionClientOutput.ID,
-                        LocationExtensionClientOutput.ID,
-                        BiometricAuthenticatorPerformanceBoundsExtensionClientOutput.ID
+                        CredentialPropertiesExtensionClientOutput.ID
                 ),
                 () -> assertThat(extensionOutputs).containsValues(
                         new FIDOAppIDExtensionClientOutput(true),
-                        new CredentialPropertiesExtensionClientOutput(new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true)),
-                        new SimpleTransactionAuthorizationExtensionClientOutput("authorization message"),
-                        new GenericTransactionAuthorizationExtensionClientOutput(new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("image/png", null)),
-                        new AuthenticatorSelectionExtensionClientOutput(true),
-                        new SupportedExtensionsExtensionClientOutput(Arrays.asList("exts", "authnSel")),
-                        new UserVerificationIndexExtensionClientOutput(new byte[0]),
-                        new LocationExtensionClientOutput(new Coordinates(0d, 0d, null, 1d, null, null, null)),
-                        new BiometricAuthenticatorPerformanceBoundsExtensionClientOutput(true)
+                        new CredentialPropertiesExtensionClientOutput(new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true))
                 )
         );
     }

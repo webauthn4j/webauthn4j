@@ -34,7 +34,6 @@ import com.webauthn4j.util.WIP;
 import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,12 +122,7 @@ public class ClientPlatform {
         Map<String, RegistrationExtensionClientOutput<?>> map = new HashMap<>();
         extensions.forEach((key, value) -> {
             switch (key) {
-                case SupportedExtensionsExtensionClientInput.ID:
-                    SupportedExtensionsExtensionClientInput clientExtensionInput = (SupportedExtensionsExtensionClientInput) value;
-                    if (clientExtensionInput.getValue()) {
-                        map.put(key, new SupportedExtensionsExtensionClientOutput(Collections.singletonList(SupportedExtensionsExtensionClientInput.ID)));
-                    }
-                    break;
+                //TODO
             }
         });
         return new AuthenticationExtensionsClientOutputs<>(map);

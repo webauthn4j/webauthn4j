@@ -76,11 +76,6 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
 
         // authenticator extension outputs
-        this.registerSubtypes(new NamedType(GenericTransactionAuthorizationExtensionAuthenticatorOutput.class, GenericTransactionAuthorizationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(LocationExtensionAuthenticatorOutput.class, LocationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(SimpleTransactionAuthorizationExtensionAuthenticatorOutput.class, SimpleTransactionAuthorizationExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(SupportedExtensionsExtensionAuthenticatorOutput.class, SupportedExtensionsExtensionAuthenticatorOutput.ID));
-        this.registerSubtypes(new NamedType(UserVerificationIndexExtensionAuthenticatorOutput.class, UserVerificationIndexExtensionAuthenticatorOutput.ID));
 
     }
 
