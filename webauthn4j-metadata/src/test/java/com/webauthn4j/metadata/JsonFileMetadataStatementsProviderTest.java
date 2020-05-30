@@ -21,7 +21,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.exception.UnknownProtocolFamilyException;
 import org.junit.jupiter.api.Test;
 

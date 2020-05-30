@@ -14,30 +14,25 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.data.statement;
 
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.statement.MetadataStatement;
-import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.webauthn4j.data.AbstractImmutableMap;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 
-public interface MetadataItem extends Serializable {
+/**
+ * This descriptor contains description in alternative languages.
+ */
+public class AlternativeDescriptions extends AbstractImmutableMap<String, String> {
 
-    String getAaid();
+    @JsonCreator
+    public AlternativeDescriptions(Map<String, String> map) {
+        super(map);
+    }
 
-    AAGUID getAaguid();
-
-    List<String> getAttestationCertificateKeyIdentifiers();
-
-    String getHash();
-
-    List<StatusReport> getStatusReports();
-
-    LocalDate getTimeOfLastStatusChange();
-
-    MetadataStatement getMetadataStatement();
-
+    public AlternativeDescriptions() {
+        this(Collections.emptyMap());
+    }
 }

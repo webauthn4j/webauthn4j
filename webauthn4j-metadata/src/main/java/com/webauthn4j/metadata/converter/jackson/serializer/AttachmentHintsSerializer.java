@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.metadata.data.statement.AttachmentHint;
-import com.webauthn4j.metadata.data.statement.AttachmentHints;
+import com.webauthn4j.data.statement.AttachmentHint;
+import com.webauthn4j.data.statement.AttachmentHints;
 
 import java.io.IOException;
 

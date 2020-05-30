@@ -41,7 +41,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
-import com.webauthn4j.metadata.data.statement.*;
+import com.webauthn4j.data.statement.*;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.server.ServerProperty;

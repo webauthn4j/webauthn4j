@@ -25,10 +25,10 @@ import com.webauthn4j.metadata.converter.jackson.serializer.AttachmentHintsSeria
 import com.webauthn4j.metadata.converter.jackson.serializer.KeyProtectionsSerializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.MatcherProtectionsSerializer;
 import com.webauthn4j.metadata.converter.jackson.serializer.TransactionConfirmationDisplaysSerializer;
-import com.webauthn4j.metadata.data.statement.AttachmentHints;
-import com.webauthn4j.metadata.data.statement.KeyProtections;
-import com.webauthn4j.metadata.data.statement.MatcherProtections;
-import com.webauthn4j.metadata.data.statement.TransactionConfirmationDisplays;
+import com.webauthn4j.data.statement.AttachmentHints;
+import com.webauthn4j.data.statement.KeyProtections;
+import com.webauthn4j.data.statement.MatcherProtections;
+import com.webauthn4j.data.statement.TransactionConfirmationDisplays;
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 

@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.metadata.data.statement.KeyProtection;
-import com.webauthn4j.metadata.data.statement.KeyProtections;
+import com.webauthn4j.data.KeyProtectionType;
+import com.webauthn4j.data.statement.KeyProtections;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class KeyProtectionsSerializer extends StdSerializer<KeyProtections> {
 
     @Override
     public void serialize(KeyProtections value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(KeyProtection::getValue).reduce(0, Integer::sum);
+        long sum = value.stream().map(KeyProtectionType::getValue).reduce(0, Integer::sum);
         gen.writeNumber(sum);
     }
 }

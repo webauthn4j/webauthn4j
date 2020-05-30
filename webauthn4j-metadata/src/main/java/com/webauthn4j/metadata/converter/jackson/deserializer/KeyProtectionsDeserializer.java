@@ -19,7 +19,7 @@ package com.webauthn4j.metadata.converter.jackson.deserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.webauthn4j.metadata.data.statement.KeyProtections;
+import com.webauthn4j.data.statement.KeyProtections;
 
 import java.io.IOException;
 

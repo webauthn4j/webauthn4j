@@ -23,7 +23,7 @@ import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.MetadataItemImpl;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
+import com.webauthn4j.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayload;
 import com.webauthn4j.metadata.data.toc.MetadataTOCPayloadEntry;
 import com.webauthn4j.metadata.exception.MDSException;
