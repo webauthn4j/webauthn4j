@@ -16,7 +16,10 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 
@@ -38,22 +41,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @JsonProperty
     private final AttestationCertificatePath x5c;
 
-    @JsonProperty
-    private final byte[] ecdaaKeyId;
-
-    @Deprecated
-    @JsonCreator //TODO: this annotation need to be moved to another when this constructor is removed
-    public PackedAttestationStatement(
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @JsonProperty("sig") byte[] sig,
-            @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @JsonProperty("ecdaaKeyId") byte[] ecdaaKeyId) {
-        this.alg = alg;
-        this.sig = sig;
-        this.x5c = x5c;
-        this.ecdaaKeyId = ecdaaKeyId;
-    }
-
     public PackedAttestationStatement(
             @JsonProperty("alg") COSEAlgorithmIdentifier alg,
             @JsonProperty("sig") byte[] sig,
@@ -61,7 +48,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
-        this.ecdaaKeyId = null;
     }
 
     public COSEAlgorithmIdentifier getAlg() {
@@ -75,11 +61,6 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     @Override
     public AttestationCertificatePath getX5c() {
         return x5c;
-    }
-
-    @Deprecated
-    public byte[] getEcdaaKeyId() {
-        return ArrayUtil.clone(ecdaaKeyId);
     }
 
     @JsonIgnore
@@ -100,17 +81,15 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PackedAttestationStatement that = (PackedAttestationStatement) o;
-        return alg == that.alg &&
+        return Objects.equals(alg, that.alg) &&
                 Arrays.equals(sig, that.sig) &&
-                Objects.equals(x5c, that.x5c) &&
-                Arrays.equals(ecdaaKeyId, that.ecdaaKeyId);
+                Objects.equals(x5c, that.x5c);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(alg, x5c);
         result = 31 * result + Arrays.hashCode(sig);
-        result = 31 * result + Arrays.hashCode(ecdaaKeyId);
         return result;
     }
 }

@@ -19,14 +19,10 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import org.junit.jupiter.api.Test;
@@ -38,36 +34,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AttestationValidatorTest {
-
-    @Test
-    void validate_ecdaa(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
-        AttestationStatementValidator attestationStatementValidatorMock = mock(AttestationStatementValidator.class);
-        when(attestationStatementValidatorMock.supports(any())).thenReturn(true);
-        when(attestationStatementValidatorMock.validate(any())).thenReturn(AttestationType.ECDAA);
-
-        AttestationValidator attestationValidator = new AttestationValidator(
-                Collections.singletonList(attestationStatementValidatorMock),
-                new NullCertPathTrustworthinessValidator(),
-                new NullECDAATrustworthinessValidator(),
-                new NullSelfAttestationTrustworthinessValidator());
-
-        RegistrationObject registrationObject = mock(RegistrationObject.class);
-        AttestationObject attestationObject = mock(AttestationObject.class);
-        when(attestationObject.getFormat()).thenReturn(PackedAttestationStatement.FORMAT);
-        when(registrationObject.getAttestationObject()).thenReturn(attestationObject);
-        attestationValidator.validate(registrationObject);
-    }
 
     @Test
     void validateAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
         AttestationValidator attestationValidator = new AttestationValidator(
                 Collections.singletonList(new FIDOU2FAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),
-                new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator());
 
         AttestationObject attestationObject = mock(AttestationObject.class);

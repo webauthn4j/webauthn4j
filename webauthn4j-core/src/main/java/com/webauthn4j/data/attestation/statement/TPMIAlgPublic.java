@@ -24,9 +24,7 @@ public enum TPMIAlgPublic {
     TPM_ALG_ERROR(0),
     TPM_ALG_RSA(1),
     TPM_ALG_NULL(0x10),
-    TPM_ALG_ECDSA(0x18),
-    @Deprecated TPM_ALG_ECDAA(0x1A);
-
+    TPM_ALG_ECDSA(0x18);
     private final int value;
 
     TPMIAlgPublic(int value) {
@@ -42,8 +40,6 @@ public enum TPMIAlgPublic {
             return TPM_ALG_NULL;
         } else if (value == TPM_ALG_ECDSA.value) {
             return TPM_ALG_ECDSA;
-        } else if (value == TPM_ALG_ECDAA.value) {
-            return TPM_ALG_ECDAA;
         } else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }

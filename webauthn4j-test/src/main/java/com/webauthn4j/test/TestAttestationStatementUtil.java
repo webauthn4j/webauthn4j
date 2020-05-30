@@ -39,11 +39,11 @@ public class TestAttestationStatementUtil {
 
     public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         AttestationCertificatePath certPath = TestAttestationUtil.load3tierTestAttestationCertificatePath();
-        return new PackedAttestationStatement(algorithm, signature, certPath, null);
+        return new PackedAttestationStatement(algorithm, signature, certPath);
     }
 
     public static PackedAttestationStatement createSelfPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
-        return new PackedAttestationStatement(algorithm, signature, null, null);
+        return new PackedAttestationStatement(algorithm, signature, null);
     }
 
     public static AndroidKeyAttestationStatement createAndroidKeyAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {

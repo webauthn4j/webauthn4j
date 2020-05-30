@@ -36,7 +36,6 @@ import com.webauthn4j.validator.attestation.statement.none.NoneAttestationStatem
 import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.jupiter.api.Test;
@@ -66,7 +65,6 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
                     fidoU2FAttestationStatementValidator,
                     androidKeyAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
-            new DefaultECDAATrustworthinessValidator(),
             new DefaultSelfAttestationTrustworthinessValidator(),
             objectConverter
     );
