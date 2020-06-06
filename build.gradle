@@ -128,7 +128,6 @@ subprojects {
         options.compilerArgs << "-Werror"
     }
 
-    check.dependsOn dependencyCheckAnalyze
 
     artifacts {
         archives sourcesJar
