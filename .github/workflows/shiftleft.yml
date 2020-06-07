@@ -1,0 +1,30 @@
+# This workflow integrates ShiftLeft Inspect with GitHub
+# Visit https://docs.shiftleft.io for help
+name: Analyze with ShiftLeft Inspect
+
+on: pull_request
+
+jobs:
+  Inspect-webauthn4j-core:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Build with Gradle
+        run: ./gradlew build javadoc asciidoc
+
+      - name: Download ShiftLeft cli
+        run: |
+          curl https://cdn.shiftleft.io/download/sl > ${GITHUB_WORKSPACE}/sl && chmod a+rx ${GITHUB_WORKSPACE}/sl
+
+      - name: Analyze with Inspect
+        run: ${GITHUB_WORKSPACE}/sl analyze --no-diagnostic --force --app webauthn4j-core --tag branch=${GITHUB_REF} --java --cpg webauthn4j-core/build/libs/webauthn4j-core-0.12.1-SNAPSHOT.jar
+        env:
+          SHIFTLEFT_ORG_ID: ${{ secrets.SHIFTLEFT_ORG_ID }}
+          SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
