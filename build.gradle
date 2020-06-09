@@ -18,7 +18,7 @@
 
 buildscript {
 
-    def sonarqubeVersion = "2.8.0.1969"
+    def sonarqubeVersion = "3.0"
     def asciidoctorGradleVersion="1.6.1"
     def artifactoryVersion="4.15.2"
     def bintrayVersion = "1.8.5"
