@@ -41,7 +41,7 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new PackedAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
-        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath, null);
+        return new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, attestationCertificatePath);
     }
 
     @Override

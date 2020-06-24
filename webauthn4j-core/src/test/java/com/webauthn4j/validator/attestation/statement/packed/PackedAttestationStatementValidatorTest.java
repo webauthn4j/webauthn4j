@@ -15,7 +15,6 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -24,10 +23,8 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadSignatureException;
@@ -117,7 +114,7 @@ class PackedAttestationStatementValidatorTest {
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
 
         AttestationCertificatePath x5c = generateCertPath(keyPair, "SHA256withRSA");
-        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature, x5c, null);
+        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.RS256, signature, x5c);
         AttestationObject attestationObject = new AttestationObject(authenticatorData, packedAttestationStatement);
 
         validate(clientData, attestationObject);
@@ -151,22 +148,6 @@ class PackedAttestationStatementValidatorTest {
 
         validate(clientData, attestationObject);
 
-    }
-
-    @Test
-    void validate_with_ecdaaKeyId_test() throws Exception {
-        KeyPair keyPair = ECUtil.createKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
-
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE, new DefaultChallenge(challengeString));
-        byte[] signature = generateSignature("SHA256withECDSA", keyPair, authenticatorData, clientData);
-
-        byte[] ecdaaKeyId = new byte[16];
-        AttestationObject attestationObject = new AttestationObject(authenticatorData, new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature, null, ecdaaKeyId));
-
-        assertThrows(NotImplementedException.class,
-                () -> validate(clientData, attestationObject)
-        );
     }
 
     @Test

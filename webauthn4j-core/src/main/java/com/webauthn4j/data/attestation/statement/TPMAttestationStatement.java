@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -40,8 +39,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     @JsonProperty
     private final AttestationCertificatePath x5c;
     @JsonProperty
-    private byte[] ecdaaKeyId;
-    @JsonProperty
     private final byte[] sig;
     @JsonProperty
     private final TPMSAttest certInfo;
@@ -58,31 +55,10 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.ver = ver;
         this.alg = alg;
         this.x5c = x5c;
-        this.ecdaaKeyId = null;
         this.sig = sig;
         this.certInfo = certInfo;
         this.pubArea = pubArea;
     }
-
-    @Deprecated
-    @JsonCreator //TODO: this annotation need to be moved to another when this constructor is removed
-    public TPMAttestationStatement(
-            @JsonProperty("ver") String ver,
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @JsonProperty("ecdaaKeyId") byte[] ecdaaKeyId,
-            @JsonProperty("sig") byte[] sig,
-            @JsonProperty("certInfo") TPMSAttest certInfo,
-            @JsonProperty("pubArea") TPMTPublic pubArea) {
-        this.ver = ver;
-        this.alg = alg;
-        this.x5c = x5c;
-        this.ecdaaKeyId = ecdaaKeyId;
-        this.sig = sig;
-        this.certInfo = certInfo;
-        this.pubArea = pubArea;
-    }
-
 
     public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
         this.ver = VERSION_2_0;
@@ -106,11 +82,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         return x5c;
     }
 
-    @Deprecated
-    public byte[] getEcdaaKeyId() {
-        return ArrayUtil.clone(ecdaaKeyId);
-    }
-
     public byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
@@ -130,8 +101,8 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
 
     @Override
     public void validate() {
-        if (x5c == null && ecdaaKeyId == null) {
-            throw new ConstraintViolationException("x5c or ecdaaKeyId must be present");
+        if (x5c == null) {
+            throw new ConstraintViolationException("x5c must be present");
         }
     }
 
@@ -143,7 +114,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         return Objects.equals(ver, that.ver) &&
                 Objects.equals(alg, that.alg) &&
                 Objects.equals(x5c, that.x5c) &&
-                Arrays.equals(ecdaaKeyId, that.ecdaaKeyId) &&
                 Arrays.equals(sig, that.sig) &&
                 Objects.equals(certInfo, that.certInfo) &&
                 Objects.equals(pubArea, that.pubArea);
@@ -152,7 +122,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     @Override
     public int hashCode() {
         int result = Objects.hash(ver, alg, x5c, certInfo, pubArea);
-        result = 31 * result + Arrays.hashCode(ecdaaKeyId);
         result = 31 * result + Arrays.hashCode(sig);
         return result;
     }

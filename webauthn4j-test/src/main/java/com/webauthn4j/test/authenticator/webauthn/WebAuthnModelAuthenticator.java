@@ -33,7 +33,6 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
-import com.webauthn4j.data.extension.client.SupportedExtensionsExtensionClientInput;
 import com.webauthn4j.test.CACertificatePath;
 import com.webauthn4j.test.CipherUtil;
 import com.webauthn4j.test.TestAttestationUtil;
@@ -303,9 +302,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         Map<String, RegistrationExtensionAuthenticatorOutput<?>> processedExtensions = new HashMap<>();
         for (Map.Entry<String, RegistrationExtensionClientInput<?>> entry : extensions.entrySet()) {
             String extensionIdentifier = entry.getKey();
-            if (extensionIdentifier.equals(SupportedExtensionsExtensionClientInput.ID)) {
-                processedExtensions.put(SupportedExtensionsExtensionClientInput.ID, new SupportedExtensionsExtensionAuthenticatorOutput(Collections.singletonList("exts")));
-            }
+            //TODO
         }
         return new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions);
     }

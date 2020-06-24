@@ -21,11 +21,13 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.extension.authenticator.SupportedExtensionsExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
+import test.TestExtensionAuthenticatorOutput;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -37,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {
@@ -76,8 +78,7 @@ class AuthenticatorDataConverterTest {
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
         Map<String, RegistrationExtensionAuthenticatorOutput<?>> extensionOutputMap = new HashMap<>();
-        List<String> extension = Collections.singletonList("uvm");
-        SupportedExtensionsExtensionAuthenticatorOutput extensionOutput = new SupportedExtensionsExtensionAuthenticatorOutput(extension);
+        TestExtensionAuthenticatorOutput extensionOutput = new TestExtensionAuthenticatorOutput(true);
         extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData =
                 new AuthenticatorData<>(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
@@ -92,8 +93,7 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getFlags()).isEqualTo(BIT_ED);
         assertThat(result.getSignCount()).isEqualTo(0);
         assertThat(result.getAttestedCredentialData()).isNull();
-        assertThat(result.getExtensions()).containsKeys(SupportedExtensionsExtensionAuthenticatorOutput.ID);
-        assertThat(result.getExtensions()).containsValues(extensionOutput);
+        assertThat(result.getExtensions()).containsKeys(TestExtensionAuthenticatorOutput.ID);
     }
 
     @Test

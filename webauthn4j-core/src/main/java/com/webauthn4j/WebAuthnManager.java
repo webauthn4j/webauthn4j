@@ -32,8 +32,6 @@ import com.webauthn4j.validator.attestation.statement.tpm.NullTPMAttestationStat
 import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
@@ -49,77 +47,6 @@ public class WebAuthnManager {
 
     private final WebAuthnRegistrationManager webAuthnRegistrationManager;
     private final WebAuthnAuthenticationManager webAuthnAuthenticationManager;
-
-    @Deprecated
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           List<CustomRegistrationValidator> customRegistrationValidators,
-                           List<CustomAuthenticationValidator> customAuthenticationValidators,
-                           ObjectConverter objectConverter) {
-
-        this.webAuthnRegistrationManager = new WebAuthnRegistrationManager(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                customRegistrationValidators,
-                objectConverter);
-        this.webAuthnAuthenticationManager = new WebAuthnAuthenticationManager(
-                customAuthenticationValidators,
-                objectConverter);
-    }
-
-    @Deprecated
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           List<CustomRegistrationValidator> customRegistrationValidators,
-                           List<CustomAuthenticationValidator> customAuthenticationValidators) {
-        this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                customRegistrationValidators,
-                customAuthenticationValidators,
-                new ObjectConverter()
-        );
-    }
-
-    @Deprecated
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           ObjectConverter objectConverter) {
-        this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                new ArrayList<>(),
-                new ArrayList<>(),
-                objectConverter
-        );
-    }
-
-    @Deprecated
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
-        this(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator,
-                new ArrayList<>(),
-                new ArrayList<>()
-        );
-    }
 
     public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
                            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
@@ -210,7 +137,6 @@ public class WebAuthnManager {
                         new NullAndroidSafetyNetAttestationStatementValidator()
                 ),
                 new NullCertPathTrustworthinessValidator(),
-                new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
                 objectConverter
         );

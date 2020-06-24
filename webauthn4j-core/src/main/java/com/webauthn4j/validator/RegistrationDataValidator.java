@@ -32,7 +32,6 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
@@ -58,29 +57,6 @@ public class RegistrationDataValidator {
     private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
 
     private final AttestationValidator attestationValidator;
-
-    @Deprecated
-    public RegistrationDataValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            List<CustomRegistrationValidator> customRegistrationValidators,
-            ObjectConverter objectConverter
-    ) {
-        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
-        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
-        AssertUtil.notNull(ecdaaTrustworthinessValidator, "ecdaaTrustworthinessValidator must not be null");
-        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
-        AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
-        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
-
-        this.attestationValidator = new AttestationValidator(
-                attestationStatementValidators,
-                certPathTrustworthinessValidator,
-                ecdaaTrustworthinessValidator,
-                selfAttestationTrustworthinessValidator);
-    }
 
     public RegistrationDataValidator(
             List<AttestationStatementValidator> attestationStatementValidators,

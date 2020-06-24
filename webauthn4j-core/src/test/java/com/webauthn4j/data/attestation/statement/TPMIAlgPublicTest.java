@@ -36,8 +36,7 @@ class TPMIAlgPublicTest {
                 () -> assertThat(TPMIAlgPublic.create(0x0)).isEqualTo(TPMIAlgPublic.TPM_ALG_ERROR),
                 () -> assertThat(TPMIAlgPublic.create(0x1)).isEqualTo(TPMIAlgPublic.TPM_ALG_RSA),
                 () -> assertThat(TPMIAlgPublic.create(0x10)).isEqualTo(TPMIAlgPublic.TPM_ALG_NULL),
-                () -> assertThat(TPMIAlgPublic.create(0x18)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA),
-                () -> assertThat(TPMIAlgPublic.create(0x1A)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDAA)
+                () -> assertThat(TPMIAlgPublic.create(0x18)).isEqualTo(TPMIAlgPublic.TPM_ALG_ECDSA)
         );
     }
 

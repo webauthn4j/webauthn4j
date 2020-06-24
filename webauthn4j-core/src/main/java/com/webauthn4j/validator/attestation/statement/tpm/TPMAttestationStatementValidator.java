@@ -24,7 +24,6 @@ import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -117,13 +116,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             validateX5c(attestationStatement, certInfo, authenticatorData);
             /// If successful, return implementation-specific values representing attestation type AttCA and attestation trust path x5c.
             return AttestationType.ATT_CA;
-        }
-        //If ecdaaKeyId is present, then the attestation type is ECDAA.
-        if (attestationStatement.getEcdaaKeyId() != null) {
-            /// Perform ECDAA-Verify on sig to verify that it is a valid signature over certInfo (see  [FIDOEcdaaAlgorithm]).
-            /// If successful, return implementation-specific values representing attestation type ECDAA and attestation trust path ecdaaKeyId.
-            throw new NotImplementedException();
-            // When it is implemented, `AttestationType.ECDAA` is to be returned.
         }
         throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }

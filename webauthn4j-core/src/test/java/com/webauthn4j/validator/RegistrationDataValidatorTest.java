@@ -26,7 +26,6 @@ import com.webauthn4j.validator.attestation.statement.packed.NullPackedAttestati
 import com.webauthn4j.validator.attestation.statement.tpm.NullTPMAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.NullECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
@@ -56,7 +55,6 @@ class RegistrationDataValidatorTest {
                 new NullAndroidSafetyNetAttestationStatementValidator()
         ),
                 new NullCertPathTrustworthinessValidator(),
-                new NullECDAATrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
                 Collections.emptyList(),
                 objectConverter);

@@ -27,11 +27,10 @@ class AuthenticationExtensionsClientOutputsTest {
 
     @Test
     void instance_can_store_concrete_extension_test() {
-        GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg value = new GenericTransactionAuthorizationExtensionClientOutput.TxAuthnGenericArg("dummy", new byte[32]);
-        GenericTransactionAuthorizationExtensionClientOutput genericTransactionAuthorizationExtensionClientOutput = new GenericTransactionAuthorizationExtensionClientOutput(value);
+        FIDOAppIDExtensionClientOutput fidoAppIDExtensionClientOutput = new FIDOAppIDExtensionClientOutput(true);
         assertThatCode(() -> {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions =
-                    new AuthenticationExtensionsClientOutputs<>(Collections.singletonMap(GenericTransactionAuthorizationExtensionClientOutput.ID, genericTransactionAuthorizationExtensionClientOutput));
+                    new AuthenticationExtensionsClientOutputs<>(Collections.singletonMap(FIDOAppIDExtensionClientOutput.ID, fidoAppIDExtensionClientOutput));
             assertThat(clientExtensions.size()).isEqualTo(1);
         }).doesNotThrowAnyException();
     }

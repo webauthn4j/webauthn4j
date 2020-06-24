@@ -25,7 +25,6 @@ import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
-import com.webauthn4j.util.exception.NotImplementedException;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAlgorithmException;
@@ -57,15 +56,11 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         byte[] sig = attestationStatement.getSig();
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
-        // If x5c is present, this indicates that the attestation type is not ECDAA. In this case:
+        // If x5c is present,
         if (attestationStatement.getX5c() != null) {
             return validateX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
-        // If ecdaaKeyId is present, then the attestation type is ECDAA. In this case:
-        else if (attestationStatement.getEcdaaKeyId() != null) {
-            return validateEcdaaKeyId();
-        }
-        // If neither x5c nor ecdaaKeyId is present, self attestation is in use.
+        // If x5c is not present, self attestation is in use.
         else {
             return validateSelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
@@ -111,15 +106,6 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    @Deprecated
-    private AttestationType validateEcdaaKeyId() {
-        /// Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash
-        /// using ECDAA-Verify with ECDAA-Issuer public key identified by ecdaaKeyId (see [FIDOEcdaaAlgorithm]).
-        throw new NotImplementedException();
-        /// If successful, return attestation type ECDAA and attestation trust path ecdaaKeyId.
-        // When it is implemented, `AttestationType.ECDAA` is to be returned.
     }
 
     private AttestationType validateSelfAttestation(RegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {

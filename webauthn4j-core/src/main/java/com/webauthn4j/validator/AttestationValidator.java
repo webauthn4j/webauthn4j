@@ -24,8 +24,6 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.DefaultECDAATrustworthinessValidator;
-import com.webauthn4j.validator.attestation.trustworthiness.ecdaa.ECDAATrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -46,26 +44,11 @@ class AttestationValidator {
     private final List<AttestationStatementValidator> attestationStatementValidators;
 
     private final CertPathTrustworthinessValidator certPathTrustworthinessValidator;
-    private final ECDAATrustworthinessValidator ecdaaTrustworthinessValidator;
     private final SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator;
 
     // ~ Constructor
     // ========================================================================================================
 
-    @Deprecated
-    AttestationValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            ECDAATrustworthinessValidator ecdaaTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
-    ) {
-        this.attestationStatementValidators = attestationStatementValidators;
-
-        this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
-        this.ecdaaTrustworthinessValidator = ecdaaTrustworthinessValidator;
-        this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
-    }
-
     AttestationValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
@@ -74,7 +57,6 @@ class AttestationValidator {
         this.attestationStatementValidators = attestationStatementValidators;
 
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
-        this.ecdaaTrustworthinessValidator = new DefaultECDAATrustworthinessValidator();
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
 
@@ -119,11 +101,6 @@ class AttestationValidator {
                 }
                 break;
 
-            // If ECDAA was used, verify that the identifier of the ECDAA-Issuer public key used is included in the set of
-            // acceptable trust anchors obtained in step 15.
-            case ECDAA:
-                ecdaaTrustworthinessValidator.validate(attestationStatement);
-                break;
             // Otherwise, use the X.509 certificates returned by the verification procedure to verify that
             // the attestation public key correctly chains up to an acceptable root certificate.
             case BASIC:
