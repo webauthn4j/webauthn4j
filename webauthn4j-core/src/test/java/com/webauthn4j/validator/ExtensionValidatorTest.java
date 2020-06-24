@@ -69,11 +69,12 @@ class ExtensionValidatorTest {
     void unexpected_authenticator_extension_does_exist_test() {
         AuthenticationExtensionsClientOutputs<ExtensionClientOutput<?>> clientOutputs = new AuthenticationExtensionsClientOutputs<>();
         Map<String, ExtensionAuthenticatorOutput<?>> authenticatorOutputsSource = new HashMap<>();
+        List<String> expectedExtensionIdentifiers = Collections.emptyList();
         authenticatorOutputsSource.put(TestExtensionAuthenticatorOutput.ID,
                 new TestExtensionAuthenticatorOutput(true));
         AuthenticationExtensionsAuthenticatorOutputs<ExtensionAuthenticatorOutput<?>> authenticatorOutputs = new AuthenticationExtensionsAuthenticatorOutputs<>(authenticatorOutputsSource);
         assertThrows(UnexpectedExtensionException.class,
-                () -> extensionValidator.validate(clientOutputs, authenticatorOutputs, Collections.emptyList())
+                () -> extensionValidator.validate(clientOutputs, authenticatorOutputs, expectedExtensionIdentifiers)
         );
     }
 
