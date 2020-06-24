@@ -25,7 +25,9 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 import test.TestExtensionAuthenticatorOutput;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -37,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class AuthenticatorDataConverterTest {
 
-    private final ObjectConverter objectConverter = new ObjectConverter();
+    private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {
@@ -92,7 +94,6 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getSignCount()).isEqualTo(0);
         assertThat(result.getAttestedCredentialData()).isNull();
         assertThat(result.getExtensions()).containsKeys(TestExtensionAuthenticatorOutput.ID);
-        assertThat(result.getExtensions()).containsValues(extensionOutput);
     }
 
     @Test
