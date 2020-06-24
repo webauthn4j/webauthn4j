@@ -78,7 +78,7 @@ public class AuthenticatorDataConverter {
      * @param <T> extension type
      * @return the converted byte array
      */
-    public <T extends ExtensionAuthenticatorOutput<?>> byte[] convert(AuthenticatorData<T> source) {
+    public <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticatorData<T> source) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] rpIdHash = source.getRpIdHash();
@@ -102,7 +102,7 @@ public class AuthenticatorDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public <T extends ExtensionAuthenticatorOutput<?>> AuthenticatorData<T> convert(byte[] source) {
+    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] source) {
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(source);
 
@@ -134,7 +134,7 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    private <T extends ExtensionAuthenticatorOutput<?>> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
+    private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
@@ -179,8 +179,8 @@ public class AuthenticatorDataConverter {
     }
 
 
-    <T extends ExtensionAuthenticatorOutput<?>> byte[] convert(AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
-        if (extensions == null || extensions.isEmpty()) {
+    <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
+        if (extensions == null || extensions.getKeys().isEmpty()) {
             return new byte[0];
         } else {
             return cborConverter.writeValueAsBytes(extensions);

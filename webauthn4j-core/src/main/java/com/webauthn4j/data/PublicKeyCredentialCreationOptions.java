@@ -48,7 +48,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private final List<PublicKeyCredentialDescriptor> excludeCredentials;
     private final AuthenticatorSelectionCriteria authenticatorSelection;
     private final AttestationConveyancePreference attestation;
-    private final AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions;
+    private final AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
 
     @SuppressWarnings("squid:S00107")
     @JsonCreator
@@ -61,7 +61,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
             @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
             @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
             @JsonProperty("attestation") AttestationConveyancePreference attestation,
-            @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions) {
+            @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
@@ -113,7 +113,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         return attestation;
     }
 
-    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> getExtensions() {
+    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> getExtensions() {
         return extensions;
     }
 

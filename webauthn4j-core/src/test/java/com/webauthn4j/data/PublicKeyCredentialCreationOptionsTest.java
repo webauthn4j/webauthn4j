@@ -49,7 +49,7 @@ class PublicKeyCredentialCreationOptionsTest {
                         true,
                         UserVerificationRequirement.REQUIRED);
         AttestationConveyancePreference attestation = AttestationConveyancePreference.DIRECT;
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 rp,
                 user,

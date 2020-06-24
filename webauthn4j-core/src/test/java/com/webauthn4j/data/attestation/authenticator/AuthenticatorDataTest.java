@@ -31,10 +31,10 @@ class AuthenticatorDataTest {
 
     @Test
     void flag_operation_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> target1 = new AuthenticatorData<>(null, BIT_UP, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> target2 = new AuthenticatorData<>(null, BIT_UV, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> target3 = new AuthenticatorData<>(null, BIT_AT, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> target4 = new AuthenticatorData<>(null, BIT_ED, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target1 = new AuthenticatorData<>(null, BIT_UP, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target2 = new AuthenticatorData<>(null, BIT_UV, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target3 = new AuthenticatorData<>(null, BIT_AT, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target4 = new AuthenticatorData<>(null, BIT_ED, 0);
 
         assertAll(
                 () -> assertThat(target1.isFlagUP()).isTrue(),
@@ -61,29 +61,29 @@ class AuthenticatorDataTest {
 
     @Test
     void equals_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceA = TestDataUtil.createAuthenticatorData();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceB = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceA = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceB = TestDataUtil.createAuthenticatorData();
         assertThat(instanceA).isEqualTo(instanceB);
     }
 
     @Test
     void equals_test_with_not_equal_data() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceA = new AuthenticatorData<>(new byte[32], BIT_UP, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceB = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceA = new AuthenticatorData<>(new byte[32], BIT_UP, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceB = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
         assertThat(instanceA).isNotEqualTo(instanceB);
     }
 
     @Test
     void hashCode_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceA = TestDataUtil.createAuthenticatorData();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceB = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceA = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceB = TestDataUtil.createAuthenticatorData();
         assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
     }
 
     @Test
     void hashCode_test_with_not_equal_data() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceA = new AuthenticatorData<>(new byte[32], BIT_UP, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> instanceB = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceA = new AuthenticatorData<>(new byte[32], BIT_UP, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceB = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
         assertThat(instanceA.hashCode()).isNotEqualTo(instanceB.hashCode());
     }
 }

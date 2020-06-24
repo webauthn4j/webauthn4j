@@ -19,15 +19,14 @@ package com.webauthn4j.converter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
-import test.TestExtensionAuthenticatorOutput;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_UP;
@@ -48,7 +47,7 @@ class AuthenticatorDataConverterTest {
         String input = "SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2MBAAABRQ";
 
         //When
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> result = new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input));
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(Base64UrlUtil.decode(input));
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -56,7 +55,7 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getFlags()).isEqualTo(BIT_UP);
         assertThat(result.getSignCount()).isEqualTo(325);
         assertThat(result.getAttestedCredentialData()).isNull();
-        assertThat(result.getExtensions()).isEmpty();
+        assertThat(result.getExtensions().getKeys()).isEmpty();
     }
 
     @Test
@@ -77,15 +76,14 @@ class AuthenticatorDataConverterTest {
         //Given
         byte[] rpIdHash = new byte[32];
         byte flags = BIT_ED;
-        Map<String, RegistrationExtensionAuthenticatorOutput<?>> extensionOutputMap = new HashMap<>();
-        TestExtensionAuthenticatorOutput extensionOutput = new TestExtensionAuthenticatorOutput(true);
-        extensionOutputMap.put(extensionOutput.getIdentifier(), extensionOutput);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData =
-                new AuthenticatorData<>(rpIdHash, flags, 0, new AuthenticationExtensionsAuthenticatorOutputs<>(extensionOutputMap));
+        AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
+        builder.setUvm(new UvmEntries());
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
+                new AuthenticatorData<>(rpIdHash, flags, 0, builder.build());
 
         //When
         byte[] serialized = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> result = new AuthenticatorDataConverter(objectConverter).convert(serialized);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> result = new AuthenticatorDataConverter(objectConverter).convert(serialized);
 
         //Then
         assertThat(result.getRpIdHash()).isNotNull();
@@ -93,7 +91,7 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getFlags()).isEqualTo(BIT_ED);
         assertThat(result.getSignCount()).isEqualTo(0);
         assertThat(result.getAttestedCredentialData()).isNull();
-        assertThat(result.getExtensions()).containsKeys(TestExtensionAuthenticatorOutput.ID);
+        assertThat(result.getExtensions().getKeys()).contains(UserVerificationMethodExtensionAuthenticatorOutput.ID);
     }
 
     @Test

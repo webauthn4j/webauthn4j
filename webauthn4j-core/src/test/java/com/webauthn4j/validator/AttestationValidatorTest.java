@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 class AttestationValidatorTest {
 
     @Test
-    void validateAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    void validateAAGUID(@Mock(answer = Answers.RETURNS_DEEP_STUBS) AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         AttestationValidator attestationValidator = new AttestationValidator(
                 Collections.singletonList(new FIDOU2FAttestationStatementValidator()),
                 new NullCertPathTrustworthinessValidator(),

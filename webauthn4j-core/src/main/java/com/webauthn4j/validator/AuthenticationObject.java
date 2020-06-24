@@ -22,11 +22,11 @@ public class AuthenticationObject {
     // ================================================================================================
 
     private final byte[] credentialId;
-    private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData;
+    private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
     private final byte[] authenticatorDataBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
-    private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
     private final ServerProperty serverProperty;
 
     private final Authenticator authenticator;
@@ -34,11 +34,11 @@ public class AuthenticationObject {
     @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
             byte[] credentialId,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData,
+            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
             byte[] authenticatorDataBytes,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions,
+            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty,
             Authenticator authenticator) {
         this.credentialId = ArrayUtil.clone(credentialId);
@@ -55,7 +55,7 @@ public class AuthenticationObject {
         return ArrayUtil.clone(credentialId);
     }
 
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> getAuthenticatorData() {
+    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
@@ -71,7 +71,7 @@ public class AuthenticationObject {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return this.clientExtensions;
     }
 

@@ -18,10 +18,11 @@ package com.webauthn4j.data.extension;
 
 import java.io.Serializable;
 
-public interface ExtensionOutput<T> extends Serializable {
+public interface ExtensionOutput extends Serializable {
     String getIdentifier();
+
+    Object getValue(String key);
 
     void validate();
 
-    T getValue();
 }

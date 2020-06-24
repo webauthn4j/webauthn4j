@@ -88,7 +88,7 @@ public class RegistrationDataValidator {
         CollectedClientData collectedClientData = registrationData.getCollectedClientData();
         AttestationObject attestationObject = registrationData.getAttestationObject();
         Set<AuthenticatorTransport> transports = registrationData.getTransports();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions = registrationData.getClientExtensions();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = registrationData.getClientExtensions();
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
@@ -104,7 +104,7 @@ public class RegistrationDataValidator {
                 serverProperty
         );
 
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = attestationObject.getAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
 
         //spec| Step3
         //spec| Verify that the value of C.type is webauthn.create.
@@ -148,7 +148,7 @@ public class RegistrationDataValidator {
         //spec| values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput<?>> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationParameters.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
@@ -176,14 +176,14 @@ public class RegistrationDataValidator {
         }
     }
 
-    void validateAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    void validateAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
         }
     }
 
-    void validateUVUPFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
+    void validateUVUPFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
         //spec| Step10
         //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {

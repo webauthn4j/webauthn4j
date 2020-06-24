@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * Jackson Serializer for {@link AuthenticatorData}
  */
-public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData<? extends ExtensionAuthenticatorInput<?>>> {
+public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData<? extends ExtensionAuthenticatorInput>> {
 
     private final ObjectConverter objectConverter;
 
@@ -46,7 +46,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      * {@inheritDoc}
      */
     @Override
-    public void serialize(AuthenticatorData<? extends ExtensionAuthenticatorInput<?>> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(AuthenticatorData<? extends ExtensionAuthenticatorInput> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         gen.writeBinary(new AuthenticatorDataConverter(objectConverter).convert(value));
     }
 

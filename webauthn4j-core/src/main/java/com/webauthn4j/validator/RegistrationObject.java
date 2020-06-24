@@ -48,7 +48,7 @@ public class RegistrationObject {
     private final byte[] attestationObjectBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
-    private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions;
+    private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
     private final Set<AuthenticatorTransport> transports;
     private final ServerProperty serverProperty;
     private final LocalDateTime timestamp;
@@ -61,7 +61,7 @@ public class RegistrationObject {
             byte[] attestationObjectBytes,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions,
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports,
             ServerProperty serverProperty,
             LocalDateTime timestamp) {
@@ -81,7 +81,7 @@ public class RegistrationObject {
             byte[] attestationObjectBytes,
             CollectedClientData collectedClientData,
             byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> clientExtensions,
+            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports,
             ServerProperty serverProperty) {
 
@@ -111,7 +111,7 @@ public class RegistrationObject {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 

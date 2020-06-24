@@ -16,17 +16,25 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CredentialPropertiesExtensionClientInputTest {
 
     @Test
-    void test(){
+    void validate_test(){
         CredentialPropertiesExtensionClientInput target = new CredentialPropertiesExtensionClientInput(true);
-        assertThat(target.getValue()).isTrue();
-        assertThat(target.getIdentifier()).isEqualTo(CredentialPropertiesExtensionClientInput.ID);
+        assertThatCode(target::validate).doesNotThrowAnyException();
     }
+
+    @Test
+    void validate_invalid_data_test(){
+        CredentialPropertiesExtensionClientInput target = new CredentialPropertiesExtensionClientInput(null);
+        assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
+    }
+
 
 }

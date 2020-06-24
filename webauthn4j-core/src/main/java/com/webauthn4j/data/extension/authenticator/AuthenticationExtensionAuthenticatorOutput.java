@@ -16,5 +16,5 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-public interface AuthenticationExtensionAuthenticatorOutput<T> extends ExtensionAuthenticatorOutput<T> {
+public interface AuthenticationExtensionAuthenticatorOutput extends ExtensionAuthenticatorOutput {
 }

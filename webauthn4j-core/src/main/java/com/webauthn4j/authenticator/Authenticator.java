@@ -76,7 +76,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the client extensions
      */
-    default Map<String, RegistrationExtensionClientOutput<?>> getClientExtensions() {
+    default Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
         return null;
     }
 
@@ -85,7 +85,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the authenticator extensions
      */
-    default Map<String, RegistrationExtensionAuthenticatorOutput<?>> getAuthenticatorExtensions() {
+    default Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return null;
     }
 

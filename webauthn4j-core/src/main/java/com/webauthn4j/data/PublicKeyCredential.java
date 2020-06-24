@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
  */
-public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput<?>> implements Serializable {
+public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput> implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================

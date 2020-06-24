@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * Jackson Serializer for {@link AuthenticationExtensionsAuthenticatorOutputsEnvelope}
  */
-public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput<?>>> {
+public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer extends StdDeserializer<AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput>> {
 
     public AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer() {
         super(AuthenticationExtensionsAuthenticatorOutputsEnvelope.class);
@@ -39,9 +39,9 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
      * {@inheritDoc}
      */
     @Override
-    public AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput<?>> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         JavaType javaType = SimpleType.constructUnsafe(AuthenticationExtensionsAuthenticatorOutputs.class);
-        AuthenticationExtensionsAuthenticatorOutputs<? extends ExtensionAuthenticatorOutput<?>> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, javaType);
+        AuthenticationExtensionsAuthenticatorOutputs<? extends ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, javaType);
         int length = (int) p.getCurrentLocation().getByteOffset();
         return new AuthenticationExtensionsAuthenticatorOutputsEnvelope<>(authenticationExtensionsAuthenticatorOutputs, length);
     }

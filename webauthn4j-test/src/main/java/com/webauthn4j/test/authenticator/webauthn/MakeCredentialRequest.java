@@ -37,7 +37,7 @@ public class MakeCredentialRequest {
     private boolean requireUserVerification;
     private List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs;
     private List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList;
-    private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions;
+    private AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
 
     public MakeCredentialRequest(
             byte[] hash,
@@ -48,7 +48,7 @@ public class MakeCredentialRequest {
             boolean requireUserVerification,
             List<PublicKeyCredentialParameters> credTypesAndPublicKeyAlgs,
             List<PublicKeyCredentialDescriptor> excludeCredentialDescriptorList,
-            AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions) {
+            AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
 
         AssertUtil.notNull(credTypesAndPublicKeyAlgs, "credTypesAndPublicKeyAlgs must not be null");
 
@@ -154,11 +154,11 @@ public class MakeCredentialRequest {
         this.excludeCredentialDescriptorList = excludeCredentialDescriptorList;
     }
 
-    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> getExtensions() {
+    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> getExtensions() {
         return extensions;
     }
 
-    public void setExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions) {
+    public void setExtensions(AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
         this.extensions = extensions;
     }
 }

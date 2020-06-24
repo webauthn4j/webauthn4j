@@ -36,7 +36,7 @@ public class AttestationObject implements Serializable {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")
-    private final AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData;
+    private final AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData;
 
     @JsonProperty("attStmt")
     @JsonTypeInfo(
@@ -48,13 +48,13 @@ public class AttestationObject implements Serializable {
 
     @JsonCreator
     public AttestationObject(
-            @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData,
+            @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
             @JsonProperty("attStmt") AttestationStatement attestationStatement) {
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
     }
 
-    public AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> getAuthenticatorData() {
+    public AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 

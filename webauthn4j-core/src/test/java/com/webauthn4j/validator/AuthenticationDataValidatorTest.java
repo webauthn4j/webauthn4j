@@ -36,7 +36,7 @@ class AuthenticationDataValidatorTest {
     private final AuthenticationDataValidator target = new AuthenticationDataValidator();
 
     @Test
-    void validateAuthenticatorData_with_non_null_AttestedCredentialData(@Mock AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    void validateAuthenticatorData_with_non_null_AttestedCredentialData(@Mock AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         AttestedCredentialData attestedCredentialData = mock(AttestedCredentialData.class);
         when(authenticatorData.getAttestedCredentialData()).thenReturn(attestedCredentialData);
         assertThatThrownBy(() -> target.validateAuthenticatorData(authenticatorData)).isInstanceOf(ConstraintViolationException.class);
