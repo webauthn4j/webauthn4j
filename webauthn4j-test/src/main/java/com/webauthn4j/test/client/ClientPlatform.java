@@ -122,7 +122,11 @@ public class ClientPlatform {
         Map<String, RegistrationExtensionClientOutput<?>> map = new HashMap<>();
         extensions.forEach((key, value) -> {
             switch (key) {
-                //TODO
+                case CredentialPropertiesExtensionClientInput.ID:
+                    map.put(CredentialPropertiesExtensionClientOutput.ID, new CredentialPropertiesExtensionClientOutput(new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true))); //TODO
+                    break;
+                default:
+                    //nop
             }
         });
         return new AuthenticationExtensionsClientOutputs<>(map);
