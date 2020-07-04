@@ -1,3 +1,5 @@
+import org.asciidoctor.gradle.jvm.AsciidoctorTask
+
 /*
  * Copyright 2018 the original author or authors.
  *
@@ -19,7 +21,7 @@
 buildscript {
 
     def sonarqubeVersion = "3.0"
-    def asciidoctorGradleVersion="1.6.1"
+    def asciidoctorGradleVersion="3.2.0"
     def artifactoryVersion="4.16.0"
     def bintrayVersion = "1.8.5"
     def owaspDependencyCheckVersion = "5.3.2.1"
@@ -28,10 +30,14 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
+
     dependencies {
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubeVersion")
-        classpath("org.asciidoctor:asciidoctor-gradle-plugin:$asciidoctorGradleVersion")
+        classpath("org.asciidoctor:asciidoctor-gradle-jvm:$asciidoctorGradleVersion")
         classpath("org.jfrog.buildinfo:build-info-extractor-gradle:$artifactoryVersion")
         classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
         classpath("org.owasp:dependency-check-gradle:$owaspDependencyCheckVersion")
@@ -39,11 +45,20 @@ buildscript {
     }
 }
 
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'org.sonarqube'
 apply plugin: 'com.jfrog.artifactory'
-apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'org.asciidoctor.jvm.convert'
 apply plugin: 'org.owasp.dependencycheck'
+
 
 allprojects {
     group 'com.webauthn4j'
@@ -287,20 +302,32 @@ task generateReleaseNote(type: JavaExec) {
 
 }
 
-asciidoctorj {
-    version = "1.6.2"
+task generateReferenceJA (type: AsciidoctorTask) {
+    group = "documentation"
+    baseDirFollowsSourceDir()
+    sourceDir = file("docs/src/reference/asciidoc/ja")
+    outputDir = file("build/docs/asciidoc/html5/ja")
+    options eruby: 'erubis'
+    //noinspection GroovyAssignabilityCheck
+    attributes docinfo: '',
+            copycss: '',
+            icons: 'font',
+            'source-highlighter': 'prettify',
+            sectanchors: '',
+            toc2: '',
+            idprefix: '',
+            idseparator: '-',
+            doctype: 'book',
+            numbered: '',
+            revnumber: "${webAuthn4JVersion}"
 }
 
-asciidoctor {
-    sourceDir = file("docs/src/reference/asciidoc")
-//  backends = ['docbook5']
-    resources {
-        from(sourceDir) {
-            include '*/images/**'
-        }
-    }
+task generateReferenceEN (type: AsciidoctorTask) {
+    group = "documentation"
+    baseDirFollowsSourceDir()
+    sourceDir = file("docs/src/reference/asciidoc/en")
+    outputDir = file("build/docs/asciidoc/html5/en")
     options eruby: 'erubis'
-
     //noinspection GroovyAssignabilityCheck
     attributes docinfo: '',
             copycss: '',

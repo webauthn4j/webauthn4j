@@ -17,7 +17,7 @@ cache:
 script:
   # unshallow git repository
   - 'git fetch --unshallow --quiet'
-  - './gradlew check javadoc asciidoc'
+  - './gradlew check javadoc generateReferenceEN generateReferenceJA'
 deploy:
   - provider: pages
     skip-cleanup: true
