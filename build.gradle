@@ -279,7 +279,7 @@ subprojects {
     }
 }
 
-check.dependsOn dependencyCheckAggregate
+// check.dependsOn dependencyCheckAggregate
 
 task updateVersionsInDocuments() {
     group = "documentation"
