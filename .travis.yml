@@ -23,7 +23,7 @@ deploy:
     skip-cleanup: true
     github-token: $GITHUB_TOKEN
     keep-history: true
-    local-dir: build/asciidoc/html5
+    local-dir: build/docs/asciidoc/html5
     target-branch: gh-pages
     on:
       branch: master
