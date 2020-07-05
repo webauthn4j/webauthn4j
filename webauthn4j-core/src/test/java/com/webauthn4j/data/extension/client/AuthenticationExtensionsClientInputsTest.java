@@ -16,29 +16,32 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsClientInputsTest {
+
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void registration_variant_test() {
         AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
         builder.setCredProps(true);
         builder.setUvm(true);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", 1);
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm", "unknown");
 
         assertThat(target.getAppid()).isNull();
         assertThat(target.getAppidExclude()).isNull();
         assertThat(target.getUvm()).isTrue();
         assertThat(target.getCredProps()).isTrue();
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getValue("unknown")).isEqualTo(1);
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat(target.getValue("appid")).isNull();
         assertThat(target.getValue("appidExclude")).isNull();
@@ -60,16 +63,17 @@ class AuthenticationExtensionsClientInputsTest {
         builder.setAppid("dummyAppid");
         builder.setAppidExclude("dummyAppidExclude");
         builder.setUvm(true);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", 1);
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "appidExclude", "uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "appidExclude", "uvm", "unknown");
 
         assertThat(target.getAppid()).isEqualTo("dummyAppid");
         assertThat(target.getAppidExclude()).isEqualTo("dummyAppidExclude");
         assertThat(target.getUvm()).isTrue();
         assertThat(target.getCredProps()).isNull();
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getValue("unknown")).isEqualTo(1);
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat(target.getValue("appid")).isEqualTo("dummyAppid");
         assertThat(target.getValue("appidExclude")).isEqualTo("dummyAppidExclude");
@@ -95,18 +99,34 @@ class AuthenticationExtensionsClientInputsTest {
         builder1.setAppid("dummyAppid");
         builder1.setAppidExclude("dummyAppidExclude");
         builder1.setUvm(true);
-        builder1.setUnknowns(new HashMap<>());
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance1 = builder1.build();
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder2 = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder2.setAppid("dummyAppid");
         builder2.setAppidExclude("dummyAppidExclude");
         builder2.setUvm(true);
-        builder2.setUnknowns(new HashMap<>());
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance2 = builder2.build();
 
         assertThat(instance1)
                 .isEqualTo(instance2)
                 .hasSameHashCodeAs(instance2);
+    }
+
+    @Test
+    void serialize_test(){
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.setAppid("dummyAppid");
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> authenticationExtensions = builder.build();
+        String json = jsonConverter.writeValueAsString(authenticationExtensions);
+        assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
+    }
+
+    @Test
+    void serialize_set_known_extension_through_set_method_test(){
+        AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
+        builder.set("appid", "dummyAppid");
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> authenticationExtensions = builder.build();
+        String json = jsonConverter.writeValueAsString(authenticationExtensions);
+        assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
     }
 
 }

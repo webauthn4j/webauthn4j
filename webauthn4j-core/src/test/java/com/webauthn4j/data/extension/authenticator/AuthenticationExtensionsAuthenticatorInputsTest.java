@@ -19,8 +19,6 @@ package com.webauthn4j.data.extension.authenticator;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationExtensionsAuthenticatorInputsTest {
@@ -29,15 +27,16 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     void registration_variant_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
         builder.setUvm(true);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", 1);
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "unknown");
 
         assertThat(target.getUvm()).isTrue();
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean)target.getValue("uvm")).isTrue();
+        assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class)).isNotNull();
@@ -49,15 +48,16 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     void authentication_variant_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication();
         builder.setUvm(true);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", 1);
         AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "unknown");
 
         assertThat(target.getUvm()).isTrue();
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean)target.getValue("uvm")).isTrue();
+        assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class)).isNotNull();
@@ -70,11 +70,9 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     void equals_hashCode_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication();
         builder1.setUvm(true);
-        builder1.setUnknowns(new HashMap<>());
         AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance1 = builder1.build();
         AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication builder2 = new AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication();
         builder2.setUvm(true);
-        builder2.setUnknowns(new HashMap<>());
         AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance2 = builder2.build();
 
         assertThat(instance1)

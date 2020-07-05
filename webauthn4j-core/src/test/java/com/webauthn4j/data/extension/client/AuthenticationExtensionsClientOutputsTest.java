@@ -24,7 +24,6 @@ import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -37,15 +36,17 @@ class AuthenticationExtensionsClientOutputsTest {
         AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
         builder.setCredProps(credProps);
         builder.setUvm(uvm);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", 1);
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm", "unknown");
 
         assertThat(target.getAppid()).isNull();
         assertThat(target.getUvm()).isEqualTo(uvm);
         assertThat(target.getCredProps()).isEqualTo(credProps);
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getValue("unknown")).isEqualTo(1);
+
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat(target.getValue("appid")).isNull();
         assertThat(target.getValue("uvm")).isEqualTo(uvm);
@@ -66,19 +67,20 @@ class AuthenticationExtensionsClientOutputsTest {
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder.setAppid(true);
         builder.setUvm(uvm);
-        builder.setUnknowns(new HashMap<>());
+        builder.set("unknown", "data");
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "uvm");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "uvm", "unknown");
 
         assertThat(target.getAppid()).isTrue();
         assertThat(target.getUvm()).isEqualTo(uvm);
         assertThat(target.getCredProps()).isNull();
-        assertThat(target.getUnknownKeys()).isEmpty();
+        assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean)target.getValue("appid")).isTrue();
         assertThat(target.getValue("uvm")).isEqualTo(uvm);
         assertThat(target.getValue("credProps")).isNull();
+        assertThat(target.getValue("unknown")).isEqualTo("data");
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class)).isNotNull();
@@ -96,12 +98,10 @@ class AuthenticationExtensionsClientOutputsTest {
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder1.setAppid(true);
         builder1.setUvm(uvm);
-        builder1.setUnknowns(new HashMap<>());
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance1 = builder1.build();
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder2 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder2.setAppid(true);
         builder2.setUvm(uvm);
-        builder2.setUnknowns(new HashMap<>());
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance2 = builder2.build();
 
         assertThat(instance1)

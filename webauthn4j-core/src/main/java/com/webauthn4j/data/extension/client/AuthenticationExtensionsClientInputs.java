@@ -150,7 +150,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private Boolean uvm;
         private Boolean credProps;
 
-        private Map<String, Serializable> unknowns = Collections.emptyMap();
+        private Map<String, Serializable> unknowns = new HashMap<>();
 
         public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build(){
             AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
@@ -171,9 +171,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public BuilderForRegistration setUnknowns(Map<String, Serializable> unknowns){
-            AssertUtil.notNull(unknowns, "unknowns must not be null.");
-            this.unknowns = unknowns;
+        public BuilderForRegistration set(String key, Serializable value){
+            AssertUtil.notNull(key, "key must not be null.");
+            AssertUtil.notNull(value, "value must not be null.");
+            unknowns.put(key, value);
             return this;
         }
 
@@ -185,7 +186,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private String appidExclude;
         private Boolean uvm;
 
-        private Map<String, Serializable> unknowns = Collections.emptyMap();
+        private Map<String, Serializable> unknowns = new HashMap<>();
 
         public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build(){
             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
@@ -212,9 +213,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setUnknowns(Map<String, Serializable> unknowns){
-            AssertUtil.notNull(unknowns, "unknowns must not be null.");
-            this.unknowns = unknowns;
+        public BuilderForAuthentication set(String key, Serializable value){
+            AssertUtil.notNull(key, "key must not be null.");
+            AssertUtil.notNull(value, "value must not be null.");
+            unknowns.put(key, value);
             return this;
         }
 
