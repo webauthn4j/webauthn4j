@@ -114,7 +114,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         private UvmEntries uvm;
 
-        private Map<String, Serializable> unknowns = Collections.emptyMap();
+        private Map<String, Serializable> unknowns = new HashMap<>();
 
         public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> build(){
             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
@@ -124,14 +124,15 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             return instance;
         }
 
-        public AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration setUvm(UvmEntries uvm){
+        public BuilderForRegistration setUvm(UvmEntries uvm){
             this.uvm = uvm;
             return this;
         }
 
-        public AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration setUnknowns(Map<String, Serializable> unknowns){
-            AssertUtil.notNull(unknowns, "unknowns must not be null.");
-            this.unknowns = unknowns;
+        public BuilderForRegistration set(String key, Serializable value){
+            AssertUtil.notNull(key, "key must not be null.");
+            AssertUtil.notNull(value, "value must not be null.");
+            unknowns.put(key, value);
             return this;
         }
 
@@ -141,7 +142,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         private UvmEntries uvm;
 
-        private Map<String, Serializable> unknowns = Collections.emptyMap();
+        private Map<String, Serializable> unknowns = new HashMap<>();
 
 
         public AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build(){
@@ -152,16 +153,18 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             return instance;
         }
 
-        public AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication setUvm(UvmEntries uvm){
+        public BuilderForAuthentication setUvm(UvmEntries uvm){
             this.uvm = uvm;
             return this;
         }
 
-        public AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication setUnknowns(Map<String, Serializable> unknowns){
-            AssertUtil.notNull(unknowns, "unknowns must not be null.");
-            this.unknowns = unknowns;
+        public BuilderForAuthentication set(String key, Serializable value){
+            AssertUtil.notNull(key, "key must not be null.");
+            AssertUtil.notNull(value, "value must not be null.");
+            unknowns.put(key, value);
             return this;
         }
+
 
     }
 
