@@ -30,16 +30,47 @@ import static org.mockito.Mockito.mock;
 class AuthenticationDataTest {
 
     @Test
+    void getter_test(){
+        byte[] credentialId = new byte[32];
+        byte[] userHandle = new byte[32];
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
+        byte[] authenticatorDataBytes = new byte[64];
+        CollectedClientData collectedClientData = mock(CollectedClientData.class);
+        byte[] collectedClientDataBytes = new byte[128];
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = null;
+        byte[] signature = new byte[32];
+
+        AuthenticationData instance = new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
+                collectedClientData,
+                collectedClientDataBytes,
+                clientExtensions,
+                signature
+        );
+
+        assertThat(instance.getCredentialId()).isEqualTo(credentialId);
+        assertThat(instance.getUserHandle()).isEqualTo(userHandle);
+        assertThat(instance.getAuthenticatorData()).isEqualTo(authenticatorData);
+        assertThat(instance.getAuthenticatorDataBytes()).isEqualTo(authenticatorDataBytes);
+        assertThat(instance.getCollectedClientData()).isEqualTo(collectedClientData);
+        assertThat(instance.getCollectedClientDataBytes()).isEqualTo(collectedClientDataBytes);
+        assertThat(instance.getClientExtensions()).isEqualTo(clientExtensions);
+        assertThat(instance.getSignature()).isEqualTo(signature);
+    }
+
+    @Test
     void equals_hashCode_test() {
 
         byte[] credentialId = new byte[32];
         byte[] userHandle = new byte[32];
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = null;
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
         byte[] authenticatorDataBytes = new byte[64];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
-        String clientExtensionJSON = "";
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> authenticationExtensionsClientOutputs = null;
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
         byte[] signature = new byte[32];
 
         AuthenticationData instanceA = new AuthenticationData(

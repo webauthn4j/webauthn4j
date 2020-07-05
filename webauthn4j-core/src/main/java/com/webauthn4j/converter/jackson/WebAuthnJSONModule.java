@@ -16,15 +16,15 @@
 
 package com.webauthn4j.converter.jackson;
 
-import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.converter.jackson.deserializer.*;
+import com.webauthn4j.converter.jackson.deserializer.ChallengeDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.JWSDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.X509CertificateDeserializer;
 import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
 import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.data.jws.JWS;
 
 import java.security.cert.X509Certificate;
@@ -39,26 +39,12 @@ public class WebAuthnJSONModule extends SimpleModule {
         super("WebAuthnJSONModule");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(ExtensionClientInput.class, new ExtensionClientInputDeserializer());
-        this.addDeserializer(RegistrationExtensionClientInput.class, new RegistrationExtensionClientInputDeserializer());
-        this.addDeserializer(AuthenticationExtensionClientInput.class, new AuthenticationExtensionClientInputDeserializer());
-        this.addDeserializer(ExtensionClientOutput.class, new ExtensionClientOutputDeserializer());
-        this.addDeserializer(UnknownExtensionClientInput.class, new UnknownExtensionClientInputDeserializer());
-        this.addDeserializer(UnknownExtensionClientOutput.class, new UnknownExtensionClientOutputDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new JWSSerializer());
         this.addSerializer(new X509CertificateSerializer());
-
-        // client extension inputs
-        this.registerSubtypes(new NamedType(CredentialPropertiesExtensionClientInput.class, CredentialPropertiesExtensionClientInput.ID));
-        this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientInput.class, FIDOAppIDExtensionClientInput.ID));
-
-        // client extension outputs
-        this.registerSubtypes(new NamedType(CredentialPropertiesExtensionClientOutput.class, CredentialPropertiesExtensionClientOutput.ID));
-        this.registerSubtypes(new NamedType(FIDOAppIDExtensionClientOutput.class, FIDOAppIDExtensionClientOutput.ID));
 
     }
 

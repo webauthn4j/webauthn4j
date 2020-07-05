@@ -16,36 +16,23 @@
 
 package com.webauthn4j.data.extension.client;
 
-import org.junit.jupiter.api.Nested;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class CredentialPropertiesExtensionClientOutputTest {
 
     @Test
-    void test() {
-        CredentialPropertiesExtensionClientOutput target = new CredentialPropertiesExtensionClientOutput(new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true));
-        assertThat(target.getIdentifier()).isEqualTo(CredentialPropertiesExtensionClientOutput.ID);
+    void validate_test(){
+        CredentialPropertiesExtensionClientOutput target = new CredentialPropertiesExtensionClientOutput(mock(CredentialPropertiesOutput.class));
+        assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
-
-    @Nested
-    class CredentialPropertiesOutputTest{
-        @Test
-        void getter_test(){
-            CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput target = new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true);
-            assertThat(target.getRk()).isTrue();
-        }
-
-        @Test
-        void equals_hashCode_test(){
-            CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput instanceA = new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true);
-            CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput instanceB = new CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput(true);
-            assertThat(instanceA).isEqualTo(instanceB);
-            assertThat(instanceA).hasSameHashCodeAs(instanceB);
-        }
-
+    @Test
+    void validate_invalid_data_test(){
+        CredentialPropertiesExtensionClientOutput target = new CredentialPropertiesExtensionClientOutput(null);
+        assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }
-
 }

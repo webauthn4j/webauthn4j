@@ -18,5 +18,5 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.ExtensionOutput;
 
-public interface ExtensionClientOutput<T> extends ExtensionOutput<T> {
+public interface ExtensionClientOutput extends ExtensionOutput {
 }

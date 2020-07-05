@@ -16,22 +16,16 @@
 
 package com.webauthn4j.data.extension.client;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.data.extension.AbstractExtensionOutput;
-
-import java.io.Serializable;
-import java.util.Objects;
+import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 public class CredentialPropertiesExtensionClientOutput
-        extends AbstractExtensionOutput<CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput>
-        implements RegistrationExtensionClientOutput<CredentialPropertiesExtensionClientOutput.CredentialPropertiesOutput> {
+        extends SingleValueExtensionOutputBase<CredentialPropertiesOutput>
+        implements RegistrationExtensionClientOutput {
 
     public static final String ID = "credProps";
 
-    @JsonCreator
-    public CredentialPropertiesExtensionClientOutput(
-            CredentialPropertiesOutput value) {
+    public CredentialPropertiesExtensionClientOutput(CredentialPropertiesOutput value) {
         super(value);
     }
 
@@ -40,31 +34,15 @@ public class CredentialPropertiesExtensionClientOutput
         return ID;
     }
 
-    public static class CredentialPropertiesOutput implements Serializable {
+    public CredentialPropertiesOutput getCredProps(){
+        return getValue();
+    }
 
-        final Boolean rk;
-
-        @JsonCreator
-        public CredentialPropertiesOutput(
-                @JsonProperty("rk") Boolean rk) {
-            this.rk = rk;
-        }
-
-        public Boolean getRk() {
-            return rk;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CredentialPropertiesOutput that = (CredentialPropertiesOutput) o;
-            return Objects.equals(rk, that.rk);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(rk);
+    @Override
+    public void validate() {
+        if(getValue() == null){
+            throw new ConstraintViolationException("value must not be null");
         }
     }
+
 }

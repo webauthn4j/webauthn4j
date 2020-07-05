@@ -67,7 +67,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         TPMSAttest certInfo = attestationStatement.getCertInfo();
         TPMTPublic pubArea = attestationStatement.getPubArea();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
 
         /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
         validatePublicKeyEquality(pubArea, authenticatorData);
@@ -131,7 +131,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         return messageDigestJcaName;
     }
 
-    private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
@@ -186,7 +186,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         this.tpmDevicePropertyValidator = tpmDevicePropertyValidator;
     }
 
-    private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         PublicKey publicKeyInAuthData =
                 authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
         TPMUPublicId publicKeyInPubArea = pubArea.getUnique();

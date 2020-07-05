@@ -29,7 +29,7 @@ public class GetAssertionRequest {
     private final List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList;
     private final boolean requireUserPresence;
     private final boolean requireUserVerification;
-    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
+    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     public GetAssertionRequest(
             String rpId,
@@ -37,7 +37,7 @@ public class GetAssertionRequest {
             List<PublicKeyCredentialDescriptor> allowCredentialDescriptorList,
             boolean requireUserPresence,
             boolean requireUserVerification,
-            AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions) {
+            AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
 
         this.rpId = rpId;
         this.hash = hash;
@@ -67,7 +67,7 @@ public class GetAssertionRequest {
         return requireUserVerification;
     }
 
-    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> getExtensions() {
+    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
     }
 }

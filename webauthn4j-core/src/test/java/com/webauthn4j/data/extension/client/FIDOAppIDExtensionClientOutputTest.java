@@ -16,15 +16,22 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 class FIDOAppIDExtensionClientOutputTest {
 
     @Test
-    void test() {
+    void validate_test(){
         FIDOAppIDExtensionClientOutput target = new FIDOAppIDExtensionClientOutput(true);
-        assertThat(target.getIdentifier()).isEqualTo(FIDOAppIDExtensionClientOutput.ID);
+        assertThatCode(target::validate).doesNotThrowAnyException();
+    }
+
+    @Test
+    void validate_invalid_data_test(){
+        FIDOAppIDExtensionClientOutput target = new FIDOAppIDExtensionClientOutput(null);
+        assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }
 }

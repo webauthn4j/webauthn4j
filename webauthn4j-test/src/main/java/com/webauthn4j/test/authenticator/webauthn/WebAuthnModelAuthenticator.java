@@ -249,7 +249,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         // Let processedExtensions be the result of authenticator extension processing for each
         // supported extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput<?>>
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput>
                 registrationExtensionAuthenticatorOutputs = processRegistrationExtensions(makeCredentialRequest);
 
         // If the authenticator supports:
@@ -266,13 +266,13 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         byte flag = BIT_AT;
         if (userConsent) flag |= BIT_UP;
         if (userVerification) flag |= BIT_UV;
-        if (!registrationExtensionAuthenticatorOutputs.isEmpty()) flag |= BIT_ED;
+        if (!registrationExtensionAuthenticatorOutputs.getKeys().isEmpty()) flag |= BIT_ED;
 
         AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, coseKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData =
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData =
                 new AuthenticatorData<>(rpIdHash, flag, counter, attestedCredentialData, registrationExtensionAuthenticatorOutputs);
 
         byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
@@ -294,17 +294,16 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         return makeCredentialResponse;
     }
 
-    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput<?>> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest) {
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = makeCredentialRequest.getExtensions();
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> processRegistrationExtensions(MakeCredentialRequest makeCredentialRequest) {
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = makeCredentialRequest.getExtensions();
         if (extensions == null) {
             extensions = new AuthenticationExtensionsClientInputs<>();
         }
-        Map<String, RegistrationExtensionAuthenticatorOutput<?>> processedExtensions = new HashMap<>();
-        for (Map.Entry<String, RegistrationExtensionClientInput<?>> entry : extensions.entrySet()) {
-            String extensionIdentifier = entry.getKey();
+        AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
+        for (String key : extensions.getKeys()) {
             //TODO
         }
-        return new AuthenticationExtensionsAuthenticatorOutputs<>(processedExtensions);
+        return builder.build();
     }
 
     public MakeCredentialResponse makeCredential(MakeCredentialRequest makeCredentialRequest) {
@@ -365,8 +364,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         // Let processedExtensions be the result of authenticator extension processing for each supported
         // extension identifier -> authenticator extension input in extensions.
-        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput<?>> processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
-        if (!processedExtensions.isEmpty()) {
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> processedExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
+        if (!processedExtensions.getKeys().isEmpty()) {
             flags |= BIT_ED;
         }
 
@@ -378,7 +377,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data including processedExtensions,
         // if any, as the extensions and excluding attestedCredentialData.
         byte[] rpIdHash = MessageDigestUtil.createSHA256().digest(getAssertionRequest.getRpId().getBytes(StandardCharsets.UTF_8));
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorDataObject = new AuthenticatorData<>(rpIdHash, flags, counter, processedExtensions);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorDataObject = new AuthenticatorData<>(rpIdHash, flags, counter, processedExtensions);
         byte[] authenticatorData = authenticatorDataConverter.convert(authenticatorDataObject);
 
         // Let signature be the assertion signature of the concatenation authenticatorData || hash using

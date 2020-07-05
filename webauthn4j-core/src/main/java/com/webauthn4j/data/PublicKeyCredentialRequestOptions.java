@@ -42,14 +42,14 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     private final String rpId;
     private final List<PublicKeyCredentialDescriptor> allowCredentials;
     private final UserVerificationRequirement userVerification;
-    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions;
+    private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
     public PublicKeyCredentialRequestOptions(Challenge challenge,
                                              Long timeout,
                                              String rpId,
                                              List<PublicKeyCredentialDescriptor> allowCredentials,
                                              UserVerificationRequirement userVerification,
-                                             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> extensions) {
+                                             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -78,7 +78,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         return userVerification;
     }
 
-    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput<?>> getExtensions() {
+    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
     }
 

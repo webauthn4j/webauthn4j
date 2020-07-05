@@ -32,13 +32,14 @@ class ExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public <A extends ExtensionAuthenticatorOutput<?>, C extends ExtensionClientOutput<?>> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
+    public <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
                                                                                                    AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
                                                                                                    List<String> expectedExtensionIdentifiers) {
         validateExtensionIds(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
     }
 
-    private <A extends ExtensionAuthenticatorOutput<?>, C extends ExtensionClientOutput<?>> void validateExtensionIds(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs, AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
+    //TODO: extensionId -> key
+    private <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validateExtensionIds(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs, AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
             return;
@@ -47,16 +48,16 @@ class ExtensionValidator {
         }
 
         if (authenticationExtensionsClientOutputs != null) {
-            authenticationExtensionsClientOutputs.keySet().forEach(identifier -> {
+            authenticationExtensionsClientOutputs.getKeys().forEach(identifier -> {
                 if (!expected.contains(identifier)) {
                     throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
                 }
             });
         }
         if (authenticationExtensionsAuthenticatorOutputs != null) {
-            authenticationExtensionsAuthenticatorOutputs.keySet().forEach(identifier -> {
-                if (!expected.contains(identifier)) {
-                    throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", identifier));
+            authenticationExtensionsAuthenticatorOutputs.getKeys().forEach(key -> {
+                if (!expected.contains(key)) {
+                    throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", key));
                 }
             });
         }

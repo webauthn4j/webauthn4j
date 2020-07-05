@@ -26,7 +26,6 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.extension.authenticator.*;
 import com.webauthn4j.data.jws.JWS;
 
 import java.security.cert.CertPath;
@@ -47,8 +46,6 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
-        this.addDeserializer(ExtensionAuthenticatorOutput.class, new ExtensionAuthenticatorOutputDeserializer());
-        this.addDeserializer(UnknownExtensionAuthenticatorOutput.class, new UnknownExtensionAuthenticatorOutputDeserializer());
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());

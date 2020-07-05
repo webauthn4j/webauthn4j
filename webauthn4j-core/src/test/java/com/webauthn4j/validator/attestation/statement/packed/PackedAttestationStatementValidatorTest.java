@@ -108,7 +108,7 @@ class PackedAttestationStatementValidatorTest {
     @Test
     void validate_with_RSAx5c_test() throws Exception {
         KeyPair keyPair = RSAUtil.createKeyPair();
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = TestDataUtil.createAuthenticatorData();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
         byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
@@ -191,7 +191,7 @@ class PackedAttestationStatementValidatorTest {
 
         CollectedClientData collectedClientData = new CollectedClientDataConverter(objectConverter).convert(clientDataBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
 
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
@@ -206,13 +206,13 @@ class PackedAttestationStatementValidatorTest {
         validator.validate(registrationObject);
     }
 
-    private <T extends ExtensionAuthenticatorOutput<?>> byte[] generateSignature(String signAlgo, KeyPair keyPair, AuthenticatorData<T> data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+    private <T extends ExtensionAuthenticatorOutput> byte[] generateSignature(String signAlg, KeyPair keyPair, AuthenticatorData<T> data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         byte[] authenticatorData = new AuthenticatorDataConverter(objectConverter).convert(data);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientDataJSON);
 
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
 
-        Signature sig = Signature.getInstance(signAlgo);
+        Signature sig = Signature.getInstance(signAlg);
         sig.initSign(keyPair.getPrivate());
         sig.update(signedData);
         return sig.sign();

@@ -43,17 +43,18 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientOutput<?>> AuthenticationExtensionsClientOutputs<T> convert(String value) {
+    public <T extends ExtensionClientOutput> AuthenticationExtensionsClientOutputs<T> convert(String value) {
         if (value == null) {
             return null;
         }
         return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>(){});
     }
 
-    public <T extends ExtensionClientOutput<?>> String convertToString(AuthenticationExtensionsClientOutputs<T> value) {
+    public <T extends ExtensionClientOutput> String convertToString(AuthenticationExtensionsClientOutputs<T> value) {
         if (value == null) {
             return null;
         }
         return jsonConverter.writeValueAsString(value);
     }
+
 }

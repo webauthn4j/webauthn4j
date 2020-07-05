@@ -16,9 +16,10 @@
 
 package com.webauthn4j.data.extension.client;
 
-import com.webauthn4j.data.extension.AbstractExtensionInput;
+import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
-public class CredentialPropertiesExtensionClientInput extends AbstractExtensionInput<Boolean> implements RegistrationExtensionClientInput<Boolean> {
+public class CredentialPropertiesExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProps";
 
@@ -30,4 +31,16 @@ public class CredentialPropertiesExtensionClientInput extends AbstractExtensionI
     public String getIdentifier() {
         return ID;
     }
+
+    public Boolean getCredProps(){
+        return getValue();
+    }
+
+    @Override
+    public void validate() {
+        if(getValue() == null){
+            throw new ConstraintViolationException("value must not be null");
+        }
+    }
+
 }

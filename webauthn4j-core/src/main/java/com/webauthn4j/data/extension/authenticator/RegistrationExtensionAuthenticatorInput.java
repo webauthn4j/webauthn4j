@@ -16,6 +16,6 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-public interface RegistrationExtensionAuthenticatorInput<T> extends ExtensionAuthenticatorInput<T> {
+public interface RegistrationExtensionAuthenticatorInput extends ExtensionAuthenticatorInput {
 
 }

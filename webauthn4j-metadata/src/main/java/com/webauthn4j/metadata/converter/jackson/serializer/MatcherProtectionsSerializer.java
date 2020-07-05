@@ -19,7 +19,7 @@ package com.webauthn4j.metadata.converter.jackson.serializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.metadata.data.statement.MatcherProtection;
+import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.metadata.data.statement.MatcherProtections;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class MatcherProtectionsSerializer extends StdSerializer<MatcherProtectio
 
     @Override
     public void serialize(MatcherProtections value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(MatcherProtection::getValue).reduce(0, Integer::sum);
+        long sum = value.stream().map(MatcherProtectionType::getValue).reduce(0, Integer::sum);
         gen.writeNumber(sum);
     }
 }

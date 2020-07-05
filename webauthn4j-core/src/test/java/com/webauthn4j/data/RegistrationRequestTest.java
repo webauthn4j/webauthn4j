@@ -41,6 +41,20 @@ class RegistrationRequestTest {
     }
 
     @Test
+    void constructor_without_transports_test() {
+        // Client properties
+        byte[] attestationObject = new byte[32];
+        byte[] clientDataJSON = new byte[64];
+        String clientExtensionJSON = "{}";  /* set clientExtensionJSON */
+
+        RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON);
+        assertThat(registrationRequest.getAttestationObject()).isEqualTo(attestationObject);
+        assertThat(registrationRequest.getClientDataJSON()).isEqualTo(clientDataJSON);
+        assertThat(registrationRequest.getClientExtensionsJSON()).isEqualTo(clientExtensionJSON);
+        assertThat(registrationRequest.getTransports()).isNull();
+    }
+
+    @Test
     void equals_hashCode_test() {
         // Client properties
         byte[] attestationObject = null /* set attestationObject */;

@@ -37,4 +37,8 @@ public class CollectionUtil {
         Set<T> set = new HashSet<>(Arrays.asList(items));
         return Collections.unmodifiableSet(set);
     }
+
+    public static <K,V> Map<K,V> unmodifiableMap(Map<? extends K, ? extends V> map) {
+        return map == null ? null : Collections.unmodifiableMap(map);
+    }
 }

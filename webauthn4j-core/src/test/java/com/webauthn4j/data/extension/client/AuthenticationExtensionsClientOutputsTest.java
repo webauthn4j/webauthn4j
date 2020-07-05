@@ -16,23 +16,98 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.webauthn4j.data.KeyProtectionType;
+import com.webauthn4j.data.MatcherProtectionType;
+import com.webauthn4j.data.UserVerificationMethod;
+import com.webauthn4j.data.extension.UvmEntries;
+import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
 class AuthenticationExtensionsClientOutputsTest {
 
     @Test
-    void instance_can_store_concrete_extension_test() {
-        FIDOAppIDExtensionClientOutput fidoAppIDExtensionClientOutput = new FIDOAppIDExtensionClientOutput(true);
-        assertThatCode(() -> {
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions =
-                    new AuthenticationExtensionsClientOutputs<>(Collections.singletonMap(FIDOAppIDExtensionClientOutput.ID, fidoAppIDExtensionClientOutput));
-            assertThat(clientExtensions.size()).isEqualTo(1);
-        }).doesNotThrowAnyException();
+    void registration_variant_test() {
+        CredentialPropertiesOutput credProps = new CredentialPropertiesOutput(true);
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
+        builder.setCredProps(credProps);
+        builder.setUvm(uvm);
+        builder.setUnknowns(new HashMap<>());
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm");
+
+        assertThat(target.getAppid()).isNull();
+        assertThat(target.getUvm()).isEqualTo(uvm);
+        assertThat(target.getCredProps()).isEqualTo(credProps);
+        assertThat(target.getUnknownKeys()).isEmpty();
+
+        assertThat(target.getValue("appid")).isNull();
+        assertThat(target.getValue("uvm")).isEqualTo(uvm);
+        assertThat(target.getValue("credProps")).isEqualTo(credProps);
+        assertThat(target.getValue("invalid")).isNull();
+
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class)).isNotNull();
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getIdentifier()).isEqualTo("uvm");
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getUvm()).isEqualTo(uvm);
+        assertThat(target.getExtension(CredentialPropertiesExtensionClientOutput.class)).isNotNull();
+        assertThat(target.getExtension(CredentialPropertiesExtensionClientOutput.class).getIdentifier()).isEqualTo("credProps");
+        assertThat(target.getExtension(CredentialPropertiesExtensionClientOutput.class).getCredProps()).isEqualTo(credProps);
     }
+
+    @Test
+    void authentication_variant_test() {
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder.setAppid(true);
+        builder.setUvm(uvm);
+        builder.setUnknowns(new HashMap<>());
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> target = builder.build();
+
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("appid", "uvm");
+
+        assertThat(target.getAppid()).isTrue();
+        assertThat(target.getUvm()).isEqualTo(uvm);
+        assertThat(target.getCredProps()).isNull();
+        assertThat(target.getUnknownKeys()).isEmpty();
+
+        assertThat((Boolean)target.getValue("appid")).isTrue();
+        assertThat(target.getValue("uvm")).isEqualTo(uvm);
+        assertThat(target.getValue("credProps")).isNull();
+        assertThat(target.getValue("invalid")).isNull();
+
+        assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class)).isNotNull();
+        assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class).getIdentifier()).isEqualTo("appid");
+        assertThat(target.getExtension(FIDOAppIDExtensionClientOutput.class).getAppid()).isTrue();
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class)).isNotNull();
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getIdentifier()).isEqualTo("uvm");
+        assertThat(target.getExtension(UserVerificationMethodExtensionClientOutput.class).getUvm()).isEqualTo(uvm);
+
+    }
+
+    @Test
+    void equals_hashCode_test() {
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder1.setAppid(true);
+        builder1.setUvm(uvm);
+        builder1.setUnknowns(new HashMap<>());
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance1 = builder1.build();
+        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder2 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
+        builder2.setAppid(true);
+        builder2.setUvm(uvm);
+        builder2.setUnknowns(new HashMap<>());
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance2 = builder2.build();
+
+        assertThat(instance1)
+                .isEqualTo(instance2)
+                .hasSameHashCodeAs(instance2);
+    }
+
 
 }

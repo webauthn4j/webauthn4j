@@ -16,11 +16,12 @@
 
 package com.webauthn4j.data.extension.client;
 
-import com.webauthn4j.data.extension.AbstractExtensionOutput;
+import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 public class FIDOAppIDExtensionClientOutput
-        extends AbstractExtensionOutput<Boolean>
-        implements AuthenticationExtensionClientOutput<Boolean> {
+        extends SingleValueExtensionOutputBase<Boolean>
+        implements AuthenticationExtensionClientOutput {
 
     public static final String ID = "appid";
 
@@ -31,6 +32,15 @@ public class FIDOAppIDExtensionClientOutput
     @Override
     public String getIdentifier() {
         return ID;
+    }
+
+    public Boolean getAppid(){ return getValue(ID);}
+
+    @Override
+    public void validate() {
+        if(getValue() == null){
+            throw new ConstraintViolationException("value must not be null");
+        }
     }
 
 }

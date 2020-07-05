@@ -28,7 +28,6 @@ import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.TokenBinding;
-import com.webauthn4j.data.extension.ExtensionOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -36,8 +35,6 @@ import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-
-import java.util.Map;
 
 /**
  * Per field checker utility class
@@ -146,7 +143,7 @@ class BeanAssertUtil {
         validate(attestationObject.getAuthenticatorData());
     }
 
-    public static <T extends ExtensionAuthenticatorOutput<?>> void validate(AuthenticatorData<T> authenticatorData) {
+    public static <T extends ExtensionAuthenticatorOutput> void validate(AuthenticatorData<T> authenticatorData) {
         if (authenticatorData == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
         }
@@ -191,34 +188,26 @@ class BeanAssertUtil {
         validate(coseKey);
     }
 
-    public static <T extends ExtensionClientOutput<?>> void validateAuthenticationExtensionsClientOutputs(
+    @SuppressWarnings("unused")
+    public static <T extends ExtensionClientOutput> void validateAuthenticationExtensionsClientOutputs(
             AuthenticationExtensionsClientOutputs<T> authenticationExtensionsClientOutputs) {
         if (authenticationExtensionsClientOutputs == null) {
             return;
         }
-        for (Map.Entry<String, T> set : authenticationExtensionsClientOutputs.entrySet()) {
-            validate(set.getKey(), set.getValue());
+        for (T value : authenticationExtensionsClientOutputs.getExtensions().values()) {
+            value.validate();
         }
     }
 
-    public static <T extends ExtensionAuthenticatorOutput<?>> void validateAuthenticatorExtensionsOutputs(
+    @SuppressWarnings("unused")
+    public static <T extends ExtensionAuthenticatorOutput> void validateAuthenticatorExtensionsOutputs(
             AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs) {
         if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
         }
-        for (Map.Entry<String, T> set : authenticationExtensionsAuthenticatorOutputs.entrySet()) {
-            validate(set.getKey(), set.getValue());
+        for (T value : authenticationExtensionsAuthenticatorOutputs.getExtensions().values()) {
+            value.validate();
         }
-    }
-
-    public static void validate(String identifier, ExtensionOutput<?> extensionOutput) {
-        if (identifier == null) {
-            throw new ConstraintViolationException("identifier must not be null");
-        }
-        if (!identifier.equals(extensionOutput.getIdentifier())) {
-            throw new ConstraintViolationException("identifier must match");
-        }
-        extensionOutput.validate();
     }
 
     public static void validate(ServerProperty serverProperty) {

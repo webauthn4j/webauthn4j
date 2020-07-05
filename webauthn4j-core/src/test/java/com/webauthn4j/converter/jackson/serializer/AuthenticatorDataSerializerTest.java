@@ -50,13 +50,13 @@ class AuthenticatorDataSerializerTest {
         long counter = 325;
 
         AttestedCredentialData attestationData = new AttestedCredentialData(aaguid, credentialId, credentialPublicKey);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> authenticatorData = new AuthenticatorData<>(rpIdHash, flags, counter, attestationData);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(rpIdHash, flags, counter, attestationData);
 
         //Given
 
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput<?>>>() {});
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {});
 
         //Then
 
@@ -68,7 +68,7 @@ class AuthenticatorDataSerializerTest {
                 () -> assertThat(restored.getAttestedCredentialData().getAaguid()).isEqualTo(aaguid),
                 () -> assertThat(restored.getAttestedCredentialData().getCredentialId()).isEqualTo(credentialId),
                 () -> assertThat(restored.getAttestedCredentialData().getCOSEKey()).isEqualTo(credentialPublicKey),
-                () -> assertThat(restored.getExtensions().isEmpty()).isTrue()
+                () -> assertThat(restored.getExtensions().getKeys().isEmpty()).isTrue()
         );
     }
 }

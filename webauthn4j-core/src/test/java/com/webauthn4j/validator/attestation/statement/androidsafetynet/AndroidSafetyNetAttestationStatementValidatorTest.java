@@ -61,7 +61,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
 
         PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
 
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput<?>> extensions = new AuthenticationExtensionsClientInputs<>();
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
                 = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
@@ -74,7 +74,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
                 AttestationConveyancePreference.DIRECT,
                 extensions
         );
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput<?>> publicKeyCredential = clientPlatform.create(credentialCreationOptions);
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> publicKeyCredential = clientPlatform.create(credentialCreationOptions);
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObject(publicKeyCredential);
         target.validate(registrationObject);
     }

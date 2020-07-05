@@ -38,7 +38,7 @@ class RegistrationDataTest {
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
         String clientExtensionJSON = "";
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput<?>> authenticationExtensionsClientOutputs = null;
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
         Set<AuthenticatorTransport> transports = Collections.emptySet();
 
         RegistrationData instanceA = new RegistrationData(

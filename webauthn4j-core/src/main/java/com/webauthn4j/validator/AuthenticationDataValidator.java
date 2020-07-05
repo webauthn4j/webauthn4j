@@ -98,8 +98,8 @@ public class AuthenticationDataValidator {
         //      (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = authenticationData.getCollectedClientData();
 
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData = authenticationData.getAuthenticatorData();
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput<?>> clientExtensions = authenticationData.getClientExtensions();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = authenticationData.getClientExtensions();
         ServerProperty serverProperty = authenticationParameters.getServerProperty();
 
         BeanAssertUtil.validate(collectedClientData);
@@ -160,7 +160,7 @@ public class AuthenticationDataValidator {
         //spec| values in the clientExtensionResults and the extensions in authData MUST be also be present as extension
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
-        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput<?>> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = authenticationParameters.getExpectedExtensionIds();
         extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
@@ -199,7 +199,7 @@ public class AuthenticationDataValidator {
 
     }
 
-    void validateAuthenticatorData(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput<?>> authenticatorData) {
+    void validateAuthenticatorData(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }

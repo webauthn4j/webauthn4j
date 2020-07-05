@@ -16,5 +16,5 @@
 
 package com.webauthn4j.data.extension.client;
 
-public interface RegistrationExtensionClientInput<T> extends ExtensionClientInput<T> {
+public interface RegistrationExtensionClientInput extends ExtensionClientInput {
 }

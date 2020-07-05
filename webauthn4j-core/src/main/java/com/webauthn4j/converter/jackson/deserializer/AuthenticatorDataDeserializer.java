@@ -30,7 +30,7 @@ import java.io.IOException;
 /**
  * Jackson Deserializer for {@link AuthenticatorData}
  */
-public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData<? extends ExtensionAuthenticatorOutput<?>>> {
+public class AuthenticatorDataDeserializer extends StdDeserializer<AuthenticatorData<? extends ExtensionAuthenticatorOutput>> {
 
     private final ObjectConverter objectConverter;
 
@@ -46,7 +46,7 @@ public class AuthenticatorDataDeserializer extends StdDeserializer<Authenticator
      * {@inheritDoc}
      */
     @Override
-    public AuthenticatorData<? extends ExtensionAuthenticatorOutput<?>> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public AuthenticatorData<? extends ExtensionAuthenticatorOutput> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
         return new AuthenticatorDataConverter(objectConverter).convert(value);
     }
