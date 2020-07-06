@@ -23,6 +23,7 @@ public class UserVerificationMethodExtensionAuthenticatorInput extends SingleVal
         implements RegistrationExtensionAuthenticatorInput, AuthenticationExtensionAuthenticatorInput {
 
     public static final String ID = "uvm";
+    public static final String KEY_UVM = "uvm";
 
     public UserVerificationMethodExtensionAuthenticatorInput(Boolean value) {
         super(value);
@@ -34,7 +35,7 @@ public class UserVerificationMethodExtensionAuthenticatorInput extends SingleVal
     }
 
     public Boolean getUvm() {
-        return getValue(ID);
+        return getValue(KEY_UVM);
     }
 
     @Override

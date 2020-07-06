@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class CredentialProtectionExtensionAuthenticatorInput implements RegistrationExtensionAuthenticatorInput {
 
     public static final String ID = "credProtect";
+    public static final String KEY_CRED_PROTECT = "credProtect";
 
     public static final Byte USER_VERIFICATION_OPTIONAL = 0x01;
     public static final Byte USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST = 0x02;
@@ -29,7 +30,7 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
 
     @Override
     public Serializable getValue(String key) {
-        if ("credProtect".equals(key)) {
+        if (KEY_CRED_PROTECT.equals(key)) {
             return credProtect;
         }
         throw new IllegalArgumentException(String.format("%s is not valid key.", key));

@@ -7,6 +7,8 @@ import java.io.Serializable;
 public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput{
 
     public static final String ID = "credProtect";
+    public static final String KEY_CREDENTIAL_PROTECTION_POLICY = "credentialProtectionPolicy";
+    public static final String KEY_ENFORCE_CREDENTIAL_PROTECTION_POLICY = "enforceCredentialProtectionPolicy";
 
     public static final String USER_VERIFICATION_OPTIONAL = "userVerificationOptional";
     public static final String USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST = "userVerificationOptionalWithCredentialIDList";
@@ -37,9 +39,9 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     @Override
     public Serializable getValue(String key) {
         switch (key) {
-            case "credentialProtectionPolicy":
+            case KEY_CREDENTIAL_PROTECTION_POLICY:
                 return credentialProtectionPolicy;
-            case "enforceCredentialProtectionPolicy":
+            case KEY_ENFORCE_CREDENTIAL_PROTECTION_POLICY:
                 return enforceCredentialProtectionPolicy;
             default:
                 throw new IllegalArgumentException(String.format("%s is not valid key.", key));
