@@ -19,6 +19,7 @@ package com.webauthn4j.data.extension.authenticator;
 import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.data.UserVerificationMethod;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.data.extension.UvmEntry;
 import org.junit.jupiter.api.Test;
@@ -34,21 +35,25 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
         UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.setUvm(uvm);
+        builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
         builder.set("unknown", 1);
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "unknown");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "credProtect", "unknown");
 
         assertThat(target.getUvm()).isEqualTo(uvm);
+        assertThat(target.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat(target.getValue("uvm")).isEqualTo(uvm);
+        assertThat(target.getValue("credProtect")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorOutput.class)).isNotNull();
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorOutput.class).getIdentifier()).isEqualTo("uvm");
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorOutput.class).getUvm()).isEqualTo(uvm);
+        assertThat(target.getExtension(CredentialProtectionExtensionAuthenticatorOutput.class).getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
     }
 
     @Test

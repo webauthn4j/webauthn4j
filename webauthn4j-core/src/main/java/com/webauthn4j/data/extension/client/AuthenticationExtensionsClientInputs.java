@@ -1,7 +1,15 @@
 package com.webauthn4j.data.extension.client;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.Serializable;
@@ -24,8 +32,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private Boolean uvm;
     @JsonProperty
     private Boolean credProps;
+    @JsonSerialize(using = CredentialProtectionPolicyStringSerializer.class)
+    @JsonDeserialize(using = CredentialProtectionPolicyStringDeserializer.class)
     @JsonProperty
-    private String credentialProtectionPolicy;
+    private CredentialProtectionPolicy credentialProtectionPolicy;
     @JsonProperty
     private Boolean enforceCredentialProtectionPolicy;
     @JsonIgnore
@@ -114,7 +124,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public String getCredentialProtectionPolicy(){
+    public CredentialProtectionPolicy getCredentialProtectionPolicy(){
         return this.credentialProtectionPolicy;
     }
 
@@ -177,7 +187,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
         private Boolean uvm;
         private Boolean credProps;
-        private String credentialProtectionPolicy;
+        private CredentialProtectionPolicy credentialProtectionPolicy;
         private Boolean enforceCredentialProtectionPolicy;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
@@ -203,7 +213,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public BuilderForRegistration setCredentialProtectionPolicy(String credentialProtectionPolicy) {
+        public BuilderForRegistration setCredentialProtectionPolicy(CredentialProtectionPolicy credentialProtectionPolicy) {
             this.credentialProtectionPolicy = credentialProtectionPolicy;
             return this;
         }

@@ -1,6 +1,7 @@
 package com.webauthn4j.data.extension.client;
 
-import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 
@@ -10,17 +11,17 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     public static final String KEY_CREDENTIAL_PROTECTION_POLICY = "credentialProtectionPolicy";
     public static final String KEY_ENFORCE_CREDENTIAL_PROTECTION_POLICY = "enforceCredentialProtectionPolicy";
 
-    public static final String USER_VERIFICATION_OPTIONAL = "userVerificationOptional";
-    public static final String USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST = "userVerificationOptionalWithCredentialIDList";
-    public static final String USER_VERIFICATION_REQUIRED = "userVerificationRequired";
-
-    private final String credentialProtectionPolicy;
+    private final CredentialProtectionPolicy credentialProtectionPolicy;
     private final Boolean enforceCredentialProtectionPolicy;
 
     public CredentialProtectionExtensionClientInput(
-            String credentialProtectionPolicy, Boolean enforceCredentialProtectionPolicy) {
+            CredentialProtectionPolicy credentialProtectionPolicy, Boolean enforceCredentialProtectionPolicy) {
         this.credentialProtectionPolicy = credentialProtectionPolicy;
         this.enforceCredentialProtectionPolicy = enforceCredentialProtectionPolicy;
+    }
+
+    public CredentialProtectionExtensionClientInput(CredentialProtectionPolicy credentialProtectionPolicy) {
+        this(credentialProtectionPolicy, null);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
         return ID;
     }
 
-    public String creCredentialProtectionPolicy(){
+    public CredentialProtectionPolicy getCredentialProtectionPolicy(){
         return credentialProtectionPolicy;
     }
 
@@ -50,6 +51,9 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
 
     @Override
     public void validate() {
-        AssertUtil.notNull(credentialProtectionPolicy, "credentialProtectionPolicy must not be null.");
+        if(credentialProtectionPolicy == null){
+            throw new ConstraintViolationException("credentialProtectionPolicy must not be null."); //TODO: revisit exception type
+        }
     }
+
 }

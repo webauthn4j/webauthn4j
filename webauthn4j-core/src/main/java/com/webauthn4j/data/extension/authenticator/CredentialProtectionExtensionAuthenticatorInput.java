@@ -1,6 +1,7 @@
 package com.webauthn4j.data.extension.authenticator;
 
-import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 
@@ -9,13 +10,9 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
     public static final String ID = "credProtect";
     public static final String KEY_CRED_PROTECT = "credProtect";
 
-    public static final Byte USER_VERIFICATION_OPTIONAL = 0x01;
-    public static final Byte USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST = 0x02;
-    public static final Byte USER_VERIFICATION_REQUIRED = 0x02;
+    private final CredentialProtectionPolicy credProtect;
 
-    private final Byte credProtect;
-
-    public CredentialProtectionExtensionAuthenticatorInput(Byte credProtect) {
+    public CredentialProtectionExtensionAuthenticatorInput(CredentialProtectionPolicy credProtect) {
         this.credProtect = credProtect;
     }
 
@@ -24,7 +21,7 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
         return ID;
     }
 
-    public Byte getCredProtect(){
+    public CredentialProtectionPolicy getCredProtect(){
         return credProtect;
     }
 
@@ -38,6 +35,8 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
 
     @Override
     public void validate() {
-        AssertUtil.notNull(credProtect, "credProtect must not be null.");
+        if(credProtect == null){
+            throw new ConstraintViolationException("credProtect must not be null");
+        }
     }
 }

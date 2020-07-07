@@ -1,6 +1,7 @@
 package com.webauthn4j.data.extension.authenticator;
 
-import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 import java.io.Serializable;
 
@@ -9,9 +10,9 @@ public class CredentialProtectionExtensionAuthenticatorOutput implements Registr
     public static final String ID = "credProtect";
     public static final String KEY_CRED_PROTECT = "credProtect";
 
-    private final Byte credProtect;
+    private final CredentialProtectionPolicy credProtect;
 
-    public CredentialProtectionExtensionAuthenticatorOutput(Byte credProtect) {
+    public CredentialProtectionExtensionAuthenticatorOutput(CredentialProtectionPolicy credProtect) {
         this.credProtect = credProtect;
     }
 
@@ -20,7 +21,7 @@ public class CredentialProtectionExtensionAuthenticatorOutput implements Registr
         return ID;
     }
 
-    public Byte getCredProtect(){
+    public CredentialProtectionPolicy getCredProtect(){
         return credProtect;
     }
 
@@ -34,6 +35,8 @@ public class CredentialProtectionExtensionAuthenticatorOutput implements Registr
 
     @Override
     public void validate() {
-        AssertUtil.notNull(credProtect, "credProtect must not be null.");
+        if(credProtect == null){
+            throw new ConstraintViolationException("credProtect must not be null");
+        }
     }
 }

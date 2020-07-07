@@ -20,6 +20,11 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
+import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.Serializable;
@@ -36,8 +41,10 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     @JsonProperty
     private Boolean uvm;
+    @JsonSerialize(using = CredentialProtectionPolicyByteSerializer.class)
+    @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
-    private Byte credProtect;
+    private CredentialProtectionPolicy credProtect;
     @JsonIgnore
     private Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
@@ -89,7 +96,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonIgnore
-    public Byte getCredProtect(){
+    public CredentialProtectionPolicy getCredProtect(){
         return this.credProtect;
     }
 
@@ -133,7 +140,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     public static class BuilderForRegistration {
 
         private Boolean uvm;
-        private Byte credProtect;
+        private CredentialProtectionPolicy credProtect;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -151,7 +158,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return this;
         }
 
-        public AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration setCredProtect(Byte credProtect) {
+        public AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration setCredProtect(CredentialProtectionPolicy credProtect) {
             this.credProtect = credProtect;
             return this;
         }
