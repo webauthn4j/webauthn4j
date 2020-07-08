@@ -101,7 +101,7 @@ subprojects {
 
     def springBootVersion = "2.3.1.RELEASE"
     def kerbyVersion = "2.0.1"
-    def bouncyCastleVersion = "1.65"
+    def bouncyCastleVersion = "1.66"
 
     dependencies {
         constraints {
