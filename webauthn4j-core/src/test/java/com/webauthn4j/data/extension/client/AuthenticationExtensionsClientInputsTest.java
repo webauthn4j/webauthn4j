@@ -16,8 +16,10 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,15 +33,19 @@ class AuthenticationExtensionsClientInputsTest {
         AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
         builder.setCredProps(true);
         builder.setUvm(true);
+        builder.setCredentialProtectionPolicy(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
+        builder.setEnforceCredentialProtectionPolicy(true);
         builder.set("unknown", 1);
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm", "unknown");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("credProps", "uvm", "credentialProtectionPolicy", "enforceCredentialProtectionPolicy", "unknown");
 
         assertThat(target.getAppid()).isNull();
         assertThat(target.getAppidExclude()).isNull();
         assertThat(target.getUvm()).isTrue();
         assertThat(target.getCredProps()).isTrue();
+        assertThat(target.getCredentialProtectionPolicy()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
+        assertThat(target.getEnforceCredentialProtectionPolicy()).isTrue();
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
@@ -47,6 +53,8 @@ class AuthenticationExtensionsClientInputsTest {
         assertThat(target.getValue("appidExclude")).isNull();
         assertThat((Boolean)target.getValue("uvm")).isTrue();
         assertThat((Boolean)target.getValue("credProps")).isTrue();
+        assertThat(target.getValue("credentialProtectionPolicy")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
+        assertThat((Boolean)target.getValue("enforceCredentialProtectionPolicy")).isTrue();
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionClientInput.class)).isNotNull();
@@ -55,6 +63,10 @@ class AuthenticationExtensionsClientInputsTest {
         assertThat(target.getExtension(CredentialPropertiesExtensionClientInput.class)).isNotNull();
         assertThat(target.getExtension(CredentialPropertiesExtensionClientInput.class).getIdentifier()).isEqualTo("credProps");
         assertThat(target.getExtension(CredentialPropertiesExtensionClientInput.class).getCredProps()).isTrue();
+        assertThat(target.getExtension(CredentialProtectionExtensionClientInput.class)).isNotNull();
+        assertThat(target.getExtension(CredentialProtectionExtensionClientInput.class).getIdentifier()).isEqualTo("credProtect");
+        assertThat(target.getExtension(CredentialProtectionExtensionClientInput.class).getCredentialProtectionPolicy()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
+        assertThat(target.getExtension(CredentialProtectionExtensionClientInput.class).getEnforceCredentialProtectionPolicy()).isTrue();
     }
 
     @Test
@@ -112,12 +124,28 @@ class AuthenticationExtensionsClientInputsTest {
     }
 
     @Test
-    void serialize_test(){
+    void serialize_registration_test(){
+        AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
+        builder.setCredentialProtectionPolicy(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> registrationExtensions = builder.build();
+        String json = jsonConverter.writeValueAsString(registrationExtensions);
+        assertThat(json).isEqualTo("{\"credentialProtectionPolicy\":\"userVerificationOptional\"}");
+    }
+
+    @Test
+    void serialize_authentication_test(){
         AuthenticationExtensionsClientInputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientInputs.BuilderForAuthentication();
         builder.setAppid("dummyAppid");
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> authenticationExtensions = builder.build();
         String json = jsonConverter.writeValueAsString(authenticationExtensions);
         assertThat(json).isEqualTo("{\"appid\":\"dummyAppid\"}");
+    }
+
+    @Test
+    void deserialize_registration_test(){
+        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance =
+                jsonConverter.readValue("{\"credentialProtectionPolicy\":\"userVerificationOptionalWithCredentialIDList\"}", new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {});
+        assertThat(instance.getCredentialProtectionPolicy()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
     }
 
     @Test

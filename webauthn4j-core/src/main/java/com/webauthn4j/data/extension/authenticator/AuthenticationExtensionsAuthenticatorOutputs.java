@@ -22,6 +22,11 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
+import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 
@@ -32,6 +37,10 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
     @JsonProperty
     private UvmEntries uvm;
+    @JsonSerialize(using = CredentialProtectionPolicyByteSerializer.class)
+    @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
+    @JsonProperty
+    private CredentialProtectionPolicy credProtect;
     @JsonIgnore
     private Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
@@ -53,6 +62,9 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         if(uvm != null){
             keys.add("uvm");
         }
+        if(credProtect != null){
+            keys.add("credProtect");
+        }
         keys.addAll(getUnknownKeys());
         return keys;
     }
@@ -62,12 +74,13 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         return unknowns.keySet();
     }
 
-    @SuppressWarnings({"SwitchStatementWithTooFewBranches", "java:S1301"})
     @JsonIgnore
     public Object getValue(String key) {
         switch (key){
             case "uvm":
                 return uvm;
+            case "credProtect":
+                return credProtect;
             default:
                 return unknowns.get(key);
         }
@@ -76,6 +89,11 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonIgnore
     public UvmEntries getUvm(){
         return this.uvm;
+    }
+
+    @JsonIgnore
+    public CredentialProtectionPolicy getCredProtect(){
+        return credProtect;
     }
 
     @SuppressWarnings("unchecked")
@@ -91,6 +109,9 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             if(uvm != null){
                 map.put((Class<? extends T>)UserVerificationMethodExtensionAuthenticatorOutput.class, (T)new UserVerificationMethodExtensionAuthenticatorOutput(uvm));
             }
+            if(credProtect != null){
+                map.put((Class<? extends T>)CredentialProtectionExtensionAuthenticatorOutput.class, (T)new CredentialProtectionExtensionAuthenticatorOutput(credProtect));
+            }
             extensions = Collections.unmodifiableMap(map);
         }
         return extensions;
@@ -102,23 +123,27 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorOutputs<?> that = (AuthenticationExtensionsAuthenticatorOutputs<?>) o;
         return Objects.equals(uvm, that.uvm) &&
-                Objects.equals(unknowns, that.unknowns);
+                Objects.equals(credProtect, that.credProtect) &&
+                Objects.equals(unknowns, that.unknowns) &&
+                Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uvm, unknowns);
+        return Objects.hash(uvm, credProtect, unknowns, extensions);
     }
 
     public static class BuilderForRegistration {
 
         private UvmEntries uvm;
+        private CredentialProtectionPolicy credProtect;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
         public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> build(){
             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
             instance.uvm = this.uvm;
+            instance.credProtect = this.credProtect;
             instance.unknowns = this.unknowns;
 
             return instance;
@@ -126,6 +151,11 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         public BuilderForRegistration setUvm(UvmEntries uvm){
             this.uvm = uvm;
+            return this;
+        }
+
+        public BuilderForRegistration setCredProtect(CredentialProtectionPolicy credProtect){
+            this.credProtect = credProtect;
             return this;
         }
 

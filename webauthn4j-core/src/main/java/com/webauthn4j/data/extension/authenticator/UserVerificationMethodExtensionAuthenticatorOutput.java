@@ -24,6 +24,7 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
         implements RegistrationExtensionAuthenticatorOutput, AuthenticationExtensionAuthenticatorOutput{
 
     public static final String ID = "uvm";
+    public static final String KEY_UVM = "uvm";
 
     public UserVerificationMethodExtensionAuthenticatorOutput(UvmEntries value) {
         super(value);
@@ -35,7 +36,7 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
     }
 
     public UvmEntries getUvm() {
-        return getValue(ID);
+        return getValue(KEY_UVM);
     }
 
     @Override

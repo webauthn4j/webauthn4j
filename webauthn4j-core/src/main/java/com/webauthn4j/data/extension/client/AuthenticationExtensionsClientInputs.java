@@ -1,7 +1,15 @@
 package com.webauthn4j.data.extension.client;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.Serializable;
@@ -24,6 +32,12 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private Boolean uvm;
     @JsonProperty
     private Boolean credProps;
+    @JsonSerialize(using = CredentialProtectionPolicyStringSerializer.class)
+    @JsonDeserialize(using = CredentialProtectionPolicyStringDeserializer.class)
+    @JsonProperty
+    private CredentialProtectionPolicy credentialProtectionPolicy;
+    @JsonProperty
+    private Boolean enforceCredentialProtectionPolicy;
     @JsonIgnore
     private Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
@@ -54,6 +68,12 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         if(credProps != null){
             keys.add("credProps");
         }
+        if (credentialProtectionPolicy != null) {
+            keys.add("credentialProtectionPolicy");
+        }
+        if(enforceCredentialProtectionPolicy != null){
+            keys.add("enforceCredentialProtectionPolicy");
+        }
         keys.addAll(getUnknownKeys());
         return keys;
     }
@@ -74,6 +94,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 return uvm;
             case "credProps":
                 return credProps;
+            case "credentialProtectionPolicy":
+                return credentialProtectionPolicy;
+            case "enforceCredentialProtectionPolicy":
+                return enforceCredentialProtectionPolicy;
             default:
                 return unknowns.get(key);
         }
@@ -99,6 +123,15 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         return this.credProps;
     }
 
+    @JsonIgnore
+    public CredentialProtectionPolicy getCredentialProtectionPolicy(){
+        return this.credentialProtectionPolicy;
+    }
+
+    @JsonIgnore
+    public Boolean getEnforceCredentialProtectionPolicy(){
+        return this.enforceCredentialProtectionPolicy;
+    }
 
     @SuppressWarnings("unchecked")
     public <E extends T> E getExtension(Class<E> tClass) {
@@ -122,6 +155,9 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             if(credProps != null){
                 map.put((Class<? extends T>)CredentialPropertiesExtensionClientInput.class, (T)new CredentialPropertiesExtensionClientInput(credProps));
             }
+            if(credentialProtectionPolicy != null){
+                map.put((Class<? extends T>)CredentialProtectionExtensionClientInput.class, (T)new CredentialProtectionExtensionClientInput(credentialProtectionPolicy, enforceCredentialProtectionPolicy));
+            }
             extensions = Collections.unmodifiableMap(map);
         }
         return extensions;
@@ -136,19 +172,23 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 Objects.equals(appidExclude, that.appidExclude) &&
                 Objects.equals(uvm, that.uvm) &&
                 Objects.equals(credProps, that.credProps) &&
+                Objects.equals(credentialProtectionPolicy, that.credentialProtectionPolicy) &&
+                Objects.equals(enforceCredentialProtectionPolicy, that.enforceCredentialProtectionPolicy) &&
                 Objects.equals(unknowns, that.unknowns) &&
                 Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(appid, appidExclude, uvm, credProps, unknowns, extensions);
+        return Objects.hash(appid, appidExclude, uvm, credProps, credentialProtectionPolicy, enforceCredentialProtectionPolicy, unknowns, extensions);
     }
 
     public static class BuilderForRegistration {
 
         private Boolean uvm;
         private Boolean credProps;
+        private CredentialProtectionPolicy credentialProtectionPolicy;
+        private Boolean enforceCredentialProtectionPolicy;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -156,6 +196,8 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
+            instance.credentialProtectionPolicy = this.credentialProtectionPolicy;
+            instance.enforceCredentialProtectionPolicy = this.enforceCredentialProtectionPolicy;
             instance.unknowns = this.unknowns;
 
             return instance;
@@ -168,6 +210,16 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
         public BuilderForRegistration setCredProps(Boolean credProps){
             this.credProps = credProps;
+            return this;
+        }
+
+        public BuilderForRegistration setCredentialProtectionPolicy(CredentialProtectionPolicy credentialProtectionPolicy) {
+            this.credentialProtectionPolicy = credentialProtectionPolicy;
+            return this;
+        }
+
+        public BuilderForRegistration setEnforceCredentialProtectionPolicy(Boolean enforceCredentialProtectionPolicy) {
+            this.enforceCredentialProtectionPolicy = enforceCredentialProtectionPolicy;
             return this;
         }
 

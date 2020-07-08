@@ -22,7 +22,7 @@ public interface ExtensionInput extends Serializable {
 
     String getIdentifier();
 
-    Object getValue(String key);
+    Serializable getValue(String key);
 
     void validate();
 
