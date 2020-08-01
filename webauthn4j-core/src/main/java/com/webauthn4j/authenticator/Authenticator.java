@@ -19,11 +19,12 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -76,7 +77,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the client extensions
      */
-    default Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
+    default AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return null;
     }
 
@@ -85,7 +86,7 @@ public interface Authenticator extends Serializable {
      *
      * @return the authenticator extensions
      */
-    default Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+    default AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return null;
     }
 

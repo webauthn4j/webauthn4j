@@ -23,7 +23,9 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
@@ -31,7 +33,6 @@ import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -52,7 +53,7 @@ class AuthenticatorTest {
                 null,
                 null);
         byte[] serialized = cborConverter.writeValueAsBytes(original);
-        Authenticator deserialized = cborConverter.readValue(serialized, TestAuthenticator.class);
+        TestAuthenticator deserialized = cborConverter.readValue(serialized, TestAuthenticator.class);
 
         assertThat(deserialized).isEqualTo(original);
     }
@@ -64,16 +65,16 @@ class AuthenticatorTest {
         private final Set<AuthenticatorTransport> transports;
         private long counter;
 
-        private final Map<String, RegistrationExtensionClientOutput> clientExtensions;
-        private final Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
+        private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+        private final AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
         public TestAuthenticator(
                 @JsonProperty("attestedCredentialData") AttestedCredentialData attestedCredentialData,
                 @JsonProperty("attestationStatement") AttestationStatement attestationStatement,
                 @JsonProperty("counter") long counter,
                 @JsonProperty("transports") Set<AuthenticatorTransport> transports,
-                @JsonProperty("clientExtensions") Map<String, RegistrationExtensionClientOutput> clientExtensions,
-                @JsonProperty("authenticatorExtensions") Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+                @JsonProperty("clientExtensions") AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+                @JsonProperty("authenticatorExtensions") AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
             this.attestedCredentialData = attestedCredentialData;
             this.attestationStatement = attestationStatement;
             this.transports = CollectionUtil.unmodifiableSet(transports);
@@ -118,12 +119,12 @@ class AuthenticatorTest {
         }
 
         @Override
-        public Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
+        public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
             return clientExtensions;
         }
 
         @Override
-        public Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+        public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
             return authenticatorExtensions;
         }
 

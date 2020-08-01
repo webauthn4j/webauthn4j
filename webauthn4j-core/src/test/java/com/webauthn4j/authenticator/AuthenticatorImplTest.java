@@ -19,14 +19,15 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,8 +54,8 @@ class AuthenticatorImplTest {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
-        HashMap<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new HashMap<>();
-        HashMap<String, RegistrationExtensionClientOutput> clientExtensions = new HashMap<>();
+        AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
         authenticator.setAttestedCredentialData(attestedCredentialData);
         authenticator.setAttestationStatement(attestationStatement);

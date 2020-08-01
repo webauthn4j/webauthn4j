@@ -20,7 +20,9 @@ import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.ConstUtil;
@@ -38,12 +40,12 @@ public class AuthenticatorImpl implements Authenticator {
     private Set<AuthenticatorTransport> transports;
     private long counter;
 
-    private Map<String, RegistrationExtensionClientOutput> clientExtensions;
-    private Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
+    private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports,
-                             Map<String, RegistrationExtensionClientOutput> clientExtensions,
-                             Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+                             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+                             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         this.transports = CollectionUtil.unmodifiableSet(transports);
@@ -53,7 +55,7 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
-        this(attestedCredentialData, attestationStatement, counter, transports, new HashMap<>(), new HashMap<>());
+        this(attestedCredentialData, attestationStatement, counter, transports, new AuthenticationExtensionsClientOutputs<>(), new AuthenticationExtensionsAuthenticatorOutputs<>());
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
@@ -112,20 +114,20 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     @Override
-    public Map<String, RegistrationExtensionClientOutput> getClientExtensions() {
+    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
-    public void setClientExtensions(Map<String, RegistrationExtensionClientOutput> clientExtensions) {
+    public void setClientExtensions(AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions) {
         this.clientExtensions = clientExtensions;
     }
 
     @Override
-    public Map<String, RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+    public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return authenticatorExtensions;
     }
 
-    public void setAuthenticatorExtensions(Map<String, RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+    public void setAuthenticatorExtensions(AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 
