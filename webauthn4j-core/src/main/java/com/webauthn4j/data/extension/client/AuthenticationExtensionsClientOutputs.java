@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 
@@ -27,10 +26,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     private UvmEntries uvm;
     @JsonProperty
     private CredentialPropertiesOutput credProps;
-    @JsonProperty
-    private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretOutput hmacGetSecret;
     @JsonIgnore
     private Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
@@ -58,12 +53,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         if(credProps != null){
             keys.add("credProps");
         }
-        if(hmacCreateSecret != null){
-            keys.add("hmacCreateSecret");
-        }
-        if(hmacGetSecret != null){
-            keys.add("hmacGetSecret");
-        }
         keys.addAll(getUnknownKeys());
         return keys;
     }
@@ -82,10 +71,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
                 return uvm;
             case "credProps":
                 return credProps;
-            case "hmacCreateSecret":
-                return hmacCreateSecret;
-            case "hmacGetSecret":
-                return hmacGetSecret;
             default:
                 return unknowns.get(key);
         }
@@ -104,16 +89,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     @JsonIgnore
     public CredentialPropertiesOutput getCredProps(){
         return this.credProps;
-    }
-
-    @JsonIgnore
-    public Boolean getHmacCreateSecret(){
-        return this.hmacCreateSecret;
-    }
-
-    @JsonIgnore
-    public HMACGetSecretOutput getHmacGetSecret(){
-        return this.hmacGetSecret;
     }
 
     @SuppressWarnings("unchecked")
@@ -135,12 +110,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             if(credProps != null){
                 map.put((Class<? extends T>)CredentialPropertiesExtensionClientOutput.class, (T)new CredentialPropertiesExtensionClientOutput(credProps));
             }
-            if(hmacCreateSecret != null){
-                map.put((Class<? extends T>)HMACCreateSecretExtensionClientOutput.class, (T)new HMACCreateSecretExtensionClientOutput(hmacCreateSecret));
-            }
-            if(hmacGetSecret != null){
-                map.put((Class<? extends T>)HMACGetSecretExtensionClientOutput.class, (T)new HMACGetSecretExtensionClientOutput(hmacGetSecret));
-            }
             extensions = Collections.unmodifiableMap(map);
         }
         return extensions;
@@ -154,22 +123,18 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         return Objects.equals(appid, that.appid) &&
                 Objects.equals(uvm, that.uvm) &&
                 Objects.equals(credProps, that.credProps) &&
-                Objects.equals(hmacCreateSecret, that.hmacCreateSecret) &&
-                Objects.equals(hmacGetSecret, that.hmacGetSecret) &&
-                Objects.equals(unknowns, that.unknowns) &&
-                Objects.equals(extensions, that.extensions);
+                Objects.equals(unknowns, that.unknowns);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(appid, uvm, credProps, hmacCreateSecret, hmacGetSecret, unknowns, extensions);
+        return Objects.hash(appid, uvm, credProps, unknowns);
     }
 
     public static class BuilderForRegistration {
 
         private UvmEntries uvm;
         private CredentialPropertiesOutput credProps;
-        private Boolean hmacCreateSecret;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -177,7 +142,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
-            instance.hmacCreateSecret = hmacCreateSecret;
             instance.unknowns = this.unknowns;
 
             return instance;
@@ -193,10 +157,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return this;
         }
 
-        public BuilderForRegistration setHmacCreateSecret(Boolean hmacCreateSecret) {
-            this.hmacCreateSecret = hmacCreateSecret;
-            return this;
-        }
 
         public BuilderForRegistration set(String key, Serializable value){
             AssertUtil.notNull(key, "key must not be null.");
@@ -211,7 +171,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         private Boolean appid;
         private UvmEntries uvm;
-        private HMACGetSecretOutput hmacGetSecret;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -219,24 +178,18 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.appid = this.appid;
             instance.uvm = this.uvm;
-            instance.hmacGetSecret = this.hmacGetSecret;
             instance.unknowns = this.unknowns;
 
             return instance;
         }
 
-        public BuilderForAuthentication setAppid(Boolean appid){
+        public AuthenticationExtensionsClientOutputs.BuilderForAuthentication setAppid(Boolean appid){
             this.appid = appid;
             return this;
         }
 
-        public BuilderForAuthentication setUvm(UvmEntries uvm){
+        public AuthenticationExtensionsClientOutputs.BuilderForAuthentication setUvm(UvmEntries uvm){
             this.uvm = uvm;
-            return this;
-        }
-
-        public BuilderForAuthentication setHmacGetSecret(HMACGetSecretOutput hmacGetSecret) {
-            this.hmacGetSecret = hmacGetSecret;
             return this;
         }
 

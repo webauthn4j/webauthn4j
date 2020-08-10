@@ -40,7 +40,7 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
 
     protected abstract String getIdentifier();
 
-    protected T getValue() {
+    public T getValue() {
         return value;
     }
 
