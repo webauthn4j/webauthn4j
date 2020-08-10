@@ -41,7 +41,7 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                 );
 
         assertAll(
-                () -> assertThat(extensionInputs.getExtension(CredentialPropertiesExtensionClientInput.class).getCredProps()).isTrue()
+                () -> assertThat(extensionInputs.getExtension(CredentialPropertiesExtensionClientInput.class).getValue()).isTrue()
         );
     }
 
@@ -58,7 +58,7 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                 );
 
         assertAll(
-                () -> assertThat(extensionInputs.getExtension(FIDOAppIDExtensionClientInput.class).getAppid()).isEqualTo("dummy")
+                () -> assertThat(extensionInputs.getExtension(FIDOAppIDExtensionClientInput.class).getValue()).isEqualTo("dummy")
         );
     }
 

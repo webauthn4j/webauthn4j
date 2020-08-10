@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
-import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.AssertUtil;
 
 import java.io.Serializable;
@@ -39,10 +38,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private CredentialProtectionPolicy credentialProtectionPolicy;
     @JsonProperty
     private Boolean enforceCredentialProtectionPolicy;
-    @JsonProperty
-    private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretInput hmacGetSecret;
     @JsonIgnore
     private Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
@@ -79,12 +74,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         if(enforceCredentialProtectionPolicy != null){
             keys.add("enforceCredentialProtectionPolicy");
         }
-        if(hmacCreateSecret != null){
-            keys.add("hmacCreateSecret");
-        }
-        if(hmacGetSecret != null){
-            keys.add("hmacGetSecret");
-        }
         keys.addAll(getUnknownKeys());
         return keys;
     }
@@ -109,10 +98,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 return credentialProtectionPolicy;
             case "enforceCredentialProtectionPolicy":
                 return enforceCredentialProtectionPolicy;
-            case "hmacCreateSecret":
-                return hmacCreateSecret;
-            case "hmacGetSecret":
-                return hmacGetSecret;
             default:
                 return unknowns.get(key);
         }
@@ -148,16 +133,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         return this.enforceCredentialProtectionPolicy;
     }
 
-    @JsonIgnore
-    public Boolean getHmacCreateSecret(){
-        return this.hmacCreateSecret;
-    }
-
-    @JsonIgnore
-    public HMACGetSecretInput getHmacGetSecret(){
-        return this.hmacGetSecret;
-    }
-
     @SuppressWarnings("unchecked")
     public <E extends T> E getExtension(Class<E> tClass) {
         return (E)getExtensions().get(tClass);
@@ -183,12 +158,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             if(credentialProtectionPolicy != null){
                 map.put((Class<? extends T>)CredentialProtectionExtensionClientInput.class, (T)new CredentialProtectionExtensionClientInput(credentialProtectionPolicy, enforceCredentialProtectionPolicy));
             }
-            if(hmacCreateSecret != null){
-                map.put((Class<? extends T>)HMACCreateSecretExtensionClientInput.class, (T)new HMACCreateSecretExtensionClientInput(hmacCreateSecret));
-            }
-            if(hmacGetSecret != null){
-                map.put((Class<? extends T>)HMACGetSecretExtensionClientInput.class, (T)new HMACGetSecretExtensionClientInput(hmacGetSecret));
-            }
             extensions = Collections.unmodifiableMap(map);
         }
         return extensions;
@@ -205,15 +174,13 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 Objects.equals(credProps, that.credProps) &&
                 Objects.equals(credentialProtectionPolicy, that.credentialProtectionPolicy) &&
                 Objects.equals(enforceCredentialProtectionPolicy, that.enforceCredentialProtectionPolicy) &&
-                Objects.equals(hmacCreateSecret, that.hmacCreateSecret) &&
-                Objects.equals(hmacGetSecret, that.hmacGetSecret) &&
                 Objects.equals(unknowns, that.unknowns) &&
                 Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(appid, appidExclude, uvm, credProps, credentialProtectionPolicy, enforceCredentialProtectionPolicy, hmacCreateSecret, hmacGetSecret, unknowns, extensions);
+        return Objects.hash(appid, appidExclude, uvm, credProps, credentialProtectionPolicy, enforceCredentialProtectionPolicy, unknowns, extensions);
     }
 
     public static class BuilderForRegistration {
@@ -222,7 +189,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private Boolean credProps;
         private CredentialProtectionPolicy credentialProtectionPolicy;
         private Boolean enforceCredentialProtectionPolicy;
-        private Boolean hmacCreateSecret;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -232,7 +198,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             instance.credProps = this.credProps;
             instance.credentialProtectionPolicy = this.credentialProtectionPolicy;
             instance.enforceCredentialProtectionPolicy = this.enforceCredentialProtectionPolicy;
-            instance.hmacCreateSecret = this.hmacCreateSecret;
             instance.unknowns = this.unknowns;
 
             return instance;
@@ -258,11 +223,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public BuilderForRegistration setHmacCreateSecret(Boolean hmacCreateSecret) {
-            this.hmacCreateSecret = hmacCreateSecret;
-            return this;
-        }
-
         public BuilderForRegistration set(String key, Serializable value){
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
@@ -277,7 +237,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private String appid;
         private String appidExclude;
         private Boolean uvm;
-        private HMACGetSecretInput hmacGetSecret;
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
@@ -286,30 +245,23 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             instance.appid = this.appid;
             instance.appidExclude = this.appidExclude;
             instance.uvm = this.uvm;
-            instance.hmacGetSecret = this.hmacGetSecret;
-
             instance.unknowns = this.unknowns;
 
             return instance;
         }
 
-        public BuilderForAuthentication setAppid(String appid){
+        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setAppid(String appid){
             this.appid = appid;
             return this;
         }
 
-        public BuilderForAuthentication setAppidExclude(String appidExclude){
+        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setAppidExclude(String appidExclude){
             this.appidExclude = appidExclude;
             return this;
         }
 
-        public BuilderForAuthentication setUvm(Boolean uvm){
+        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setUvm(Boolean uvm){
             this.uvm = uvm;
-            return this;
-        }
-
-        public BuilderForAuthentication setHmacGetSecret(HMACGetSecretInput hmacGetSecret) {
-            this.hmacGetSecret = hmacGetSecret;
             return this;
         }
 
@@ -321,5 +273,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         }
 
     }
+
+
 
 }
