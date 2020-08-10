@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 
@@ -35,45 +36,59 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
         builder.setUvm(true);
         builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
+        builder.setHmacCreateSecret(true);
         builder.set("unknown", 1);
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "credProtect", "unknown");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "credProtect", "hmacCreateSecret", "unknown");
 
         assertThat(target.getUvm()).isTrue();
         assertThat(target.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
+        assertThat(target.getHmacCreateSecret()).isTrue();
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean)target.getValue("uvm")).isTrue();
         assertThat(target.getValue("credProtect")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
+        assertThat((Boolean)target.getValue("hmacCreateSecret")).isTrue();
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class)).isNotNull();
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class).getIdentifier()).isEqualTo("uvm");
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class).getUvm()).isTrue();
+        assertThat(target.getExtension(CredentialProtectionExtensionAuthenticatorInput.class)).isNotNull();
+        assertThat(target.getExtension(CredentialProtectionExtensionAuthenticatorInput.class).getIdentifier()).isEqualTo("credProtect");
         assertThat(target.getExtension(CredentialProtectionExtensionAuthenticatorInput.class).getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
+        assertThat(target.getExtension(HMACCreateSecretExtensionAuthenticatorInput.class)).isNotNull();
+        assertThat(target.getExtension(HMACCreateSecretExtensionAuthenticatorInput.class).getIdentifier()).isEqualTo("hmac-secret");
+        assertThat(target.getExtension(HMACCreateSecretExtensionAuthenticatorInput.class).getHmacCreateSecret()).isTrue();
     }
 
     @Test
     void authentication_variant_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForAuthentication();
         builder.setUvm(true);
+        builder.setHmacGetSecret(new HMACGetSecretInput(new byte[32], new byte[32]));
         builder.set("unknown", 1);
         AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> target = builder.build();
 
-        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "unknown");
+        assertThat(target.getKeys()).containsExactlyInAnyOrder("uvm", "hmacGetSecret", "unknown");
 
         assertThat(target.getUvm()).isTrue();
+        assertThat(target.getHmacGetSecret()).isEqualTo(new HMACGetSecretInput(new byte[32], new byte[32]));
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
         assertThat((Boolean)target.getValue("uvm")).isTrue();
+        assertThat(target.getValue("hmacGetSecret")).isEqualTo(new HMACGetSecretInput(new byte[32], new byte[32]));
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class)).isNotNull();
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class).getIdentifier()).isEqualTo("uvm");
         assertThat(target.getExtension(UserVerificationMethodExtensionAuthenticatorInput.class).getUvm()).isTrue();
+        assertThat(target.getExtension(HMACGetSecretExtensionAuthenticatorInput.class)).isNotNull();
+        assertThat(target.getExtension(HMACGetSecretExtensionAuthenticatorInput.class).getIdentifier()).isEqualTo("hmac-secret");
+        assertThat(target.getExtension(HMACGetSecretExtensionAuthenticatorInput.class).getHmacGetSecret()).isEqualTo(new HMACGetSecretInput(new byte[32], new byte[32]));
 
     }
 
