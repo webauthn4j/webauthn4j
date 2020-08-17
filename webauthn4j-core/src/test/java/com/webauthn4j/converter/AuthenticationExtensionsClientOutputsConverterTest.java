@@ -17,7 +17,11 @@
 package com.webauthn4j.converter;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,12 +33,18 @@ class AuthenticationExtensionsClientOutputsConverterTest {
     private final AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @Test
-    void convertAuthenticationExtensions() {
+    <T extends ExtensionClientOutput> void convert_test() {
+        JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+        jsonConverter.readValue("{}", new TypeReference<AuthenticationExtensionsClientOutputs<ExtensionClientOutput>>(){});
+    }
+
+    @Test
+    void convert_null_test() {
         assertThat(target.convert(null)).isNull();
     }
 
     @Test
-    void convertAuthenticationExtensionsToString_null_test() {
+    void convertToString_null_test() {
         assertThat(target.convertToString(null)).isNull();
     }
 }
