@@ -142,7 +142,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }
@@ -178,7 +178,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.appid = this.appid;
             instance.uvm = this.uvm;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }
