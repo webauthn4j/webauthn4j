@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.TokenBinding;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
@@ -33,6 +34,8 @@ import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+
+import java.util.Collection;
 
 /**
  * Per field checker utility class
@@ -66,7 +69,7 @@ class BeanAssertUtil {
         }
 
         if (registrationData.getClientDataHash() == null) {
-            throw new ConstraintViolationException("attestationObjectBytes must not be null");
+            throw new ConstraintViolationException("clientDataHash must not be null");
         }
     }
 
@@ -228,8 +231,9 @@ class BeanAssertUtil {
 
     public static void validate(ServerProperty serverProperty) {
         validate((CoreServerProperty) serverProperty);
-        if (serverProperty.getOrigin() == null) {
-            throw new ConstraintViolationException("origin must not be null");
+        final Collection<Origin> origins = serverProperty.getOrigins();
+        if (origins == null || origins.isEmpty()) {
+            throw new ConstraintViolationException("origins must not be null or empty");
         }
     }
 
