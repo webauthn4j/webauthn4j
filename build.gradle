@@ -22,7 +22,7 @@ buildscript {
 
     def sonarqubeVersion = "3.0"
     def asciidoctorGradleVersion="3.2.0"
-    def artifactoryVersion="4.17.0"
+    def artifactoryVersion="4.17.1"
     def bintrayVersion = "1.8.5"
     def owaspDependencyCheckVersion = "5.3.2.1"
     def httpBuilderVersion = "0.7.2"
