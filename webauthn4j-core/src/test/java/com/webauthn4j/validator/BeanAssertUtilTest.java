@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -530,4 +532,37 @@ class BeanAssertUtilTest {
                 () -> BeanAssertUtil.validate(attestationObject)
         );
     }
+
+    @Test
+    void validate_serverProperty_with_null_test(){
+        assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate((ServerProperty) null)
+        );
+    }
+
+    @Test
+    void validate_serverProperty_with_origins_null_test(){
+        ServerProperty serverProperty = new ServerProperty((List<Origin>) null, "example.com", new DefaultChallenge(), null);
+        assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate(serverProperty)
+        );
+    }
+
+    @Test
+    void validate_serverProperty_with_rpId_null_test(){
+        ServerProperty serverProperty = new ServerProperty(new Origin("https://example.com"), null, new DefaultChallenge(), null);
+                assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate(serverProperty)
+        );
+    }
+
+    @Test
+    void validate_serverProperty_with_challenge_null_test(){
+        ServerProperty serverProperty = new ServerProperty(new Origin("https://example.com"), "example.com", null, null);
+        assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate(serverProperty)
+        );
+    }
+
+
 }

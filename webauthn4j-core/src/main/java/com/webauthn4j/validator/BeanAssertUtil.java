@@ -214,14 +214,14 @@ class BeanAssertUtil {
         if (serverProperty == null) {
             throw new ConstraintViolationException("serverProperty must not be null");
         }
+        if (serverProperty.getOrigins() == null) {
+            throw new ConstraintViolationException("origin must not be null");
+        }
         if (serverProperty.getRpId() == null) {
             throw new ConstraintViolationException("rpId must not be null");
         }
         if (serverProperty.getChallenge() == null) {
             throw new ConstraintViolationException("challenge must not be null");
-        }
-        if (serverProperty.getOrigin() == null) {
-            throw new ConstraintViolationException("origin must not be null");
         }
     }
 

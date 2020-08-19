@@ -21,6 +21,8 @@ import com.webauthn4j.data.client.challenge.Challenge;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,7 +33,7 @@ public class ServerProperty implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private final Origin origin;
+    private final List<Origin> origins;
     private final String rpId;
     private final Challenge challenge;
     private final byte[] tokenBindingId;
@@ -40,7 +42,19 @@ public class ServerProperty implements Serializable {
     // ========================================================================================================
 
     public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
-        this.origin = origin;
+        if(origin == null){
+            this.origins = null;
+        }
+        else {
+            this.origins = Collections.singletonList(origin);
+        }
+        this.rpId = rpId;
+        this.challenge = challenge;
+        this.tokenBindingId = tokenBindingId;
+    }
+
+    public ServerProperty(List<Origin> origins, String rpId, Challenge challenge, byte[] tokenBindingId) {
+        this.origins = origins;
         this.rpId = rpId;
         this.challenge = challenge;
         this.tokenBindingId = tokenBindingId;
@@ -50,12 +64,28 @@ public class ServerProperty implements Serializable {
     // ========================================================================================================
 
     /**
+     * @deprecated
      * Returns the {@link Origin}
      *
      * @return the {@link Origin}
      */
+    @Deprecated
     public Origin getOrigin() {
-        return origin;
+        if(origins == null || origins.isEmpty()){
+            return null;
+        }
+        else {
+            return origins.get(0);
+        }
+    }
+
+    /**
+     * Returns the {@link Origin} list
+     *
+     * @return the {@link Origin} list
+     */
+    public List<Origin> getOrigins() {
+        return origins;
     }
 
     /**
@@ -90,7 +120,7 @@ public class ServerProperty implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ServerProperty that = (ServerProperty) o;
-        return Objects.equals(origin, that.origin) &&
+        return Objects.equals(origins, that.origins) &&
                 Objects.equals(rpId, that.rpId) &&
                 Objects.equals(challenge, that.challenge) &&
                 Arrays.equals(tokenBindingId, that.tokenBindingId);
@@ -98,8 +128,7 @@ public class ServerProperty implements Serializable {
 
     @Override
     public int hashCode() {
-
-        int result = Objects.hash(origin, rpId, challenge);
+        int result = Objects.hash(origins, rpId, challenge);
         result = 31 * result + Arrays.hashCode(tokenBindingId);
         return result;
     }

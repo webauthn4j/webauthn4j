@@ -40,7 +40,8 @@ class OriginValidator {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
 
-        if (!Objects.equals(collectedClientData.getOrigin(), serverProperty.getOrigin())) {
+
+        if (serverProperty.getOrigins().stream().noneMatch(origin -> Objects.equals(origin, collectedClientData.getOrigin()))) {
             throw new BadOriginException("The collectedClientData origin doesn't match the preconfigured server origin.");
         }
     }

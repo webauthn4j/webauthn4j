@@ -34,27 +34,6 @@ class OriginTest {
     private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
     @Test
-    void equals_test() {
-        Origin https_examplecom_default = new Origin("https://example.com");
-        Origin https_examplecom_443 = new Origin("https://example.com:443");
-        Origin http_examplecom_default = new Origin("http://example.com");
-        Origin http_examplecom_80 = new Origin("http://example.com:80");
-        Origin http_examplecom_8080 = new Origin("http://example.com:8080");
-        Origin android_apk_key_hash_abc123_a = new Origin("android:apk-key-hash:abc123");
-        Origin android_apk_key_hash_abc123_b = new Origin("android:apk-key-hash:abc123");
-        Origin android_apk_key_hash_def456 = new Origin("android:apk-key-hash:def");
-
-        assertAll(
-                () -> assertThat(https_examplecom_default).isEqualTo(https_examplecom_443),
-                () -> assertThat(http_examplecom_default).isEqualTo(http_examplecom_80),
-                () -> assertThat(http_examplecom_default).isNotEqualTo(http_examplecom_8080),
-                () -> assertThat(http_examplecom_default).isNotEqualTo(https_examplecom_default),
-                () -> assertThat(android_apk_key_hash_abc123_a).isEqualTo(android_apk_key_hash_abc123_b),
-                () -> assertThat(android_apk_key_hash_abc123_a).isNotEqualTo(android_apk_key_hash_def456)
-        );
-    }
-
-    @Test
     void getter_test() {
         Origin https_examplecom_default = new Origin("https://example.com");
         assertAll(
@@ -144,18 +123,45 @@ class OriginTest {
         assertThatCode(() -> new Origin("example.com")).doesNotThrowAnyException();
     }
 
+
+    @Test
+    void equals_test() {
+        Origin https_examplecom_default = new Origin("https://example.com");
+        Origin https_examplecom_443 = new Origin("https://example.com:443");
+        Origin http_examplecom_default = new Origin("http://example.com");
+        Origin http_examplecom_80 = new Origin("http://example.com:80");
+        Origin http_examplecom_8080 = new Origin("http://example.com:8080");
+        Origin android_apk_key_hash_abc123_a = new Origin("android:apk-key-hash:abc123");
+        Origin android_apk_key_hash_abc123_b = new Origin("android:apk-key-hash:abc123");
+        Origin android_apk_key_hash_def456 = new Origin("android:apk-key-hash:def");
+
+        assertAll(
+                () -> assertThat(https_examplecom_default).isEqualTo(https_examplecom_443),
+                () -> assertThat(http_examplecom_default).isEqualTo(http_examplecom_80),
+                () -> assertThat(http_examplecom_default).isNotEqualTo(http_examplecom_8080),
+                () -> assertThat(http_examplecom_default).isNotEqualTo(https_examplecom_default),
+                () -> assertThat(android_apk_key_hash_abc123_a).isEqualTo(android_apk_key_hash_abc123_b),
+                () -> assertThat(android_apk_key_hash_abc123_a).isNotEqualTo(android_apk_key_hash_def456)
+        );
+    }
+
     @Test
     @SuppressWarnings("deprecation")
     void hasCode_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
+        Origin originC = new Origin("http://localhost:8080");
+        Origin originD = new Origin("http", "localhost", 8080);
         Origin android_apk_key_hash_abc123_a = new Origin("android:apk-key-hash:abc123");
         Origin android_apk_key_hash_abc123_b = new Origin("android:apk-key-hash:abc123");
         Origin android_apk_key_hash_def456 = new Origin("android:apk-key-hash:def");
+        Origin invalid_data = new Origin("invalid:data");
 
         assertThat(originA).hasSameHashCodeAs(originB);
+        assertThat(originC).hasSameHashCodeAs(originD);
         assertThat(android_apk_key_hash_abc123_a).hasSameHashCodeAs(android_apk_key_hash_abc123_b);
         assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(android_apk_key_hash_def456.hashCode());
+        assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(invalid_data.hashCode());
     }
 
     @Test

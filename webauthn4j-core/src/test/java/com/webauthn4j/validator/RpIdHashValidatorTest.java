@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator;
 
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -40,7 +41,7 @@ class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, rpIdB, null, null);
 
         //When
         target.validate(rpIdHashA, serverProperty);
@@ -54,7 +55,7 @@ class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        ServerProperty serverProperty = new ServerProperty(null, rpIdB, null, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, rpIdB, null, null);
 
         //When
         assertThrows(BadRpIdException.class,
@@ -84,7 +85,7 @@ class RpIdHashValidatorTest {
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
-        ServerProperty serverProperty = new ServerProperty(null, null, null, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, null, null, null);
 
         //When
         assertThrows(IllegalArgumentException.class,

@@ -18,6 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
@@ -42,7 +43,7 @@ class ChallengeValidatorTest {
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, null, challengeB, null);
 
         //When
         target.validate(collectedClientData, serverProperty);
@@ -55,7 +56,7 @@ class ChallengeValidatorTest {
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, null, challengeB, null);
 
         //When
         assertThrows(BadChallengeException.class,
@@ -70,7 +71,7 @@ class ChallengeValidatorTest {
         Challenge challengeB = null;
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(null, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty((Origin) null, null, challengeB, null);
 
         //When
         assertThrows(MissingChallengeException.class,

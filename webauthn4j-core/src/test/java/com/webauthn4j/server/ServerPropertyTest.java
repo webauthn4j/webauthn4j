@@ -16,15 +16,27 @@
 
 package com.webauthn4j.server;
 
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ServerPropertyTest {
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void getOrigin_test(){
+        Origin origin = new Origin("https://example.com");
+        assertThat(new ServerProperty(origin, "example.com", new DefaultChallenge(), null).getOrigin()).isEqualTo(origin);
+        assertThat(new ServerProperty(Collections.emptyList(), "example.com", new DefaultChallenge(), null).getOrigin()).isNull();;
+        assertThat(new ServerProperty((Origin) null, "example.com", new DefaultChallenge(), null).getOrigin()).isNull();;
+    }
 
     @Test
     void equals_hashCode_test() {
