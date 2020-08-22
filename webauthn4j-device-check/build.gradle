@@ -14,21 +14,19 @@
  * limitations under the License.
  */
 
-description = "Package that contains testing classes for WebAuthn4J"
+description = "WebAuthn4J Device Check library"
 
 dependencies {
-    implementation project(':webauthn4j-core')
-    implementation project(':webauthn4j-device-check')
-    implementation project(':webauthn4j-metadata')
+    api project(':webauthn4j-core')
+
+    implementation("org.slf4j:slf4j-api")
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
-    implementation("org.springframework:spring-core")
-    implementation("org.bouncycastle:bcprov-jdk15on")
-    implementation("org.bouncycastle:bcpkix-jdk15on")
-
     //Test
+    testImplementation project(':webauthn4j-test')
+
     testImplementation('ch.qos.logback:logback-classic')
     testImplementation('org.projectlombok:lombok')
     testImplementation('org.mockito:mockito-core')
@@ -37,6 +35,7 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
 
 }
+
 
 sonarqube {
     skipProject = true
