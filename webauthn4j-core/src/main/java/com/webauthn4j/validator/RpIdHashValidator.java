@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
@@ -37,7 +37,7 @@ class RpIdHashValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(byte[] rpIdHash, ServerProperty serverProperty) {
+    public void validate(byte[] rpIdHash, CoreServerProperty serverProperty) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();
         AssertUtil.notNull(rpId, "rpId must not be null");

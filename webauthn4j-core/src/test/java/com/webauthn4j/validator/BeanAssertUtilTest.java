@@ -147,6 +147,8 @@ class BeanAssertUtilTest {
         );
     }
 
+
+
     @Test
     void validate_RegistrationParameters_test() {
         RegistrationParameters registrationParameters = new RegistrationParameters(

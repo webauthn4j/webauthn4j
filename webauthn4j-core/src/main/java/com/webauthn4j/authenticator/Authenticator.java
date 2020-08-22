@@ -16,61 +16,13 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-
-import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Core interface that represents WebAuthn authenticator
  */
-public interface Authenticator extends Serializable {
-
-    /**
-     * Returns the {@link AttestedCredentialData}
-     *
-     * @return the {@link AttestedCredentialData}
-     */
-    AttestedCredentialData getAttestedCredentialData();
-
-    /**
-     * Returns the {@link AttestationStatement}
-     *
-     * @return the {@link AttestationStatement}
-     */
-    default AttestationStatement getAttestationStatement() {
-        return null;
-    }
-
-    /**
-     * Returns the {@link AuthenticatorTransport} {@link Set}
-     *
-     * @return the {@link AuthenticatorTransport} {@link Set}
-     */
-    @SuppressWarnings("squid:S1168")
-    default Set<AuthenticatorTransport> getTransports() {
-        return null;
-    }
-
-    /**
-     * Returns the counter value
-     *
-     * @return the counter value
-     */
-    long getCounter();
-
-    /**
-     * Sets the counter value
-     *
-     * @param value the counter value
-     */
-    void setCounter(long value);
+public interface Authenticator extends CoreAuthenticator {
 
     /**
      * Returns the client extensions
@@ -78,15 +30,6 @@ public interface Authenticator extends Serializable {
      * @return the client extensions
      */
     default AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
-        return null;
-    }
-
-    /**
-     * Returns the authenticator extensions
-     *
-     * @return the authenticator extensions
-     */
-    default AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return null;
     }
 

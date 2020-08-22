@@ -22,7 +22,7 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
@@ -44,7 +44,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     private int backwardThreshold = 60;
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -68,8 +68,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] collectedClientData = registrationObject.getCollectedClientDataBytes();
-        validateNonce(nonce, authenticatorData, collectedClientData);
+        validateNonce(nonce, authenticatorData, registrationObject.getClientDataHash());
 
         /// Let attestationCert be the attestation certificate.
         /// Verify that attestationCert is issued to the hostname "attest.android.com" (see SafetyNet online documentation).
@@ -101,8 +100,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(String nonce, byte[] authenticatorData, byte[] collectedClientData) {
-        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientData);
+    private void validateNonce(String nonce, byte[] authenticatorData, byte[] clientDataHash) {
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);

@@ -25,7 +25,7 @@ import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
@@ -56,7 +56,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -289,10 +289,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
 
-    private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
-        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+    private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 

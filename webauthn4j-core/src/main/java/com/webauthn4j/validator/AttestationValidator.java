@@ -61,7 +61,7 @@ class AttestationValidator {
     }
 
 
-    public void validate(RegistrationObject registrationObject) {
+    public void validate(CoreRegistrationObject registrationObject) {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
@@ -132,7 +132,7 @@ class AttestationValidator {
         }
     }
 
-    private AttestationType validateAttestationStatement(RegistrationObject registrationObject) {
+    private AttestationType validateAttestationStatement(CoreRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 return validator.validate(registrationObject);

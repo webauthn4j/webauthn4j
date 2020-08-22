@@ -19,30 +19,26 @@ package com.webauthn4j.server;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * Data transfer object that represents relying party server property for validators
  */
-public class ServerProperty implements Serializable {
+public class ServerProperty extends CoreServerProperty {
 
     // ~ Instance fields
     // ================================================================================================
 
     private final Origin origin;
-    private final String rpId;
-    private final Challenge challenge;
     private final byte[] tokenBindingId;
 
     // ~ Constructor
     // ========================================================================================================
 
     public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
+        super(rpId, challenge);
         this.origin = origin;
-        this.rpId = rpId;
-        this.challenge = challenge;
         this.tokenBindingId = tokenBindingId;
     }
 
@@ -58,23 +54,7 @@ public class ServerProperty implements Serializable {
         return origin;
     }
 
-    /**
-     * Returns the rpId
-     *
-     * @return the rpId
-     */
-    public String getRpId() {
-        return rpId;
-    }
 
-    /**
-     * Returns the {@link Challenge}
-     *
-     * @return the {@link Challenge}
-     */
-    public Challenge getChallenge() {
-        return challenge;
-    }
 
     /**
      * Returns the tokenBindingId
@@ -89,17 +69,15 @@ public class ServerProperty implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         ServerProperty that = (ServerProperty) o;
         return Objects.equals(origin, that.origin) &&
-                Objects.equals(rpId, that.rpId) &&
-                Objects.equals(challenge, that.challenge) &&
                 Arrays.equals(tokenBindingId, that.tokenBindingId);
     }
 
     @Override
     public int hashCode() {
-
-        int result = Objects.hash(origin, rpId, challenge);
+        int result = Objects.hash(super.hashCode(), origin);
         result = 31 * result + Arrays.hashCode(tokenBindingId);
         return result;
     }

@@ -19,7 +19,7 @@ package com.webauthn4j.validator.attestation.statement.none;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
 /**
@@ -28,7 +28,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 public class NoneAttestationStatementValidator extends AbstractStatementValidator<NoneAttestationStatement> {
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

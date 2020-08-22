@@ -17,49 +17,37 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.RegistrationData;
-import com.webauthn4j.data.RegistrationParameters;
+import com.webauthn4j.data.CoreRegistrationData;
+import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.client.ClientDataType;
-import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
-public class RegistrationDataValidator {
+public class CoreRegistrationDataValidator {
 
     // ~ Instance fields
     // ================================================================================================
 
-    private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
-    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
 
-    private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
+    private final List<CustomCoreRegistrationValidator> customRegistrationValidators = new ArrayList<>();
 
     private final AttestationValidator attestationValidator;
 
-    public RegistrationDataValidator(
+    public CoreRegistrationDataValidator(
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
@@ -77,55 +65,33 @@ public class RegistrationDataValidator {
                 selfAttestationTrustworthinessValidator);
     }
 
+
+    /**
+     * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
+     */
     @SuppressWarnings("deprecation")
-    public void validate(RegistrationData registrationData, RegistrationParameters registrationParameters) {
+    public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
         BeanAssertUtil.validate(registrationParameters);
 
-        byte[] clientDataBytes = registrationData.getCollectedClientDataBytes();
         byte[] attestationObjectBytes = registrationData.getAttestationObjectBytes();
+        byte[] clientDataHash = registrationData.getClientDataHash();
 
-        CollectedClientData collectedClientData = registrationData.getCollectedClientData();
         AttestationObject attestationObject = registrationData.getAttestationObject();
-        Set<AuthenticatorTransport> transports = registrationData.getTransports();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = registrationData.getClientExtensions();
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
-        ServerProperty serverProperty = registrationParameters.getServerProperty();
+        CoreServerProperty serverProperty = registrationParameters.getServerProperty();
 
-        RegistrationObject registrationObject = new RegistrationObject(
+        CoreRegistrationObject registrationObject = new CoreRegistrationObject(
                 attestationObject,
                 attestationObjectBytes,
-                collectedClientData,
-                clientDataBytes,
-                clientExtensions,
-                transports,
+                clientDataHash,
                 serverProperty
         );
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
-
-        //spec| Step3
-        //spec| Verify that the value of C.type is webauthn.create.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be 'create' on registration, but it isn't.");
-        }
-
-        //spec| Step4
-        //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in the create() call.
-        challengeValidator.validate(collectedClientData, serverProperty);
-
-        //spec| Step5
-        //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
-
-        //spec| Step6
-        //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
-        //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
-        //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step7
         //spec| Compute the hash of response.clientDataJSON using SHA-256.
@@ -151,7 +117,6 @@ public class RegistrationDataValidator {
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = registrationParameters.getExpectedExtensionIds();
-        clientExtensionValidator.validate(clientExtensions, expectedExtensionIdentifiers);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         //spec| Step13-16,19
@@ -173,7 +138,7 @@ public class RegistrationDataValidator {
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         // validate with custom logic
-        for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
+        for (CustomCoreRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
         }
     }
@@ -199,7 +164,7 @@ public class RegistrationDataValidator {
         }
     }
 
-    public List<CustomRegistrationValidator> getCustomRegistrationValidators() {
+    public List<CustomCoreRegistrationValidator> getCustomRegistrationValidators() {
         return customRegistrationValidators;
     }
 

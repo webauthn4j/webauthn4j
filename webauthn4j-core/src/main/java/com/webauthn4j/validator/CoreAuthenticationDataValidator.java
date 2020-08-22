@@ -16,51 +16,44 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.authenticator.Authenticator;
-import com.webauthn4j.data.AuthenticationData;
-import com.webauthn4j.data.AuthenticationParameters;
+import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.data.CoreAuthenticationData;
+import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.data.client.ClientDataType;
-import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class AuthenticationDataValidator {
+public class CoreAuthenticationDataValidator {
 
-    private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
-    private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
-    private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
 
-    private final List<CustomAuthenticationValidator> customAuthenticationValidators;
+    private final List<CustomCoreAuthenticationValidator> customAuthenticationValidators;
 
-    private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
+    private CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
-    public AuthenticationDataValidator(List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public CoreAuthenticationDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 
-    public AuthenticationDataValidator() {
-        this.customAuthenticationValidators = new ArrayList<>();
+    public CoreAuthenticationDataValidator() {
+        this(new ArrayList<>());
     }
 
+    /**
+     * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
+     */
     @SuppressWarnings("deprecation")
-    public void validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
+    public void validate(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
         BeanAssertUtil.validate(authenticationParameters);
@@ -89,7 +82,6 @@ public class AuthenticationDataValidator {
         //spec| Step4
         //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         //spec| and signature respectively.
-        byte[] cData = authenticationData.getCollectedClientDataBytes();
         byte[] aData = authenticationData.getAuthenticatorDataBytes();
 
         //spec| Step5
@@ -97,47 +89,22 @@ public class AuthenticationDataValidator {
         //spec| Step6
         //spec| Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
 
-        //      (In the spec, claimed as "C", but use "collectedClientData" here)
-        CollectedClientData collectedClientData = authenticationData.getCollectedClientData();
+        byte[] clientDataHash = authenticationData.getClientDataHash();
 
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions = authenticationData.getClientExtensions();
-        ServerProperty serverProperty = authenticationParameters.getServerProperty();
+        CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
 
-        BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
         BeanAssertUtil.validate(serverProperty);
 
         validateAuthenticatorData(authenticatorData);
 
         byte[] credentialId = authenticationData.getCredentialId();
-        Authenticator authenticator = authenticationParameters.getAuthenticator();
+        CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
 
-        AuthenticationObject authenticationObject = new AuthenticationObject(
-                credentialId, authenticatorData, aData, collectedClientData, cData, clientExtensions,
-                serverProperty, authenticator
+        CoreAuthenticationObject authenticationObject = new CoreAuthenticationObject(
+                credentialId, authenticatorData, aData, clientDataHash, serverProperty, authenticator
         );
-
-        //spec| Step7
-        //spec| Verify that the value of C.type is the string webauthn.get.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
-        }
-
-        //spec| Step8
-        //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
-        //spec| the PublicKeyCredentialRequestOptions passed to the get() call.
-        challengeValidator.validate(collectedClientData, serverProperty);
-
-        //spec| Step9
-        //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
-
-        //spec| Step10
-        //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
-        //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
-        //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
-        tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
         //spec| Step11
         //spec| Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
@@ -164,7 +131,6 @@ public class AuthenticationDataValidator {
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
         List<String> expectedExtensionIdentifiers = authenticationParameters.getExpectedExtensionIds();
-        clientExtensionValidator.validate(clientExtensions, expectedExtensionIdentifiers);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
 
         //spec| Using the credential public key, validate that sig is a valid signature over
@@ -188,11 +154,11 @@ public class AuthenticationDataValidator {
             }
             //spec| less than or equal to the signature counter value stored in conjunction with credential’s id attribute.
             else {
-                maliciousCounterValueHandler.maliciousCounterValueDetected(authenticationObject);
+                coreMaliciousCounterValueHandler.maliciousCounterValueDetected(authenticationObject);
             }
         }
 
-        for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
+        for (CustomCoreAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
             customAuthenticationValidator.validate(authenticationObject);
         }
 
@@ -209,15 +175,15 @@ public class AuthenticationDataValidator {
     }
 
     public CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
-        return maliciousCounterValueHandler;
+        return coreMaliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
-        AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
-        this.maliciousCounterValueHandler = maliciousCounterValueHandler;
+    public void setMaliciousCounterValueHandler(CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
+        AssertUtil.notNull(coreMaliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
+        this.coreMaliciousCounterValueHandler = coreMaliciousCounterValueHandler;
     }
 
-    public List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
+    public List<CustomCoreAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
     }
 }

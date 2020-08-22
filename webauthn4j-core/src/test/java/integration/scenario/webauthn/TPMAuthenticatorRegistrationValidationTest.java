@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package integration.scenario;
+package integration.scenario.webauthn;
 
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
@@ -31,7 +31,7 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.webauthn.WebAuthnAuthenticatorAdaptor;
 import com.webauthn4j.test.client.ClientPlatform;
-import com.webauthn4j.validator.attestation.statement.androidsafetynet.AndroidSafetyNetAttestationStatementValidator;
+import com.webauthn4j.validator.attestation.statement.tpm.TPMAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import org.junit.jupiter.api.Test;
@@ -42,18 +42,18 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
+class TPMAuthenticatorRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
 
     private final Origin origin = new Origin("http://localhost");
-    private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.ANDROID_SAFETY_NET_AUTHENTICATOR);
+    private final WebAuthnAuthenticatorAdaptor webAuthnAuthenticatorAdaptor = new WebAuthnAuthenticatorAdaptor(EmulatorUtil.TPM_AUTHENTICATOR);
     private final ClientPlatform clientPlatform = new ClientPlatform(origin, webAuthnAuthenticatorAdaptor);
-    private final AndroidSafetyNetAttestationStatementValidator androidSafetyNetAttestationStatementValidator = new AndroidSafetyNetAttestationStatementValidator();
+    private final TPMAttestationStatementValidator tpmAttestationStatementValidator = new TPMAttestationStatementValidator();
     private final TrustAnchorsResolver trustAnchorsResolver = TestAttestationUtil.createTrustAnchorProviderWith3tierTestRootCACertificate();
     private final WebAuthnManager target = new WebAuthnManager(
-            Collections.singletonList(androidSafetyNetAttestationStatementValidator),
+            Collections.singletonList(tpmAttestationStatementValidator),
             new TrustAnchorCertPathTrustworthinessValidator(trustAnchorsResolver),
             new DefaultSelfAttestationTrustworthinessValidator()
     );
@@ -63,7 +63,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    void validate_RegistrationContext_with_android_safety_net_attestation_statement_test() {
+    void validate_RegistrationContext_with_tpm_attestation_statement_test() {
         String rpId = "example.com";
         Challenge challenge = new DefaultChallenge();
         AuthenticatorSelectionCriteria authenticatorSelectionCriteria =

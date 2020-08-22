@@ -22,21 +22,17 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticationData implements Serializable {
+public class AuthenticationData extends CoreAuthenticationData {
 
-    private final byte[] credentialId;
     private final byte[] userHandle;
-    private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
-    private final byte[] authenticatorDataBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
-    private final byte[] signature;
 
     @SuppressWarnings("squid:S107")
     public AuthenticationData(
@@ -48,30 +44,15 @@ public class AuthenticationData implements Serializable {
             byte[] collectedClientDataBytes,
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             byte[] signature) {
-        this.credentialId = ArrayUtil.clone(credentialId);
+        super(credentialId, authenticatorData, authenticatorDataBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), signature);
         this.userHandle = ArrayUtil.clone(userHandle);
-        this.authenticatorData = authenticatorData;
-        this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
-        this.signature = ArrayUtil.clone(signature);
-    }
-
-    public byte[] getCredentialId() {
-        return ArrayUtil.clone(credentialId);
     }
 
     public byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
-    }
-
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
-        return authenticatorData;
-    }
-
-    public byte[] getAuthenticatorDataBytes() {
-        return ArrayUtil.clone(authenticatorDataBytes);
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -86,33 +67,23 @@ public class AuthenticationData implements Serializable {
         return clientExtensions;
     }
 
-    public byte[] getSignature() {
-        return ArrayUtil.clone(signature);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         AuthenticationData that = (AuthenticationData) o;
-        return Arrays.equals(credentialId, that.credentialId) &&
-                Arrays.equals(userHandle, that.userHandle) &&
-                Objects.equals(authenticatorData, that.authenticatorData) &&
-                Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
+        return Arrays.equals(userHandle, that.userHandle) &&
                 Objects.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
-                Objects.equals(clientExtensions, that.clientExtensions) &&
-                Arrays.equals(signature, that.signature);
+                Objects.equals(clientExtensions, that.clientExtensions);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(authenticatorData, collectedClientData, clientExtensions);
-        result = 31 * result + Arrays.hashCode(credentialId);
+        int result = Objects.hash(super.hashCode(), collectedClientData, clientExtensions);
         result = 31 * result + Arrays.hashCode(userHandle);
-        result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
-        result = 31 * result + Arrays.hashCode(signature);
         return result;
     }
 }

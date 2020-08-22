@@ -18,28 +18,25 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 
 import java.util.List;
 
 /**
- * Validates clientExtensionOutputs and authenticatorExtensionOutputs
+ * Validates authenticatorExtensionOutputs
  */
-class ExtensionValidator {
+class AuthenticatorExtensionValidator {
 
     // ~ Methods
     // ========================================================================================================
 
-    public <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
-                                                                                                   AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
+    public <A extends ExtensionAuthenticatorOutput> void validate(AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
                                                                                                    List<String> expectedExtensionIdentifiers) {
-        validateExtensionIds(authenticationExtensionsClientOutputs, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+        validateExtensionIds(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
     }
 
     //TODO: extensionId -> key
-    private <A extends ExtensionAuthenticatorOutput, C extends ExtensionClientOutput> void validateExtensionIds(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs, AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
+    private <A extends ExtensionAuthenticatorOutput> void validateExtensionIds(AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
         List<String> expected;
         if (expectedExtensionIdentifiers == null) {
             return;
@@ -47,13 +44,6 @@ class ExtensionValidator {
             expected = expectedExtensionIdentifiers;
         }
 
-        if (authenticationExtensionsClientOutputs != null) {
-            authenticationExtensionsClientOutputs.getKeys().forEach(identifier -> {
-                if (!expected.contains(identifier)) {
-                    throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
-                }
-            });
-        }
         if (authenticationExtensionsAuthenticatorOutputs != null) {
             authenticationExtensionsAuthenticatorOutputs.getKeys().forEach(key -> {
                 if (!expected.contains(key)) {
@@ -62,4 +52,5 @@ class ExtensionValidator {
             });
         }
     }
+
 }
