@@ -52,6 +52,7 @@ class CustomAuthenticationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void CustomAuthenticationValidator_test() {
         String rpId = "example.com";

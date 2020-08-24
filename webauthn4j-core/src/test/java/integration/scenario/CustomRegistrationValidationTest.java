@@ -64,6 +64,7 @@ class CustomRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void CustomRegistrationValidator_test() {
         String rpId = "example.com";

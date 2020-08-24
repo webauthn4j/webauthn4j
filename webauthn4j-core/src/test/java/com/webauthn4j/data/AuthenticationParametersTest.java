@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationParametersTest {
 
+    @SuppressWarnings("deprecation")
     @Test
     void constructor_test() {
         // Server properties
@@ -57,6 +58,7 @@ class AuthenticationParametersTest {
         assertThat(authenticationParameters.getExpectedExtensionIds()).isNull();
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void equals_hashCode_test() {
         // Server properties

@@ -76,7 +76,7 @@ public class RegistrationDataValidator {
                 selfAttestationTrustworthinessValidator);
     }
 
-
+    @SuppressWarnings("deprecation")
     public void validate(RegistrationData registrationData, RegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);

@@ -58,6 +58,7 @@ public class AuthenticationDataValidator {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
+    @SuppressWarnings("deprecation")
     public void validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);

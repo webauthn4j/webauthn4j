@@ -61,6 +61,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_RegistrationContext_with_android_safety_net_attestation_statement_test() {
         String rpId = "example.com";

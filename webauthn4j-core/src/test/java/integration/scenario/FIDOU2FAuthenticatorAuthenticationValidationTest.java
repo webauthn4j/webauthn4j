@@ -57,6 +57,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_test() {
         String rpId = "example.com";

@@ -71,6 +71,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_test() {
         String rpId = "example.com";
@@ -116,6 +117,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_direct_attestation_conveyance_preference_test() {
         String rpId = "example.com";
@@ -172,6 +174,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
@@ -214,6 +217,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_challenge_test() {
         String rpId = "example.com";
@@ -252,6 +256,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_origin_test() {
         String rpId = "example.com";
@@ -290,6 +295,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_rpId_test() {
         String rpId = "example.com";
@@ -325,6 +331,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
@@ -365,6 +372,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
@@ -418,6 +426,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_malicious_client_data_test() {
         Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");

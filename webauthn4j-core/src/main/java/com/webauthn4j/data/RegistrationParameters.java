@@ -33,6 +33,10 @@ public class RegistrationParameters implements Serializable {
     private final boolean userPresenceRequired;
     private final List<String> expectedExtensionIds;
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
@@ -60,6 +64,10 @@ public class RegistrationParameters implements Serializable {
         return userPresenceRequired;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public List<String> getExpectedExtensionIds() {
         return expectedExtensionIds;
     }
