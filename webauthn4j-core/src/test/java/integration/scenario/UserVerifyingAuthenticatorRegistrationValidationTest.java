@@ -185,6 +185,7 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_RegistrationRequest_with_unexpected_extension_test() {
         String rpId = "example.com";

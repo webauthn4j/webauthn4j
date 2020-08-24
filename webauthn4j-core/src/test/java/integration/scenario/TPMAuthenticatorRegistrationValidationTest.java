@@ -61,6 +61,7 @@ class TPMAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_RegistrationContext_with_tpm_attestation_statement_test() {
         String rpId = "example.com";

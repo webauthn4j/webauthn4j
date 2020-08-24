@@ -34,6 +34,10 @@ public class AuthenticationParameters implements Serializable {
     private final boolean userPresenceRequired;
     private final List<String> expectedExtensionIds;
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public AuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
@@ -89,6 +93,10 @@ public class AuthenticationParameters implements Serializable {
         return userPresenceRequired;
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public List<String> getExpectedExtensionIds() {
         return expectedExtensionIds;
     }
