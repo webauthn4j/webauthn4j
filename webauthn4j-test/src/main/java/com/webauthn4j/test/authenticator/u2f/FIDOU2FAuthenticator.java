@@ -136,7 +136,7 @@ public class FIDOU2FAuthenticator {
 
     private byte[] calculateSignature(PrivateKey privateKey, byte[] signedData) {
         try {
-            Signature signature = SignatureUtil.getES256();
+            Signature signature = SignatureUtil.createES256();
             signature.initSign(privateKey);
             signature.update(signedData);
             return signature.sign();
