@@ -20,6 +20,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.internal.SignatureAlgorithm;
 import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -89,8 +90,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        String messageDigestJcaName = getMessageDigestJcaName(alg);
-        byte[] hash = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attToBeSigned);
+        MessageDigest messageDigest = getMessageDigest(alg);
+        byte[] hash = messageDigest.digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
         }
@@ -120,15 +121,13 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }
 
-    private String getMessageDigestJcaName(COSEAlgorithmIdentifier alg) {
-        String messageDigestJcaName;
+    private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
         try {
             SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
+            return signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);
         }
-        return messageDigestJcaName;
     }
 
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {

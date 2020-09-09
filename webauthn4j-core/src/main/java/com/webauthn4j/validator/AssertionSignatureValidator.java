@@ -18,7 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
-import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
+import com.webauthn4j.data.internal.SignatureAlgorithm;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.slf4j.Logger;

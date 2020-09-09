@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
+import com.webauthn4j.data.internal.SignatureAlgorithm;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
