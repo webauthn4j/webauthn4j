@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.attestation.statement;
+package com.webauthn4j.data.internal;
+
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.webauthn4j.data.internal.MessageDigestAlgorithm.*;
+
 public class SignatureAlgorithm {
 
-    public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", "SHA-256");
-    public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", "SHA-384");
-    public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("SHA512withECDSA", "SHA-512");
-    public static final SignatureAlgorithm RS1 = new SignatureAlgorithm("SHA1withRSA", "SHA-1");
-    public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("SHA256withRSA", "SHA-256");
-    public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", "SHA-384");
-    public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", "SHA-512");
+    public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", SHA256);
+    public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", SHA384);
+    public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("SHA512withECDSA", SHA512);
+    public static final SignatureAlgorithm RS1   = new SignatureAlgorithm("SHA1withRSA",     SHA1);
+    public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("SHA256withRSA", SHA256);
+    public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", SHA384);
+    public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", SHA512);
 
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> predefinedAlgorithmMap = new HashMap<>();
 
@@ -43,11 +47,11 @@ public class SignatureAlgorithm {
     }
 
     private final String jcaName;
-    private final String messageDigestJcaName;
+    private final MessageDigestAlgorithm messageDigestAlgorithm;
 
-    private SignatureAlgorithm(String jcaName, String messageDigestJcaName) {
+    private SignatureAlgorithm(String jcaName, MessageDigestAlgorithm messageDigestAlgorithm) {
         this.jcaName = jcaName;
-        this.messageDigestJcaName = messageDigestJcaName;
+        this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
     public static SignatureAlgorithm create(COSEAlgorithmIdentifier coseAlgorithmIdentifier) {
@@ -62,8 +66,8 @@ public class SignatureAlgorithm {
         return jcaName;
     }
 
-    public String getMessageDigestJcaName() {
-        return messageDigestJcaName;
+    public MessageDigestAlgorithm getMessageDigestAlgorithm() {
+        return messageDigestAlgorithm;
     }
 
     @Override
@@ -72,11 +76,11 @@ public class SignatureAlgorithm {
         if (o == null || getClass() != o.getClass()) return false;
         SignatureAlgorithm that = (SignatureAlgorithm) o;
         return Objects.equals(jcaName, that.jcaName) &&
-                Objects.equals(messageDigestJcaName, that.messageDigestJcaName);
+                Objects.equals(messageDigestAlgorithm, that.messageDigestAlgorithm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jcaName, messageDigestJcaName);
+        return Objects.hash(jcaName, messageDigestAlgorithm);
     }
 }
