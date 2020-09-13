@@ -17,16 +17,15 @@
 package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.internal.SignatureAlgorithm;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 @SuppressWarnings({"squid:S2326", "unused"})
 public abstract class AbstractStatementValidator<T extends AttestationStatement> implements AttestationStatementValidator {
+
+
     private Class<?> parameterizedTypeClass;
 
     public AbstractStatementValidator() {
@@ -50,17 +49,6 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
-    }
-
-    protected String getJcaName(COSEAlgorithmIdentifier alg) {
-        String jcaName;
-        try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            jcaName = signatureAlgorithm.getJcaName();
-        } catch (IllegalArgumentException e) {
-            throw new BadAttestationStatementException("alg is not signature algorithm", e);
-        }
-        return jcaName;
     }
 
 }

@@ -20,7 +20,6 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.internal.SignatureAlgorithm;
 import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -123,8 +122,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            return signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
+            return MessageDigestUtil.createMessageDigest(alg.getMessageDigestJcaName());
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);
         }
@@ -134,7 +132,11 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        String jcaName = getJcaName(attestationStatement.getAlg());
+        COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
+        String jcaName = alg.getJcaName();
+        if(jcaName == null){
+            throw new BadAttestationStatementException(String.format("alg %d is not signature algorithm", alg.getValue()));
+        }
         Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
         try {
             certInfoSignature.initVerify(aikCert.getPublicKey());

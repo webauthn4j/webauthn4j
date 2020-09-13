@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -77,8 +78,11 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
-            String jcaName;
-            jcaName = getJcaName(attestationStatement.getAlg());
+            COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
+            String jcaName = alg.getJcaName();
+            if(jcaName == null){
+                throw new BadAttestationStatementException(String.format("alg %d is not signature algorithm", alg.getValue()));
+            }
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(signedData);

@@ -50,6 +50,27 @@ class COSEAlgorithmIdentifierTest {
     }
 
     @Test
+    void getJcaName_test() {
+        assertThat(COSEAlgorithmIdentifier.RS256.getJcaName()).isEqualTo("SHA256withRSA");
+    }
+
+    @Test
+    void getJcaName_with_invalid_data_test(){
+        COSEAlgorithmIdentifier unknown = COSEAlgorithmIdentifier.create(-16);
+        assertThat(unknown.getJcaName()).isNull();
+    }
+
+    @Test
+    void getMessageDigestJcaName_test(){
+        assertThat(COSEAlgorithmIdentifier.RS256.getMessageDigestJcaName()).isEqualTo("SHA-256");
+    }
+
+    @Test
+    void getMessageDigestAlgorithm_test() {
+        assertThat(COSEAlgorithmIdentifier.RS256.getMessageDigestJcaName()).isEqualTo("SHA-256");
+    }
+
+    @Test
     void deserialize_test() {
         TestDTO dto = jsonConverter.readValue("{\"cose_alg_id\":-257}", TestDTO.class);
         assertThat(dto.cose_alg_id).isEqualTo(COSEAlgorithmIdentifier.RS256);

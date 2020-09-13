@@ -126,7 +126,10 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
         try {
-            String jcaName = getJcaName(algorithmIdentifier);
+            String jcaName = algorithmIdentifier.getJcaName();
+            if(jcaName == null){
+                throw new BadAttestationStatementException(String.format("alg %d is not signature algorithm", algorithmIdentifier.getValue()));
+            }
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(data);
