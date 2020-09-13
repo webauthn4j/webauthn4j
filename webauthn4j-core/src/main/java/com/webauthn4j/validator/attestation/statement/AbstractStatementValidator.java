@@ -18,7 +18,7 @@ package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.internal.SignatureAlgorithm;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
@@ -55,7 +55,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     protected String getJcaName(COSEAlgorithmIdentifier alg) {
         String jcaName;
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
             jcaName = signatureAlgorithm.getJcaName();
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);

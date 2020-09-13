@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.internal;
 
+import com.webauthn4j.data.MessageDigestAlgorithm;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.junit.jupiter.api.Test;
 

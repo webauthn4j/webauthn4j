@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.internal;
+package com.webauthn4j.data;
 
 import com.webauthn4j.util.MessageDigestUtil;
 

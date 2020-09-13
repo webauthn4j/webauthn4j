@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,8 +46,28 @@ class COSEAlgorithmIdentifierTest {
     }
 
     @Test
+    void create_with_SignatureAlgorithm_test() {
+        assertAll(
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS1)).isEqualTo(COSEAlgorithmIdentifier.RS1),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS256)).isEqualTo(COSEAlgorithmIdentifier.RS256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS384)).isEqualTo(COSEAlgorithmIdentifier.RS384),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.RS512)).isEqualTo(COSEAlgorithmIdentifier.RS512),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES256)).isEqualTo(COSEAlgorithmIdentifier.ES256),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES384)).isEqualTo(COSEAlgorithmIdentifier.ES384),
+                () -> assertThat(COSEAlgorithmIdentifier.create(SignatureAlgorithm.ES512)).isEqualTo(COSEAlgorithmIdentifier.ES512)
+        );
+    }
+
+    @Test
     void getValue_test() {
         assertThat(COSEAlgorithmIdentifier.RS256.getValue()).isEqualTo(-257);
+    }
+
+
+    @Test
+    void invalid_data_toSignatureAlgorithm_test() {
+        COSEAlgorithmIdentifier coseAlgorithmIdentifier = COSEAlgorithmIdentifier.create(-16);
+        assertThatThrownBy(coseAlgorithmIdentifier::toSignatureAlgorithm).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

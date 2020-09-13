@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.internal;
 
+import com.webauthn4j.data.MessageDigestAlgorithm;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 
@@ -25,10 +27,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SignatureAlgorithmTest {
 
-    @Test
-    void create_with_invalid_alg_test() {
-        assertThatThrownBy(() -> SignatureAlgorithm.create(COSEAlgorithmIdentifier.create(-16))).isInstanceOf(IllegalArgumentException.class);
-    }
 
     @Test
     void getJcaName_test() {
