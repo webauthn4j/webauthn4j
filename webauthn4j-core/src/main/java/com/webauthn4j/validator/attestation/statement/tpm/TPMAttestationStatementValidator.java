@@ -20,7 +20,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.internal.SignatureAlgorithm;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
@@ -123,7 +123,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
             return signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);

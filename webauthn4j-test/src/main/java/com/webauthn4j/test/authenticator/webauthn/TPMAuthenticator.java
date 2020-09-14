@@ -17,7 +17,7 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.statement.*;
-import com.webauthn4j.data.internal.SignatureAlgorithm;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
@@ -93,7 +93,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         byte[] qualifiedSigner = Base64UrlUtil.decode("AAu8WfTf2aakLcO4Zq_y3w0Zgmu_AUtnqwrW67F2MGuABw");
         MessageDigest messageDigest;
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
             messageDigest = signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
         } catch (IllegalArgumentException e) {
             throw new WebAuthnModelException("alg is not signature algorithm", e);

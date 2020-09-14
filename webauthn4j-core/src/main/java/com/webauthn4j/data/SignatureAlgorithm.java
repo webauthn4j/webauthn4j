@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.internal;
+package com.webauthn4j.data;
 
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-import static com.webauthn4j.data.internal.MessageDigestAlgorithm.*;
+import static com.webauthn4j.data.MessageDigestAlgorithm.*;
 
 public class SignatureAlgorithm {
 
@@ -34,18 +30,6 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", SHA384);
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", SHA512);
 
-    private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> predefinedAlgorithmMap = new HashMap<>();
-
-    static {
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES256, ES256);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES384, ES384);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.ES512, ES512);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS1, RS1);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS256, RS256);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS384, RS384);
-        predefinedAlgorithmMap.put(COSEAlgorithmIdentifier.RS512, RS512);
-    }
-
     private final String jcaName;
     private final MessageDigestAlgorithm messageDigestAlgorithm;
 
@@ -54,13 +38,6 @@ public class SignatureAlgorithm {
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
-    public static SignatureAlgorithm create(COSEAlgorithmIdentifier coseAlgorithmIdentifier) {
-        SignatureAlgorithm signatureAlgorithm = predefinedAlgorithmMap.get(coseAlgorithmIdentifier);
-        if (signatureAlgorithm == null) {
-            throw new IllegalArgumentException("provided algorithm is not supported.");
-        }
-        return signatureAlgorithm;
-    }
 
     public String getJcaName() {
         return jcaName;
