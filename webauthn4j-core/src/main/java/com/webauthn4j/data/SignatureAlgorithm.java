@@ -16,6 +16,9 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Objects;
 
 import static com.webauthn4j.data.MessageDigestAlgorithm.*;
@@ -38,7 +41,33 @@ public class SignatureAlgorithm {
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
+    @JsonCreator
+    public static SignatureAlgorithm create(String jcaName){
+        switch (jcaName){
+            case "SHA256withECDSA":
+                return ES256;
+            case "SHA384withECDSA":
+                return ES384;
+            case "SHA512withECDSA":
+                return ES512;
+            case "SHA1withRSA":
+                return RS1;
+            case "SHA256withRSA":
+                return RS256;
+            case "SHA384withRSA":
+                return RS384;
+            case "SHA512withRSA":
+                return RS512;
+            default:
+                throw new IllegalArgumentException(String.format("jcaName %s is not supported.", jcaName));
+        }
+    }
 
+    public static SignatureAlgorithm create(String jcaName, String messageDigestJcaName){
+        return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
+    }
+
+    @JsonValue
     public String getJcaName() {
         return jcaName;
     }

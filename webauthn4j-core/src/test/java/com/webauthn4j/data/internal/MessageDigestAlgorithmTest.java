@@ -38,8 +38,8 @@ class MessageDigestAlgorithmTest {
 
     @Test
     void equals_hashCode_test(){
-        assertThat(new MessageDigestAlgorithm("SHA-256")).isEqualTo(new MessageDigestAlgorithm("SHA-256"));
-        assertThat(new MessageDigestAlgorithm("SHA-256")).hasSameHashCodeAs(new MessageDigestAlgorithm("SHA-256"));
+        assertThat(MessageDigestAlgorithm.create("SHA-256")).isEqualTo(MessageDigestAlgorithm.create("SHA-256"));
+        assertThat(MessageDigestAlgorithm.create("SHA-256")).hasSameHashCodeAs(MessageDigestAlgorithm.create("SHA-256"));
     }
 
 }
