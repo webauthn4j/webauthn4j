@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import java.security.MessageDigest;
@@ -30,10 +32,16 @@ public class MessageDigestAlgorithm {
 
     private final String jcaName;
 
-    public MessageDigestAlgorithm(String jcaName){
+    private MessageDigestAlgorithm(String jcaName){
         this.jcaName = jcaName;
     }
 
+    @JsonCreator
+    public static MessageDigestAlgorithm create(String jcaName){
+        return new MessageDigestAlgorithm(jcaName);
+    }
+
+    @JsonValue
     public String getJcaName() {
         return jcaName;
     }
