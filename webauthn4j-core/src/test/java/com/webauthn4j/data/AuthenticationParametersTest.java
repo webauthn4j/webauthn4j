@@ -22,14 +22,10 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationParametersTest {
 
-    @SuppressWarnings("deprecation")
     @Test
     void constructor_test() {
         // Server properties
@@ -55,7 +51,6 @@ class AuthenticationParametersTest {
         assertThat(authenticationParameters.getAuthenticator()).isEqualTo(authenticator);
         assertThat(authenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
         assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
-        assertThat(authenticationParameters.getExpectedExtensionIds()).isNull();
     }
 
     @SuppressWarnings("deprecation")
@@ -73,23 +68,20 @@ class AuthenticationParametersTest {
         // expectations
         boolean userVerificationRequired = true;
         boolean userPresenceRequired = true;
-        List<String> expectedExtensionIds = Collections.emptyList();
 
         AuthenticationParameters instanceA =
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
-                        userPresenceRequired,
-                        expectedExtensionIds
+                        userPresenceRequired
                 );
         AuthenticationParameters instanceB =
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
-                        userPresenceRequired,
-                        expectedExtensionIds
+                        userPresenceRequired
                 );
 
         assertThat(instanceA).isEqualTo(instanceB);

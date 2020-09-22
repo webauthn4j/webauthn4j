@@ -60,7 +60,6 @@ class AndroidKeyAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_RegistrationContext_with_android_key_attestation_statement_test() {
         String rpId = "example.com";
@@ -106,8 +105,7 @@ class AndroidKeyAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(webAuthnRegistrationRequest, webAuthnRegistrationParameters);

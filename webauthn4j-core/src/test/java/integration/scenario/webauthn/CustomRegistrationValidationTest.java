@@ -64,7 +64,6 @@ class CustomRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
-    @SuppressWarnings("deprecation")
     @Test
     void CustomRegistrationValidator_test() {
         String rpId = "example.com";
@@ -97,8 +96,7 @@ class CustomRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         target.getRegistrationDataValidator().getCustomRegistrationValidators().add(registrationObject ->

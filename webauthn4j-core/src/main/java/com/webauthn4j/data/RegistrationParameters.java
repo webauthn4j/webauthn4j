@@ -18,17 +18,7 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.server.ServerProperty;
 
-import java.util.List;
-
 public class RegistrationParameters extends CoreRegistrationParameters {
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
-        super(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-    }
 
     public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
         super(serverProperty, userVerificationRequired, userPresenceRequired);

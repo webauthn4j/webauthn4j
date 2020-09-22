@@ -18,9 +18,6 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
-import com.webauthn4j.validator.exception.UnexpectedExtensionException;
-
-import java.util.List;
 
 /**
  * Validates authenticatorExtensionOutputs
@@ -30,27 +27,9 @@ class AuthenticatorExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public <A extends ExtensionAuthenticatorOutput> void validate(AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs,
-                                                                                                   List<String> expectedExtensionIdentifiers) {
-        validateExtensionIds(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
-    }
-
-    //TODO: extensionId -> key
-    private <A extends ExtensionAuthenticatorOutput> void validateExtensionIds(AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs, List<String> expectedExtensionIdentifiers) {
-        List<String> expected;
-        if (expectedExtensionIdentifiers == null) {
-            return;
-        } else {
-            expected = expectedExtensionIdentifiers;
-        }
-
-        if (authenticationExtensionsAuthenticatorOutputs != null) {
-            authenticationExtensionsAuthenticatorOutputs.getKeys().forEach(key -> {
-                if (!expected.contains(key)) {
-                    throw new UnexpectedExtensionException(String.format("Unexpected authenticator extension '%s' is contained", key));
-                }
-            });
-        }
+    @SuppressWarnings("unused")
+    public <A extends ExtensionAuthenticatorOutput> void validate(AuthenticationExtensionsAuthenticatorOutputs<A> authenticationExtensionsAuthenticatorOutputs) {
+        //nop for now
     }
 
 }

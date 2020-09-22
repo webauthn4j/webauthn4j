@@ -16,63 +16,23 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
-import com.webauthn4j.data.extension.client.FIDOAppIDExtensionClientOutput;
-import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.jupiter.api.Test;
-import test.TestExtensionAuthenticatorOutput;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ClientExtensionValidatorTest {
 
     private final ClientExtensionValidator extensionValidator = new ClientExtensionValidator();
 
     @Test
-    void expected_extension_does_not_exist_test() {
+    void test() {
         AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
         builder.set("test", true);
-        List<String> expectedExtensions = Arrays.asList(FIDOAppIDExtensionClientOutput.ID, TestExtensionAuthenticatorOutput.ID);
-        extensionValidator.validate(builder.build(), expectedExtensions);
-    }
-
-    @Test
-    void expected_extension_does_exist_test() {
-        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
-        builder.setAppid(true);
-        List<String> expectedExtensions = Collections.singletonList(FIDOAppIDExtensionClientOutput.ID);
-        extensionValidator.validate(builder.build(), expectedExtensions);
-    }
-
-    @Test
-    void unexpected_extension_does_exist_test() {
-        AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
-        builder.set("unknown", true);
-        List<String> expectedExtensions = Collections.emptyList();
-        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> outputs = builder.build();
-        assertThrows(UnexpectedExtensionException.class,
-                () -> extensionValidator.validate(outputs, expectedExtensions)
-        );
-    }
-
-    @Test
-    void expectedExtensions_null_test() {
-        AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
-        builder.set("test", true);
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> outputs = builder.build();
-        assertThatCode(()-> extensionValidator.validate(outputs, null)).doesNotThrowAnyException();
+        extensionValidator.validate(builder.build());
     }
 
     @Test
     void clientOutputs_null_test() {
-        extensionValidator.validate(null, null);
+        extensionValidator.validate(null);
     }
 
 }

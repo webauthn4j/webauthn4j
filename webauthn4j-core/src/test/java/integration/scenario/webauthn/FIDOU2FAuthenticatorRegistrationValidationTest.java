@@ -104,8 +104,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(registrationRequest, registrationParameters);
@@ -160,8 +159,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(registrationRequest, registrationParameters);
@@ -207,8 +205,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
 
@@ -247,8 +244,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadChallengeException.class,
@@ -286,8 +282,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadOriginException.class,
@@ -322,8 +317,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadRpIdException.class,
@@ -358,8 +352,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
         WebAuthnManager target = new WebAuthnManager(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
@@ -417,8 +410,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadSignatureException.class,
@@ -475,8 +467,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadSignatureException.class,
