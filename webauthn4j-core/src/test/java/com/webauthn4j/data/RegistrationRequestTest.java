@@ -63,8 +63,9 @@ class RegistrationRequestTest {
         RegistrationRequest instanceA = new RegistrationRequest(attestationObject, clientDataJSON);
         RegistrationRequest instanceB = new RegistrationRequest(attestationObject, clientDataJSON);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
 
     }
 

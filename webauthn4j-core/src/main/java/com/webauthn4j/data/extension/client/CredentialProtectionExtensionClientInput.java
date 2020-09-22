@@ -52,7 +52,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     @Override
     public void validate() {
         if(credentialProtectionPolicy == null){
-            throw new ConstraintViolationException("credentialProtectionPolicy must not be null."); //TODO: revisit exception type
+            throw new ConstraintViolationException("credentialProtectionPolicy must not be null.");
         }
     }
 
