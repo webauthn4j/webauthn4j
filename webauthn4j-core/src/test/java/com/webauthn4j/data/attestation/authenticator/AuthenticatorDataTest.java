@@ -77,7 +77,7 @@ class AuthenticatorDataTest {
     void hashCode_test() {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceA = TestDataUtil.createAuthenticatorData();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> instanceB = TestDataUtil.createAuthenticatorData();
-        assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 
     @Test

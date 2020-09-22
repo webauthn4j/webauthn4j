@@ -18,11 +18,9 @@ package com.webauthn4j.data.internal;
 
 import com.webauthn4j.data.MessageDigestAlgorithm;
 import com.webauthn4j.data.SignatureAlgorithm;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 class SignatureAlgorithmTest {
@@ -40,9 +38,10 @@ class SignatureAlgorithmTest {
 
     @Test
     void equals_hashCode_test() {
-        assertThat(SignatureAlgorithm.ES256).isEqualTo(SignatureAlgorithm.ES256);
-        assertThat(SignatureAlgorithm.ES256).hasSameHashCodeAs(SignatureAlgorithm.ES256);
-        assertThat(SignatureAlgorithm.ES256).isNotEqualTo(SignatureAlgorithm.RS512);
-        assertThat(SignatureAlgorithm.ES256).isNotEqualTo(SignatureAlgorithm.ES512);
+        assertThat(SignatureAlgorithm.ES256)
+                .isEqualTo(SignatureAlgorithm.ES256)
+                .hasSameHashCodeAs(SignatureAlgorithm.ES256)
+                .isNotEqualTo(SignatureAlgorithm.RS512)
+                .isNotEqualTo(SignatureAlgorithm.ES512);
     }
 }

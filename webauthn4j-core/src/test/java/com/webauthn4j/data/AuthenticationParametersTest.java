@@ -84,8 +84,9 @@ class AuthenticationParametersTest {
                         userPresenceRequired
                 );
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
 
     }
 

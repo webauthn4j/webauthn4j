@@ -24,7 +24,7 @@ class X500NameTest {
 
     @Test
     void constructor_test() {
-        assertThat(new X500Name().size()).isEqualTo(0);
+        assertThat(new X500Name().size()).isZero();
     }
 
     @Test
@@ -32,8 +32,9 @@ class X500NameTest {
         X500Name nameA = new X500Name("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
         X500Name nameB = new X500Name("2.23.133.2.3=#0c0b69643a3030303230303030,2.23.133.2.2=#0c03535054,2.23.133.2.1=#0c0b69643a3439344535343433");
 
-        assertThat(nameA).isEqualTo(nameB);
-        assertThat(nameA).hasSameHashCodeAs(nameB);
+        assertThat(nameA)
+                .isEqualTo(nameB)
+                .hasSameHashCodeAs(nameB);
     }
 
 }

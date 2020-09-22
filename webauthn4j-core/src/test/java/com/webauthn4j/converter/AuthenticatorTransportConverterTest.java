@@ -46,7 +46,7 @@ class AuthenticatorTransportConverterTest {
 
     @Test
     void convertSet_null_test() {
-        assertThat(converter.convertSet(null)).isEqualTo(null);
+        assertThat(converter.convertSet(null)).isNull();
     }
 
     @Test
@@ -61,7 +61,7 @@ class AuthenticatorTransportConverterTest {
 
     @Test
     void convertSetToStringSet_null_test() {
-        assertThat(converter.convertSetToStringSet(null)).isEqualTo(null);
+        assertThat(converter.convertSetToStringSet(null)).isNull();
     }
 
 }
