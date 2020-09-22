@@ -78,7 +78,7 @@ class FIDOU2FAttestationStatementTest {
         FIDOU2FAttestationStatement instanceA = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
         FIDOU2FAttestationStatement instanceB = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
 
-        assertThat(instanceA.hashCode()).isEqualTo(instanceB.hashCode());
+        assertThat(instanceA).hasSameHashCodeAs(instanceB);
     }
 
     @Test

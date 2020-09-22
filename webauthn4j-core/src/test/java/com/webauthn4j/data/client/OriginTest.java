@@ -100,7 +100,7 @@ class OriginTest {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
 
-        assertThat(originA.hashCode()).isEqualTo(originB.hashCode());
+        assertThat(originA).hasSameHashCodeAs(originB);
     }
 
     @Test

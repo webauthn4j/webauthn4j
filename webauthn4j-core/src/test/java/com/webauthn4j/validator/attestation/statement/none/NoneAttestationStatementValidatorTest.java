@@ -17,6 +17,7 @@
 package com.webauthn4j.validator.attestation.statement.none;
 
 import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -28,7 +29,8 @@ class NoneAttestationStatementValidatorTest {
 
     @Test
     void validate_test() {
-        assertThatThrownBy(() -> target.validate(TestDataUtil.createRegistrationObjectWithPackedAttestation())).isInstanceOf(IllegalArgumentException.class);
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithPackedAttestation();
+        assertThatThrownBy(() -> target.validate(registrationObject)).isInstanceOf(IllegalArgumentException.class);
     }
 
 }

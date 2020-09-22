@@ -27,6 +27,6 @@ class DefaultChallengeTest {
         Challenge challengeA = new DefaultChallenge();
         Challenge challengeB = new DefaultChallenge(challengeA.getValue());
 
-        assertThat(challengeA.hashCode()).isEqualTo(challengeB.hashCode());
+        assertThat(challengeA).hasSameHashCodeAs(challengeB);
     }
 }

@@ -30,7 +30,7 @@ class PublicKeyCredentialRpEntityTest {
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo("localhost"),
                 () -> assertThat(rpEntity.getName()).isEqualTo("name"),
-                () -> assertThat(rpEntity.getIcon()).isEqualTo(null)
+                () -> assertThat(rpEntity.getIcon()).isNull()
         );
     }
 
@@ -38,9 +38,9 @@ class PublicKeyCredentialRpEntityTest {
     void single_arg_constructor_test() {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("name");
         assertAll(
-                () -> assertThat(rpEntity.getId()).isEqualTo(null),
+                () -> assertThat(rpEntity.getId()).isNull(),
                 () -> assertThat(rpEntity.getName()).isEqualTo("name"),
-                () -> assertThat(rpEntity.getIcon()).isEqualTo(null)
+                () -> assertThat(rpEntity.getIcon()).isNull()
         );
     }
 

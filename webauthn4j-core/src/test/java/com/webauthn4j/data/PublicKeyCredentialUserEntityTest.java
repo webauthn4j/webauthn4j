@@ -30,7 +30,7 @@ class PublicKeyCredentialUserEntityTest {
                 () -> assertThat(userEntity.getId()).isEqualTo(new byte[16]),
                 () -> assertThat(userEntity.getName()).isEqualTo("name"),
                 () -> assertThat(userEntity.getDisplayName()).isEqualTo("displayName"),
-                () -> assertThat(userEntity.getIcon()).isEqualTo(null)
+                () -> assertThat(userEntity.getIcon()).isNull()
         );
     }
 
