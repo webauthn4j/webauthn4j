@@ -8,6 +8,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -16,20 +17,14 @@ import java.util.Objects;
  * Internal data transfer object for authentication data
  */
 @SuppressWarnings("Duplicates")
-public class AuthenticationObject {
+public class AuthenticationObject extends CoreAuthenticationObject{
 
     //~ Instance fields
     // ================================================================================================
 
-    private final byte[] credentialId;
-    private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;
-    private final byte[] authenticatorDataBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions;
-    private final ServerProperty serverProperty;
-
-    private final Authenticator authenticator;
 
     @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
@@ -41,26 +36,12 @@ public class AuthenticationObject {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
             ServerProperty serverProperty,
             Authenticator authenticator) {
-        this.credentialId = ArrayUtil.clone(credentialId);
-        this.authenticatorData = authenticatorData;
-        this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
+
+        super(credentialId, authenticatorData, authenticatorDataBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, authenticator);
+
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
-        this.serverProperty = serverProperty;
-        this.authenticator = authenticator;
-    }
-
-    public byte[] getCredentialId() {
-        return ArrayUtil.clone(credentialId);
-    }
-
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
-        return authenticatorData;
-    }
-
-    public byte[] getAuthenticatorDataBytes() {
-        return ArrayUtil.clone(authenticatorDataBytes);
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -75,34 +56,30 @@ public class AuthenticationObject {
         return this.clientExtensions;
     }
 
+    @Override
     public ServerProperty getServerProperty() {
-        return this.serverProperty;
+        return (ServerProperty) super.getServerProperty();
     }
 
+    @Override
     public Authenticator getAuthenticator() {
-        return authenticator;
+        return (Authenticator) super.getAuthenticator();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         AuthenticationObject that = (AuthenticationObject) o;
-        return Arrays.equals(credentialId, that.credentialId) &&
-                Objects.equals(authenticatorData, that.authenticatorData) &&
-                Arrays.equals(authenticatorDataBytes, that.authenticatorDataBytes) &&
-                Objects.equals(collectedClientData, that.collectedClientData) &&
+        return Objects.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
-                Objects.equals(clientExtensions, that.clientExtensions) &&
-                Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(authenticator, that.authenticator);
+                Objects.equals(clientExtensions, that.clientExtensions);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(authenticatorData, collectedClientData, clientExtensions, serverProperty, authenticator);
-        result = 31 * result + Arrays.hashCode(credentialId);
-        result = 31 * result + Arrays.hashCode(authenticatorDataBytes);
+        int result = Objects.hash(super.hashCode(), collectedClientData, clientExtensions);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
     }

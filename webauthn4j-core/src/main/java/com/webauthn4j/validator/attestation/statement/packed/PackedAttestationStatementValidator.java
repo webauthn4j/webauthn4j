@@ -22,10 +22,9 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
-import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -35,7 +34,10 @@ import org.apache.kerby.asn1.type.Asn1OctetString;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.cert.X509Certificate;
 import java.util.Objects;
 
@@ -47,7 +49,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -66,7 +68,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private AttestationType validateX5c(RegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+    private AttestationType validateX5c(CoreRegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
         }
@@ -108,7 +110,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private AttestationType validateSelfAttestation(RegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+    private AttestationType validateSelfAttestation(CoreRegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
         COSEKey coseKey =
                 registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
@@ -137,10 +139,9 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
-        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+    private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 

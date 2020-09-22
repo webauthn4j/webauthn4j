@@ -22,9 +22,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-class DefaultMaliciousCounterValueHandlerTest {
+class DefaultCoreMaliciousCounterValueHandlerTest {
 
-    private final DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
+    private final DefaultCoreMaliciousCounterValueHandler target = new DefaultCoreMaliciousCounterValueHandler();
 
     @Test
     void maliciousCounterValueDetected_test() {

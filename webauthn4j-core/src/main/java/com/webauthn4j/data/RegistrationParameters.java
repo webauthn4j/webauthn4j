@@ -17,74 +17,30 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.util.CollectionUtil;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
-public class RegistrationParameters implements Serializable {
-
-    // server property
-    private final ServerProperty serverProperty;
-
-    // verification condition
-    private final boolean userVerificationRequired;
-    private final boolean userPresenceRequired;
-    private final List<String> expectedExtensionIds;
+public class RegistrationParameters extends CoreRegistrationParameters {
 
     /**
      * @deprecated
      */
     @Deprecated
     public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
-        this.serverProperty = serverProperty;
-        this.userVerificationRequired = userVerificationRequired;
-        this.userPresenceRequired = userPresenceRequired;
-        this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
+        super(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
     }
 
     public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
-        this(serverProperty, userVerificationRequired, userPresenceRequired, null);
+        super(serverProperty, userVerificationRequired, userPresenceRequired);
     }
 
     public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired) {
-        this(serverProperty, userVerificationRequired, true);
+        super(serverProperty, userVerificationRequired);
     }
 
+    @Override
     public ServerProperty getServerProperty() {
-        return serverProperty;
+        return (ServerProperty) super.getServerProperty();
     }
 
-    public boolean isUserVerificationRequired() {
-        return userVerificationRequired;
-    }
-
-    public boolean isUserPresenceRequired() {
-        return userPresenceRequired;
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getExpectedExtensionIds() {
-        return expectedExtensionIds;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RegistrationParameters that = (RegistrationParameters) o;
-        return userVerificationRequired == that.userVerificationRequired &&
-                userPresenceRequired == that.userPresenceRequired &&
-                Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-    }
 }

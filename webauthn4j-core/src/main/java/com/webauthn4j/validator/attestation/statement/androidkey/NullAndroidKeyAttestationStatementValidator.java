@@ -18,12 +18,12 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
 public class NullAndroidKeyAttestationStatementValidator extends AbstractStatementValidator<AndroidKeyAttestationStatement> {
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

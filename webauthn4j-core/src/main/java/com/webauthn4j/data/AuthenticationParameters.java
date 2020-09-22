@@ -18,21 +18,10 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.util.CollectionUtil;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
-public class AuthenticationParameters implements Serializable {
-
-    private final ServerProperty serverProperty;
-    private final Authenticator authenticator;
-
-    // verification condition
-    private final boolean userVerificationRequired;
-    private final boolean userPresenceRequired;
-    private final List<String> expectedExtensionIds;
+public class AuthenticationParameters extends CoreAuthenticationParameters {
 
     /**
      * @deprecated
@@ -44,11 +33,7 @@ public class AuthenticationParameters implements Serializable {
             boolean userVerificationRequired,
             boolean userPresenceRequired,
             List<String> expectedExtensionIds) {
-        this.serverProperty = serverProperty;
-        this.authenticator = authenticator;
-        this.userVerificationRequired = userVerificationRequired;
-        this.userPresenceRequired = userPresenceRequired;
-        this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
+        super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
     }
 
     public AuthenticationParameters(
@@ -56,7 +41,7 @@ public class AuthenticationParameters implements Serializable {
             Authenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
-        this(
+        super(
                 serverProperty,
                 authenticator,
                 userVerificationRequired,
@@ -69,7 +54,7 @@ public class AuthenticationParameters implements Serializable {
             ServerProperty serverProperty,
             Authenticator authenticator,
             boolean userVerificationRequired) {
-        this(
+        super(
                 serverProperty,
                 authenticator,
                 userVerificationRequired,
@@ -77,44 +62,14 @@ public class AuthenticationParameters implements Serializable {
         );
     }
 
+    @Override
     public ServerProperty getServerProperty() {
-        return serverProperty;
+        return (ServerProperty) super.getServerProperty();
     }
 
+    @Override
     public Authenticator getAuthenticator() {
-        return authenticator;
+        return (Authenticator) super.getAuthenticator();
     }
 
-    public boolean isUserVerificationRequired() {
-        return userVerificationRequired;
-    }
-
-    public boolean isUserPresenceRequired() {
-        return userPresenceRequired;
-    }
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getExpectedExtensionIds() {
-        return expectedExtensionIds;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AuthenticationParameters that = (AuthenticationParameters) o;
-        return userVerificationRequired == that.userVerificationRequired &&
-                userPresenceRequired == that.userPresenceRequired &&
-                Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(authenticator, that.authenticator) &&
-                Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(serverProperty, authenticator, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-    }
 }

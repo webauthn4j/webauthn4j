@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator.attestation.statement;
-
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.AttestationType;
-import com.webauthn4j.validator.CoreRegistrationObject;
+package com.webauthn4j.validator;
 
 /**
- * Validates the specified {@link AttestationStatement}
+ * Strategy interface to handle malicious counter value
  */
-public interface AttestationStatementValidator {
+public interface CoreMaliciousCounterValueHandler {
 
-    AttestationType validate(CoreRegistrationObject registrationObject);
-
-    boolean supports(CoreRegistrationObject registrationObject);
-
+    void maliciousCounterValueDetected(CoreAuthenticationObject authenticationObject);
 }
