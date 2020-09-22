@@ -47,7 +47,7 @@ class ChallengeDeserializerTest {
         //Then
         assertAll(
                 () -> assertThat(result).extracting("challenge").isNotNull(),
-                () -> assertThat(result.getChallenge().getValue()).hasSize(0)
+                () -> assertThat(result.getChallenge().getValue()).isEmpty()
         );
     }
 
