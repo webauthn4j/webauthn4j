@@ -107,8 +107,7 @@ class TPMAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(registrationRequest, registrationParameters);

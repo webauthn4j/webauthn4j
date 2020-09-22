@@ -130,8 +130,7 @@ public class CoreAuthenticationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        List<String> expectedExtensionIdentifiers = authenticationParameters.getExpectedExtensionIds();
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Using the credential public key, validate that sig is a valid signature over
         //spec| the binary concatenation of the authenticatorData and the hash of the collectedClientData.

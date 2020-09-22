@@ -17,10 +17,8 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.server.CoreServerProperty;
-import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class CoreRegistrationParameters implements Serializable {
@@ -31,17 +29,11 @@ public class CoreRegistrationParameters implements Serializable {
     // verification condition
     private final boolean userVerificationRequired;
     private final boolean userPresenceRequired;
-    private final List<String> expectedExtensionIds;
 
-    public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired, List<String> expectedExtensionIds) {
+    public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
-        this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
-    }
-
-    public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
-        this(serverProperty, userVerificationRequired, userPresenceRequired, null);
     }
 
     public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired) {
@@ -60,14 +52,6 @@ public class CoreRegistrationParameters implements Serializable {
         return userPresenceRequired;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getExpectedExtensionIds() {
-        return expectedExtensionIds;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,12 +59,11 @@ public class CoreRegistrationParameters implements Serializable {
         CoreRegistrationParameters that = (CoreRegistrationParameters) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
-                Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
+                Objects.equals(serverProperty, that.serverProperty);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+        return Objects.hash(serverProperty, userVerificationRequired, userPresenceRequired);
     }
 }

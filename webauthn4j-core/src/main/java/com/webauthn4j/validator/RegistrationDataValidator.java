@@ -150,9 +150,8 @@ public class RegistrationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        List<String> expectedExtensionIdentifiers = registrationParameters.getExpectedExtensionIds();
-        clientExtensionValidator.validate(clientExtensions, expectedExtensionIdentifiers);
-        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+        clientExtensionValidator.validate(clientExtensions);
+        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Step13-16,19
         attestationValidator.validate(registrationObject);

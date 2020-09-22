@@ -52,7 +52,6 @@ class CustomAuthenticationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
-    @SuppressWarnings("deprecation")
     @Test
     void CustomAuthenticationValidator_test() {
         String rpId = "example.com";
@@ -98,8 +97,7 @@ class CustomAuthenticationValidationTest {
                         serverProperty,
                         authenticator,
                         false,
-                        true,
-                        Collections.emptyList()
+                        true
                 );
 
         // You can add custom authentication validator

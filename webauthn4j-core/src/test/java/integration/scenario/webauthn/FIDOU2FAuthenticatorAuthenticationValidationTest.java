@@ -57,7 +57,6 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_test() {
         String rpId = "example.com";
@@ -103,8 +102,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         serverProperty,
                         authenticator,
                         false,
-                        true,
-                        Collections.emptyList()
+                        true
                 );
 
         AuthenticationData response = target.validate(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);

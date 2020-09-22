@@ -18,9 +18,6 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
-import com.webauthn4j.validator.exception.UnexpectedExtensionException;
-
-import java.util.List;
 
 /**
  * Validates clientExtensionOutputs
@@ -30,27 +27,9 @@ class ClientExtensionValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public <C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs,
-                                                           List<String> expectedExtensionIdentifiers) {
-        validateExtensionIds(authenticationExtensionsClientOutputs, expectedExtensionIdentifiers);
-    }
-
-    //TODO: extensionId -> key
-    private <C extends ExtensionClientOutput> void validateExtensionIds(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs, List<String> expectedExtensionIdentifiers) {
-        List<String> expected;
-        if (expectedExtensionIdentifiers == null) {
-            return;
-        } else {
-            expected = expectedExtensionIdentifiers;
-        }
-
-        if (authenticationExtensionsClientOutputs != null) {
-            authenticationExtensionsClientOutputs.getKeys().forEach(identifier -> {
-                if (!expected.contains(identifier)) {
-                    throw new UnexpectedExtensionException(String.format("Unexpected client extension '%s' is contained", identifier));
-                }
-            });
-        }
+    @SuppressWarnings("unused")
+    public <C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs) {
+        //nop for now
     }
 
 }

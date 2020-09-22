@@ -18,10 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.server.CoreServerProperty;
-import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 public class CoreAuthenticationParameters implements Serializable {
@@ -32,33 +30,16 @@ public class CoreAuthenticationParameters implements Serializable {
     // verification condition
     private final boolean userVerificationRequired;
     private final boolean userPresenceRequired;
-    private final List<String> expectedExtensionIds;
-
-    public CoreAuthenticationParameters(
-            CoreServerProperty serverProperty,
-            CoreAuthenticator authenticator,
-            boolean userVerificationRequired,
-            boolean userPresenceRequired,
-            List<String> expectedExtensionIds) {
-        this.serverProperty = serverProperty;
-        this.authenticator = authenticator;
-        this.userVerificationRequired = userVerificationRequired;
-        this.userPresenceRequired = userPresenceRequired;
-        this.expectedExtensionIds = CollectionUtil.unmodifiableList(expectedExtensionIds);
-    }
 
     public CoreAuthenticationParameters(
             CoreServerProperty serverProperty,
             CoreAuthenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
-        this(
-                serverProperty,
-                authenticator,
-                userVerificationRequired,
-                userPresenceRequired,
-                null
-        );
+        this.serverProperty = serverProperty;
+        this.authenticator = authenticator;
+        this.userVerificationRequired = userVerificationRequired;
+        this.userPresenceRequired = userPresenceRequired;
     }
 
     public CoreAuthenticationParameters(
@@ -89,13 +70,6 @@ public class CoreAuthenticationParameters implements Serializable {
         return userPresenceRequired;
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public List<String> getExpectedExtensionIds() {
-        return expectedExtensionIds;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -105,12 +79,11 @@ public class CoreAuthenticationParameters implements Serializable {
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
                 Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(authenticator, that.authenticator) &&
-                Objects.equals(expectedExtensionIds, that.expectedExtensionIds);
+                Objects.equals(authenticator, that.authenticator);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serverProperty, authenticator, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+        return Objects.hash(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
     }
 }

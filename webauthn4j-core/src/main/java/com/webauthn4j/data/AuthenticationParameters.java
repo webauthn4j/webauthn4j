@@ -19,35 +19,14 @@ package com.webauthn4j.data;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
 
-import java.util.List;
-
 public class AuthenticationParameters extends CoreAuthenticationParameters {
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public AuthenticationParameters(
-            ServerProperty serverProperty,
-            Authenticator authenticator,
-            boolean userVerificationRequired,
-            boolean userPresenceRequired,
-            List<String> expectedExtensionIds) {
-        super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
-    }
 
     public AuthenticationParameters(
             ServerProperty serverProperty,
             Authenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
-        super(
-                serverProperty,
-                authenticator,
-                userVerificationRequired,
-                userPresenceRequired,
-                null
-        );
+        super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
     }
 
     public AuthenticationParameters(
