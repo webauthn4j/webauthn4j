@@ -50,6 +50,7 @@ public class DeviceCheckAttestationManager {
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
     }
 
+    @SuppressWarnings("java:S1130")
     public DCAttestationData parse(DCAttestationRequest dcAttestationRequest) throws DataConversionException {
 
         byte[] attestationObjectBytes = dcAttestationRequest.getAttestationObject();

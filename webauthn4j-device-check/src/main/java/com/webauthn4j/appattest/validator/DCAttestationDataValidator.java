@@ -16,11 +16,9 @@
 
 package com.webauthn4j.appattest.validator;
 
-import com.webauthn4j.appattest.data.DCAttestationData;
-import com.webauthn4j.appattest.data.DCAttestationParameters;
+import com.webauthn4j.appattest.validator.attestation.statement.appleappattest.AppleAppAttestStatementValidator;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.validator.CoreRegistrationDataValidator;
-import com.webauthn4j.appattest.validator.attestation.statement.appleappattest.AppleAppAttestStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
@@ -32,10 +30,6 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
     public DCAttestationDataValidator(CertPathTrustworthinessValidator certPathTrustworthinessValidator, ObjectConverter objectConverter) {
         super(Collections.singletonList(new AppleAppAttestStatementValidator()),
                 certPathTrustworthinessValidator, createSelfAttestationTrustWorthinessValidator(), Collections.emptyList(), objectConverter);
-    }
-
-    public void validate(DCAttestationData dcAttestationData, DCAttestationParameters dcAttestationParameters){
-        super.validate(dcAttestationData, dcAttestationParameters);
     }
 
     private static SelfAttestationTrustworthinessValidator createSelfAttestationTrustWorthinessValidator(){
