@@ -7,7 +7,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -32,7 +32,7 @@ public class AppleAppAttestStatementValidator extends AbstractStatementValidator
     public static final AAGUID APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION = new AAGUID("appattest\0\0\0\0\0\0\0".getBytes());
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.",
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
@@ -44,13 +44,12 @@ public class AppleAppAttestStatementValidator extends AbstractStatementValidator
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(RegistrationObject registrationObject) {
+    private void validateNonce(CoreRegistrationObject registrationObject) {
         AppleAppAttestStatement attestationStatement = getAttestationStatement(registrationObject);
         X509Certificate credCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         byte[] actualNonce = extractNonce(credCert);
 
-        byte[] challenge = registrationObject.getCollectedClientDataBytes();
-        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] composite = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length)
                 .put(authenticatorData).put(clientDataHash).array();
@@ -73,7 +72,7 @@ public class AppleAppAttestStatementValidator extends AbstractStatementValidator
         }
     }
 
-    private AppleAppAttestStatement getAttestationStatement(RegistrationObject registrationObject) {
+    private AppleAppAttestStatement getAttestationStatement(CoreRegistrationObject registrationObject) {
         AppleAppAttestStatement attestationStatement =
                 (AppleAppAttestStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
