@@ -16,12 +16,12 @@
 
 package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
 
-import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestStatement;
+import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
-public class NullAppleAppAttestStatementValidator extends AbstractStatementValidator<AppleAppAttestStatement> {
+public class NullAppleAppAttestStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
 
     @Override
     public AttestationType validate(CoreRegistrationObject registrationObject) {

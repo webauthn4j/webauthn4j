@@ -28,8 +28,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonTypeName(AppleAppAttestStatement.FORMAT)
-public class AppleAppAttestStatement implements CertificateBaseAttestationStatement {
+@JsonTypeName(AppleAppAttestAttestationStatement.FORMAT)
+public class AppleAppAttestAttestationStatement implements CertificateBaseAttestationStatement {
     public static final String FORMAT = "apple-appattest";
 
     @JsonProperty
@@ -38,7 +38,7 @@ public class AppleAppAttestStatement implements CertificateBaseAttestationStatem
     @JsonProperty
     private final byte[] receipt;
 
-    public AppleAppAttestStatement(
+    public AppleAppAttestAttestationStatement(
             @JsonProperty("x5c") AttestationCertificatePath x5c,
             @JsonProperty("receipt") byte[] receipt) {
         this.x5c = x5c;
@@ -73,7 +73,7 @@ public class AppleAppAttestStatement implements CertificateBaseAttestationStatem
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AppleAppAttestStatement that = (AppleAppAttestStatement) o;
+        AppleAppAttestAttestationStatement that = (AppleAppAttestAttestationStatement) o;
         return x5c.equals(that.x5c) &&
                 Arrays.equals(receipt, that.receipt);
     }

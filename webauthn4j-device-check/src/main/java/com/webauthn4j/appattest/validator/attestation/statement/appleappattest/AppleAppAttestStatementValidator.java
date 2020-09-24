@@ -18,7 +18,7 @@ package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
-import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestStatement;
+import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
@@ -42,7 +42,7 @@ import java.util.Arrays;
 /**
  * Validates that the specified {@link AttestationStatement} is a valid Apple App Attest attestation
  */
-public class AppleAppAttestStatementValidator extends AbstractStatementValidator<AppleAppAttestStatement> {
+public class AppleAppAttestStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
     public static final String APPLE_CRED_CERT_EXTENSION_OID = "1.2.840.113635.100.8.2";
     public static final AAGUID APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT = new AAGUID("appattestdevelop".getBytes());
     public static final AAGUID APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION = new AAGUID("appattest\0\0\0\0\0\0\0".getBytes());
@@ -61,7 +61,7 @@ public class AppleAppAttestStatementValidator extends AbstractStatementValidator
     }
 
     private void validateNonce(CoreRegistrationObject registrationObject) {
-        AppleAppAttestStatement attestationStatement = getAttestationStatement(registrationObject);
+        AppleAppAttestAttestationStatement attestationStatement = getAttestationStatement(registrationObject);
         X509Certificate credCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         byte[] actualNonce = extractNonce(credCert);
 
@@ -88,9 +88,9 @@ public class AppleAppAttestStatementValidator extends AbstractStatementValidator
         }
     }
 
-    private AppleAppAttestStatement getAttestationStatement(CoreRegistrationObject registrationObject) {
-        AppleAppAttestStatement attestationStatement =
-                (AppleAppAttestStatement) registrationObject.getAttestationObject().getAttestationStatement();
+    private AppleAppAttestAttestationStatement getAttestationStatement(CoreRegistrationObject registrationObject) {
+        AppleAppAttestAttestationStatement attestationStatement =
+                (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException(

@@ -22,6 +22,6 @@ import com.webauthn4j.server.CoreServerProperty;
 public class DCAttestationParameters extends CoreRegistrationParameters {
 
     public DCAttestationParameters(CoreServerProperty serverProperty) {
-        super(serverProperty, false, false, null);
+        super(serverProperty, false, false);
     }
 }

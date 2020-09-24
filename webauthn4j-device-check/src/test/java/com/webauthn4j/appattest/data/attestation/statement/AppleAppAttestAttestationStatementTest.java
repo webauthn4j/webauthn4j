@@ -26,19 +26,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AppleAppAttestStatementTest {
+class AppleAppAttestAttestationStatementTest {
 
     @Test
     void validate_test() {
-        new AppleAppAttestStatement(new AttestationCertificatePath(), new byte[32]).validate();
+        new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]).validate();
         assertAll(
                 () -> {
-                    AppleAppAttestStatement appleAppAttestStatement = new AppleAppAttestStatement(null, new byte[32]);
-                    assertThrows(ConstraintViolationException.class, appleAppAttestStatement::validate);
+                    AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(null, new byte[32]);
+                    assertThrows(ConstraintViolationException.class, appleAppAttestAttestationStatement::validate);
                 },
                 () -> {
-                    AppleAppAttestStatement appleAppAttestStatement = new AppleAppAttestStatement(new AttestationCertificatePath(), null);
-                    assertThrows(ConstraintViolationException.class, appleAppAttestStatement::validate);
+                    AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), null);
+                    assertThrows(ConstraintViolationException.class, appleAppAttestAttestationStatement::validate);
                 }
         );
     }
@@ -46,9 +46,9 @@ public class AppleAppAttestStatementTest {
     @Test
     void equals_hashCode_test() {
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
-        AppleAppAttestStatement instanceA = (AppleAppAttestStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
+        AppleAppAttestAttestationStatement instanceA = (AppleAppAttestAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
         RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
-        AppleAppAttestStatement instanceB = (AppleAppAttestStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
+        AppleAppAttestAttestationStatement instanceB = (AppleAppAttestAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
