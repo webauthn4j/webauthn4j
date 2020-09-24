@@ -52,7 +52,6 @@ public class CoreAuthenticationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
-    @SuppressWarnings("deprecation")
     public void validate(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);

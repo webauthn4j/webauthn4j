@@ -25,10 +25,12 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.validator.CustomCoreRegistrationValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 
 import java.util.Collections;
+import java.util.List;
 
 public class DeviceCheckAttestationManager {
 
@@ -40,12 +42,14 @@ public class DeviceCheckAttestationManager {
 
     public DeviceCheckAttestationManager(
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            List<CustomCoreRegistrationValidator> customRegistrationValidators,
             ObjectConverter objectConverter) {
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         dcAttestationDataValidator = new DCAttestationDataValidator(
                 certPathTrustworthinessValidator,
+                customRegistrationValidators,
                 objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
     }
@@ -77,5 +81,9 @@ public class DeviceCheckAttestationManager {
     public DCAttestationData validate(DCAttestationData dcAttestationData, DCAttestationParameters dcAttestationParameters) throws ValidationException {
         dcAttestationDataValidator.validate(dcAttestationData, dcAttestationParameters);
         return dcAttestationData;
+    }
+
+    public DCAttestationDataValidator getDCAttestationDataValidator() {
+        return dcAttestationDataValidator;
     }
 }

@@ -19,13 +19,13 @@ package com.webauthn4j.appattest;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
+import com.webauthn4j.appattest.validator.DCAssertionDataValidator;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.CoreAuthenticationDataValidator;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 
@@ -39,13 +39,13 @@ public class DeviceCheckAssertionManager {
 
     private final AuthenticatorDataConverter authenticatorDataConverter;
 
-    private final CoreAuthenticationDataValidator authenticationDataValidator;
+    private final DCAssertionDataValidator dcAssertionDataValidator;
 
     public DeviceCheckAssertionManager(List<CustomCoreAuthenticationValidator> customAuthenticationValidators, ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        authenticationDataValidator = new CoreAuthenticationDataValidator(customAuthenticationValidators);
+        dcAssertionDataValidator = new DCAssertionDataValidator(customAuthenticationValidators);
 
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
     }
@@ -86,9 +86,11 @@ public class DeviceCheckAssertionManager {
 
     @SuppressWarnings("squid:S1130")
     public DCAssertionData validate(DCAssertionData dcAssertionData, DCAssertionParameters dcAssertionParameters) throws ValidationException {
-        authenticationDataValidator.validate(dcAssertionData, dcAssertionParameters);
+        dcAssertionDataValidator.validate(dcAssertionData, dcAssertionParameters);
         return dcAssertionData;
     }
 
-
+    public DCAssertionDataValidator getDCAssertionDataValidator() {
+        return dcAssertionDataValidator;
+    }
 }
