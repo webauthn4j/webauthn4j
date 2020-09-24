@@ -4,13 +4,6 @@ WebAuthn is state of the art technology. Therefore, there are still some limitat
 This section tells you issues known at the time of Dec 2019 that might be encountered if you try to use products
 utilizing WebAuthn technology.
 
-
-=== Safari's WebAuthn support
-
-On macOS, WebAuthn is supported from Safari 13.
-on iPhone/iPad, WebAuthn is supported from Safari on iOS13.3.
-Both implementation only support external authenticators. TouchID and FaceID is not yet supported at this moment.
-
 === Android's resident key support
 
 Android's FIDO API has not supported resident key yet. It means Chrome for Android and Firefox for Android
@@ -36,10 +29,8 @@ without WebAuthn for users using browsers without WebAuthn support.
 
 === WebAuthn4J's ECDAA support
 
-WebAuthn4J has not yet supported ECDAA (Elliptic Curve based Direct Anonymous Attestation) algorithm. There is no plan
-to support it for the time being because ECDAA algorithm support is optional by WebAuthn specification and major
-browsers have not yet supported it.
-
+WebAuthn4J has not yet supported ECDAA (Elliptic Curve based Direct Anonymous Attestation) algorithm. There is no plan to support it for the time being because ECDAA algorithm support is optional by WebAuthn specification and major browsers have not yet supported it.
+From WebAuthn Level2 specification, ECDAA is dropped.
 
 === WebAuthn4J's PS256/PS384/PS512 support
 
