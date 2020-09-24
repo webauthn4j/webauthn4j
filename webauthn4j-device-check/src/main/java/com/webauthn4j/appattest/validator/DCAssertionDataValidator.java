@@ -34,6 +34,6 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
     }
 
     public void validate(DCAssertionData dcAssertionData, DCAssertionParameters dcAssertionParameters) {
-        validate(dcAssertionData, dcAssertionParameters);
+        super.validate(dcAssertionData, dcAssertionParameters);
     }
 }

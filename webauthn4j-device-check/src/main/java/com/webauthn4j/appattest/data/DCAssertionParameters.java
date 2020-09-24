@@ -16,17 +16,17 @@
 
 package com.webauthn4j.appattest.data;
 
+import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.data.CoreAuthenticationParameters;
-import com.webauthn4j.server.CoreServerProperty;
 
 public class DCAssertionParameters extends CoreAuthenticationParameters {
 
-    public DCAssertionParameters(CoreServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public DCAssertionParameters(DCServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired, boolean userPresenceRequired) {
         super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
     }
 
-    public DCAssertionParameters(CoreServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired) {
+    public DCAssertionParameters(DCServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired) {
         super(serverProperty, authenticator, userVerificationRequired);
     }
 }

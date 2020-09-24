@@ -16,12 +16,12 @@
 
 package com.webauthn4j.appattest.data;
 
+import com.webauthn4j.appattest.server.DCServerProperty;
 import com.webauthn4j.data.CoreRegistrationParameters;
-import com.webauthn4j.server.CoreServerProperty;
 
 public class DCAttestationParameters extends CoreRegistrationParameters {
 
-    public DCAttestationParameters(CoreServerProperty serverProperty) {
+    public DCAttestationParameters(DCServerProperty serverProperty) {
         super(serverProperty, false, false);
     }
 }

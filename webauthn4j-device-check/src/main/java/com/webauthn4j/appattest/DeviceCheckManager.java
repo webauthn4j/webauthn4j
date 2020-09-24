@@ -62,7 +62,7 @@ public class DeviceCheckManager {
                 certPathTrustworthinessValidator,
                 customRegistrationValidators,
                 customAuthenticationValidators,
-                new ObjectConverter()
+                createObjectConverter()
         );
     }
 
@@ -154,5 +154,11 @@ public class DeviceCheckManager {
     }
 
 
+    private static ObjectConverter createObjectConverter(){
+        ObjectMapper jsonMapper = new ObjectMapper();
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        cborMapper.registerModule(new DeviceCheckCBORModule());
+        return new ObjectConverter(jsonMapper, cborMapper);
+    }
 
 }

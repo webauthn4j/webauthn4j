@@ -140,7 +140,7 @@ public class TestDataUtil {
         return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty(), timestamp);
     }
 
-    public static CoreRegistrationObject createDCRegistrationObjectWithAppleAppAttestAttestation() {
+    public static CoreRegistrationObject createCoreRegistrationObjectWithAppleAppAttestAttestation() {
         // Key ID: "eTAkPnbDrHW+v17P3CrBvb4gPKLxpSxvsnyVTFXVq+w="
         byte[] collectedClientDataBytes = Base64UrlUtil.decode("eyJvcmlnaW4iOiJodHRwOi8vbG9jYWxob3N0OjgwODAiLCJjaGFsbGVuZ2UiOiJkM1Z5ZW1Wc2NHWnliM0JtIiwidHlwZSI6IndlYmF1dGhuLmNyZWF0ZSJ9");
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
