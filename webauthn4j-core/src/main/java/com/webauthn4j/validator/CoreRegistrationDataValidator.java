@@ -32,7 +32,6 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CoreRegistrationDataValidator {
@@ -43,7 +42,7 @@ public class CoreRegistrationDataValidator {
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
 
-    private final List<CustomCoreRegistrationValidator> customRegistrationValidators = new ArrayList<>();
+    private List<CustomCoreRegistrationValidator> customRegistrationValidators;
 
     private final AttestationValidator attestationValidator;
 
@@ -51,7 +50,7 @@ public class CoreRegistrationDataValidator {
             List<AttestationStatementValidator> attestationStatementValidators,
             CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            List<CustomRegistrationValidator> customRegistrationValidators,
+            List<CustomCoreRegistrationValidator> customRegistrationValidators,
             ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
@@ -63,6 +62,7 @@ public class CoreRegistrationDataValidator {
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator);
+        this.customRegistrationValidators = customRegistrationValidators;
     }
 
 
