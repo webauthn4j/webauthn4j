@@ -16,6 +16,9 @@
 
 package com.webauthn4j.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+import com.webauthn4j.appattest.converter.jackson.DeviceCheckCBORModule;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
@@ -70,12 +73,22 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
  */
 public class TestDataUtil {
 
-    private static final ObjectConverter objectConverter = new ObjectConverter();
-    private static final CollectedClientDataConverter collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
-    private static final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-    private static final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-    private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
-            = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    private static final ObjectConverter objectConverter;
+    private static final CollectedClientDataConverter collectedClientDataConverter;
+    private static final AttestationObjectConverter attestationObjectConverter;
+    private static final AuthenticatorDataConverter authenticatorDataConverter;
+    private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
+
+    static {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        cborMapper.registerModule(new DeviceCheckCBORModule());
+        objectConverter = new ObjectConverter(jsonMapper, cborMapper);
+        collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
+        attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+        authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    }
 
     private TestDataUtil() {
     }
