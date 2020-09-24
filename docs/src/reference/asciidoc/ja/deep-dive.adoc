@@ -1,5 +1,29 @@
 == 詳細
 
+=== WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用
+
+FIDO CTAP2セキュリティキーにとって、WebAuthnは一つの応用例でしかなく、セキュアな認証を必要とする独自アプリケーションで
+セキュリティキーを利用することも可能です。本節では、FIDO CTAP2セキュリティキーを用いた独自アプリケーションにおけるAttestation、Assertion検証でWebAuthn4Jを利用する方法を説明します。
+
+==== FIDO CTAP2セキュリティキーを用いた独自アプリケーションでの登録、認証のフロー
+
+FIDO CTAP2セキュリティキーを独自アプリケーションで認証に使用する場合、セキュリティキーを登録するために、
+アプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドを呼び出し、公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）を取得し保存します。
+取得されたAttestationは、セキュリティキーがアプリとして受け入れ可能なキーか判定するために検証が必要です。
+WebAuthn4Jでは、 `CoreRegistrationValidator` クラスを用いることで、取得されたAttestationを検証可能です。
+
+認証時には、同様にアプリからFIDO CTAP2セキュリティキーの https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッドを呼び出し、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を取得します。
+取得されたAssertionを検証することで、アプリは認証に用いられたセキュリティキーが、登録時に用いられたセキュリティキーと同一であることを確認し、正当なアクセスか判定することが可能となります。WebAuthn4Jでは、 `CoreAuthenticationValidator` クラスを用いることで、取得されたAssertionを検証可能です。
+
+==== アプリケーション固有のクライアントデータの真正性の担保、検証
+
+上記のフローに従って実装することで、FIDO CTAP2セキュリティキーを用いた安全な認証が実現可能ですが、
+FIDO CTAP2セキュリティキーを呼び出す主体（クライアント）と、Attestation、Assertionを検証する主体（サーバー）が分離している場合、クライアントが登録、認証時にアプリケーション固有のクライアントデータを生成し、クライアントデータを追加でサーバーで検証したい場合もあります。クライアントデータ自体はAttestation、Assertionと一緒に送信すれば良いですが、
+クライアントデータを中間者攻撃から防御するために、クライアントデータに対して署名を行い、保護する必要があります。
+
+さて、FIDO CTAP2では、認証時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドと登録時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッド 、どちらにも共通するパラメータとして、`clientDataHash` というパラメータが存在します。セキュリティキーは、受け取った `clientDataHash` パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
+`clientDataHash` にセットすることで、アプリケーション固有のクライアントデータが改竄されていない真正なデータか、サーバー側で検証することが出来ます。
+
 === Project Modules
 
 WebAuthn4Jは、以下の4つのModuleから構成されます。

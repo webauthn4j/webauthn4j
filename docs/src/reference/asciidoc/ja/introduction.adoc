@@ -9,14 +9,14 @@ Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケ
 
 === WebAuthn4Jとは
 
-Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。
-全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
+WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。
+Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
 
-=== Spring Security WebAuthnとは
+=== WebAuthn4J Spring Securityとは
 
-WebAuthn4Jの関連プロジェクトとして、Spring SecurityでWebAuthnを利用するためのラッパーライブラリをSpring Security WebAuthnという名前で開発しています。
+WebAuthn4Jの関連プロジェクトとして、Spring SecurityでWebAuthnを利用するためのラッパーライブラリを https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security] という名前で開発しています。
 Spring Securityを活用したアプリケーションでWebAuthnを導入する場合は、WebAuthn4Jを直接利用するのではなく、
-Spring Security WebAuthnを利用するのが良いでしょう。FIDO2 Transport Binding ProfileのREST APIの実装も提供しています。
+WebAuthn4J Spring Securityを利用するのが良いでしょう。
 
 === 特徴
 

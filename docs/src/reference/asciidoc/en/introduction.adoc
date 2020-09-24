@@ -12,13 +12,12 @@ Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but
 
 WebAuthn4J is a portable Java library for WebAuthn server side verification
 
-=== Spring Security WebAuthn
+=== WebAuthn4J Spring Security
 
-As a related project of WebAuthn4J, we are developing a wrapper library named Spring Security WebAuthn
+As a related project of WebAuthn4J, we are developing a wrapper library named https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security]
 to support WebAuthn with Spring Security.
-To introduce WebAuthn in an application built with Spring Security, it is better to use Spring Security WebAuthn rather
+To introduce WebAuthn in an application built with Spring Security, it is better to use WebAuthn4J Spring Security rather
 than directly using WebAuthn4J.
-Spring Security WebAuthn also provides an implementation of the REST API of FIDO2 transporting binding profile.
 
 === Feature
 
