@@ -24,34 +24,24 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.util.CollectionUtil;
-import com.webauthn4j.util.ConstUtil;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * An {@link Authenticator} implementation
  */
-public class AuthenticatorImpl implements Authenticator {
+public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenticator {
 
     //~ Instance fields ================================================================================================
-    private AttestedCredentialData attestedCredentialData;
-    private AttestationStatement attestationStatement;
-    private Set<AuthenticatorTransport> transports;
-    private long counter;
-
     private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
-    private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports,
                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
                              AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
-        this.attestedCredentialData = attestedCredentialData;
-        this.attestationStatement = attestationStatement;
-        this.transports = CollectionUtil.unmodifiableSet(transports);
+        super(attestedCredentialData, attestationStatement, counter, transports, authenticatorExtensions);
         this.clientExtensions = clientExtensions;
-        this.authenticatorExtensions = authenticatorExtensions;
-        setCounter(counter);
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
@@ -70,48 +60,6 @@ public class AuthenticatorImpl implements Authenticator {
                 registrationData.getTransports());
     }
 
-    @Override
-    public AttestedCredentialData getAttestedCredentialData() {
-        return attestedCredentialData;
-    }
-
-    public void setAttestedCredentialData(AttestedCredentialData attestedCredentialData) {
-        this.attestedCredentialData = attestedCredentialData;
-    }
-
-    @Override
-    public AttestationStatement getAttestationStatement() {
-        return attestationStatement;
-    }
-
-    public void setAttestationStatement(AttestationStatement attestationStatement) {
-        this.attestationStatement = attestationStatement;
-    }
-
-    @Override
-    public long getCounter() {
-        return this.counter;
-    }
-
-    @Override
-    public void setCounter(long value) {
-        if (value > ConstUtil.UINT_MAX_VALUE) {
-            throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not exceed 4294967295.");
-        }
-        if (value < 0) {
-            throw new IllegalArgumentException("[Assertion failed] - this argument is unsigned int. it must not be negative value.");
-        }
-        this.counter = value;
-    }
-
-    @Override
-    public Set<AuthenticatorTransport> getTransports() {
-        return transports;
-    }
-
-    public void setTransports(Set<AuthenticatorTransport> transports) {
-        this.transports = transports;
-    }
 
     @Override
     public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
@@ -123,29 +71,16 @@ public class AuthenticatorImpl implements Authenticator {
     }
 
     @Override
-    public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
-        return authenticatorExtensions;
-    }
-
-    public void setAuthenticatorExtensions(AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
-        this.authenticatorExtensions = authenticatorExtensions;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         AuthenticatorImpl that = (AuthenticatorImpl) o;
-        return counter == that.counter &&
-                Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
-                Objects.equals(attestationStatement, that.attestationStatement) &&
-                Objects.equals(transports, that.transports) &&
-                Objects.equals(clientExtensions, that.clientExtensions) &&
-                Objects.equals(authenticatorExtensions, that.authenticatorExtensions);
+        return Objects.equals(clientExtensions, that.clientExtensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attestedCredentialData, attestationStatement, transports, counter, clientExtensions, authenticatorExtensions);
+        return Objects.hash(super.hashCode(), clientExtensions);
     }
 }

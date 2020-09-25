@@ -17,8 +17,11 @@
 package com.webauthn4j.authenticator;
 
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.data.RegistrationData;
+import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
+import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -33,6 +36,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 class AuthenticatorImplTest {
 
@@ -47,6 +51,24 @@ class AuthenticatorImplTest {
                 () -> assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationStatement),
                 () -> assertThat(authenticator.getCounter()).isEqualTo(1)
         );
+    }
+
+    @Test
+    void createFromRegistrationData_test(){
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        byte[] attestationObjectBytes = new byte[32];
+        CollectedClientData collectedClientData = mock(CollectedClientData.class);
+        byte[] collectedClientDataBytes = new byte[128];
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs.BuilderForRegistration().build();
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+        RegistrationData registrationData = new RegistrationData(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports);
+        AuthenticatorImpl authenticator = AuthenticatorImpl.createFromRegistrationData(registrationData);
+        assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData());
+        assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationObject.getAttestationStatement());
+        assertThat(authenticator.getTransports()).isEqualTo(transports);
+        assertThat(authenticator.getCounter()).isEqualTo(attestationObject.getAuthenticatorData().getSignCount());
+        assertThat(authenticator.getAuthenticatorExtensions()).isEqualTo(attestationObject.getAuthenticatorData().getExtensions());
+        assertThat(authenticator.getClientExtensions()).isEqualTo(authenticationExtensionsClientOutputs);
     }
 
     @Test
