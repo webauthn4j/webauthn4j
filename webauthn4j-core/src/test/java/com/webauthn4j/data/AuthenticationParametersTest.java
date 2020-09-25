@@ -22,9 +22,6 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AuthenticationParametersTest {
@@ -54,9 +51,9 @@ class AuthenticationParametersTest {
         assertThat(authenticationParameters.getAuthenticator()).isEqualTo(authenticator);
         assertThat(authenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
         assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
-        assertThat(authenticationParameters.getExpectedExtensionIds()).isNull();
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void equals_hashCode_test() {
         // Server properties
@@ -71,27 +68,25 @@ class AuthenticationParametersTest {
         // expectations
         boolean userVerificationRequired = true;
         boolean userPresenceRequired = true;
-        List<String> expectedExtensionIds = Collections.emptyList();
 
         AuthenticationParameters instanceA =
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
-                        userPresenceRequired,
-                        expectedExtensionIds
+                        userPresenceRequired
                 );
         AuthenticationParameters instanceB =
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
-                        userPresenceRequired,
-                        expectedExtensionIds
+                        userPresenceRequired
                 );
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
 
     }
 

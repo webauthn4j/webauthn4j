@@ -37,7 +37,6 @@ class RegistrationDataTest {
         byte[] attestationObjectBytes = new byte[32];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
         byte[] collectedClientDataBytes = new byte[128];
-        String clientExtensionJSON = "";
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
         Set<AuthenticatorTransport> transports = Collections.emptySet();
 
@@ -58,8 +57,9 @@ class RegistrationDataTest {
                 transports
         );
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 }

@@ -371,9 +371,9 @@ public class TestDataUtil {
         try {
             Signature signature;
             if (privateKey.getAlgorithm().equals("EC")) {
-                signature = SignatureUtil.getES256();
+                signature = SignatureUtil.createES256();
             } else {
-                signature = SignatureUtil.getRS256();
+                signature = SignatureUtil.createRS256();
             }
             signature.initSign(privateKey);
             signature.update(signedData);

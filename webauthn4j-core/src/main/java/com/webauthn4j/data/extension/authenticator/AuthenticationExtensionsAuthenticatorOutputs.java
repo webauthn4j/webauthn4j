@@ -144,7 +144,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
             instance.uvm = this.uvm;
             instance.credProtect = this.credProtect;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }
@@ -178,7 +178,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         public AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build(){
             AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
             instance.uvm = this.uvm;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }

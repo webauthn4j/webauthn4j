@@ -17,9 +17,9 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.AuthenticationData;
+import com.webauthn4j.data.CoreAuthenticationData;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
-import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
-import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ class AssertionSignatureValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(AuthenticationData authenticationData, COSEKey coseKey) {
+    public void validate(CoreAuthenticationData authenticationData, COSEKey coseKey) {
         byte[] signedData = getSignedData(authenticationData);
         byte[] signature = authenticationData.getSignature();
         if (!verifySignature(coseKey, signature, signedData)) {
@@ -45,17 +45,16 @@ class AssertionSignatureValidator {
         }
     }
 
-    private byte[] getSignedData(AuthenticationData authenticationData) {
-        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+    private byte[] getSignedData(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(authenticationData.getCollectedClientDataBytes());
+        byte[] clientDataHash = authenticationData.getClientDataHash();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 
     private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(coseKey.getAlgorithm());
+            SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();
             String jcaName = signatureAlgorithm.getJcaName();
             Signature verifier = Signature.getInstance(jcaName);
             verifier.initVerify(publicKey);

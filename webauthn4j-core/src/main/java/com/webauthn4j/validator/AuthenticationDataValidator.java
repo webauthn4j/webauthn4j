@@ -44,11 +44,12 @@ public class AuthenticationDataValidator {
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
-    private final ExtensionValidator extensionValidator = new ExtensionValidator();
+    private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
+    private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
 
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
-    private MaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultMaliciousCounterValueHandler();
+    private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     public AuthenticationDataValidator(List<CustomAuthenticationValidator> customAuthenticationValidators) {
         this.customAuthenticationValidators = customAuthenticationValidators;
@@ -58,6 +59,7 @@ public class AuthenticationDataValidator {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
+    @SuppressWarnings("deprecation")
     public void validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
@@ -161,8 +163,8 @@ public class AuthenticationDataValidator {
         //spec| identifier values in the extensions member of options, i.e., no extensions are present that were not requested.
         //spec| In the general case, the meaning of "are as expected" is specific to the Relying Party and which extensions are in use.
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = authenticatorData.getExtensions();
-        List<String> expectedExtensionIdentifiers = authenticationParameters.getExpectedExtensionIds();
-        extensionValidator.validate(clientExtensions, authenticationExtensionsAuthenticatorOutputs, expectedExtensionIdentifiers);
+        clientExtensionValidator.validate(clientExtensions);
+        authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
         //spec| Using the credential public key, validate that sig is a valid signature over
         //spec| the binary concatenation of the authenticatorData and the hash of the collectedClientData.
@@ -205,11 +207,11 @@ public class AuthenticationDataValidator {
         }
     }
 
-    public MaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+    public CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return maliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(MaliciousCounterValueHandler maliciousCounterValueHandler) {
+    public void setMaliciousCounterValueHandler(CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
         AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.maliciousCounterValueHandler = maliciousCounterValueHandler;
     }

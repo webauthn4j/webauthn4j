@@ -18,16 +18,18 @@ package com.webauthn4j.validator.attestation.statement.androidkey;
 
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
-import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
 
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.cert.Certificate;
 
 public class AndroidKeyAttestationStatementValidator extends AbstractStatementValidator<AndroidKeyAttestationStatement> {
@@ -39,7 +41,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
     private boolean teeEnforcedOnly = true;
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
@@ -63,13 +65,13 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
         }
 
-        byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(registrationObject.getCollectedClientDataBytes());
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         keyDescriptionValidator.validate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
 
         return AttestationType.BASIC;
     }
 
-    private void validateSignature(RegistrationObject registrationObject) {
+    private void validateSignature(CoreRegistrationObject registrationObject) {
         AndroidKeyAttestationStatement attestationStatement = (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -91,10 +93,9 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
     }
 
-    private byte[] getSignedData(RegistrationObject registrationObject) {
-        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 

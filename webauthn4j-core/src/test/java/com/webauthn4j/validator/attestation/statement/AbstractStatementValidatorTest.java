@@ -29,6 +29,7 @@ class AbstractStatementValidatorTest {
 
     @Test
     void getJcaName() {
-        assertThatThrownBy(() -> packedAttestationStatementValidator.getJcaName(COSEAlgorithmIdentifier.create(-16))).isInstanceOf(BadAttestationStatementException.class);
+        COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
+        assertThatThrownBy(() -> packedAttestationStatementValidator.getJcaName(invalid)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

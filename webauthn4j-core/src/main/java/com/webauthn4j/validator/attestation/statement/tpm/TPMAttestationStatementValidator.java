@@ -20,11 +20,12 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.type.Asn1Utf8String;
@@ -55,7 +56,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
 
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -89,8 +90,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        String messageDigestJcaName = getMessageDigestJcaName(alg);
-        byte[] hash = MessageDigestUtil.createMessageDigest(messageDigestJcaName).digest(attToBeSigned);
+        MessageDigest messageDigest = getMessageDigest(alg);
+        byte[] hash = messageDigest.digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
         }
@@ -120,15 +121,13 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }
 
-    private String getMessageDigestJcaName(COSEAlgorithmIdentifier alg) {
-        String messageDigestJcaName;
+    private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
-            messageDigestJcaName = signatureAlgorithm.getMessageDigestJcaName();
+            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
+            return signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);
         }
-        return messageDigestJcaName;
     }
 
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
@@ -290,10 +289,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
 
-    private byte[] getAttToBeSigned(RegistrationObject registrationObject) {
-        MessageDigest messageDigest = MessageDigestUtil.createSHA256();
+    private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
-        byte[] clientDataHash = messageDigest.digest(registrationObject.getCollectedClientDataBytes());
+        byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 

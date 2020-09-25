@@ -198,7 +198,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             instance.credProps = this.credProps;
             instance.credentialProtectionPolicy = this.credentialProtectionPolicy;
             instance.enforceCredentialProtectionPolicy = this.enforceCredentialProtectionPolicy;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }
@@ -245,7 +245,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             instance.appid = this.appid;
             instance.appidExclude = this.appidExclude;
             instance.uvm = this.uvm;
-            instance.unknowns = this.unknowns;
+            instance.unknowns.putAll(this.unknowns);
 
             return instance;
         }

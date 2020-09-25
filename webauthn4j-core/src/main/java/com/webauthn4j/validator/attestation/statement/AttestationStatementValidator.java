@@ -18,15 +18,15 @@ package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 
 /**
  * Validates the specified {@link AttestationStatement}
  */
 public interface AttestationStatementValidator {
 
-    AttestationType validate(RegistrationObject registrationObject);
+    AttestationType validate(CoreRegistrationObject registrationObject);
 
-    boolean supports(RegistrationObject registrationObject);
+    boolean supports(CoreRegistrationObject registrationObject);
 
 }

@@ -16,10 +16,10 @@
 
 package com.webauthn4j.validator.attestation.statement;
 
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.attestation.statement.SignatureAlgorithm;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
 import java.lang.reflect.ParameterizedType;
@@ -46,7 +46,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     }
 
     @Override
-    public boolean supports(RegistrationObject registrationObject) {
+    public boolean supports(CoreRegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
@@ -55,7 +55,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     protected String getJcaName(COSEAlgorithmIdentifier alg) {
         String jcaName;
         try {
-            SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.create(alg);
+            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
             jcaName = signatureAlgorithm.getJcaName();
         } catch (IllegalArgumentException e) {
             throw new BadAttestationStatementException("alg is not signature algorithm", e);

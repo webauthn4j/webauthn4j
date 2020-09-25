@@ -23,7 +23,7 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
@@ -46,7 +46,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
      * @return AttestationType.BASIC
      */
     @Override
-    public AttestationType validate(RegistrationObject registrationObject) {
+    public AttestationType validate(CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -75,7 +75,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private void validateSignature(RegistrationObject registrationObject) {
+    private void validateSignature(CoreRegistrationObject registrationObject) {
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -95,7 +95,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private byte[] getSignedData(RegistrationObject registrationObject) {
+    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
 
         String rpId = registrationObject.getServerProperty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
@@ -106,10 +106,8 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
 
         byte[] rpIdBytes = rpId.getBytes(StandardCharsets.UTF_8);
 
-        byte[] clientDataJsonBytes = registrationObject.getCollectedClientDataBytes();
-
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
-        byte[] challengeParameter = messageDigest.digest(clientDataJsonBytes);
+        byte[] challengeParameter = registrationObject.getClientDataHash();
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         byte[] userPublicKeyBytes = getPublicKeyBytes(credentialPublicKey);
 

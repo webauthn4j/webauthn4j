@@ -32,7 +32,7 @@ class AuthenticatorTransportTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(AuthenticatorTransport.create(null)).isEqualTo(null),
+                () -> assertThat(AuthenticatorTransport.create(null)).isNull(),
                 () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
                 () -> assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC),
                 () -> assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE),

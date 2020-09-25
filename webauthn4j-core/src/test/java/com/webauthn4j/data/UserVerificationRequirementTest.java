@@ -36,7 +36,7 @@ class UserVerificationRequirementTest {
                 () -> assertThat(UserVerificationRequirement.create("discouraged")).isEqualTo(UserVerificationRequirement.DISCOURAGED),
                 () -> assertThat(UserVerificationRequirement.create("preferred")).isEqualTo(UserVerificationRequirement.PREFERRED),
                 () -> assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED),
-                () -> assertThat(UserVerificationRequirement.create(null)).isEqualTo(null)
+                () -> assertThat(UserVerificationRequirement.create(null)).isNull()
         );
     }
 

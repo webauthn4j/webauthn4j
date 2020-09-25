@@ -3,12 +3,6 @@
 WebAuthnは各ブラウザベンダが実装を進めている最中の新技術であり、仕様で定められていても、残念ながら実際の活用には制約がかかる場面もあります。
 本節では、2019/12 現在のWebAuthnを活用する上での既知の問題を整理します。
 
-=== Safariのサポート
-
-macOSではSafari 13からWebAuthnのサポートが開始されました。
-iPhone/iPadではiOS 13.3のSafariから、WebAuthnのサポートが開始されました。どちらも外部セキュリティキーのサポートのみであり、
-Touch ID/Face ID のサポートは始まっていません。
-
 === AndroidのResidentKey対応
 
 AndroidのFIDO APIはResidentKey対応が完了していません。即ち、Chrome for AndroidとFirefox for Androidでは
@@ -33,6 +27,7 @@ WebAuthnが利用できないユーザーを考慮してWebAuthn以外での二�
 
 WebAuthn4JはECDAA(Elliptic Curve based Direct Anonymous Attestation)アルゴリズムをサポートしていません。
 ECDAAアルゴリズムはWebAuthn仕様でオプションとされており、主要ブラウザでもサポートされていない為、当面サポートする予定はありません。
+WebAuthn Level2仕様からECDAAのサポートは削除されました。
 
 === PS256、PS384、PS512のサポート
 

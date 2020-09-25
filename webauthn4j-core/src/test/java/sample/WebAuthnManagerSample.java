@@ -46,6 +46,7 @@ public class WebAuthnManagerSample {
         webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
     }
 
+    @SuppressWarnings("deprecation")
     public void registrationValidationSample() {
 
         // Client properties
@@ -64,10 +65,9 @@ public class WebAuthnManagerSample {
         // expectations
         boolean userVerificationRequired = false;
         boolean userPresenceRequired = true;
-        List<String> expectedExtensionIds = Collections.emptyList();
 
         RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
         RegistrationData registrationData;
         try {
             registrationData = webAuthnManager.parse(registrationRequest);
@@ -93,6 +93,7 @@ public class WebAuthnManagerSample {
     }
 
 
+    @SuppressWarnings("deprecation")
     public void authenticationValidationSample() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;
@@ -130,8 +131,7 @@ public class WebAuthnManagerSample {
                         serverProperty,
                         authenticator,
                         userVerificationRequired,
-                        userPresenceRequired,
-                        expectedExtensionIds
+                        userPresenceRequired
                 );
 
         AuthenticationData authenticationData;

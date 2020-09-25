@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package integration.scenario;
+package integration.scenario.webauthn;
 
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
@@ -25,7 +25,10 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
-import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestAttestationUtil;
@@ -37,14 +40,14 @@ import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationSt
 import com.webauthn4j.validator.attestation.statement.u2f.FIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.TrustAnchorCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.DefaultSelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.UnexpectedExtensionException;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserVerifyingAuthenticatorRegistrationValidationTest {
 
@@ -185,59 +188,4 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @Test
-    void validate_RegistrationRequest_with_unexpected_extension_test() {
-        String rpId = "example.com";
-        Challenge challenge = new DefaultChallenge();
-        AuthenticatorSelectionCriteria authenticatorSelectionCriteria =
-                new AuthenticatorSelectionCriteria(
-                        AuthenticatorAttachment.CROSS_PLATFORM,
-                        true,
-                        UserVerificationRequirement.REQUIRED);
-
-        PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
-
-        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
-
-        AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();
-        builder.setCredProps(true);
-
-        PublicKeyCredentialCreationOptions credentialCreationOptions
-                = new PublicKeyCredentialCreationOptions(
-                new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                publicKeyCredentialUserEntity,
-                challenge,
-                Collections.singletonList(publicKeyCredentialParameters),
-                null,
-                Collections.emptyList(),
-                authenticatorSelectionCriteria,
-                AttestationConveyancePreference.NONE,
-                builder.build()
-        );
-
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
-        AuthenticatorAttestationResponse registrationRequest = credential.getAuthenticatorResponse();
-        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
-        Set<String> transports = Collections.emptySet();
-        String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
-
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
-        List<String> expectedExtensions = Collections.singletonList("appId");
-        RegistrationRequest webAuthnRegistrationRequest
-                = new RegistrationRequest(
-                registrationRequest.getAttestationObject(),
-                registrationRequest.getClientDataJSON(),
-                clientExtensionJSON,
-                transports
-        );
-        RegistrationParameters registrationParameters = new RegistrationParameters(
-                serverProperty,
-                false,
-                true,
-                expectedExtensions
-        );
-
-        RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
-        assertThrows(UnexpectedExtensionException.class, () -> target.validate(registrationData, registrationParameters));
-    }
 }

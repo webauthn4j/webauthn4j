@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package integration.scenario;
+package integration.scenario.webauthn;
 
 import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.anchor.TrustAnchorsResolver;
@@ -71,6 +71,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_test() {
         String rpId = "example.com";
@@ -103,8 +104,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(registrationRequest, registrationParameters);
@@ -116,6 +116,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_direct_attestation_conveyance_preference_test() {
         String rpId = "example.com";
@@ -158,8 +159,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         RegistrationData response = target.validate(registrationRequest, registrationParameters);
@@ -172,6 +172,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
@@ -204,8 +205,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
 
@@ -214,6 +214,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_challenge_test() {
         String rpId = "example.com";
@@ -243,8 +244,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadChallengeException.class,
@@ -252,6 +252,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_origin_test() {
         String rpId = "example.com";
@@ -281,8 +282,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadOriginException.class,
@@ -290,6 +290,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_rpId_test() {
         String rpId = "example.com";
@@ -316,8 +317,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadRpIdException.class,
@@ -325,6 +325,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
@@ -351,8 +352,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
         WebAuthnManager target = new WebAuthnManager(
                 Collections.singletonList(fidoU2FAttestationStatementValidator),
@@ -365,6 +365,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
@@ -409,8 +410,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadSignatureException.class,
@@ -418,6 +418,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void validate_malicious_client_data_test() {
         Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");
@@ -466,8 +467,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new RegistrationParameters(
                 serverProperty,
                 false,
-                true,
-                Collections.emptyList()
+                true
         );
 
         assertThrows(BadSignatureException.class,

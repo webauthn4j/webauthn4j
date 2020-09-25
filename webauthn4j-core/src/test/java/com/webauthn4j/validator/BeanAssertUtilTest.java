@@ -29,7 +29,6 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -146,6 +145,8 @@ class BeanAssertUtilTest {
                 () -> BeanAssertUtil.validate(registrationData)
         );
     }
+
+
 
     @Test
     void validate_RegistrationParameters_test() {
@@ -341,8 +342,7 @@ class BeanAssertUtilTest {
                 TestDataUtil.createServerProperty(),
                 TestDataUtil.createAuthenticator(),
                 true,
-                true,
-                new ArrayList<>()
+                true
         );
         BeanAssertUtil.validate(authenticationParameters);
     }
@@ -360,8 +360,7 @@ class BeanAssertUtilTest {
                 null,
                 TestDataUtil.createAuthenticator(),
                 true,
-                true,
-                new ArrayList<>()
+                true
         );
         assertThrows(ConstraintViolationException.class,
                 () -> BeanAssertUtil.validate(authenticationParameters)
@@ -374,24 +373,9 @@ class BeanAssertUtilTest {
                 TestDataUtil.createServerProperty(),
                 null,
                 true,
-                true,
-                new ArrayList<>()
+                true
         );
         assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(authenticationParameters)
-        );
-    }
-
-    @Test
-    void validate_AuthenticationParameters_with_expectedExtensionIds_null_test() {
-        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
-                TestDataUtil.createServerProperty(),
-                TestDataUtil.createAuthenticator(),
-                true,
-                true,
-                null
-        );
-        assertDoesNotThrow(
                 () -> BeanAssertUtil.validate(authenticationParameters)
         );
     }

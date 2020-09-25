@@ -43,7 +43,7 @@ class AttestationConveyancePreferenceTest {
 
     @Test
     void create_test_with_null_value() {
-        assertThat(AttestationConveyancePreference.create(null)).isEqualTo(null);
+        assertThat(AttestationConveyancePreference.create(null)).isNull();
     }
 
     @Test

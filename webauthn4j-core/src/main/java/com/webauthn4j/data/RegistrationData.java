@@ -21,21 +21,17 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.util.CollectionUtil;
+import com.webauthn4j.util.MessageDigestUtil;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class RegistrationData implements Serializable {
+public class RegistrationData extends CoreRegistrationData {
 
-    private final AttestationObject attestationObject;
-    private final byte[] attestationObjectBytes;
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
-    private final Set<AuthenticatorTransport> transports;
 
     public RegistrationData(
             AttestationObject attestationObject,
@@ -44,20 +40,12 @@ public class RegistrationData implements Serializable {
             byte[] collectedClientDataBytes,
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports) {
-        this.attestationObject = attestationObject;
-        this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
+
+        super(attestationObject, attestationObjectBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), transports);
+
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
-        this.transports = CollectionUtil.unmodifiableSet(transports);
-    }
-
-    public AttestationObject getAttestationObject() {
-        return attestationObject;
-    }
-
-    public byte[] getAttestationObjectBytes() {
-        return ArrayUtil.clone(attestationObjectBytes);
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -72,27 +60,20 @@ public class RegistrationData implements Serializable {
         return clientExtensions;
     }
 
-    public Set<AuthenticatorTransport> getTransports() {
-        return transports;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         RegistrationData that = (RegistrationData) o;
-        return Objects.equals(attestationObject, that.attestationObject) &&
-                Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
-                Objects.equals(collectedClientData, that.collectedClientData) &&
+        return Objects.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
-                Objects.equals(clientExtensions, that.clientExtensions) &&
-                Objects.equals(transports, that.transports);
+                Objects.equals(clientExtensions, that.clientExtensions);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(attestationObject, collectedClientData, clientExtensions, transports);
-        result = 31 * result + Arrays.hashCode(attestationObjectBytes);
+        int result = Objects.hash(super.hashCode(), collectedClientData, clientExtensions);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
     }

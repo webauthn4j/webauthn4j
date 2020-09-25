@@ -89,7 +89,7 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getRpIdHash()).isNotNull();
         assertThat(result.getRpIdHash()).hasSize(32);
         assertThat(result.getFlags()).isEqualTo(BIT_ED);
-        assertThat(result.getSignCount()).isEqualTo(0);
+        assertThat(result.getSignCount()).isZero();
         assertThat(result.getAttestedCredentialData()).isNull();
         assertThat(result.getExtensions().getKeys()).contains(UserVerificationMethodExtensionAuthenticatorOutput.ID);
     }

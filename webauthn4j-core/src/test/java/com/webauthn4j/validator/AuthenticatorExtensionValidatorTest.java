@@ -16,21 +16,23 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.validator.exception.MaliciousCounterValueException;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
+class AuthenticatorExtensionValidatorTest {
 
-class DefaultMaliciousCounterValueHandlerTest {
-
-    private final DefaultMaliciousCounterValueHandler target = new DefaultMaliciousCounterValueHandler();
+    private final AuthenticatorExtensionValidator extensionValidator = new AuthenticatorExtensionValidator();
 
     @Test
-    void maliciousCounterValueDetected_test() {
-        AuthenticationObject authenticationObject = mock(AuthenticationObject.class);
-        assertThrows(MaliciousCounterValueException.class,
-                () -> target.maliciousCounterValueDetected(authenticationObject)
-        );
+    void test() {
+        AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
+        builder.set("test", true);
+        extensionValidator.validate(builder.build());
     }
+
+    @Test
+    void authenticatorOutputs_null_test() {
+        extensionValidator.validate(null);
+    }
+
 }
