@@ -33,7 +33,8 @@ ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれ
 
 検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
 検証に成功した場合は、返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
-認証時に必要となります。
+認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#authenticatorのシリアライズデシリアライズ,Authenticatorのシリアライズ、デシリアライズ>> を参照して下さい。
+
 
 [source,java]
 ----

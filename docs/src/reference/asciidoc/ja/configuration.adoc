@@ -56,15 +56,6 @@ FIDO Allianceでは、FIDO Metadata Serviceという、認証デバイスのメ�
 `FidoMdsMetadataValidator` は、 `CustomRegistrationValidator` の実装ですので、
 <<_./deep-dive.adoc#カスタム検証ロジックの登録,カスタム検証ロジックの登録>> を参考に使用して下さい。
 
-=== 認証デバイスの表現
-
-認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。
-登録時に、 `RegistrationData` クラスが含む値を用いて `Authenticator` インタフェースの
-インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。
-なお、永続化する際は、検索する際の利便性を考え、credentialIdをキーに永続化すると良いでしょう。
-`Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。
-典型的には、 `Authenticator` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。
-
 === WebAuthn4Jが提供しない機能
 
 WebAuthn4Jは特定のフレームワークに依存しないポータビリティを実現する為、

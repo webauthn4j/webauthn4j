@@ -1,5 +1,108 @@
 == Deep-Dive
 
+=== Representation of an authenticator
+
+WebAuthn4j provides `Authenticator` interface as a representation of an authenticator.
+
+On registering the authenticator, you need to persist its representation by creating the instance implementing
+`Authenticator` interface in your application manner because it is used afterwards on authentication verification.
+It might be better to use credentialId as a search key for this persisted instance.
+
+You can freely enhance the class implementing `Authenticator` interface in order to meet your application's requirements.
+For example, you can add the field for your application's user to identify the authenticator.
+
+=== Authenticator serialization and deserialization
+
+While it is application's responsibility to serialize `Authenticator` instance at registration, WebAuthn4J provides
+an utility class to serialize or deserialize members of `Authenticator` class. Please use them for implementing persistence in your application.
+
+==== attestedCredentialData
+
+`AttestedCredentialDataConverter` converts from `AttestedCredentialData` to `byte[]` and vice versa.
+If you would like to persist as `String`, use `Base64UrlUtil` to convert from `byte[]` to base64url `String`.
+
+[source,java]
+----
+AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+
+// serialize
+byte[] serialized = attestedCredentialDataConverter.convert(attestedCredentialData);
+// deserialize
+AttestedCredentialDataConverter deserialized = attestedCredentialDataConverter.convert(serialized);
+----
+
+==== attestationStatement
+
+Since `AttestationStatement` is an interface, there are some implementation classes like `PackedAttestationStatement` or `AndroidKeyAttestationStatement` per format.
+As `AttestationStatement` is not self-descriptive for its format, the format need to be persisted in an another field.
+Because of that, an envelope class which has attestationStatement field and format field is required,
+and the envelope class need to be serialized for persisting `AttestationStatement`.
+
+[source,java]
+----
+AttestationStatementEnvelope attestationStatementEnvelope = new AttestationStatementEnvelope(format, attestationStatement);
+byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes()
+----
+
+[source,java]
+----
+static class AttestationStatementEnvelope{
+
+    @JsonProperty("attStmt")
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+            property = "fmt"
+    )
+    private AttestationStatement attestationStatement;
+
+    @JsonCreator
+    public AttestationStatementEnvelope(@JsonProperty("attStmt") AttestationStatement attestationStatement) {
+        this.attestationStatement = attestationStatement;
+    }
+
+    @JsonProperty("fmt")
+    public String getFormat() {
+        return attestationStatement.getFormat();
+    }
+
+    public AttestationStatement getAttestationStatement() {
+        return attestationStatement;
+    }
+}
+----
+
+==== transports
+
+If you would like to persist as JSON `String`, use `ObjectConverter`.
+
+[source,java]
+----
+String serializedTransports = objectConverter.getJsonConverter().writeValueAsString(transports);
+----
+
+==== counter
+
+This member is `long`. Nothing special is required.
+
+==== authenticatorExtensions
+
+This member can be serialized as CBOR as it is originally CBOR data.
+
+[source,java]
+----
+byte[] serializedAuthenticatorExtensions = objectConverter.getCborConverter().writeValueAsBytes(authenticatorExtensions);
+----
+
+==== clientExtensions
+
+This member can be serialized as JSON as it is originally JSON data.
+
+[source,java]
+----
+String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
+----
+
 === Using FIDO CTAP2 Security key in your own application other than WebAuthn
 
 For FIDO CTAP2 Security key, WebAuthn is just an application. An original application can use a a security key too.
