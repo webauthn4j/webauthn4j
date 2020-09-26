@@ -39,6 +39,7 @@ It is the application's responsibility for retaining the issued Challenge.
 If validation fails, an exception inheriting `ValidationException` is thrown.
 If validation succeeds, please create an `Authenticator` instance from the returned value and persist it to the database
 or something in your application manner. The instance is required at the time of authentication.
+For more details about `Authenticator` serialization, please refer <<./deep-dive.adoc#authenticator-serialization-and-deserialization,Authenticator serialization and deserialization>>.
 
 [source,java]
 ----

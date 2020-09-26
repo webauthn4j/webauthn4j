@@ -1,4 +1,107 @@
+
+
 == 詳細
+
+=== 認証デバイスの表現
+
+認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。
+登録時に、 `RegistrationData` クラスが含む値を用いて `Authenticator` インタフェースの
+インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。
+なお、永続化する際は、検索する際の利便性を考え、credentialIdをキーに永続化すると良いでしょう。
+`Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。
+典型的には、 `Authenticator` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。
+
+=== Authenticatorのシリアライズ、デシリアライズ
+
+認証デバイスの登録時、`Authenticator` のインスタンスをデータベース等に永続化し、認証時に利用できるようにするのはアプリケーションの責務ですが、
+`Authenticator` を構成する各メンバをシリアライズ、デシリアライズする際に使用できるクラスをWebAuthn4Jでは用意しています。
+アプリケーションで永続化を実装する際の補助としてご利用ください。
+
+==== attestedCredentialData
+
+`AttestedCredentialDataConverter` で `AttestedCredentialData` を `byte[]` に変換したり、その逆の変換を行うことが出来ます。
+なお、`String` として保存したい場合、さらに `Base64UrlUtil` を用いることで `byte[]` から Base64Url `String` に変換することが出来ます。
+
+[source,java]
+----
+AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+
+// serialize
+byte[] serialized = attestedCredentialDataConverter.convert(attestedCredentialData);
+// deserialize
+AttestedCredentialDataConverter deserialized = attestedCredentialDataConverter.convert(serialized);
+----
+
+==== attestationStatement
+
+`AttestationStatement` はインタフェースであり、`PackedAttestationStatement` や、`AndroidKeyAttestationStatement` など、フォーマットにあわせて複数の実装があります。
+`AttestationStatement` のCBOR表現は具象型が何であるかについて自己記述性を持たない為、フォーマットは別途、別のフィールドとして永続化する必要があります。
+そのため、CBORとしてシリアライズする際は、実際のattestationStatementのフィールドと、フォーマットのフィールドを持つエンベロープクラスを用意し、エンベロープクラスをシリアライズしなければなりません。
+
+[source,java]
+----
+AttestationStatementEnvelope attestationStatementEnvelope = new AttestationStatementEnvelope(format, attestationStatement);
+byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes()
+----
+
+[source,java]
+----
+class AttestationStatementEnvelope{
+
+    @JsonProperty("attStmt")
+    @JsonTypeInfo(
+            use = JsonTypeInfo.Id.NAME,
+            include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
+            property = "fmt"
+    )
+    private AttestationStatement attestationStatement;
+
+    @JsonCreator
+    public AttestationStatementEnvelope(@JsonProperty("attStmt") AttestationStatement attestationStatement) {
+        this.attestationStatement = attestationStatement;
+    }
+
+    @JsonProperty("fmt")
+    public String getFormat() {
+        return attestationStatement.getFormat();
+    }
+
+    public AttestationStatement getAttestationStatement() {
+        return attestationStatement;
+    }
+}
+----
+
+==== transports
+
+JSON文字列として保存したい場合は `ObjectConverter` が使用できます。
+
+[source,java]
+----
+String serializedTransports = objectConverter.getJsonConverter().writeValueAsString(transports);
+----
+
+==== counter
+
+このメンバは元々long型の為、特に変換は不要です。
+
+==== authenticatorExtensions
+
+authenticatorExtensionsは元来CBORデータの為、CBORに変換できます。
+
+[source,java]
+----
+byte[] serializedAuthenticatorExtensions = objectConverter.getCborConverter().writeValueAsBytes(authenticatorExtensions);
+----
+
+==== clientExtensions
+
+clientExtensionsは元来JSONデータの為、JSONに変換できます。
+
+[source,java]
+----
+String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
+----
 
 === WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用
 
