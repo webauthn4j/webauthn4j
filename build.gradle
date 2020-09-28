@@ -24,7 +24,7 @@ buildscript {
     def asciidoctorGradleVersion="3.2.0"
     def artifactoryVersion="4.17.2"
     def bintrayVersion = "1.8.5"
-    def owaspDependencyCheckVersion = "6.0.1"
+    def owaspDependencyCheckVersion = "6.0.2"
     def httpBuilderVersion = "0.7.2"
 
     repositories {
