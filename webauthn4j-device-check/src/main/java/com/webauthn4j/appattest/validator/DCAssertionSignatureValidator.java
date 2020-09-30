@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.validator;
+package com.webauthn4j.appattest.validator;
 
-import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.util.MessageDigestUtil;
+import com.webauthn4j.validator.AssertionSignatureValidator;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,16 +28,13 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 import java.security.*;
 
-/**
- * Validates the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
- */
-public class AssertionSignatureValidator {
+public class DCAssertionSignatureValidator extends AssertionSignatureValidator {
 
     final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
 
     // ~ Methods
     // ========================================================================================================
-
+    @Override
     public void validate(CoreAuthenticationData authenticationData, COSEKey coseKey) {
         byte[] signedData = getSignedData(authenticationData);
         byte[] signature = authenticationData.getSignature();
@@ -48,7 +46,8 @@ public class AssertionSignatureValidator {
     private byte[] getSignedData(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
-        return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
+        byte[] concatenated = ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
+        return MessageDigestUtil.createSHA256().digest(concatenated);
     }
 
     private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
@@ -68,6 +67,5 @@ public class AssertionSignatureValidator {
             return false;
         }
     }
-
 
 }

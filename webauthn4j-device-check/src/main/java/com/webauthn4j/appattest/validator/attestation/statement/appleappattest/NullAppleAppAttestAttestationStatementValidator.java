@@ -21,7 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 
-public class NullAppleAppAttestStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
+public class NullAppleAppAttestAttestationStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
 
     @Override
     public AttestationType validate(CoreRegistrationObject registrationObject) {

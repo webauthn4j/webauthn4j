@@ -22,11 +22,7 @@ import com.webauthn4j.data.CoreAuthenticationParameters;
 
 public class DCAssertionParameters extends CoreAuthenticationParameters {
 
-    public DCAssertionParameters(DCServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired, boolean userPresenceRequired) {
-        super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
-    }
-
-    public DCAssertionParameters(DCServerProperty serverProperty, CoreAuthenticator authenticator, boolean userVerificationRequired) {
-        super(serverProperty, authenticator, userVerificationRequired);
+    public DCAssertionParameters(DCServerProperty serverProperty, CoreAuthenticator authenticator) {
+        super(serverProperty, authenticator, false, false);
     }
 }

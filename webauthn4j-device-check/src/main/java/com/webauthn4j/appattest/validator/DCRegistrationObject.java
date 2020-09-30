@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.data;
+package com.webauthn4j.appattest.validator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.validator.CoreRegistrationObject;
 
+import java.time.Instant;
 import java.util.Arrays;
-import java.util.Set;
 
-public class DCAttestationData extends CoreRegistrationData {
+public class DCRegistrationObject extends CoreRegistrationObject {
 
-    private final byte[] keyIdentifier;
+    private byte[] keyIdentifier;
 
-    public DCAttestationData(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, Set<AuthenticatorTransport> transports) {
-        super(attestationObject, attestationObjectBytes, clientDataHash, transports);
+
+    public DCRegistrationObject(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty, Instant timestamp) {
+        super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
+        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+    }
+
+    public DCRegistrationObject(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty) {
+        super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
         this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
     }
 
@@ -42,7 +48,7 @@ public class DCAttestationData extends CoreRegistrationData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DCAttestationData that = (DCAttestationData) o;
+        DCRegistrationObject that = (DCRegistrationObject) o;
         return Arrays.equals(keyIdentifier, that.keyIdentifier);
     }
 

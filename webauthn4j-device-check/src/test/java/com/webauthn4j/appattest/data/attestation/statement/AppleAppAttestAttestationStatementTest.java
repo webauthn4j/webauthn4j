@@ -16,9 +16,9 @@
 
 package com.webauthn4j.appattest.data.attestation.statement;
 
+import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +45,9 @@ class AppleAppAttestAttestationStatementTest {
 
     @Test
     void equals_hashCode_test() {
-        RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
+        DCRegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
         AppleAppAttestAttestationStatement instanceA = (AppleAppAttestAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
-        RegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
+        DCRegistrationObject registrationObjectB = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
         AppleAppAttestAttestationStatement instanceB = (AppleAppAttestAttestationStatement) registrationObjectB.getAttestationObject().getAttestationStatement();
 
         assertAll(

@@ -22,12 +22,18 @@ import java.util.Arrays;
 
 public class DCAttestationRequest {
 
+    private byte[] keyIdentifier;
     private byte[] attestationObject;
     private byte[] clientDataHash;
 
-    public DCAttestationRequest(byte[] attestationObject, byte[] clientDataHash) {
+    public DCAttestationRequest(byte[] keyIdentifier, byte[] attestationObject, byte[] clientDataHash) {
+        this.keyIdentifier = keyIdentifier;
         this.attestationObject = attestationObject;
         this.clientDataHash = clientDataHash;
+    }
+
+    public byte[] getKeyIdentifier() {
+        return keyIdentifier;
     }
 
     public byte[] getAttestationObject() {
@@ -43,13 +49,15 @@ public class DCAttestationRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DCAttestationRequest that = (DCAttestationRequest) o;
-        return Arrays.equals(attestationObject, that.attestationObject) &&
+        return Arrays.equals(keyIdentifier, that.keyIdentifier) &&
+                Arrays.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(clientDataHash, that.clientDataHash);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(attestationObject);
+        int result = Arrays.hashCode(keyIdentifier);
+        result = 31 * result + Arrays.hashCode(attestationObject);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;
     }

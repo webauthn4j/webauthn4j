@@ -16,17 +16,17 @@
 
 package com.webauthn4j.appattest.validator.attestation.statement.appleappattest;
 
+import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
 class AppleAppAttestAttestationStatementValidatorTest {
 
-    private final AppleAppAttestStatementValidator target = new AppleAppAttestStatementValidator();
+    private final AppleAppAttestAttestationStatementValidator target = new AppleAppAttestAttestationStatementValidator();
 
     @Test
     void validate_test() {
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
+        DCRegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
         target.validate(registrationObject);
     }
 }

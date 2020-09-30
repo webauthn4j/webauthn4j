@@ -74,21 +74,13 @@ public class CoreRegistrationDataValidator {
         BeanAssertUtil.validate(registrationData);
         BeanAssertUtil.validate(registrationParameters);
 
-        byte[] attestationObjectBytes = registrationData.getAttestationObjectBytes();
-        byte[] clientDataHash = registrationData.getClientDataHash();
-
         AttestationObject attestationObject = registrationData.getAttestationObject();
 
         validateAuthenticatorDataField(attestationObject.getAuthenticatorData());
 
         CoreServerProperty serverProperty = registrationParameters.getServerProperty();
 
-        CoreRegistrationObject registrationObject = new CoreRegistrationObject(
-                attestationObject,
-                attestationObjectBytes,
-                clientDataHash,
-                serverProperty
-        );
+        CoreRegistrationObject registrationObject = createCoreRegistrationObject(registrationData, registrationParameters);
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
 
@@ -139,6 +131,15 @@ public class CoreRegistrationDataValidator {
         for (CustomCoreRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
         }
+    }
+
+    protected CoreRegistrationObject createCoreRegistrationObject(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
+        return new CoreRegistrationObject(
+                registrationData.getAttestationObject(),
+                registrationData.getAttestationObjectBytes(),
+                registrationData.getClientDataHash(),
+                registrationParameters.getServerProperty()
+            );
     }
 
     void validateAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {

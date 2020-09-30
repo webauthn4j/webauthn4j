@@ -16,12 +16,16 @@
 
 package com.webauthn4j.appattest;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
 import com.webauthn4j.appattest.validator.DCAssertionDataValidator;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
@@ -40,14 +44,15 @@ public class DeviceCheckAssertionManager {
     private final AuthenticatorDataConverter authenticatorDataConverter;
 
     private final DCAssertionDataValidator dcAssertionDataValidator;
+    private final CborConverter cborConverter;
 
     public DeviceCheckAssertionManager(List<CustomCoreAuthenticationValidator> customAuthenticationValidators, ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         dcAssertionDataValidator = new DCAssertionDataValidator(customAuthenticationValidators);
-
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        cborConverter = objectConverter.getCborConverter();
     }
 
     public DeviceCheckAssertionManager(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
@@ -62,10 +67,11 @@ public class DeviceCheckAssertionManager {
     public DCAssertionData parse(DCAssertionRequest dcAssertionRequest) throws DataConversionException {
 
         byte[] credentialId = dcAssertionRequest.getCredentialId();
-        byte[] authenticatorDataBytes = dcAssertionRequest.getAuthenticatorData();
+        DCAssertion assertion =  cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
+        byte[] authenticatorDataBytes = assertion.getAuthenticatorData();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
         byte[] clientDataHash = dcAssertionRequest.getClientDataHash();
-        byte[] signature = dcAssertionRequest.getSignature();
+        byte[] signature = assertion.getSignature();
 
         return new DCAssertionData(
                 credentialId,
@@ -93,4 +99,30 @@ public class DeviceCheckAssertionManager {
     public DCAssertionDataValidator getDCAssertionDataValidator() {
         return dcAssertionDataValidator;
     }
+
+    static class DCAssertion {
+
+        private byte[] signature;
+        private byte[] authenticatorData;
+
+        @JsonCreator
+        public DCAssertion(
+                @JsonProperty("signature") byte[] signature,
+                @JsonProperty("authenticatorData") byte[] authenticatorData) {
+            this.signature = signature;
+            this.authenticatorData = authenticatorData;
+        }
+
+        @JsonGetter("signature")
+        public byte[] getSignature() {
+            return signature;
+        }
+
+        @JsonGetter("authenticatorData")
+        public byte[] getAuthenticatorData() {
+            return authenticatorData;
+        }
+
+    }
+
 }

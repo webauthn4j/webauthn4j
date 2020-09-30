@@ -16,38 +16,42 @@
 
 package com.webauthn4j.appattest.data;
 
-import com.webauthn4j.util.ArrayUtil;
-
 import java.util.Arrays;
 
 public class DCAssertionRequest {
 
     private byte[] credentialId;
-    private byte[] authenticatorData;
+    private byte[] assertion;
     private byte[] clientDataHash;
-    private byte[] signature;
 
-    public DCAssertionRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataHash, byte[] signature) {
-        this.credentialId = ArrayUtil.clone(credentialId);
-        this.authenticatorData = ArrayUtil.clone(authenticatorData);
-        this.clientDataHash = ArrayUtil.clone(clientDataHash);
-        this.signature = ArrayUtil.clone(signature);
+    public DCAssertionRequest(byte[] credentialId, byte[] assertion, byte[] clientDataHash) {
+        this.credentialId = credentialId;
+        this.assertion = assertion;
+        this.clientDataHash = clientDataHash;
     }
 
     public byte[] getCredentialId() {
-        return ArrayUtil.clone(credentialId);
+        return credentialId;
     }
 
-    public byte[] getAuthenticatorData() {
-        return ArrayUtil.clone(authenticatorData);
+    public void setCredentialId(byte[] credentialId) {
+        this.credentialId = credentialId;
+    }
+
+    public byte[] getAssertion() {
+        return assertion;
+    }
+
+    public void setAssertion(byte[] assertion) {
+        this.assertion = assertion;
     }
 
     public byte[] getClientDataHash() {
-        return ArrayUtil.clone(clientDataHash);
+        return clientDataHash;
     }
 
-    public byte[] getSignature() {
-        return ArrayUtil.clone(signature);
+    public void setClientDataHash(byte[] clientDataHash) {
+        this.clientDataHash = clientDataHash;
     }
 
     @Override
@@ -56,17 +60,15 @@ public class DCAssertionRequest {
         if (o == null || getClass() != o.getClass()) return false;
         DCAssertionRequest that = (DCAssertionRequest) o;
         return Arrays.equals(credentialId, that.credentialId) &&
-                Arrays.equals(authenticatorData, that.authenticatorData) &&
-                Arrays.equals(clientDataHash, that.clientDataHash) &&
-                Arrays.equals(signature, that.signature);
+                Arrays.equals(assertion, that.assertion) &&
+                Arrays.equals(clientDataHash, that.clientDataHash);
     }
 
     @Override
     public int hashCode() {
         int result = Arrays.hashCode(credentialId);
-        result = 31 * result + Arrays.hashCode(authenticatorData);
+        result = 31 * result + Arrays.hashCode(assertion);
         result = 31 * result + Arrays.hashCode(clientDataHash);
-        result = 31 * result + Arrays.hashCode(signature);
         return result;
     }
 }

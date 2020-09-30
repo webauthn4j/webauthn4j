@@ -26,7 +26,7 @@ import java.util.List;
 public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
 
     public DCAssertionDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
-        super(customAuthenticationValidators);
+        super(customAuthenticationValidators, new DCAssertionSignatureValidator());
     }
 
     public DCAssertionDataValidator() {

@@ -34,11 +34,10 @@ import java.util.List;
 public class CoreAuthenticationDataValidator {
 
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
-    private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
-
     private final List<CustomCoreAuthenticationValidator> customAuthenticationValidators;
 
+    private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
     private CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     public CoreAuthenticationDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
@@ -47,6 +46,11 @@ public class CoreAuthenticationDataValidator {
 
     public CoreAuthenticationDataValidator() {
         this(new ArrayList<>());
+    }
+
+    protected CoreAuthenticationDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators, AssertionSignatureValidator assertionSignatureValidator) {
+        this.customAuthenticationValidators = customAuthenticationValidators;
+        this.assertionSignatureValidator = assertionSignatureValidator;
     }
 
     /**

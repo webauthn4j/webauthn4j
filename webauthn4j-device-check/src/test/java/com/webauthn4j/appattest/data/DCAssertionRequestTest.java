@@ -26,11 +26,10 @@ class DCAssertionRequestTest {
     void equals_hashCode_test(){
 
         byte[] credentialId = new byte[24];
-        byte[] authenticatorData = new byte[64];
+        byte[] assertion = new byte[64];
         byte[] clientDataHash = new byte[32];
-        byte[] signature = new byte[32];
-        DCAssertionRequest instanceA = new DCAssertionRequest(credentialId, authenticatorData, clientDataHash, signature);
-        DCAssertionRequest instanceB = new DCAssertionRequest(credentialId, authenticatorData, clientDataHash, signature);
+        DCAssertionRequest instanceA = new DCAssertionRequest(credentialId, assertion, clientDataHash);
+        DCAssertionRequest instanceB = new DCAssertionRequest(credentialId, assertion, clientDataHash);
 
         assertThat(instanceA).isEqualTo(instanceB);
         assertThat(instanceA).hasSameHashCodeAs(instanceB);
