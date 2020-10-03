@@ -55,7 +55,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
@@ -110,7 +110,7 @@ public class TestDataUtil {
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = new AuthenticationExtensionsClientOutputs<>();
-        LocalDateTime timestamp = LocalDateTime.parse("2019-02-02T07:01:00");
+        Instant timestamp = Instant.parse("2019-02-02T07:01:00.00Z");
         return new RegistrationObject(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, authenticationExtensionsClientOutputs, transports, TestDataUtil.createServerProperty(), timestamp);
     }
 
