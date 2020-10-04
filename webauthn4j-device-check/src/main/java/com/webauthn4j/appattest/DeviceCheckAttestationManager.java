@@ -75,13 +75,12 @@ public class DeviceCheckAttestationManager {
     @SuppressWarnings("squid:S1130")
     public DCAttestationData validate(DCAttestationRequest dcAttestationRequest, DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
         DCAttestationData dcAttestationData = parse(dcAttestationRequest);
-        dcAttestationDataValidator.validate(dcAttestationData, dcAttestationParameters);
-        return dcAttestationData;
+        return validate(dcAttestationData, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
     public DCAttestationData validate(DCAttestationData dcAttestationData, DCAttestationParameters dcAttestationParameters) throws ValidationException {
-        dcAttestationDataValidator.validate(dcAttestationData, dcAttestationParameters);
+        getDCAttestationDataValidator().validate(dcAttestationData, dcAttestationParameters);
         return dcAttestationData;
     }
 

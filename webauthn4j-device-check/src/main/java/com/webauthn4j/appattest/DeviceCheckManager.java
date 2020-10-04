@@ -145,11 +145,11 @@ public class DeviceCheckManager {
     }
 
 
-    public DCAttestationDataValidator getRegistrationDataValidator() {
+    public DCAttestationDataValidator getAttestationDataValidator() {
         return this.deviceCheckAttestationManager.getDCAttestationDataValidator();
     }
 
-    public DCAssertionDataValidator getAuthenticationDataValidator() {
+    public DCAssertionDataValidator getAssertionDataValidator() {
         return this.deviceCheckAssertionManager.getDCAssertionDataValidator();
     }
 

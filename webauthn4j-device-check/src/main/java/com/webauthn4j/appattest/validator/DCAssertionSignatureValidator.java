@@ -17,55 +17,21 @@
 package com.webauthn4j.appattest.validator;
 
 import com.webauthn4j.data.CoreAuthenticationData;
-import com.webauthn4j.data.SignatureAlgorithm;
-import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.AssertionSignatureValidator;
-import com.webauthn4j.validator.exception.BadSignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.security.*;
 
 public class DCAssertionSignatureValidator extends AssertionSignatureValidator {
 
-    private final Logger logger = LoggerFactory.getLogger(DCAssertionSignatureValidator.class);
-
     // ~ Methods
     // ========================================================================================================
-    @Override
-    public void validate(CoreAuthenticationData authenticationData, COSEKey coseKey) {
-        byte[] signedData = getSignedDataForDCAssertion(authenticationData);
-        byte[] signature = authenticationData.getSignature();
-        if (!verifySignatureForDCAssertion(coseKey, signature, signedData)) {
-            throw new BadSignatureException("Assertion signature is not valid.");
-        }
-    }
 
-    private byte[] getSignedDataForDCAssertion(CoreAuthenticationData authenticationData) {
+    @Override
+    protected byte[] getSignedData(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         byte[] concatenated = ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
         return MessageDigestUtil.createSHA256().digest(concatenated);
     }
-
-    private boolean verifySignatureForDCAssertion(COSEKey coseKey, byte[] signature, byte[] data) {
-        try {
-            PublicKey publicKey = coseKey.getPublicKey();
-            SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();
-            String jcaName = signatureAlgorithm.getJcaName();
-            Signature verifier = Signature.getInstance(jcaName);
-            verifier.initVerify(publicKey);
-            verifier.update(data);
-            return verifier.verify(signature);
-        } catch (IllegalArgumentException e) {
-            logger.debug("COSE key alg must be signature algorithm.", e);
-            return false;
-        } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException | RuntimeException e) {
-            logger.debug("Unexpected exception is thrown during signature verification.", e);
-            return false;
-        }
-    }
-
 }

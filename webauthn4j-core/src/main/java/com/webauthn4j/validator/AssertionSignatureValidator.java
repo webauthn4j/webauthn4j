@@ -45,7 +45,7 @@ public class AssertionSignatureValidator {
         }
     }
 
-    private byte[] getSignedData(CoreAuthenticationData authenticationData) {
+    protected byte[] getSignedData(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();

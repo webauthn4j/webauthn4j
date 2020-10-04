@@ -86,13 +86,12 @@ public class DeviceCheckAssertionManager {
     @SuppressWarnings("squid:S1130")
     public DCAssertionData validate(DCAssertionRequest dcAssertionRequest, DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
         DCAssertionData dcAssertionData = parse(dcAssertionRequest);
-        validate(dcAssertionData, dcAssertionParameters);
-        return dcAssertionData;
+        return validate(dcAssertionData, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
     public DCAssertionData validate(DCAssertionData dcAssertionData, DCAssertionParameters dcAssertionParameters) throws ValidationException {
-        dcAssertionDataValidator.validate(dcAssertionData, dcAssertionParameters);
+        getDCAssertionDataValidator().validate(dcAssertionData, dcAssertionParameters);
         return dcAssertionData;
     }
 

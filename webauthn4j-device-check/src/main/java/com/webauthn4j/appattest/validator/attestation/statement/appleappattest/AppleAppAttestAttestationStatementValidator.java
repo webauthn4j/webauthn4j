@@ -53,9 +53,18 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
 
+        validateX5c((AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement());
         validateNonce(registrationObject);
         validatePublicKey(registrationObject);
         return AttestationType.BASIC;
+    }
+
+    void validateX5c(AppleAppAttestAttestationStatement attestationStatement) {
+        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
+            throw new BadAttestationStatementException(
+                    "No attestation certificate is found in Apple App Attest attestation statement."
+            );
+        }
     }
 
     @Override
@@ -89,20 +98,11 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     }
 
     private AppleAppAttestAttestationStatement getAttestationStatement(CoreRegistrationObject registrationObject) {
-        AppleAppAttestAttestationStatement attestationStatement =
-                (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-
-        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException(
-                    "No attestation certificate is found in Apple App Attest attestation statement."
-            );
-        }
-
-        return attestationStatement;
+        return (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
     }
 
-    private byte[] extractNonce(X509Certificate credCert) {
-        byte[] attestationExtensionBytes = credCert.getExtensionValue(APPLE_CRED_CERT_EXTENSION_OID);
+    byte[] extractNonce(X509Certificate attestationCertificate) {
+        byte[] attestationExtensionBytes = attestationCertificate.getExtensionValue(APPLE_CRED_CERT_EXTENSION_OID);
         if (attestationExtensionBytes == null) {
             throw new BadAttestationStatementException("Apple X.509 extension not found");
         }
