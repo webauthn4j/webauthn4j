@@ -65,6 +65,7 @@ class ServerPropertyTest {
         );
     }
 
+    @Deprecated
     @Test
     void test_getters_null_origin_input() {
         final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
@@ -80,6 +81,7 @@ class ServerPropertyTest {
         );
     }
 
+    @Deprecated
     @Test
     void test_getters_null_origins_input() {
         final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
@@ -95,6 +97,7 @@ class ServerPropertyTest {
         );
     }
 
+    @Deprecated
     @Test
     void test_getters_empty_origins_input() {
         final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
@@ -110,7 +113,7 @@ class ServerPropertyTest {
         );
     }
 
-
+    @Deprecated
     @Test
     void test_getters_with_single_origin_input() {
         final byte[] tokenBindingBytes = "random-token-binding2".getBytes(StandardCharsets.UTF_8);
@@ -129,6 +132,7 @@ class ServerPropertyTest {
     }
 
 
+    @Deprecated
     @Test
     void test_getters_with_multiple_origin_input() {
         final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
@@ -153,6 +157,7 @@ class ServerPropertyTest {
 
     }
 
+    @Deprecated
     @Test
     void test_getters_with_repeated_origins_input() {
         final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);
@@ -173,6 +178,7 @@ class ServerPropertyTest {
         );
     }
 
+    @Deprecated
     @Test
     void test_getters_with_with_some_duplicated_origins_input() {
         final byte[] tokenBindingBytes = "random-token-binding3".getBytes(StandardCharsets.UTF_8);

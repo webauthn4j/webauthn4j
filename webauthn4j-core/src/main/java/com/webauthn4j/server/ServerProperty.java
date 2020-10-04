@@ -56,10 +56,12 @@ public class ServerProperty extends CoreServerProperty {
     // ========================================================================================================
 
     /**
+     * @deprecated
      * Returns a single {@link Origin}, provided that this ServerProperty is configured with only a single origin
      *
      * @return the {@link Origin}
      */
+    @Deprecated
     public Origin getOrigin() {
         final int originsSize = origins.size();
         switch (originsSize){
