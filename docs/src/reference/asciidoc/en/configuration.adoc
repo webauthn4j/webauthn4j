@@ -55,17 +55,6 @@ Authenticator vulnerability announcement check is also possible with FIDO Metada
 `FidoMdsMetadataValidator`. As it is an implementation of `CustomRegistrationValidator`, please refer
 <<_./deep-dive.adoc#Custom validator registration,Custom validator registration>>.
 
-=== Representation of an authenticator
-
-WebAuthn4j provides `Authenticator` interface as a representation of an authenticator.
-
-On registering the authenticator, you need to persist its representation by creating the instance implementing
-`Authenticator` interface in your application manner because it is used afterwards on authentication verification.
-It might be better to use credentialId as a search key for this persisted instance.
-
-You can freely enhance the class implementing `Authenticator` interface in order to meet your application’s requirements.
-For example, you can add the field for your application’s user to identify the authenticator.
-
 === What WebAuthn4J doesn't offer
 
 In order to realize framework independence, WebAuthn4J intentionally scopes functions to WebAuthn Assertion / Attestation verification. Fetching parameters from HTTP request, issuing and saving Challenge in session, counter Value validation are not provided.

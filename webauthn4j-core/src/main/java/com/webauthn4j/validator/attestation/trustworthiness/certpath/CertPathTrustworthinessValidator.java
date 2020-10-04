@@ -20,10 +20,16 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 
+import java.time.Instant;
+
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness
  */
 public interface CertPathTrustworthinessValidator {
 
-    void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement);
+    void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement, Instant timestamp);
+
+    default void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement){
+        validate(aaguid, attestationStatement, Instant.now());
+    }
 }
