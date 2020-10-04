@@ -45,6 +45,9 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
     @Override
     public AttestationType validate(CoreRegistrationObject registrationObject) {
+        if(!(registrationObject instanceof DCRegistrationObject)){
+            throw new IllegalArgumentException("registrationObject must be an instance of DCRegistrationObject.");
+        }
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.",
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
@@ -57,7 +60,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
     @Override
     public boolean supports(CoreRegistrationObject registrationObject) {
-        return super.supports(registrationObject);
+        return super.supports(registrationObject) && registrationObject instanceof DCRegistrationObject;
     }
 
     private void validateNonce(CoreRegistrationObject registrationObject) {

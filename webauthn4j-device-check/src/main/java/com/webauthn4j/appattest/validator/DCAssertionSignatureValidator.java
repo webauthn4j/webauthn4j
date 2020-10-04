@@ -30,27 +30,27 @@ import java.security.*;
 
 public class DCAssertionSignatureValidator extends AssertionSignatureValidator {
 
-    final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
+    private final Logger logger = LoggerFactory.getLogger(DCAssertionSignatureValidator.class);
 
     // ~ Methods
     // ========================================================================================================
     @Override
     public void validate(CoreAuthenticationData authenticationData, COSEKey coseKey) {
-        byte[] signedData = getSignedData(authenticationData);
+        byte[] signedData = getSignedDataForDCAssertion(authenticationData);
         byte[] signature = authenticationData.getSignature();
-        if (!verifySignature(coseKey, signature, signedData)) {
+        if (!verifySignatureForDCAssertion(coseKey, signature, signedData)) {
             throw new BadSignatureException("Assertion signature is not valid.");
         }
     }
 
-    private byte[] getSignedData(CoreAuthenticationData authenticationData) {
+    private byte[] getSignedDataForDCAssertion(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         byte[] concatenated = ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
         return MessageDigestUtil.createSHA256().digest(concatenated);
     }
 
-    private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
+    private boolean verifySignatureForDCAssertion(COSEKey coseKey, byte[] signature, byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
             SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();

@@ -16,8 +16,6 @@
 
 package com.webauthn4j.appattest.validator;
 
-import com.webauthn4j.appattest.data.DCAssertionData;
-import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.validator.CoreAuthenticationDataValidator;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
 
@@ -27,13 +25,5 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
 
     public DCAssertionDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         super(customAuthenticationValidators, new DCAssertionSignatureValidator());
-    }
-
-    public DCAssertionDataValidator() {
-        super();
-    }
-
-    public void validate(DCAssertionData dcAssertionData, DCAssertionParameters dcAssertionParameters) {
-        super.validate(dcAssertionData, dcAssertionParameters);
     }
 }

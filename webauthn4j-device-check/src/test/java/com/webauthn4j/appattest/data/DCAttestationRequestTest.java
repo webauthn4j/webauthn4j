@@ -35,8 +35,9 @@ class DCAttestationRequestTest {
         DCAttestationRequest instanceA = new DCAttestationRequest(keyIdentifier, attestationObject, clientDataHash);
         DCAttestationRequest instanceB = new DCAttestationRequest(keyIdentifier, attestationObject, clientDataHash);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 }

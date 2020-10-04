@@ -31,8 +31,9 @@ class DCAssertionRequestTest {
         DCAssertionRequest instanceA = new DCAssertionRequest(credentialId, assertion, clientDataHash);
         DCAssertionRequest instanceB = new DCAssertionRequest(credentialId, assertion, clientDataHash);
 
-        assertThat(instanceA).isEqualTo(instanceB);
-        assertThat(instanceA).hasSameHashCodeAs(instanceB);
+        assertThat(instanceA)
+                .isEqualTo(instanceB)
+                .hasSameHashCodeAs(instanceB);
     }
 
 }

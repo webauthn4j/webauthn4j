@@ -51,6 +51,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
                 certPathTrustworthinessValidator, createSelfAttestationTrustWorthinessValidator(), customRegistrationValidatorList, objectConverter);
     }
 
+    @Override
     public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
         super.validate(registrationData, registrationParameters);
         validateAuthenticatorData(registrationData.getAttestationObject().getAuthenticatorData());

@@ -32,7 +32,7 @@ import java.security.*;
  */
 public class AssertionSignatureValidator {
 
-    final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
+    private final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
 
     // ~ Methods
     // ========================================================================================================
