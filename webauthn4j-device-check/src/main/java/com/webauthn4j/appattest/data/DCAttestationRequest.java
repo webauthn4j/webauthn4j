@@ -27,13 +27,13 @@ public class DCAttestationRequest {
     private byte[] clientDataHash;
 
     public DCAttestationRequest(byte[] keyIdentifier, byte[] attestationObject, byte[] clientDataHash) {
-        this.keyIdentifier = keyIdentifier;
-        this.attestationObject = attestationObject;
-        this.clientDataHash = clientDataHash;
+        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+        this.attestationObject = ArrayUtil.clone(attestationObject);
+        this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
     public byte[] getKeyIdentifier() {
-        return keyIdentifier;
+        return ArrayUtil.clone(keyIdentifier);
     }
 
     public byte[] getAttestationObject() {
