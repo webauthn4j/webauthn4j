@@ -26,8 +26,7 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -56,7 +55,7 @@ public class RegistrationObject extends CoreRegistrationObject {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports,
             ServerProperty serverProperty,
-            LocalDateTime timestamp) {
+            Instant timestamp) {
 
         super(attestationObject, attestationObjectBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, timestamp);
         this.collectedClientData = collectedClientData;
@@ -74,7 +73,7 @@ public class RegistrationObject extends CoreRegistrationObject {
             Set<AuthenticatorTransport> transports,
             ServerProperty serverProperty) {
 
-        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty, LocalDateTime.now(Clock.systemUTC()));
+        this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty, Instant.now());
     }
 
     // ~ Methods

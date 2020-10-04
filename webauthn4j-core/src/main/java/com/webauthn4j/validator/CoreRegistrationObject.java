@@ -23,8 +23,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 
-import java.time.Clock;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -36,14 +35,14 @@ public class CoreRegistrationObject {
     private final byte[] attestationObjectBytes;
     private final byte[] clientDataHash;
     private final CoreServerProperty serverProperty;
-    private final LocalDateTime timestamp;
+    private final Instant timestamp;
 
     public CoreRegistrationObject(
             AttestationObject attestationObject,
             byte[] attestationObjectBytes,
             byte[] clientDataHash,
             CoreServerProperty serverProperty,
-            LocalDateTime timestamp) {
+            Instant timestamp) {
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.clientDataHash = clientDataHash;
@@ -57,7 +56,7 @@ public class CoreRegistrationObject {
             byte[] clientDataHash,
             CoreServerProperty serverProperty) {
 
-        this(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, LocalDateTime.now(Clock.systemUTC()));
+        this(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, Instant.now());
     }
 
     public AttestationObject getAttestationObject() {
@@ -81,7 +80,7 @@ public class CoreRegistrationObject {
         return serverProperty;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 

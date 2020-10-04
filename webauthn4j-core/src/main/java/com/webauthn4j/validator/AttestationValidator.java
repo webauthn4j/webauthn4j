@@ -109,7 +109,7 @@ class AttestationValidator {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
                     AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
-                    certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement);
+                    certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement, registrationObject.getTimestamp());
                 } else {
                     throw new IllegalStateException();
                 }

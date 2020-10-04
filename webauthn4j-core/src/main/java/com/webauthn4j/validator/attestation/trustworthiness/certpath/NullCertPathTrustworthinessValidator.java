@@ -19,12 +19,14 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 
+import java.time.Instant;
+
 /**
  * Null validator that bypass x5c trustworthiness check
  */
 public class NullCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
     @Override
-    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement, Instant timestamp) {
         // nop
     }
 }

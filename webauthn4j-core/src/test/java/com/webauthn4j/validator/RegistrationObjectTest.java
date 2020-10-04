@@ -32,7 +32,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ class RegistrationObjectTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        LocalDateTime timestamp = LocalDateTime.now();
+        Instant timestamp = Instant.now();
         RegistrationObject registrationObject = new RegistrationObject(
                 attestationObject,
                 attestationObjectBytes,
@@ -89,7 +89,7 @@ class RegistrationObjectTest {
         Set<AuthenticatorTransport> transports = Collections.emptySet();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        LocalDateTime timestamp = LocalDateTime.now();
+        Instant timestamp = Instant.now();
         RegistrationObject instanceA = new RegistrationObject(
                 attestationObject,
                 attestationObjectBytes,

@@ -24,13 +24,15 @@ import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator {
 
     private boolean fullChainProhibited = false;
 
-    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement, Instant timestamp) {
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
@@ -44,6 +46,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         certPathParameters.setPolicyQualifiersRejected(false); // As policy qualifiers are checked manually in attestation statement validator, it is turned off
 
         certPathParameters.setRevocationEnabled(false);
+        certPathParameters.setDate(Date.from(timestamp));
 
         PKIXCertPathValidatorResult result;
         try {
