@@ -22,13 +22,9 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -131,70 +127,6 @@ class OriginValidatorTest {
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientDataD, serverProperty)
         );
-    }
-
-    @Test
-    void null_single_origin_input_test(){
-        final Origin origin = new Origin("https://example.com:14443");
-
-        final ServerProperty serverProperty = new ServerProperty((Origin)null,
-                "example.com", TestDataUtil.createChallenge(), null);
-
-        final CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE,
-                TestDataUtil.createChallenge(), origin, null);
-
-
-        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(
-                ()->target.validate(collectedClientData, serverProperty)
-        ).withMessage("No origins configured for the given serverProperty");
-    }
-
-    @Test
-    void null_multiple_origins_input_test(){
-        final Origin origin = new Origin("https://example.com:14443");
-
-        final ServerProperty serverProperty = new ServerProperty((Collection<Origin>)null,
-                "example.com", TestDataUtil.createChallenge(), null);
-
-        final CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE,
-                TestDataUtil.createChallenge(), origin, null);
-
-
-        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(
-                ()->target.validate(collectedClientData, serverProperty)
-        ).withMessage("No origins configured for the given serverProperty");
-    }
-
-    @Test
-    void empty_origins_input_test(){
-        final Origin origin = new Origin("https://example.com:14443");
-
-        final ServerProperty serverProperty = new ServerProperty(new ArrayList<>(),
-                "example.com", TestDataUtil.createChallenge(), null);
-
-        final CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE,
-                TestDataUtil.createChallenge(), origin, null);
-
-
-        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(
-                ()->target.validate(collectedClientData, serverProperty)
-        ).withMessage("No origins configured for the given serverProperty");
-    }
-
-    @Test
-    void validate_collected_client_data_having_null_origin_test(){
-        final Origin origin = new Origin("https://example.com:14443");
-
-        final ServerProperty serverProperty = new ServerProperty(Collections.singleton(origin),
-                "example.com", TestDataUtil.createChallenge(), null);
-
-        final CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE,
-                TestDataUtil.createChallenge(), null, null);
-
-
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(
-                ()->target.validate(collectedClientData, serverProperty)
-        ).withMessage("CollectedClientData has a null origin");
     }
 
     @Test
