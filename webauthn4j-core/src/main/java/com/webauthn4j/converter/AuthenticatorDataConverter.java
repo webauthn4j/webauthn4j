@@ -140,7 +140,7 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
+    <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }

@@ -26,6 +26,7 @@ import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensi
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
@@ -105,6 +106,13 @@ class AuthenticatorDataConverterTest {
         assertThrows(DataConversionException.class,
                 () -> authenticatorDataConverter.convert(bytes)
         );
+    }
+
+    @Test
+    void convertToExtensions_with_0_length_ByteBuffer_test(){
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.allocate(0));
+        assertThat(extensions.getKeys()).isEmpty();
     }
 
     @Test
