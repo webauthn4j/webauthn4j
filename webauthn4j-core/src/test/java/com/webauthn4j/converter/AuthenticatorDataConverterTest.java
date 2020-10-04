@@ -20,6 +20,7 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.UvmEntries;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensionAuthenticatorOutput;
@@ -57,6 +58,14 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getSignCount()).isEqualTo(325);
         assertThat(result.getAttestedCredentialData()).isNull();
         assertThat(result.getExtensions().getKeys()).isEmpty();
+    }
+
+    @Test
+    void convert_apple_app_attest_authenticatorData(){
+        byte[] authenticatorDataBytes = Base64UrlUtil.decode("MGACygVeBsWIpS7GqlSC9TaOAq8wh7Hp0wnQQMr12VpAAAAAAQ");
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
+        assertThat(authenticatorData.getAttestedCredentialData()).isNull();
     }
 
     @Test
