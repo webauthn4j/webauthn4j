@@ -36,12 +36,14 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
     //~ Instance fields ================================================================================================
     private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+    private Set<AuthenticatorTransport> transports;
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports,
                              AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
                              AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
-        super(attestedCredentialData, attestationStatement, counter, transports, authenticatorExtensions);
+        super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
         this.clientExtensions = clientExtensions;
+        this.transports = transports;
     }
 
     public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
@@ -68,6 +70,15 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
     public void setClientExtensions(AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions) {
         this.clientExtensions = clientExtensions;
+    }
+
+    @Override
+    public Set<AuthenticatorTransport> getTransports() {
+        return transports;
+    }
+
+    public void setTransports(Set<AuthenticatorTransport> transports) {
+        this.transports = transports;
     }
 
     @Override

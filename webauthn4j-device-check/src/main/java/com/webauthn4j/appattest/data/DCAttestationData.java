@@ -28,8 +28,8 @@ public class DCAttestationData extends CoreRegistrationData {
 
     private final byte[] keyIdentifier;
 
-    public DCAttestationData(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, Set<AuthenticatorTransport> transports) {
-        super(attestationObject, attestationObjectBytes, clientDataHash, transports);
+    public DCAttestationData(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash) {
+        super(attestationObject, attestationObjectBytes, clientDataHash);
         this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
     }
 

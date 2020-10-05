@@ -18,29 +18,24 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.util.CollectionUtil;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Set;
 
 public class CoreRegistrationData implements Serializable {
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;
     private final byte[] clientDataHash;
-    private final Set<AuthenticatorTransport> transports;
 
     public CoreRegistrationData(
             AttestationObject attestationObject,
             byte[] attestationObjectBytes,
-            byte[] clientDataHash,
-            Set<AuthenticatorTransport> transports) {
+            byte[] clientDataHash) {
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
-        this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
     public AttestationObject getAttestationObject() {
@@ -53,10 +48,6 @@ public class CoreRegistrationData implements Serializable {
 
     public byte[] getClientDataHash(){ return ArrayUtil.clone(clientDataHash); }
 
-    public Set<AuthenticatorTransport> getTransports() {
-        return transports;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,13 +55,12 @@ public class CoreRegistrationData implements Serializable {
         CoreRegistrationData that = (CoreRegistrationData) o;
         return Objects.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(attestationObjectBytes, that.attestationObjectBytes) &&
-                Arrays.equals(clientDataHash, that.clientDataHash) &&
-                Objects.equals(transports, that.transports);
+                Arrays.equals(clientDataHash, that.clientDataHash);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(attestationObject, transports);
+        int result = Objects.hash(attestationObject);
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;

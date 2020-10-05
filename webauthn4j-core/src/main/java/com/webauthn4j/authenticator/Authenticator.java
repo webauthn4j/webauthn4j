@@ -16,8 +16,11 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+
+import java.util.Set;
 
 /**
  * Core interface that represents WebAuthn authenticator
@@ -30,6 +33,16 @@ public interface Authenticator extends CoreAuthenticator {
      * @return the client extensions
      */
     default AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+        return null;
+    }
+
+    /**
+     * Returns the {@link AuthenticatorTransport} {@link Set}
+     *
+     * @return the {@link AuthenticatorTransport} {@link Set}
+     */
+    @SuppressWarnings("squid:S1168")
+    default Set<AuthenticatorTransport> getTransports() {
         return null;
     }
 

@@ -26,8 +26,6 @@ import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DCAttestationDataTest {
@@ -44,7 +42,7 @@ class DCAttestationDataTest {
         byte[] challenge = "1234567890abcdefgh".getBytes();
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
 
-        DCAttestationData instance = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash, Collections.emptySet());
+        DCAttestationData instance = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash);
 
         assertThat(instance.getKeyIdentifier()).isEqualTo(keyIdentifier);
         assertThat(instance.getAttestationObject()).isEqualTo(attestationObject);
@@ -62,8 +60,8 @@ class DCAttestationDataTest {
         byte[] challenge = "1234567890abcdefgh".getBytes();
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
 
-        DCAttestationData instanceA = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash, Collections.emptySet());
-        DCAttestationData instanceB = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash, Collections.emptySet());
+        DCAttestationData instanceA = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash);
+        DCAttestationData instanceB = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash);
 
         assertThat(instanceA)
                 .isEqualTo(instanceB)

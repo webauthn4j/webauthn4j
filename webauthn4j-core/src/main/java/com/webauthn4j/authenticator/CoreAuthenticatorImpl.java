@@ -16,7 +16,6 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -25,7 +24,6 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import com.webauthn4j.util.ConstUtil;
 
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * An {@link CoreAuthenticator} implementation
@@ -36,18 +34,15 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     private AttestedCredentialData attestedCredentialData;
     private AttestationStatement attestationStatement;
     private long counter;
-    private Set<AuthenticatorTransport> transports;
     private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
     public CoreAuthenticatorImpl(AttestedCredentialData attestedCredentialData,
                                  AttestationStatement attestationStatement,
                                  long counter,
-                                 Set<AuthenticatorTransport> transports,
                                  AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         setCounter(counter);
-        this.transports = transports;
         this.authenticatorExtensions = authenticatorExtensions;
     }
 
@@ -56,7 +51,6 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 coreRegistrationData.getAttestationObject().getAttestationStatement(),
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getSignCount(),
-                coreRegistrationData.getTransports(),
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getExtensions());
     }
 
@@ -95,15 +89,6 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     @Override
-    public Set<AuthenticatorTransport> getTransports() {
-        return transports;
-    }
-
-    public void setTransports(Set<AuthenticatorTransport> transports) {
-        this.transports = transports;
-    }
-
-    @Override
     public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return authenticatorExtensions;
     }
@@ -120,12 +105,11 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
         return counter == that.counter &&
                 Objects.equals(attestedCredentialData, that.attestedCredentialData) &&
                 Objects.equals(attestationStatement, that.attestationStatement) &&
-                Objects.equals(transports, that.transports) &&
                 Objects.equals(authenticatorExtensions, that.authenticatorExtensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(attestedCredentialData, attestationStatement, counter, transports, authenticatorExtensions);
+        return Objects.hash(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
     }
 }

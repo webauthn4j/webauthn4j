@@ -29,7 +29,6 @@ import com.webauthn4j.validator.CustomCoreRegistrationValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 
-import java.util.Collections;
 import java.util.List;
 
 public class DeviceCheckAttestationManager {
@@ -67,8 +66,7 @@ public class DeviceCheckAttestationManager {
                 keyIdentifierBytes,
                 attestationObject,
                 attestationObjectBytes,
-                clientDataHash,
-                Collections.emptySet()
+                clientDataHash
         );
     }
 

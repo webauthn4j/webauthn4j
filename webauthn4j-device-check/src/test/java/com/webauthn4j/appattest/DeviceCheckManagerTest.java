@@ -139,7 +139,7 @@ class DeviceCheckManagerTest {
         AppleAppAttestAttestationStatement attestationStatement = objectConverter.getCborConverter().readValue(attestationStatementBytes, AppleAppAttestAttestationStatement.class);
         long counter = authenticatorData.getSignCount();
 
-        CoreAuthenticator coreAuthenticator = new CoreAuthenticatorImpl(attestedCredentialData, attestationStatement, counter, Collections.emptySet(), new AuthenticationExtensionsAuthenticatorOutputs<>());
+        CoreAuthenticator coreAuthenticator = new CoreAuthenticatorImpl(attestedCredentialData, attestationStatement, counter, new AuthenticationExtensionsAuthenticatorOutputs<>());
         DCAssertionParameters dcAssertionParameters = new DCAssertionParameters(dcServerProperty, coreAuthenticator);
 
         deviceCheckManager.validate(dcAssertionRequest, dcAssertionParameters);
