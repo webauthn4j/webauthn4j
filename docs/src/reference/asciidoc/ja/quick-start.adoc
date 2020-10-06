@@ -3,9 +3,11 @@
 WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサーバーに登録し、認証時に認証デバイスで生成した署名を公開鍵で検証することで認証が成立する認証方式です。
 このクイックスタートでは、WebAuthn4Jを用いてWebAuthn認証における登録時にサーバーに送信される公開鍵やデバイスの構成情報を
 含むデータ（構成証明、Attestation）の検証と、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を検証する方法を解説します。
+また、Apple App Attestの構成証明、アサーションを検証する方法も示します。
 
+=== WebAuthnの検証
 
-=== 構成証明の検証
+==== WebAuthn構成証明の検証
 
 認証デバイスの登録時に構成証明を検証する際は、`RegistrationRequest` を引数に
 `WebAuthnManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。
@@ -84,7 +86,7 @@ Authenticator authenticator =
 save(authenticator); // please persist authenticator in your manner
 ----
 
-=== アサーションの検証
+==== WebAuthnアサーションの検証
 
 認証時にアサーションを検証する際は、`AuthenticationRequest` を引数に  `WebAuthnManager#validate` メソッドを
 実行してください。`AuthenticationRequest` の
@@ -166,6 +168,168 @@ catch (ValidationException e){
 updateCounter(
         authenticationData.getCredentialId(),
         authenticationData.getAuthenticatorData().getSignCount()
+);
+----
+
+=== Apple App Attestの検証
+
+続いて、Apple App Attestの検証方法について解説します。
+Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Validatorの設計も、WebAuthn用のValidatorを踏襲しています。
+
+==== Maven Centralからの取得
+
+Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-device-checkというモジュールとして配布されています。
+Mavenを使用している場合、以下のようにwebauthn4j-device-checkを依存関係として追加してください。
+
+[source, xml]
+----
+<properties>
+  ...
+  <!-- Use the latest version whenever possible. -->
+  <webauthn4j.version>0.13.0.RELEASE</webauthn4j.version>
+  ...
+</properties>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>com.webauthn4j</groupId>
+    <artifactId>webauthn4j-device-check</artifactId>
+    <version>${webauthn4j.version}</version>
+  </dependency>
+  ...
+</dependencies>
+----
+
+==== Apple App Attest構成証明の検証
+
+認証デバイスの登録時に構成証明を検証する際は、`DCAttestationRequest` を引数に
+`DeviceCheckManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。
+登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+`DeviceCheckManager#parse` メソッドを用いて登録リクエストをパースしたうえで、
+得られた `DCAttestationData` のインスタンスを `DeviceCheckManager#validate` メソッドに渡して実行してください。
+
+`DCAttestationRequest` のメンバー はiOS上でDevice Check App Attest APIを実行して取得した値となります。
+何らかの方法でiOSデバイス側からサーバー側に伝送し、指定してください。
+
+`DCAttestationParameters` は、`DeviceCheckManager#validate` メソッドのもう一つの引数であり、
+サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `DCServerProperty` としてまとめています。
+`DCServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
+
+- `teamIdentifier` にはiOSアプリ開発時のteam identifierを指定してください。
+詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
+- `cfBundleIdentifier` にはiOSアプリ開発時のbundle identifierを指定してください。
+詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
+- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。
+サーバー側で `challenge` としてランダムなバイト列を生成し、iOS側でApp Attest APIを実行する際に
+パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。
+発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
+
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
+検証に成功した場合は、返却された値から `CoreAuthenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
+認証時に必要となります。
+
+[source,java]
+----
+// Client properties
+byte[] keyIdentifier = null; /* set keyIdentifier */
+byte[] attestationObject = null; /* set attestationObject */
+byte[] challenge = null; /* set challenge */
+byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
+
+// Server properties
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
+
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(attestationObject, attestationObject, clientDataHash);
+DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
+DCAttestationData dcAttestationData;
+try {
+    dcAttestationData = deviceCheckManager.parse(dcAttestationRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
+    throw e;
+}
+try {
+    deviceCheckManager.validate(dcAttestationData, dcAttestationParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+    throw e;
+}
+
+// please persist Authenticator object, which will be used in the authentication process.
+CoreAuthenticatorImpl authenticator =
+        new CoreAuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                dcAttestationData.getAttestationObject().getAttestationStatement(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getSignCount(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getExtensions()
+        );
+save(authenticator); // please persist authenticator in your manner
+----
+
+==== Apple App Attestアサーションの検証
+
+認証時にアサーションを検証する際は、`DCAssertionRequest` を引数に  `DeviceCheckManager#validate` メソッドを
+実行してください。`DCAssertionRequest` の
+コンストラクタの引数に指定する、 `credentialId` と `assertion` 、 `clientDataHash` は
+iOS側でApple App Attest APIを実行して取得した値となります。
+何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+`DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の
+コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
+
+`CoreAuthenticator` には、登録時に永続化した `CoreAuthenticator` を指定してください。
+
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
+検証後は、 `CoreAuthenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
+作成された場合を検知するために用意されています。カウンタについて詳しくは
+https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
+
+[source,java]
+----
+// Client properties
+byte[] credentialId = null /* set credentialId */;
+byte[] assertion = null /* set assertion */;
+byte[] clientDataHash = null /* set clientDataHash */;
+
+// Server properties
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+byte[] challenge = null;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
+
+CoreAuthenticator authenticator = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
+
+DCAssertionRequest dcAssertionRequest =
+        new DCAssertionRequest(
+                credentialId,
+                assertion,
+                clientDataHash
+        );
+DCAssertionParameters dcAssertionParameters =
+        new DCAssertionParameters(
+                dcServerProperty,
+                authenticator
+        );
+
+DCAssertionData dcAssertionData;
+try {
+    dcAssertionData = deviceCheckManager.parse(dcAssertionRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
+    throw e;
+}
+try {
+    deviceCheckManager.validate(dcAssertionData, dcAssertionParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+    throw e;
+}
+// please update the counter of the authenticator record
+updateCounter(
+        dcAssertionData.getCredentialId(),
+        dcAssertionData.getAuthenticatorData().getSignCount()
 );
 ----
 

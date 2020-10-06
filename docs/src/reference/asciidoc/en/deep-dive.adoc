@@ -129,7 +129,11 @@ WebAuthn4J consists of the following four modules.
 
 ==== Core webauthn4j-core.jar
 
-Provides core features for attestation and assertion verification.
+Provides core features for WebAuthn attestation and assertion verification.
+
+==== Core webauthn4j-device-check.jar
+
+Provides core features for Apple App Attest attestation and assertion verification.
 
 ==== Metadata webauthn4j-metadata.jar
 
