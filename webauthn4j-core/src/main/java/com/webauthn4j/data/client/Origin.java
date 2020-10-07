@@ -47,21 +47,35 @@ public class Origin implements Serializable {
      */
     @Deprecated
     public Origin(String scheme, String host, int port) {
-        if (!Objects.equals(SCHEME_HTTPS, scheme) && !Objects.equals(SCHEME_HTTP, scheme)) {
+        String lowerCaseScheme = toLowerCase(scheme);
+        if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
             throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
         }
 
-        this.scheme = scheme;
-        this.host = host;
+        this.scheme = lowerCaseScheme;
+        this.host = toLowerCase(host);
         this.port = port;
-        this.schemeSpecificPart = "//" + host + ":" + port;
+        this.schemeSpecificPart = "//" + this.host + ":" + port;
+    }
+
+    private static String toLowerCase(String s){
+        return (s!=null)? s.toLowerCase() : s;
     }
 
     public Origin(String originUrl) {
         URI uri = URI.create(originUrl);
-        this.scheme = uri.getScheme();
+
+        //https://www.ietf.org/rfc/rfc1738.txt  section 2.1
+        // For resiliency, programs interpreting URLs should treat upper case letters as equivalent to
+        // lower case in scheme names (e.g., allow "HTTP" as well as "http").
+        //
+        //https://tools.ietf.org/html/rfc6454#section-4, Let uri-scheme be the scheme component of the URI, converted to
+        //lowercase.
+
+        this.scheme = toLowerCase(uri.getScheme());
         if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
-            this.host = uri.getHost();
+            //https://tools.ietf.org/html/rfc3986#section-3.2.2 , host component is case insensitive
+            this.host = toLowerCase(uri.getHost());
             int originPort = uri.getPort();
             if (originPort == -1) {
                 explicitPortNotation = false;
@@ -75,8 +89,14 @@ public class Origin implements Serializable {
             else {
                 explicitPortNotation = true;
             }
+
+            //https://tools.ietf.org/html/rfc2396#section-3
             this.port = originPort;
-            this.schemeSpecificPart = null;
+            String schemeSpecificPartStr = "//" + this.host;
+            if (explicitPortNotation){
+                schemeSpecificPartStr += ":" + this.port;
+            }
+            this.schemeSpecificPart = schemeSpecificPartStr;
         }
         else {
             this.explicitPortNotation = uri.getPort() != -1;
@@ -98,7 +118,7 @@ public class Origin implements Serializable {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, Origin.class);
+            throw new InvalidFormatException(null, "value has an invalid syntax:'" + value + "'", value, Origin.class);
         }
     }
 
