@@ -23,6 +23,7 @@ All attestation statement formats are supported.
 * Android Key attestation
 * Android SafetyNet attestation
 * TPM attestation
+* Apple Anonymous attestation
 * None attestation
 
 ### Projects using WebAuthn4J
