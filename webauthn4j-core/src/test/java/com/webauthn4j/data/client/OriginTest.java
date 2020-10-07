@@ -40,14 +40,14 @@ class OriginTest {
                 () -> assertThat(https_examplecom_default.getScheme()).isEqualTo("https"),
                 () -> assertThat(https_examplecom_default.getHost()).isEqualTo("example.com"),
                 () -> assertThat(https_examplecom_default.getPort()).isEqualTo(443),
-                () -> assertThat(https_examplecom_default.getSchemeSpecificPart()).isNull()
+                () -> assertThat(https_examplecom_default.getSchemeSpecificPart()).isEqualTo("//example.com")
         );
         Origin https_examplecom_443 = new Origin("https://example.com:443");
         assertAll(
                 () -> assertThat(https_examplecom_443.getScheme()).isEqualTo("https"),
                 () -> assertThat(https_examplecom_443.getHost()).isEqualTo("example.com"),
                 () -> assertThat(https_examplecom_443.getPort()).isEqualTo(443),
-                () -> assertThat(https_examplecom_443.getSchemeSpecificPart()).isNull()
+                () -> assertThat(https_examplecom_443.getSchemeSpecificPart()).isEqualTo("//example.com:443")
         );
         Origin android_apk_key_hash_sha1 = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         assertAll(
@@ -85,8 +85,9 @@ class OriginTest {
     void constructor_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
-
+        Origin originC = new Origin("HTTPs","EXAMPLE.COM",443);
         assertThat(originA).isEqualTo(originB);
+        assertThat(originA).isEqualTo(originC);
     }
 
     @Test
@@ -179,8 +180,61 @@ class OriginTest {
     }
 
     @Test
+    void https_equals_case_sensitivity_test() {
+        Origin https_examplecom_default = new Origin("https://example.com");
+        Origin https_examplecom_443 = new Origin("https://example.com:443");
+
+        Origin HTTPS_examplecom_default = new Origin("HTTPS://example.com");
+        Origin https_EXAMPLecoM_default = new Origin("https://EXAMPLe.coM");
+        Origin https_EXAMPLecoM_443 = new Origin("https://EXAMPLe.coM:443");
+        Origin HTTPS_EXAMPLECOM = new Origin("HTTPS://EXAMPLE.COM");
+        Origin HTTPS_EXAMPLECOM_443 = new Origin("HTTPS://EXAMPLE.COM:443");
+
+        assertAll(
+                () -> assertThat(HTTPS_examplecom_default).isEqualTo(https_examplecom_default),
+                () -> assertThat(https_EXAMPLecoM_default).isEqualTo(https_examplecom_default),
+                () -> assertThat(https_EXAMPLecoM_443).isEqualTo(https_examplecom_default),
+                () -> assertThat(HTTPS_EXAMPLECOM).isEqualTo(https_examplecom_default),
+                () -> assertThat(HTTPS_EXAMPLECOM_443).isEqualTo(https_examplecom_default),
+
+                () -> assertThat(HTTPS_examplecom_default).isEqualTo(https_examplecom_443),
+                () -> assertThat(https_EXAMPLecoM_default).isEqualTo(https_examplecom_443),
+                () -> assertThat(https_EXAMPLecoM_443).isEqualTo(https_examplecom_443),
+                () -> assertThat(HTTPS_EXAMPLECOM).isEqualTo(https_examplecom_443),
+                () -> assertThat(HTTPS_EXAMPLECOM_443).isEqualTo(https_examplecom_443)
+        );
+    }
+
+    @Test
+    void http_equals_case_sensitivity_test() {
+        Origin http_localhost_default = new Origin("http://localhost");
+        Origin http_localhost_80 = new Origin("http://localhost:80");
+
+        Origin HTTP_localhost_default = new Origin("HTTP://localhost");
+        Origin http_LocalHost_default = new Origin("http://LocalHost");
+        Origin http_LocalHost_80 = new Origin("http://LocalHost:80");
+        Origin HTTP_LOCALHOST = new Origin("HTTP://LOCALHOST");
+        Origin HTTP_LOCALHOST_80 = new Origin("HTTP://LOCALHOST:80");
+
+        assertAll(
+                () -> assertThat(HTTP_localhost_default).isEqualTo(http_localhost_default),
+                () -> assertThat(http_LocalHost_default).isEqualTo(http_localhost_default),
+                () -> assertThat(http_LocalHost_80).isEqualTo(http_localhost_default),
+                () -> assertThat(HTTP_LOCALHOST).isEqualTo(http_localhost_default),
+                () -> assertThat(HTTP_LOCALHOST_80).isEqualTo(http_localhost_default),
+
+                () -> assertThat(HTTP_localhost_default).isEqualTo(http_localhost_80),
+                () -> assertThat(http_LocalHost_default).isEqualTo(http_localhost_80),
+                () -> assertThat(http_LocalHost_80).isEqualTo(http_localhost_80),
+                () -> assertThat(HTTP_LOCALHOST).isEqualTo(http_localhost_80),
+                () -> assertThat(HTTP_LOCALHOST_80).isEqualTo(http_localhost_80)
+        );
+    }
+
+
+    @Test
     @SuppressWarnings("deprecation")
-    void hasCode_test() {
+    void hashCode_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
         Origin originC = new Origin("http://localhost:8080");
@@ -195,6 +249,38 @@ class OriginTest {
         assertThat(android_apk_key_hash_abc123_a).hasSameHashCodeAs(android_apk_key_hash_abc123_b);
         assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(android_apk_key_hash_def456.hashCode());
         assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(invalid_data.hashCode());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void hashCode_https_case_insensitive_test() {
+        Origin originA = new Origin("https://example.com");
+        Origin originB = new Origin("HTTPS://example.com");
+        Origin originC = new Origin("https://EXAMPLE.COM");
+        Origin originD = new Origin("HTTPS://EXAMPLE.COM");
+        Origin originE = new Origin("HTTPS://EXAMPLE.COM:443");
+
+
+        assertThat(originA).hasSameHashCodeAs(originB);
+        assertThat(originA).hasSameHashCodeAs(originC);
+        assertThat(originA).hasSameHashCodeAs(originD);
+        assertThat(originA).hasSameHashCodeAs(originE);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void hashCode_http_case_insensitive_test() {
+        Origin originA = new Origin("http://localhost");
+        Origin originB = new Origin("HTTP://localhost");
+        Origin originC = new Origin("http://LOCALHOST");
+        Origin originD = new Origin("HTTP://LOCALHOST");
+        Origin originE = new Origin("HTTP://LOCALHOST:80");
+
+
+        assertThat(originA).hasSameHashCodeAs(originB);
+        assertThat(originA).hasSameHashCodeAs(originC);
+        assertThat(originA).hasSameHashCodeAs(originD);
+        assertThat(originA).hasSameHashCodeAs(originE);
     }
 
     @Test
