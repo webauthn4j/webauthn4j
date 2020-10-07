@@ -86,8 +86,9 @@ class OriginTest {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
         Origin originC = new Origin("HTTPs","EXAMPLE.COM",443);
-        assertThat(originA).isEqualTo(originB);
-        assertThat(originA).isEqualTo(originC);
+        assertThat(originA)
+                .isEqualTo(originB)
+                .isEqualTo(originC);
     }
 
     @Test
@@ -261,10 +262,11 @@ class OriginTest {
         Origin originE = new Origin("HTTPS://EXAMPLE.COM:443");
 
 
-        assertThat(originA).hasSameHashCodeAs(originB);
-        assertThat(originA).hasSameHashCodeAs(originC);
-        assertThat(originA).hasSameHashCodeAs(originD);
-        assertThat(originA).hasSameHashCodeAs(originE);
+        assertThat(originA)
+            .hasSameHashCodeAs(originB)
+            .hasSameHashCodeAs(originC)
+            .hasSameHashCodeAs(originD)
+            .hasSameHashCodeAs(originE);
     }
 
     @Test
@@ -277,10 +279,11 @@ class OriginTest {
         Origin originE = new Origin("HTTP://LOCALHOST:80");
 
 
-        assertThat(originA).hasSameHashCodeAs(originB);
-        assertThat(originA).hasSameHashCodeAs(originC);
-        assertThat(originA).hasSameHashCodeAs(originD);
-        assertThat(originA).hasSameHashCodeAs(originE);
+        assertThat(originA)
+            .hasSameHashCodeAs(originB)
+            .hasSameHashCodeAs(originC)
+            .hasSameHashCodeAs(originD)
+            .hasSameHashCodeAs(originE);
     }
 
     @Test
