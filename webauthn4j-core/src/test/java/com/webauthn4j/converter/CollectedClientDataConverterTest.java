@@ -79,4 +79,40 @@ class CollectedClientDataConverterTest {
         //noinspection SpellCheckingInspection
         assertThat(result).isEqualTo("eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoidGszMVVIMUVUR0dUUGozM09oT016dyIsIm9yaWdpbiI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCIsInRva2VuQmluZGluZyI6eyJzdGF0dXMiOiJub3Qtc3VwcG9ydGVkIn19");
     }
+
+    @Test
+    void apk_key_hash_convert_clientDataBase64UrlString() {
+        String clientDataJson = "{\n" +
+                "  \"type\": \"webauthn.create\",\n" +
+                "  \"challenge\": \"AAABcXKin1fLrZx0o4RL64fs-RUVSxCu\",\n" +
+                "  \"origin\": \"android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS00H1xKCQcfIoGLck\",\n" +
+                "  \"androidPackageName\": \"com.myrpid.app\"\n" +
+                "}";
+        String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
+        CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
+        assertAll(
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(collectedClientData.getTokenBinding()).isNull(),
+                () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("AAABcXKin1fLrZx0o4RL64fs-RUVSxCu")),
+                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS00H1xKCQcfIoGLck"))
+        );
+    }
+
+    @Test
+    void apk_key_hash_sha256_convert_clientDataBase64UrlString() {
+        String clientDataJson = "{\n" +
+                "  \"type\": \"webauthn.create\",\n" +
+                "  \"challenge\": \"AAABcXKin1fLrZx0o4RL64fs-RUVSxCu\",\n" +
+                "  \"origin\": \"android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=\",\n" +
+                "  \"androidPackageName\": \"com.myrpid.app\"\n" +
+                "}";
+        String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
+        CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
+        assertAll(
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(collectedClientData.getTokenBinding()).isNull(),
+                () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("AAABcXKin1fLrZx0o4RL64fs-RUVSxCu")),
+                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo="))
+        );
+    }
 }

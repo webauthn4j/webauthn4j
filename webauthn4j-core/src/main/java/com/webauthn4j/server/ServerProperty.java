@@ -20,7 +20,11 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Data transfer object that represents relying party server property for validators
@@ -30,15 +34,21 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Instance fields
     // ================================================================================================
 
-    private final Origin origin;
+    private final Set<Origin> origins;
     private final byte[] tokenBindingId;
 
     // ~ Constructor
     // ========================================================================================================
 
     public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
+        this(origin != null ? Collections.singleton(origin) : Collections.emptySet(),
+                rpId,
+                challenge, tokenBindingId);
+    }
+
+    public ServerProperty(Collection<Origin> origins, String rpId, Challenge challenge, byte[] tokenBindingId) {
         super(rpId, challenge);
-        this.origin = origin;
+        this.origins = (origins != null && !origins.isEmpty()) ? Collections.unmodifiableSet(new HashSet<>(origins)) : Collections.emptySet();
         this.tokenBindingId = tokenBindingId;
     }
 
@@ -46,15 +56,27 @@ public class ServerProperty extends CoreServerProperty {
     // ========================================================================================================
 
     /**
-     * Returns the {@link Origin}
+     * @deprecated
+     * Returns a single {@link Origin}, provided that this ServerProperty is configured with only a single origin
      *
      * @return the {@link Origin}
      */
+    @Deprecated
     public Origin getOrigin() {
-        return origin;
+        final int originsSize = origins.size();
+        switch (originsSize){
+            case 0:
+                return null;
+            case 1:
+                return origins.iterator().next();
+            default:
+                throw new IllegalStateException("There are multiple Origins associated with this ServerProperty");
+        }
     }
 
-
+    public Set<Origin> getOrigins(){
+        return this.origins;
+    }
 
     /**
      * Returns the tokenBindingId
@@ -71,13 +93,14 @@ public class ServerProperty extends CoreServerProperty {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         ServerProperty that = (ServerProperty) o;
-        return Objects.equals(origin, that.origin) &&
+
+        return Objects.equals(origins, that.origins) &&
                 Arrays.equals(tokenBindingId, that.tokenBindingId);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), origin);
+        int result = Objects.hash(super.hashCode(), origins);
         result = 31 * result + Arrays.hashCode(tokenBindingId);
         return result;
     }
