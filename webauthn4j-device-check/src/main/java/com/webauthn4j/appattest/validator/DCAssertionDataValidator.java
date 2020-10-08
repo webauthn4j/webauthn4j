@@ -16,7 +16,14 @@
 
 package com.webauthn4j.appattest.validator;
 
+import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.data.CoreAuthenticationData;
+import com.webauthn4j.data.CoreAuthenticationParameters;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.validator.CoreAuthenticationDataValidator;
+import com.webauthn4j.validator.CoreAuthenticationObject;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
 
 import java.util.List;
@@ -26,4 +33,19 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
     public DCAssertionDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         super(customAuthenticationValidators, new DCAssertionSignatureValidator());
     }
+
+    protected CoreAuthenticationObject createCoreAuthenticationObject(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
+        byte[] credentialId = authenticationData.getCredentialId();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
+        byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
+        byte[] clientDataHash = authenticationData.getClientDataHash();
+
+        CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
+        CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
+
+        return new DCAuthenticationObject(
+                credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, authenticator
+        );
+    }
+
 }

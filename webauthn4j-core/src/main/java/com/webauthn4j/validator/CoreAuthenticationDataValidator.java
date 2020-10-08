@@ -85,14 +85,12 @@ public class CoreAuthenticationDataValidator {
         //spec| Step4
         //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         //spec| and signature respectively.
-        byte[] aData = authenticationData.getAuthenticatorDataBytes();
+        //      (This step is in createCoreAuthenticationObject method)
 
         //spec| Step5
         //spec| Let JSONtext be the result of running UTF-8 decode on the value of cData.
         //spec| Step6
         //spec| Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
-
-        byte[] clientDataHash = authenticationData.getClientDataHash();
 
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
         CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
@@ -102,12 +100,9 @@ public class CoreAuthenticationDataValidator {
 
         validateAuthenticatorData(authenticatorData);
 
-        byte[] credentialId = authenticationData.getCredentialId();
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
 
-        CoreAuthenticationObject authenticationObject = new CoreAuthenticationObject(
-                credentialId, authenticatorData, aData, clientDataHash, serverProperty, authenticator
-        );
+        CoreAuthenticationObject authenticationObject = createCoreAuthenticationObject(authenticationData, authenticationParameters);
 
         //spec| Step11
         //spec| Verify that the rpIdHash in aData is the SHA-256 hash of the RP ID expected by the Relying Party.
@@ -168,6 +163,20 @@ public class CoreAuthenticationDataValidator {
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
 
 
+    }
+
+    protected CoreAuthenticationObject createCoreAuthenticationObject(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
+        byte[] credentialId = authenticationData.getCredentialId();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
+        byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
+        byte[] clientDataHash = authenticationData.getClientDataHash();
+
+        CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
+        CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
+
+        return new CoreAuthenticationObject(
+                credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, authenticator
+        );
     }
 
     void validateAuthenticatorData(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
