@@ -175,6 +175,7 @@ updateCounter(
 
 続いて、Apple App Attestの検証方法について解説します。
 Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Validatorの設計も、WebAuthn用のValidatorを踏襲しています。
+なお、リスクメトリックの評価には対応していません。
 
 ==== Maven Centralからの取得
 
@@ -226,7 +227,7 @@ Mavenを使用している場合、以下のようにwebauthn4j-device-checkを�
 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 
 検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証に成功した場合は、返却された値から `CoreAuthenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
+検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
 認証時に必要となります。
 
 [source,java]
@@ -279,10 +280,10 @@ iOS側でApple App Attest APIを実行して取得した値となります。
 `DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の
 コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
 
-`CoreAuthenticator` には、登録時に永続化した `CoreAuthenticator` を指定してください。
+`DCAppleDevice` には、登録時に永続化した `DCAppleDevice` を指定してください。
 
 検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証後は、 `CoreAuthenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
+検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 

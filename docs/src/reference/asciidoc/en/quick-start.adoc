@@ -174,6 +174,7 @@ updateCounter(
 
 Next, how to verify Apple App Attest is explained.
 Since Apple App Attest has a data structure similar to WebAuthn, the validator design follows that of WebAuthn.
+Risk metric evaluation is not supported for now.
 
 ==== Getting from Maven Central
 
@@ -230,7 +231,7 @@ and verifying the signature on server side, users are protected from the replay 
 It is the application's responsibility for retaining the issued Challenge.
 
 If validation fails, an exception inheriting `ValidationException` is thrown.
-If validation succeeds, please create an `CoreAuthenticator` instance from the returned value and persist it to the database
+If validation succeeds, please create an `DCAppleDevice` instance from the returned value and persist it to the database
 or something in your application manner. The instance is required at the time of authentication.
 
 [source,java]

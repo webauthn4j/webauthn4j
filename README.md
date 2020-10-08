@@ -200,8 +200,8 @@ updateCounter(
 
 ## Sample application
 
-Spring Security WebAuthn is built on the top of WebAuthn4J, and its sample application demonstrates WebAuthn4J feature well.
-Please see [Spring Security WebAuthn sample application](https://github.com/sharplab/spring-security-webauthn).
+WebAuthn4J Spring Security is built on the top of WebAuthn4J, and its sample application demonstrates WebAuthn4J feature well.
+Please see [WebAuthn4J Spring Security sample application](https://github.com/webauthn4j/webauthn4j-spring-security).
 
 ## License
 
