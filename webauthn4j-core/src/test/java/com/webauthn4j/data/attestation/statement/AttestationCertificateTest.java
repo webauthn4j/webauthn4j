@@ -43,11 +43,18 @@ class AttestationCertificateTest {
     }
 
     @Test
+    void getter_with_illegal_data_authenticator_test(){
+        AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.loadEWBMGoldengateG310Certificate());
+        assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("KR");
+        assertThat(attestationCertificate.getSubjectOrganization()).isEqualTo("eWBM Co., Ltd.");
+        assertThat(attestationCertificate.getSubjectOrganizationUnit()).isEqualTo("Authenticator Attestation");
+        assertThat(attestationCertificate.getSubjectCommonName()).isEqualTo("eWBM FIDO2 Certificate");
+    }
+
+    @Test
     void getValue_with_invalid_subjectDN_test() {
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());
-        assertThrows(CertificateException.class,
-                () -> attestationCertificate.getValue("Invalid DN")
-        );
+        assertThat(attestationCertificate.getValue("Invalid DN")).isNull();
     }
 
     @Test
