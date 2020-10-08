@@ -19,10 +19,10 @@ package sample;
 import com.webauthn4j.anchor.CertFileTrustAnchorsProvider;
 import com.webauthn4j.anchor.TrustAnchorsResolverImpl;
 import com.webauthn4j.appattest.DeviceCheckManager;
+import com.webauthn4j.appattest.authenticator.DCAppleDevice;
+import com.webauthn4j.appattest.authenticator.DCAppleDeviceImpl;
 import com.webauthn4j.appattest.data.*;
 import com.webauthn4j.appattest.server.DCServerProperty;
-import com.webauthn4j.authenticator.CoreAuthenticator;
-import com.webauthn4j.authenticator.CoreAuthenticatorImpl;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.util.MessageDigestUtil;
@@ -78,14 +78,14 @@ public class DeviceCheckManagerSample {
         }
 
         // please persist Authenticator object, which will be used in the authentication process.
-        CoreAuthenticatorImpl authenticator =
-                new CoreAuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+        DCAppleDevice dcAppleDevice =
+                new DCAppleDeviceImpl( // You may create your own Authenticator implementation to save friendly authenticator name
                         dcAttestationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                         dcAttestationData.getAttestationObject().getAttestationStatement(),
                         dcAttestationData.getAttestationObject().getAuthenticatorData().getSignCount(),
                         dcAttestationData.getAttestationObject().getAuthenticatorData().getExtensions()
                 );
-        save(authenticator); // please persist authenticator in your manner
+        save(dcAppleDevice); // please persist authenticator in your manner
     }
 
 
@@ -101,7 +101,7 @@ public class DeviceCheckManagerSample {
         byte[] challenge = null;
         DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-        CoreAuthenticator authenticator = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
+        DCAppleDevice dcAppleDevice = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
 
         DCAssertionRequest dcAssertionRequest =
                 new DCAssertionRequest(
@@ -112,7 +112,7 @@ public class DeviceCheckManagerSample {
         DCAssertionParameters dcAssertionParameters =
                 new DCAssertionParameters(
                         dcServerProperty,
-                        authenticator
+                        dcAppleDevice
                 );
 
         DCAssertionData dcAssertionData;
@@ -136,12 +136,12 @@ public class DeviceCheckManagerSample {
     }
 
 
-    private void save(CoreAuthenticator authenticator) {
+    private void save(DCAppleDevice dcAppleDevice) {
         // please persist in your manner
     }
 
-    private CoreAuthenticator load(byte[] credentialId) {
-        return null; // please load authenticator in your manner
+    private DCAppleDevice load(byte[] credentialId) {
+        return null; // please load DCAppleDevice in your manner
     }
 
     private void updateCounter(byte[] credentialId, long signCount) {

@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.data;
+package com.webauthn4j.appattest.authenticator;
 
-import com.webauthn4j.appattest.authenticator.DCAppleDevice;
-import com.webauthn4j.appattest.server.DCServerProperty;
-import com.webauthn4j.data.CoreAuthenticationParameters;
+import com.webauthn4j.authenticator.CoreAuthenticator;
 
-public class DCAssertionParameters extends CoreAuthenticationParameters {
-
-    public DCAssertionParameters(DCServerProperty serverProperty, DCAppleDevice dcAppleDevice) {
-        super(serverProperty, dcAppleDevice, false, false);
-    }
+public interface DCAppleDevice extends CoreAuthenticator {
 }

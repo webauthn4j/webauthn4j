@@ -16,7 +16,7 @@
 
 package com.webauthn4j.appattest.validator;
 
-import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.appattest.authenticator.DCAppleDevice;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
@@ -29,7 +29,7 @@ public class DCAuthenticationObject extends CoreAuthenticationObject {
             byte[] authenticatorDataBytes,
             byte[] clientDataHash,
             CoreServerProperty serverProperty,
-            CoreAuthenticator authenticator) {
-        super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, authenticator);
+            DCAppleDevice dcAppleDevice) {
+        super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, dcAppleDevice);
     }
 }

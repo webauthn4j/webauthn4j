@@ -18,11 +18,11 @@ package com.webauthn4j.appattest;
 
 import com.webauthn4j.anchor.CertFileTrustAnchorsProvider;
 import com.webauthn4j.anchor.TrustAnchorsResolverImpl;
+import com.webauthn4j.appattest.authenticator.DCAppleDevice;
+import com.webauthn4j.appattest.authenticator.DCAppleDeviceImpl;
 import com.webauthn4j.appattest.data.*;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 import com.webauthn4j.appattest.server.DCServerProperty;
-import com.webauthn4j.authenticator.CoreAuthenticator;
-import com.webauthn4j.authenticator.CoreAuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
@@ -139,8 +139,8 @@ class DeviceCheckManagerTest {
         AppleAppAttestAttestationStatement attestationStatement = objectConverter.getCborConverter().readValue(attestationStatementBytes, AppleAppAttestAttestationStatement.class);
         long counter = authenticatorData.getSignCount();
 
-        CoreAuthenticator coreAuthenticator = new CoreAuthenticatorImpl(attestedCredentialData, attestationStatement, counter, new AuthenticationExtensionsAuthenticatorOutputs<>());
-        DCAssertionParameters dcAssertionParameters = new DCAssertionParameters(dcServerProperty, coreAuthenticator);
+        DCAppleDevice dcAppleDevice = new DCAppleDeviceImpl(attestedCredentialData, attestationStatement, counter, new AuthenticationExtensionsAuthenticatorOutputs<>());
+        DCAssertionParameters dcAssertionParameters = new DCAssertionParameters(dcServerProperty, dcAppleDevice);
 
         deviceCheckManager.validate(dcAssertionRequest, dcAssertionParameters);
 
