@@ -26,21 +26,21 @@ import java.util.Arrays;
 
 public class DCRegistrationObject extends CoreRegistrationObject {
 
-    private byte[] keyIdentifier;
+    private byte[] keyId;
 
 
-    public DCRegistrationObject(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty, Instant timestamp) {
+    public DCRegistrationObject(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty, Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
-        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+        this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public DCRegistrationObject(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty) {
+    public DCRegistrationObject(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
-        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+        this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public byte[] getKeyIdentifier() {
-        return ArrayUtil.clone(keyIdentifier);
+    public byte[] getKeyId() {
+        return ArrayUtil.clone(keyId);
     }
 
     @Override
@@ -49,13 +49,13 @@ public class DCRegistrationObject extends CoreRegistrationObject {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         DCRegistrationObject that = (DCRegistrationObject) o;
-        return Arrays.equals(keyIdentifier, that.keyIdentifier);
+        return Arrays.equals(keyId, that.keyId);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + Arrays.hashCode(keyIdentifier);
+        result = 31 * result + Arrays.hashCode(keyId);
         return result;
     }
 }

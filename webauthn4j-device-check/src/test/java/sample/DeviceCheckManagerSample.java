@@ -51,7 +51,7 @@ public class DeviceCheckManagerSample {
     public void attestationValidationSample() {
 
         // Client properties
-        byte[] keyIdentifier = null; /* set keyIdentifier */
+        byte[] keyId = null; /* set keyId */
         byte[] attestationObject = null; /* set attestationObject */
         byte[] challenge = null; /* set challenge */
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
@@ -61,7 +61,7 @@ public class DeviceCheckManagerSample {
         String cfBundleIdentifier = null /* set cfBundleIdentifier */;
         DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-        DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(attestationObject, attestationObject, clientDataHash);
+        DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyId, attestationObject, clientDataHash);
         DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
         DCAttestationData dcAttestationData;
         try {
@@ -91,7 +91,7 @@ public class DeviceCheckManagerSample {
 
     public void authenticationValidationSample() {
         // Client properties
-        byte[] credentialId = null /* set credentialId */;
+        byte[] keyId = null /* set keyId */;
         byte[] assertion = null /* set assertion */;
         byte[] clientDataHash = null /* set clientDataHash */;
 
@@ -101,11 +101,11 @@ public class DeviceCheckManagerSample {
         byte[] challenge = null;
         DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-        DCAppleDevice dcAppleDevice = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
+        DCAppleDevice dcAppleDevice = load(keyId); // please load authenticator object persisted in the attestation process in your manner
 
         DCAssertionRequest dcAssertionRequest =
                 new DCAssertionRequest(
-                        credentialId,
+                        keyId,
                         assertion,
                         clientDataHash
                 );
@@ -140,14 +140,14 @@ public class DeviceCheckManagerSample {
         // please persist in your manner
     }
 
-    private DCAppleDevice load(byte[] credentialId) {
+    private DCAppleDevice load(byte[] keyId) {
         return null; // please load DCAppleDevice in your manner
     }
 
-    private void updateCounter(byte[] credentialId, long signCount) {
+    private void updateCounter(byte[] keyId, long signCount) {
         // please update the counter of the authenticator record
         // authenticator should be resolved using following comparision:
-        // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), credentialId)
+        // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), keyId)
     }
 
     private CertFileTrustAnchorsProvider getAppleAppAttestCertFileTrustAnchorsProvider()  {

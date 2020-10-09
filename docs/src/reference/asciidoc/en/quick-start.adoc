@@ -237,7 +237,7 @@ or something in your application manner. The instance is required at the time of
 [source,java]
 ----
 // Client properties
-byte[] keyIdentifier = null; /* set keyIdentifier */
+byte[] keyId = null; /* set keyId */
 byte[] attestationObject = null; /* set attestationObject */
 byte[] challenge = null; /* set challenge */
 byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
@@ -247,7 +247,7 @@ String teamIdentifier = null /* set teamIdentifier */;
 String cfBundleIdentifier = null /* set cfBundleIdentifier */;
 DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(attestationObject, attestationObject, clientDataHash);
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyId, attestationObject, clientDataHash);
 DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
 DCAttestationData dcAttestationData;
 try {
@@ -289,47 +289,47 @@ and contains server property, persisted authenticator and validation conditions.
 
 [source,java]
 ----
-        // Client properties
-        byte[] credentialId = null /* set credentialId */;
-        byte[] assertion = null /* set assertion */;
-        byte[] clientDataHash = null /* set clientDataHash */;
+// Client properties
+byte[] keyId = null /* set keyId */;
+byte[] assertion = null /* set assertion */;
+byte[] clientDataHash = null /* set clientDataHash */;
 
-        // Server properties
-        String teamIdentifier = null /* set teamIdentifier */;
-        String cfBundleIdentifier = null /* set cfBundleIdentifier */;
-        byte[] challenge = null;
-        DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
+// Server properties
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+byte[] challenge = null;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-        DCAppleDevice dcAppleDevice = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
+DCAppleDevice dcAppleDevice = load(keyId); // please load authenticator object persisted in the attestation process in your manner
 
-        DCAssertionRequest dcAssertionRequest =
-                new DCAssertionRequest(
-                        credentialId,
-                        assertion,
-                        clientDataHash
-                );
-        DCAssertionParameters dcAssertionParameters =
-                new DCAssertionParameters(
-                        dcServerProperty,
-                        dcAppleDevice
-                );
-
-        DCAssertionData dcAssertionData;
-        try {
-            dcAssertionData = deviceCheckManager.parse(dcAssertionRequest);
-        } catch (DataConversionException e) {
-            // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
-            throw e;
-        }
-        try {
-            deviceCheckManager.validate(dcAssertionData, dcAssertionParameters);
-        } catch (ValidationException e) {
-            // If you would like to handle Apple App Attest data validation error, please catch ValidationException
-            throw e;
-        }
-        // please update the counter of the authenticator record
-        updateCounter(
-                dcAssertionData.getCredentialId(),
-                dcAssertionData.getAuthenticatorData().getSignCount()
+DCAssertionRequest dcAssertionRequest =
+        new DCAssertionRequest(
+                keyId,
+                assertion,
+                clientDataHash
         );
+DCAssertionParameters dcAssertionParameters =
+        new DCAssertionParameters(
+                dcServerProperty,
+                dcAppleDevice
+        );
+
+DCAssertionData dcAssertionData;
+try {
+    dcAssertionData = deviceCheckManager.parse(dcAssertionRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
+    throw e;
+}
+try {
+    deviceCheckManager.validate(dcAssertionData, dcAssertionParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
+    throw e;
+}
+// please update the counter of the authenticator record
+updateCounter(
+        dcAssertionData.getCredentialId(),
+        dcAssertionData.getAuthenticatorData().getSignCount()
+);
 ----

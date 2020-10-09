@@ -91,7 +91,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     private void validatePublicKey(CoreRegistrationObject registrationObject) {
         byte[] publicKey = ECUtil.createUncompressedPublicKey((ECPublicKey) getAttestationStatement(registrationObject).getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey());
         DCRegistrationObject dcRegistrationObject = (DCRegistrationObject)registrationObject;
-        byte[] keyIdentifier = dcRegistrationObject.getKeyIdentifier();
+        byte[] keyIdentifier = dcRegistrationObject.getKeyId();
         if (!Arrays.equals(MessageDigestUtil.createSHA256().digest(publicKey), keyIdentifier)) {
             throw new BadAttestationStatementException("key identifier doesn't match SHA-256 of the publickey");
         }

@@ -16,25 +16,23 @@
 
 package com.webauthn4j.appattest.data;
 
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.ArrayUtil;
 
 import java.util.Arrays;
-import java.util.Set;
 
 public class DCAttestationData extends CoreRegistrationData {
 
-    private final byte[] keyIdentifier;
+    private final byte[] keyId;
 
-    public DCAttestationData(byte[] keyIdentifier, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash) {
+    public DCAttestationData(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash) {
         super(attestationObject, attestationObjectBytes, clientDataHash);
-        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+        this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public byte[] getKeyIdentifier() {
-        return ArrayUtil.clone(keyIdentifier);
+    public byte[] getKeyId() {
+        return ArrayUtil.clone(keyId);
     }
 
     @Override
@@ -43,13 +41,13 @@ public class DCAttestationData extends CoreRegistrationData {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         DCAttestationData that = (DCAttestationData) o;
-        return Arrays.equals(keyIdentifier, that.keyIdentifier);
+        return Arrays.equals(keyId, that.keyId);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + Arrays.hashCode(keyIdentifier);
+        result = 31 * result + Arrays.hashCode(keyId);
         return result;
     }
 }

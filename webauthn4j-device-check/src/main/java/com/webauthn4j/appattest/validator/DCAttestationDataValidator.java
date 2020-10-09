@@ -55,12 +55,12 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
     public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
         super.validate(registrationData, registrationParameters);
         validateAuthenticatorData(registrationData.getAttestationObject().getAuthenticatorData());
-        validateKeyIdentifier(registrationData);
+        validateKeyId(registrationData);
     }
 
-    private void validateKeyIdentifier(CoreRegistrationData registrationData) {
+    private void validateKeyId(CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData)registrationData;
-        byte[] keyIdentifier = dcAttestationData.getKeyIdentifier();
+        byte[] keyIdentifier = dcAttestationData.getKeyId();
         byte[] credentialId = registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         if (!Arrays.equals(keyIdentifier, credentialId)) {
             throw new BadAttestationStatementException("key identifier doesn't match credentialId.");
@@ -71,7 +71,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
     protected CoreRegistrationObject createCoreRegistrationObject(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         return new DCRegistrationObject(
-                dcAttestationData.getKeyIdentifier(),
+                dcAttestationData.getKeyId(),
                 registrationData.getAttestationObject(),
                 registrationData.getAttestationObjectBytes(),
                 registrationData.getClientDataHash(),

@@ -44,7 +44,7 @@ class DCAttestationDataTest {
 
         DCAttestationData instance = new DCAttestationData(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash);
 
-        assertThat(instance.getKeyIdentifier()).isEqualTo(keyIdentifier);
+        assertThat(instance.getKeyId()).isEqualTo(keyIdentifier);
         assertThat(instance.getAttestationObject()).isEqualTo(attestationObject);
         assertThat(instance.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
         assertThat(instance.getClientDataHash()).isEqualTo(clientDataHash);

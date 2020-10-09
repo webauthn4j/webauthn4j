@@ -110,65 +110,41 @@ https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウン�
 [source,java]
 ----
 // Client properties
-byte[] credentialId = null /* set credentialId */;
-byte[] userHandle = null /* set userHandle */;
-byte[] authenticatorData = null /* set authenticatorData */;
-byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null /* set clientExtensionJSON */;
-byte[] signature = null /* set signature */;
+byte[] keyIdentifier = null; /* set keyIdentifier */
+byte[] attestationObject = null; /* set attestationObject */
+byte[] challenge = null; /* set challenge */
+byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
 
 // Server properties
-Origin origin = null /* set origin */;
-String rpId = null /* set rpId */;
-Challenge challenge = null /* set challenge */;
-byte[] tokenBindingId = null /* set tokenBindingId */;
-ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+String teamIdentifier = null /* set teamIdentifier */;
+String cfBundleIdentifier = null /* set cfBundleIdentifier */;
+DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-// expectations
-boolean userVerificationRequired = true;
-boolean userPresenceRequired = true;
-List<String> expectedExtensionIds = Collections.emptyList();
-
-Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
-
-AuthenticationRequest authenticationRequest =
-        new AuthenticationRequest(
-                credentialId,
-                userHandle,
-                authenticatorData,
-                clientDataJSON,
-                clientExtensionJSON,
-                signature
-        );
-AuthenticationParameters authenticationParameters =
-        new AuthenticationParameters(
-                serverProperty,
-                authenticator,
-                userVerificationRequired,
-                userPresenceRequired,
-                expectedExtensionIds
-        );
-
-AuthenticationData authenticationData;
-try{
-    authenticationData = webAuthnManager.parse(authenticationRequest);
-}
-catch (DataConversionException e){
-    // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyIdentifier, attestationObject, clientDataHash);
+DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
+DCAttestationData dcAttestationData;
+try {
+    dcAttestationData = deviceCheckManager.parse(dcAttestationRequest);
+} catch (DataConversionException e) {
+    // If you would like to handle Apple App Attest data structure parse error, please catch DataConversionException
     throw e;
 }
-try{
-    webAuthnManager.validate(authenticationData, authenticationParameters);
-}
-catch (ValidationException e){
-    // If you would like to handle WebAuthn data validation error, please catch ValidationException
+try {
+    deviceCheckManager.validate(dcAttestationData, dcAttestationParameters);
+} catch (ValidationException e) {
+    // If you would like to handle Apple App Attest data validation error, please catch ValidationException
     throw e;
 }
-// please update the counter of the authenticator record
-updateCounter(
-        authenticationData.getCredentialId(),
-        authenticationData.getAuthenticatorData().getSignCount()
-);
+
+// please persist Authenticator object, which will be used in the authentication process.
+DCAppleDevice dcAppleDevice =
+        new DCAppleDeviceImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
+                dcAttestationData.getAttestationObject().getAttestationStatement(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getSignCount(),
+                dcAttestationData.getAttestationObject().getAuthenticatorData().getExtensions()
+        );
+save(dcAppleDevice); // please persist authenticator in your manner
 ----
 
 === Apple App Attestの検証
@@ -233,7 +209,7 @@ Mavenを使用している場合、以下のようにwebauthn4j-device-checkを�
 [source,java]
 ----
 // Client properties
-byte[] keyIdentifier = null; /* set keyIdentifier */
+byte[] keyId = null; /* set keyId */
 byte[] attestationObject = null; /* set attestationObject */
 byte[] challenge = null; /* set challenge */
 byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
@@ -243,7 +219,7 @@ String teamIdentifier = null /* set teamIdentifier */;
 String cfBundleIdentifier = null /* set cfBundleIdentifier */;
 DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(attestationObject, attestationObject, clientDataHash);
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyId, attestationObject, clientDataHash);
 DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
 DCAttestationData dcAttestationData;
 try {
@@ -260,21 +236,21 @@ try {
 }
 
 // please persist Authenticator object, which will be used in the authentication process.
-CoreAuthenticatorImpl authenticator =
-        new CoreAuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
+DCAppleDevice dcAppleDevice =
+        new DCAppleDeviceImpl( // You may create your own Authenticator implementation to save friendly authenticator name
                 dcAttestationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 dcAttestationData.getAttestationObject().getAttestationStatement(),
                 dcAttestationData.getAttestationObject().getAuthenticatorData().getSignCount(),
                 dcAttestationData.getAttestationObject().getAuthenticatorData().getExtensions()
         );
-save(authenticator); // please persist authenticator in your manner
+save(dcAppleDevice); // please persist authenticator in your manner
 ----
 
 ==== Apple App Attestアサーションの検証
 
 認証時にアサーションを検証する際は、`DCAssertionRequest` を引数に  `DeviceCheckManager#validate` メソッドを
 実行してください。`DCAssertionRequest` の
-コンストラクタの引数に指定する、 `credentialId` と `assertion` 、 `clientDataHash` は
+コンストラクタの引数に指定する、 `keyIdentifier` と `assertion` 、 `clientDataHash` は
 iOS側でApple App Attest APIを実行して取得した値となります。
 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
 `DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の
@@ -290,7 +266,7 @@ https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウン�
 [source,java]
 ----
 // Client properties
-byte[] credentialId = null /* set credentialId */;
+byte[] keyId = null /* set keyId */;
 byte[] assertion = null /* set assertion */;
 byte[] clientDataHash = null /* set clientDataHash */;
 
@@ -300,18 +276,18 @@ String cfBundleIdentifier = null /* set cfBundleIdentifier */;
 byte[] challenge = null;
 DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-CoreAuthenticator authenticator = load(credentialId); // please load authenticator object persisted in the attestation process in your manner
+DCAppleDevice dcAppleDevice = load(keyId); // please load authenticator object persisted in the attestation process in your manner
 
 DCAssertionRequest dcAssertionRequest =
         new DCAssertionRequest(
-                credentialId,
+                keyId,
                 assertion,
                 clientDataHash
         );
 DCAssertionParameters dcAssertionParameters =
         new DCAssertionParameters(
                 dcServerProperty,
-                authenticator
+                dcAppleDevice
         );
 
 DCAssertionData dcAssertionData;

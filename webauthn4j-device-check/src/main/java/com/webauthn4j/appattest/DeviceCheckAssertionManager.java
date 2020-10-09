@@ -66,7 +66,7 @@ public class DeviceCheckAssertionManager {
     @SuppressWarnings("squid:S1130")
     public DCAssertionData parse(DCAssertionRequest dcAssertionRequest) throws DataConversionException {
 
-        byte[] credentialId = dcAssertionRequest.getCredentialId();
+        byte[] credentialId = dcAssertionRequest.getKeyId();
         DCAssertion assertion =  cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
         byte[] authenticatorDataBytes = assertion.getAuthenticatorData();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);

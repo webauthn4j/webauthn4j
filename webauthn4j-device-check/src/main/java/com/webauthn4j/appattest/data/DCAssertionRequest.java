@@ -22,18 +22,18 @@ import java.util.Arrays;
 
 public class DCAssertionRequest {
 
-    private byte[] credentialId;
+    private byte[] keyId;
     private byte[] assertion;
     private byte[] clientDataHash;
 
-    public DCAssertionRequest(byte[] credentialId, byte[] assertion, byte[] clientDataHash) {
-        this.credentialId = ArrayUtil.clone(credentialId);
+    public DCAssertionRequest(byte[] keyId, byte[] assertion, byte[] clientDataHash) {
+        this.keyId = ArrayUtil.clone(keyId);
         this.assertion = ArrayUtil.clone(assertion);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
-    public byte[] getCredentialId() {
-        return ArrayUtil.clone(credentialId);
+    public byte[] getKeyId() {
+        return ArrayUtil.clone(keyId);
     }
 
     public byte[] getAssertion() {
@@ -49,14 +49,14 @@ public class DCAssertionRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DCAssertionRequest that = (DCAssertionRequest) o;
-        return Arrays.equals(credentialId, that.credentialId) &&
+        return Arrays.equals(keyId, that.keyId) &&
                 Arrays.equals(assertion, that.assertion) &&
                 Arrays.equals(clientDataHash, that.clientDataHash);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(credentialId);
+        int result = Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(assertion);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;

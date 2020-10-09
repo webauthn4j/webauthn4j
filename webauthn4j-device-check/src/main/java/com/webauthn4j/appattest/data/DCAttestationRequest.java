@@ -22,18 +22,18 @@ import java.util.Arrays;
 
 public class DCAttestationRequest {
 
-    private byte[] keyIdentifier;
+    private byte[] keyId;
     private byte[] attestationObject;
     private byte[] clientDataHash;
 
-    public DCAttestationRequest(byte[] keyIdentifier, byte[] attestationObject, byte[] clientDataHash) {
-        this.keyIdentifier = ArrayUtil.clone(keyIdentifier);
+    public DCAttestationRequest(byte[] keyId, byte[] attestationObject, byte[] clientDataHash) {
+        this.keyId = ArrayUtil.clone(keyId);
         this.attestationObject = ArrayUtil.clone(attestationObject);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
-    public byte[] getKeyIdentifier() {
-        return ArrayUtil.clone(keyIdentifier);
+    public byte[] getKeyId() {
+        return ArrayUtil.clone(keyId);
     }
 
     public byte[] getAttestationObject() {
@@ -49,14 +49,14 @@ public class DCAttestationRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DCAttestationRequest that = (DCAttestationRequest) o;
-        return Arrays.equals(keyIdentifier, that.keyIdentifier) &&
+        return Arrays.equals(keyId, that.keyId) &&
                 Arrays.equals(attestationObject, that.attestationObject) &&
                 Arrays.equals(clientDataHash, that.clientDataHash);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(keyIdentifier);
+        int result = Arrays.hashCode(keyId);
         result = 31 * result + Arrays.hashCode(attestationObject);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;

@@ -55,7 +55,7 @@ class DCRegistrationObjectTest {
             mocked.when(Instant::now).thenReturn(timestamp);
 
             DCRegistrationObject instance = new DCRegistrationObject(keyIdentifier, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty);
-            assertThat(instance.getKeyIdentifier()).isEqualTo(keyIdentifier);
+            assertThat(instance.getKeyId()).isEqualTo(keyIdentifier);
             assertThat(instance.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
             assertThat(instance.getAttestationObject()).isEqualTo(attestationObject);
             assertThat(instance.getClientDataHash()).isEqualTo(clientDataHash);

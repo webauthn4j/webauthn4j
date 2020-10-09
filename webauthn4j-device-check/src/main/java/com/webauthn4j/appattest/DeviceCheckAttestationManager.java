@@ -56,7 +56,7 @@ public class DeviceCheckAttestationManager {
     @SuppressWarnings("java:S1130")
     public DCAttestationData parse(DCAttestationRequest dcAttestationRequest) throws DataConversionException {
 
-        byte[] keyIdentifierBytes = dcAttestationRequest.getKeyIdentifier();
+        byte[] keyIdentifierBytes = dcAttestationRequest.getKeyId();
         byte[] attestationObjectBytes = dcAttestationRequest.getAttestationObject();
         byte[] clientDataHash= dcAttestationRequest.getClientDataHash();
 

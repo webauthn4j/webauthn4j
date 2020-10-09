@@ -22,7 +22,20 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 
 public class DCAssertionData extends CoreAuthenticationData {
 
-    public DCAssertionData(byte[] credentialId, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData, byte[] authenticatorDataBytes, byte[] clientDataHash, byte[] signature) {
-        super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, signature);
+    /**
+     * Constructor
+     * @param keyId keyId or credentialId
+     * @param authenticatorData authenticatorData
+     * @param authenticatorDataBytes authenticatorData in bytes
+     * @param clientDataHash clientDataHash
+     * @param signature signature
+     */
+    public DCAssertionData(byte[] keyId, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData, byte[] authenticatorDataBytes, byte[] clientDataHash, byte[] signature) {
+        super(keyId, authenticatorData, authenticatorDataBytes, clientDataHash, signature);
+    }
+
+    // keyId is an alias of credentialId
+    public byte[] getKeyId(){
+        return getCredentialId();
     }
 }
