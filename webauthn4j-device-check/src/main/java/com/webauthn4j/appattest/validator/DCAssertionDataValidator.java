@@ -36,6 +36,7 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
         super(customAuthenticationValidators, new DCAssertionSignatureValidator());
     }
 
+    @Override
     protected CoreAuthenticationObject createCoreAuthenticationObject(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
