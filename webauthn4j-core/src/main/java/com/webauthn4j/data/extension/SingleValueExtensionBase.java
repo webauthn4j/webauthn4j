@@ -23,11 +23,11 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
 
     private final T value;
 
-    public SingleValueExtensionBase(T value) {
+    protected SingleValueExtensionBase(T value) {
         this.value = value;
     }
 
-    public SingleValueExtensionBase() {
+    protected SingleValueExtensionBase() {
         this.value = null;
     }
 

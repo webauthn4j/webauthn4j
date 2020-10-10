@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 public abstract class SingleValueExtensionInputBase<T extends Serializable> extends SingleValueExtensionOutputBase<T> implements ExtensionInput {
 
-    public SingleValueExtensionInputBase(T value) {
+    protected SingleValueExtensionInputBase(T value) {
         super(value);
     }
 }
