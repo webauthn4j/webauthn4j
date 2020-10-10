@@ -201,7 +201,7 @@ WebAuthn4Jのシリアライザ、デシリアライザを使用したい場合�
 
 `TrustAnchorsProvider` インタフェースは前述の `TrustAnchorsResolver` インタフェースの実装である `TrustAnchorsResolverImpl`
 がTrustAnchorの読込処理を委譲する先のインタフェースです。実装としてJava Key StoreファイルからTrustAnchorを読み込む
-`KeyStoreFileTrustAnchorsProvider` クラスが提供されている他、Spring Security WebAuthnでは、SpringのResourceから
+`KeyStoreFileTrustAnchorsProvider` クラスが提供されている他、WebAuthn4J Spring Securityでは、SpringのResourceから
 TrustAnchorを読み込む `CertFileResourcesTrustAnchorProvider` が提供されています。
 
 

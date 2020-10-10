@@ -58,5 +58,5 @@ Authenticator vulnerability announcement check is also possible with FIDO Metada
 === What WebAuthn4J doesn't offer
 
 In order to realize framework independence, WebAuthn4J intentionally scopes functions to WebAuthn Assertion / Attestation verification. Fetching parameters from HTTP request, issuing and saving Challenge in session, counter Value validation are not provided.
-Please implement in your caller code. If you are using Spring Security, consider using Spring Security WebAuthn as it provides these implementations of authentication framework specific parts.
+Please implement in your caller code. If you are using Spring Security, consider using WebAuthn$J Spring Security as it provides these implementations of authentication framework specific parts.
 
