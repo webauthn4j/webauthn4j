@@ -110,7 +110,7 @@ https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウン�
 [source,java]
 ----
 // Client properties
-byte[] keyIdentifier = null; /* set keyIdentifier */
+byte[] keyId = null; /* set keyId */
 byte[] attestationObject = null; /* set attestationObject */
 byte[] challenge = null; /* set challenge */
 byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(challenge);
@@ -120,7 +120,7 @@ String teamIdentifier = null /* set teamIdentifier */;
 String cfBundleIdentifier = null /* set cfBundleIdentifier */;
 DCServerProperty dcServerProperty = new DCServerProperty(teamIdentifier, cfBundleIdentifier, new DefaultChallenge(challenge));
 
-DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyIdentifier, attestationObject, clientDataHash);
+DCAttestationRequest dcAttestationRequest = new DCAttestationRequest(keyId, attestationObject, clientDataHash);
 DCAttestationParameters dcAttestationParameters = new DCAttestationParameters(dcServerProperty);
 DCAttestationData dcAttestationData;
 try {
@@ -250,7 +250,7 @@ save(dcAppleDevice); // please persist authenticator in your manner
 
 認証時にアサーションを検証する際は、`DCAssertionRequest` を引数に  `DeviceCheckManager#validate` メソッドを
 実行してください。`DCAssertionRequest` の
-コンストラクタの引数に指定する、 `keyIdentifier` と `assertion` 、 `clientDataHash` は
+コンストラクタの引数に指定する、 `keyId` と `assertion` 、 `clientDataHash` は
 iOS側でApple App Attest APIを実行して取得した値となります。
 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
 `DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の

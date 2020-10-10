@@ -60,9 +60,9 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
 
     private void validateKeyId(CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData)registrationData;
-        byte[] keyIdentifier = dcAttestationData.getKeyId();
+        byte[] keyId = dcAttestationData.getKeyId();
         byte[] credentialId = registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
-        if (!Arrays.equals(keyIdentifier, credentialId)) {
+        if (!Arrays.equals(keyId, credentialId)) {
             throw new BadAttestationStatementException("key identifier doesn't match credentialId.");
         }
     }
