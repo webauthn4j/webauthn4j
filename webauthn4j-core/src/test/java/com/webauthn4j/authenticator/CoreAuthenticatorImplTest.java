@@ -16,14 +16,10 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,14 +30,11 @@ class CoreAuthenticatorImplTest {
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new byte[32];
         byte[] clientDataHash = new byte[32];
-        Set<AuthenticatorTransport> transports = Collections.emptySet();
-        CoreRegistrationData registrationData = new CoreRegistrationData(attestationObject, attestationObjectBytes, clientDataHash, transports);
+        CoreRegistrationData registrationData = new CoreRegistrationData(attestationObject, attestationObjectBytes, clientDataHash);
         CoreAuthenticator authenticator = AuthenticatorImpl.createFromCoreRegistrationData(registrationData);
         assertThat(authenticator.getAttestedCredentialData()).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData());
         assertThat(authenticator.getAttestationStatement()).isEqualTo(attestationObject.getAttestationStatement());
-        assertThat(authenticator.getTransports()).isEqualTo(transports);
         assertThat(authenticator.getCounter()).isEqualTo(attestationObject.getAuthenticatorData().getSignCount());
         assertThat(authenticator.getAuthenticatorExtensions()).isEqualTo(attestationObject.getAuthenticatorData().getExtensions());
     }
-
 }

@@ -10,7 +10,7 @@ Initially, the specification was developed as FIDO 2.0 by the FIDO Alliance, but
 
 === WebAuthn4J
 
-WebAuthn4J is a portable Java library for WebAuthn server side verification
+WebAuthn4J is a portable Java library for WebAuthn and Apple App Attest server side verification.
 
 === WebAuthn4J Spring Security
 
@@ -30,6 +30,7 @@ All attestation statement formats are supported:
 - Android Key attestation
 - Android SafetyNet attestation
 - TPM attestation
+- Apple App Attest attestation
 - None attestation
 
 ==== Conformance

@@ -16,14 +16,12 @@
 
 package com.webauthn4j.authenticator;
 
-import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * Core interface that represents WebAuthn authenticator
@@ -43,16 +41,6 @@ public interface CoreAuthenticator extends Serializable {
      * @return the {@link AttestationStatement}
      */
     default AttestationStatement getAttestationStatement() {
-        return null;
-    }
-
-    /**
-     * Returns the {@link AuthenticatorTransport} {@link Set}
-     *
-     * @return the {@link AuthenticatorTransport} {@link Set}
-     */
-    @SuppressWarnings("squid:S1168")
-    default Set<AuthenticatorTransport> getTransports() {
         return null;
     }
 

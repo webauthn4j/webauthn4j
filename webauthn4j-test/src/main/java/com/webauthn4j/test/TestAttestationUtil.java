@@ -115,7 +115,7 @@ public class TestAttestationUtil {
         return createCertificate(certificate);
     }
 
-    public static X509Certificate loadAndroidKeyIntermidiateCertificate() {
+    public static X509Certificate loadAndroidKeyIntermediateCertificate() {
         String certificate =
                 "-----BEGIN CERTIFICATE-----\n" +
                         "MIICeDCCAh6gAwIBAgICEAEwCgYIKoZIzj0EAwIwgZgxCzAJBgNVBAYTAlVTMRMwEQ"

@@ -133,7 +133,11 @@ WebAuthn4Jは、以下の4つのModuleから構成されます。
 
 ==== Core webauthn4j-core.jar
 
-Attestation/Assertionの検証に関わるコア機能を提供します。
+WebAuthn Attestation/Assertionの検証機能およびコア機能を提供します。
+
+==== Core webauthn4j-device-check.jar
+
+Apple App Attest Attestation/Assertionの検証機能を提供します。
 
 ==== Metadata webauthn4j-metadata.jar
 

@@ -69,14 +69,10 @@ public class CoreRegistrationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
-    @SuppressWarnings("deprecation")
     public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
         BeanAssertUtil.validate(registrationParameters);
-
-        byte[] attestationObjectBytes = registrationData.getAttestationObjectBytes();
-        byte[] clientDataHash = registrationData.getClientDataHash();
 
         AttestationObject attestationObject = registrationData.getAttestationObject();
 
@@ -84,12 +80,7 @@ public class CoreRegistrationDataValidator {
 
         CoreServerProperty serverProperty = registrationParameters.getServerProperty();
 
-        CoreRegistrationObject registrationObject = new CoreRegistrationObject(
-                attestationObject,
-                attestationObjectBytes,
-                clientDataHash,
-                serverProperty
-        );
+        CoreRegistrationObject registrationObject = createCoreRegistrationObject(registrationData, registrationParameters);
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
 
@@ -140,6 +131,15 @@ public class CoreRegistrationDataValidator {
         for (CustomCoreRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
         }
+    }
+
+    protected CoreRegistrationObject createCoreRegistrationObject(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
+        return new CoreRegistrationObject(
+                registrationData.getAttestationObject(),
+                registrationData.getAttestationObjectBytes(),
+                registrationData.getClientDataHash(),
+                registrationParameters.getServerProperty()
+            );
     }
 
     void validateAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {

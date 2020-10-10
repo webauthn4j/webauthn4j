@@ -111,12 +111,18 @@ public class AuthenticatorDataConverter {
             byte flags = byteBuffer.get();
             long counter = UnsignedNumberUtil.getUnsignedInt(byteBuffer);
 
-            AttestedCredentialData attestationData;
+            AttestedCredentialData attestedCredentialData;
             AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
-                attestationData = attestedCredentialDataConverter.convert(byteBuffer);
-            } else {
-                attestationData = null;
+                if(byteBuffer.hasRemaining()){
+                    attestedCredentialData = attestedCredentialDataConverter.convert(byteBuffer);
+                }
+                else {
+                    attestedCredentialData = null; // Apple App Attest API assertion has AT flag even though they don't have attestedCredentialData.
+                }
+            }
+            else {
+                attestedCredentialData = null;
             }
             if (AuthenticatorData.checkFlagED(flags)) {
                 extensions = convertToExtensions(byteBuffer);
@@ -127,14 +133,14 @@ public class AuthenticatorDataConverter {
                 throw new DataConversionException("provided data does not have proper byte layout");
             }
 
-            return new AuthenticatorData<>(rpIdHash, flags, counter, attestationData, extensions);
+            return new AuthenticatorData<>(rpIdHash, flags, counter, attestedCredentialData, extensions);
 
         } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
     }
 
-    private <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
+    <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }

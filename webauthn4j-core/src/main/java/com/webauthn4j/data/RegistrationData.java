@@ -32,6 +32,7 @@ public class RegistrationData extends CoreRegistrationData {
     private final CollectedClientData collectedClientData;
     private final byte[] collectedClientDataBytes;
     private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
+    private final Set<AuthenticatorTransport> transports;
 
     public RegistrationData(
             AttestationObject attestationObject,
@@ -41,11 +42,12 @@ public class RegistrationData extends CoreRegistrationData {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             Set<AuthenticatorTransport> transports) {
 
-        super(attestationObject, attestationObjectBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), transports);
+        super(attestationObject, attestationObjectBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes));
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
+        this.transports = transports;
     }
 
     public CollectedClientData getCollectedClientData() {
@@ -60,6 +62,10 @@ public class RegistrationData extends CoreRegistrationData {
         return clientExtensions;
     }
 
+    public Set<AuthenticatorTransport> getTransports() {
+        return transports;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -68,12 +74,13 @@ public class RegistrationData extends CoreRegistrationData {
         RegistrationData that = (RegistrationData) o;
         return Objects.equals(collectedClientData, that.collectedClientData) &&
                 Arrays.equals(collectedClientDataBytes, that.collectedClientDataBytes) &&
-                Objects.equals(clientExtensions, that.clientExtensions);
+                Objects.equals(clientExtensions, that.clientExtensions) &&
+                Objects.equals(transports, that.transports);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), collectedClientData, clientExtensions);
+        int result = Objects.hash(super.hashCode(), collectedClientData, clientExtensions, transports);
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
     }
