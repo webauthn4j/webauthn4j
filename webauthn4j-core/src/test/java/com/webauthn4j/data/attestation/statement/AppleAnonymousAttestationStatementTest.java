@@ -33,14 +33,8 @@ class AppleAnonymousAttestationStatementTest {
     }
 
     @Test
-    void validate_alg_null_instance(){
-        AppleAnonymousAttestationStatement instance = new AppleAnonymousAttestationStatement(null, null);
-        assertThatThrownBy(instance::validate).isInstanceOf(ConstraintViolationException.class);
-    }
-
-    @Test
     void validate_x5c_null_instance(){
-        AppleAnonymousAttestationStatement instance = new AppleAnonymousAttestationStatement(COSEAlgorithmIdentifier.ES256, null);
+        AppleAnonymousAttestationStatement instance = new AppleAnonymousAttestationStatement(null);
         assertThatThrownBy(instance::validate).isInstanceOf(ConstraintViolationException.class);
     }
 
@@ -49,7 +43,6 @@ class AppleAnonymousAttestationStatementTest {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        assertThat(instance.getAlg()).isEqualTo(COSEAlgorithmIdentifier.ES256);
         assertThat(instance.getFormat()).isEqualTo(AppleAnonymousAttestationStatement.FORMAT);
         assertThat(instance.getX5c()).hasSize(2);
     }

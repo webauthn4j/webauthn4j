@@ -31,20 +31,11 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
     public static final String FORMAT = "apple";
 
     @JsonProperty
-    private final COSEAlgorithmIdentifier alg;
-
-    @JsonProperty
     private final AttestationCertificatePath x5c;
 
     public AppleAnonymousAttestationStatement(
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
             @JsonProperty("x5c") AttestationCertificatePath x5c) {
-        this.alg = alg;
         this.x5c = x5c;
-    }
-
-    public COSEAlgorithmIdentifier getAlg() {
-        return alg;
     }
 
     @Override
@@ -60,9 +51,6 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
 
     @Override
     public void validate() {
-        if (alg == null) {
-            throw new ConstraintViolationException("alg must not be null");
-        }
         if (x5c== null || x5c.isEmpty()) {
             throw new ConstraintViolationException("No attestation certificate is found in apple anonymous attestation statement.");
         }
@@ -73,12 +61,11 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppleAnonymousAttestationStatement that = (AppleAnonymousAttestationStatement) o;
-        return Objects.equals(alg, that.alg) &&
-                Objects.equals(x5c, that.x5c);
+        return Objects.equals(x5c, that.x5c);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(alg, x5c);
+        return Objects.hash(x5c);
     }
 }
