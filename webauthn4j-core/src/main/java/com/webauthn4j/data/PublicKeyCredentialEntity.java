@@ -37,17 +37,17 @@ public abstract class PublicKeyCredentialEntity implements Serializable {
     // ~ Constructor
     // ========================================================================================================
 
-    public PublicKeyCredentialEntity(String name, String icon) {
+    protected PublicKeyCredentialEntity(String name, String icon) {
         this.name = name;
         this.icon = icon;
     }
 
-    public PublicKeyCredentialEntity(String name) {
+    protected PublicKeyCredentialEntity(String name) {
         this.name = name;
         this.icon = null;
     }
 
-    public PublicKeyCredentialEntity() {
+    protected PublicKeyCredentialEntity() {
     }
 
     public String getName() {

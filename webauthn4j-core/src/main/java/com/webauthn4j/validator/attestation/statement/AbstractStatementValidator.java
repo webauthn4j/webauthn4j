@@ -27,9 +27,10 @@ import java.lang.reflect.Type;
 
 @SuppressWarnings({"squid:S2326", "unused"})
 public abstract class AbstractStatementValidator<T extends AttestationStatement> implements AttestationStatementValidator {
-    private Class<?> parameterizedTypeClass;
 
-    public AbstractStatementValidator() {
+    private final Class<?> parameterizedTypeClass;
+
+    protected AbstractStatementValidator() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         if (parameterizedType.getActualTypeArguments().length == 0) {
             // Throw an exception if the class is not extending AttestationStatement

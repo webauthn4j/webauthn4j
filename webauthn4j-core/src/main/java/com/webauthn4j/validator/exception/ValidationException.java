@@ -22,15 +22,15 @@ import com.webauthn4j.util.exception.WebAuthnException;
  * An abstract exception for validation violation
  */
 public abstract class ValidationException extends WebAuthnException {
-    public ValidationException(String message, Throwable cause) {
+    protected ValidationException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ValidationException(String message) {
+    protected ValidationException(String message) {
         super(message);
     }
 
-    public ValidationException(Throwable cause) {
+    protected ValidationException(Throwable cause) {
         super(cause);
     }
 }
