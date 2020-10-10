@@ -20,12 +20,14 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.UvmEntries;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.UserVerificationMethodExtensionAuthenticatorOutput;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BIT_ED;
@@ -56,6 +58,14 @@ class AuthenticatorDataConverterTest {
         assertThat(result.getSignCount()).isEqualTo(325);
         assertThat(result.getAttestedCredentialData()).isNull();
         assertThat(result.getExtensions().getKeys()).isEmpty();
+    }
+
+    @Test
+    void convert_apple_app_attest_authenticatorData(){
+        byte[] authenticatorDataBytes = Base64UrlUtil.decode("MGACygVeBsWIpS7GqlSC9TaOAq8wh7Hp0wnQQMr12VpAAAAAAQ");
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
+        assertThat(authenticatorData.getAttestedCredentialData()).isNull();
     }
 
     @Test
@@ -105,6 +115,13 @@ class AuthenticatorDataConverterTest {
         assertThrows(DataConversionException.class,
                 () -> authenticatorDataConverter.convert(bytes)
         );
+    }
+
+    @Test
+    void convertToExtensions_with_0_length_ByteBuffer_test(){
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.allocate(0));
+        assertThat(extensions.getKeys()).isEmpty();
     }
 
     @Test

@@ -30,9 +30,9 @@ import java.security.*;
 /**
  * Validates the assertion signature in {@link AuthenticationData} based on {@link COSEKey}
  */
-class AssertionSignatureValidator {
+public class AssertionSignatureValidator {
 
-    final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
+    private final Logger logger = LoggerFactory.getLogger(AssertionSignatureValidator.class);
 
     // ~ Methods
     // ========================================================================================================
@@ -45,7 +45,7 @@ class AssertionSignatureValidator {
         }
     }
 
-    private byte[] getSignedData(CoreAuthenticationData authenticationData) {
+    protected byte[] getSignedData(CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();

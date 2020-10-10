@@ -7,7 +7,7 @@
 [![Build Status](https://img.shields.io/maven-central/v/com.webauthn4j/webauthn4j-core.svg)](https://search.maven.org/#search%7Cga%7C1%7Cwebauthn4j)
 [![license](https://img.shields.io/github/license/webauthn4j/webauthn4j.svg)](https://github.com/webauthn4j/webauthn4j/blob/master/LICENSE.txt)
 
-A portable Java library for WebAuthn server side verification
+A portable Java library for WebAuthn and Apple App Attest server side verification
 
 ### Conformance
 
@@ -25,6 +25,7 @@ All attestation statement formats are supported.
 * TPM attestation
 * Apple Anonymous attestation
 * None attestation
+* Apple App Attest attestation
 
 ### Projects using WebAuthn4J
 
@@ -82,7 +83,10 @@ git clone https://github.com/webauthn4j/webauthn4j
 
 ## How to use
 
-Parse and Validation on Registration
+Parse and Validation on WebAuthn registration
+
+If your would like to validate Apple App Attest, please see the reference.
+
 ```java 
 // Client properties
 byte[] attestationObject = null /* set attestationObject */;
@@ -197,8 +201,8 @@ updateCounter(
 
 ## Sample application
 
-Spring Security WebAuthn is built on the top of WebAuthn4J, and its sample application demonstrates WebAuthn4J feature well.
-Please see [Spring Security WebAuthn sample application](https://github.com/sharplab/spring-security-webauthn).
+WebAuthn4J Spring Security is built on the top of WebAuthn4J, and its sample application demonstrates WebAuthn4J feature well.
+Please see [WebAuthn4J Spring Security sample application](https://github.com/webauthn4j/webauthn4j-spring-security).
 
 ## License
 

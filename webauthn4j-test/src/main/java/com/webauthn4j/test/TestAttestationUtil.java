@@ -115,7 +115,7 @@ public class TestAttestationUtil {
         return createCertificate(certificate);
     }
 
-    public static X509Certificate loadAndroidKeyIntermidiateCertificate() {
+    public static X509Certificate loadAndroidKeyIntermediateCertificate() {
         String certificate =
                 "-----BEGIN CERTIFICATE-----\n" +
                         "MIICeDCCAh6gAwIBAgICEAEwCgYIKoZIzj0EAwIwgZgxCzAJBgNVBAYTAlVTMRMwEQ"
@@ -202,6 +202,10 @@ public class TestAttestationUtil {
         return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
     }
 
+    public static X509Certificate loadEWBMGoldengateG310Certificate() {
+        String base64UrlCertificate = "MIICtDCCAlmgAwIBAgIJALxeM7i3hpQoMAoGCCqGSM49BAMCMIGvMQswCQYDVQQGEwJLUjERMA8GA1UECAwIU2VvdWwtU2kxEzARBgNVBAcMCkdhbmduYW0tR3UxFzAVBgNVBAoMDmVXQk0gQ28uLCBMdGQuMSIwIAYDVQQLDBlBdXRoZW50aWNhdG9yIEF0dGVzdGF0aW9uMRwwGgYDVQQDDBNlV0JNIENBIENlcnRpZmljYXRlMR0wGwYJKoZIhvcNAQkBFg5pbmZvQGUtd2JtLmNvbTAeFw0xOTA1MDMwNjI2MTNaFw0yOTA0MjkwNjI2MTNaMIGxMQswCQYDVQQGEwJLUjERMA8GA1UECAwIU2VvdWwtU2kxEzARBgNVBAcMCkdhbmduYW0tR3UxFzAVBgNVBAoMDmVXQk0gQ28uLCBMdGQuMSIwIAYDVQQLDBlBdXRoZW50aWNhdG9yIEF0dGVzdGF0aW9uMR8wHQYDVQQDDBZlV0JNIEZJRE8yIENlcnRpZmljYXRlMRwwGgYJKoZIhvcNAQkBFg1pbmZvQGV3Ym0uY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEBU3mVqz1Sr9gT1sEOwanyeaKa3siEvNvZ5v-SLe9Hc6zsLhmOP9FcFM0Q3n0q1S5mMz0ICvZTIwoPUXBYbA9AKNaMFgwCQYDVR0TBAIwADAfBgNVHSMEGDAWgBS3J_fxiAv22irdBs98SODhF7kU_jAdBgNVHQ4EFgQURC6pWidWMcBGc1y0IAjaedxgYnEwCwYDVR0PBAQDAgXgMAoGCCqGSM49BAMCA0kAMEYCIQCgTYpDe4Z74WrbpTn0TguzSUM2IjMRgRxF8NSnhnbAIgIhAN5sSXh9kYR73Y36RSV8j8M-nJW7aKOhRqTPZ97VfiCy";
+        return CertificateUtil.generateX509Certificate(Base64UrlUtil.decode(base64UrlCertificate));
+    }
 
     public static X509Certificate load3tierTestRootCACertificate() {
         return loadCertificateFromResourcePath("classpath:attestation/3tier/certs/3tier-test-root-CA.crt");

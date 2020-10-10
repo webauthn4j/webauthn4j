@@ -9,7 +9,7 @@ Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケ
 
 === WebAuthn4Jとは
 
-WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。
+WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。
 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
 
 === WebAuthn4J Spring Securityとは
@@ -31,6 +31,7 @@ WebAuthn4Jでは、以下の通り全ての構成証明ステートメントフ�
 - TPM attestation
 - Apple Anonymous attestation
 - None attestation
+- Apple App Attest attestation
 
 ==== 準拠状況
 

@@ -18,6 +18,7 @@ description = "Package that contains testing classes for WebAuthn4J"
 
 dependencies {
     implementation project(':webauthn4j-core')
+    implementation project(':webauthn4j-device-check')
     implementation project(':webauthn4j-metadata')
 
     implementation("com.fasterxml.jackson.core:jackson-databind")

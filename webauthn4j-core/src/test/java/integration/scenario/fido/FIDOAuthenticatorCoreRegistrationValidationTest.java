@@ -110,8 +110,7 @@ class FIDOAuthenticatorCoreRegistrationValidationTest {
                 = new CoreRegistrationData(
                 attestationObject,
                 registrationRequest.getAttestationObject(),
-                MessageDigestUtil.createSHA256().digest(registrationRequest.getClientDataJSON()),
-                transports
+                MessageDigestUtil.createSHA256().digest(registrationRequest.getClientDataJSON())
         );
         CoreRegistrationParameters coreRegistrationParameters = new CoreRegistrationParameters(
                 serverProperty,

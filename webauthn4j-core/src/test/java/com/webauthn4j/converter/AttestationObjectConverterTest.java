@@ -88,6 +88,16 @@ class AttestationObjectConverterTest {
     }
 
     @Test
+    void convert_AttestationObject_from_eWBM_Goldengate_G310_test(){
+        String value = "o2NmbXRmcGFja2VkZ2F0dFN0bXSjY2FsZyZjc2lnWEgwRgIhANO_lCv6b9TaBxpUdKJYlEAybxFE-wm3gsdalBtGWNvcAiEAqbOGAkKvRgOdQ_6i3tdfV7zwwvG0FycVSCRdAu0eV_1jeDVjgVkCuDCCArQwggJZoAMCAQICCQC8XjO4t4aUKDAKBggqhkjOPQQDAjCBrzELMAkGA1UEBhMCS1IxETAPBgNVBAgMCFNlb3VsLVNpMRMwEQYDVQQHDApHYW5nbmFtLUd1MRcwFQYDVQQKDA5lV0JNIENvLiwgTHRkLjEiMCAGA1UECwwZQXV0aGVudGljYXRvciBBdHRlc3RhdGlvbjEcMBoGA1UEAwwTZVdCTSBDQSBDZXJ0aWZpY2F0ZTEdMBsGCSqGSIb3DQEJARYOaW5mb0BlLXdibS5jb20wHhcNMTkwNTAzMDYyNjEzWhcNMjkwNDI5MDYyNjEzWjCBsTELMAkGA1UEBhMCS1IxETAPBgNVBAgMCFNlb3VsLVNpMRMwEQYDVQQHDApHYW5nbmFtLUd1MRcwFQYDVQQKDA5lV0JNIENvLiwgTHRkLjEiMCAGA1UECwwZQXV0aGVudGljYXRvciBBdHRlc3RhdGlvbjEfMB0GA1UEAwwWZVdCTSBGSURPMiBDZXJ0aWZpY2F0ZTEcMBoGCSqGSIb3DQEJARYNaW5mb0Bld2JtLmNvbTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABAVN5las9Uq_YE9bBDsGp8nmimt7IhLzb2eb_ki3vR3Os7C4Zjj_RXBTNEN59KtUuZjM9CAr2UyMKD1FwWGwPQCjWjBYMAkGA1UdEwQCMAAwHwYDVR0jBBgwFoAUtyf38YgL9toq3QbPfEjg4Re5FP4wHQYDVR0OBBYEFEQuqVonVjHARnNctCAI2nncYGJxMAsGA1UdDwQEAwIF4DAKBggqhkjOPQQDAgNJADBGAiEAoE2KQ3uGe-Fq26U59E4Ls0lDNiIzEYEcRfDUp4Z2wCICIQDebEl4fZGEe92N-kUlfI_DPpyVu2ijoUakz2fe1X4gsmhhdXRoRGF0YVi2SZYN5YgOjGh0NBcPZHZgW4_krrmihjLHmVzzuoMdl2PFAAAAopVEKy7xXk3vsnDvsQb6y04AJOJW_7wgdqz2FHU_Jd9d57ZZfGGzMFdwxjMDBkVzRrHmAMAwMKUBAgMmIAEhWCDOdH7egzu6wQYBTxbfNL_SLhFiqgKOnHY64vBRfsTtJCJYIJmuBub2uZKG6Dj4n01JX77Yi23vgeSgYC4dvpViuezIoWtjcmVkUHJvdGVjdAI";
+        byte[] source = Base64UrlUtil.decode(value);
+        AttestationObject left = target.convert(source);
+        assertThat(left.getAttestationStatement()).isInstanceOf(PackedAttestationStatement.class);
+        byte[] result = target.convertToBytes(left);
+        target.convert(result);
+    }
+
+    @Test
     void convert_test_with_illegal_input() {
         String testData = "illegal input";
         assertThrows(IllegalArgumentException.class,

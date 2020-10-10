@@ -38,47 +38,78 @@ public class Origin implements Serializable {
 
     private String scheme;
     private String host;
-    private int port;
+    private Integer port;
+    private String schemeSpecificPart;
+    private boolean explicitPortNotation;
 
+    /**
+     * @deprecated this constructor will be removed before GA release.
+     */
+    @Deprecated
     public Origin(String scheme, String host, int port) {
-        if (!Objects.equals(SCHEME_HTTPS, scheme) && !Objects.equals(SCHEME_HTTP, scheme)) {
+        String lowerCaseScheme = toLowerCase(scheme);
+        if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
             throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
         }
 
-        this.scheme = scheme;
-        this.host = host;
+        this.scheme = lowerCaseScheme;
+        this.host = toLowerCase(host);
         this.port = port;
+        this.schemeSpecificPart = "//" + this.host + ":" + port;
+    }
+
+    private static String toLowerCase(String s){
+        return (s!=null)? s.toLowerCase() : s;
     }
 
     public Origin(String originUrl) {
         URI uri = URI.create(originUrl);
-        this.scheme = uri.getScheme();
-        this.host = uri.getHost();
-        int originPort = uri.getPort();
 
-        if (originPort == -1) {
-            if (this.scheme == null) {
-                throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
-            }
-            switch (this.scheme) {
-                case SCHEME_HTTPS:
+        //https://www.ietf.org/rfc/rfc1738.txt  section 2.1
+        // For resiliency, programs interpreting URLs should treat upper case letters as equivalent to
+        // lower case in scheme names (e.g., allow "HTTP" as well as "http").
+        //
+        //https://tools.ietf.org/html/rfc6454#section-4, Let uri-scheme be the scheme component of the URI, converted to
+        //lowercase.
+
+        this.scheme = toLowerCase(uri.getScheme());
+        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+            //https://tools.ietf.org/html/rfc3986#section-3.2.2 , host component is case insensitive
+            this.host = toLowerCase(uri.getHost());
+            int originPort = uri.getPort();
+            if (originPort == -1) {
+                explicitPortNotation = false;
+                if (SCHEME_HTTPS.equals(this.scheme)) {
                     originPort = 443;
-                    break;
-                case SCHEME_HTTP:
+                }
+                else { // SCHEME_HTTP
                     originPort = 80;
-                    break;
-                default:
-                    throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
+                }
             }
+            else {
+                explicitPortNotation = true;
+            }
+
+            //https://tools.ietf.org/html/rfc2396#section-3
+            this.port = originPort;
+            String schemeSpecificPartStr = "//" + this.host;
+            if (explicitPortNotation){
+                schemeSpecificPartStr += ":" + this.port;
+            }
+            this.schemeSpecificPart = schemeSpecificPartStr;
         }
-        this.port = originPort;
+        else {
+            this.explicitPortNotation = uri.getPort() != -1;
+            this.port = null;
+            this.schemeSpecificPart = uri.getSchemeSpecificPart();
+        }
     }
 
     public static Origin create(String value) {
         try {
             return new Origin(value);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("value is out of range: " + e.getMessage());
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("value is out of range: null", e);
         }
     }
 
@@ -87,7 +118,7 @@ public class Origin implements Serializable {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, Origin.class);
+            throw new InvalidFormatException(null, "value has an invalid syntax:'" + value + "'", value, Origin.class);
         }
     }
 
@@ -99,49 +130,60 @@ public class Origin implements Serializable {
         return host;
     }
 
-    public int getPort() {
+    public Integer getPort() {
         return port;
+    }
+
+    public String getSchemeSpecificPart() {
+        return schemeSpecificPart;
     }
 
     @JsonValue
     @Override
     public String toString() {
-        String result = this.scheme + "://" + this.host;
-        switch (this.scheme) {
-            case SCHEME_HTTPS:
-                if (this.port != 443) {
-                    result += ":" + this.port;
-                }
-                break;
-            case SCHEME_HTTP:
-                if (this.port != 80) {
-                    result += ":" + this.port;
-                }
-                break;
-            default:
-                throw new IllegalStateException();
+        if(this.scheme == null){
+            return this.schemeSpecificPart;
         }
-        return result;
+        String result;
+        switch (this.scheme){
+            case SCHEME_HTTPS:
+            case SCHEME_HTTP:
+                result = this.scheme + "://" + this.host;
+                if (this.explicitPortNotation) {
+                    result += ":" + this.port;
+                }
+                return result;
+            default:
+                return this.scheme + ":" + this.schemeSpecificPart;
+        }
     }
 
     @Override
     public boolean equals(Object o) {
+        // explicitPortNotation is not taken into count
         if (this == o) return true;
-        if (!(o instanceof Origin)) return false;
-
+        if (o == null || getClass() != o.getClass()) return false;
         Origin origin = (Origin) o;
-
-        if (port != origin.port) return false;
-        //noinspection SimplifiableIfStatement
-        if (!scheme.equals(origin.scheme)) return false;
-        return host.equals(origin.host);
+        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+            return Objects.equals(scheme, origin.scheme) &&
+                    Objects.equals(host, origin.host) &&
+                    Objects.equals(port, origin.port);
+        }
+        else {
+            return Objects.equals(scheme, origin.scheme) &&
+                    Objects.equals(schemeSpecificPart, origin.schemeSpecificPart);
+        }
     }
+
 
     @Override
     public int hashCode() {
-        int result = scheme.hashCode();
-        result = 31 * result + host.hashCode();
-        result = 31 * result + port;
-        return result;
+        // explicitPortNotation is not taken into count
+        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+            return Objects.hash(scheme, host, port);
+        }
+        else {
+            return Objects.hash(scheme, schemeSpecificPart);
+        }
     }
 }

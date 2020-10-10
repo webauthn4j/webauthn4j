@@ -16,11 +16,17 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.webauthn4j.data.x500.X500Name;
 import com.webauthn4j.validator.exception.CertificateException;
 
+import javax.naming.InvalidNameException;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.io.Serializable;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -84,13 +90,13 @@ public class AttestationCertificate implements Serializable {
     }
 
     String getValue(String name) {
-        X500Name subjectDN = new X500Name(getCertificate().getSubjectX500Principal().getName());
-        Map<String, String> map = subjectDN.stream().flatMap(attributes -> attributes.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        if (!map.containsKey(name)) {
-            throw new CertificateException("invalid subjectDN: " + subjectDN);
+        try {
+            LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
+            Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return (String)map.get(name);
+        } catch (InvalidNameException e) {
+            throw new IllegalArgumentException(e);
         }
-        return map.get(name);
     }
 
     @Override
@@ -105,5 +111,23 @@ public class AttestationCertificate implements Serializable {
     public int hashCode() {
 
         return Objects.hash(certificate);
+    }
+
+    private static Map<String, Object> toMap(Rdn rdn) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Attributes attributes = rdn.toAttributes();
+            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
+
+            while(ids.hasMore()){
+                String id = ids.next();
+                map.put(id, attributes.get(id).get());
+            }
+            return map;
+
+        }
+        catch (NamingException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }
