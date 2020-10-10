@@ -37,7 +37,7 @@ WebAuthn4Jでは、以下の通り全ての構成証明ステートメントフ�
 https://fidoalliance.org/certification/functional-certification/conformance/[FIDO Allianceが提供するFIDO2 Test Tools]
 で必須のテストケースに加え、オプションのAndroid Key attestationのテストケースを全て合格しています。
 
-NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテストを実行する為、Spring Security WebAuthnが
+NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテストを実行する為、WebAuthn4J Spring Securityが
 提供するFIDO2 Transport Binding ProfileのREST API実装に対して実行して検証を行っています。
 
 ==== ポータビリティ

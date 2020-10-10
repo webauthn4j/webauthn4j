@@ -198,7 +198,7 @@ in the verification of the authenticity of the attestation statements.
 
 `TrustAnchorsProvider` is an interface that `TrustAnchorsResolverImpl` delegates TrustAnchor load operation to.
 KeyStoreFileTrustAnchorsProvider is provided as an implementation for loading TrustAnchor from Java Key Store file.
-Spring Security WebAuthn also provides `CertFileResourcesTrustAnchorProvider` to load TrustAnchor from Spring Resource.
+WebAuthn$J Spring Security also provides `CertFileResourcesTrustAnchorProvider` to load TrustAnchor from Spring Resource.
 
 ==== Exceptions
 
