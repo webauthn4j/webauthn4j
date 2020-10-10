@@ -281,8 +281,6 @@ subprojects {
     }
 }
 
-// check.dependsOn dependencyCheckAggregate
-
 task updateVersionsInDocuments() {
     group = "documentation"
     String regex = "<webauthn4j\\.version>.*</webauthn4j\\.version>";
