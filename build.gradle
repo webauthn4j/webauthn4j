@@ -102,7 +102,7 @@ subprojects {
     def springBootVersion = "2.3.4.RELEASE"
     def kerbyVersion = "2.0.1"
     def bouncyCastleVersion = "1.66"
-    def mockitoVersion = "3.5.0"
+    def mockitoVersion = "3.5.13"
 
     dependencies {
         constraints {
@@ -110,7 +110,9 @@ subprojects {
             implementation ("org.apache.kerby:kerby-asn1:$kerbyVersion")
             implementation ("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
             implementation ("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
+            implementation ("org.mockito:mockito-core:$mockitoVersion")
             implementation ("org.mockito:mockito-inline:$mockitoVersion")
+            implementation ("org.mockito:mockito-junit-jupiter:$mockitoVersion")
         }
 
         implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
