@@ -29,6 +29,8 @@ All attestation statement formats are supported.
 ### Projects using WebAuthn4J
 
 * [Keycloak](https://www.keycloak.org/)
+* [Red Hat SSO](https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.4/)
+* [WebAuthn4J Spring Security](https://github.com/webauthn4j/webauthn4j-spring-security)
 
 ## Documentation
 
