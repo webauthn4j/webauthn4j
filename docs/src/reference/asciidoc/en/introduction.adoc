@@ -30,6 +30,7 @@ All attestation statement formats are supported:
 - Android Key attestation
 - Android SafetyNet attestation
 - TPM attestation
+- Apple Anonymous attestation
 - Apple App Attest attestation
 - None attestation
 

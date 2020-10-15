@@ -29,6 +29,7 @@ WebAuthn4Jでは、以下の通り全ての構成証明ステートメントフ�
 - Android Key attestation
 - Android SafetyNet attestation
 - TPM attestation
+- Apple Anonymous attestation
 - None attestation
 - Apple App Attest attestation
 
