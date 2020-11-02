@@ -53,9 +53,7 @@ public class CollectedClientDataConverter {
      * @return the converted object
      */
     public @NonNull CollectedClientData convert(@NonNull String base64UrlString) {
-        if (base64UrlString == null) {
-            return null;
-        }
+        AssertUtil.notNull(base64UrlString, "base64UrlString must not be null");
         byte[] bytes = Base64UrlUtil.decode(base64UrlString);
         return convert(bytes);
     }
@@ -67,9 +65,7 @@ public class CollectedClientDataConverter {
      * @return the converted object
      */
     public @NonNull CollectedClientData convert(@NonNull byte[] source) {
-        if (source == null) {
-            return null;
-        }
+        AssertUtil.notNull(source, "source must not be null");
         String jsonString = new String(source, StandardCharsets.UTF_8);
         return jsonConverter.readValue(jsonString, CollectedClientData.class);
     }

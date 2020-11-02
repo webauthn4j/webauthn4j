@@ -44,17 +44,14 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ================================================================================================
 
     public <T extends ExtensionClientInput> @NonNull AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
-        if (value == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(value, "value must not be null");
         return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {});
     }
 
 
     public <T extends ExtensionClientInput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientInputs<T> value) {
-        if (value == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(value, "value must not be null");
+
         return jsonConverter.writeValueAsString(value);
     }
 
