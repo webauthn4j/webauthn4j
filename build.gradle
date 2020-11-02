@@ -22,7 +22,7 @@ buildscript {
 
     def sonarqubeVersion = "3.0"
     def asciidoctorGradleVersion="3.2.0"
-    def artifactoryVersion="4.17.2"
+    def artifactoryVersion="4.18.0"
     def bintrayVersion = "1.8.5"
     def owaspDependencyCheckVersion = "6.0.2"
     def httpBuilderVersion = "0.7.2"
@@ -99,11 +99,11 @@ subprojects {
         mavenCentral()
     }
 
-    def springBootVersion = "2.3.4.RELEASE"
+    def springBootVersion = "2.3.5.RELEASE"
     def kerbyVersion = "2.0.1"
     def bouncyCastleVersion = "1.66"
     def checkerframeworkVersion = "2.5.5"
-    def mockitoVersion = "3.5.13"
+    def mockitoVersion = "3.6.0"
 
     dependencies {
         constraints {
