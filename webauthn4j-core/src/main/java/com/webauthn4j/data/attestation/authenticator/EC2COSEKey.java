@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -105,13 +106,17 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         this.y = y;
     }
 
-    public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey, @NonNull COSEAlgorithmIdentifier alg) {
+    public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(privateKey, "privateKey must not be null");
+
         Curve curve = getCurve(privateKey.getParams());
         byte[] d = privateKey.getS().toByteArray();
         return new EC2COSEKey(null, alg, null, curve, null, null, d);
     }
 
-    public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey, @NonNull COSEAlgorithmIdentifier alg) {
+    public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(publicKey, "publicKey must not be null");
+
         ECPoint ecPoint = publicKey.getW();
         Curve curve = getCurve(publicKey.getParams());
         byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
@@ -119,8 +124,10 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         return new EC2COSEKey(null, alg, null, curve, x, y);
     }
 
-    public static EC2COSEKey create(@NonNull KeyPair keyPair, @NonNull COSEAlgorithmIdentifier alg) {
-        if (keyPair != null && keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
+    public static @NonNull EC2COSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(keyPair, "keyPair must not be null");
+
+        if (keyPair.getPrivate() instanceof ECPrivateKey && keyPair.getPublic() instanceof ECPublicKey) {
             ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
             ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
             ECPoint ecPoint = ecPublicKey.getW();
@@ -134,16 +141,30 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         }
     }
 
+    /**
+     * Create {@link EC2COSEKey} from {@link ECPrivateKey}.
+     * @param privateKey privateKey
+     * @return {@link EC2COSEKey}
+     */
     public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey) {
-        return create(privateKey, null); //TODO
+        return create(privateKey, null);
     }
 
+    /**
+     * Create {@link EC2COSEKey} from {@link ECPublicKey}.
+     * @param publicKey publicKey
+     * @return {@link EC2COSEKey}
+     */
     public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey) {
-        return create(publicKey, null); //TODO
+        return create(publicKey, null);
     }
 
+    /**
+     * Create {@link EC2COSEKey} from {@link KeyPair}.
+     * @return {@link EC2COSEKey}
+     */
     public static @NonNull EC2COSEKey create(KeyPair keyPair) {
-        return create(keyPair, null); //TODO
+        return create(keyPair, null);
     }
 
     /**
@@ -293,7 +314,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         return result;
     }
 
-    static Curve getCurve(@Nullable ECParameterSpec params) {
+    static @NonNull Curve getCurve(@Nullable ECParameterSpec params) {
         if(params == null){
             throw new IllegalArgumentException("params must not be null");
         }

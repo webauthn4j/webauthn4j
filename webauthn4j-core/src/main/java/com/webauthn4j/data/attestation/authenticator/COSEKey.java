@@ -53,7 +53,7 @@ public interface COSEKey extends Serializable {
 
     @Nullable byte[] getKeyId();
 
-    @NonNull COSEAlgorithmIdentifier getAlgorithm();
+    @Nullable COSEAlgorithmIdentifier getAlgorithm();
 
     @Nullable List<COSEKeyOperation> getKeyOps();
 
