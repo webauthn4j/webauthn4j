@@ -51,9 +51,7 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @NonNull AttestationObject convert(@NonNull String source) {
-        if (source == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(source, "source must not be null");
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
     }
@@ -65,9 +63,7 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @NonNull AttestationObject convert(@NonNull byte[] source) {
-        if (source == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(source, "source must not be null");
         return cborConverter.readValue(source, AttestationObject.class);
     }
 

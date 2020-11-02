@@ -24,6 +24,7 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthenticationExtensionsClientInputsConverterTest {
 
@@ -32,11 +33,11 @@ class AuthenticationExtensionsClientInputsConverterTest {
     private final AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
 
 
-//    @SuppressWarnings("ConstantConditions")
-//    @Test
-//    void convertRegistrationExtensions_null_test() {
-//        assertThatThrownBy(()-> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(IllegalArgumentException.class);
-//    }
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    void convertRegistrationExtensions_null_test() {
+        assertThatThrownBy(()-> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void convertAuthenticationExtensionsToString_test() {
@@ -46,11 +47,11 @@ class AuthenticationExtensionsClientInputsConverterTest {
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(extensions)).isEqualTo("{\"appid\":\"test\"}");
     }
 
-//    @SuppressWarnings("ConstantConditions")
-//    @Test
-//    void convertAuthenticationExtensionsToString_null_test() {
-//        assertThatThrownBy(()->authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
-//    }
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    void convertAuthenticationExtensionsToString_null_test() {
+        assertThatThrownBy(()->authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void convert_test() {

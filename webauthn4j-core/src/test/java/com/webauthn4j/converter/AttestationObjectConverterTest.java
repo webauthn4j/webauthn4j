@@ -26,6 +26,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -51,11 +52,11 @@ class AttestationObjectConverterTest {
         );
     }
 
-//    @Test
-//    void convert_null_test() {
-//        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
-//        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
-//    }
+    @Test
+    void convert_null_test() {
+        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void convert_AttestationObject_with_AndroidKeyAttestation_test() {

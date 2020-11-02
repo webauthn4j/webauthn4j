@@ -37,9 +37,7 @@ public class AuthenticatorTransportConverter {
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<AuthenticatorTransport> convertSet(@NonNull Set<String> values) {
-        if (values == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(values, "values must not be null");
         return values.stream().map(this::convert).collect(Collectors.toSet());
     }
 
@@ -50,9 +48,7 @@ public class AuthenticatorTransportConverter {
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<String> convertSetToStringSet(@NonNull Set<AuthenticatorTransport> values) {
-        if (values == null) { //TODO: revisit
-            return null;
-        }
+        AssertUtil.notNull(values, "values must not be null");
         return values.stream().map(this::convertToString).collect(Collectors.toSet());
     }
 
