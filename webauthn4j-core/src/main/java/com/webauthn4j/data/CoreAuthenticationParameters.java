@@ -18,6 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.server.CoreServerProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -32,8 +34,8 @@ public class CoreAuthenticationParameters implements Serializable {
     private final boolean userPresenceRequired;
 
     public CoreAuthenticationParameters(
-            CoreServerProperty serverProperty,
-            CoreAuthenticator authenticator,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull CoreAuthenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         this.serverProperty = serverProperty;
@@ -43,8 +45,8 @@ public class CoreAuthenticationParameters implements Serializable {
     }
 
     public CoreAuthenticationParameters(
-            CoreServerProperty serverProperty,
-            CoreAuthenticator authenticator,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull CoreAuthenticator authenticator,
             boolean userVerificationRequired) {
         this(
                 serverProperty,
@@ -54,11 +56,11 @@ public class CoreAuthenticationParameters implements Serializable {
         );
     }
 
-    public CoreServerProperty getServerProperty() {
+    public @NonNull CoreServerProperty getServerProperty() {
         return serverProperty;
     }
 
-    public CoreAuthenticator getAuthenticator() {
+    public @NonNull CoreAuthenticator getAuthenticator() {
         return authenticator;
     }
 
@@ -72,7 +74,7 @@ public class CoreAuthenticationParameters implements Serializable {
 
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreAuthenticationParameters that = (CoreAuthenticationParameters) o;

@@ -26,6 +26,7 @@ import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.jws.JWS;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.X509Certificate;
 
@@ -35,7 +36,7 @@ import java.security.cert.X509Certificate;
 public class WebAuthnJSONModule extends SimpleModule {
 
     @SuppressWarnings("unused")
-    public WebAuthnJSONModule(ObjectConverter objectConverter) {
+    public WebAuthnJSONModule(@NonNull ObjectConverter objectConverter) {
         super("WebAuthnJSONModule");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());

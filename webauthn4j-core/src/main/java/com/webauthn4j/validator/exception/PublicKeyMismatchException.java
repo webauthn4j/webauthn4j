@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if the public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData
  */
 @SuppressWarnings("squid:S110")
 public class PublicKeyMismatchException extends ValidationException {
-    public PublicKeyMismatchException(String message, Throwable cause) {
+    public PublicKeyMismatchException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public PublicKeyMismatchException(String message) {
+    public PublicKeyMismatchException(@Nullable String message) {
         super(message);
     }
 
-    public PublicKeyMismatchException(Throwable cause) {
+    public PublicKeyMismatchException(@Nullable Throwable cause) {
         super(cause);
     }
 }

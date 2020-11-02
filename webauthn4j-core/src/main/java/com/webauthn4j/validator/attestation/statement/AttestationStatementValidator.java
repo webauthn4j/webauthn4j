@@ -19,14 +19,15 @@ package com.webauthn4j.validator.attestation.statement;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.CoreRegistrationObject;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Validates the specified {@link AttestationStatement}
  */
 public interface AttestationStatementValidator {
 
-    AttestationType validate(CoreRegistrationObject registrationObject);
+    @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject);
 
-    boolean supports(CoreRegistrationObject registrationObject);
+    boolean supports(@NonNull CoreRegistrationObject registrationObject);
 
 }

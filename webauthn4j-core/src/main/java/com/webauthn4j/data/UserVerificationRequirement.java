@@ -19,6 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * A WebAuthn Relying Party may require user verification for some of its operations but not for
@@ -53,10 +55,8 @@ public enum UserVerificationRequirement {
         this.value = value;
     }
 
-    public static UserVerificationRequirement create(String value) {
-        if (value == null) {
-            return null;
-        }
+    public static UserVerificationRequirement create(@NonNull String value) {
+        AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "required":
                 return REQUIRED;
@@ -70,7 +70,7 @@ public enum UserVerificationRequirement {
     }
 
     @JsonCreator
-    private static UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
+    private static @NonNull UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -79,7 +79,7 @@ public enum UserVerificationRequirement {
     }
 
     @JsonValue
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 

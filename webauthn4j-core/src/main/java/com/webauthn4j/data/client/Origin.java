@@ -19,6 +19,8 @@ package com.webauthn4j.data.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -46,7 +48,7 @@ public class Origin implements Serializable {
      * @deprecated this constructor will be removed before GA release.
      */
     @Deprecated
-    public Origin(String scheme, String host, int port) {
+    public Origin(@NonNull String scheme, @NonNull String host, int port) {
         String lowerCaseScheme = toLowerCase(scheme);
         if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
             throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
@@ -58,11 +60,7 @@ public class Origin implements Serializable {
         this.schemeSpecificPart = "//" + this.host + ":" + port;
     }
 
-    private static String toLowerCase(String s){
-        return (s!=null)? s.toLowerCase() : s;
-    }
-
-    public Origin(String originUrl) {
+    public Origin(@NonNull String originUrl) {
         URI uri = URI.create(originUrl);
 
         //https://www.ietf.org/rfc/rfc1738.txt  section 2.1
@@ -105,7 +103,7 @@ public class Origin implements Serializable {
         }
     }
 
-    public static Origin create(String value) {
+    public static @NonNull Origin create(@NonNull String value) {
         try {
             return new Origin(value);
         } catch (NullPointerException e) {
@@ -114,7 +112,7 @@ public class Origin implements Serializable {
     }
 
     @JsonCreator
-    private static Origin deserialize(String value) throws InvalidFormatException {
+    private static @NonNull Origin deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -122,25 +120,25 @@ public class Origin implements Serializable {
         }
     }
 
-    public String getScheme() {
+    public @Nullable String getScheme() {
         return scheme;
     }
 
-    public String getHost() {
+    public @Nullable String getHost() {
         return host;
     }
 
-    public Integer getPort() {
+    public @Nullable Integer getPort() {
         return port;
     }
 
-    public String getSchemeSpecificPart() {
+    public @Nullable String getSchemeSpecificPart() {
         return schemeSpecificPart;
     }
 
     @JsonValue
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         if(this.scheme == null){
             return this.schemeSpecificPart;
         }
@@ -159,7 +157,7 @@ public class Origin implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         // explicitPortNotation is not taken into count
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -186,4 +184,9 @@ public class Origin implements Serializable {
             return Objects.hash(scheme, schemeSpecificPart);
         }
     }
+
+    private static String toLowerCase(String s){
+        return (s!=null)? s.toLowerCase() : s;
+    }
+
 }

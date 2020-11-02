@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 import java.security.cert.CertPath;
@@ -31,13 +32,13 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> im
     private final X509Certificate[] certificates;
 
     @JsonCreator
-    public AttestationCertificatePath(List<X509Certificate> certificates) {
+    public AttestationCertificatePath(@NonNull List<X509Certificate> certificates) {
         AssertUtil.notNull(certificates, "certificates must not be null");
         this.size = certificates.size();
         this.certificates = certificates.toArray(new X509Certificate[this.size]);
     }
 
-    public AttestationCertificatePath(X509Certificate attestationCertificate, List<X509Certificate> caCertificates) {
+    public AttestationCertificatePath(@NonNull X509Certificate attestationCertificate, @NonNull List<X509Certificate> caCertificates) {
         AssertUtil.notNull(attestationCertificate, "attestationCertificate must not be null");
         AssertUtil.notNull(caCertificates, "caCertificates must not be null");
         List<X509Certificate> buffer = new ArrayList<>();
@@ -57,15 +58,15 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> im
     }
 
     @Override
-    public X509Certificate get(int index) {
+    public @NonNull X509Certificate get(int index) {
         return certificates[index];
     }
 
-    public CertPath createCertPath() {
+    public @NonNull CertPath createCertPath() {
         return CertificateUtil.generateCertPath(this);
     }
 
-    public AttestationCertificate getEndEntityAttestationCertificate() {
+    public @NonNull AttestationCertificate getEndEntityAttestationCertificate() {
         if (this.isEmpty()) {
             throw new IllegalStateException();
         }

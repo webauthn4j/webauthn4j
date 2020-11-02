@@ -20,6 +20,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -44,35 +46,38 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
     // ~ Constructor
     // ========================================================================================================
 
-    public PublicKeyCredential(byte[] credentialId, R authenticatorResponse, AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
+    public PublicKeyCredential(
+            @Nullable byte[] credentialId,
+            @Nullable R authenticatorResponse,
+            @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.authenticatorResponse = authenticatorResponse;
         this.clientExtensionResults = clientExtensionResults;
     }
 
-    public String getType() {
+    public @NonNull String getType() {
         return PublicKeyCredentialType.PUBLIC_KEY.getValue();
     }
 
-    public String getId() {
+    public @Nullable String getId() {
         return id;
     }
 
-    public byte[] getRawId() {
+    public @Nullable byte[] getRawId() {
         return ArrayUtil.clone(rawId);
     }
 
-    public R getAuthenticatorResponse() {
+    public @Nullable R getAuthenticatorResponse() {
         return authenticatorResponse;
     }
 
-    public AuthenticationExtensionsClientOutputs<E> getClientExtensionResults() {
+    public @Nullable AuthenticationExtensionsClientOutputs<E> getClientExtensionResults() {
         return clientExtensionResults;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredential<?, ?> that = (PublicKeyCredential<?, ?>) o;

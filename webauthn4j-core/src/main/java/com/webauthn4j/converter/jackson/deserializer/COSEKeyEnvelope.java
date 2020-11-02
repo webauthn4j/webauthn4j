@@ -17,6 +17,7 @@
 package com.webauthn4j.converter.jackson.deserializer;
 
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Internal envelope class for {@link COSEKey} deserialization
@@ -26,12 +27,12 @@ public class COSEKeyEnvelope {
     private final COSEKey coseKey;
     private final int length;
 
-    COSEKeyEnvelope(COSEKey coseKey, int length) {
+    COSEKeyEnvelope(@Nullable COSEKey coseKey, int length) {
         this.coseKey = coseKey;
         this.length = length;
     }
 
-    public COSEKey getCOSEKey() {
+    public @Nullable COSEKey getCOSEKey() {
         return coseKey;
     }
 

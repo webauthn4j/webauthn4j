@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.validator.exception.CertificateException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import javax.naming.InvalidNameException;
 import javax.naming.NamingEnumeration;
@@ -38,27 +40,27 @@ public class AttestationCertificate implements Serializable {
     private static final int NON_CA = -1;
     private final X509Certificate certificate;
 
-    public AttestationCertificate(X509Certificate certificate) {
+    public AttestationCertificate(@NonNull X509Certificate certificate) {
         this.certificate = certificate;
     }
 
-    public X509Certificate getCertificate() {
+    public @NonNull X509Certificate getCertificate() {
         return certificate;
     }
 
-    public String getSubjectCountry() {
+    public @Nullable String getSubjectCountry() {
         return getValue("C");
     }
 
-    public String getSubjectOrganization() {
+    public @Nullable String getSubjectOrganization() {
         return getValue("O");
     }
 
-    public String getSubjectOrganizationUnit() {
+    public @Nullable String getSubjectOrganizationUnit() {
         return getValue("OU");
     }
 
-    public String getSubjectCommonName() {
+    public @Nullable String getSubjectCommonName() {
         return getValue("CN");
     }
 
@@ -89,18 +91,8 @@ public class AttestationCertificate implements Serializable {
         }
     }
 
-    String getValue(String name) {
-        try {
-            LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
-            Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return (String)map.get(name);
-        } catch (InvalidNameException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttestationCertificate that = (AttestationCertificate) o;
@@ -111,6 +103,16 @@ public class AttestationCertificate implements Serializable {
     public int hashCode() {
 
         return Objects.hash(certificate);
+    }
+
+    @Nullable String getValue(@NonNull String name) {
+        try {
+            LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
+            Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            return (String)map.get(name);
+        } catch (InvalidNameException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     private static Map<String, Object> toMap(Rdn rdn) {

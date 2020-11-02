@@ -28,6 +28,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -78,7 +80,7 @@ public class AuthenticatorDataConverter {
      * @param <T> extension type
      * @return the converted byte array
      */
-    public <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticatorData<T> source) {
+    public <T extends ExtensionAuthenticatorOutput> @NonNull byte[] convert(@NonNull AuthenticatorData<T> source) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] rpIdHash = source.getRpIdHash();
@@ -102,7 +104,7 @@ public class AuthenticatorDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] source) {
+    public <T extends ExtensionAuthenticatorOutput> @NonNull AuthenticatorData<T> convert(@NonNull byte[] source) {
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(source);
 
@@ -140,7 +142,7 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
+    <T extends ExtensionAuthenticatorOutput> @NonNull AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
         if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
@@ -160,7 +162,7 @@ public class AuthenticatorDataConverter {
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted attestedCredData byte array
      */
-    public byte[] extractAttestedCredentialData(byte[] authenticatorData) {
+    public @NonNull byte[] extractAttestedCredentialData(@NonNull byte[] authenticatorData) {
         byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
         int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         int credentialPublicKeyIndex = CREDENTIAL_ID_INDEX + credentialIdLength;
@@ -179,13 +181,13 @@ public class AuthenticatorDataConverter {
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted signCount
      */
-    public long extractSignCount(byte[] authenticatorData) {
+    public long extractSignCount(@NonNull byte[] authenticatorData) {
         byte[] counterBytes = Arrays.copyOfRange(authenticatorData, COUNTER_INDEX, COUNTER_INDEX + COUNTER_LENGTH);
         return UnsignedNumberUtil.getUnsignedInt(counterBytes);
     }
 
 
-    <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
+    @NonNull <T extends ExtensionAuthenticatorOutput> byte[] convert(@Nullable AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         if (extensions == null || extensions.getKeys().isEmpty()) {
             return new byte[0];
         } else {

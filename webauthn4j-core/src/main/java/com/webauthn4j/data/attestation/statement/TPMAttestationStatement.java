@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -46,12 +48,12 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     private final TPMTPublic pubArea;
 
     public TPMAttestationStatement(
-            @JsonProperty("ver") String ver,
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @JsonProperty("sig") byte[] sig,
-            @JsonProperty("certInfo") TPMSAttest certInfo,
-            @JsonProperty("pubArea") TPMTPublic pubArea) {
+            @Nullable @JsonProperty("ver") String ver,
+            @Nullable @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @Nullable @JsonProperty("sig") byte[] sig,
+            @Nullable @JsonProperty("certInfo") TPMSAttest certInfo,
+            @Nullable @JsonProperty("pubArea") TPMTPublic pubArea) {
         this.ver = ver;
         this.alg = alg;
         this.x5c = x5c;
@@ -60,7 +62,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.pubArea = pubArea;
     }
 
-    public TPMAttestationStatement(COSEAlgorithmIdentifier alg, AttestationCertificatePath x5c, byte[] sig, TPMSAttest certInfo, TPMTPublic pubArea) {
+    public TPMAttestationStatement(@Nullable COSEAlgorithmIdentifier alg, @Nullable AttestationCertificatePath x5c, @Nullable byte[] sig, @Nullable TPMSAttest certInfo, @Nullable TPMTPublic pubArea) {
         this.ver = VERSION_2_0;
         this.alg = alg;
         this.x5c = x5c;
@@ -69,33 +71,33 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.pubArea = pubArea;
     }
 
-    public String getVer() {
+    public @Nullable String getVer() {
         return ver;
     }
 
-    public COSEAlgorithmIdentifier getAlg() {
+    public @Nullable COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
     @Override
-    public AttestationCertificatePath getX5c() {
+    public @Nullable AttestationCertificatePath getX5c() {
         return x5c;
     }
 
-    public byte[] getSig() {
+    public @Nullable byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
-    public TPMSAttest getCertInfo() {
+    public @Nullable TPMSAttest getCertInfo() {
         return certInfo;
     }
 
-    public TPMTPublic getPubArea() {
+    public @Nullable TPMTPublic getPubArea() {
         return pubArea;
     }
 
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
@@ -107,7 +109,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMAttestationStatement that = (TPMAttestationStatement) o;

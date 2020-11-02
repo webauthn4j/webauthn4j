@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 
@@ -36,8 +38,8 @@ public class COSEKeyEnvelopeDeserializer extends StdDeserializer<COSEKeyEnvelope
      * {@inheritDoc}
      */
     @Override
-    public COSEKeyEnvelope deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        COSEKey coseKey = ctxt.readValue(p, COSEKey.class);
+    public @NonNull COSEKeyEnvelope deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+        @Nullable COSEKey coseKey = ctxt.readValue(p, COSEKey.class);
         int length = (int) p.getCurrentLocation().getByteOffset();
         return new COSEKeyEnvelope(coseKey, length);
     }

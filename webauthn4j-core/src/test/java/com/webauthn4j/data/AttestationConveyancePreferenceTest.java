@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -43,7 +44,7 @@ class AttestationConveyancePreferenceTest {
 
     @Test
     void create_test_with_null_value() {
-        assertThat(AttestationConveyancePreference.create(null)).isNull();
+        assertThatThrownBy(()-> AttestationConveyancePreference.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

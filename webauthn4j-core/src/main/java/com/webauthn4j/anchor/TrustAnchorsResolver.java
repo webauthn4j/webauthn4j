@@ -17,6 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
@@ -32,5 +33,5 @@ public interface TrustAnchorsResolver {
      * @param aaguid {@link AAGUID} for authenticator
      * @return {@link TrustAnchor} {@link Set}.
      */
-    Set<TrustAnchor> resolve(AAGUID aaguid);
+    @NonNull Set<TrustAnchor> resolve(AAGUID aaguid);
 }

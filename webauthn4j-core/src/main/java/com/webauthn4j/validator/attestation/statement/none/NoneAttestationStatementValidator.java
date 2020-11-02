@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Validates the specified {@link AttestationStatement} is a none attestation
@@ -28,7 +29,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 public class NoneAttestationStatementValidator extends AbstractStatementValidator<NoneAttestationStatement> {
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

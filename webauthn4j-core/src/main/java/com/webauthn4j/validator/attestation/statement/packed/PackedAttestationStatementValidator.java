@@ -30,6 +30,7 @@ import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.apache.kerby.asn1.type.Asn1OctetString;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -49,7 +50,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -68,7 +69,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private AttestationType validateX5c(CoreRegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+    private @NonNull AttestationType validateX5c(@NonNull CoreRegistrationObject registrationObject, @NonNull PackedAttestationStatement attestationStatement, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
         }
@@ -94,7 +95,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.BASIC;
     }
 
-    AAGUID extractAAGUIDFromAttestationCertificate(X509Certificate certificate) {
+    @NonNull AAGUID extractAAGUIDFromAttestationCertificate(@NonNull X509Certificate certificate) {
         byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
         if (extensionValue == null) {
             return AAGUID.NULL;
@@ -110,7 +111,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private AttestationType validateSelfAttestation(CoreRegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+    private @NonNull AttestationType validateSelfAttestation(@NonNull CoreRegistrationObject registrationObject, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
         COSEKey coseKey =
                 registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
@@ -126,7 +127,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.SELF;
     }
 
-    private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
+    private boolean verifySignature(@NonNull PublicKey publicKey, @NonNull COSEAlgorithmIdentifier algorithmIdentifier, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             String jcaName = getJcaName(algorithmIdentifier);
             Signature verifier = SignatureUtil.createSignature(jcaName);
@@ -139,7 +140,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
+    private @NonNull byte[] getAttToBeSigned(@NonNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

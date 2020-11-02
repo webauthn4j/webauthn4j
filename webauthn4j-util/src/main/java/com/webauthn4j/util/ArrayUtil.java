@@ -16,16 +16,19 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class ArrayUtil {
 
     private ArrayUtil() {
     }
 
-    public static byte[] clone(byte[] value) {
+    public static @Nullable
+    byte[] clone(@Nullable byte[] value) {
         return value == null ? null : value.clone();
     }
 
-    public static String[] clone(String[] value) {
+    public static @Nullable String[] clone(@Nullable String[] value) {
         return value == null ? null : value.clone();
     }
 }

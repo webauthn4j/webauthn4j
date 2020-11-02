@@ -16,13 +16,15 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.Serializable;
 
 /**
  * Attestation metadata.certs container
  */
 public interface AttestationStatement extends Serializable {
-    String getFormat();
+    @NonNull String getFormat();
 
     /**
      * Validates the instance per field basis.

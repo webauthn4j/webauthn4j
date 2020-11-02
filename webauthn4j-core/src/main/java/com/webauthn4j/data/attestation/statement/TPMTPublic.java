@@ -18,6 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,7 +37,13 @@ public class TPMTPublic implements Serializable {
     private final TPMUPublicParms parameters;
     private final TPMUPublicId unique;
 
-    public TPMTPublic(TPMIAlgPublic type, TPMIAlgHash nameAlg, TPMAObject objectAttributes, byte[] authPolicy, TPMUPublicParms parameters, TPMUPublicId unique) {
+    public TPMTPublic(
+            @NonNull TPMIAlgPublic type,
+            @NonNull TPMIAlgHash nameAlg,
+            @NonNull TPMAObject objectAttributes,
+            @NonNull byte[] authPolicy,
+            @NonNull TPMUPublicParms parameters,
+            @NonNull TPMUPublicId unique) {
         this.type = type;
         this.nameAlg = nameAlg;
         this.objectAttributes = objectAttributes;
@@ -44,31 +52,31 @@ public class TPMTPublic implements Serializable {
         this.unique = unique;
     }
 
-    public TPMIAlgPublic getType() {
+    public @NonNull TPMIAlgPublic getType() {
         return type;
     }
 
-    public TPMIAlgHash getNameAlg() {
+    public @NonNull TPMIAlgHash getNameAlg() {
         return nameAlg;
     }
 
-    public TPMAObject getObjectAttributes() {
+    public @NonNull TPMAObject getObjectAttributes() {
         return objectAttributes;
     }
 
-    public byte[] getAuthPolicy() {
+    public @NonNull byte[] getAuthPolicy() {
         return ArrayUtil.clone(authPolicy);
     }
 
-    public TPMUPublicParms getParameters() {
+    public @NonNull TPMUPublicParms getParameters() {
         return parameters;
     }
 
-    public TPMUPublicId getUnique() {
+    public @NonNull TPMUPublicId getUnique() {
         return unique;
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             int typeValue = type.getValue();
@@ -86,7 +94,7 @@ public class TPMTPublic implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMTPublic that = (TPMTPublic) o;

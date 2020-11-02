@@ -22,6 +22,8 @@ import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.AbstractList;
@@ -32,12 +34,12 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
     private final Number[] array;
 
     @JsonCreator
-    public UvmEntry(Number[] value) {
+    public UvmEntry(@NonNull Number[] value) {
         AssertUtil.notNull(value, "value must not be null");
         this.array = value.clone();
     }
 
-    public UvmEntry(UserVerificationMethod userVerificationMethod, KeyProtectionType keyProtectionType, MatcherProtectionType matcherProtectionType) {
+    public UvmEntry(@NonNull UserVerificationMethod userVerificationMethod, @NonNull KeyProtectionType keyProtectionType, @NonNull MatcherProtectionType matcherProtectionType) {
         Number[] numbers = new Number[3];
         numbers[0] = userVerificationMethod.getValue();
         numbers[1] = keyProtectionType.getValue();
@@ -46,12 +48,12 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
     }
 
     @JsonValue
-    private Number[] getValue(){
+    private @NonNull Number[] getValue(){
         return array;
     }
 
     @Override
-    public Number get(int index) {
+    public @NonNull Number get(int index) {
         return array[index];
     }
 
@@ -60,21 +62,21 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
         return array.length;
     }
 
-    public UserVerificationMethod getUserVerificationMethod(){
+    public @NonNull UserVerificationMethod getUserVerificationMethod(){
         if(array.length <= 0){
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. UserVerificationMethod is not included.");
         }
         return UserVerificationMethod.create(array[0].intValue());
     }
 
-    public KeyProtectionType getKeyProtectionType(){
+    public @NonNull KeyProtectionType getKeyProtectionType(){
         if(array.length <= 1){
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. KeyProtectionType is not included.");
         }
         return KeyProtectionType.create(array[1].intValue());
     }
 
-    public MatcherProtectionType getMatcherProtectionType(){
+    public @NonNull MatcherProtectionType getMatcherProtectionType(){
         if(array.length <= 2){
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. MatcherProtectionType is not included.");
         }
@@ -82,7 +84,7 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UvmEntry uvmEntry = (UvmEntry) o;

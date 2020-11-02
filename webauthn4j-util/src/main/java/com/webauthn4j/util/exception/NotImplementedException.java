@@ -16,20 +16,22 @@
 
 package com.webauthn4j.util.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if the execution falls into not implemented block
  */
 public class NotImplementedException extends RuntimeException {
 
-    public NotImplementedException(String message, Throwable cause) {
+    public NotImplementedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public NotImplementedException(String message) {
+    public NotImplementedException(@Nullable String message) {
         super(message);
     }
 
-    public NotImplementedException(Throwable cause) {
+    public NotImplementedException(@Nullable Throwable cause) {
         super(cause);
     }
 

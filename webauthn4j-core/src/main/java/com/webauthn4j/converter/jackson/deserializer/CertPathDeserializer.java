@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.webauthn4j.util.CertificateUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.security.cert.CertPath;
@@ -44,7 +45,7 @@ public class CertPathDeserializer extends StdDeserializer<CertPath> {
      * {@inheritDoc}
      */
     @Override
-    public CertPath deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull CertPath deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
 
         ObjectCodec oc = p.getCodec();
         ArrayNode node = oc.readTree(p);

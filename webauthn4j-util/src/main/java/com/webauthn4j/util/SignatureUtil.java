@@ -16,6 +16,8 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.Signature;
 
@@ -28,24 +30,24 @@ public class SignatureUtil {
     }
 
     @Deprecated
-    public static Signature getRS256() {
+    public static @NonNull Signature getRS256() {
         return createRS256();
     }
 
     @Deprecated
-    public static Signature getES256() {
+    public static @NonNull Signature getES256() {
         return createES256();
     }
 
-    public static Signature createRS256() {
+    public static @NonNull Signature createRS256() {
         return createSignature("SHA256withRSA");
     }
 
-    public static Signature createES256() {
+    public static @NonNull Signature createES256() {
         return createSignature("SHA256withECDSA");
     }
 
-    public static Signature createSignature(String algorithm) {
+    public static @NonNull Signature createSignature(@NonNull String algorithm) {
         AssertUtil.notNull(algorithm, "algorithm is required; it must not be null");
         try {
             return Signature.getInstance(algorithm);

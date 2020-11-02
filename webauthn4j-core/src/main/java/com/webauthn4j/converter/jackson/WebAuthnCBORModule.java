@@ -27,6 +27,7 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.jws.JWS;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -36,7 +37,7 @@ import java.security.cert.X509Certificate;
  */
 public class WebAuthnCBORModule extends SimpleModule {
 
-    public WebAuthnCBORModule(ObjectConverter objectConverter) {
+    public WebAuthnCBORModule(@NonNull ObjectConverter objectConverter) {
         super("WebAuthnCBORModule");
 
         this.addDeserializer(AAGUID.class, new AAGUIDDeserializer());

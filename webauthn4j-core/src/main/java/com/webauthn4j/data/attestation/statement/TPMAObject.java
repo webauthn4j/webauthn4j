@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -90,7 +92,7 @@ public class TPMAObject implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMAObject that = (TPMAObject) o;

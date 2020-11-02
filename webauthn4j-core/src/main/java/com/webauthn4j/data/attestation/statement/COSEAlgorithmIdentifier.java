@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.data.SignatureAlgorithm;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -77,11 +79,11 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     // COSEAlgorithmIdentifier doesn't accept jcaName and messageDigestJcaName from caller for the time being
-    public static COSEAlgorithmIdentifier create(long value) {
+    public static @NonNull COSEAlgorithmIdentifier create(long value) {
         return new COSEAlgorithmIdentifier(value);
     }
 
-    public static COSEAlgorithmIdentifier create(SignatureAlgorithm signatureAlgorithm) {
+    public static @NonNull COSEAlgorithmIdentifier create(@NonNull SignatureAlgorithm signatureAlgorithm) {
         COSEAlgorithmIdentifier coseAlgorithmIdentifier = reverseAlgorithmMap.get(signatureAlgorithm);
         if(coseAlgorithmIdentifier == null){
             throw new IllegalArgumentException(String.format("SignatureAlgorithm %s is not supported.", signatureAlgorithm.getJcaName()));
@@ -90,7 +92,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     @JsonCreator
-    private static COSEAlgorithmIdentifier deserialize(long value) {
+    private static @NonNull COSEAlgorithmIdentifier deserialize(long value) {
         return create(value);
     }
 
@@ -100,7 +102,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     @JsonIgnore
-    public COSEKeyType getKeyType(){
+    public @NonNull COSEKeyType getKeyType(){
         COSEKeyType coseKeyType = keyTypeMap.get(this);
         if(coseKeyType == null){
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));
@@ -108,7 +110,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
         return coseKeyType;
     }
 
-    public SignatureAlgorithm toSignatureAlgorithm(){
+    public @NonNull SignatureAlgorithm toSignatureAlgorithm(){
         SignatureAlgorithm signatureAlgorithm = algorithmMap.get(this);
         if(signatureAlgorithm == null){
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));
@@ -117,7 +119,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         COSEAlgorithmIdentifier that = (COSEAlgorithmIdentifier) o;

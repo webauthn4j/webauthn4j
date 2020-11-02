@@ -19,6 +19,7 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Instant;
 
@@ -27,9 +28,9 @@ import java.time.Instant;
  */
 public interface CertPathTrustworthinessValidator {
 
-    void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement, Instant timestamp);
+    void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp);
 
-    default void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement){
+    default void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement){
         validate(aaguid, attestationStatement, Instant.now());
     }
 }

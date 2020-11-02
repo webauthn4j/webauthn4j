@@ -17,6 +17,7 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -47,7 +48,7 @@ public class CertificateUtil {
     private CertificateUtil() {
     }
 
-    public static CertPathValidator createCertPathValidator() {
+    public static @NonNull CertPathValidator createCertPathValidator() {
         try {
             return CertPathValidator.getInstance("PKIX");
         } catch (NoSuchAlgorithmException e) {
@@ -55,7 +56,7 @@ public class CertificateUtil {
         }
     }
 
-    public static PKIXParameters createPKIXParameters(Set<TrustAnchor> trustAnchors) {
+    public static @NonNull PKIXParameters createPKIXParameters(@NonNull Set<TrustAnchor> trustAnchors) {
         AssertUtil.notEmpty(trustAnchors, "trustAnchors is required; it must not be empty");
         try {
             return new PKIXParameters(trustAnchors);
@@ -64,7 +65,7 @@ public class CertificateUtil {
         }
     }
 
-    public static KeyStore createKeyStore() {
+    public static @NonNull KeyStore createKeyStore() {
         try {
             return KeyStore.getInstance(KeyStore.getDefaultType());
         } catch (KeyStoreException e) {
@@ -72,11 +73,11 @@ public class CertificateUtil {
         }
     }
 
-    public static <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(List<C> certificates) {
+    public static @NonNull <C extends X509Certificate> Set<TrustAnchor> generateTrustAnchors(@NonNull List<C> certificates) {
         return certificates.stream().map(certificate -> new TrustAnchor(certificate, null)).collect(Collectors.toSet());
     }
 
-    public static <C extends Certificate> CertPath generateCertPath(List<C> certificates) {
+    public static @NonNull <C extends Certificate> CertPath generateCertPath(@NonNull List<C> certificates) {
         try {
             return certificateFactory.generateCertPath(certificates);
         } catch (CertificateException e) {
@@ -84,11 +85,11 @@ public class CertificateUtil {
         }
     }
 
-    public static X509Certificate generateX509Certificate(byte[] bytes) {
+    public static @NonNull X509Certificate generateX509Certificate(@NonNull byte[] bytes) {
         return generateX509Certificate(new ByteArrayInputStream(bytes));
     }
 
-    public static X509Certificate generateX509Certificate(InputStream inputStream) {
+    public static @NonNull X509Certificate generateX509Certificate(@NonNull InputStream inputStream) {
         try {
             return (X509Certificate) certificateFactory.generateCertificate(inputStream);
         } catch (CertificateException e) {

@@ -21,6 +21,7 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.*;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientInputs}
@@ -34,7 +35,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Constructors
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputsConverter(ObjectConverter objectConverter) {
+    public AuthenticationExtensionsClientInputsConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -42,16 +43,16 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientInput> AuthenticationExtensionsClientInputs<T> convert(String value) {
-        if (value == null) {
+    public <T extends ExtensionClientInput> @NonNull AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
+        if (value == null) { //TODO: revisit
             return null;
         }
         return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {});
     }
 
 
-    public <T extends ExtensionClientInput> String convertToString(AuthenticationExtensionsClientInputs<T> value) {
-        if (value == null) {
+    public <T extends ExtensionClientInput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientInputs<T> value) {
+        if (value == null) { //TODO: revisit
             return null;
         }
         return jsonConverter.writeValueAsString(value);

@@ -19,6 +19,8 @@ package com.webauthn4j.data.extension.authenticator;
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<UvmEntries>
         implements RegistrationExtensionAuthenticatorOutput, AuthenticationExtensionAuthenticatorOutput{
@@ -26,16 +28,16 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
     public static final String ID = "uvm";
     public static final String KEY_UVM = "uvm";
 
-    public UserVerificationMethodExtensionAuthenticatorOutput(UvmEntries value) {
+    public UserVerificationMethodExtensionAuthenticatorOutput(@Nullable UvmEntries value) {
         super(value);
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return ID;
     }
 
-    public UvmEntries getUvm() {
+    public @Nullable UvmEntries getUvm() {
         return getValue(KEY_UVM);
     }
 

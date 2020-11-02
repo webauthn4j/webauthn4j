@@ -17,6 +17,7 @@
 package com.webauthn4j.data.client;
 
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,15 +31,15 @@ import java.util.Objects;
  */
 public class TokenBinding implements Serializable {
 
-    private TokenBindingStatus status;
-    private String id;
+    private @Nullable TokenBindingStatus status;
+    private @Nullable String id;
 
-    public TokenBinding(TokenBindingStatus status, String id) {
+    public TokenBinding(@Nullable TokenBindingStatus status, @Nullable String id) {
         this.status = status;
         this.id = id;
     }
 
-    public TokenBinding(TokenBindingStatus status, byte[] id) {
+    public TokenBinding(@Nullable TokenBindingStatus status, @Nullable byte[] id) {
         this.status = status;
         if (id == null) {
             this.id = null;
@@ -50,11 +51,11 @@ public class TokenBinding implements Serializable {
     public TokenBinding() {
     }
 
-    public TokenBindingStatus getStatus() {
+    public @Nullable TokenBindingStatus getStatus() {
         return status;
     }
 
-    public String getId() {
+    public @Nullable String getId() {
         return id;
     }
 

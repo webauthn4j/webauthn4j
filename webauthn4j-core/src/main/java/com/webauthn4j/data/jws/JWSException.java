@@ -18,7 +18,7 @@ package com.webauthn4j.data.jws;
 
 import com.webauthn4j.util.exception.WebAuthnException;
 
-public class JWSException extends WebAuthnException {
+public class JWSException extends WebAuthnException { //TODO: revisit
     public JWSException(String message, Throwable cause) {
         super(message, cause);
     }

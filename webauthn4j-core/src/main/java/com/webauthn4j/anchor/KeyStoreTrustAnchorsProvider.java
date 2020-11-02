@@ -18,6 +18,7 @@ package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.KeyStore;
 import java.security.cert.TrustAnchor;
@@ -41,7 +42,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
      * {@inheritDoc}
      */
     @Override
-    public Map<AAGUID, Set<TrustAnchor>> provide() {
+    public @NonNull Map<AAGUID, Set<TrustAnchor>> provide() {
         return loadTrustAnchors();
     }
 
@@ -50,7 +51,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
      *
      * @return keyStore object
      */
-    public KeyStore getKeyStore() {
+    public @NonNull KeyStore getKeyStore() {
         return keyStore;
     }
 
@@ -59,7 +60,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
      *
      * @param keyStore keyStore object
      */
-    public void setKeyStore(KeyStore keyStore) {
+    public void setKeyStore(@NonNull KeyStore keyStore) {
         this.keyStore = keyStore;
     }
 
@@ -67,7 +68,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
         AssertUtil.notNull(keyStore, "keyStore must not be null");
     }
 
-    private Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+    private @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         KeyStore keyStoreObject = getKeyStore();
         try {

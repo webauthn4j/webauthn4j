@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,14 +42,14 @@ public class CborConverter implements Serializable {
 
     private final ObjectMapper cborMapper;
 
-    CborConverter(ObjectMapper cborMapper) {
+    CborConverter(@NonNull ObjectMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.cborMapper = cborMapper;
     }
 
-    public <T> T readValue(byte[] src, Class<T> valueType) {
+    public @NonNull <T> T readValue(@NonNull byte[] src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -57,7 +59,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(InputStream src, Class<T> valueType) {
+    public @NonNull <T> T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -67,7 +69,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(byte[] src, TypeReference<T> valueTypeRef) {
+    public @NonNull <T> T readValue(@NonNull byte[] src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -77,7 +79,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public <T> T readValue(InputStream src, TypeReference<T> valueTypeRef) {
+    public @NonNull <T> T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -87,7 +89,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public JsonNode readTree(byte[] bytes) {
+    public @NonNull JsonNode readTree(@NonNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -97,7 +99,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public byte[] writeValueAsBytes(Object value) {
+    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {

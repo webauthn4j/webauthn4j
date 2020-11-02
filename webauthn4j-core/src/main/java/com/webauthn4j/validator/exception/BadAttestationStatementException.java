@@ -17,20 +17,22 @@
 package com.webauthn4j.validator.exception;
 
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad attestation statement is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadAttestationStatementException extends ValidationException {
-    public BadAttestationStatementException(String message, Throwable cause) {
+    public BadAttestationStatementException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadAttestationStatementException(String message) {
+    public BadAttestationStatementException(@Nullable String message) {
         super(message);
     }
 
-    public BadAttestationStatementException(Throwable cause) {
+    public BadAttestationStatementException(@Nullable Throwable cause) {
         super(cause);
     }
 }

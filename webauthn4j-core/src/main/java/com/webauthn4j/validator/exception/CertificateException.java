@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if certificate problems happen
  */
 @SuppressWarnings("squid:S110")
 public class CertificateException extends ValidationException {
-    public CertificateException(String message, Throwable cause) {
+    public CertificateException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public CertificateException(String message) {
+    public CertificateException(@Nullable String message) {
         super(message);
     }
 
-    public CertificateException(Throwable cause) {
+    public CertificateException(@Nullable Throwable cause) {
         super(cause);
     }
 }

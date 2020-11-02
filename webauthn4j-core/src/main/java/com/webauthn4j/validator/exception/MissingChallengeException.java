@@ -17,20 +17,22 @@
 package com.webauthn4j.validator.exception;
 
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if challenge doesn't exist in the session
  */
 @SuppressWarnings("squid:S110")
 public class MissingChallengeException extends ValidationException {
-    public MissingChallengeException(String message, Throwable cause) {
+    public MissingChallengeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public MissingChallengeException(String message) {
+    public MissingChallengeException(@Nullable String message) {
         super(message);
     }
 
-    public MissingChallengeException(Throwable cause) {
+    public MissingChallengeException(@Nullable Throwable cause) {
         super(cause);
     }
 

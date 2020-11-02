@@ -19,6 +19,7 @@ package com.webauthn4j.anchor;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -43,9 +44,10 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     // ========================================================================================================
 
     public CertFileTrustAnchorsProvider() {
+        certificates = Collections.emptyList();
     }
 
-    public CertFileTrustAnchorsProvider(List<Path> certificates) {
+    public CertFileTrustAnchorsProvider(@NonNull List<Path> certificates) {
         this.certificates = certificates;
     }
 
@@ -59,13 +61,13 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
 
 
     @Override
-    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+    protected @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         Set<TrustAnchor> trustAnchors = certificates.stream().map(this::loadTrustAnchor).collect(Collectors.toSet());
         return Collections.singletonMap(AAGUID.NULL, trustAnchors);
     }
 
-    private TrustAnchor loadTrustAnchor(Path certificate) {
+    private @NonNull TrustAnchor loadTrustAnchor(@NonNull Path certificate) {
         try {
             X509Certificate x509Certificate = CertificateUtil.generateX509Certificate(Files.newInputStream(certificate));
             return new TrustAnchor(x509Certificate, null);
@@ -74,11 +76,11 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
         }
     }
 
-    public List<Path> getCertificates() {
+    public @NonNull List<Path> getCertificates() {
         return certificates;
     }
 
-    public void setCertificates(List<Path> certificates) {
+    public void setCertificates(@NonNull List<Path> certificates) {
         this.certificates = certificates;
     }
 }

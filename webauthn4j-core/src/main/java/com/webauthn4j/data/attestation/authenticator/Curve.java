@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.spec.ECParameterSpec;
 
@@ -33,13 +34,13 @@ public enum Curve {
     private final int size;
     private final ECParameterSpec parameterSpec;
 
-    Curve(int value, int size, ECParameterSpec parameterSpec) {
+    Curve(int value, int size, @NonNull ECParameterSpec parameterSpec) {
         this.value = value;
         this.size = size;
         this.parameterSpec = parameterSpec;
     }
 
-    public static Curve create(int value) {
+    public static @NonNull Curve create(int value) {
         switch (value) {
             case 1:
                 return SECP256R1;
@@ -52,8 +53,9 @@ public enum Curve {
         }
     }
 
+    @SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
     @JsonCreator
-    static Curve deserialize(int value) throws InvalidFormatException {
+    static @NonNull Curve deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -70,7 +72,7 @@ public enum Curve {
         return size;
     }
 
-    public ECParameterSpec getECParameterSpec() {
+    public @NonNull ECParameterSpec getECParameterSpec() {
         return parameterSpec;
     }
 }

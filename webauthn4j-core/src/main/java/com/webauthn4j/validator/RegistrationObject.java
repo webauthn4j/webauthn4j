@@ -25,6 +25,8 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -48,14 +50,14 @@ public class RegistrationObject extends CoreRegistrationObject {
     // ========================================================================================================
     @SuppressWarnings("squid:S00107")
     public RegistrationObject(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-            Set<AuthenticatorTransport> transports,
-            ServerProperty serverProperty,
-            Instant timestamp) {
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull CollectedClientData collectedClientData,
+            @NonNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable Set<AuthenticatorTransport> transports,
+            @NonNull ServerProperty serverProperty,
+            @NonNull Instant timestamp) {
 
         super(attestationObject, attestationObjectBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, timestamp);
         this.collectedClientData = collectedClientData;
@@ -65,13 +67,13 @@ public class RegistrationObject extends CoreRegistrationObject {
     }
 
     public RegistrationObject(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-            Set<AuthenticatorTransport> transports,
-            ServerProperty serverProperty) {
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull CollectedClientData collectedClientData,
+            @NonNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable Set<AuthenticatorTransport> transports,
+            @NonNull ServerProperty serverProperty) {
 
         this(attestationObject, attestationObjectBytes, collectedClientData, collectedClientDataBytes, clientExtensions, transports, serverProperty, Instant.now());
     }
@@ -79,29 +81,29 @@ public class RegistrationObject extends CoreRegistrationObject {
     // ~ Methods
     // ========================================================================================================
 
-    public CollectedClientData getCollectedClientData() {
+    public @NonNull CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getCollectedClientDataBytes() {
+    public @NonNull byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
-    public Set<AuthenticatorTransport> getTransports() {
+    public @Nullable Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
     @Override
-    public ServerProperty getServerProperty() {
+    public @NonNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

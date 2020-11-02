@@ -17,6 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.util.Map;
@@ -32,5 +33,5 @@ public interface TrustAnchorsProvider {
      *
      * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
-    Map<AAGUID, Set<TrustAnchor>> provide();
+    @NonNull Map<AAGUID, Set<TrustAnchor>> provide();
 }

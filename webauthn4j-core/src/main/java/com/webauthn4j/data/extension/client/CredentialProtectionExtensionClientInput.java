@@ -2,6 +2,8 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
@@ -15,30 +17,31 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     private final Boolean enforceCredentialProtectionPolicy;
 
     public CredentialProtectionExtensionClientInput(
-            CredentialProtectionPolicy credentialProtectionPolicy, Boolean enforceCredentialProtectionPolicy) {
+            @Nullable CredentialProtectionPolicy credentialProtectionPolicy,
+            @Nullable Boolean enforceCredentialProtectionPolicy) {
         this.credentialProtectionPolicy = credentialProtectionPolicy;
         this.enforceCredentialProtectionPolicy = enforceCredentialProtectionPolicy;
     }
 
-    public CredentialProtectionExtensionClientInput(CredentialProtectionPolicy credentialProtectionPolicy) {
+    public CredentialProtectionExtensionClientInput(@Nullable CredentialProtectionPolicy credentialProtectionPolicy) {
         this(credentialProtectionPolicy, null);
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return ID;
     }
 
-    public CredentialProtectionPolicy getCredentialProtectionPolicy(){
+    public @Nullable CredentialProtectionPolicy getCredentialProtectionPolicy(){
         return credentialProtectionPolicy;
     }
 
-    public Boolean getEnforceCredentialProtectionPolicy(){
+    public @Nullable Boolean getEnforceCredentialProtectionPolicy(){
         return enforceCredentialProtectionPolicy;
     }
 
     @Override
-    public Serializable getValue(String key) {
+    public @Nullable Serializable getValue(@NonNull String key) {
         switch (key) {
             case KEY_CREDENTIAL_PROTECTION_POLICY:
                 return credentialProtectionPolicy;

@@ -31,6 +31,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 
@@ -47,11 +48,11 @@ public class CoreRegistrationDataValidator {
     private final AttestationValidator attestationValidator;
 
     public CoreRegistrationDataValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            List<CustomCoreRegistrationValidator> customRegistrationValidators,
-            ObjectConverter objectConverter) {
+            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+            @NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
@@ -69,7 +70,7 @@ public class CoreRegistrationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
-    public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
+    public void validate(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
         BeanAssertUtil.validate(registrationParameters);
@@ -133,7 +134,7 @@ public class CoreRegistrationDataValidator {
         }
     }
 
-    protected CoreRegistrationObject createCoreRegistrationObject(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
+    protected CoreRegistrationObject createCoreRegistrationObject(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
         return new CoreRegistrationObject(
                 registrationData.getAttestationObject(),
                 registrationData.getAttestationObjectBytes(),
@@ -142,14 +143,14 @@ public class CoreRegistrationDataValidator {
             );
     }
 
-    void validateAuthenticatorDataField(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorDataField(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         // attestedCredentialData must be present on registration
         if (authenticatorData.getAttestedCredentialData() == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null on registration");
         }
     }
 
-    void validateUVUPFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
+    void validateUVUPFlags(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData, boolean isUserVerificationRequired, boolean isUserPresenceRequired) {
         //spec| Step10
         //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
@@ -163,7 +164,7 @@ public class CoreRegistrationDataValidator {
         }
     }
 
-    public List<CustomCoreRegistrationValidator> getCustomRegistrationValidators() {
+    public @NonNull List<CustomCoreRegistrationValidator> getCustomRegistrationValidators() {
         return customRegistrationValidators;
     }
 

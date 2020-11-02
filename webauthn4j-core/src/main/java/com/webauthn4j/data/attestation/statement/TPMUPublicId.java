@@ -16,9 +16,11 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.Serializable;
 
 public interface TPMUPublicId extends Serializable {
 
-    byte[] getBytes();
+    @NonNull byte[] getBytes();
 }

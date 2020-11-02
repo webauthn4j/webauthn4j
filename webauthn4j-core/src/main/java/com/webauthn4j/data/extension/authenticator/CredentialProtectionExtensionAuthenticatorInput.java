@@ -2,6 +2,8 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
@@ -12,21 +14,21 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
 
     private final CredentialProtectionPolicy credProtect;
 
-    public CredentialProtectionExtensionAuthenticatorInput(CredentialProtectionPolicy credProtect) {
+    public CredentialProtectionExtensionAuthenticatorInput(@Nullable CredentialProtectionPolicy credProtect) {
         this.credProtect = credProtect;
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return ID;
     }
 
-    public CredentialProtectionPolicy getCredProtect(){
+    public @Nullable CredentialProtectionPolicy getCredProtect(){
         return credProtect;
     }
 
     @Override
-    public Serializable getValue(String key) {
+    public @Nullable Serializable getValue(@NonNull String key) {
         if (KEY_CRED_PROTECT.equals(key)) {
             return credProtect;
         }

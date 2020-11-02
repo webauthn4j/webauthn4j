@@ -19,6 +19,8 @@ package com.webauthn4j.data.client.challenge;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -32,12 +34,12 @@ public class DefaultChallenge implements Challenge {
      *
      * @param value the value of the challenge
      */
-    public DefaultChallenge(byte[] value) {
+    public DefaultChallenge(@NonNull byte[] value) {
         AssertUtil.notNull(value, "value cannot be null");
         this.value = value;
     }
 
-    public DefaultChallenge(String base64urlString) {
+    public DefaultChallenge(@NonNull String base64urlString) {
         AssertUtil.notNull(base64urlString, "base64urlString cannot be null");
         this.value = Base64UrlUtil.decode(base64urlString);
     }
@@ -50,12 +52,12 @@ public class DefaultChallenge implements Challenge {
     }
 
     @Override
-    public byte[] getValue() {
+    public @NonNull byte[] getValue() {
         return ArrayUtil.clone(value);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DefaultChallenge that = (DefaultChallenge) o;

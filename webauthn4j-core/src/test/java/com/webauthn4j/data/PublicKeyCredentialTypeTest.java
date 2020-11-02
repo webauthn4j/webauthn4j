@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -44,9 +45,13 @@ class PublicKeyCredentialTypeTest {
 
     @Test
     void create_test() {
-        PublicKeyCredentialType value = PublicKeyCredentialType.create(null);
-        //noinspection ConstantConditions
-        assertThat(value).isNull();
+        PublicKeyCredentialType value = PublicKeyCredentialType.create("public-key");
+        assertThat(value).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
+    }
+
+    @Test
+    void create_null_test(){
+        assertThatThrownBy(() -> PublicKeyCredentialType.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

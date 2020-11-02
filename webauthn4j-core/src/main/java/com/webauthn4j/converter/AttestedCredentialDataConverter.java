@@ -24,6 +24,7 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -40,12 +41,12 @@ public class AttestedCredentialDataConverter implements Serializable {
 
     private final CborConverter cborConverter;
 
-    public AttestedCredentialDataConverter(ObjectConverter objectConverter) {
+    public AttestedCredentialDataConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
     }
 
-    public byte[] convert(AttestedCredentialData attestationData) {
+    public @NonNull byte[] convert(@NonNull AttestedCredentialData attestationData) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byteArrayOutputStream.write(attestationData.getAaguid().getBytes());
@@ -58,7 +59,7 @@ public class AttestedCredentialDataConverter implements Serializable {
         }
     }
 
-    public AttestedCredentialData convert(ByteBuffer attestedCredentialData) {
+    public @NonNull AttestedCredentialData convert(@NonNull ByteBuffer attestedCredentialData) {
         byte[] aaguidBytes = new byte[AAGUID_LENGTH];
         attestedCredentialData.get(aaguidBytes, 0, AAGUID_LENGTH);
         AAGUID aaguid = new AAGUID(aaguidBytes);
@@ -76,7 +77,7 @@ public class AttestedCredentialDataConverter implements Serializable {
         return result;
     }
 
-    public AttestedCredentialData convert(byte[] attestedCredentialData) {
+    public @NonNull AttestedCredentialData convert(@NonNull byte[] attestedCredentialData) {
         return convert(ByteBuffer.wrap(attestedCredentialData));
     }
 
@@ -86,17 +87,17 @@ public class AttestedCredentialDataConverter implements Serializable {
      * @param attestedCredentialData the attestedCredentialData byte array
      * @return the extracted credentialId byte array
      */
-    public byte[] extractCredentialId(byte[] attestedCredentialData) {
+    public @NonNull byte[] extractCredentialId(@NonNull byte[] attestedCredentialData) {
         byte[] lengthBytes = Arrays.copyOfRange(attestedCredentialData, L_INDEX, CREDENTIAL_ID_INDEX);
         int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
-    COSEKeyEnvelope convertToCredentialPublicKey(InputStream inputStream) {
+    @NonNull COSEKeyEnvelope convertToCredentialPublicKey(@NonNull InputStream inputStream) {
         return cborConverter.readValue(inputStream, COSEKeyEnvelope.class);
     }
 
-    byte[] convert(COSEKey coseKey) {
+    @NonNull byte[] convert(@NonNull COSEKey coseKey) {
         return cborConverter.writeValueAsBytes(coseKey);
     }
 

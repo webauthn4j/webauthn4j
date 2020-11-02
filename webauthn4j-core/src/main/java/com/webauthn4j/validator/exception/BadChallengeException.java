@@ -16,21 +16,23 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad challenge is detected
  */
 @SuppressWarnings("squid:S110")
 public class BadChallengeException extends ValidationException {
 
-    public BadChallengeException(String message, Throwable cause) {
+    public BadChallengeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadChallengeException(String message) {
+    public BadChallengeException(@Nullable String message) {
         super(message);
     }
 
-    public BadChallengeException(Throwable cause) {
+    public BadChallengeException(@Nullable Throwable cause) {
         super(cause);
     }
 }

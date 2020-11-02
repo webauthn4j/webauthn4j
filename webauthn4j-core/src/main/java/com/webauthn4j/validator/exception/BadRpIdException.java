@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad rpId is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadRpIdException extends ValidationException {
-    public BadRpIdException(String message, Throwable cause) {
+    public BadRpIdException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadRpIdException(String message) {
+    public BadRpIdException(@Nullable String message) {
         super(message);
     }
 
-    public BadRpIdException(Throwable cause) {
+    public BadRpIdException(@Nullable Throwable cause) {
         super(cause);
     }
 }

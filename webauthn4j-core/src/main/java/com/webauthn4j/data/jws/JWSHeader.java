@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -31,24 +32,24 @@ public class JWSHeader implements Serializable {
 
     @JsonCreator
     public JWSHeader(
-            @JsonProperty("alg") JWAIdentifier alg,
-            @JsonProperty("x5c") AttestationCertificatePath x5c) {
+            @Nullable @JsonProperty("alg") JWAIdentifier alg,
+            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c) {
         this.alg = alg;
         this.x5c = x5c;
     }
 
     @JsonGetter
-    public JWAIdentifier getAlg() {
+    public @Nullable JWAIdentifier getAlg() {
         return alg;
     }
 
     @JsonGetter
-    public AttestationCertificatePath getX5c() {
+    public @Nullable AttestationCertificatePath getX5c() {
         return x5c;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JWSHeader jwsHeader = (JWSHeader) o;

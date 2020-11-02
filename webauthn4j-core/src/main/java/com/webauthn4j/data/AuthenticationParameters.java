@@ -18,20 +18,21 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class AuthenticationParameters extends CoreAuthenticationParameters {
 
     public AuthenticationParameters(
-            ServerProperty serverProperty,
-            Authenticator authenticator,
+            @NonNull ServerProperty serverProperty,
+            @NonNull Authenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
     }
 
     public AuthenticationParameters(
-            ServerProperty serverProperty,
-            Authenticator authenticator,
+            @NonNull ServerProperty serverProperty,
+            @NonNull Authenticator authenticator,
             boolean userVerificationRequired) {
         super(
                 serverProperty,
@@ -42,12 +43,12 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     }
 
     @Override
-    public ServerProperty getServerProperty() {
+    public @NonNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
     @Override
-    public Authenticator getAuthenticator() {
+    public @NonNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
     }
 

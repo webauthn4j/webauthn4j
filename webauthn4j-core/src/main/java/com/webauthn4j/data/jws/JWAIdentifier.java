@@ -19,6 +19,8 @@ package com.webauthn4j.data.jws;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
 
@@ -34,16 +36,13 @@ public enum JWAIdentifier {
     private final String name;
     private final String jcaName;
 
-    JWAIdentifier(String name, String jcaName) {
+    JWAIdentifier(@NonNull String name, @NonNull String jcaName) {
         this.name = name;
         this.jcaName = jcaName;
     }
 
-    public static JWAIdentifier create(String value) {
-        if (value == null) {
-            return null;
-        }
-
+    public static @NonNull JWAIdentifier create(@NonNull String value) {
+        AssertUtil.notNull(value, "value must not be null.");
         return Arrays.stream(values())
                 .filter(it -> it.name.equals(value))
                 .findFirst()
@@ -51,7 +50,7 @@ public enum JWAIdentifier {
     }
 
     @JsonCreator
-    private static JWAIdentifier deserialize(String value) throws InvalidFormatException {
+    private static @NonNull JWAIdentifier deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -60,11 +59,11 @@ public enum JWAIdentifier {
     }
 
     @JsonValue
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
-    public String getJcaName() {
+    public @NonNull String getJcaName() {
         return jcaName;
     }
 }

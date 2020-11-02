@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 
@@ -35,11 +36,11 @@ abstract class AuthenticatorResponse implements Serializable {
     // ~ Constructor
     // ========================================================================================================
 
-    AuthenticatorResponse(byte[] clientDataJSON) {
+    AuthenticatorResponse(@NonNull byte[] clientDataJSON) {
         this.clientDataJSON = clientDataJSON;
     }
 
-    public byte[] getClientDataJSON() {
+    public @NonNull byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
 }

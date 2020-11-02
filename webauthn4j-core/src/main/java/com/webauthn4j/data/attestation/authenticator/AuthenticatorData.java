@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.authenticator;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -47,9 +48,9 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
     private final AttestedCredentialData attestedCredentialData;
     private final AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
 
-    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             AttestedCredentialData attestedCredentialData,
-                             AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
+    public AuthenticatorData(@Nullable byte[] rpIdHash, byte flags, long counter,
+                             @Nullable AttestedCredentialData attestedCredentialData,
+                             @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -57,8 +58,8 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         this.extensions = extensions;
     }
 
-    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             AttestedCredentialData attestedCredentialData) {
+    public AuthenticatorData(@Nullable byte[] rpIdHash, byte flags, long counter,
+                             @Nullable AttestedCredentialData attestedCredentialData) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -66,8 +67,8 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         this.extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
     }
 
-    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter,
-                             AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
+    public AuthenticatorData(@Nullable byte[] rpIdHash, byte flags, long counter,
+                             @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -75,7 +76,7 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         this.extensions = extensions;
     }
 
-    public AuthenticatorData(byte[] rpIdHash, byte flags, long counter) {
+    public AuthenticatorData(@Nullable byte[] rpIdHash, byte flags, long counter) {
         this.rpIdHash = rpIdHash;
         this.flags = flags;
         this.signCount = counter;
@@ -101,7 +102,7 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         return (flags & BIT_ED) != 0;
     }
 
-    public byte[] getRpIdHash() {
+    public @Nullable byte[] getRpIdHash() {
         return ArrayUtil.clone(rpIdHash);
     }
 
@@ -129,16 +130,16 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         return signCount;
     }
 
-    public AttestedCredentialData getAttestedCredentialData() {
+    public @Nullable AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
-    public AuthenticationExtensionsAuthenticatorOutputs<T> getExtensions() {
+    public @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> getExtensions() {
         return extensions;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorData<?> that = (AuthenticatorData<?>) o;

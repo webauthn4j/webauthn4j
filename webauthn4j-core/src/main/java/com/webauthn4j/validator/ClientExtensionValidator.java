@@ -18,6 +18,7 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Validates clientExtensionOutputs
@@ -28,7 +29,7 @@ class ClientExtensionValidator {
     // ========================================================================================================
 
     @SuppressWarnings("unused")
-    public <C extends ExtensionClientOutput> void validate(AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs) {
+    public <C extends ExtensionClientOutput> void validate(@NonNull AuthenticationExtensionsClientOutputs<C> authenticationExtensionsClientOutputs) {
         //nop for now
     }
 

@@ -19,6 +19,8 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 
@@ -32,21 +34,21 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
     @JsonCreator
     public AndroidSafetyNetAttestationStatement(
-            @JsonProperty("ver") String ver,
-            @JsonProperty("response") JWS<Response> response) {
+            @Nullable @JsonProperty("ver") String ver,
+            @Nullable @JsonProperty("response") JWS<Response> response) {
         this.ver = ver;
         this.response = response;
     }
 
     @JsonIgnore
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
     @JsonIgnore
     @Override
-    public AttestationCertificatePath getX5c() {
+    public @Nullable AttestationCertificatePath getX5c() {
         return getResponse().getHeader().getX5c();
     }
 
@@ -61,17 +63,17 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     }
 
     @JsonGetter("ver")
-    public String getVer() {
+    public @Nullable String getVer() {
         return ver;
     }
 
     @JsonGetter("response")
-    public JWS<Response> getResponse() {
+    public @Nullable JWS<Response> getResponse() {
         return response;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AndroidSafetyNetAttestationStatement that = (AndroidSafetyNetAttestationStatement) o;

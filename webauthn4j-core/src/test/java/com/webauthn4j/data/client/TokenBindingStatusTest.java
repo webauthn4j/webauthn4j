@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -48,8 +49,8 @@ class TokenBindingStatusTest {
     }
 
     @Test
-    void create_with_null_value_test() throws IllegalArgumentException {
-        assertThat(TokenBindingStatus.create(null)).isNull();
+    void create_with_null_value_test() {
+        assertThatThrownBy(()->TokenBindingStatus.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

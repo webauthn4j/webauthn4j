@@ -16,7 +16,9 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public interface CertificateBaseAttestationStatement extends AttestationStatement {
 
-    AttestationCertificatePath getX5c();
+    @NonNull AttestationCertificatePath getX5c();
 }

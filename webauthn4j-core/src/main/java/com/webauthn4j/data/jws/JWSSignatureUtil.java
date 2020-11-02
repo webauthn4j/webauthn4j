@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.jws;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 class JWSSignatureUtil {
 
     private static final String INVALID_ECDSA_SIGNATURE_FORMAT = "Invalid ECDSA signature format";
@@ -55,7 +57,7 @@ class JWSSignatureUtil {
      * @author Vladimir Dzhuvinov
      * @author Aleksei Doroganov
      */
-    public static byte[] convertJwsSignatureToDerSignature(byte[] jwsSignature) {
+    public static @NonNull byte[] convertJwsSignatureToDerSignature(@NonNull byte[] jwsSignature) {
 
         // Adapted from org.apache.xml.security.algorithms.implementations.SignatureECDSA
 
@@ -127,7 +129,7 @@ class JWSSignatureUtil {
      * @param derSignature signature in DER format
      * @return signature in JWS format
      */
-    public static byte[] convertDerSignatureToJwsSignature(byte[] derSignature) {
+    public static @NonNull byte[] convertDerSignatureToJwsSignature(@NonNull byte[] derSignature) {
         if (derSignature.length < 8 || derSignature[0] != 48) {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }

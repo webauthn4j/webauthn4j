@@ -16,21 +16,23 @@
 
 package com.webauthn4j.anchor;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.security.KeyStore;
 
 /**
  * Thrown if it fails to load certificate from {@link KeyStore}
  */
 public class KeyStoreException extends RuntimeException {
-    public KeyStoreException(String msg, Throwable cause) {
+    public KeyStoreException(@Nullable String msg, @Nullable Throwable cause) {
         super(msg, cause);
     }
 
-    public KeyStoreException(String msg) {
+    public KeyStoreException(@Nullable String msg) {
         super(msg);
     }
 
-    public KeyStoreException(Throwable cause) {
+    public KeyStoreException(@Nullable Throwable cause) {
         super(cause);
     }
 

@@ -34,6 +34,7 @@ import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collection;
 
@@ -51,13 +52,13 @@ class BeanAssertUtil {
     // ========================================================================================================
 
 
-    public static void validate(RegistrationData registrationData) {
+    public static void validate(@Nullable RegistrationData registrationData) {
         validate((CoreRegistrationData) registrationData);
         validateAuthenticationExtensionsClientOutputs(registrationData.getClientExtensions());
         validate(registrationData.getCollectedClientData());
     }
 
-    public static void validate(CoreRegistrationData registrationData) {
+    public static void validate(@Nullable CoreRegistrationData registrationData) {
         if (registrationData == null) {
             throw new ConstraintViolationException("registrationData must not be null");
         }
@@ -73,19 +74,19 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(RegistrationParameters registrationParameters) {
+    public static void validate(@Nullable RegistrationParameters registrationParameters) {
         validate((CoreRegistrationParameters) registrationParameters);
         validate(registrationParameters.getServerProperty());
     }
 
-    public static void validate(CoreRegistrationParameters registrationParameters) {
+    public static void validate(@Nullable CoreRegistrationParameters registrationParameters) {
         if (registrationParameters == null) {
             throw new ConstraintViolationException("registrationParameters must not be null");
         }
         validate(registrationParameters.getServerProperty());
     }
 
-    public static void validate(AuthenticationData authenticationData) {
+    public static void validate(@Nullable AuthenticationData authenticationData) {
         validate((CoreAuthenticationData) authenticationData);
         if (authenticationData.getCollectedClientData() == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
@@ -97,7 +98,7 @@ class BeanAssertUtil {
         validateAuthenticationExtensionsClientOutputs(authenticationData.getClientExtensions());
     }
 
-    public static void validate(CoreAuthenticationData authenticationData) {
+    public static void validate(@Nullable CoreAuthenticationData authenticationData) {
         if (authenticationData == null) {
             throw new ConstraintViolationException("authenticationData must not be null");
         }
@@ -114,12 +115,12 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(AuthenticationParameters authenticationParameters) {
+    public static void validate(@Nullable AuthenticationParameters authenticationParameters) {
         validate((CoreAuthenticationParameters) authenticationParameters);
         validate(authenticationParameters.getServerProperty());
     }
 
-    public static void validate(CoreAuthenticationParameters authenticationParameters) {
+    public static void validate(@Nullable CoreAuthenticationParameters authenticationParameters) {
         if (authenticationParameters == null) {
             throw new ConstraintViolationException("authenticationParameters must not be null");
         }
@@ -129,7 +130,7 @@ class BeanAssertUtil {
         validate(authenticationParameters.getServerProperty());
     }
 
-    public static void validate(CollectedClientData collectedClientData) {
+    public static void validate(@Nullable CollectedClientData collectedClientData) {
         if (collectedClientData == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
@@ -145,7 +146,7 @@ class BeanAssertUtil {
         validate(collectedClientData.getTokenBinding());
     }
 
-    public static void validate(TokenBinding tokenBinding) {
+    public static void validate(@Nullable TokenBinding tokenBinding) {
         if (tokenBinding == null) {
             return;
         }
@@ -154,7 +155,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(AttestationObject attestationObject) {
+    public static void validate(@Nullable AttestationObject attestationObject) {
         if (attestationObject == null) {
             throw new ConstraintViolationException("attestationObject must not be null");
         }
@@ -162,7 +163,7 @@ class BeanAssertUtil {
         validate(attestationObject.getAuthenticatorData());
     }
 
-    public static <T extends ExtensionAuthenticatorOutput> void validate(AuthenticatorData<T> authenticatorData) {
+    public static <T extends ExtensionAuthenticatorOutput> void validate(@Nullable AuthenticatorData<T> authenticatorData) {
         if (authenticatorData == null) {
             throw new ConstraintViolationException("authenticatorData must not be null");
         }
@@ -189,7 +190,7 @@ class BeanAssertUtil {
         validateAuthenticatorExtensionsOutputs(extensions);
     }
 
-    public static void validate(AttestedCredentialData attestedCredentialData) {
+    public static void validate(@Nullable AttestedCredentialData attestedCredentialData) {
         if (attestedCredentialData == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null");
         }
@@ -209,7 +210,7 @@ class BeanAssertUtil {
 
     @SuppressWarnings("unused")
     public static <T extends ExtensionClientOutput> void validateAuthenticationExtensionsClientOutputs(
-            AuthenticationExtensionsClientOutputs<T> authenticationExtensionsClientOutputs) {
+            @Nullable AuthenticationExtensionsClientOutputs<T> authenticationExtensionsClientOutputs) {
         if (authenticationExtensionsClientOutputs == null) {
             return;
         }
@@ -220,7 +221,7 @@ class BeanAssertUtil {
 
     @SuppressWarnings("unused")
     public static <T extends ExtensionAuthenticatorOutput> void validateAuthenticatorExtensionsOutputs(
-            AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs) {
+            @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> authenticationExtensionsAuthenticatorOutputs) {
         if (authenticationExtensionsAuthenticatorOutputs == null) {
             return;
         }
@@ -229,7 +230,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(ServerProperty serverProperty) {
+    public static void validate(@Nullable ServerProperty serverProperty) {
         validate((CoreServerProperty) serverProperty);
         final Collection<Origin> origins = serverProperty.getOrigins();
         if (origins == null || origins.isEmpty()) {
@@ -237,7 +238,7 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(CoreServerProperty serverProperty) {
+    public static void validate(@Nullable CoreServerProperty serverProperty) {
         if (serverProperty == null) {
             throw new ConstraintViolationException("serverProperty must not be null");
         }
@@ -249,14 +250,14 @@ class BeanAssertUtil {
         }
     }
 
-    public static void validate(AttestationStatement attestationStatement) {
+    public static void validate(@Nullable AttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new ConstraintViolationException("attestationStatement must not be null");
         }
         attestationStatement.validate();
     }
 
-    public static void validate(COSEKey coseKey) {
+    public static void validate(@Nullable COSEKey coseKey) {
         if (coseKey == null) {
             throw new ConstraintViolationException("coseKey must not be null");
         }

@@ -24,6 +24,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -41,7 +42,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
     private boolean teeEnforcedOnly = true;
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
@@ -71,7 +72,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         return AttestationType.BASIC;
     }
 
-    private void validateSignature(CoreRegistrationObject registrationObject) {
+    private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {
         AndroidKeyAttestationStatement attestationStatement = (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -93,13 +94,13 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
     }
 
-    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
+    private @NonNull byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 
-    private PublicKey getPublicKey(AndroidKeyAttestationStatement attestationStatement) {
+    private @NonNull PublicKey getPublicKey(@NonNull AndroidKeyAttestationStatement attestationStatement) {
         Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }
