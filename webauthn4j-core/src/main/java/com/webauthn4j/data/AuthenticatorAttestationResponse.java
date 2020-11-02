@@ -18,6 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,14 +43,14 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
     // ~ Constructor
     // ========================================================================================================
 
-    public AuthenticatorAttestationResponse(byte[] clientDataJSON,
-                                            byte[] attestationObject) {
+    public AuthenticatorAttestationResponse(@NonNull byte[] clientDataJSON,
+                                            @NonNull byte[] attestationObject) {
         this(clientDataJSON, attestationObject, Collections.emptySet());
     }
 
-    public AuthenticatorAttestationResponse(byte[] clientDataJSON,
-                                            byte[] attestationObject,
-                                            Set<AuthenticatorTransport> transports) {
+    public AuthenticatorAttestationResponse(@NonNull byte[] clientDataJSON,
+                                            @NonNull byte[] attestationObject,
+                                            @Nullable Set<AuthenticatorTransport> transports) {
         super(clientDataJSON);
 
 
@@ -62,7 +64,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      *
      * @return byte array representation of {@link com.webauthn4j.data.attestation.AttestationObject}
      */
-    public byte[] getAttestationObject() {
+    public @NonNull byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
 
@@ -73,7 +75,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      *
      * @return list of {@link AuthenticatorTransport}
      */
-    public Set<AuthenticatorTransport> getTransports() {
+    public @NonNull Set<AuthenticatorTransport> getTransports() {
         return this.transports;
     }
 
@@ -81,7 +83,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorAttestationResponse that = (AuthenticatorAttestationResponse) o;

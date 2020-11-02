@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public enum TPMIAlgHash {
 
@@ -35,7 +36,7 @@ public enum TPMIAlgHash {
         this.value = value;
     }
 
-    public static TPMIAlgHash create(int value) {
+    public @NonNull static TPMIAlgHash create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
         } else if (value == TPM_ALG_SHA1.value) {
@@ -55,7 +56,7 @@ public enum TPMIAlgHash {
 
     @JsonCreator
     @SuppressWarnings("squid:S3776")
-    private static TPMIAlgHash deserialize(int value) throws InvalidFormatException {
+    private static @NonNull TPMIAlgHash deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

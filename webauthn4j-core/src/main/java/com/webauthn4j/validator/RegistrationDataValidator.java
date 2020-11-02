@@ -37,6 +37,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,11 @@ public class RegistrationDataValidator {
     private final AttestationValidator attestationValidator;
 
     public RegistrationDataValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-            List<CustomRegistrationValidator> customRegistrationValidators,
-            ObjectConverter objectConverter) {
+            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+            @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
+            @NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
@@ -78,7 +79,7 @@ public class RegistrationDataValidator {
     }
 
     @SuppressWarnings("deprecation")
-    public void validate(RegistrationData registrationData, RegistrationParameters registrationParameters) {
+    public void validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
         BeanAssertUtil.validate(registrationParameters);

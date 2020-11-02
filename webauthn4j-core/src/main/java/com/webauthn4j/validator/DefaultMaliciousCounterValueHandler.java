@@ -17,6 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.validator.exception.MaliciousCounterValueException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Default implementation of {@link MaliciousCounterValueHandler} that throws {@link MaliciousCounterValueException}
@@ -28,7 +29,7 @@ class DefaultMaliciousCounterValueHandler implements MaliciousCounterValueHandle
     // ========================================================================================================
 
     @Override
-    public void maliciousCounterValueDetected(AuthenticationObject authenticationObject) {
+    public void maliciousCounterValueDetected(@NonNull AuthenticationObject authenticationObject) {
         throw new MaliciousCounterValueException("Malicious counter value is detected. Cloned authenticators exist in parallel.");
     }
 }

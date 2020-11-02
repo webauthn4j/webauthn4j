@@ -51,13 +51,11 @@ class AttestationObjectConverterTest {
         );
     }
 
-    @Test
-    void convert_null_test() {
-        assertAll(
-                () -> assertThat(target.convert((String) null)).isNull(),
-                () -> assertThat(target.convert((byte[]) null)).isNull()
-        );
-    }
+//    @Test
+//    void convert_null_test() {
+//        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
+//        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
+//    }
 
     @Test
     void convert_AttestationObject_with_AndroidKeyAttestation_test() {

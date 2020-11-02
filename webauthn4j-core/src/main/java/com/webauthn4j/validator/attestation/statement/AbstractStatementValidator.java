@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -47,13 +48,13 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     }
 
     @Override
-    public boolean supports(CoreRegistrationObject registrationObject) {
+    public boolean supports(@NonNull CoreRegistrationObject registrationObject) {
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
     }
 
-    protected String getJcaName(COSEAlgorithmIdentifier alg) {
+    protected String getJcaName(@NonNull COSEAlgorithmIdentifier alg) {
         String jcaName;
         try {
             SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();

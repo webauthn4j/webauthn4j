@@ -18,6 +18,8 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,13 +42,13 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Constructor
     // ========================================================================================================
 
-    public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
+    public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @NonNull Challenge challenge, @Nullable byte[] tokenBindingId) {
         this(origin != null ? Collections.singleton(origin) : Collections.emptySet(),
                 rpId,
                 challenge, tokenBindingId);
     }
 
-    public ServerProperty(Collection<Origin> origins, String rpId, Challenge challenge, byte[] tokenBindingId) {
+    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @NonNull Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         this.origins = (origins != null && !origins.isEmpty()) ? Collections.unmodifiableSet(new HashSet<>(origins)) : Collections.emptySet();
         this.tokenBindingId = tokenBindingId;
@@ -62,7 +64,7 @@ public class ServerProperty extends CoreServerProperty {
      * @return the {@link Origin}
      */
     @Deprecated
-    public Origin getOrigin() {
+    public @Nullable Origin getOrigin() {
         final int originsSize = origins.size();
         switch (originsSize){
             case 0:
@@ -74,7 +76,7 @@ public class ServerProperty extends CoreServerProperty {
         }
     }
 
-    public Set<Origin> getOrigins(){
+    public @NonNull Set<Origin> getOrigins(){
         return this.origins;
     }
 
@@ -83,12 +85,12 @@ public class ServerProperty extends CoreServerProperty {
      *
      * @return the tokenBindingId
      */
-    public byte[] getTokenBindingId() {
+    public @Nullable byte[] getTokenBindingId() {
         return tokenBindingId;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

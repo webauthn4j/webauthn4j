@@ -17,6 +17,8 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 
@@ -39,27 +41,31 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
     // ~ Constructor
     // ========================================================================================================
 
-    public AuthenticatorAssertionResponse(byte[] clientDataJSON, byte[] authenticatorData, byte[] signature, byte[] userHandle) {
+    public AuthenticatorAssertionResponse(
+            @NonNull byte[] clientDataJSON,
+            @NonNull byte[] authenticatorData,
+            @NonNull byte[] signature,
+            @NonNull byte[] userHandle) {
         super(clientDataJSON);
         this.authenticatorData = authenticatorData;
         this.signature = signature;
         this.userHandle = userHandle;
     }
 
-    public byte[] getAuthenticatorData() {
+    public @NonNull byte[] getAuthenticatorData() {
         return ArrayUtil.clone(authenticatorData);
     }
 
-    public byte[] getSignature() {
+    public @NonNull byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 
-    public byte[] getUserHandle() {
+    public @NonNull byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorAssertionResponse that = (AuthenticatorAssertionResponse) o;

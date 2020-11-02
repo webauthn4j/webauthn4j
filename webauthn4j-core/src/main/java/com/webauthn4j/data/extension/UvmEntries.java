@@ -18,6 +18,8 @@ package com.webauthn4j.data.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,7 +30,7 @@ public class UvmEntries extends AbstractList<UvmEntry> implements Serializable {
     private final UvmEntry[] array;
 
     @JsonCreator
-    public UvmEntries(List<UvmEntry> value) {
+    public UvmEntries(@NonNull List<UvmEntry> value) {
         AssertUtil.notNull(value, "value must not be null");
         this.size = value.size();
         this.array = value.toArray(new UvmEntry[this.size]);
@@ -39,7 +41,7 @@ public class UvmEntries extends AbstractList<UvmEntry> implements Serializable {
     }
 
     @Override
-    public UvmEntry get(int index) {
+    public @NonNull UvmEntry get(int index) {
         return array[index];
     }
 
@@ -49,7 +51,7 @@ public class UvmEntries extends AbstractList<UvmEntry> implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

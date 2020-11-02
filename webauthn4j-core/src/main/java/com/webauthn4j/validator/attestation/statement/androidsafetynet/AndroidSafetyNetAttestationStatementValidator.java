@@ -25,6 +25,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -43,7 +44,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     private int backwardThreshold = 60;
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -99,7 +100,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(String nonce, byte[] authenticatorData, byte[] clientDataHash) {
+    private void validateNonce(@NonNull String nonce, @NonNull byte[] authenticatorData, @NonNull byte[] clientDataHash) {
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
@@ -124,11 +125,11 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         this.backwardThreshold = backwardThreshold;
     }
 
-    public GooglePlayServiceVersionValidator getVersionValidator() {
+    public @NonNull GooglePlayServiceVersionValidator getVersionValidator() {
         return versionValidator;
     }
 
-    public void setVersionValidator(GooglePlayServiceVersionValidator versionValidator) {
+    public void setVersionValidator(@NonNull GooglePlayServiceVersionValidator versionValidator) {
         this.versionValidator = versionValidator;
     }
 
@@ -137,7 +138,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         private static final int MINIMAL_VERSION = 0;
 
         @Override
-        public void validate(String version) {
+        public void validate(@NonNull String version) {
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < MINIMAL_VERSION) {

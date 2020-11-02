@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
 
@@ -29,11 +30,11 @@ public enum TPMGenerated {
 
     private final byte[] value;
 
-    TPMGenerated(byte[] value) {
+    TPMGenerated(@NonNull byte[] value) {
         this.value = value;
     }
 
-    public static TPMGenerated create(byte[] value) {
+    public static @NonNull TPMGenerated create(@NonNull byte[] value) {
         if (Arrays.equals(value, TPM_GENERATED_VALUE.value)) {
             return TPM_GENERATED_VALUE;
         } else {
@@ -42,7 +43,7 @@ public enum TPMGenerated {
     }
 
     @JsonCreator
-    private static TPMGenerated deserialize(byte[] value) throws InvalidFormatException {
+    private static @NonNull TPMGenerated deserialize(@NonNull byte[] value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -51,7 +52,7 @@ public enum TPMGenerated {
     }
 
     @JsonValue
-    public byte[] getValue() {
+    public @NonNull byte[] getValue() {
         return ArrayUtil.clone(value);
     }
 }

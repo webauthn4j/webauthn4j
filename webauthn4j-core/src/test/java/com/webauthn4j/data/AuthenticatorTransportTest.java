@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
@@ -32,12 +33,17 @@ class AuthenticatorTransportTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(AuthenticatorTransport.create(null)).isNull(),
                 () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
                 () -> assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC),
                 () -> assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE),
                 () -> assertThat(AuthenticatorTransport.create("internal")).isEqualTo(AuthenticatorTransport.INTERNAL)
         );
+    }
+
+    @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
+    @Test
+    void create_null_test(){
+        assertThatThrownBy(()-> AuthenticatorTransport.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

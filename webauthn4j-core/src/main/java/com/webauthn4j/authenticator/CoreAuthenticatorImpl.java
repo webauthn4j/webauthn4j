@@ -22,6 +22,8 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.ConstUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 
@@ -36,17 +38,17 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     private long counter;
     private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
-    public CoreAuthenticatorImpl(AttestedCredentialData attestedCredentialData,
-                                 AttestationStatement attestationStatement,
+    public CoreAuthenticatorImpl(@NonNull AttestedCredentialData attestedCredentialData,
+                                 @NonNull AttestationStatement attestationStatement,
                                  long counter,
-                                 AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+                                 @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
         setCounter(counter);
         this.authenticatorExtensions = authenticatorExtensions;
     }
 
-    public static CoreAuthenticatorImpl createFromCoreRegistrationData(CoreRegistrationData coreRegistrationData){
+    public static @NonNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NonNull CoreRegistrationData coreRegistrationData){
         return new CoreAuthenticatorImpl(
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 coreRegistrationData.getAttestationObject().getAttestationStatement(),
@@ -55,20 +57,20 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     @Override
-    public AttestedCredentialData getAttestedCredentialData() {
+    public @NonNull AttestedCredentialData getAttestedCredentialData() {
         return attestedCredentialData;
     }
 
-    public void setAttestedCredentialData(AttestedCredentialData attestedCredentialData) {
+    public void setAttestedCredentialData(@NonNull AttestedCredentialData attestedCredentialData) {
         this.attestedCredentialData = attestedCredentialData;
     }
 
     @Override
-    public AttestationStatement getAttestationStatement() {
+    public @Nullable AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 
-    public void setAttestationStatement(AttestationStatement attestationStatement) {
+    public void setAttestationStatement(@Nullable AttestationStatement attestationStatement) {
         this.attestationStatement = attestationStatement;
     }
 
@@ -89,11 +91,11 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     @Override
-    public AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+    public @NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return authenticatorExtensions;
     }
 
-    public void setAuthenticatorExtensions(AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+    public void setAuthenticatorExtensions(@NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 

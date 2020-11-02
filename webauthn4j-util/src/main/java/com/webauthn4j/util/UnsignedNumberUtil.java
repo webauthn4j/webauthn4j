@@ -16,6 +16,8 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 
@@ -38,35 +40,35 @@ public class UnsignedNumberUtil {
         return (short) Byte.toUnsignedInt(value);
     }
 
-    public static int getUnsignedShort(ByteBuffer byteBuffer) {
+    public static int getUnsignedShort(@NonNull ByteBuffer byteBuffer) {
         return Short.toUnsignedInt(byteBuffer.getShort());
     }
 
-    public static int getUnsignedShort(byte[] bytes) {
+    public static int getUnsignedShort(@NonNull byte[] bytes) {
         if (bytes.length != 2) {
             throw new IllegalArgumentException("byte array must be 2 bytes");
         }
         return getUnsignedShort(ByteBuffer.wrap(bytes));
     }
 
-    public static long getUnsignedInt(ByteBuffer byteBuffer) {
+    public static long getUnsignedInt(@NonNull ByteBuffer byteBuffer) {
         return Integer.toUnsignedLong(byteBuffer.getInt());
     }
 
-    public static long getUnsignedInt(byte[] bytes) {
+    public static long getUnsignedInt(@NonNull byte[] bytes) {
         if (bytes.length != 4) {
             throw new IllegalArgumentException("byte array must be 4 bytes");
         }
         return getUnsignedInt(ByteBuffer.wrap(bytes));
     }
 
-    public static BigInteger getUnsignedLong(ByteBuffer byteBuffer) {
+    public static @NonNull BigInteger getUnsignedLong(@NonNull ByteBuffer byteBuffer) {
         byte[] buffer = new byte[8];
         byteBuffer.get(buffer);
         return new BigInteger(1, buffer);
     }
 
-    public static byte[] toBytes(int ushortValue) {
+    public static @NonNull byte[] toBytes(int ushortValue) {
         if (!isWithinUnsignedShort(ushortValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
@@ -76,7 +78,7 @@ public class UnsignedNumberUtil {
         return bytes;
     }
 
-    public static byte[] toBytes(long uintValue) {
+    public static @NonNull byte[] toBytes(long uintValue) {
         if (!isWithinUnsignedInt(uintValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
@@ -88,7 +90,7 @@ public class UnsignedNumberUtil {
         return bytes;
     }
 
-    public static byte[] toBytes(BigInteger unsignedLongValue) {
+    public static @NonNull byte[] toBytes(@NonNull BigInteger unsignedLongValue) {
         if (!isWithinUnsignedLong(unsignedLongValue)) {
             throw new IllegalArgumentException(OUT_OF_RANGE_ERROR);
         }
@@ -111,7 +113,7 @@ public class UnsignedNumberUtil {
         return value <= UNSIGNED_INT_MAX && value >= 0;
     }
 
-    public static boolean isWithinUnsignedLong(BigInteger value) {
+    public static boolean isWithinUnsignedLong(@NonNull BigInteger value) {
         return value.bitLength() <= 64 && value.compareTo(BigInteger.valueOf(0)) >= 0;
     }
 

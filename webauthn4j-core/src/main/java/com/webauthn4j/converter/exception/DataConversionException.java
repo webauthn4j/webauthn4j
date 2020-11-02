@@ -22,7 +22,7 @@ public class DataConversionException extends WebAuthnException {
 
     public DataConversionException(String message, Throwable cause) {
         super(message, cause);
-    }
+    } //TODO:revisit
 
     public DataConversionException(String message) {
         super(message);

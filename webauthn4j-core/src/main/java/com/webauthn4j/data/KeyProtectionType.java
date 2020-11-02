@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * The supported key protection type(s).
@@ -41,7 +42,7 @@ public enum KeyProtectionType {
     }
 
     @SuppressWarnings("Duplicates")
-    public static KeyProtectionType create(int value) {
+    public static @NonNull KeyProtectionType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
@@ -62,7 +63,7 @@ public enum KeyProtectionType {
     }
 
     @JsonCreator
-    private static KeyProtectionType deserialize(int value) throws InvalidFormatException {
+    private static @NonNull KeyProtectionType deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

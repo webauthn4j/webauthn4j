@@ -19,6 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 
@@ -41,10 +43,8 @@ public enum PublicKeyCredentialType implements Serializable {
         this.value = value;
     }
 
-    public static PublicKeyCredentialType create(String value) {
-        if (value == null) {
-            return null;
-        }
+    public static @NonNull PublicKeyCredentialType create(@NonNull String value) {
+        AssertUtil.notNull(value, "value must not be null.");
         if ("public-key".equals(value)) {
             return PUBLIC_KEY;
         } else {
@@ -53,7 +53,7 @@ public enum PublicKeyCredentialType implements Serializable {
     }
 
     @JsonCreator
-    private static PublicKeyCredentialType deserialize(String value) throws InvalidFormatException {
+    private static @NonNull PublicKeyCredentialType deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -62,7 +62,7 @@ public enum PublicKeyCredentialType implements Serializable {
     }
 
     @JsonValue
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 }

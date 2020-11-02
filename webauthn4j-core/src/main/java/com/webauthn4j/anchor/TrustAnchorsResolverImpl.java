@@ -18,6 +18,7 @@ package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.util.Collections;
@@ -38,7 +39,7 @@ public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
     // ~ Constructor
     // ========================================================================================================
 
-    public TrustAnchorsResolverImpl(TrustAnchorsProvider trustAnchorsProvider) {
+    public TrustAnchorsResolverImpl(@NonNull TrustAnchorsProvider trustAnchorsProvider) {
         AssertUtil.notNull(trustAnchorsProvider, "trustAnchorsProvider must not be null");
         this.trustAnchorsProvider = trustAnchorsProvider;
     }
@@ -50,7 +51,7 @@ public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
      * {@inheritDoc}
      */
     @Override
-    public Set<TrustAnchor> resolve(AAGUID aaguid) {
+    public @NonNull Set<TrustAnchor> resolve(@NonNull AAGUID aaguid) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
 
         Map<AAGUID, Set<TrustAnchor>> trustAnchors = trustAnchorsProvider.provide();

@@ -36,6 +36,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPat
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,12 +50,12 @@ public class WebAuthnManager {
     private final WebAuthnRegistrationManager webAuthnRegistrationManager;
     private final WebAuthnAuthenticationManager webAuthnAuthenticationManager;
 
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           List<CustomRegistrationValidator> customRegistrationValidators,
-                           List<CustomAuthenticationValidator> customAuthenticationValidators,
-                           ObjectConverter objectConverter) {
+    public WebAuthnManager(@NonNull List<AttestationStatementValidator> attestationStatementValidators,
+                           @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
+                           @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+                           @NonNull ObjectConverter objectConverter) {
 
         this.webAuthnRegistrationManager = new WebAuthnRegistrationManager(
                 attestationStatementValidators,
@@ -67,11 +68,11 @@ public class WebAuthnManager {
                 objectConverter);
     }
 
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           List<CustomRegistrationValidator> customRegistrationValidators,
-                           List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public WebAuthnManager(@NonNull List<AttestationStatementValidator> attestationStatementValidators,
+                           @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
+                           @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
@@ -82,10 +83,10 @@ public class WebAuthnManager {
         );
     }
 
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
-                           ObjectConverter objectConverter) {
+    public WebAuthnManager(@NonNull List<AttestationStatementValidator> attestationStatementValidators,
+                           @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
+                           @NonNull ObjectConverter objectConverter) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
@@ -96,9 +97,9 @@ public class WebAuthnManager {
         );
     }
 
-    public WebAuthnManager(List<AttestationStatementValidator> attestationStatementValidators,
-                           CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
+    public WebAuthnManager(@NonNull List<AttestationStatementValidator> attestationStatementValidators,
+                           @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                           @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator) {
         this(
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
@@ -116,7 +117,7 @@ public class WebAuthnManager {
      *
      * @return configured {@link WebAuthnManager}
      */
-    public static WebAuthnManager createNonStrictWebAuthnManager() {
+    public static @NonNull WebAuthnManager createNonStrictWebAuthnManager() {
         ObjectConverter objectConverter = new ObjectConverter();
         return createNonStrictWebAuthnManager(objectConverter);
     }
@@ -127,7 +128,7 @@ public class WebAuthnManager {
      * @param objectConverter ObjectConverter
      * @return configured {@link WebAuthnManager}
      */
-    public static WebAuthnManager createNonStrictWebAuthnManager(ObjectConverter objectConverter) {
+    public static @NonNull WebAuthnManager createNonStrictWebAuthnManager(@NonNull ObjectConverter objectConverter) {
         return new WebAuthnManager(
                 Arrays.asList(
                         new NoneAttestationStatementValidator(),
@@ -146,41 +147,41 @@ public class WebAuthnManager {
 
 
     @SuppressWarnings("squid:S1130")
-    public RegistrationData parse(RegistrationRequest registrationRequest) throws DataConversionException {
+    public @NonNull RegistrationData parse(@NonNull RegistrationRequest registrationRequest) throws DataConversionException {
         return this.webAuthnRegistrationManager.parse(registrationRequest);
     }
 
     @SuppressWarnings("squid:S1130")
-    public RegistrationData validate(RegistrationRequest registrationRequest, RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
+    public @NonNull RegistrationData validate(@NonNull RegistrationRequest registrationRequest, @NonNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
         return this.webAuthnRegistrationManager.validate(registrationRequest, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public RegistrationData validate(RegistrationData registrationData, RegistrationParameters registrationParameters) throws ValidationException {
+    public @NonNull RegistrationData validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) throws ValidationException {
         return this.webAuthnRegistrationManager.validate(registrationData, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData parse(AuthenticationRequest authenticationRequest) throws DataConversionException {
+    public @NonNull AuthenticationData parse(@NonNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         return this.webAuthnAuthenticationManager.parse(authenticationRequest);
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData validate(AuthenticationRequest authenticationRequest, AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+    public @NonNull AuthenticationData validate(@NonNull AuthenticationRequest authenticationRequest, @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         return this.webAuthnAuthenticationManager.validate(authenticationRequest, authenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) throws ValidationException {
+    public @NonNull AuthenticationData validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
         return this.webAuthnAuthenticationManager.validate(authenticationData, authenticationParameters);
     }
 
 
-    public RegistrationDataValidator getRegistrationDataValidator() {
+    public @NonNull RegistrationDataValidator getRegistrationDataValidator() {
         return this.webAuthnRegistrationManager.getRegistrationDataValidator();
     }
 
-    public AuthenticationDataValidator getAuthenticationDataValidator() {
+    public @NonNull AuthenticationDataValidator getAuthenticationDataValidator() {
         return this.webAuthnAuthenticationManager.getAuthenticationDataValidator();
     }
 }

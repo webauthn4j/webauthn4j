@@ -21,6 +21,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.charset.StandardCharsets;
 
@@ -36,7 +37,7 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public CollectedClientDataConverter(ObjectConverter objectConverter) {
+    public CollectedClientDataConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -51,7 +52,7 @@ public class CollectedClientDataConverter {
      * @param base64UrlString the source byte array to convert
      * @return the converted object
      */
-    public CollectedClientData convert(String base64UrlString) {
+    public @NonNull CollectedClientData convert(@NonNull String base64UrlString) {
         if (base64UrlString == null) {
             return null;
         }
@@ -65,7 +66,7 @@ public class CollectedClientDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public CollectedClientData convert(byte[] source) {
+    public @NonNull CollectedClientData convert(@NonNull byte[] source) {
         if (source == null) {
             return null;
         }
@@ -79,7 +80,8 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public byte[] convertToBytes(CollectedClientData source) {
+    public @NonNull byte[] convertToBytes(@NonNull CollectedClientData source) {
+        AssertUtil.notNull(source, "source must not be null");
         return jsonConverter.writeValueAsBytes(source);
     }
 
@@ -89,7 +91,7 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public String convertToBase64UrlString(CollectedClientData source) {
+    public @NonNull String convertToBase64UrlString(@NonNull CollectedClientData source) {
         byte[] bytes = convertToBytes(source);
         return Base64UrlUtil.encodeToString(bytes);
     }

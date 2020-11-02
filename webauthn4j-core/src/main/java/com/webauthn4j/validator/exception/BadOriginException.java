@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad origin is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadOriginException extends ValidationException {
-    public BadOriginException(String message, Throwable cause) {
+    public BadOriginException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadOriginException(String message) {
+    public BadOriginException(@Nullable String message) {
         super(message);
     }
 
-    public BadOriginException(Throwable cause) {
+    public BadOriginException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.client.challenge;
+package com.webauthn4j.converter.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.junit.jupiter.api.Test;
 
-import java.io.Serializable;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public interface Challenge extends Serializable {
+class CborConverterTest {
 
-    /**
-     * Gets the challenge value. Cannot be null.
-     *
-     * @return the challenge value
-     */
-    @NonNull byte[] getValue();
+    private CborConverter cborConverter = new ObjectConverter().getCborConverter();
+
+    @Test
+    void writeValueAsBytes_null_test(){
+        byte[] bytes = cborConverter.writeValueAsBytes(null);
+        assertThat(bytes).isNotNull();
+    }
 
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.converter.AttestedCredentialDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -29,13 +30,13 @@ public class AttestedCredentialDataDeserializer extends StdDeserializer<Attested
 
     private final AttestedCredentialDataConverter attestedCredentialDataConverter;
 
-    public AttestedCredentialDataDeserializer(ObjectConverter objectConverter) {
+    public AttestedCredentialDataDeserializer(@NonNull ObjectConverter objectConverter) {
         super(AttestedCredentialData.class);
         attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
     }
 
     @Override
-    public AttestedCredentialData deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull AttestedCredentialData deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
         byte[] value = p.getBinaryValue();
         return attestedCredentialDataConverter.convert(value);
     }

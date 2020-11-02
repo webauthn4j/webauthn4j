@@ -20,6 +20,8 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
@@ -33,14 +35,14 @@ public interface CoreAuthenticator extends Serializable {
      *
      * @return the {@link AttestedCredentialData}
      */
-    AttestedCredentialData getAttestedCredentialData();
+    @NonNull AttestedCredentialData getAttestedCredentialData();
 
     /**
      * Returns the {@link AttestationStatement}
      *
      * @return the {@link AttestationStatement}
      */
-    default AttestationStatement getAttestationStatement() {
+    default @Nullable AttestationStatement getAttestationStatement() {
         return null;
     }
 
@@ -63,7 +65,7 @@ public interface CoreAuthenticator extends Serializable {
      *
      * @return the authenticator extensions
      */
-    default AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
+    default @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return null;
     }
 

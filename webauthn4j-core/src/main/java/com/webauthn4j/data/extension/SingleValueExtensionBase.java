@@ -16,6 +16,9 @@
 
 package com.webauthn4j.data.extension;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -23,7 +26,7 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
 
     private final T value;
 
-    protected SingleValueExtensionBase(T value) {
+    protected SingleValueExtensionBase(@Nullable T value) {
         this.value = value;
     }
 
@@ -31,21 +34,21 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
         this.value = null;
     }
 
-    public T getValue(String key) {
+    public T getValue(@NonNull String key) {
         if(!key.equals(getIdentifier())){
             throw new IllegalArgumentException(String.format("%s is the only valid key.", getIdentifier()));
         }
         return value;
     }
 
-    protected abstract String getIdentifier();
+    protected abstract @NonNull String getIdentifier();
 
-    public T getValue() {
+    public @Nullable T getValue() {
         return value;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SingleValueExtensionBase<?> that = (SingleValueExtensionBase<?>) o;

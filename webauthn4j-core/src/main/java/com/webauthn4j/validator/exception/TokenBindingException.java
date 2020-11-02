@@ -16,21 +16,23 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if tokenBinding error happen
  */
 @SuppressWarnings("squid:S110")
 public class TokenBindingException extends ValidationException {
 
-    public TokenBindingException(String message, Throwable cause) {
+    public TokenBindingException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public TokenBindingException(String message) {
+    public TokenBindingException(@Nullable String message) {
         super(message);
     }
 
-    public TokenBindingException(Throwable cause) {
+    public TokenBindingException(@Nullable Throwable cause) {
         super(cause);
     }
 }

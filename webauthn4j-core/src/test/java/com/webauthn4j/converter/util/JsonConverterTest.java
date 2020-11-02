@@ -83,6 +83,11 @@ class JsonConverterTest {
     }
 
     @Test
+    void writeValueAsString_null_test(){
+        assertThat(jsonConverter.writeValueAsString(null)).isEqualTo("null");
+    }
+
+    @Test
     void writeValueAsBytes_with_invalid_dto_test() {
         ConverterTestInvalidDto converterTestInvalidDto = new ConverterTestInvalidDto();
         converterTestInvalidDto.setValue(new Object());

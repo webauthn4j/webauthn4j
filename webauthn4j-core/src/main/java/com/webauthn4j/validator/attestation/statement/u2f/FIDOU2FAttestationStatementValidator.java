@@ -28,6 +28,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -46,7 +47,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
      * @return AttestationType.BASIC
      */
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -58,7 +59,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         return AttestationType.BASIC;
     }
 
-    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement) {
+    void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().size() != 1) {
             throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
         }
@@ -66,7 +67,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         validatePublicKey(publicKey);
     }
 
-    void validatePublicKey(PublicKey publicKey) {
+    void validatePublicKey(@NonNull PublicKey publicKey) {
         if (!publicKey.getAlgorithm().equals("EC")) {
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
         }
@@ -75,7 +76,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private void validateSignature(CoreRegistrationObject registrationObject) {
+    private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
@@ -95,7 +96,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
+    private byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
 
         String rpId = registrationObject.getServerProperty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
@@ -120,14 +121,14 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         return byteBuffer.array();
     }
 
-    private byte[] getPublicKeyBytes(EC2COSEKey ec2CoseKey) {
+    private byte[] getPublicKeyBytes(@NonNull EC2COSEKey ec2CoseKey) {
         byte[] x = ec2CoseKey.getX();
         byte[] y = ec2CoseKey.getY();
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
 
-    private PublicKey getPublicKey(FIDOU2FAttestationStatement attestationStatement) {
+    private PublicKey getPublicKey(@NonNull FIDOU2FAttestationStatement attestationStatement) {
         Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }

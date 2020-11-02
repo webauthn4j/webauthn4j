@@ -18,13 +18,16 @@ package com.webauthn4j.converter;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.AuthenticatorTransport;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AuthenticatorTransportConverter {
 
-    public AuthenticatorTransport convert(String value) {
+    public @NonNull AuthenticatorTransport convert(@NonNull  String value) {
+        AssertUtil.notNull(value, "value must not be null");
         try {
             return AuthenticatorTransport.create(value);
         } catch (IllegalArgumentException e) {
@@ -33,20 +36,21 @@ public class AuthenticatorTransportConverter {
     }
 
     @SuppressWarnings("squid:S1168")
-    public Set<AuthenticatorTransport> convertSet(Set<String> values) {
-        if (values == null) {
+    public @NonNull Set<AuthenticatorTransport> convertSet(@NonNull Set<String> values) {
+        if (values == null) { //TODO: revisit
             return null;
         }
         return values.stream().map(this::convert).collect(Collectors.toSet());
     }
 
-    public String convertToString(AuthenticatorTransport value) {
+    public @NonNull String convertToString(@NonNull AuthenticatorTransport value) {
+        AssertUtil.notNull(value, "value must not be null");
         return value.getValue();
     }
 
     @SuppressWarnings("squid:S1168")
-    public Set<String> convertSetToStringSet(Set<AuthenticatorTransport> values) {
-        if (values == null) {
+    public @NonNull Set<String> convertSetToStringSet(@NonNull Set<AuthenticatorTransport> values) {
+        if (values == null) { //TODO: revisit
             return null;
         }
         return values.stream().map(this::convertToString).collect(Collectors.toSet());

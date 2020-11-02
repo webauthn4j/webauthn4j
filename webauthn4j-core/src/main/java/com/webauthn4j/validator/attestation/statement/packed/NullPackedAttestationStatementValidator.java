@@ -20,13 +20,14 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Null validator for {@link PackedAttestationStatement}
  */
 public class NullPackedAttestationStatementValidator extends AbstractStatementValidator<PackedAttestationStatement> {
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

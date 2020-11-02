@@ -20,13 +20,14 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Null validator for {@link FIDOU2FAttestationStatement}
  */
 public class NullFIDOU2FAttestationStatementValidator extends AbstractStatementValidator<FIDOU2FAttestationStatement> {
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         return AttestationType.NONE;
     }
 }

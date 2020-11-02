@@ -17,20 +17,21 @@
 package com.webauthn4j.validator.exception;
 
 import com.webauthn4j.util.exception.WebAuthnException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * An abstract exception for validation violation
  */
 public abstract class ValidationException extends WebAuthnException {
-    protected ValidationException(String message, Throwable cause) {
+    protected ValidationException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    protected ValidationException(String message) {
+    protected ValidationException(@Nullable String message) {
         super(message);
     }
 
-    protected ValidationException(Throwable cause) {
+    protected ValidationException(@Nullable Throwable cause) {
         super(cause);
     }
 }

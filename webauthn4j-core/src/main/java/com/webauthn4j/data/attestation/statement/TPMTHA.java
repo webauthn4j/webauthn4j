@@ -18,6 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -29,20 +31,20 @@ public class TPMTHA implements Serializable {
     private final TPMIAlgHash hashAlg;
     private final byte[] digest;
 
-    public TPMTHA(TPMIAlgHash hashAlg, byte[] digest) {
+    public TPMTHA(@NonNull TPMIAlgHash hashAlg, @NonNull byte[] digest) {
         this.hashAlg = hashAlg;
         this.digest = digest;
     }
 
-    public TPMIAlgHash getHashAlg() {
+    public @NonNull TPMIAlgHash getHashAlg() {
         return hashAlg;
     }
 
-    public byte[] getDigest() {
+    public @NonNull byte[] getDigest() {
         return ArrayUtil.clone(digest);
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         ByteBuffer buffer = ByteBuffer.allocate(2 + digest.length);
         buffer.put(UnsignedNumberUtil.toBytes(hashAlg.getValue()));
         buffer.put(digest);
@@ -50,7 +52,7 @@ public class TPMTHA implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMTHA tpmtha = (TPMTHA) o;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -16,7 +17,7 @@ public class JacksonUtil {
     private JacksonUtil() {
     }
 
-    public static JsonNode readTree(ObjectMapper objectMapper, byte[] bytes) {
+    public static @NonNull JsonNode readTree(@NonNull ObjectMapper objectMapper, @NonNull byte[] bytes) {
         try {
             return objectMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -26,7 +27,7 @@ public class JacksonUtil {
         }
     }
 
-    public static byte[] binaryValue(JsonNode jsonNode) {
+    public static @NonNull byte[] binaryValue(@NonNull JsonNode jsonNode) {
         try {
             return jsonNode.binaryValue();
         } catch (IOException e) {

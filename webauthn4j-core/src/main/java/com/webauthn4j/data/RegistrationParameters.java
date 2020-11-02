@@ -17,19 +17,25 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.server.ServerProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class RegistrationParameters extends CoreRegistrationParameters {
 
-    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public RegistrationParameters(
+            @NonNull ServerProperty serverProperty,
+            boolean userVerificationRequired,
+            boolean userPresenceRequired) {
         super(serverProperty, userVerificationRequired, userPresenceRequired);
     }
 
-    public RegistrationParameters(ServerProperty serverProperty, boolean userVerificationRequired) {
+    public RegistrationParameters(
+            @NonNull ServerProperty serverProperty,
+            boolean userVerificationRequired) {
         super(serverProperty, userVerificationRequired);
     }
 
     @Override
-    public ServerProperty getServerProperty() {
+    public @NonNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 

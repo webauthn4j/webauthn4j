@@ -19,6 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.security.MessageDigest;
 import java.util.Objects;
@@ -32,26 +34,26 @@ public class MessageDigestAlgorithm {
 
     private final String jcaName;
 
-    private MessageDigestAlgorithm(String jcaName){
+    private MessageDigestAlgorithm(@NonNull String jcaName){
         this.jcaName = jcaName;
     }
 
     @JsonCreator
-    public static MessageDigestAlgorithm create(String jcaName){
+    public static @NonNull MessageDigestAlgorithm create(@NonNull String jcaName){
         return new MessageDigestAlgorithm(jcaName);
     }
 
     @JsonValue
-    public String getJcaName() {
+    public @NonNull String getJcaName() {
         return jcaName;
     }
 
-    public MessageDigest createMessageDigestObject() {
+    public @NonNull MessageDigest createMessageDigestObject() {
         return MessageDigestUtil.createMessageDigest(jcaName);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MessageDigestAlgorithm that = (MessageDigestAlgorithm) o;

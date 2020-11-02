@@ -23,7 +23,9 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ResidentKeyRequirementTest {
 
@@ -32,11 +34,15 @@ class ResidentKeyRequirementTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(ResidentKeyRequirement.create(null)).isNull(),
                 () -> assertThat(ResidentKeyRequirement.create("discouraged")).isEqualTo(ResidentKeyRequirement.DISCOURAGED),
                 () -> assertThat(ResidentKeyRequirement.create("preferred")).isEqualTo(ResidentKeyRequirement.PREFERRED),
                 () -> assertThat(ResidentKeyRequirement.create("required")).isEqualTo(ResidentKeyRequirement.REQUIRED)
         );
+    }
+
+    @Test
+    void create_with_null_value_test() {
+        assertThatThrownBy(()-> ResidentKeyRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

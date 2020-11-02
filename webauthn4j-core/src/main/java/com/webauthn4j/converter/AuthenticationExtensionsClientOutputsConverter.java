@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientOutputs}
@@ -35,7 +36,7 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Constructors
     // ================================================================================================
 
-    public AuthenticationExtensionsClientOutputsConverter(ObjectConverter objectConverter) {
+    public AuthenticationExtensionsClientOutputsConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -43,15 +44,15 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientOutput> AuthenticationExtensionsClientOutputs<T> convert(String value) {
-        if (value == null) {
+    public <T extends ExtensionClientOutput> @NonNull AuthenticationExtensionsClientOutputs<T> convert(@NonNull String value) {
+        if (value == null) { //TODO: revisit
             return null;
         }
         return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>(){});
     }
 
-    public <T extends ExtensionClientOutput> String convertToString(AuthenticationExtensionsClientOutputs<T> value) {
-        if (value == null) {
+    public <T extends ExtensionClientOutput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientOutputs<T> value) {
+        if (value == null) { //TODO: revisit
             return null;
         }
         return jsonConverter.writeValueAsString(value);

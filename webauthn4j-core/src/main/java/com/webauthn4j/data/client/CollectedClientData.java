@@ -17,6 +17,7 @@
 package com.webauthn4j.data.client;
 
 import com.webauthn4j.data.client.challenge.Challenge;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -34,10 +35,10 @@ public class CollectedClientData implements Serializable {
     private Origin origin;
     private TokenBinding tokenBinding;
 
-    public CollectedClientData(ClientDataType type,
-                               Challenge challenge,
-                               Origin origin,
-                               TokenBinding tokenBinding) {
+    public CollectedClientData(@Nullable ClientDataType type,
+                               @Nullable Challenge challenge,
+                               @Nullable Origin origin,
+                               @Nullable TokenBinding tokenBinding) {
         this.type = type;
         this.challenge = challenge;
         this.origin = origin;
@@ -47,24 +48,24 @@ public class CollectedClientData implements Serializable {
     public CollectedClientData() {
     }
 
-    public ClientDataType getType() {
+    public @Nullable ClientDataType getType() {
         return type;
     }
 
-    public Challenge getChallenge() {
+    public @Nullable Challenge getChallenge() {
         return challenge;
     }
 
-    public Origin getOrigin() {
+    public @Nullable Origin getOrigin() {
         return origin;
     }
 
-    public TokenBinding getTokenBinding() {
+    public @Nullable TokenBinding getTokenBinding() {
         return tokenBinding;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CollectedClientData that = (CollectedClientData) o;

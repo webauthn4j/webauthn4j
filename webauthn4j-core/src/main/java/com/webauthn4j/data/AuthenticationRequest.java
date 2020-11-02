@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -31,7 +32,13 @@ public class AuthenticationRequest implements Serializable {
     private final String clientExtensionsJSON;
     private final byte[] signature;
 
-    public AuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
+    public AuthenticationRequest(
+            @Nullable byte[] credentialId,
+            @Nullable byte[] userHandle,
+            @Nullable byte[] authenticatorData,
+            @Nullable byte[] clientDataJSON,
+            @Nullable String clientExtensionsJSON,
+            @Nullable byte[] signature) {
         this.credentialId = ArrayUtil.clone(credentialId);
         this.userHandle = ArrayUtil.clone(userHandle);
         this.authenticatorData = ArrayUtil.clone(authenticatorData);
@@ -40,44 +47,58 @@ public class AuthenticationRequest implements Serializable {
         this.signature = ArrayUtil.clone(signature);
     }
 
-    public AuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, String clientExtensionsJSON, byte[] signature) {
+    public AuthenticationRequest(
+            @Nullable byte[] credentialId,
+            @Nullable byte[] authenticatorData,
+            @Nullable byte[] clientDataJSON,
+            @Nullable String clientExtensionsJSON,
+            @Nullable byte[] signature) {
         this(credentialId, null, authenticatorData, clientDataJSON, clientExtensionsJSON, signature);
     }
 
-    public AuthenticationRequest(byte[] credentialId, byte[] userHandle, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
+    public AuthenticationRequest(
+            @Nullable byte[] credentialId,
+            @Nullable byte[] userHandle,
+            @Nullable byte[] authenticatorData,
+            @Nullable byte[] clientDataJSON,
+            @Nullable byte[] signature) {
         this(credentialId, userHandle, authenticatorData, clientDataJSON, null, signature);
     }
 
-    public AuthenticationRequest(byte[] credentialId, byte[] authenticatorData, byte[] clientDataJSON, byte[] signature) {
+    public AuthenticationRequest(
+            @Nullable byte[] credentialId,
+            @Nullable byte[] authenticatorData,
+            @Nullable byte[] clientDataJSON,
+            @Nullable byte[] signature) {
         this(credentialId, null, authenticatorData, clientDataJSON, signature);
     }
 
-    public byte[] getCredentialId() {
+    public @Nullable byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public byte[] getUserHandle() {
+    public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
-    public byte[] getAuthenticatorData() {
+    public @Nullable byte[] getAuthenticatorData() {
         return ArrayUtil.clone(authenticatorData);
     }
 
-    public byte[] getClientDataJSON() {
+    public @Nullable byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
 
-    public String getClientExtensionsJSON() {
+    public @Nullable String getClientExtensionsJSON() {
         return clientExtensionsJSON;
     }
 
-    public byte[] getSignature() {
+    public @Nullable byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationRequest that = (AuthenticationRequest) o;

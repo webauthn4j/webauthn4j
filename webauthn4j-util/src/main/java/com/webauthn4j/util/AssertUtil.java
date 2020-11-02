@@ -16,6 +16,9 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.util.Collection;
 
 /**
@@ -44,7 +47,7 @@ public class AssertUtil {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object is {@code null}
      */
-    public static void notNull(Object object, String message) {
+    public static void notNull(@Nullable Object object, @NonNull String message) {
         if (object == null) {
             throw new IllegalArgumentException(message);
         }
@@ -59,7 +62,7 @@ public class AssertUtil {
      * @param message the exception message to use if the assertion fails
      * @throws IllegalArgumentException if the object array is {@code null} or contains no elements
      */
-    public static void notEmpty(Object[] array, String message) {
+    public static void notEmpty(@Nullable Object[] array, @NonNull String message) {
         if (array == null || array.length == 0) {
             throw new IllegalArgumentException(message);
         }
@@ -75,13 +78,13 @@ public class AssertUtil {
      * @throws IllegalArgumentException if the collection is {@code null} or
      *                                  contains no elements
      */
-    public static void notEmpty(Collection<?> collection, String message) {
+    public static void notEmpty(@Nullable Collection<?> collection, @NonNull String message) {
         if (collection == null || collection.isEmpty()) {
             throw new IllegalArgumentException(message);
         }
     }
 
-    public static void isTrue(boolean condition, String message) {
+    public static void isTrue(boolean condition, @NonNull String message) {
         if (!condition) {
             throw new IllegalArgumentException(message);
         }

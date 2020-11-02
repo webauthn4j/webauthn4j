@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -53,10 +54,10 @@ public class AuthenticatorSelectionCriteria implements Serializable {
      */
     @JsonCreator
     public AuthenticatorSelectionCriteria(
-            @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
-            @JsonProperty("requireResidentKey") boolean requireResidentKey,
-            @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
-            @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
+            @Nullable @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
+            @Nullable @JsonProperty("requireResidentKey") boolean requireResidentKey,
+            @Nullable @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
+            @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
         this.requireResidentKey = requireResidentKey;
         this.residentKey = residentKey;
@@ -70,9 +71,9 @@ public class AuthenticatorSelectionCriteria implements Serializable {
      * @param userVerification relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
-            AuthenticatorAttachment authenticatorAttachment,
-            ResidentKeyRequirement residentKey,
-            UserVerificationRequirement userVerification) {
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            @Nullable ResidentKeyRequirement residentKey,
+            @Nullable UserVerificationRequirement userVerification) {
         this(authenticatorAttachment, false, residentKey, userVerification);
     }
 
@@ -83,13 +84,13 @@ public class AuthenticatorSelectionCriteria implements Serializable {
      * @param userVerification relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
-            AuthenticatorAttachment authenticatorAttachment,
-            boolean requireResidentKey,
-            UserVerificationRequirement userVerification) {
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            boolean requireResidentKey, //TODO: must not be primitive
+            @Nullable UserVerificationRequirement userVerification) {
         this(authenticatorAttachment, requireResidentKey, null, userVerification);
     }
 
-    public AuthenticatorAttachment getAuthenticatorAttachment() {
+    public @Nullable AuthenticatorAttachment getAuthenticatorAttachment() {
         return authenticatorAttachment;
     }
 
@@ -97,16 +98,16 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         return requireResidentKey;
     }
 
-    public ResidentKeyRequirement getResidentKey() {
+    public @Nullable ResidentKeyRequirement getResidentKey() {
         return residentKey;
     }
 
-    public UserVerificationRequirement getUserVerification() {
+    public @Nullable UserVerificationRequirement getUserVerification() {
         return userVerification;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;

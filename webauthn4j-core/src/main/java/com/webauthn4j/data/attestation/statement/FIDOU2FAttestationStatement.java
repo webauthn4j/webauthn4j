@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -40,23 +42,23 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
 
     @JsonCreator
     public FIDOU2FAttestationStatement(
-            @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @JsonProperty("sig") byte[] sig) {
+            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @Nullable @JsonProperty("sig") byte[] sig) {
         this.x5c = x5c;
         this.sig = sig;
     }
 
     @Override
-    public AttestationCertificatePath getX5c() {
+    public @Nullable AttestationCertificatePath getX5c() {
         return x5c;
     }
 
-    public byte[] getSig() {
+    public @Nullable byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
@@ -75,7 +77,7 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FIDOU2FAttestationStatement that = (FIDOU2FAttestationStatement) o;

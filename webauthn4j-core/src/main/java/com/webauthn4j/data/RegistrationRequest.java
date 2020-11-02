@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -35,43 +36,55 @@ public class RegistrationRequest implements Serializable {
     private final String clientExtensionsJSON;
     private final Set<String> transports;
 
-    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON, Set<String> transports) {
+    public RegistrationRequest(
+            @Nullable byte[] attestationObject,
+            @Nullable byte[] clientDataJSON,
+            @Nullable String clientExtensionsJSON,
+            @Nullable Set<String> transports) {
         this.attestationObject = ArrayUtil.clone(attestationObject);
         this.clientDataJSON = ArrayUtil.clone(clientDataJSON);
         this.clientExtensionsJSON = clientExtensionsJSON;
         this.transports = CollectionUtil.unmodifiableSet(transports);
     }
 
-    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, String clientExtensionsJSON) {
+    public RegistrationRequest(
+            @Nullable byte[] attestationObject,
+            @Nullable byte[] clientDataJSON,
+            @Nullable String clientExtensionsJSON) {
         this(attestationObject, clientDataJSON, clientExtensionsJSON, null);
     }
 
-    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON, Set<String> transports) {
+    public RegistrationRequest(
+            @Nullable byte[] attestationObject,
+            @Nullable byte[] clientDataJSON,
+            @Nullable Set<String> transports) {
         this(attestationObject, clientDataJSON, null, transports);
     }
 
-    public RegistrationRequest(byte[] attestationObject, byte[] clientDataJSON) {
+    public RegistrationRequest(
+            @Nullable byte[] attestationObject,
+            @Nullable byte[] clientDataJSON) {
         this(attestationObject, clientDataJSON, null, null);
     }
 
-    public byte[] getAttestationObject() {
+    public @Nullable byte[] getAttestationObject() {
         return ArrayUtil.clone(attestationObject);
     }
 
-    public byte[] getClientDataJSON() {
+    public @Nullable byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
 
-    public String getClientExtensionsJSON() {
+    public @Nullable String getClientExtensionsJSON() {
         return clientExtensionsJSON;
     }
 
-    public Set<String> getTransports() {
+    public @Nullable Set<String> getTransports() {
         return transports;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RegistrationRequest that = (RegistrationRequest) o;

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ public class CredentialProtectionPolicyByteSerializer extends StdSerializer<Cred
     }
 
     @Override
-    public void serialize(CredentialProtectionPolicy value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull CredentialProtectionPolicy value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeNumber(value.toByte());
     }
 }

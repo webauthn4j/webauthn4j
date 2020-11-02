@@ -17,6 +17,7 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class AttestedCredentialData implements Serializable {
 
     private final COSEKey coseKey;
 
-    public AttestedCredentialData(AAGUID aaguid, byte[] credentialId, COSEKey coseKey) {
+    public AttestedCredentialData(@Nullable AAGUID aaguid, @Nullable byte[] credentialId, @Nullable COSEKey coseKey) {
         this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.coseKey = coseKey;
@@ -49,20 +50,20 @@ public class AttestedCredentialData implements Serializable {
         this.coseKey = null;
     }
 
-    public AAGUID getAaguid() {
+    public @Nullable AAGUID getAaguid() {
         return aaguid;
     }
 
-    public byte[] getCredentialId() {
+    public @Nullable byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public COSEKey getCOSEKey() {
+    public @Nullable COSEKey getCOSEKey() {
         return coseKey;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttestedCredentialData that = (AttestedCredentialData) o;

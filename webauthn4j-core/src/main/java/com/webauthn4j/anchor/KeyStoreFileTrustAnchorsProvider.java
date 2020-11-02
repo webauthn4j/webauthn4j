@@ -19,6 +19,8 @@ package com.webauthn4j.anchor;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,13 +48,14 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
     // ========================================================================================================
     private void checkConfig() {
         AssertUtil.notNull(keyStore, "keyStore must not be null");
+        AssertUtil.notNull(password, "password must not be null");
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+    protected @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         Path keystore = getKeyStore();
         try (InputStream inputStream = Files.newInputStream(keystore)) {
@@ -69,7 +72,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
         }
     }
 
-    private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password)
+    private @NonNull KeyStore loadKeyStoreFromStream(@NonNull InputStream inputStream, @NonNull String password)
             throws CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore keyStoreObject = CertificateUtil.createKeyStore();
         keyStoreObject.load(inputStream, password.toCharArray());
@@ -81,7 +84,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
      *
      * @return keyStore file
      */
-    public Path getKeyStore() {
+    public @Nullable Path getKeyStore() {
         return keyStore;
     }
 
@@ -90,7 +93,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
      *
      * @param keyStore keyStore file
      */
-    public void setKeyStore(Path keyStore) {
+    public void setKeyStore(@Nullable Path keyStore) {
         this.keyStore = keyStore;
     }
 
@@ -99,7 +102,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
      *
      * @return keyStore file password
      */
-    public String getPassword() {
+    public @Nullable String getPassword() {
         return password;
     }
 
@@ -108,7 +111,7 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
      *
      * @param password keyStore file password
      */
-    public void setPassword(String password) {
+    public void setPassword(@Nullable String password) {
         this.password = password;
     }
 

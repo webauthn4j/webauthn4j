@@ -21,6 +21,7 @@ import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.validator.exception.BadSignatureException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class AssertionSignatureValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(CoreAuthenticationData authenticationData, COSEKey coseKey) {
+    public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull COSEKey coseKey) {
         byte[] signedData = getSignedData(authenticationData);
         byte[] signature = authenticationData.getSignature();
         if (!verifySignature(coseKey, signature, signedData)) {
@@ -45,13 +46,13 @@ public class AssertionSignatureValidator {
         }
     }
 
-    protected byte[] getSignedData(CoreAuthenticationData authenticationData) {
+    protected @NonNull byte[] getSignedData(@NonNull CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         return ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();
     }
 
-    private boolean verifySignature(COSEKey coseKey, byte[] signature, byte[] data) {
+    private boolean verifySignature(@NonNull COSEKey coseKey, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
             SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();

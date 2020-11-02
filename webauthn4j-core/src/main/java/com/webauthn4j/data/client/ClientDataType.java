@@ -19,6 +19,8 @@ package com.webauthn4j.data.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public enum ClientDataType {
     CREATE("webauthn.create"),
@@ -26,11 +28,11 @@ public enum ClientDataType {
 
     private final String value;
 
-    ClientDataType(String value) {
+    ClientDataType(@NonNull String value) {
         this.value = value;
     }
 
-    public static ClientDataType create(String value) {
+    public static @Nullable ClientDataType create(@Nullable String value) {
         if (value == null) {
             return null;
         }
@@ -45,7 +47,7 @@ public enum ClientDataType {
     }
 
     @JsonCreator
-    private static ClientDataType deserialize(String value) throws InvalidFormatException {
+    private static @Nullable ClientDataType deserialize(@Nullable String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -54,7 +56,7 @@ public enum ClientDataType {
     }
 
     @JsonValue
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 }

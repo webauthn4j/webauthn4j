@@ -27,6 +27,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTru
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,9 +51,9 @@ class AttestationValidator {
     // ========================================================================================================
 
     AttestationValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
+            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
         this.attestationStatementValidators = attestationStatementValidators;
 
@@ -61,7 +62,7 @@ class AttestationValidator {
     }
 
 
-    public void validate(CoreRegistrationObject registrationObject) {
+    public void validate(@NonNull CoreRegistrationObject registrationObject) {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
@@ -123,7 +124,7 @@ class AttestationValidator {
 
     }
 
-    void validateAAGUID(AttestationObject attestationObject) {
+    void validateAAGUID(@NonNull AttestationObject attestationObject) {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
@@ -132,7 +133,7 @@ class AttestationValidator {
         }
     }
 
-    private AttestationType validateAttestationStatement(CoreRegistrationObject registrationObject) {
+    private @NonNull AttestationType validateAttestationStatement(@NonNull CoreRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 return validator.validate(registrationObject);

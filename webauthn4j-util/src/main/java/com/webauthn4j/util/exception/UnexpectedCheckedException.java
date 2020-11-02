@@ -16,20 +16,22 @@
 
 package com.webauthn4j.util.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if unexpected checked exception is thrown
  */
 public class UnexpectedCheckedException extends RuntimeException {
 
-    public UnexpectedCheckedException(String message, Throwable cause) {
+    public UnexpectedCheckedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public UnexpectedCheckedException(String message) {
+    public UnexpectedCheckedException(@Nullable String message) {
         super(message);
     }
 
-    public UnexpectedCheckedException(Throwable cause) {
+    public UnexpectedCheckedException(@Nullable Throwable cause) {
         super(cause);
     }
 

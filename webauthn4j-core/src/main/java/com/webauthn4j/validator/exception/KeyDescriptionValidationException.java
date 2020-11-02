@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if an invalid TPM key description is detected
  */
 @SuppressWarnings("squid:S110")
 public class KeyDescriptionValidationException extends BadAttestationStatementException {
-    public KeyDescriptionValidationException(String message, Throwable cause) {
+    public KeyDescriptionValidationException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public KeyDescriptionValidationException(String message) {
+    public KeyDescriptionValidationException(@Nullable String message) {
         super(message);
     }
 
-    public KeyDescriptionValidationException(Throwable cause) {
+    public KeyDescriptionValidationException(@Nullable Throwable cause) {
         super(cause);
     }
 }

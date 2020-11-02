@@ -26,6 +26,8 @@ import org.apache.kerby.asn1.parse.Asn1ParseResult;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1Integer;
 import org.apache.kerby.asn1.type.Asn1OctetString;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public class KeyDescriptionValidator {
 
     private final Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
 
-    public void validate(X509Certificate x509Certificate, byte[] clientDataHash, boolean teeEnforcedOnly) {
+    public void validate(@NonNull X509Certificate x509Certificate, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) {
         try {
             Asn1Container keyDescription = extractKeyDescription(x509Certificate);
             doValidate(keyDescription, clientDataHash, teeEnforcedOnly);
@@ -64,7 +66,7 @@ public class KeyDescriptionValidator {
         }
     }
 
-    Asn1Container extractKeyDescription(X509Certificate x509Certificate) throws IOException {
+    @NonNull Asn1Container extractKeyDescription(@NonNull X509Certificate x509Certificate) throws IOException {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
         Asn1OctetString envelope = new Asn1OctetString();
@@ -75,7 +77,7 @@ public class KeyDescriptionValidator {
         return (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
     }
 
-    void doValidate(Asn1Container keyDescription, byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+    void doValidate(@NonNull Asn1Container keyDescription, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
@@ -96,7 +98,7 @@ public class KeyDescriptionValidator {
         validateAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void validateAuthorizationList(boolean teeEnforcedOnly, Asn1Container softwareEnforced, Asn1Container teeEnforced) throws IOException {
+    private void validateAuthorizationList(boolean teeEnforcedOnly, @NonNull Asn1Container softwareEnforced, @NonNull Asn1Container teeEnforced) throws IOException {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -126,7 +128,7 @@ public class KeyDescriptionValidator {
         }
     }
 
-    private boolean isKeyGeneratedInKeymaster(Asn1ParseResult origin) {
+    private boolean isKeyGeneratedInKeymaster(@Nullable Asn1ParseResult origin) {
         try {
             return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
         } catch (RuntimeException | IOException e) {
@@ -135,7 +137,7 @@ public class KeyDescriptionValidator {
         }
     }
 
-    private boolean containsValidPurpose(Asn1ParseResult purposes) throws IOException {
+    private boolean containsValidPurpose(@Nullable Asn1ParseResult purposes) throws IOException {
         try {
             if (purposes == null) {
                 return false;
@@ -154,7 +156,7 @@ public class KeyDescriptionValidator {
     }
 
 
-    private BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
+    private @Nullable BigInteger getIntegerFromAsn1(Asn1ParseResult asn1Value) throws IOException {
         if (asn1Value == null) {
             return null;
         }
@@ -166,12 +168,11 @@ public class KeyDescriptionValidator {
         return value.getValue();
     }
 
-    private Asn1ParseResult findAuthorizationListEntry(
-            Asn1Container authorizationList, int tag) {
+    private @Nullable Asn1ParseResult findAuthorizationListEntry(
+            @NonNull Asn1Container authorizationList, int tag) {
         for (Asn1ParseResult entry : authorizationList.getChildren()) {
-            Asn1ParseResult taggedEntry = entry;
-            if (taggedEntry.tagNo() == tag) {
-                return ((Asn1Container) taggedEntry).getChildren().get(0);
+            if (entry.tagNo() == tag) {
+                return ((Asn1Container) entry).getChildren().get(0);
             }
         }
         return null;

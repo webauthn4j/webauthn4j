@@ -16,6 +16,8 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -28,7 +30,7 @@ public class MessageDigestUtil {
     private MessageDigestUtil() {
     }
 
-    public static MessageDigest createMessageDigest(String hashAlgorithm) {
+    public static @NonNull MessageDigest createMessageDigest(@NonNull String hashAlgorithm) {
         try {
             switch (hashAlgorithm) {
                 case "S256":
@@ -45,7 +47,7 @@ public class MessageDigestUtil {
         }
     }
 
-    public static MessageDigest createSHA256() {
+    public static @NonNull MessageDigest createSHA256() {
         return createMessageDigest("SHA-256");
     }
 

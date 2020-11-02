@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * The supported user verification method(s).
@@ -73,7 +74,7 @@ public enum UserVerificationMethod {
     }
 
     @JsonCreator
-    private static UserVerificationMethod deserialize(long value) throws InvalidFormatException {
+    private static @NonNull UserVerificationMethod deserialize(long value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

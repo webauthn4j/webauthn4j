@@ -18,6 +18,8 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 
@@ -36,13 +38,13 @@ public class SignatureAlgorithm {
     private final String jcaName;
     private final MessageDigestAlgorithm messageDigestAlgorithm;
 
-    private SignatureAlgorithm(String jcaName, MessageDigestAlgorithm messageDigestAlgorithm) {
+    private SignatureAlgorithm(@NonNull String jcaName, @NonNull MessageDigestAlgorithm messageDigestAlgorithm) {
         this.jcaName = jcaName;
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
     @JsonCreator
-    public static SignatureAlgorithm create(String jcaName){
+    public static SignatureAlgorithm create(@NonNull String jcaName){
         switch (jcaName){
             case "SHA256withECDSA":
                 return ES256;
@@ -63,21 +65,21 @@ public class SignatureAlgorithm {
         }
     }
 
-    public static SignatureAlgorithm create(String jcaName, String messageDigestJcaName){
+    public static SignatureAlgorithm create(@NonNull String jcaName, @NonNull String messageDigestJcaName){
         return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
     }
 
     @JsonValue
-    public String getJcaName() {
+    public @NonNull String getJcaName() {
         return jcaName;
     }
 
-    public MessageDigestAlgorithm getMessageDigestAlgorithm() {
+    public @NonNull MessageDigestAlgorithm getMessageDigestAlgorithm() {
         return messageDigestAlgorithm;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SignatureAlgorithm that = (SignatureAlgorithm) o;

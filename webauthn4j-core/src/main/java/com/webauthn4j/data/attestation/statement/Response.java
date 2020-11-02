@@ -27,7 +27,7 @@ public class Response implements Serializable {
     @JsonProperty
     private final String nonce;
     @JsonProperty
-    private final long timestampMs;
+    private final long timestampMs; //TODO must not be primitive
     @JsonProperty
     private final String apkPackageName;
     @JsonProperty

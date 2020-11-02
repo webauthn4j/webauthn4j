@@ -25,6 +25,7 @@ import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -38,7 +39,7 @@ public class JWSDeserializer extends StdDeserializer<JWS<? extends Serializable>
     @SuppressWarnings("squid:S1948")
     private final JWSFactory jwsFactory;
 
-    public JWSDeserializer(ObjectConverter objectConverter) {
+    public JWSDeserializer(@NonNull ObjectConverter objectConverter) {
         super(JWS.class);
 
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
@@ -47,7 +48,7 @@ public class JWSDeserializer extends StdDeserializer<JWS<? extends Serializable>
     }
 
     @Override
-    public JWS<? extends Serializable> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull JWS<? extends Serializable> deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
 
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);

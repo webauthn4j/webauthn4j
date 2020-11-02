@@ -17,6 +17,7 @@
 package com.webauthn4j.anchor;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.util.Map;
@@ -41,7 +42,7 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
      * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
     @Override
-    public Map<AAGUID, Set<TrustAnchor>> provide() {
+    public @NonNull Map<AAGUID, Set<TrustAnchor>> provide() {
         if (cachedTrustAnchors == null) {
             synchronized (this) {
                 cachedTrustAnchors = loadTrustAnchors();
@@ -55,5 +56,5 @@ public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsPro
      *
      * @return {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
      */
-    protected abstract Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();
+    protected abstract @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors();
 }

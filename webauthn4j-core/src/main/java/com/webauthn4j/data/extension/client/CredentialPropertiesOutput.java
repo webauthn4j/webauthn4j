@@ -18,6 +18,7 @@ package com.webauthn4j.data.extension.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,17 +28,16 @@ public class CredentialPropertiesOutput implements Serializable {
     final Boolean rk;
 
     @JsonCreator
-    public CredentialPropertiesOutput(
-            @JsonProperty("rk") Boolean rk) {
+    public CredentialPropertiesOutput(@Nullable @JsonProperty("rk") Boolean rk) {
         this.rk = rk;
     }
 
-    public Boolean getRk() {
+    public @Nullable Boolean getRk() {
         return rk;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CredentialPropertiesOutput that = (CredentialPropertiesOutput) o;

@@ -1,7 +1,9 @@
 package com.webauthn4j.validator;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public interface CustomCoreAuthenticationValidator {
 
-    void validate(CoreAuthenticationObject authenticationObject);
+    void validate(@NonNull CoreAuthenticationObject authenticationObject);
 
 }

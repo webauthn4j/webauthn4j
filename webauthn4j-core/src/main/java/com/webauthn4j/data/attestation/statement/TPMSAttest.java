@@ -18,6 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +39,14 @@ public class TPMSAttest implements Serializable {
     private final BigInteger firmwareVersion;
     private final TPMUAttest attested;
 
-    public TPMSAttest(TPMGenerated magic, TPMISTAttest type, byte[] qualifiedSigner, byte[] extraData, TPMSClockInfo clockInfo, BigInteger firmwareVersion, TPMUAttest attested) {
+    public TPMSAttest(
+            @NonNull TPMGenerated magic,
+            @NonNull TPMISTAttest type,
+            @NonNull byte[] qualifiedSigner,
+            @NonNull byte[] extraData,
+            @NonNull TPMSClockInfo clockInfo,
+            @NonNull BigInteger firmwareVersion,
+            @NonNull TPMUAttest attested) {
         this.magic = magic;
         this.type = type;
         this.qualifiedSigner = qualifiedSigner;
@@ -47,35 +56,35 @@ public class TPMSAttest implements Serializable {
         this.attested = attested;
     }
 
-    public TPMGenerated getMagic() {
+    public @NonNull TPMGenerated getMagic() {
         return magic;
     }
 
-    public TPMISTAttest getType() {
+    public @NonNull TPMISTAttest getType() {
         return type;
     }
 
-    public byte[] getQualifiedSigner() {
+    public @NonNull byte[] getQualifiedSigner() {
         return ArrayUtil.clone(qualifiedSigner);
     }
 
-    public byte[] getExtraData() {
+    public @NonNull byte[] getExtraData() {
         return ArrayUtil.clone(extraData);
     }
 
-    public TPMSClockInfo getClockInfo() {
+    public @NonNull TPMSClockInfo getClockInfo() {
         return clockInfo;
     }
 
-    public BigInteger getFirmwareVersion() {
+    public @NonNull BigInteger getFirmwareVersion() {
         return firmwareVersion;
     }
 
-    public TPMUAttest getAttested() {
+    public @NonNull TPMUAttest getAttested() {
         return attested;
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             stream.write(getMagic().getValue());
@@ -92,7 +101,7 @@ public class TPMSAttest implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMSAttest that = (TPMSAttest) o;

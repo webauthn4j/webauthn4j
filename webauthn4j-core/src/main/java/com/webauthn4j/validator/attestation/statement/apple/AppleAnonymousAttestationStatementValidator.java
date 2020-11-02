@@ -27,6 +27,7 @@ import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1ParseResult;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1OctetString;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -40,7 +41,7 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
 
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
@@ -54,7 +55,7 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(CoreRegistrationObject registrationObject) {
+    private void validateNonce(@NonNull CoreRegistrationObject registrationObject) {
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
@@ -79,14 +80,14 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         }
     }
 
-    private byte[] getNonce(CoreRegistrationObject registrationObject) {
+    private @NonNull byte[] getNonce(@NonNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         byte[] nonceToHash = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
         return MessageDigestUtil.createSHA256().digest(nonceToHash);
     }
 
-    private void validatePublicKey(CoreRegistrationObject registrationObject, AppleAnonymousAttestationStatement attestationStatement) {
+    private void validatePublicKey(@NonNull CoreRegistrationObject registrationObject, @NonNull AppleAnonymousAttestationStatement attestationStatement) {
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {

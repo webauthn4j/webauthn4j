@@ -18,6 +18,8 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -28,13 +30,13 @@ public abstract class AbstractImmutableMap<K extends Serializable, V extends Ser
     private transient Set<Entry<K, V>> cachedEntrySet;
 
     @JsonCreator
-    protected AbstractImmutableMap(Map<K, V> map) {
+    protected AbstractImmutableMap(@NonNull Map<K, V> map) {
         AssertUtil.notNull(map, "map must not be null");
         this.map = new HashMap<>(map);
     }
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         if (this.cachedEntrySet == null) {
             this.cachedEntrySet = Collections.unmodifiableMap(map).entrySet();
         }
@@ -42,7 +44,7 @@ public abstract class AbstractImmutableMap<K extends Serializable, V extends Ser
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

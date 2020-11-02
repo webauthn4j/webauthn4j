@@ -20,6 +20,7 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -32,7 +33,7 @@ public class JWSFactory {
 
     private final JsonConverter jsonConverter;
 
-    public JWSFactory(ObjectConverter objectConverter) {
+    public JWSFactory(@NonNull ObjectConverter objectConverter) {
         this.jsonConverter = objectConverter.getJsonConverter();
     }
 
@@ -40,7 +41,7 @@ public class JWSFactory {
         this(new ObjectConverter());
     }
 
-    public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, PrivateKey privateKey) {
+    public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
         String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
@@ -56,13 +57,13 @@ public class JWSFactory {
         }
     }
 
-    public <T extends Serializable> JWS<T> create(JWSHeader header, T payload, byte[] signature) {
+    public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
         String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
-    public <T extends Serializable> JWS<T> parse(String value, Class<T> payloadType) {
+    public <T extends Serializable> @NonNull JWS<T> parse(@NonNull String value, @NonNull Class<T> payloadType) {
         String[] data = value.split("\\.");
         if (data.length != 3) {
             throw new IllegalArgumentException("JWS value is not divided by two period.");

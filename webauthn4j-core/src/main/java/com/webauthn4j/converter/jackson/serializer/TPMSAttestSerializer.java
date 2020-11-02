@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.attestation.statement.TPMSAttest;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class TPMSAttestSerializer extends StdSerializer<TPMSAttest> {
     }
 
     @Override
-    public void serialize(TPMSAttest value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull TPMSAttest value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeBinary(value.getBytes());
     }
 

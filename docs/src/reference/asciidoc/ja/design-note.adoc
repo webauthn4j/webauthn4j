@@ -1,5 +1,12 @@
 == デザインノート
 
+=== データクラスのメンバのNullability
+
+WebAuthn, CTAPで定義されたデータ型は、たとえRequiredと仕様で指定されていても、Nullableとする
+これは、JSONなどでシリアライズされたデータを受け入れる際に、誤った値が入る可能性が在る為。
+WebAuthn4J独自のデータクラスでも、シリアライズされたデータを受けるための型はフィールドをNullableとする
+シリアライズされたデータを受け取らない方は、必要性に応じてNullabilityを設計する　
+
 === 各クラスの責務分担
 
 ==== `RegistrationRequest`, `AuthenticationRequest`
