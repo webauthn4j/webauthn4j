@@ -60,6 +60,7 @@ public class AuthenticationDataValidator {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     public void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
