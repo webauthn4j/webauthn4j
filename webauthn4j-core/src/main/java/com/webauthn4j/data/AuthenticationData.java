@@ -23,7 +23,6 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
@@ -53,19 +52,19 @@ public class AuthenticationData extends CoreAuthenticationData {
         this.clientExtensions = clientExtensions;
     }
 
-    public @NonNull byte[] getUserHandle() {
+    public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
-    public @NonNull CollectedClientData getCollectedClientData() {
+    public @Nullable CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public @NonNull byte[] getCollectedClientDataBytes() {
+    public @Nullable byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
