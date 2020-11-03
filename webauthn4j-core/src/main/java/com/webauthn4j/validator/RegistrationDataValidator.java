@@ -82,7 +82,7 @@ public class RegistrationDataValidator {
     public void validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
-        BeanAssertUtil.validate(registrationParameters);
+        AssertUtil.notNull(registrationParameters, "registrationParameters must not be null");
 
         byte[] clientDataBytes = registrationData.getCollectedClientDataBytes();
         byte[] attestationObjectBytes = registrationData.getAttestationObjectBytes();

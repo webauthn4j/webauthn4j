@@ -21,9 +21,11 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuthenticationParametersTest {
 
@@ -52,6 +54,26 @@ class AuthenticationParametersTest {
         assertThat(authenticationParameters.getAuthenticator()).isEqualTo(authenticator);
         assertThat(authenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
         assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
+    }
+
+    @Test
+    void constructor_with_serverProperty_null_test() {
+        assertThatThrownBy(()->{new AuthenticationParameters(
+                null,
+                TestDataUtil.createAuthenticator(),
+                true,
+                true
+        );}).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void constructor_with_authenticator_null_test() {
+        new AuthenticationParameters(
+                TestDataUtil.createServerProperty(),
+                null,
+                true,
+                true
+        );
     }
 
     @Test

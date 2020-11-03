@@ -73,7 +73,7 @@ public class CoreRegistrationDataValidator {
     public void validate(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
-        BeanAssertUtil.validate(registrationParameters);
+        AssertUtil.notNull(registrationParameters, "registrationParameters must not be null");
 
         AttestationObject attestationObject = registrationData.getAttestationObject();
 
