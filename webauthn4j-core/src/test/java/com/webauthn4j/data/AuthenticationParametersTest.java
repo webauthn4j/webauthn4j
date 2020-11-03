@@ -19,6 +19,7 @@ package com.webauthn4j.data;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +30,9 @@ class AuthenticationParametersTest {
     @Test
     void constructor_test() {
         // Server properties
-        Origin origin = null /* set origin */;
-        String rpId = null /* set rpId */;
-        Challenge challenge = null /* set challenge */;
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
@@ -53,13 +54,12 @@ class AuthenticationParametersTest {
         assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void equals_hashCode_test() {
         // Server properties
-        Origin origin = null /* set origin */;
-        String rpId = null /* set rpId */;
-        Challenge challenge = null /* set challenge */;
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 

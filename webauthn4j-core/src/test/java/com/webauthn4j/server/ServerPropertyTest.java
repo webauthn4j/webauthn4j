@@ -25,12 +25,11 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ServerPropertyTest {
     private final String rpId = "rp-origin.com";
@@ -38,6 +37,16 @@ class ServerPropertyTest {
     private final Origin webApp2Origin = new Origin("https://app2.rp-origin.com");
     private final Origin apk1Origin = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
     private final Origin apk2Origin = new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=");
+
+
+    @Test
+    void constructor_rpId_null() {
+
+        //When
+        assertThrows(IllegalArgumentException.class,
+                () -> new ServerProperty(webApp1Origin, null, null, null)
+        );
+    }
 
     @Test
     void equals_hashCode_test() {
@@ -71,9 +80,8 @@ class ServerPropertyTest {
         final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
         final Challenge challenge = new DefaultChallenge();
         final ServerProperty serverProperty =
-                new ServerProperty((Origin)null, rpId, challenge, tokenBindingBytes);
+                new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigin()).isNull(),
                 ()->assertThat(serverProperty.getOrigins()).isEmpty(),
                 ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
                 ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
@@ -87,9 +95,8 @@ class ServerPropertyTest {
         final byte[] tokenBindingBytes = "random-token-binding1".getBytes(StandardCharsets.UTF_8);
         final Challenge challenge = new DefaultChallenge();
         final ServerProperty serverProperty =
-                new ServerProperty((Collection<Origin>)null, rpId, challenge, tokenBindingBytes);
+                new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigin()).isNull(),
                 ()->assertThat(serverProperty.getOrigins()).isEmpty(),
                 ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
                 ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
@@ -105,7 +112,6 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(new ArrayList<>(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigin()).isNull(),
                 ()->assertThat(serverProperty.getOrigins()).isEmpty(),
                 ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
                 ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
@@ -122,7 +128,6 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(webApp1Origin, rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigin()).isEqualTo(webApp1Origin),
                 ()->assertThat(serverProperty.getOrigins()).isEqualTo(Collections.singleton(webApp1Origin)),
                 ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
                 ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
@@ -145,9 +150,6 @@ class ServerPropertyTest {
 
 
         assertAll(
-                () -> assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() ->
-                        serverProperty.getOrigin()
-                ),
                 () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(
                         webApp1Origin, apk1Origin, webApp2Origin, apk2Origin),
                 () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
@@ -170,7 +172,6 @@ class ServerPropertyTest {
 
 
         assertAll(
-                () -> assertThat(serverProperty.getOrigin()).isEqualTo(webApp1Origin),
                 () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(webApp1Origin),
                 () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
                 () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
@@ -191,9 +192,6 @@ class ServerPropertyTest {
 
 
         assertAll(
-                () -> assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() ->
-                        serverProperty.getOrigin()
-                ),
                 () -> assertThat(serverProperty.getOrigins()).containsExactlyInAnyOrder(
                         webApp1Origin, apk1Origin),
                 () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),

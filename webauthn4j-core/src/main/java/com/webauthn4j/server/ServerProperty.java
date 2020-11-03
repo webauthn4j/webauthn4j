@@ -18,6 +18,7 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -42,39 +43,22 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Constructor
     // ========================================================================================================
 
-    public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @NonNull Challenge challenge, @Nullable byte[] tokenBindingId) {
-        this(origin != null ? Collections.singleton(origin) : Collections.emptySet(),
-                rpId,
-                challenge, tokenBindingId);
+    public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+        super(rpId, challenge);
+        AssertUtil.notNull(origin, "origin must not be null");
+        this.origins = Collections.singleton(origin);
+        this.tokenBindingId = tokenBindingId;
     }
 
-    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @NonNull Challenge challenge, @Nullable byte[] tokenBindingId) {
+    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
-        this.origins = (origins != null && !origins.isEmpty()) ? Collections.unmodifiableSet(new HashSet<>(origins)) : Collections.emptySet();
+        AssertUtil.notNull(origins, "origins must not be null");
+        this.origins = Collections.unmodifiableSet(new HashSet<>(origins));
         this.tokenBindingId = tokenBindingId;
     }
 
     // ~ Methods
     // ========================================================================================================
-
-    /**
-     * @deprecated
-     * Returns a single {@link Origin}, provided that this ServerProperty is configured with only a single origin
-     *
-     * @return the {@link Origin}
-     */
-    @Deprecated
-    public @Nullable Origin getOrigin() {
-        final int originsSize = origins.size();
-        switch (originsSize){
-            case 0:
-                return null;
-            case 1:
-                return origins.iterator().next();
-            default:
-                throw new IllegalStateException("There are multiple Origins associated with this ServerProperty");
-        }
-    }
 
     public @NonNull Set<Origin> getOrigins(){
         return this.origins;
