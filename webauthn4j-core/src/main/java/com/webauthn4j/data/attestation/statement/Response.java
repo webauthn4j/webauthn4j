@@ -82,13 +82,13 @@ public class Response implements Serializable {
         return apkDigestSha256;
     }
 
-    public @Nullable Boolean isCtsProfileMatch() {
+    public @Nullable Boolean getCtsProfileMatch() {
         return ctsProfileMatch;
-    } //TODO: should be get as it is not primitive now
+    }
 
-    public @Nullable Boolean isBasicIntegrity() {
+    public @Nullable Boolean getBasicIntegrity() {
         return basicIntegrity;
-    } //TODO: should be get as it is not primitive now
+    }
 
     public @Nullable String getAdvice() {
         return advice;

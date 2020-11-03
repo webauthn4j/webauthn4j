@@ -84,7 +84,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
-        if (!Objects.equals(response.isCtsProfileMatch(), true)) {
+        if (!Objects.equals(response.getCtsProfileMatch(), true)) {
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
         }
 
@@ -149,10 +149,10 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         if (response.getApkDigestSha256() == null){
             throw new BadAttestationStatementException("apkDigestSha256 must not be null.");
         }
-        if (response.isCtsProfileMatch() == null){
+        if (response.getCtsProfileMatch() == null){
             throw new BadAttestationStatementException("ctsProfileMatch must not be null.");
         }
-        if (response.isBasicIntegrity() == null){
+        if (response.getBasicIntegrity() == null){
             throw new BadAttestationStatementException("basicIntegrity must not be null.");
         }
     }
