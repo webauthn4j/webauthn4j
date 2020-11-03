@@ -58,9 +58,10 @@ class AuthenticationParametersTest {
 
     @Test
     void constructor_with_serverProperty_null_test() {
+        Authenticator authenticator = TestDataUtil.createAuthenticator();
         assertThatThrownBy(()->{new AuthenticationParameters(
                 null,
-                TestDataUtil.createAuthenticator(),
+                authenticator,
                 true,
                 true
         );}).isInstanceOf(IllegalArgumentException.class);
@@ -68,8 +69,9 @@ class AuthenticationParametersTest {
 
     @Test
     void constructor_with_authenticator_null_test() {
+        ServerProperty serverProperty = TestDataUtil.createServerProperty();
         new AuthenticationParameters(
-                TestDataUtil.createServerProperty(),
+                serverProperty,
                 null,
                 true,
                 true

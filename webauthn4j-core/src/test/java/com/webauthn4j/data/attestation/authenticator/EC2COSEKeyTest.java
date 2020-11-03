@@ -253,9 +253,39 @@ class EC2COSEKeyTest {
     }
 
     @Test
+    void getPrivateKey_with_null_curve_test() {
+        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
+        EC2COSEKey original = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
+        EC2COSEKey ec2COSEKey = new EC2COSEKey(
+                original.getKeyId(),
+                COSEAlgorithmIdentifier.ES256,
+                original.getKeyOps(),
+                null,
+                original.getX(),
+                original.getY(),
+                original.getD()
+        );
+        assertThatThrownBy(ec2COSEKey::getPrivateKey).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     void getPublicKey_with_invalid_key_test() {
         EC2COSEKey target = createNullXKey();
         assertThat(target.getPublicKey()).isNull();
+    }
+
+    @Test
+    void getPublicKey_with_null_curve_test() {
+        EC2COSEKey original = TestDataUtil.createEC2COSEPublicKey();
+        EC2COSEKey ec2COSEKey = new EC2COSEKey(
+                original.getKeyId(),
+                COSEAlgorithmIdentifier.ES256,
+                original.getKeyOps(),
+                null,
+                original.getX(),
+                original.getY()
+        );
+        assertThatThrownBy(ec2COSEKey::getPublicKey).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

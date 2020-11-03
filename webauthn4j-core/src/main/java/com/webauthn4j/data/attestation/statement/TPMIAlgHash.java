@@ -36,7 +36,7 @@ public enum TPMIAlgHash {
         this.value = value;
     }
 
-    public @NonNull static TPMIAlgHash create(int value) {
+    public static @NonNull TPMIAlgHash create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
         } else if (value == TPM_ALG_SHA1.value) {

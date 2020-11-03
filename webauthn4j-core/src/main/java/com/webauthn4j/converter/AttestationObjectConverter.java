@@ -29,6 +29,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public class AttestationObjectConverter {
 
+    private static final String SOURCE_NULL_CHECK_MESSAGE = "source must not be null";
+
     // ~ Instance fields
     // ================================================================================================
     private final CborConverter cborConverter;
@@ -51,7 +53,7 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @NonNull AttestationObject convert(@NonNull String source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
     }
@@ -63,7 +65,7 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @NonNull AttestationObject convert(@NonNull byte[] source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return cborConverter.readValue(source, AttestationObject.class);
     }
 
@@ -74,7 +76,7 @@ public class AttestationObjectConverter {
      * @return the converted byte array
      */
     public @NonNull byte[] convertToBytes(@NonNull AttestationObject source) {
-        AssertUtil.notNull(source, "source must not be null");
+        AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         return cborConverter.writeValueAsBytes(source);
     }
 

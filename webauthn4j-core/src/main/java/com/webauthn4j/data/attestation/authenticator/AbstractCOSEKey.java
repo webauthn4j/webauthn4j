@@ -56,7 +56,7 @@ public abstract class AbstractCOSEKey implements COSEKey {
     }
 
     @JsonProperty("1")
-    public @Nullable abstract COSEKeyType getKeyType();
+    public abstract @Nullable COSEKeyType getKeyType();
 
     public @Nullable byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
