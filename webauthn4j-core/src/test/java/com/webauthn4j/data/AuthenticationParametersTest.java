@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 class AuthenticationParametersTest {
 
@@ -38,7 +39,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = null;
+        Authenticator authenticator = mock(Authenticator.class);
 
         // expectations
         boolean userVerificationRequired = true;
@@ -70,12 +71,12 @@ class AuthenticationParametersTest {
     @Test
     void constructor_with_authenticator_null_test() {
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
-        new AuthenticationParameters(
+        assertThatThrownBy(()->{new AuthenticationParameters(
                 serverProperty,
                 null,
                 true,
                 true
-        );
+        );}).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -87,7 +88,7 @@ class AuthenticationParametersTest {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
-        Authenticator authenticator = null;
+        Authenticator authenticator = mock(Authenticator.class);
 
         // expectations
         boolean userVerificationRequired = true;

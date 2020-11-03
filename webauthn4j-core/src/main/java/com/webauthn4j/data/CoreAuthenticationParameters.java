@@ -40,7 +40,7 @@ public class CoreAuthenticationParameters implements Serializable {
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
-        AssertUtil.notNull(serverProperty, "authenticator must not be null");
+        AssertUtil.notNull(authenticator, "authenticator must not be null");
         this.serverProperty = serverProperty;
         this.authenticator = authenticator;
         this.userVerificationRequired = userVerificationRequired;
