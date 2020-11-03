@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -33,6 +34,7 @@ public class CoreRegistrationParameters implements Serializable {
     private final boolean userPresenceRequired;
 
     public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;

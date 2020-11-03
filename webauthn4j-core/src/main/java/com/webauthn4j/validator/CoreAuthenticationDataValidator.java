@@ -62,7 +62,8 @@ public class CoreAuthenticationDataValidator {
     public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
-        BeanAssertUtil.validate(authenticationParameters);
+
+        AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
         //spec| Step1
         //spec| If the allowCredentials option was given when this authentication ceremony was initiated,
@@ -99,8 +100,6 @@ public class CoreAuthenticationDataValidator {
         CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
 
         BeanAssertUtil.validate(authenticatorData);
-        BeanAssertUtil.validate(serverProperty);
-
         validateAuthenticatorData(authenticatorData);
 
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();

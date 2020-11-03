@@ -37,7 +37,7 @@ class ChallengeValidator {
 
     // ~ Methods
     // ========================================================================================================
-
+    @SuppressWarnings("S2259")
     public void validate(@Nullable CollectedClientData collectedClientData, @Nullable ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
@@ -54,6 +54,7 @@ class ChallengeValidator {
 
     }
 
+    @SuppressWarnings("S2259")
     public void validate(@Nullable Challenge expected, @Nullable Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
