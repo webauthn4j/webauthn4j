@@ -42,6 +42,8 @@ import java.util.Objects;
 
 public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
+    private static final String CURVE_NULL_CHECK_MESSAGE = "curve must not be null";
+
     @JsonProperty("-1")
     private final Curve curve;
 
@@ -244,7 +246,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
                 new BigInteger(1, getY())
         );
         if(curve == null){
-            throw new IllegalStateException("curve must not be null");
+            throw new IllegalStateException(CURVE_NULL_CHECK_MESSAGE);
         }
         ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, curve.getECParameterSpec());
 
@@ -258,7 +260,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         }
         BigInteger s = new BigInteger(1, d);
         if(curve == null){
-            throw new IllegalStateException("curve must not be null");
+            throw new IllegalStateException(CURVE_NULL_CHECK_MESSAGE);
         }
         ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(s, curve.getECParameterSpec());
         return ECUtil.createPrivateKey(ecPrivateKeySpec);
@@ -277,7 +279,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
             throw new ConstraintViolationException("algorithm must not be null");
         }
         if (curve == null) {
-            throw new ConstraintViolationException("curve must not be null");
+            throw new ConstraintViolationException(CURVE_NULL_CHECK_MESSAGE);
         }
         if (d != null) {
             return;

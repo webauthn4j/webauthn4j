@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
@@ -49,7 +48,7 @@ public interface COSEKey extends Serializable {
     @JsonIgnore
     @Nullable PrivateKey getPrivateKey();
 
-    @NonNull COSEKeyType getKeyType();
+    @Nullable COSEKeyType getKeyType();
 
     @Nullable byte[] getKeyId();
 

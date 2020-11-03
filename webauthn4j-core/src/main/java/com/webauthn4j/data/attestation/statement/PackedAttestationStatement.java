@@ -79,7 +79,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     }
 
     @Override
-    public boolean equals(@NonNull Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PackedAttestationStatement that = (PackedAttestationStatement) o;
