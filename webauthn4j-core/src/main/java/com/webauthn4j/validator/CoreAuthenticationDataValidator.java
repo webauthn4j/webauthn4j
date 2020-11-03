@@ -59,6 +59,7 @@ public class CoreAuthenticationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);

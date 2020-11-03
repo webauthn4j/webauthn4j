@@ -22,7 +22,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
 
@@ -37,8 +37,8 @@ class ChallengeValidator {
 
     // ~ Methods
     // ========================================================================================================
-    @SuppressWarnings("S2259")
-    public void validate(@Nullable CollectedClientData collectedClientData, @Nullable ServerProperty serverProperty) {
+    @SuppressWarnings("ConstantConditions")
+    public void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         Challenge savedChallenge = serverProperty.getChallenge();
@@ -51,11 +51,9 @@ class ChallengeValidator {
         // Verify that the challenge member of the collectedClientData matches the challenge that was sent to
         // the authenticator in the PublicKeyCredentialRequestOptions passed to the get() call.
         validate(savedChallenge, collectedChallenge);
-
     }
 
-    @SuppressWarnings("S2259")
-    public void validate(@Nullable Challenge expected, @Nullable Challenge actual) {
+    public void validate(@NonNull Challenge expected, @NonNull Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();

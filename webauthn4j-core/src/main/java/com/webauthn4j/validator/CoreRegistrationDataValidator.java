@@ -70,6 +70,7 @@ public class CoreRegistrationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     public void validate(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
@@ -134,6 +135,7 @@ public class CoreRegistrationDataValidator {
         }
     }
 
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     protected CoreRegistrationObject createCoreRegistrationObject(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
         return new CoreRegistrationObject(
                 registrationData.getAttestationObject(),

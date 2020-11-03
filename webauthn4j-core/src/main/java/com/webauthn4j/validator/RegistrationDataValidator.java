@@ -78,7 +78,7 @@ public class RegistrationDataValidator {
                 selfAttestationTrustworthinessValidator);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     public void validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) {
 
         BeanAssertUtil.validate(registrationData);
