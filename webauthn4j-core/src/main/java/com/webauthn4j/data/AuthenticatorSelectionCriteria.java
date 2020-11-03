@@ -38,7 +38,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     private final AuthenticatorAttachment authenticatorAttachment;
 
     @SuppressWarnings("UnusedAssignment")
-    private boolean requireResidentKey = false;
+    private Boolean requireResidentKey = null;
 
     private ResidentKeyRequirement residentKey = null;
 
@@ -55,7 +55,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     @JsonCreator
     public AuthenticatorSelectionCriteria(
             @Nullable @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
-            @Nullable @JsonProperty("requireResidentKey") boolean requireResidentKey,
+            @Nullable @JsonProperty("requireResidentKey") Boolean requireResidentKey,
             @Nullable @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
             @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
@@ -85,7 +85,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
      */
     public AuthenticatorSelectionCriteria(
             @Nullable AuthenticatorAttachment authenticatorAttachment,
-            boolean requireResidentKey, //TODO: must not be primitive
+            @Nullable Boolean requireResidentKey,
             @Nullable UserVerificationRequirement userVerification) {
         this(authenticatorAttachment, requireResidentKey, null, userVerification);
     }
@@ -94,7 +94,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         return authenticatorAttachment;
     }
 
-    public boolean isRequireResidentKey() {
+    public Boolean isRequireResidentKey() {
         return requireResidentKey;
     }
 
@@ -107,12 +107,12 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
-        return requireResidentKey == that.requireResidentKey &&
-                authenticatorAttachment == that.authenticatorAttachment &&
+        return authenticatorAttachment == that.authenticatorAttachment &&
+                Objects.equals(requireResidentKey, that.requireResidentKey) &&
                 residentKey == that.residentKey &&
                 userVerification == that.userVerification;
     }

@@ -55,7 +55,8 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         boolean effectiveResidentKeyRequirement;
         if(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey() == null){
-            effectiveResidentKeyRequirement = publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey();
+            Boolean requireResidentKey = publicKeyCredentialCreationOptions.getAuthenticatorSelection().isRequireResidentKey();
+            effectiveResidentKeyRequirement = requireResidentKey == null ? false : requireResidentKey;
         }
         else {
             switch (publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey()){
