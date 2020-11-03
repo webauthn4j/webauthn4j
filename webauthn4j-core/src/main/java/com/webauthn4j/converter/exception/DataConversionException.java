@@ -17,18 +17,19 @@
 package com.webauthn4j.converter.exception;
 
 import com.webauthn4j.util.exception.WebAuthnException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DataConversionException extends WebAuthnException {
 
-    public DataConversionException(String message, Throwable cause) {
+    public DataConversionException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
-    } //TODO:revisit
+    }
 
-    public DataConversionException(String message) {
+    public DataConversionException(@Nullable String message) {
         super(message);
     }
 
-    public DataConversionException(Throwable cause) {
+    public DataConversionException(@Nullable Throwable cause) {
         super(cause);
     }
 }
