@@ -34,31 +34,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ChallengeValidatorTest {
 
-    private final Origin origin = null;
+    private final Origin origin = Origin.create("https://example.com");
+    private final String rpId = "example.com";
 
     private final ChallengeValidator target = new ChallengeValidator();
 
     @Test
-    void verifyChallenge_test1() {
+    void validate_test1() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(origin, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
         target.validate(collectedClientData, serverProperty);
     }
 
     @Test
-    void verifyChallenge_test_with_different_challenge() {
+    void validate_test_with_different_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(origin, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
         assertThrows(BadChallengeException.class,
@@ -67,13 +68,13 @@ class ChallengeValidatorTest {
     }
 
     @Test
-    void verifyChallenge_test_without_saved_challenge() {
+    void validate_test_without_saved_challenge() {
 
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
-        ServerProperty serverProperty = new ServerProperty(origin, null, challengeB, null);
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
         assertThrows(MissingChallengeException.class,
