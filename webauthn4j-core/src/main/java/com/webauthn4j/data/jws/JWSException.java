@@ -17,17 +17,18 @@
 package com.webauthn4j.data.jws;
 
 import com.webauthn4j.util.exception.WebAuthnException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class JWSException extends WebAuthnException { //TODO: revisit
-    public JWSException(String message, Throwable cause) {
+public class JWSException extends WebAuthnException {
+    public JWSException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public JWSException(String message) {
+    public JWSException(@Nullable String message) {
         super(message);
     }
 
-    public JWSException(Throwable cause) {
+    public JWSException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -20,12 +20,14 @@ import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStat
 import com.webauthn4j.data.attestation.statement.AttestationCertificate;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.Response;
+import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -43,6 +45,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     private int forwardThreshold = 0;
     private int backwardThreshold = 60;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -51,7 +54,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
 
         AndroidSafetyNetAttestationStatement attestationStatement =
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-
+        validateNull(attestationStatement);
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
         }
@@ -65,6 +68,9 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         versionValidator.validate(attestationStatement.getVer());
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
+        if(attestationStatement.getResponse() == null){
+            throw new BadAttestationStatementException("Response in android safetynet attestation statement is null.");
+        }
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
@@ -78,8 +84,12 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
-        if (!response.isCtsProfileMatch()) {
+        if (!Objects.equals(response.isCtsProfileMatch(), true)) {
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+        }
+
+        if(response.getTimestampMs() == null){
+            throw new BadAttestationStatementException("timestampMs is null.");
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
@@ -100,7 +110,57 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(@NonNull String nonce, @NonNull byte[] authenticatorData, @NonNull byte[] clientDataHash) {
+    void validateNull(AndroidSafetyNetAttestationStatement attestationStatement){
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getVer() == null){
+            throw new BadAttestationStatementException("ver must not be null");
+        }
+        validateNull(attestationStatement.getResponse());
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
+    }
+
+    void validateNull(JWS<Response> response){
+        if (response == null){
+            throw new BadAttestationStatementException("response must not be null.");
+        }
+        validateNull(response.getPayload());
+    }
+
+    void validateNull(Response response){
+        if (response == null){
+            throw new BadAttestationStatementException("response must not be null.");
+        }
+        if (response.getNonce() == null){
+            throw new BadAttestationStatementException("nonce must not be null.");
+        }
+        if (response.getTimestampMs() == null){
+            throw new BadAttestationStatementException("timeStampMs must not be null.");
+        }
+        if (response.getApkPackageName() == null){
+            throw new BadAttestationStatementException("apkPackageName must not be null.");
+        }
+        if (response.getApkCertificateDigestSha256() == null){
+            throw new BadAttestationStatementException("apkCertificateDigestSha256 must not be null.");
+        }
+        if (response.getApkDigestSha256() == null){
+            throw new BadAttestationStatementException("apkDigestSha256 must not be null.");
+        }
+        if (response.isCtsProfileMatch() == null){
+            throw new BadAttestationStatementException("ctsProfileMatch must not be null.");
+        }
+        if (response.isBasicIntegrity() == null){
+            throw new BadAttestationStatementException("basicIntegrity must not be null.");
+        }
+    }
+
+    private void validateNonce(@Nullable String nonce, @NonNull byte[] authenticatorData, @NonNull byte[] clientDataHash) {
+        if (nonce == null) {
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response is null.");
+        }
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);

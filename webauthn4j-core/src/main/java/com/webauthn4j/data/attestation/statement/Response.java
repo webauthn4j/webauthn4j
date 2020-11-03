@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
@@ -27,7 +28,7 @@ public class Response implements Serializable {
     @JsonProperty
     private final String nonce;
     @JsonProperty
-    private final long timestampMs; //TODO must not be primitive
+    private final Long timestampMs;
     @JsonProperty
     private final String apkPackageName;
     @JsonProperty
@@ -35,22 +36,22 @@ public class Response implements Serializable {
     @JsonProperty
     private final String apkDigestSha256;
     @JsonProperty
-    private final boolean ctsProfileMatch;
+    private final Boolean ctsProfileMatch;
     @JsonProperty
-    private final boolean basicIntegrity;
+    private final Boolean basicIntegrity;
     @JsonProperty
     private final String advice;
 
     @JsonCreator
     public Response(
-            @JsonProperty("nonce") String nonce,
-            @JsonProperty("timestampMs") long timestampMs,
-            @JsonProperty("apkPackageName") String apkPackageName,
-            @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
-            @JsonProperty("apkDigestSha256") String apkDigestSha256,
-            @JsonProperty("ctsProfileMatch") boolean ctsProfileMatch,
-            @JsonProperty("basicIntegrity") boolean basicIntegrity,
-            @JsonProperty("advice") String advice) {
+            @Nullable @JsonProperty("nonce") String nonce,
+            @Nullable @JsonProperty("timestampMs") Long timestampMs,
+            @Nullable @JsonProperty("apkPackageName") String apkPackageName,
+            @Nullable @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
+            @Nullable @JsonProperty("apkDigestSha256") String apkDigestSha256,
+            @Nullable @JsonProperty("ctsProfileMatch") Boolean ctsProfileMatch,
+            @Nullable @JsonProperty("basicIntegrity") Boolean basicIntegrity,
+            @Nullable @JsonProperty("advice") String advice) {
         this.nonce = nonce;
         this.timestampMs = timestampMs;
         this.apkPackageName = apkPackageName;
@@ -61,35 +62,35 @@ public class Response implements Serializable {
         this.advice = advice;
     }
 
-    public String getNonce() {
+    public @Nullable String getNonce() {
         return nonce;
     }
 
-    public long getTimestampMs() {
+    public @Nullable Long getTimestampMs() {
         return timestampMs;
     }
 
-    public String getApkPackageName() {
+    public @Nullable String getApkPackageName() {
         return apkPackageName;
     }
 
-    public String[] getApkCertificateDigestSha256() {
+    public @Nullable String[] getApkCertificateDigestSha256() {
         return ArrayUtil.clone(apkCertificateDigestSha256);
     }
 
-    public String getApkDigestSha256() {
+    public @Nullable String getApkDigestSha256() {
         return apkDigestSha256;
     }
 
-    public boolean isCtsProfileMatch() {
+    public @Nullable Boolean isCtsProfileMatch() {
         return ctsProfileMatch;
-    }
+    } //TODO: should be get as it is not primitive now
 
-    public boolean isBasicIntegrity() {
+    public @Nullable Boolean isBasicIntegrity() {
         return basicIntegrity;
-    }
+    } //TODO: should be get as it is not primitive now
 
-    public String getAdvice() {
+    public @Nullable String getAdvice() {
         return advice;
     }
 }
