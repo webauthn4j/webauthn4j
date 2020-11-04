@@ -28,6 +28,7 @@ import java.security.cert.CertificateFactory;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 /**
  * Test for CertPathSerializer
@@ -55,4 +56,24 @@ class CertPathSerializerTest {
         //Then
         assertThat(restored.getCertificates().toArray()).containsExactly(cert1, cert2);
     }
+
+    @Test
+    void null_serialize_test(){
+        TestDto testDto = new TestDto();
+        testDto.setCertPath(null);
+        assertThatCode(()->cborConverter.writeValueAsBytes(testDto)).doesNotThrowAnyException();
+    }
+
+    static class TestDto{
+        private CertPath certPath;
+
+        public CertPath getCertPath() {
+            return certPath;
+        }
+
+        public void setCertPath(CertPath certPath) {
+            this.certPath = certPath;
+        }
+    }
+
 }
