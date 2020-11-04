@@ -41,7 +41,10 @@ public class Response implements Serializable {
     private final Boolean basicIntegrity;
     @JsonProperty
     private final String advice;
+    @JsonProperty
+    private final String error;
 
+    @SuppressWarnings("java:S107")
     @JsonCreator
     public Response(
             @Nullable @JsonProperty("nonce") String nonce,
@@ -51,7 +54,8 @@ public class Response implements Serializable {
             @Nullable @JsonProperty("apkDigestSha256") String apkDigestSha256,
             @Nullable @JsonProperty("ctsProfileMatch") Boolean ctsProfileMatch,
             @Nullable @JsonProperty("basicIntegrity") Boolean basicIntegrity,
-            @Nullable @JsonProperty("advice") String advice) {
+            @Nullable @JsonProperty("advice") String advice,
+            @Nullable @JsonProperty("error") String error) {
         this.nonce = nonce;
         this.timestampMs = timestampMs;
         this.apkPackageName = apkPackageName;
@@ -60,6 +64,20 @@ public class Response implements Serializable {
         this.ctsProfileMatch = ctsProfileMatch;
         this.basicIntegrity = basicIntegrity;
         this.advice = advice;
+        this.error = error;
+    }
+
+    @SuppressWarnings("java:S107")
+    public Response(
+            @Nullable @JsonProperty("nonce") String nonce,
+            @Nullable @JsonProperty("timestampMs") Long timestampMs,
+            @Nullable @JsonProperty("apkPackageName") String apkPackageName,
+            @Nullable @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
+            @Nullable @JsonProperty("apkDigestSha256") String apkDigestSha256,
+            @Nullable @JsonProperty("ctsProfileMatch") Boolean ctsProfileMatch,
+            @Nullable @JsonProperty("basicIntegrity") Boolean basicIntegrity,
+            @Nullable @JsonProperty("advice") String advice) {
+        this(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice, null);
     }
 
     public @Nullable String getNonce() {
@@ -92,5 +110,9 @@ public class Response implements Serializable {
 
     public @Nullable String getAdvice() {
         return advice;
+    }
+
+    public String getError() {
+        return error;
     }
 }
