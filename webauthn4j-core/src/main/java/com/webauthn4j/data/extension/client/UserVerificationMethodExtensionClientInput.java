@@ -40,7 +40,7 @@ public class UserVerificationMethodExtensionClientInput extends SingleValueExten
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

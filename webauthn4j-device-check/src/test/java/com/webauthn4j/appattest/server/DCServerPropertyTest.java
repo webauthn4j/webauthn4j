@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DCServerPropertyTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         Challenge challenge = TestDataUtil.createChallenge();
         DCServerProperty instanceA = new DCServerProperty("8YE23NZS57.com.kayak.travel", challenge);
         DCServerProperty instanceB = new DCServerProperty("8YE23NZS57", "com.kayak.travel", challenge);

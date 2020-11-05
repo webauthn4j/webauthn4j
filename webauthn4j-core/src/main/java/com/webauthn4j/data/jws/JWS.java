@@ -72,7 +72,7 @@ public class JWS<T extends Serializable> implements Serializable {
     public boolean isValidSignature() {
         String signedData = headerString + "." + payloadString;
         try {
-            if(header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()){
+            if (header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()) {
                 return false;
             }
             Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
@@ -82,7 +82,8 @@ public class JWS<T extends Serializable> implements Serializable {
             byte[] sig;
             if (publicKey instanceof ECPublicKey) {
                 sig = JWSSignatureUtil.convertJwsSignatureToDerSignature(signature);
-            } else {
+            }
+            else {
                 sig = signature;
             }
             return signatureObj.verify(sig);

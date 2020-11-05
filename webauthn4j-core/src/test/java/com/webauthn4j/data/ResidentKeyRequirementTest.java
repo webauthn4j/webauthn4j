@@ -42,7 +42,7 @@ class ResidentKeyRequirementTest {
 
     @Test
     void create_with_null_value_test() {
-        assertThatThrownBy(()-> ResidentKeyRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> ResidentKeyRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

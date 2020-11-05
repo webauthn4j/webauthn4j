@@ -43,7 +43,7 @@ class AttestationCertificateTest {
     }
 
     @Test
-    void getter_with_illegal_data_authenticator_test(){
+    void getter_with_illegal_data_authenticator_test() {
         AttestationCertificate attestationCertificate = new AttestationCertificate(TestAttestationUtil.loadEWBMGoldengateG310Certificate());
         assertThat(attestationCertificate.getSubjectCountry()).isEqualTo("KR");
         assertThat(attestationCertificate.getSubjectOrganization()).isEqualTo("eWBM Co., Ltd.");

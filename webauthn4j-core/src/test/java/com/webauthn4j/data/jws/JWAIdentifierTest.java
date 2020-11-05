@@ -51,7 +51,7 @@ class JWAIdentifierTest {
     }
 
     @Test
-    void create_null_test(){
+    void create_null_test() {
         assertThatThrownBy(() -> JWAIdentifier.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 

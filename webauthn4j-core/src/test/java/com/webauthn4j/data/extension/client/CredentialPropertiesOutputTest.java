@@ -20,16 +20,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CredentialPropertiesOutputTest{
+class CredentialPropertiesOutputTest {
 
     @Test
-    void getter_test(){
+    void getter_test() {
         CredentialPropertiesOutput target = new CredentialPropertiesOutput(true);
         assertThat(target.getRk()).isTrue();
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         CredentialPropertiesOutput instanceA = new CredentialPropertiesOutput(true);
         CredentialPropertiesOutput instanceB = new CredentialPropertiesOutput(true);
         assertThat(instanceA)

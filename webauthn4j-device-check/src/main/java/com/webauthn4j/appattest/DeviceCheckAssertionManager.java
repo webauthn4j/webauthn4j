@@ -67,7 +67,7 @@ public class DeviceCheckAssertionManager {
     public DCAssertionData parse(DCAssertionRequest dcAssertionRequest) throws DataConversionException {
 
         byte[] credentialId = dcAssertionRequest.getKeyId();
-        DCAssertion assertion =  cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
+        DCAssertion assertion = cborConverter.readValue(dcAssertionRequest.getAssertion(), DCAssertion.class);
         byte[] authenticatorDataBytes = assertion.getAuthenticatorData();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
         byte[] clientDataHash = dcAssertionRequest.getClientDataHash();

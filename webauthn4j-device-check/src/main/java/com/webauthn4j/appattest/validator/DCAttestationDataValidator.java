@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
+public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
 
     private static final AAGUID APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT = new AAGUID("appattestdevelop".getBytes());
     private static final AAGUID APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION = new AAGUID("appattest\0\0\0\0\0\0\0".getBytes());
@@ -51,6 +51,12 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
                 certPathTrustworthinessValidator, createSelfAttestationTrustWorthinessValidator(), customRegistrationValidatorList, objectConverter);
     }
 
+    private static SelfAttestationTrustworthinessValidator createSelfAttestationTrustWorthinessValidator() {
+        DefaultSelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator = new DefaultSelfAttestationTrustworthinessValidator();
+        selfAttestationTrustworthinessValidator.setSelfAttestationAllowed(false);
+        return selfAttestationTrustworthinessValidator;
+    }
+
     @Override
     public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
         super.validate(registrationData, registrationParameters);
@@ -59,7 +65,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
     }
 
     private void validateKeyId(CoreRegistrationData registrationData) {
-        DCAttestationData dcAttestationData = (DCAttestationData)registrationData;
+        DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         byte[] keyId = dcAttestationData.getKeyId();
         byte[] credentialId = registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         if (!Arrays.equals(keyId, credentialId)) {
@@ -96,12 +102,6 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator{
         if (!aaguid.equals(expectedAAGUID)) {
             throw new BadAaguidException("Expected AAGUID of either 'appattestdevelop' or 'appattest'");
         }
-    }
-
-    private static SelfAttestationTrustworthinessValidator createSelfAttestationTrustWorthinessValidator(){
-        DefaultSelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator = new DefaultSelfAttestationTrustworthinessValidator();
-        selfAttestationTrustworthinessValidator.setSelfAttestationAllowed(false);
-        return selfAttestationTrustworthinessValidator;
     }
 
 }

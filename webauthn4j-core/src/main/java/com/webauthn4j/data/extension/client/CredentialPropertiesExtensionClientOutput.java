@@ -36,13 +36,13 @@ public class CredentialPropertiesExtensionClientOutput
         return ID;
     }
 
-    public @Nullable CredentialPropertiesOutput getCredProps(){
+    public @Nullable CredentialPropertiesOutput getCredProps() {
         return getValue();
     }
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

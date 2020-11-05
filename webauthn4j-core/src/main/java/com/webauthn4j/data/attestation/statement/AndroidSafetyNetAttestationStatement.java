@@ -52,7 +52,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     @Override
     public @Nullable AttestationCertificatePath getX5c() {
         JWS<Response> res = getResponse();
-        if(res == null){
+        if (res == null) {
             throw new IllegalStateException("response is null");
         }
         return new AttestationCertificatePath(res.getHeader().getX5c().getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));

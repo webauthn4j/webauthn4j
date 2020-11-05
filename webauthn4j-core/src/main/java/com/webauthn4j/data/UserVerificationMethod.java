@@ -48,27 +48,38 @@ public enum UserVerificationMethod {
     public static UserVerificationMethod create(long value) {
         if (value == 0x00000001L) {
             return PRESENCE;
-        } else if (value == 0x00000002L) {
+        }
+        else if (value == 0x00000002L) {
             return FINGERPRINT;
-        } else if (value == 0x00000004L) {
+        }
+        else if (value == 0x00000004L) {
             return PASSCODE;
-        } else if (value == 0x00000008L) {
+        }
+        else if (value == 0x00000008L) {
             return VOICEPRINT;
-        } else if (value == 0x00000010L) {
+        }
+        else if (value == 0x00000010L) {
             return FACEPRINT;
-        } else if (value == 0x00000020L) {
+        }
+        else if (value == 0x00000020L) {
             return LOCATION;
-        } else if (value == 0x00000040L) {
+        }
+        else if (value == 0x00000040L) {
             return EYEPRINT;
-        } else if (value == 0x00000080L) {
+        }
+        else if (value == 0x00000080L) {
             return PATTERN;
-        } else if (value == 0x00000100L) {
+        }
+        else if (value == 0x00000100L) {
             return HANDPRINT;
-        } else if (value == 0x00000200L) {
+        }
+        else if (value == 0x00000200L) {
             return NONE;
-        } else if (value == 0x00000400L) {
+        }
+        else if (value == 0x00000400L) {
             return ALL;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }

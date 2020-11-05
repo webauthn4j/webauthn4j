@@ -71,9 +71,11 @@ public enum TPMEccCurve {
     public static @NonNull TPMEccCurve create(@NonNull EllipticCurve value) {
         if (ECUtil.P_256_SPEC.getCurve().equals(value)) {
             return TPM_ECC_NIST_P256;
-        } else if (ECUtil.P_384_SPEC.getCurve().equals(value)) {
+        }
+        else if (ECUtil.P_384_SPEC.getCurve().equals(value)) {
             return TPM_ECC_NIST_P384;
-        } else if (ECUtil.P_521_SPEC.getCurve().equals(value)) {
+        }
+        else if (ECUtil.P_521_SPEC.getCurve().equals(value)) {
             return TPM_ECC_NIST_P521;
         }
         throw new IllegalArgumentException("value '" + value + "' is out of range");

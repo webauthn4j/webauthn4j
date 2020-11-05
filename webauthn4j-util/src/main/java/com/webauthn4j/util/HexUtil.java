@@ -30,13 +30,13 @@ public class HexUtil {
     public static @NonNull byte[] decode(@NonNull String source) {
         source = source.toUpperCase();
         int sourceLength = source.length();
-        if(sourceLength % 2 != 0){
+        if (sourceLength % 2 != 0) {
             throw new IllegalArgumentException("source length must be even-length.");
         }
-        byte[] bytes = new byte[sourceLength/2];
+        byte[] bytes = new byte[sourceLength / 2];
         char[] sourceChars = source.toCharArray();
         for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) ((HEX_CHARS.indexOf(sourceChars[i*2]) << 4) + HEX_CHARS.indexOf(sourceChars[i*2 + 1]));
+            bytes[i] = (byte) ((HEX_CHARS.indexOf(sourceChars[i * 2]) << 4) + HEX_CHARS.indexOf(sourceChars[i * 2 + 1]));
         }
 
         return bytes;

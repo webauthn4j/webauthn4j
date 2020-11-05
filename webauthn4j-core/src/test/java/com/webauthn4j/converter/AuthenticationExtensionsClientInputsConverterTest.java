@@ -36,7 +36,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertRegistrationExtensions_null_test() {
-        assertThatThrownBy(()-> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -50,7 +50,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertAuthenticationExtensionsToString_null_test() {
-        assertThatThrownBy(()->authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

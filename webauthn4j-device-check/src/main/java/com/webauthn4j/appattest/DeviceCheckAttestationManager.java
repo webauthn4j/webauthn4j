@@ -58,7 +58,7 @@ public class DeviceCheckAttestationManager {
 
         byte[] keyId = dcAttestationRequest.getKeyId();
         byte[] attestationObjectBytes = dcAttestationRequest.getAttestationObject();
-        byte[] clientDataHash= dcAttestationRequest.getClientDataHash();
+        byte[] clientDataHash = dcAttestationRequest.getClientDataHash();
 
         AttestationObject attestationObject = attestationObjectConverter.convert(attestationObjectBytes);
 

@@ -39,17 +39,23 @@ public enum TPMIAlgHash {
     public static @NonNull TPMIAlgHash create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
-        } else if (value == TPM_ALG_SHA1.value) {
+        }
+        else if (value == TPM_ALG_SHA1.value) {
             return TPM_ALG_SHA1;
-        } else if (value == TPM_ALG_SHA256.value) {
+        }
+        else if (value == TPM_ALG_SHA256.value) {
             return TPM_ALG_SHA256;
-        } else if (value == TPM_ALG_SHA384.value) {
+        }
+        else if (value == TPM_ALG_SHA384.value) {
             return TPM_ALG_SHA384;
-        } else if (value == TPM_ALG_SHA512.value) {
+        }
+        else if (value == TPM_ALG_SHA512.value) {
             return TPM_ALG_SHA512;
-        } else if (value == TPM_ALG_NULL.value) {
+        }
+        else if (value == TPM_ALG_NULL.value) {
             return TPM_ALG_NULL;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }

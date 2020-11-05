@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class AuthenticatorTransportConverter {
 
-    public @NonNull AuthenticatorTransport convert(@NonNull  String value) {
+    public @NonNull AuthenticatorTransport convert(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null");
         try {
             return AuthenticatorTransport.create(value);

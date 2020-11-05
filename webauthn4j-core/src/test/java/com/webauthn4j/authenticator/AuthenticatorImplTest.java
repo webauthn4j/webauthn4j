@@ -54,7 +54,7 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void createFromRegistrationData_test(){
+    void createFromRegistrationData_test() {
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new byte[32];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);

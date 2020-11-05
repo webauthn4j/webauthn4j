@@ -25,31 +25,31 @@ import static org.assertj.core.api.Assertions.*;
 class CredentialProtectionExtensionAuthenticatorOutputTest {
 
     @Test
-    void getIdentifier_test(){
+    void getIdentifier_test() {
         CredentialProtectionExtensionAuthenticatorOutput target = new CredentialProtectionExtensionAuthenticatorOutput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
         assertThat(target.getIdentifier()).isEqualTo(CredentialProtectionExtensionAuthenticatorOutput.ID);
     }
 
     @Test
-    void getValue_with_valid_key_test(){
+    void getValue_with_valid_key_test() {
         CredentialProtectionExtensionAuthenticatorOutput target = new CredentialProtectionExtensionAuthenticatorOutput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
-        assertThatCode(()->target.getValue("credProtect")).doesNotThrowAnyException();
+        assertThatCode(() -> target.getValue("credProtect")).doesNotThrowAnyException();
     }
 
     @Test
-    void getValue_with_invalid_key_test(){
+    void getValue_with_invalid_key_test() {
         CredentialProtectionExtensionAuthenticatorOutput target = new CredentialProtectionExtensionAuthenticatorOutput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
-        assertThatThrownBy(()->target.getValue("invalid")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.getValue("invalid")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void validate_test(){
+    void validate_test() {
         CredentialProtectionExtensionAuthenticatorOutput target = new CredentialProtectionExtensionAuthenticatorOutput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         CredentialProtectionExtensionAuthenticatorOutput target = new CredentialProtectionExtensionAuthenticatorOutput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

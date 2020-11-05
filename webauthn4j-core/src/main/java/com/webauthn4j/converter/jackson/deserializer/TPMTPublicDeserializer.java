@@ -113,7 +113,8 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
             byte[] n = new byte[nSize];
             buffer.get(n);
             return new RSAUnique(n);
-        } else if (type == TPMIAlgPublic.TPM_ALG_ECDSA) {
+        }
+        else if (type == TPMIAlgPublic.TPM_ALG_ECDSA) {
             int xSize = UnsignedNumberUtil.getUnsignedShort(buffer);
             byte[] x = new byte[xSize];
             buffer.get(x);
@@ -121,7 +122,8 @@ public class TPMTPublicDeserializer extends StdDeserializer<TPMTPublic> {
             byte[] y = new byte[ySize];
             buffer.get(y);
             return new ECCUnique(x, y);
-        } else {
+        }
+        else {
             throw new NotImplementedException();
         }
     }

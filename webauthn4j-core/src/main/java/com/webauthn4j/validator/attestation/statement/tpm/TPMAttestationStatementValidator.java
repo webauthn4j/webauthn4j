@@ -57,6 +57,23 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
 
+    private static Map<String, Object> toMap(Rdn rdn) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Attributes attributes = rdn.toAttributes();
+            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
+
+            while (ids.hasMore()) {
+                String id = ids.next();
+                map.put(id, attributes.get(id).get());
+            }
+            return map;
+
+        } catch (NamingException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
@@ -204,7 +221,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                     rsaPublicKey.getPublicExponent().equals(BigInteger.valueOf(exponent))) {
                 return;
             }
-        } else if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique) {
+        }
+        else if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_ECDSA && publicKeyInPubArea instanceof ECCUnique) {
             ECPublicKey ecPublicKey = (ECPublicKey) publicKeyInAuthData;
             TPMSECCParms parms = (TPMSECCParms) pubArea.getParameters();
             EllipticCurve curveInParms = parms.getCurveId().getEllipticCurve();
@@ -217,7 +235,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         }
         throw new BadAttestationStatementException("publicKey in authData and publicKey in unique pubArea doesn't match");
     }
-
 
     void validateAikCert(X509Certificate certificate) {
         try {
@@ -273,9 +290,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         }
         Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        byte[] manufacturerAttr = (byte[])map.get("2.23.133.2.1");
-        byte[] partNumberAttr =(byte[])map.get("2.23.133.2.2");
-        byte[] firmwareVersionAttr = (byte[])map.get("2.23.133.2.3");
+        byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
+        byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
+        byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
 
         String manufacturer = decodeAttr(manufacturerAttr);
         String partNumber = decodeAttr(partNumberAttr);
@@ -287,36 +304,18 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     String decodeAttr(byte[] attr) throws IOException {
         if (attr == null) {
             return null;
-        } else {
+        }
+        else {
             Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
             attrAsn1Utf8String.decode(attr);
             return attrAsn1Utf8String.getValue();
         }
     }
 
-
     private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-    }
-
-    private static Map<String, Object> toMap(Rdn rdn) {
-        try {
-            Map<String, Object> map = new HashMap<>();
-            Attributes attributes = rdn.toAttributes();
-            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
-
-            while(ids.hasMore()){
-                String id = ids.next();
-                map.put(id, attributes.get(id).get());
-            }
-            return map;
-
-        }
-        catch (NamingException e) {
-            throw new IllegalArgumentException(e);
-        }
     }
 
 

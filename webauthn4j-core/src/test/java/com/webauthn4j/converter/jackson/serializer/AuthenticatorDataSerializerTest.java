@@ -56,7 +56,8 @@ class AuthenticatorDataSerializerTest {
 
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {});
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {
+        });
 
         //Then
 

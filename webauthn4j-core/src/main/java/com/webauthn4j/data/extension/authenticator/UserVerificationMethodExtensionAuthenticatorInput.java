@@ -42,7 +42,7 @@ public class UserVerificationMethodExtensionAuthenticatorInput extends SingleVal
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

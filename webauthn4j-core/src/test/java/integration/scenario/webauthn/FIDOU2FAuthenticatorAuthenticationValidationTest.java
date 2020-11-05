@@ -51,11 +51,10 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     private final ObjectConverter objectConverter = new ObjectConverter();
 
     private final Origin origin = new Origin("http://example.com");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
-
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
 
     @Test
     void validate_test() {

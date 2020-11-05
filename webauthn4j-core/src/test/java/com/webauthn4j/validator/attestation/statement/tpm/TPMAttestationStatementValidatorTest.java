@@ -92,13 +92,13 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    void parseTPMDeviceProperty_invalid_data_test(){
-        assertThatThrownBy(()-> target.parseTPMDeviceProperty("hoge\"huga")).isInstanceOf(IllegalArgumentException.class);
+    void parseTPMDeviceProperty_invalid_data_test() {
+        assertThatThrownBy(() -> target.parseTPMDeviceProperty("hoge\"huga")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void decodeAtter_null_test() throws IOException {
-        assertThat(target.decodeAttr(null)).isNull();;
+        assertThat(target.decodeAttr(null)).isNull();
     }
 
     @Test

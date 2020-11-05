@@ -53,7 +53,7 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
 
     @Override
     public void validate() {
-        if (x5c== null || x5c.isEmpty()) {
+        if (x5c == null || x5c.isEmpty()) {
             throw new ConstraintViolationException("No attestation certificate is found in apple anonymous attestation statement.");
         }
     }

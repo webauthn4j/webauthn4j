@@ -47,7 +47,8 @@ public enum PublicKeyCredentialType implements Serializable {
         AssertUtil.notNull(value, "value must not be null.");
         if ("public-key".equals(value)) {
             return PUBLIC_KEY;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }

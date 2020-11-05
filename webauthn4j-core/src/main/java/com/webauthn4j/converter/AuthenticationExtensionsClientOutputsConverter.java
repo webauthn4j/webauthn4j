@@ -46,7 +46,8 @@ public class AuthenticationExtensionsClientOutputsConverter {
 
     public <T extends ExtensionClientOutput> @NonNull AuthenticationExtensionsClientOutputs<T> convert(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null");
-        return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>(){});
+        return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
+        });
     }
 
     public <T extends ExtensionClientOutput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientOutputs<T> value) {

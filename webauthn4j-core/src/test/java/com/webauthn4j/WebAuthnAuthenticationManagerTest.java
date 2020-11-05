@@ -32,8 +32,8 @@ class WebAuthnAuthenticationManagerTest {
         ObjectConverter objectConverter = new ObjectConverter();
         List<CustomAuthenticationValidator> customAuthenticationValidators = Collections.emptyList();
         assertThatCode(WebAuthnAuthenticationManager::new).doesNotThrowAnyException();
-        assertThatCode(()-> new WebAuthnAuthenticationManager(customAuthenticationValidators)).doesNotThrowAnyException();
-        assertThatCode(()-> new WebAuthnAuthenticationManager(customAuthenticationValidators, objectConverter)).doesNotThrowAnyException();
+        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationValidators)).doesNotThrowAnyException();
+        assertThatCode(() -> new WebAuthnAuthenticationManager(customAuthenticationValidators, objectConverter)).doesNotThrowAnyException();
     }
 
 

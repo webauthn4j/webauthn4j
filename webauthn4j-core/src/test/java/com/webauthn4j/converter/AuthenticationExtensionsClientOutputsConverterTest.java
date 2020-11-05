@@ -27,16 +27,16 @@ class AuthenticationExtensionsClientOutputsConverterTest {
     private final ObjectConverter objectConverter = new ObjectConverter();
 
     private final AuthenticationExtensionsClientOutputsConverter target = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
-    
+
     @Test
     void convert_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(()->target.convert(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convert(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void convertToString_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(()->target.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
     }
 }

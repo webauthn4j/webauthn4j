@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MessageDigestAlgorithmTest {
 
     @Test
-    void test(){
+    void test() {
         assertThat(MessageDigestAlgorithm.create("SHA-256")).isEqualTo(MessageDigestAlgorithm.SHA256);
     }
 

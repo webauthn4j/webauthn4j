@@ -71,7 +71,7 @@ public class Origin implements Serializable {
         //lowercase.
 
         this.scheme = toLowerCase(uri.getScheme());
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             //https://tools.ietf.org/html/rfc3986#section-3.2.2 , host component is case insensitive
             this.host = toLowerCase(uri.getHost());
             int originPort = uri.getPort();
@@ -91,7 +91,7 @@ public class Origin implements Serializable {
             //https://tools.ietf.org/html/rfc2396#section-3
             this.port = originPort;
             String schemeSpecificPartStr = "//" + this.host;
-            if (explicitPortNotation){
+            if (explicitPortNotation) {
                 schemeSpecificPartStr += ":" + this.port;
             }
             this.schemeSpecificPart = schemeSpecificPartStr;
@@ -120,6 +120,10 @@ public class Origin implements Serializable {
         }
     }
 
+    private static String toLowerCase(String s) {
+        return (s != null) ? s.toLowerCase() : s;
+    }
+
     public @Nullable String getScheme() {
         return scheme;
     }
@@ -139,11 +143,11 @@ public class Origin implements Serializable {
     @JsonValue
     @Override
     public @NonNull String toString() {
-        if(this.scheme == null){
+        if (this.scheme == null) {
             return this.schemeSpecificPart;
         }
         String result;
-        switch (this.scheme){
+        switch (this.scheme) {
             case SCHEME_HTTPS:
             case SCHEME_HTTP:
                 result = this.scheme + "://" + this.host;
@@ -162,7 +166,7 @@ public class Origin implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Origin origin = (Origin) o;
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             return Objects.equals(scheme, origin.scheme) &&
                     Objects.equals(host, origin.host) &&
                     Objects.equals(port, origin.port);
@@ -173,20 +177,15 @@ public class Origin implements Serializable {
         }
     }
 
-
     @Override
     public int hashCode() {
         // explicitPortNotation is not taken into count
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             return Objects.hash(scheme, host, port);
         }
         else {
             return Objects.hash(scheme, schemeSpecificPart);
         }
-    }
-
-    private static String toLowerCase(String s){
-        return (s!=null)? s.toLowerCase() : s;
     }
 
 }

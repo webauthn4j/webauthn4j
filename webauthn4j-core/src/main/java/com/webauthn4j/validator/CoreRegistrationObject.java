@@ -61,6 +61,10 @@ public class CoreRegistrationObject {
         this(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, Instant.now());
     }
 
+    private static @NonNull byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) {
+        return JacksonUtil.binaryValue(JacksonUtil.readTree(cborMapper, attestationObject).get("authData"));
+    }
+
     public @NonNull AttestationObject getAttestationObject() {
         return attestationObject;
     }
@@ -68,7 +72,6 @@ public class CoreRegistrationObject {
     public @NonNull byte[] getAttestationObjectBytes() {
         return ArrayUtil.clone(attestationObjectBytes);
     }
-
 
     public @NonNull byte[] getAuthenticatorDataBytes() {
         return extractAuthenticatorData(attestationObjectBytes);
@@ -104,10 +107,5 @@ public class CoreRegistrationObject {
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;
-    }
-
-
-    private static @NonNull byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) {
-        return JacksonUtil.binaryValue(JacksonUtil.readTree(cborMapper, attestationObject).get("authData"));
     }
 }

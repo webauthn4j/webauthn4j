@@ -23,7 +23,8 @@ public class DCServerProperty extends CoreServerProperty {
 
     /**
      * Constructor of {@link DCServerProperty}
-     * @param rpId rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
+     *
+     * @param rpId      rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
      * @param challenge challenge
      */
     public DCServerProperty(String rpId, Challenge challenge) {
@@ -32,9 +33,10 @@ public class DCServerProperty extends CoreServerProperty {
 
     /**
      * Constructor of {@link DCServerProperty}
-     * @param teamIdentifier 10-digit team identifier
+     *
+     * @param teamIdentifier     10-digit team identifier
      * @param cfBundleIdentifier CFBundleIdentifier
-     * @param challenge challenge
+     * @param challenge          challenge
      */
     public DCServerProperty(String teamIdentifier, String cfBundleIdentifier, Challenge challenge) {
         super(String.format("%s.%s", teamIdentifier, cfBundleIdentifier), challenge);

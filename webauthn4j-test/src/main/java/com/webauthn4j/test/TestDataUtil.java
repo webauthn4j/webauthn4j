@@ -413,7 +413,8 @@ public class TestDataUtil {
             Signature signature;
             if (privateKey.getAlgorithm().equals("EC")) {
                 signature = SignatureUtil.createES256();
-            } else {
+            }
+            else {
                 signature = SignatureUtil.createRS256();
             }
             signature.initSign(privateKey);

@@ -48,7 +48,7 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
     }
 
     @JsonValue
-    private @NonNull Number[] getValue(){
+    private @NonNull Number[] getValue() {
         return array;
     }
 
@@ -62,22 +62,22 @@ public class UvmEntry extends AbstractList<Number> implements Serializable {
         return array.length;
     }
 
-    public @NonNull UserVerificationMethod getUserVerificationMethod(){
-        if(array.length <= 0){
+    public @NonNull UserVerificationMethod getUserVerificationMethod() {
+        if (array.length <= 0) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. UserVerificationMethod is not included.");
         }
         return UserVerificationMethod.create(array[0].intValue());
     }
 
-    public @NonNull KeyProtectionType getKeyProtectionType(){
-        if(array.length <= 1){
+    public @NonNull KeyProtectionType getKeyProtectionType() {
+        if (array.length <= 1) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. KeyProtectionType is not included.");
         }
         return KeyProtectionType.create(array[1].intValue());
     }
 
-    public @NonNull MatcherProtectionType getMatcherProtectionType(){
-        if(array.length <= 2){
+    public @NonNull MatcherProtectionType getMatcherProtectionType() {
+        if (array.length <= 2) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. MatcherProtectionType is not included.");
         }
         return MatcherProtectionType.create(array[2].intValue());

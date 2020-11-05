@@ -17,7 +17,6 @@
 description = "WebAuthn4J Device Check library"
 
 
-
 dependencies {
     api project(':webauthn4j-core')
 

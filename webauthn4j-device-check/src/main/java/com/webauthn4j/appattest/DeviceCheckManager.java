@@ -42,9 +42,9 @@ public class DeviceCheckManager {
     private final DeviceCheckAssertionManager deviceCheckAssertionManager;
 
     public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           List<CustomCoreRegistrationValidator> customRegistrationValidators,
-                           List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
-                           ObjectConverter objectConverter) {
+                              List<CustomCoreRegistrationValidator> customRegistrationValidators,
+                              List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
+                              ObjectConverter objectConverter) {
 
         this.deviceCheckAttestationManager = new DeviceCheckAttestationManager(
                 certPathTrustworthinessValidator,
@@ -56,8 +56,8 @@ public class DeviceCheckManager {
     }
 
     public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           List<CustomCoreRegistrationValidator> customRegistrationValidators,
-                           List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+                              List<CustomCoreRegistrationValidator> customRegistrationValidators,
+                              List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this(
                 certPathTrustworthinessValidator,
                 customRegistrationValidators,
@@ -67,7 +67,7 @@ public class DeviceCheckManager {
     }
 
     public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                           ObjectConverter objectConverter) {
+                              ObjectConverter objectConverter) {
         this(
                 certPathTrustworthinessValidator,
                 new ArrayList<>(),
@@ -113,6 +113,12 @@ public class DeviceCheckManager {
         );
     }
 
+    private static ObjectConverter createObjectConverter() {
+        ObjectMapper jsonMapper = new ObjectMapper();
+        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
+        cborMapper.registerModule(new DeviceCheckCBORModule());
+        return new ObjectConverter(jsonMapper, cborMapper);
+    }
 
     @SuppressWarnings("squid:S1130")
     public DCAttestationData parse(DCAttestationRequest dcAttestationRequest) throws DataConversionException {
@@ -144,21 +150,12 @@ public class DeviceCheckManager {
         return this.deviceCheckAssertionManager.validate(dcAssertionData, dcAssertionParameters);
     }
 
-
     public DCAttestationDataValidator getAttestationDataValidator() {
         return this.deviceCheckAttestationManager.getDCAttestationDataValidator();
     }
 
     public DCAssertionDataValidator getAssertionDataValidator() {
         return this.deviceCheckAssertionManager.getDCAssertionDataValidator();
-    }
-
-
-    private static ObjectConverter createObjectConverter(){
-        ObjectMapper jsonMapper = new ObjectMapper();
-        ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
-        cborMapper.registerModule(new DeviceCheckCBORModule());
-        return new ObjectConverter(jsonMapper, cborMapper);
     }
 
 }

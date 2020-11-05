@@ -26,20 +26,20 @@ import static org.assertj.core.api.Assertions.*;
 class AppleAnonymousAttestationStatementTest {
 
     @Test
-    void validate(){
+    void validate() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         assertThatCode(instance::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_x5c_null_instance(){
+    void validate_x5c_null_instance() {
         AppleAnonymousAttestationStatement instance = new AppleAnonymousAttestationStatement(null);
         assertThatThrownBy(instance::validate).isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
-    void getter_test(){
+    void getter_test() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 

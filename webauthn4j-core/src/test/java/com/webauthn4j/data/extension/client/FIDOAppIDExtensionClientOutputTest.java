@@ -19,18 +19,19 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class FIDOAppIDExtensionClientOutputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         FIDOAppIDExtensionClientOutput target = new FIDOAppIDExtensionClientOutput(true);
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         FIDOAppIDExtensionClientOutput target = new FIDOAppIDExtensionClientOutput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

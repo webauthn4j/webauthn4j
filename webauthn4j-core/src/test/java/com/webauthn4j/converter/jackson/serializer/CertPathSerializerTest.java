@@ -58,13 +58,13 @@ class CertPathSerializerTest {
     }
 
     @Test
-    void null_serialize_test(){
+    void null_serialize_test() {
         TestDto testDto = new TestDto();
         testDto.setCertPath(null);
-        assertThatCode(()->cborConverter.writeValueAsBytes(testDto)).doesNotThrowAnyException();
+        assertThatCode(() -> cborConverter.writeValueAsBytes(testDto)).doesNotThrowAnyException();
     }
 
-    static class TestDto{
+    static class TestDto {
         private CertPath certPath;
 
         public CertPath getCertPath() {

@@ -21,7 +21,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class FIDOAppIDExclusionExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput{
+public class FIDOAppIDExclusionExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appidExclude";
 
@@ -40,7 +40,7 @@ public class FIDOAppIDExclusionExtensionClientInput extends SingleValueExtension
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

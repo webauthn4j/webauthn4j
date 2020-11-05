@@ -45,7 +45,7 @@ class AppleAppAttestAttestationStatementTest {
     }
 
     @Test
-    void getter_test(){
+    void getter_test() {
         DCRegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAppAttestAttestation();
         AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         assertThat(appleAppAttestAttestationStatement.getX5c()).hasSize(2);

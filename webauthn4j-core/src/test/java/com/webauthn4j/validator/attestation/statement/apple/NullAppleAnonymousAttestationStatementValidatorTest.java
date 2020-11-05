@@ -21,7 +21,7 @@ import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NullAppleAnonymousAttestationStatementValidatorTest {
 

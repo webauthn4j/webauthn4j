@@ -41,7 +41,7 @@ public class CollectionUtil {
         return Collections.unmodifiableSet(set);
     }
 
-    public static <K,V> @Nullable Map<K,V> unmodifiableMap(@Nullable Map<? extends K, ? extends V> map) {
+    public static <K, V> @Nullable Map<K, V> unmodifiableMap(@Nullable Map<? extends K, ? extends V> map) {
         return map == null ? null : Collections.unmodifiableMap(map);
     }
 }

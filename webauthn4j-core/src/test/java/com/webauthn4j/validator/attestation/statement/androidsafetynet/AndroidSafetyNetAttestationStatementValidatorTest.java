@@ -91,7 +91,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateNull_test(){
+    void validateNull_test() {
         String ver = "12685023";
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
@@ -108,12 +108,12 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateNull_with_null_test(){
-        assertThatThrownBy(()->target.validateNull((AndroidSafetyNetAttestationStatement) null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateNull((AndroidSafetyNetAttestationStatement) null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_ver_null_test(){
+    void validateNull_with_ver_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -125,19 +125,19 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
         JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList())), response, new byte[32]);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(null, jws);
-        assertThatThrownBy(()->target.validateNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
 
     @Test
-    void validateNull_with_response_null_test(){
+    void validateNull_with_response_null_test() {
         String ver = "12685023";
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(ver, null);
-        assertThatThrownBy(()->target.validateNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_nonce_null_test(){
+    void validateNull_with_nonce_null_test() {
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
         String[] apkCertificateDigestSha256 = new String[]{"bsb4/WQdaaOWYCd/j9OJiQpg7b0iwFgAc/zzA1tCfwE="};
@@ -146,11 +146,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(null, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_timestampMs_null_test(){
+    void validateNull_with_timestampMs_null_test() {
         String nonce = "nonce";
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
         String[] apkCertificateDigestSha256 = new String[]{"bsb4/WQdaaOWYCd/j9OJiQpg7b0iwFgAc/zzA1tCfwE="};
@@ -159,11 +159,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, null, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_apkPackageName_null_test(){
+    void validateNull_with_apkPackageName_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String[] apkCertificateDigestSha256 = new String[]{"bsb4/WQdaaOWYCd/j9OJiQpg7b0iwFgAc/zzA1tCfwE="};
@@ -172,11 +172,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, null, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_apkCertificateDigestSha256_null_test(){
+    void validateNull_with_apkCertificateDigestSha256_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -185,11 +185,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, null, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_apkDigestSha256_null_test(){
+    void validateNull_with_apkDigestSha256_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -198,11 +198,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, null, ctsProfileMatch, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_ctsProfileMatch_null_test(){
+    void validateNull_with_ctsProfileMatch_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -211,11 +211,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, null, basicIntegrity, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_basicIntegrity_null_test(){
+    void validateNull_with_basicIntegrity_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -224,11 +224,11 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean ctsProfileMatch = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, null, advice);
-        assertThatThrownBy(()->target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateNull(response)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateNull_with_advice_null_test(){
+    void validateNull_with_advice_null_test() {
         String nonce = "nonce";
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";
@@ -237,7 +237,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean ctsProfileMatch = true;
         boolean basicIntegrity = true;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, null);
-        assertThatCode(()->target.validateNull(response)).doesNotThrowAnyException();
+        assertThatCode(() -> target.validateNull(response)).doesNotThrowAnyException();
     }
 
 }

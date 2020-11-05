@@ -44,7 +44,7 @@ public class JWSHeaderDeserializer extends StdDeserializer<JWSHeader> {
         JWAIdentifier alg = p.getCodec().treeToValue(jsonNode.get("alg"), JWAIdentifier.class);
         JsonNode x5cNode = jsonNode.get("x5c");
         List<X509Certificate> certificates = new ArrayList<>();
-        for(JsonNode node : x5cNode){
+        for (JsonNode node : x5cNode) {
             certificates.add(CertificateUtil.generateX509Certificate(Base64Util.decode(node.asText())));
         }
         CertPath x5c = CertificateUtil.generateCertPath(certificates);

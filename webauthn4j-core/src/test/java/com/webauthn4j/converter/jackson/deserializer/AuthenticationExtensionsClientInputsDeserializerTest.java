@@ -37,7 +37,8 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                         "{ " +
                                 "\"credProps\": true " +
                                 "}",
-                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {}
+                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
+                        }
                 );
 
         assertAll(
@@ -54,7 +55,8 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                         "{ " +
                                 "\"appid\": \"dummy\" " +
                                 "}",
-                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {}
+                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
+                        }
                 );
 
         assertAll(

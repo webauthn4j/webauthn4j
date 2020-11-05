@@ -42,19 +42,26 @@ public enum TPMISTAttest {
     public static @NonNull TPMISTAttest create(@NonNull byte[] value) {
         if (Arrays.equals(value, TPM_ST_ATTEST_CERTIFY.value)) {
             return TPM_ST_ATTEST_CERTIFY;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_QUOTE.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_QUOTE.value)) {
             return TPM_ST_ATTEST_QUOTE;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_SESSION_AUDIT.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_SESSION_AUDIT.value)) {
             return TPM_ST_ATTEST_SESSION_AUDIT;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_COMMAND_AUDIT.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_COMMAND_AUDIT.value)) {
             return TPM_ST_ATTEST_COMMAND_AUDIT;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_TIME.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_TIME.value)) {
             return TPM_ST_ATTEST_TIME;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_CREATION.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_CREATION.value)) {
             return TPM_ST_ATTEST_CREATION;
-        } else if (Arrays.equals(value, TPM_ST_ATTEST_NV.value)) {
+        }
+        else if (Arrays.equals(value, TPM_ST_ATTEST_NV.value)) {
             return TPM_ST_ATTEST_NV;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value is out of range");
         }
     }

@@ -22,12 +22,7 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Data transfer object that represents relying party server property for validators
@@ -60,7 +55,7 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Methods
     // ========================================================================================================
 
-    public @NonNull Set<Origin> getOrigins(){
+    public @NonNull Set<Origin> getOrigins() {
         return this.origins;
     }
 

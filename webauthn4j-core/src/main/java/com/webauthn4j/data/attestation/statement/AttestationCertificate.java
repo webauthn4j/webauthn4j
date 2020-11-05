@@ -44,6 +44,23 @@ public class AttestationCertificate implements Serializable {
         this.certificate = certificate;
     }
 
+    private static Map<String, Object> toMap(Rdn rdn) {
+        try {
+            Map<String, Object> map = new HashMap<>();
+            Attributes attributes = rdn.toAttributes();
+            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
+
+            while (ids.hasMore()) {
+                String id = ids.next();
+                map.put(id, attributes.get(id).get());
+            }
+            return map;
+
+        } catch (NamingException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
     public @NonNull X509Certificate getCertificate() {
         return certificate;
     }
@@ -109,26 +126,8 @@ public class AttestationCertificate implements Serializable {
         try {
             LdapName subjectDN = new LdapName(getCertificate().getSubjectX500Principal().getName());
             Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-            return (String)map.get(name);
+            return (String) map.get(name);
         } catch (InvalidNameException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private static Map<String, Object> toMap(Rdn rdn) {
-        try {
-            Map<String, Object> map = new HashMap<>();
-            Attributes attributes = rdn.toAttributes();
-            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
-
-            while(ids.hasMore()){
-                String id = ids.next();
-                map.put(id, attributes.get(id).get());
-            }
-            return map;
-
-        }
-        catch (NamingException e) {
             throw new IllegalArgumentException(e);
         }
     }

@@ -30,7 +30,7 @@ public interface CertPathTrustworthinessValidator {
 
     void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp);
 
-    default void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement){
+    default void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement) {
         validate(aaguid, attestationStatement, Instant.now());
     }
 }

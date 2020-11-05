@@ -61,7 +61,7 @@ public enum AttestationConveyancePreference {
      * to tie registrations to specific authenticators.
      * User agents MUST NOT provide such an attestation unless the user agent or authenticator configuration permits it
      * for the requested RP ID.
-     *
+     * <p>
      * If permitted, the user agent SHOULD signal to the authenticator (at invocation time) that enterprise attestation
      * is requested, and convey the resulting AAGUID and attestation statement, unaltered, to the Relying Party.
      */

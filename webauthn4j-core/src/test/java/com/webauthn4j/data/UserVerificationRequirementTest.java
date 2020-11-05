@@ -42,7 +42,7 @@ class UserVerificationRequirementTest {
 
     @Test
     void create_with_null_value_test() {
-        assertThatThrownBy(()-> UserVerificationRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> UserVerificationRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

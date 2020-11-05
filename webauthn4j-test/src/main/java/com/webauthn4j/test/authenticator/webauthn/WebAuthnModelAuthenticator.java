@@ -30,7 +30,9 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
-import com.webauthn4j.data.extension.authenticator.*;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import com.webauthn4j.test.CACertificatePath;
@@ -67,11 +69,11 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     private final CACertificatePath caCertificatePath;
     private final PrivateKey attestationIssuerPrivateKey;
     private final Map<CredentialMapKey, PublicKeyCredentialSource> credentialMap;
-    private int counter;
     // feature flags
     private final boolean capableOfUserVerification;
-    private boolean countUpEnabled = true;
     private final AuthenticatorDataConverter authenticatorDataConverter;
+    private int counter;
+    private boolean countUpEnabled = true;
 
     public WebAuthnModelAuthenticator(
             AAGUID aaguid,
@@ -137,7 +139,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         PublicKeyCredentialParameters publicKeyCredentialParameters;
         if (optionalPublicKeyCredentialParameters.isPresent()) {
             publicKeyCredentialParameters = optionalPublicKeyCredentialParameters.get();
-        } else {
+        }
+        else {
             throw new NotSupportedException("Specified PublicKeyCredentialParameters are not supported");
         }
 

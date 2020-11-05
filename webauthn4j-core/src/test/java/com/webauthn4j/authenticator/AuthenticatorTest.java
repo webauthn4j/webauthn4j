@@ -63,10 +63,9 @@ class AuthenticatorTest {
         private final AttestedCredentialData attestedCredentialData;
         private final AttestationStatement attestationStatement;
         private final Set<AuthenticatorTransport> transports;
-        private long counter;
-
         private final AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
         private final AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
+        private long counter;
 
         public TestAuthenticator(
                 @JsonProperty("attestedCredentialData") AttestedCredentialData attestedCredentialData,

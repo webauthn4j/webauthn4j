@@ -35,7 +35,7 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
     }
 
     public T getValue(@NonNull String key) {
-        if(!key.equals(getIdentifier())){
+        if (!key.equals(getIdentifier())) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", getIdentifier()));
         }
         return value;

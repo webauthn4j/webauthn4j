@@ -68,7 +68,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         versionValidator.validate(attestationStatement.getVer());
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
-        if(attestationStatement.getResponse() == null){
+        if (attestationStatement.getResponse() == null) {
             throw new BadAttestationStatementException("Response in android safetynet attestation statement is null.");
         }
         Response response = attestationStatement.getResponse().getPayload();
@@ -88,7 +88,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
         }
 
-        if(response.getTimestampMs() == null){
+        if (response.getTimestampMs() == null) {
             throw new BadAttestationStatementException("timestampMs is null.");
         }
 
@@ -110,11 +110,11 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    void validateNull(AndroidSafetyNetAttestationStatement attestationStatement){
+    void validateNull(AndroidSafetyNetAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getVer() == null){
+        if (attestationStatement.getVer() == null) {
             throw new BadAttestationStatementException("ver must not be null");
         }
         validateNull(attestationStatement.getResponse());
@@ -123,36 +123,36 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         }
     }
 
-    void validateNull(JWS<Response> response){
-        if (response == null){
+    void validateNull(JWS<Response> response) {
+        if (response == null) {
             throw new BadAttestationStatementException("response must not be null.");
         }
         validateNull(response.getPayload());
     }
 
-    void validateNull(Response response){
-        if (response == null){
+    void validateNull(Response response) {
+        if (response == null) {
             throw new BadAttestationStatementException("response must not be null.");
         }
-        if (response.getNonce() == null){
+        if (response.getNonce() == null) {
             throw new BadAttestationStatementException("nonce must not be null.");
         }
-        if (response.getTimestampMs() == null){
+        if (response.getTimestampMs() == null) {
             throw new BadAttestationStatementException("timeStampMs must not be null.");
         }
-        if (response.getApkPackageName() == null){
+        if (response.getApkPackageName() == null) {
             throw new BadAttestationStatementException("apkPackageName must not be null.");
         }
-        if (response.getApkCertificateDigestSha256() == null){
+        if (response.getApkCertificateDigestSha256() == null) {
             throw new BadAttestationStatementException("apkCertificateDigestSha256 must not be null.");
         }
-        if (response.getApkDigestSha256() == null){
+        if (response.getApkDigestSha256() == null) {
             throw new BadAttestationStatementException("apkDigestSha256 must not be null.");
         }
-        if (response.getCtsProfileMatch() == null){
+        if (response.getCtsProfileMatch() == null) {
             throw new BadAttestationStatementException("ctsProfileMatch must not be null.");
         }
-        if (response.getBasicIntegrity() == null){
+        if (response.getBasicIntegrity() == null) {
             throw new BadAttestationStatementException("basicIntegrity must not be null.");
         }
     }

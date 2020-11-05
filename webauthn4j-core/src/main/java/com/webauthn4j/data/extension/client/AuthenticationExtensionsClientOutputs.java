@@ -34,25 +34,25 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnySetter
-    private void setUnknowns(@NonNull String name, @Nullable Serializable value){
+    private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
         this.unknowns.put(name, value);
     }
 
     @JsonAnyGetter
-    private @NonNull Map<String, Serializable> getUnknowns(){
+    private @NonNull Map<String, Serializable> getUnknowns() {
         return this.unknowns;
     }
 
     @JsonIgnore
     public @NonNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
-        if(appid != null){
+        if (appid != null) {
             keys.add("appid");
         }
-        if(uvm != null){
+        if (uvm != null) {
             keys.add("uvm");
         }
-        if(credProps != null){
+        if (credProps != null) {
             keys.add("credProps");
         }
         keys.addAll(getUnknownKeys());
@@ -66,7 +66,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     @JsonIgnore
     public @Nullable Serializable getValue(@NonNull String key) {
-        switch (key){
+        switch (key) {
             case "appid":
                 return appid;
             case "uvm":
@@ -79,38 +79,38 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     }
 
     @JsonIgnore
-    public @Nullable Boolean getAppid(){
+    public @Nullable Boolean getAppid() {
         return this.appid;
     }
 
     @JsonIgnore
-    public @Nullable UvmEntries getUvm(){
+    public @Nullable UvmEntries getUvm() {
         return this.uvm;
     }
 
     @JsonIgnore
-    public @Nullable CredentialPropertiesOutput getCredProps(){
+    public @Nullable CredentialPropertiesOutput getCredProps() {
         return this.credProps;
     }
 
     @SuppressWarnings("unchecked")
     public @Nullable <E extends T> E getExtension(@NonNull Class<E> tClass) {
-        return (E)getExtensions().get(tClass);
+        return (E) getExtensions().get(tClass);
     }
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    public @NonNull Map<Class<? extends T>, T> getExtensions(){
-        if(extensions == null){
+    public @NonNull Map<Class<? extends T>, T> getExtensions() {
+        if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if(appid != null){
-                map.put((Class<? extends T>)FIDOAppIDExtensionClientOutput.class, (T)new FIDOAppIDExtensionClientOutput(appid));
+            if (appid != null) {
+                map.put((Class<? extends T>) FIDOAppIDExtensionClientOutput.class, (T) new FIDOAppIDExtensionClientOutput(appid));
             }
-            if(uvm != null){
-                map.put((Class<? extends T>)UserVerificationMethodExtensionClientOutput.class, (T)new UserVerificationMethodExtensionClientOutput(uvm));
+            if (uvm != null) {
+                map.put((Class<? extends T>) UserVerificationMethodExtensionClientOutput.class, (T) new UserVerificationMethodExtensionClientOutput(uvm));
             }
-            if(credProps != null){
-                map.put((Class<? extends T>)CredentialPropertiesExtensionClientOutput.class, (T)new CredentialPropertiesExtensionClientOutput(credProps));
+            if (credProps != null) {
+                map.put((Class<? extends T>) CredentialPropertiesExtensionClientOutput.class, (T) new CredentialPropertiesExtensionClientOutput(credProps));
             }
             extensions = Collections.unmodifiableMap(map);
         }
@@ -140,7 +140,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
-        public @NonNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build(){
+        public @NonNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
@@ -149,18 +149,18 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return instance;
         }
 
-        public @NonNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm){
+        public @NonNull BuilderForRegistration setUvm(@Nullable UvmEntries uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setCredProps(@Nullable CredentialPropertiesOutput credProps){
+        public @NonNull BuilderForRegistration setCredProps(@Nullable CredentialPropertiesOutput credProps) {
             this.credProps = credProps;
             return this;
         }
 
 
-        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value){
+        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -176,7 +176,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
         private Map<String, Serializable> unknowns = new HashMap<>();
 
-        public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build(){
+        public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
             instance.appid = this.appid;
             instance.uvm = this.uvm;
@@ -185,17 +185,17 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
             return instance;
         }
 
-        public @NonNull BuilderForAuthentication setAppid(@Nullable Boolean appid){
+        public @NonNull BuilderForAuthentication setAppid(@Nullable Boolean appid) {
             this.appid = appid;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm){
+        public @NonNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value){
+        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

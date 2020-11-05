@@ -61,10 +61,10 @@ public class ECCUnique implements TPMUPublicId {
 
     @Override
     public @NonNull byte[] getBytes() {
-        if(x == null){
+        if (x == null) {
             throw new IllegalStateException("x must not be null");
         }
-        if(y == null){
+        if (y == null) {
             throw new IllegalStateException("y must not be null");
         }
         ByteBuffer buffer = ByteBuffer.allocate(2 + x.length + 2 + y.length);

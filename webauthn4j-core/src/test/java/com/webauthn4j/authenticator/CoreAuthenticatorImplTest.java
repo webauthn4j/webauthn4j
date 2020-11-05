@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CoreAuthenticatorImplTest {
 
     @Test
-    void createFromRegistrationData_test(){
+    void createFromRegistrationData_test() {
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new byte[32];
         byte[] clientDataHash = new byte[32];

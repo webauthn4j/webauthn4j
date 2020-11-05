@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class SignatureAlgorithmTest {
 
     @Test
-    void create_test(){
+    void create_test() {
         assertAll(
                 () -> assertThat(SignatureAlgorithm.create("SHA256withECDSA")).isEqualTo(SignatureAlgorithm.ES256),
                 () -> assertThat(SignatureAlgorithm.create("SHA384withECDSA")).isEqualTo(SignatureAlgorithm.ES384),
@@ -47,14 +47,14 @@ class SignatureAlgorithmTest {
     }
 
     @Test
-    void serialize_test(){
+    void serialize_test() {
         ObjectConverter objectConverter = new ObjectConverter();
         String string = objectConverter.getJsonConverter().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":\"SHA256withECDSA\"}");
     }
 
     @Test
-    void override_serialized_value_by_adding_custom_serializer_test(){
+    void override_serialized_value_by_adding_custom_serializer_test() {
         ObjectMapper jsonMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new CustomSignatureAlgorithmSerializer());
@@ -78,7 +78,7 @@ class SignatureAlgorithmTest {
         }
     }
 
-    static class TestDto{
+    static class TestDto {
         private SignatureAlgorithm alg;
 
         public TestDto(SignatureAlgorithm alg) {

@@ -50,21 +50,29 @@ public enum AttachmentHint {
         }
         if (value == 0x0001) {
             return INTERNAL;
-        } else if (value == 0x0002) {
+        }
+        else if (value == 0x0002) {
             return EXTERNAL;
-        } else if (value == 0x0004) {
+        }
+        else if (value == 0x0004) {
             return WIRED;
-        } else if (value == 0x0008) {
+        }
+        else if (value == 0x0008) {
             return WIRELESS;
-        } else if (value == 0x0010) {
+        }
+        else if (value == 0x0010) {
             return NFC;
-        } else if (value == 0x0020) {
+        }
+        else if (value == 0x0020) {
             return BLUETOOTH;
-        } else if (value == 0x0040) {
+        }
+        else if (value == 0x0040) {
             return NETWORK;
-        } else if (value == 0x0080) {
+        }
+        else if (value == 0x0080) {
             return READY;
-        } else if (value == 0x0100) {
+        }
+        else if (value == 0x0100) {
             return WIFI_DIRECT;
         }
         throw new IllegalArgumentException("value '" + value + "' is out of range");

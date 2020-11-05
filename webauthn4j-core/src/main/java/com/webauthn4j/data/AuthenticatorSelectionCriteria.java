@@ -47,10 +47,11 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     /**
      * Constructor for Jackson deserializer
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param requireResidentKey This describes resident key requirement if residentKey member is absent.
-     * @param residentKey relying party's requirement for resident-key
-     * @param userVerification relying party's requirement for user verification
+     * @param requireResidentKey      This describes resident key requirement if residentKey member is absent.
+     * @param residentKey             relying party's requirement for resident-key
+     * @param userVerification        relying party's requirement for user verification
      */
     @JsonCreator
     public AuthenticatorSelectionCriteria(
@@ -66,9 +67,10 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     /**
      * Constructor for WebAuthn Level2 spec
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param residentKey relying party's requirement for resident-key
-     * @param userVerification relying party's requirement for user verification
+     * @param residentKey             relying party's requirement for resident-key
+     * @param userVerification        relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
             @Nullable AuthenticatorAttachment authenticatorAttachment,
@@ -79,9 +81,10 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     /**
      * Constructor for WebAuthn Level1 spec backward-compatibility
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param requireResidentKey This describes resident key requirement
-     * @param userVerification relying party's requirement for user verification
+     * @param requireResidentKey      This describes resident key requirement
+     * @param userVerification        relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
             @Nullable AuthenticatorAttachment authenticatorAttachment,

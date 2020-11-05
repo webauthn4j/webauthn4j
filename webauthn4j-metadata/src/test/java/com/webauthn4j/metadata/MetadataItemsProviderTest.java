@@ -42,8 +42,8 @@ class MetadataItemsProviderTest {
     private final ObjectConverter objectConverter;
 
     private final HttpClient fidoMDSClient = mock(HttpClient.class);
-    private FidoMdsMetadataItemsProvider target;
     private final OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+    private FidoMdsMetadataItemsProvider target;
 
     MetadataItemsProviderTest() {
         ObjectMapper jsonMapper = new ObjectMapper();

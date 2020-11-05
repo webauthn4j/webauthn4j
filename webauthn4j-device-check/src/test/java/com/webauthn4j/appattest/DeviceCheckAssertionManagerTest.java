@@ -25,9 +25,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class DeviceCheckAssertionManagerTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         assertThatCode(DeviceCheckAssertionManager::new).doesNotThrowAnyException();
-        assertThatCode(()->{
+        assertThatCode(() -> {
             new DeviceCheckAssertionManager(Collections.emptyList());
         }).doesNotThrowAnyException();
     }

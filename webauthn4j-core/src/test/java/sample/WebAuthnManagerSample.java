@@ -34,9 +34,8 @@ import java.util.Set;
 
 public class WebAuthnManagerSample {
 
-    private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
-
     private final WebAuthnManager webAuthnManager;
+    private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
 
     public WebAuthnManagerSample() {
         // WebAuthnManager.createNonStrictWebAuthnManager() returns a WebAuthnManager instance

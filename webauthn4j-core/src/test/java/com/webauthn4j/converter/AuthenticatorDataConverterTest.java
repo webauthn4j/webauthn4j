@@ -61,7 +61,7 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
-    void convert_apple_app_attest_authenticatorData(){
+    void convert_apple_app_attest_authenticatorData() {
         byte[] authenticatorDataBytes = Base64UrlUtil.decode("MGACygVeBsWIpS7GqlSC9TaOAq8wh7Hp0wnQQMr12VpAAAAAAQ");
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
@@ -118,7 +118,7 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
-    void convertToExtensions_with_0_length_ByteBuffer_test(){
+    void convertToExtensions_with_0_length_ByteBuffer_test() {
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.allocate(0));
         assertThat(extensions.getKeys()).isEmpty();

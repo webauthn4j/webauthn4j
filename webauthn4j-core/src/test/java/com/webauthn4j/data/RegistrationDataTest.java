@@ -46,7 +46,7 @@ class RegistrationDataTest {
 
     @Test
     void constructor_with_serverProperty_null_test() {
-        assertThatThrownBy(()->{
+        assertThatThrownBy(() -> {
             new RegistrationParameters(
                     null,
                     true
