@@ -14,7 +14,6 @@ import java.util.Objects;
 /**
  * Internal data transfer object for authentication data
  */
-@SuppressWarnings("Duplicates")
 public class CoreAuthenticationObject {
 
     //~ Instance fields

@@ -37,7 +37,6 @@ public class AggregatingMetadataStatementsProvider implements MetadataStatements
         this.metadataStatementsProviders = metadataStatementsProviders;
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
     public Map<AAGUID, Set<MetadataStatement>> provide() {
         return metadataStatementsProviders.stream()

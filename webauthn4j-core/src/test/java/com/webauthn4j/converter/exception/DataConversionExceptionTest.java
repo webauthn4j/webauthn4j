@@ -19,7 +19,6 @@ package com.webauthn4j.converter.exception;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("ThrowableNotThrown")
 class DataConversionExceptionTest {
 
     @Test
