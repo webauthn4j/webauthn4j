@@ -39,7 +39,7 @@ public class CertPathSerializer extends StdSerializer<CertPath> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NonNull CertPath value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException { //TODO: revisit Does Jackson pass null to the custom serializers?
+    public void serialize(@NonNull CertPath value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         try {
             gen.writeStartArray();
             for (Certificate certificate : value.getCertificates()) {
