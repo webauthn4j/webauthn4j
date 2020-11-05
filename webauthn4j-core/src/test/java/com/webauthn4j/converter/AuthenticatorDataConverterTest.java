@@ -85,6 +85,7 @@ class AuthenticatorDataConverterTest {
     void serialize_deserialize_test() {
         //Given
         byte[] rpIdHash = new byte[32];
+        //noinspection UnnecessaryLocalVariable
         byte flags = BIT_ED;
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.setUvm(new UvmEntries());

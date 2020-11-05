@@ -27,9 +27,7 @@ class DeviceCheckAssertionManagerTest {
     @Test
     void constructor_test() {
         assertThatCode(DeviceCheckAssertionManager::new).doesNotThrowAnyException();
-        assertThatCode(() -> {
-            new DeviceCheckAssertionManager(Collections.emptyList());
-        }).doesNotThrowAnyException();
+        assertThatCode(() -> new DeviceCheckAssertionManager(Collections.emptyList())).doesNotThrowAnyException();
     }
 
 }

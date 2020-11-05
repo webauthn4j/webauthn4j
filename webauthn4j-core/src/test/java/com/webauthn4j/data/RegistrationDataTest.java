@@ -46,12 +46,10 @@ class RegistrationDataTest {
 
     @Test
     void constructor_with_serverProperty_null_test() {
-        assertThatThrownBy(() -> {
-            new RegistrationParameters(
-                    null,
-                    true
-            );
-        }).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new RegistrationParameters(
+                null,
+                true
+        )).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

@@ -127,6 +127,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.SELF;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean verifySignature(@NonNull PublicKey publicKey, @NonNull COSEAlgorithmIdentifier algorithmIdentifier, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             String jcaName = getJcaName(algorithmIdentifier);

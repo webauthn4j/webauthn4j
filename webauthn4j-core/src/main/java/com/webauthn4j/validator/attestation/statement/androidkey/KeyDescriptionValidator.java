@@ -128,6 +128,7 @@ public class KeyDescriptionValidator {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean isKeyGeneratedInKeymaster(@Nullable Asn1ParseResult origin) {
         try {
             return Objects.equals(getIntegerFromAsn1(origin), BigInteger.valueOf(KM_ORIGIN_GENERATED));
@@ -137,6 +138,7 @@ public class KeyDescriptionValidator {
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean containsValidPurpose(@Nullable Asn1ParseResult purposes) throws IOException {
         try {
             if (purposes == null) {

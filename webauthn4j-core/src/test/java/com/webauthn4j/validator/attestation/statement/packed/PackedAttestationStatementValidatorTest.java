@@ -55,6 +55,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+@SuppressWarnings({"FieldCanBeLocal", "SameParameterValue"})
 class PackedAttestationStatementValidatorTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

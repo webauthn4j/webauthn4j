@@ -62,7 +62,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-    private String token = null;
+    private String token;
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();

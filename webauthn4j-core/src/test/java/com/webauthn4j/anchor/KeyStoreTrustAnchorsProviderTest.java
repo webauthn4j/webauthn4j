@@ -61,6 +61,7 @@ class KeyStoreTrustAnchorsProviderTest {
         );
     }
 
+    @SuppressWarnings("SameParameterValue")
     private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password)
             throws CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore keyStoreObject = CertificateUtil.createKeyStore();
