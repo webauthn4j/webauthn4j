@@ -50,7 +50,7 @@ class PublicKeyCredentialTypeTest {
     }
 
     @Test
-    void create_null_test(){
+    void create_null_test() {
         assertThatThrownBy(() -> PublicKeyCredentialType.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 

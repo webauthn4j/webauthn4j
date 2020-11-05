@@ -23,7 +23,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<UvmEntries>
-        implements RegistrationExtensionAuthenticatorOutput, AuthenticationExtensionAuthenticatorOutput{
+        implements RegistrationExtensionAuthenticatorOutput, AuthenticationExtensionAuthenticatorOutput {
 
     public static final String ID = "uvm";
     public static final String KEY_UVM = "uvm";
@@ -43,7 +43,7 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

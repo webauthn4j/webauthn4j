@@ -34,11 +34,13 @@ class TokenBindingValidator {
     public void validate(@Nullable TokenBinding clientDataTokenBinding, @Nullable byte[] serverTokenBindingId) {
         if (clientDataTokenBinding == null) {
             // nop
-        } else {
+        }
+        else {
             byte[] clientDataTokenBindingId;
             if (clientDataTokenBinding.getId() == null) {
                 clientDataTokenBindingId = null;
-            } else {
+            }
+            else {
                 clientDataTokenBindingId = Base64UrlUtil.decode(clientDataTokenBinding.getId());
             }
             switch (clientDataTokenBinding.getStatus()) {

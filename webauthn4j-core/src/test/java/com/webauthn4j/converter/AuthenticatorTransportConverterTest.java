@@ -47,7 +47,7 @@ class AuthenticatorTransportConverterTest {
 
     @Test
     void convertSet_null_test() {
-        assertThatThrownBy(()->converter.convertSet(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> converter.convertSet(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -63,7 +63,7 @@ class AuthenticatorTransportConverterTest {
     @Test
     void convertSetToStringSet_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(()->converter.convertSetToStringSet(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> converter.convertSetToStringSet(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
 }

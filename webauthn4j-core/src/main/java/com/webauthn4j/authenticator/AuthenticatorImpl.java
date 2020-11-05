@@ -67,7 +67,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
         this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
     }
 
-    public static @NonNull AuthenticatorImpl createFromRegistrationData(@NonNull RegistrationData registrationData){
+    public static @NonNull AuthenticatorImpl createFromRegistrationData(@NonNull RegistrationData registrationData) {
         return new AuthenticatorImpl(
                 registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 registrationData.getAttestationObject().getAttestationStatement(),

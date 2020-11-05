@@ -35,13 +35,17 @@ public enum TPMIAlgPublic {
     public static @NonNull TPMIAlgPublic create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
-        } else if (value == TPM_ALG_RSA.value) {
+        }
+        else if (value == TPM_ALG_RSA.value) {
             return TPM_ALG_RSA;
-        } else if (value == TPM_ALG_NULL.value) {
+        }
+        else if (value == TPM_ALG_NULL.value) {
             return TPM_ALG_NULL;
-        } else if (value == TPM_ALG_ECDSA.value) {
+        }
+        else if (value == TPM_ALG_ECDSA.value) {
             return TPM_ALG_ECDSA;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }

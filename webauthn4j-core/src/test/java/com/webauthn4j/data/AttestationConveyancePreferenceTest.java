@@ -44,7 +44,7 @@ class AttestationConveyancePreferenceTest {
 
     @Test
     void create_test_with_null_value() {
-        assertThatThrownBy(()-> AttestationConveyancePreference.create(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> AttestationConveyancePreference.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

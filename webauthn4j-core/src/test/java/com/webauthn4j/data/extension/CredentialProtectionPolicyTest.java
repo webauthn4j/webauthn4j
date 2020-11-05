@@ -19,28 +19,29 @@ package com.webauthn4j.data.extension;
 
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CredentialProtectionPolicyTest {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
-    void create_test(){
+    void create_test() {
         assertThat(CredentialProtectionPolicy.create((byte) 0x01)).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThat(CredentialProtectionPolicy.create((byte) 0x02)).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
         assertThat(CredentialProtectionPolicy.create((byte) 0x03)).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
 
-        assertThatThrownBy(()->CredentialProtectionPolicy.create((byte) 0x00)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> CredentialProtectionPolicy.create((byte) 0x00)).isInstanceOf(IllegalArgumentException.class);
 
         assertThat(CredentialProtectionPolicy.create("userVerificationOptional")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThat(CredentialProtectionPolicy.create("userVerificationOptionalWithCredentialIDList")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
         assertThat(CredentialProtectionPolicy.create("userVerificationRequired")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
 
-        assertThatThrownBy(()->CredentialProtectionPolicy.create("invalid")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> CredentialProtectionPolicy.create("invalid")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void toString_toByte_test(){
+    void toString_toByte_test() {
         assertThat(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL.toByte()).isEqualTo((byte) 0x01);
         assertThat(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL.toString()).hasToString("userVerificationOptional");
     }

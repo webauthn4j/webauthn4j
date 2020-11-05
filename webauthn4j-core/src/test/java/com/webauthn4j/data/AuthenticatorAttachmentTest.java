@@ -42,8 +42,8 @@ class AuthenticatorAttachmentTest {
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void create_null_test(){
-        assertThatThrownBy(()-> AuthenticatorAttachment.create(null)).isInstanceOf(IllegalArgumentException.class);
+    void create_null_test() {
+        assertThatThrownBy(() -> AuthenticatorAttachment.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

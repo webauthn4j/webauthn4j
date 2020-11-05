@@ -48,7 +48,7 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 
-    public static @NonNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NonNull CoreRegistrationData coreRegistrationData){
+    public static @NonNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NonNull CoreRegistrationData coreRegistrationData) {
         return new CoreAuthenticatorImpl(
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 coreRegistrationData.getAttestationObject().getAttestationStatement(),

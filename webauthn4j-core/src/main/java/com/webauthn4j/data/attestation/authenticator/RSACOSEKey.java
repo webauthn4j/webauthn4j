@@ -76,7 +76,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     @SuppressWarnings("squid:S00107")
     @JsonCreator
     public RSACOSEKey(
-            @Nullable  @JsonProperty("2") byte[] keyId,
+            @Nullable @JsonProperty("2") byte[] keyId,
             @Nullable @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
             @Nullable @JsonProperty("4") List<COSEKeyOperation> keyOps,
             @Nullable @JsonProperty("-1") byte[] n,
@@ -125,7 +125,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
         byte[] n = privateKey.getModulus().toByteArray();
         byte[] d = privateKey.getPrivateExponent().toByteArray();
-        return new RSACOSEKey(null,alg,null, n, null, d, null, null, null, null, null);
+        return new RSACOSEKey(null, alg, null, n, null, d, null, null, null, null, null);
     }
 
 
@@ -141,9 +141,9 @@ public class RSACOSEKey extends AbstractCOSEKey {
     public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(keyPair, "keyPair must not be null");
 
-        if(keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey){
-            RSAPublicKey rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
-            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
+        if (keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey) {
+            RSAPublicKey rsaPublicKey = (RSAPublicKey) keyPair.getPublic();
+            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyPair.getPrivate();
 
             byte[] n = rsaPublicKey.getModulus().toByteArray();
             byte[] e = rsaPublicKey.getPublicExponent().toByteArray();
@@ -157,6 +157,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     /**
      * Create {@link RSACOSEKey} from {@link RSAPrivateKey}.
+     *
      * @param privateKey privateKey
      * @return {@link RSACOSEKey}
      */
@@ -166,6 +167,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     /**
      * Create {@link RSACOSEKey} from {@link RSAPublicKey}.
+     *
      * @param publicKey publicKey
      * @return {@link RSACOSEKey}
      */
@@ -175,6 +177,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     /**
      * Create {@link RSACOSEKey} from {@link KeyPair}.
+     *
      * @param keyPair keyPair
      * @return {@link RSACOSEKey}
      */
@@ -243,7 +246,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
 
     @Override
     public @Nullable PrivateKey getPrivateKey() {
-        if(!hasPrivateKey()){
+        if (!hasPrivateKey()) {
             return null;
         }
         RSAPrivateKeySpec rsaPrivateKeySpec = new RSAPrivateKeySpec(

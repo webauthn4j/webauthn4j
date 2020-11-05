@@ -32,7 +32,7 @@ class UvmEntriesTest {
     JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
-    void serialize_test(){
+    void serialize_test() {
         UvmEntry uvmEntry = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries = new UvmEntries(Collections.singletonList(uvmEntry));
 
@@ -41,7 +41,7 @@ class UvmEntriesTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         UvmEntry uvmEntry1 = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries1 = new UvmEntries(Collections.singletonList(uvmEntry1));
         UvmEntry uvmEntry2 = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);

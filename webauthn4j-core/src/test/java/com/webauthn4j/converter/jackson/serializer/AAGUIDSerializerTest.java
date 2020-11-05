@@ -30,7 +30,7 @@ class AAGUIDSerializerTest {
     @Test
     void null_test() throws IOException {
         // Custom jackson serializer doesn't need to handle null value as Jackson doesn't call custom serializer when the value is null.
-        assertThatThrownBy(()->aaguidSerializer.serialize(null, null, null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> aaguidSerializer.serialize(null, null, null)).isInstanceOf(IllegalArgumentException.class);
     }
 
 

@@ -36,16 +36,16 @@ public class JWSHeaderSerializer extends StdSerializer<JWSHeader> {
     @Override
     public void serialize(JWSHeader value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         try {
-        gen.writeStartObject();
-        gen.writeObjectField("alg", value.getAlg());
-        gen.writeFieldName("x5c");
-        gen.writeStartArray();
-        if(value.getX5c() != null){
-            for(Certificate certificate : value.getX5c().getCertificates()){
-                gen.writeString(Base64Util.encodeToString(certificate.getEncoded())); // x5c must be Base64, not Base64Url
+            gen.writeStartObject();
+            gen.writeObjectField("alg", value.getAlg());
+            gen.writeFieldName("x5c");
+            gen.writeStartArray();
+            if (value.getX5c() != null) {
+                for (Certificate certificate : value.getX5c().getCertificates()) {
+                    gen.writeString(Base64Util.encodeToString(certificate.getEncoded())); // x5c must be Base64, not Base64Url
+                }
             }
-        }
-        gen.writeEndArray();
+            gen.writeEndArray();
         } catch (CertificateEncodingException e) {
             throw new UnexpectedCheckedException(e);
         }

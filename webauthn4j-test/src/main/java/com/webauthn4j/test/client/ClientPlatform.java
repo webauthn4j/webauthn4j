@@ -65,7 +65,8 @@ public class ClientPlatform {
         CollectedClientData collectedClientData;
         if (registrationEmulationOption.isCollectedClientDataOverrideEnabled()) {
             collectedClientData = registrationEmulationOption.getCollectedClientData();
-        } else {
+        }
+        else {
             collectedClientData = createCollectedClientData(ClientDataType.CREATE, publicKeyCredentialCreationOptions.getChallenge());
         }
 

@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserVerificationMethodExtensionClientInputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         UserVerificationMethodExtensionClientInput target = new UserVerificationMethodExtensionClientInput(true);
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         UserVerificationMethodExtensionClientInput target = new UserVerificationMethodExtensionClientInput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

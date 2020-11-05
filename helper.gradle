@@ -19,7 +19,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath ("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
+        classpath("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
     }
 }
 
@@ -27,9 +27,9 @@ buildscript {
 import groovyx.net.http.HTTPBuilder
 
 import static groovyx.net.http.ContentType.JSON
-import static groovyx.net.http.Method.*
+import static groovyx.net.http.Method.POST
 
-def signArtifactsOnBintray(String user, String pass){
+def signArtifactsOnBintray(String user, String pass) {
 
     final http = new HTTPBuilder(bintray.apiUrl)
 
@@ -47,7 +47,7 @@ def signArtifactsOnBintray(String user, String pass){
     }
 }
 
-def syncMavenCentralToBintray(String user, String pass){
+def syncMavenCentralToBintray(String user, String pass) {
 
     final http = new HTTPBuilder(bintray.apiUrl)
 

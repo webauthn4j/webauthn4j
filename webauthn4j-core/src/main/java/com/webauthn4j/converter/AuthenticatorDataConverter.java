@@ -77,7 +77,7 @@ public class AuthenticatorDataConverter {
      * Converts from a {@link AuthenticatorData} to byte[].
      *
      * @param source the source object to convert
-     * @param <T> extension type
+     * @param <T>    extension type
      * @return the converted byte array
      */
     public <T extends ExtensionAuthenticatorOutput> @NonNull byte[] convert(@NonNull AuthenticatorData<T> source) {
@@ -116,7 +116,7 @@ public class AuthenticatorDataConverter {
             AttestedCredentialData attestedCredentialData;
             AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
-                if(byteBuffer.hasRemaining()){
+                if (byteBuffer.hasRemaining()) {
                     attestedCredentialData = attestedCredentialDataConverter.convert(byteBuffer);
                 }
                 else {
@@ -128,7 +128,8 @@ public class AuthenticatorDataConverter {
             }
             if (AuthenticatorData.checkFlagED(flags)) {
                 extensions = convertToExtensions(byteBuffer);
-            } else {
+            }
+            else {
                 extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
             }
             if (byteBuffer.hasRemaining()) {
@@ -150,7 +151,8 @@ public class AuthenticatorDataConverter {
         byteBuffer.get(remaining);
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>(){});
+                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
+                });
         int leftoverLength = remaining.length - envelope.getLength();
         byteBuffer.position(byteBuffer.position() - leftoverLength);
         return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
@@ -190,7 +192,8 @@ public class AuthenticatorDataConverter {
     @NonNull <T extends ExtensionAuthenticatorOutput> byte[] convert(@Nullable AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         if (extensions == null || extensions.getKeys().isEmpty()) {
             return new byte[0];
-        } else {
+        }
+        else {
             return cborConverter.writeValueAsBytes(extensions);
         }
     }

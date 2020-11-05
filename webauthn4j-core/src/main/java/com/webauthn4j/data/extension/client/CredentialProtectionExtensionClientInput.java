@@ -7,7 +7,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
-public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput{
+public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProtect";
     public static final String KEY_CREDENTIAL_PROTECTION_POLICY = "credentialProtectionPolicy";
@@ -32,11 +32,11 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
         return ID;
     }
 
-    public @Nullable CredentialProtectionPolicy getCredentialProtectionPolicy(){
+    public @Nullable CredentialProtectionPolicy getCredentialProtectionPolicy() {
         return credentialProtectionPolicy;
     }
 
-    public @Nullable Boolean getEnforceCredentialProtectionPolicy(){
+    public @Nullable Boolean getEnforceCredentialProtectionPolicy() {
         return enforceCredentialProtectionPolicy;
     }
 
@@ -54,7 +54,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
 
     @Override
     public void validate() {
-        if(credentialProtectionPolicy == null){
+        if (credentialProtectionPolicy == null) {
             throw new ConstraintViolationException("credentialProtectionPolicy must not be null.");
         }
     }

@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class FIDOAppIDExclusionExtensionClientInputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         FIDOAppIDExclusionExtensionClientInput target = new FIDOAppIDExclusionExtensionClientInput("dummy");
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         FIDOAppIDExclusionExtensionClientInput target = new FIDOAppIDExclusionExtensionClientInput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

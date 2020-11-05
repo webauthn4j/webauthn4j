@@ -35,7 +35,7 @@ public class TestExtensionAuthenticatorOutput extends SingleValueExtensionOutput
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

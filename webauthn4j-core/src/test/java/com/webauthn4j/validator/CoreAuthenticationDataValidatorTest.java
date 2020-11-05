@@ -23,13 +23,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CoreAuthenticationDataValidatorTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         CoreAuthenticationDataValidator coreAuthenticationDataValidator = new CoreAuthenticationDataValidator();
         assertThat(coreAuthenticationDataValidator).isInstanceOf(CoreAuthenticationDataValidator.class);
     }
 
     @Test
-    void getter_setter_test(){
+    void getter_setter_test() {
         CoreAuthenticationDataValidator coreAuthenticationDataValidator = new CoreAuthenticationDataValidator();
         CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
         coreAuthenticationDataValidator.setMaliciousCounterValueHandler(coreMaliciousCounterValueHandler);

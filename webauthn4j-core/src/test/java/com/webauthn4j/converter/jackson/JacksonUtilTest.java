@@ -37,7 +37,7 @@ class JacksonUtilTest {
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(objectMapper.readTree((byte[]) any())).thenThrow(IOException.class);
         byte[] value = new byte[0];
-        assertThatThrownBy(()-> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(UncheckedIOException.class);
+        assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(UncheckedIOException.class);
     }
 
     @Test
@@ -45,14 +45,14 @@ class JacksonUtilTest {
         ObjectMapper objectMapper = mock(ObjectMapper.class);
         when(objectMapper.readTree((byte[]) any())).thenThrow(JsonParseException.class);
         byte[] value = new byte[0];
-        assertThatThrownBy(()-> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> JacksonUtil.readTree(objectMapper, value)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
     void binaryValue_test() throws IOException {
         JsonNode jsonNode = mock(JsonNode.class);
         when(jsonNode.binaryValue()).thenThrow(IOException.class);
-            assertThatThrownBy(()-> JacksonUtil.binaryValue(jsonNode)).isInstanceOf(UncheckedIOException.class);
+        assertThatThrownBy(() -> JacksonUtil.binaryValue(jsonNode)).isInstanceOf(UncheckedIOException.class);
     }
 
 }

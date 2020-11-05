@@ -100,7 +100,8 @@ class JWSSignatureUtil {
         if (len < 128) {
             derSignature = new byte[2 + 2 + j + 2 + l];
             offset = 1;
-        } else {
+        }
+        else {
             derSignature = new byte[3 + 2 + j + 2 + l];
             derSignature[1] = (byte) 0x81;
             offset = 2;
@@ -137,9 +138,11 @@ class JWSSignatureUtil {
         int offset;
         if (derSignature[1] > 0) {
             offset = 2;
-        } else if (derSignature[1] == (byte) 0x81) {
+        }
+        else if (derSignature[1] == (byte) 0x81) {
             offset = 3;
-        } else {
+        }
+        else {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 

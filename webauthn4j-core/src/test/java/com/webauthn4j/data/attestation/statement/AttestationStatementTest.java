@@ -30,7 +30,7 @@ class AttestationStatementTest {
     private ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
-    void serialize_deserialize_with_envelope_class(){
+    void serialize_deserialize_with_envelope_class() {
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
         AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
         byte[] bytes = objectConverter.getCborConverter().writeValueAsBytes(envelope);
@@ -39,7 +39,7 @@ class AttestationStatementTest {
         assertThat(deserializedAttestationStatement).isEqualTo(attestationStatement);
     }
 
-    static class AttestationStatementEnvelope{
+    static class AttestationStatementEnvelope {
 
         @JsonProperty("attStmt")
         @JsonTypeInfo(

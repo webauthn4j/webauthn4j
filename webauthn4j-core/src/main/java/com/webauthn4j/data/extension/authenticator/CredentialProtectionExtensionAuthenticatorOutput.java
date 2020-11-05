@@ -23,13 +23,13 @@ public class CredentialProtectionExtensionAuthenticatorOutput implements Registr
         return ID;
     }
 
-    public @Nullable CredentialProtectionPolicy getCredProtect(){
+    public @Nullable CredentialProtectionPolicy getCredProtect() {
         return credProtect;
     }
 
     @Override
     public @Nullable Serializable getValue(@NonNull String key) {
-        if(!key.equals(KEY_CRED_PROTECT)){
+        if (!key.equals(KEY_CRED_PROTECT)) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", getIdentifier()));
         }
         return credProtect;
@@ -37,7 +37,7 @@ public class CredentialProtectionExtensionAuthenticatorOutput implements Registr
 
     @Override
     public void validate() {
-        if(credProtect == null){
+        if (credProtect == null) {
             throw new ConstraintViolationException("credProtect must not be null");
         }
     }

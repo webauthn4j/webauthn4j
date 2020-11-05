@@ -23,7 +23,7 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
         return ID;
     }
 
-    public @Nullable CredentialProtectionPolicy getCredProtect(){
+    public @Nullable CredentialProtectionPolicy getCredProtect() {
         return credProtect;
     }
 
@@ -37,7 +37,7 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
 
     @Override
     public void validate() {
-        if(credProtect == null){
+        if (credProtect == null) {
             throw new ConstraintViolationException("credProtect must not be null");
         }
     }

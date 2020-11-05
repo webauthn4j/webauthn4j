@@ -34,13 +34,13 @@ public class CredentialPropertiesExtensionClientInput extends SingleValueExtensi
         return ID;
     }
 
-    public @Nullable Boolean getCredProps(){
+    public @Nullable Boolean getCredProps() {
         return getValue();
     }
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

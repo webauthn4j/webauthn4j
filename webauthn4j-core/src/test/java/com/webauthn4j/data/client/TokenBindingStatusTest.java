@@ -50,7 +50,7 @@ class TokenBindingStatusTest {
 
     @Test
     void create_with_null_value_test() {
-        assertThatThrownBy(()->TokenBindingStatus.create(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> TokenBindingStatus.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

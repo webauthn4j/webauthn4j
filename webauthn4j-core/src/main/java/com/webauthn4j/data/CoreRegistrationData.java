@@ -47,7 +47,9 @@ public class CoreRegistrationData implements Serializable {
         return ArrayUtil.clone(attestationObjectBytes);
     }
 
-    public @Nullable byte[] getClientDataHash(){ return ArrayUtil.clone(clientDataHash); }
+    public @Nullable byte[] getClientDataHash() {
+        return ArrayUtil.clone(clientDataHash);
+    }
 
     @Override
     public boolean equals(@Nullable Object o) {

@@ -37,7 +37,8 @@ public enum TPMGenerated {
     public static @NonNull TPMGenerated create(@NonNull byte[] value) {
         if (Arrays.equals(value, TPM_GENERATED_VALUE.value)) {
             return TPM_GENERATED_VALUE;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value is out of range");
         }
     }

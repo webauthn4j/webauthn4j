@@ -64,9 +64,9 @@ class ServerPropertyTest {
     void equals_hashCode_multiple_origin_test() {
         final Challenge challenge = new DefaultChallenge();
         final ServerProperty serverPropertyA =
-            new ServerProperty(Arrays.asList(webApp1Origin,webApp2Origin,apk1Origin,apk2Origin), rpId, challenge, new byte[32]);
+                new ServerProperty(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin), rpId, challenge, new byte[32]);
         final ServerProperty serverPropertyB =
-            new ServerProperty(Arrays.asList(webApp1Origin,apk1Origin,webApp2Origin,apk2Origin), rpId, challenge, new byte[32]);
+                new ServerProperty(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin), rpId, challenge, new byte[32]);
 
         assertAll(
                 () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),
@@ -82,10 +82,10 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigins()).isEmpty(),
-                ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                ()->assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
+                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
+                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
         );
     }
 
@@ -97,10 +97,10 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(Collections.emptySet(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigins()).isEmpty(),
-                ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                ()->assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
+                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
+                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
         );
     }
 
@@ -112,10 +112,10 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(new ArrayList<>(), rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigins()).isEmpty(),
-                ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                ()->assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(serverProperty.getOrigins()).isEmpty(),
+                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
+                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
         );
     }
 
@@ -128,10 +128,10 @@ class ServerPropertyTest {
         final ServerProperty serverProperty =
                 new ServerProperty(webApp1Origin, rpId, challenge, tokenBindingBytes);
         assertAll(
-                ()->assertThat(serverProperty.getOrigins()).isEqualTo(Collections.singleton(webApp1Origin)),
-                ()->assertThat(serverProperty.getRpId()).isEqualTo(rpId),
-                ()->assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
-                ()->assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
+                () -> assertThat(serverProperty.getOrigins()).isEqualTo(Collections.singleton(webApp1Origin)),
+                () -> assertThat(serverProperty.getRpId()).isEqualTo(rpId),
+                () -> assertThat(serverProperty.getChallenge()).isEqualTo(challenge),
+                () -> assertThat(serverProperty.getTokenBindingId()).isEqualTo(tokenBindingBytes)
         );
 
     }

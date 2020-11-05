@@ -38,7 +38,8 @@ public class AAGUID implements Serializable {
     public AAGUID(@Nullable byte[] value) {
         if (value == null) {
             this.value = null;
-        } else {
+        }
+        else {
             this.value = UUIDUtil.fromBytes(value);
         }
     }
@@ -46,7 +47,8 @@ public class AAGUID implements Serializable {
     public AAGUID(@Nullable String value) {
         if (value == null) {
             this.value = null;
-        } else {
+        }
+        else {
             this.value = UUIDUtil.fromString(value);
         }
     }

@@ -36,11 +36,13 @@ public class FIDOAppIDExtensionClientOutput
         return ID;
     }
 
-    public @Nullable Boolean getAppid(){ return getValue(ID);}
+    public @Nullable Boolean getAppid() {
+        return getValue(ID);
+    }
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

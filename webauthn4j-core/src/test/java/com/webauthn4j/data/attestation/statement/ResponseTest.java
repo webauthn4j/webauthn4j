@@ -27,7 +27,7 @@ class ResponseTest {
     private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
-    void error_test(){
+    void error_test() {
         Response response = jsonConverter.readValue("{\"error\": \"message\"}", Response.class);
         assertThat(response.getError()).isEqualTo("message");
     }

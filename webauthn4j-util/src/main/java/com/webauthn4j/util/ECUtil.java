@@ -62,9 +62,11 @@ public class ECUtil {
         byte[] adjusted = new byte[fixedSize];
         if (bytes.length <= fixedSize) {
             System.arraycopy(bytes, 0, adjusted, fixedSize - bytes.length, bytes.length);
-        } else if (bytes.length == fixedSize + 1 && bytes[0] == 0) {
+        }
+        else if (bytes.length == fixedSize + 1 && bytes[0] == 0) {
             System.arraycopy(bytes, 1, adjusted, 0, fixedSize);
-        } else {
+        }
+        else {
             throw new IllegalStateException("Value is too large, fixedSize: " + fixedSize + ", array size: " + bytes.length + ", starts with 0: " + (bytes[0] == 0 ? "yes" : "no"));
         }
         return adjusted;
@@ -107,7 +109,8 @@ public class ECUtil {
             if (seed != null) {
                 random = SecureRandom.getInstance("SHA1PRNG"); // to make it deterministic
                 random.setSeed(seed);
-            } else {
+            }
+            else {
                 random = secureRandom;
             }
             keyPairGenerator.initialize(ecParameterSpec, random);

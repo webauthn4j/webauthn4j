@@ -52,7 +52,8 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
         for (KeyValue nonNullValue : nonNullValues) {
             if (nonNullValue.name instanceof String) {
                 gen.writeFieldName((String) nonNullValue.name);
-            } else {
+            }
+            else {
                 gen.writeFieldId((int) nonNullValue.name);
             }
             gen.writeObject(nonNullValue.value);
@@ -62,8 +63,10 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
     }
 
     private static class KeyValue {
-        @NonNull private final Object name;
-        @Nullable private final Object value;
+        @NonNull
+        private final Object name;
+        @Nullable
+        private final Object value;
 
         public KeyValue(@NonNull Object name, @Nullable Object value) {
             this.name = name;
@@ -73,8 +76,10 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
 
     static class FieldSerializationRule<T, R> {
 
-        @NonNull private final Object name;
-        @NonNull private final Function<T, R> getter;
+        @NonNull
+        private final Object name;
+        @NonNull
+        private final Function<T, R> getter;
 
         public FieldSerializationRule(int name, @NonNull Function<T, @Nullable R> getter) {
             this.name = name;

@@ -53,13 +53,13 @@ class OriginValidatorTest {
     }
 
     @Test
-    void multiple_origins_test(){
+    void multiple_origins_test() {
         final Origin originA = new Origin("https://example.com:14443");
         final Origin originB = new Origin("http://localhost:9090");
         final Origin originC = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         final Origin originD = new Origin("android:apk-key-hash-sha256:qSiQ5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA,originB,originC,originD),
+        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA, originB, originC, originD),
                 "example.com", TestDataUtil.createChallenge(), null);
 
         final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,
@@ -71,14 +71,14 @@ class OriginValidatorTest {
         final CollectedClientData collectedClientDataD = new CollectedClientData(ClientDataType.GET,
                 TestDataUtil.createChallenge(), originD, null);
 
-        target.validate(collectedClientDataA,serverProperty);
-        target.validate(collectedClientDataB,serverProperty);
-        target.validate(collectedClientDataC,serverProperty);
-        target.validate(collectedClientDataD,serverProperty);
+        target.validate(collectedClientDataA, serverProperty);
+        target.validate(collectedClientDataB, serverProperty);
+        target.validate(collectedClientDataC, serverProperty);
+        target.validate(collectedClientDataD, serverProperty);
     }
 
     @Test
-    void multiple_origins_test_with_invalid_origin(){
+    void multiple_origins_test_with_invalid_origin() {
         final Origin originA = new Origin("https://example.com:14443");
         final Origin originB = new Origin("http://localhost:9090");
         final Origin originC = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
@@ -89,7 +89,7 @@ class OriginValidatorTest {
         final Origin badOriginC = new Origin("android:apk-key-hash:0pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         final Origin badOriginD = new Origin("android:apk-key-hash-sha256:0qSiQ5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA,originB,originC,originD),
+        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA, originB, originC, originD),
                 "example.com", TestDataUtil.createChallenge(), null);
 
         final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,

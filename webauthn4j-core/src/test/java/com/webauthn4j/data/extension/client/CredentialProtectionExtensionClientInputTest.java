@@ -25,32 +25,32 @@ import static org.assertj.core.api.Assertions.*;
 class CredentialProtectionExtensionClientInputTest {
 
     @Test
-    void getIdentifier_test(){
+    void getIdentifier_test() {
         CredentialProtectionExtensionClientInput target = new CredentialProtectionExtensionClientInput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST, true);
         assertThat(target.getIdentifier()).isEqualTo(CredentialProtectionExtensionClientInput.ID);
     }
 
     @Test
-    void getValue_with_valid_key_test(){
+    void getValue_with_valid_key_test() {
         CredentialProtectionExtensionClientInput target = new CredentialProtectionExtensionClientInput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST, true);
-        assertThatCode(()->target.getValue("credentialProtectionPolicy")).doesNotThrowAnyException();
-        assertThatCode(()->target.getValue("enforceCredentialProtectionPolicy")).doesNotThrowAnyException();
+        assertThatCode(() -> target.getValue("credentialProtectionPolicy")).doesNotThrowAnyException();
+        assertThatCode(() -> target.getValue("enforceCredentialProtectionPolicy")).doesNotThrowAnyException();
     }
 
     @Test
-    void getValue_with_invalid_key_test(){
+    void getValue_with_invalid_key_test() {
         CredentialProtectionExtensionClientInput target = new CredentialProtectionExtensionClientInput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST, true);
-        assertThatThrownBy(()->target.getValue("invalid")).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.getValue("invalid")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void validate_test(){
+    void validate_test() {
         CredentialProtectionExtensionClientInput target = new CredentialProtectionExtensionClientInput(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST);
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         CredentialProtectionExtensionClientInput target = new CredentialProtectionExtensionClientInput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

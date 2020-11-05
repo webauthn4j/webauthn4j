@@ -24,18 +24,19 @@ public class DCAssertionData extends CoreAuthenticationData {
 
     /**
      * Constructor
-     * @param keyId keyId or credentialId
-     * @param authenticatorData authenticatorData
+     *
+     * @param keyId                  keyId or credentialId
+     * @param authenticatorData      authenticatorData
      * @param authenticatorDataBytes authenticatorData in bytes
-     * @param clientDataHash clientDataHash
-     * @param signature signature
+     * @param clientDataHash         clientDataHash
+     * @param signature              signature
      */
     public DCAssertionData(byte[] keyId, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData, byte[] authenticatorDataBytes, byte[] clientDataHash, byte[] signature) {
         super(keyId, authenticatorData, authenticatorDataBytes, clientDataHash, signature);
     }
 
     // keyId is an alias of credentialId
-    public byte[] getKeyId(){
+    public byte[] getKeyId() {
         return getCredentialId();
     }
 }

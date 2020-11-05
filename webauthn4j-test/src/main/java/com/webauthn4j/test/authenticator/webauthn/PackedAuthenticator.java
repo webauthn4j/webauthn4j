@@ -34,7 +34,8 @@ public class PackedAuthenticator extends WebAuthnModelAuthenticator {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
-        } else {
+        }
+        else {
             signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
 

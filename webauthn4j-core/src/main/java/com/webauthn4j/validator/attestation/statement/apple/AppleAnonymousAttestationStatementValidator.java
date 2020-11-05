@@ -71,11 +71,10 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
             Asn1OctetString octetString = new Asn1OctetString();
             octetString.decode(firstElement);
             extracted = octetString.getValue();
-        }
-        catch (IOException | RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
-        if(!Arrays.equals(extracted, nonce)){
+        if (!Arrays.equals(extracted, nonce)) {
             throw new BadAttestationStatementException("nonce doesn't match.");
         }
     }

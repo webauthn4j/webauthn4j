@@ -28,7 +28,7 @@ class AppleAnonymousAttestationStatementValidatorTest {
     private final AppleAnonymousAttestationStatementValidator target = new AppleAnonymousAttestationStatementValidator();
 
     @Test
-    void validate_test(){
+    void validate_test() {
         CoreRegistrationObject coreRegistrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         target.validate(coreRegistrationObject);
     }

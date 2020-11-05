@@ -28,13 +28,13 @@ import static org.mockito.Mockito.mock;
 class UserVerificationMethodExtensionAuthenticatorOutputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         UserVerificationMethodExtensionAuthenticatorOutput target = new UserVerificationMethodExtensionAuthenticatorOutput(mock(UvmEntries.class));
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         UserVerificationMethodExtensionAuthenticatorOutput target = new UserVerificationMethodExtensionAuthenticatorOutput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

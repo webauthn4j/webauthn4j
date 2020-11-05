@@ -42,10 +42,8 @@ public class CoreRegistrationDataValidator {
 
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
-
-    private List<CustomCoreRegistrationValidator> customRegistrationValidators;
-
     private final AttestationValidator attestationValidator;
+    private List<CustomCoreRegistrationValidator> customRegistrationValidators;
 
     public CoreRegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -142,7 +140,7 @@ public class CoreRegistrationDataValidator {
                 registrationData.getAttestationObjectBytes(),
                 registrationData.getClientDataHash(),
                 registrationParameters.getServerProperty()
-            );
+        );
     }
 
     void validateAuthenticatorDataField(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {

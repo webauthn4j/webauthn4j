@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 class AuthenticationDataTest {
 
     @Test
-    void getter_test(){
+    void getter_test() {
         byte[] credentialId = new byte[32];
         byte[] userHandle = new byte[32];
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;

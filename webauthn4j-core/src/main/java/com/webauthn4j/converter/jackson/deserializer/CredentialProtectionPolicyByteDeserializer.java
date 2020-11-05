@@ -35,10 +35,9 @@ public class CredentialProtectionPolicyByteDeserializer extends StdDeserializer<
     @Override
     public @NonNull CredentialProtectionPolicy deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
         byte value = (byte) p.getValueAsInt();
-        try{
+        try {
             return CredentialProtectionPolicy.create(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorAttachment.class);
         }
     }

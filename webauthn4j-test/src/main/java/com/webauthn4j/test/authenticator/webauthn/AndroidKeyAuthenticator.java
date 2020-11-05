@@ -36,7 +36,8 @@ public class AndroidKeyAuthenticator extends WebAuthnModelAuthenticator {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
-        } else {
+        }
+        else {
             signature = TestDataUtil.calculateSignature(attestationStatementRequest.getCredentialKeyPair().getPrivate(), attestationStatementRequest.getSignedData());
         }
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new AndroidKeyAttestationOption() : registrationEmulationOption.getAttestationOption();

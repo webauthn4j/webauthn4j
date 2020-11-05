@@ -30,7 +30,7 @@ public class SignatureAlgorithm {
     public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", SHA256);
     public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", SHA384);
     public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("SHA512withECDSA", SHA512);
-    public static final SignatureAlgorithm RS1   = new SignatureAlgorithm("SHA1withRSA",     SHA1);
+    public static final SignatureAlgorithm RS1 = new SignatureAlgorithm("SHA1withRSA", SHA1);
     public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("SHA256withRSA", SHA256);
     public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", SHA384);
     public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", SHA512);
@@ -44,8 +44,8 @@ public class SignatureAlgorithm {
     }
 
     @JsonCreator
-    public static SignatureAlgorithm create(@NonNull String jcaName){
-        switch (jcaName){
+    public static SignatureAlgorithm create(@NonNull String jcaName) {
+        switch (jcaName) {
             case "SHA256withECDSA":
                 return ES256;
             case "SHA384withECDSA":
@@ -65,7 +65,7 @@ public class SignatureAlgorithm {
         }
     }
 
-    public static SignatureAlgorithm create(@NonNull String jcaName, @NonNull String messageDigestJcaName){
+    public static SignatureAlgorithm create(@NonNull String jcaName, @NonNull String messageDigestJcaName) {
         return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
     }
 

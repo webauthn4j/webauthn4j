@@ -25,7 +25,7 @@ class CborConverterTest {
     private CborConverter cborConverter = new ObjectConverter().getCborConverter();
 
     @Test
-    void writeValueAsBytes_null_test(){
+    void writeValueAsBytes_null_test() {
         byte[] bytes = cborConverter.writeValueAsBytes(null);
         assertThat(bytes).isNotNull();
     }
