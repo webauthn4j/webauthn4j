@@ -22,7 +22,9 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.security.cert.X509Certificate;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
 public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
@@ -53,7 +55,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         if(res == null){
             throw new IllegalStateException("response is null");
         }
-        return res.getHeader().getX5c();
+        return new AttestationCertificatePath(res.getHeader().getX5c().getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));
     }
 
     @Override

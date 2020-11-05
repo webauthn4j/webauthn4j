@@ -17,7 +17,6 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWAIdentifier;
@@ -27,11 +26,15 @@ import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.Base64Util;
+import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 
 import javax.security.auth.x500.X500Principal;
+import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
@@ -44,9 +47,12 @@ public class AndroidSafetyNetAuthenticator extends WebAuthnModelAuthenticator {
 
         AttestationOption attestationOption = registrationEmulationOption.getAttestationOption() == null ? new AndroidSafetyNetAttestationOption() : registrationEmulationOption.getAttestationOption();
         X509Certificate attestationCertificate = getAttestationCertificate(attestationStatementRequest, attestationOption);
-        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath(attestationCertificate, this.getCACertificatePath());
+        List<X509Certificate> certificates = new ArrayList<>();
+        certificates.add(attestationCertificate);
+        certificates.addAll(this.getCACertificatePath());
+        CertPath certPath = CertificateUtil.generateCertPath(certificates);
 
-        JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, attestationCertificatePath);
+        JWSHeader jwsHeader = new JWSHeader(JWAIdentifier.ES256, certPath);
         String nonce = Base64Util.encodeToString(MessageDigestUtil.createSHA256().digest(attestationStatementRequest.getSignedData()));
         long timestampMs = Instant.now().toEpochMilli();
         String apkPackageName = "com.android.keystore.androidkeystoredemo";

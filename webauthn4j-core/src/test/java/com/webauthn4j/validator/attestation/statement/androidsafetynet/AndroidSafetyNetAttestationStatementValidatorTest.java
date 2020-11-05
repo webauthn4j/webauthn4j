@@ -18,7 +18,6 @@ package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStatement;
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.client.challenge.Challenge;
@@ -34,6 +33,7 @@ import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.AndroidSafetyNetAuthenticator;
 import com.webauthn4j.test.client.ClientPlatform;
+import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
@@ -102,7 +102,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, new AttestationCertificatePath()), response, new byte[32]);
+        JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList())), response, new byte[32]);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(ver, jws);
         target.validateNull(attestationStatement);
     }
@@ -123,7 +123,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
         boolean basicIntegrity = true;
         String advice = null;
         Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, new AttestationCertificatePath()), response, new byte[32]);
+        JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList())), response, new byte[32]);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(null, jws);
         assertThatThrownBy(()->target.validateNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }

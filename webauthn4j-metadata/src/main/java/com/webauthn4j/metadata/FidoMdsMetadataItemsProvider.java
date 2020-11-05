@@ -218,7 +218,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private void validateCertPath(JWS<MetadataTOCPayload> jws) {
         Set<TrustAnchor> trustAnchors = Collections.singleton(trustAnchor);
-        CertPath certPath = jws.getHeader().getX5c().createCertPath();
+        CertPath certPath = jws.getHeader().getX5c();
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);

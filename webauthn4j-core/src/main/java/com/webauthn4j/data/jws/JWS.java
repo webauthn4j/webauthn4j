@@ -42,7 +42,7 @@ public class JWS<T extends Serializable> implements Serializable {
     private final String headerString;
     private final String payloadString;
 
-    JWS(@NonNull JWSHeader header, @NonNull String headerString, @NonNull T payload, @NonNull String payloadString, @NonNull byte[] signature) { //TODO revisit
+    JWS(@NonNull JWSHeader header, @NonNull String headerString, @NonNull T payload, @NonNull String payloadString, @NonNull byte[] signature) {
         logger = LoggerFactory.getLogger(JWS.class);
 
         this.header = header;
@@ -72,8 +72,11 @@ public class JWS<T extends Serializable> implements Serializable {
     public boolean isValidSignature() {
         String signedData = headerString + "." + payloadString;
         try {
+            if(header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()){
+                return false;
+            }
             Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
-            PublicKey publicKey = header.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
+            PublicKey publicKey = header.getX5c().getCertificates().get(0).getPublicKey();
             signatureObj.initVerify(publicKey);
             signatureObj.update(signedData.getBytes());
             byte[] sig;

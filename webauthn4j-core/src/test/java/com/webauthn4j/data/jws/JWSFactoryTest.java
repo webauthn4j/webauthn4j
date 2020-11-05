@@ -16,12 +16,13 @@
 
 package com.webauthn4j.data.jws;
 
-import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.security.KeyPair;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +32,7 @@ class JWSFactoryTest {
 
     @Test
     void create_with_private_key_test() {
-        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestAttestationCertificatePath());
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList()));
         Payload payload = new Payload();
         KeyPair keyPair = ECUtil.createKeyPair();
         JWS<Payload> jws = target.create(header, payload, keyPair.getPrivate());
@@ -40,7 +41,7 @@ class JWSFactoryTest {
 
     @Test
     void create_with_signature_test() {
-        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, TestAttestationUtil.load3tierTestAttestationCertificatePath());
+        JWSHeader header = new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList()));
         Payload payload = new Payload();
         byte[] signature = new byte[32];
         JWS<Payload> jws = target.create(header, payload, signature);

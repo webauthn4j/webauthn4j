@@ -19,13 +19,16 @@ package com.webauthn4j.converter.jackson;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.ChallengeDeserializer;
 import com.webauthn4j.converter.jackson.deserializer.JWSDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.JWSHeaderDeserializer;
 import com.webauthn4j.converter.jackson.deserializer.X509CertificateDeserializer;
 import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
+import com.webauthn4j.converter.jackson.serializer.JWSHeaderSerializer;
 import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
 import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.data.jws.JWSHeader;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.X509Certificate;
@@ -41,10 +44,12 @@ public class WebAuthnJSONModule extends SimpleModule {
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
+        this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new JWSSerializer());
+        this.addSerializer(new JWSHeaderSerializer());
         this.addSerializer(new X509CertificateSerializer());
 
     }
