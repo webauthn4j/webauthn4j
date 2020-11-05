@@ -32,7 +32,6 @@ class CurveTest {
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
-                //noinspection ResultOfMethodCallIgnored
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> Curve.create(4)
                 )

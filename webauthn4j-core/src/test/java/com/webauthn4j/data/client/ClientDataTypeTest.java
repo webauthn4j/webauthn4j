@@ -36,7 +36,6 @@ class ClientDataTypeTest {
                 () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE),
                 () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
                 () -> assertThat(ClientDataType.create(null)).isNull(),
-                //noinspection ResultOfMethodCallIgnored
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> ClientDataType.create("invalid")
                 )

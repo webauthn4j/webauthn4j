@@ -37,7 +37,6 @@ public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
         this.metadataItemsProviders = metadataItemsProviders;
     }
 
-    @SuppressWarnings("Duplicates")
     @Override
     public Map<AAGUID, Set<MetadataItem>> provide() {
         return metadataItemsProviders.stream()

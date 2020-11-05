@@ -40,7 +40,7 @@ class AuthenticatorTransportTest {
         );
     }
 
-    @SuppressWarnings({"ResultOfMethodCallIgnored", "ConstantConditions"})
+    @SuppressWarnings({"ConstantConditions"})
     @Test
     void create_null_test() {
         assertThatThrownBy(() -> AuthenticatorTransport.create(null)).isInstanceOf(IllegalArgumentException.class);

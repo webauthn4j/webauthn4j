@@ -253,7 +253,6 @@ class OriginTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void hashCode_https_case_insensitive_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("HTTPS://example.com");
@@ -270,7 +269,6 @@ class OriginTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void hashCode_http_case_insensitive_test() {
         Origin originA = new Origin("http://localhost");
         Origin originB = new Origin("HTTP://localhost");

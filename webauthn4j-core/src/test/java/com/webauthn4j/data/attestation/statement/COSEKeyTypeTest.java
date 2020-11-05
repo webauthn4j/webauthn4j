@@ -38,7 +38,6 @@ class COSEKeyTypeTest {
                 () -> assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2),
                 () -> assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA),
                 () -> assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC),
-                //noinspection ResultOfMethodCallIgnored
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> COSEKeyType.create(-1)
                 )

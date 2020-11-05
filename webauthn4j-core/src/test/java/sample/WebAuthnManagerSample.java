@@ -45,7 +45,6 @@ public class WebAuthnManagerSample {
         webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
     }
 
-    @SuppressWarnings("deprecation")
     public void registrationValidationSample() {
 
         // Client properties
@@ -92,7 +91,6 @@ public class WebAuthnManagerSample {
     }
 
 
-    @SuppressWarnings("deprecation")
     public void authenticationValidationSample() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;

@@ -46,7 +46,6 @@ class AuthenticatorAttachmentTest {
         assertThatThrownBy(() -> AuthenticatorAttachment.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test
     void create_invalid_value_test() {
         assertThrows(IllegalArgumentException.class,
