@@ -62,7 +62,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-    private String token;
+    private final String token;
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();
@@ -113,6 +113,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
         InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
+        //noinspection ConstantConditions
         return CertificateUtil.generateX509Certificate(inputStream);
     }
 

@@ -31,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class ServerPropertyTest {
     private final String rpId = "rp-origin.com";
     private final Origin webApp1Origin = new Origin("https://app1.rp-origin.com");

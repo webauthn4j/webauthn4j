@@ -30,8 +30,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class DCAttestationDataTest {
 
-    private ObjectConverter objectConverter = createObjectConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private final ObjectConverter objectConverter = createObjectConverter();
+    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
 
     private static ObjectConverter createObjectConverter() {
         ObjectMapper jsonMapper = new ObjectMapper();

@@ -47,6 +47,11 @@ public class AttestedCredentialDataConverter implements Serializable {
     }
 
     public @NonNull byte[] convert(@NonNull AttestedCredentialData attestationData) {
+
+        AssertUtil.notNull(attestationData.getAaguid(), "aaguid must not be null");
+        AssertUtil.notNull(attestationData.getCredentialId(), "credentialId must not be null");
+        AssertUtil.notNull(attestationData.getCOSEKey(), "coseKey must not be null");
+
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byteArrayOutputStream.write(attestationData.getAaguid().getBytes());

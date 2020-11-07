@@ -78,9 +78,11 @@ class AssertUtilTest {
 
     @Test
     void notEmpty_test_with_empty_array() {
+        Object[] value = new Object[0];
         Throwable t = assertThrows(IllegalArgumentException.class,
-                () -> AssertUtil.notEmpty(new Object[0], "message")
+                () -> AssertUtil.notEmpty(value, "message")
         );
         assertThat(t).hasMessage("message");
     }
+
 }

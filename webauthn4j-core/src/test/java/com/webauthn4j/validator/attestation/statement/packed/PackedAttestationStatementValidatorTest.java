@@ -27,6 +27,7 @@ import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import com.webauthn4j.validator.RegistrationObject;
+import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -51,16 +52,16 @@ import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-@SuppressWarnings({"FieldCanBeLocal", "SameParameterValue"})
+@SuppressWarnings({"FieldCanBeLocal", "SameParameterValue", "ConstantConditions"})
 class PackedAttestationStatementValidatorTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
-    private final PackedAttestationStatementValidator validator = new PackedAttestationStatementValidator();
+    private final PackedAttestationStatementValidator target = new PackedAttestationStatementValidator();
 
     private final String originUrl = "http://localhost:8800";
     private final String rpId = "localhost";
@@ -96,6 +97,36 @@ class PackedAttestationStatementValidatorTest {
             throw new UnexpectedCheckedException(e);
         }
     }
+
+    @Test
+    void validateAttestationStatementNotNull_test(){
+        PackedAttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath());
+        target.validateAttestationStatementNotNull(attestationStatement);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_null_test(){
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_alg_null_test(){
+        PackedAttestationStatement attestationStatement = new PackedAttestationStatement(null, new byte[32], new AttestationCertificatePath());
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_sig_null_test(){
+        PackedAttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.RS256, null, new AttestationCertificatePath());
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_x5c_null_test(){
+        PackedAttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
+        assertThatCode(()->target.validateAttestationStatementNotNull(attestationStatement)).doesNotThrowAnyException();
+    }
+
 
     @Test
     void validate_with_ECx5c_test() {
@@ -173,13 +204,13 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void extractAAGUIDFromAttestationCertificate_with_u2f_attestation_test() {
-        AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyU2FAttestationCertificate());
+        AAGUID aaguid = target.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyU2FAttestationCertificate());
         assertThat(aaguid).isEqualTo(AAGUID.NULL);
     }
 
     @Test
     void extractAAGUIDFromAttestationCertificate_with_fido2_attestation_test() {
-        AAGUID aaguid = validator.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyFIDO2AttestationCertificate());
+        AAGUID aaguid = target.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyFIDO2AttestationCertificate());
         assertThat(aaguid).isNotEqualTo(AAGUID.NULL);
     }
 
@@ -204,7 +235,7 @@ class PackedAttestationStatementValidatorTest {
                 new ServerProperty(origin, rpId, challenge, tokenBindingId)
         );
 
-        validator.validate(registrationObject);
+        target.validate(registrationObject);
     }
 
     private <T extends ExtensionAuthenticatorOutput> byte[] generateSignature(String signAlg, KeyPair keyPair, AuthenticatorData<T> data, byte[] clientDataJSON) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {

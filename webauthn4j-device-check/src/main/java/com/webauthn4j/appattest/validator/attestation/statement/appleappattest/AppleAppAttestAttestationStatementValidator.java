@@ -52,15 +52,31 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.",
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
+        AppleAppAttestAttestationStatement attestationStatement =(AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatementNotNull(attestationStatement);
 
-        validateX5c((AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement());
+        //noinspection ConstantConditions as null check is already done in above
+        validateX5c(attestationStatement);
         validateNonce(registrationObject);
         validatePublicKey(registrationObject);
         return AttestationType.BASIC;
     }
 
+    void validateAttestationStatementNotNull(AppleAppAttestAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
+        if (attestationStatement.getReceipt() == null) {
+            throw new BadAttestationStatementException("receipt must not be null");
+        }
+    }
+
+
     void validateX5c(AppleAppAttestAttestationStatement attestationStatement) {
-        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
+        if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException(
                     "No attestation certificate is found in Apple App Attest attestation statement."
             );

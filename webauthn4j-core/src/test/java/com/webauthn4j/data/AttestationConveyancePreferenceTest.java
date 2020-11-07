@@ -43,6 +43,7 @@ class AttestationConveyancePreferenceTest {
 
     @Test
     void create_test_with_null_value() {
+        //noinspection ConstantConditions
         assertThatThrownBy(() -> AttestationConveyancePreference.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 

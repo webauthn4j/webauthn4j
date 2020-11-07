@@ -101,8 +101,8 @@ public class DeviceCheckAssertionManager {
 
     static class DCAssertion {
 
-        private byte[] signature;
-        private byte[] authenticatorData;
+        private final byte[] signature;
+        private final byte[] authenticatorData;
 
         @JsonCreator
         public DCAssertion(

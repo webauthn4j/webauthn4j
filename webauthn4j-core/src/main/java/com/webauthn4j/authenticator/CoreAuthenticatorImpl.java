@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ConstUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -49,6 +50,12 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     public static @NonNull CoreAuthenticatorImpl createFromCoreRegistrationData(@NonNull CoreRegistrationData coreRegistrationData) {
+
+        AssertUtil.notNull(coreRegistrationData.getAttestationObject(), "attestationObject must not be null");
+        AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
+        AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(), "attestedCredentialData must not be null");
+        AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAttestationStatement(), "attestationStatement must not be null");
+
         return new CoreAuthenticatorImpl(
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 coreRegistrationData.getAttestationObject().getAttestationStatement(),

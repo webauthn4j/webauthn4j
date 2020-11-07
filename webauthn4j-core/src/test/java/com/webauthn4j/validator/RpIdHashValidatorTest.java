@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Created by ynojima on 2017/08/27.
  */
+@SuppressWarnings("ConstantConditions")
 class RpIdHashValidatorTest {
 
     private final Origin origin = Origin.create("https://example.com");

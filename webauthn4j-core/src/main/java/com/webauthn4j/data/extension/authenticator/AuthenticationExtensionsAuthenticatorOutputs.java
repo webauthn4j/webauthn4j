@@ -43,7 +43,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
     @JsonIgnore
-    private Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -139,7 +139,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         private UvmEntries uvm;
         private CredentialProtectionPolicy credProtect;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> build() {
             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
@@ -173,7 +173,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         private UvmEntries uvm;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
 
         public @NonNull AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build() {

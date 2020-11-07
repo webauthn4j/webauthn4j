@@ -254,7 +254,6 @@ class EC2COSEKeyTest {
 
     @Test
     void getPrivateKey_with_null_curve_test() {
-        EC2COSEKey keyPair = EC2COSEKey.create(ECUtil.createKeyPair());
         EC2COSEKey original = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey ec2COSEKey = new EC2COSEKey(
                 original.getKeyId(),
@@ -300,6 +299,7 @@ class EC2COSEKeyTest {
         assertThat(EC2COSEKey.getCurve(ECUtil.P_256_SPEC)).isEqualTo(Curve.SECP256R1);
         assertThat(EC2COSEKey.getCurve(ECUtil.P_384_SPEC)).isEqualTo(Curve.SECP384R1);
         assertThat(EC2COSEKey.getCurve(ECUtil.P_521_SPEC)).isEqualTo(Curve.SECP521R1);
+        //noinspection ConstantConditions
         assertThatThrownBy(() -> EC2COSEKey.getCurve(null)).isInstanceOf(IllegalArgumentException.class);
         ECParameterSpec mock = mock(ECParameterSpec.class);
         when(mock.getCurve()).thenReturn(mock(EllipticCurve.class));

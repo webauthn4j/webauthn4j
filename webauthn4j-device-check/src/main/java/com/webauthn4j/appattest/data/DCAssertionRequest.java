@@ -22,9 +22,9 @@ import java.util.Arrays;
 
 public class DCAssertionRequest {
 
-    private byte[] keyId;
-    private byte[] assertion;
-    private byte[] clientDataHash;
+    private final byte[] keyId;
+    private final byte[] assertion;
+    private final byte[] clientDataHash;
 
     public DCAssertionRequest(byte[] keyId, byte[] assertion, byte[] clientDataHash) {
         this.keyId = ArrayUtil.clone(keyId);

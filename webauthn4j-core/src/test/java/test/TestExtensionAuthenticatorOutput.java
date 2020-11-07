@@ -22,7 +22,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 public class TestExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<Boolean> implements RegistrationExtensionAuthenticatorOutput {
 
-    public static String ID = "test";
+    public static final String ID = "test";
 
     public TestExtensionAuthenticatorOutput(boolean value) {
         super(value);

@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for RSACOSEKey
  */
+@SuppressWarnings("ConstantConditions")
 class RSACOSEKeyTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for Origin
  */
+@SuppressWarnings("ConstantConditions")
 class OriginTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for ChallengeDeserializer
  */
+@SuppressWarnings("ConstantConditions")
 class ChallengeDeserializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

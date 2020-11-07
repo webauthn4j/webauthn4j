@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CborConverterTest {
 
-    private CborConverter cborConverter = new ObjectConverter().getCborConverter();
+    private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
 
     @Test
     void writeValueAsBytes_null_test() {

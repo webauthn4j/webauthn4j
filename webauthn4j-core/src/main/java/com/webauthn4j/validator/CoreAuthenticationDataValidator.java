@@ -177,6 +177,8 @@ public class CoreAuthenticationDataValidator {
         CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
 
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+
         return new CoreAuthenticationObject(
                 credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, authenticator
         );

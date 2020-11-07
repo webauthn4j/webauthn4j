@@ -26,9 +26,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsAuthenticatorInputsTest {
 
-    private CborConverter cborConverter = new ObjectConverter().getCborConverter();
+    private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
 
     @Test
     void registration_variant_test() {

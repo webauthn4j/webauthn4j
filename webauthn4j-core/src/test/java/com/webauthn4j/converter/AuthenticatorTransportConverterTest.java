@@ -25,6 +25,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorTransportConverterTest {
 
     private final AuthenticatorTransportConverter converter = new AuthenticatorTransportConverter();

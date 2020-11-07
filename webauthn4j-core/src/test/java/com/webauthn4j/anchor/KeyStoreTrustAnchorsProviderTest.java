@@ -52,7 +52,7 @@ class KeyStoreTrustAnchorsProviderTest {
     }
 
     @Test
-    void provide_test_with_invalid_object() throws Exception {
+    void provide_test_with_invalid_object() {
         target = new KeyStoreTrustAnchorsProvider();
         target.setKeyStore(CertificateUtil.createKeyStore());
 

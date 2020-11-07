@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientOutputsTest {
 
     @Test

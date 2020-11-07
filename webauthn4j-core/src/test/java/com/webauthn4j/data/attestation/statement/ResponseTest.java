@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ResponseTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void error_test() {

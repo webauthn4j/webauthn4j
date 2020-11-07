@@ -58,7 +58,9 @@ public class KeyStoreFileTrustAnchorsProvider extends CachingTrustAnchorsProvide
     protected @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         Path keystore = getKeyStore();
+        //noinspection ConstantConditions as null check is already done in checkConfig
         try (InputStream inputStream = Files.newInputStream(keystore)) {
+            //noinspection ConstantConditions as null check is already done in checkConfig
             KeyStore keyStoreObject = loadKeyStoreFromStream(inputStream, getPassword());
             List<String> aliases = Collections.list(keyStoreObject.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();

@@ -34,6 +34,7 @@ import java.util.Set;
 /**
  * An {@link Authenticator} implementation
  */
+@SuppressWarnings("ConstantConditions")
 public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenticator {
 
     //~ Instance fields ================================================================================================

@@ -79,7 +79,7 @@ class SignatureAlgorithmTest {
     }
 
     static class TestDto {
-        private SignatureAlgorithm alg;
+        private final SignatureAlgorithm alg;
 
         public TestDto(SignatureAlgorithm alg) {
             this.alg = alg;

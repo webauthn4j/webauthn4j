@@ -55,6 +55,7 @@ public class AssertionSignatureValidator {
     private boolean verifySignature(@NonNull COSEKey coseKey, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             PublicKey publicKey = coseKey.getPublicKey();
+            //noinspection ConstantConditions as null check is already done in caller
             SignatureAlgorithm signatureAlgorithm = coseKey.getAlgorithm().toSignatureAlgorithm();
             String jcaName = signatureAlgorithm.getJcaName();
             Signature verifier = Signature.getInstance(jcaName);

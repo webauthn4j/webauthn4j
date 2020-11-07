@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Set;
 
+@SuppressWarnings("ConstantConditions")
 class NullAttestationStatementValidatorTest {
 
     private final Origin origin = new Origin("http://localhost");

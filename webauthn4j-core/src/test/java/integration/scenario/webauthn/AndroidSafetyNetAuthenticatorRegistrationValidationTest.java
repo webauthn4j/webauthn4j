@@ -45,6 +45,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SuppressWarnings("ConstantConditions")
 class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

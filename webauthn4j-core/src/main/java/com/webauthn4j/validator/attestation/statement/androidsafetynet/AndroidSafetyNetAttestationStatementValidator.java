@@ -54,7 +54,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
 
         AndroidSafetyNetAttestationStatement attestationStatement =
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        validateNull(attestationStatement);
+        validateAttestationStatementNotNull(attestationStatement);
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
         }
@@ -110,27 +110,27 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    void validateNull(AndroidSafetyNetAttestationStatement attestationStatement) {
+    void validateAttestationStatementNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
         if (attestationStatement.getVer() == null) {
             throw new BadAttestationStatementException("ver must not be null");
         }
-        validateNull(attestationStatement.getResponse());
+        validateJWSNotNull(attestationStatement.getResponse());
         if (attestationStatement.getX5c() == null) {
             throw new BadAttestationStatementException("x5c must not be null");
         }
     }
 
-    void validateNull(JWS<Response> response) {
+    void validateJWSNotNull(JWS<Response> response) {
         if (response == null) {
             throw new BadAttestationStatementException("response must not be null.");
         }
-        validateNull(response.getPayload());
+        validateResponseNotNull(response.getPayload());
     }
 
-    void validateNull(Response response) {
+    void validateResponseNotNull(Response response) {
         if (response == null) {
             throw new BadAttestationStatementException("response must not be null.");
         }

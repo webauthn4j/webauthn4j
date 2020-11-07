@@ -22,6 +22,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -55,7 +56,11 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         if (res == null) {
             throw new IllegalStateException("response is null");
         }
-        return new AttestationCertificatePath(res.getHeader().getX5c().getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));
+        CertPath x5c = res.getHeader().getX5c();
+        if(x5c == null){
+            return null;
+        }
+        return new AttestationCertificatePath(x5c.getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));
     }
 
     @Override

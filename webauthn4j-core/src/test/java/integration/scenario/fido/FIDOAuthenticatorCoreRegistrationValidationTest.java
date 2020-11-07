@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOAuthenticatorCoreRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

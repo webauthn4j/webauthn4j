@@ -34,6 +34,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
     private boolean fullChainProhibited = false;
 
     public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
+        //noinspection ConstantConditions as null check is already done in caller
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);

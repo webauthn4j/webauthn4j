@@ -24,8 +24,8 @@ public enum CredentialProtectionPolicy {
     USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST("userVerificationOptionalWithCredentialIDList", (byte) 0x02),
     USER_VERIFICATION_REQUIRED("userVerificationRequired", (byte) 0x03);
 
-    String string;
-    byte value;
+    final String string;
+    final byte value;
 
     CredentialProtectionPolicy(@NonNull String string, @NonNull byte value) {
         this.string = string;

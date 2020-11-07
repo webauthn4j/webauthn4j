@@ -54,6 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

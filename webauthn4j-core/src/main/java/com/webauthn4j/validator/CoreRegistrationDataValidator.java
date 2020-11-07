@@ -21,6 +21,7 @@ import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
@@ -43,7 +44,7 @@ public class CoreRegistrationDataValidator {
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
     private final AttestationValidator attestationValidator;
-    private List<CustomCoreRegistrationValidator> customRegistrationValidators;
+    private final List<CustomCoreRegistrationValidator> customRegistrationValidators;
 
     public CoreRegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -83,6 +84,9 @@ public class CoreRegistrationDataValidator {
         CoreRegistrationObject registrationObject = createCoreRegistrationObject(registrationData, registrationParameters);
 
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = attestationObject.getAuthenticatorData();
+
+        COSEKey coseKey = authenticatorData.getAttestedCredentialData().getCOSEKey();
+        validateCOSEKey(coseKey);
 
         //spec| Step7
         //spec| Compute the hash of response.clientDataJSON using SHA-256.
@@ -130,6 +134,12 @@ public class CoreRegistrationDataValidator {
         // validate with custom logic
         for (CustomCoreRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
             customRegistrationValidator.validate(registrationObject);
+        }
+    }
+
+    void validateCOSEKey(COSEKey coseKey) {
+        if(coseKey.getPublicKey() == null){
+            throw new ConstraintViolationException("coseKey doesn't contain public key");
         }
     }
 

@@ -110,7 +110,9 @@ class AttestationValidator {
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
+                    //noinspection ConstantConditions as null check is already done in caller
                     AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+                    //noinspection ConstantConditions as null check is already done in caller
                     certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement, registrationObject.getTimestamp());
                 }
                 else {
@@ -128,6 +130,7 @@ class AttestationValidator {
 
     void validateAAGUID(@NonNull AttestationObject attestationObject) {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
+            //noinspection ConstantConditions as null check is already done in caller
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
                 throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.");
