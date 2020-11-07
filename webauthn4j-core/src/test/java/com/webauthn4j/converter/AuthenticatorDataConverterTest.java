@@ -38,9 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for AuthenticatorDataConverter
  */
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorDataConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {
@@ -85,6 +86,7 @@ class AuthenticatorDataConverterTest {
     void serialize_deserialize_test() {
         //Given
         byte[] rpIdHash = new byte[32];
+        //noinspection UnnecessaryLocalVariable
         byte flags = BIT_ED;
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.setUvm(new UvmEntries());

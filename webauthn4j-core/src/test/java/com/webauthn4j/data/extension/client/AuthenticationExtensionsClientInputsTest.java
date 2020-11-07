@@ -24,9 +24,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void registration_variant_test() {

@@ -24,7 +24,6 @@ import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -79,7 +78,6 @@ public class TestDataUtil {
     private static final CollectedClientDataConverter collectedClientDataConverter;
     private static final AttestationObjectConverter attestationObjectConverter;
     private static final AuthenticatorDataConverter authenticatorDataConverter;
-    private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
     static {
         ObjectMapper jsonMapper = new ObjectMapper();
@@ -89,7 +87,6 @@ public class TestDataUtil {
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
     }
 
     private TestDataUtil() {

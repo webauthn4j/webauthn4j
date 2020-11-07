@@ -18,17 +18,15 @@ package com.webauthn4j.converter.jackson.serializer;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AAGUIDSerializerTest {
 
-    private AAGUIDSerializer aaguidSerializer = new AAGUIDSerializer();
+    private final AAGUIDSerializer aaguidSerializer = new AAGUIDSerializer();
 
     @SuppressWarnings("ConstantConditions")
     @Test
-    void null_test() throws IOException {
+    void null_test() {
         // Custom jackson serializer doesn't need to handle null value as Jackson doesn't call custom serializer when the value is null.
         assertThatThrownBy(() -> aaguidSerializer.serialize(null, null, null)).isInstanceOf(IllegalArgumentException.class);
     }

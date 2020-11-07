@@ -52,10 +52,10 @@ import static org.mockito.Mockito.mockStatic;
 
 class DeviceCheckManagerTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-    private AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+    private final AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
 
     @Test
     void parse_attestation_test() {

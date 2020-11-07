@@ -80,7 +80,9 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatementNotNull(attestationStatement);
 
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         if (!attestationStatement.getVer().equals(TPMAttestationStatement.VERSION_2_0)) {
             throw new BadAttestationStatementException("TPM version is not supported.");
         }
@@ -90,6 +92,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
 
         /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         validatePublicKeyEquality(pubArea, authenticatorData);
 
         /// Concatenate authenticatorData and clientDataHash to form attToBeSigned.
@@ -98,6 +101,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         /// Validate that certInfo is valid:
 
         /// Verify that magic is set to TPM_GENERATED_VALUE.
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         if (certInfo.getMagic() != TPMGenerated.TPM_GENERATED_VALUE) {
             throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE");
         }
@@ -109,6 +113,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         MessageDigest messageDigest = getMessageDigest(alg);
         byte[] hash = messageDigest.digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
@@ -140,6 +145,39 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         throw new BadAttestationStatementException("`x5c` or `ecdaaKeyId` must be present.");
     }
 
+    void validateAttestationStatementNotNull(TPMAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getVer() == null) {
+            throw new BadAttestationStatementException("ver must not be null");
+        }
+        if (attestationStatement.getAlg() == null) {
+            throw new BadAttestationStatementException("alg must not be null");
+        }
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
+        if (attestationStatement.getSig() == null) {
+            throw new BadAttestationStatementException("sig must not be null");
+        }
+        validateTPMSAttestNotNull(attestationStatement.getCertInfo());
+        validateTPMTPublicNotNull(attestationStatement.getPubArea());
+    }
+
+    void validateTPMSAttestNotNull(TPMSAttest tpmsAttest){
+        if (tpmsAttest == null) {
+            throw new BadAttestationStatementException("certInfo must not be null");
+        }
+    }
+
+    void validateTPMTPublicNotNull(TPMTPublic tpmtPublic){
+        if (tpmtPublic== null) {
+            throw new BadAttestationStatementException("pubArea must not be null");
+        }
+    }
+
+
     private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
         try {
             SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
@@ -150,9 +188,11 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
+        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         String jcaName = getJcaName(attestationStatement.getAlg());
         Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
         try {
@@ -170,6 +210,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// If aikCert contains an extension with OID 1 3 6 1 4 1 45724 1 1 4 (id-fido-gen-ce-aaguid) verify that the value of this extension matches the aaguid in authenticatorData.
         byte[] aaguidBytes = aikCert.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
+        //noinspection ConstantConditions as null check is already done in caller
         if (aaguidBytes != null && !Objects.equals(new AAGUID(aaguidBytes), authenticatorData.getAttestedCredentialData().getAaguid())) {
             throw new BadAttestationStatementException("AAGUID in aikCert doesn't match with that in authenticatorData");
         }
@@ -205,8 +246,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     }
 
     private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
-        PublicKey publicKeyInAuthData =
-                authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
+        //noinspection ConstantConditions as null check is already done in caller
+        PublicKey publicKeyInAuthData = authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
         TPMUPublicId publicKeyInPubArea = pubArea.getUnique();
 
         if (pubArea.getType() == TPMIAlgPublic.TPM_ALG_RSA && publicKeyInPubArea instanceof RSAUnique) {
@@ -217,6 +258,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             if (exponent == 0) {
                 exponent = 65537; // 2^16 + 1
             }
+            //noinspection ConstantConditions as null check is already done in caller
             if (rsaPublicKey.getModulus().equals(new BigInteger(1, rsaUnique.getN())) &&
                     rsaPublicKey.getPublicExponent().equals(BigInteger.valueOf(exponent))) {
                 return;
@@ -227,6 +269,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
             TPMSECCParms parms = (TPMSECCParms) pubArea.getParameters();
             EllipticCurve curveInParms = parms.getCurveId().getEllipticCurve();
             ECCUnique eccUnique = (ECCUnique) publicKeyInPubArea;
+            //noinspection ConstantConditions as null check is already done in caller
             if (ecPublicKey.getParams().getCurve().equals(curveInParms) &&
                     ecPublicKey.getW().getAffineX().equals(new BigInteger(1, eccUnique.getX())) &&
                     ecPublicKey.getW().getAffineY().equals(new BigInteger(1, eccUnique.getY()))) {

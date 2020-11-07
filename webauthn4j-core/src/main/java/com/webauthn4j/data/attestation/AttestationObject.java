@@ -62,6 +62,9 @@ public class AttestationObject implements Serializable {
 
     @JsonProperty("fmt")
     public @NonNull String getFormat() {
+        if(attestationStatement == null){
+            throw new IllegalStateException("attestationStatement must not be null");
+        }
         return attestationStatement.getFormat();
     }
 

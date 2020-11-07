@@ -48,17 +48,29 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
 
         AppleAnonymousAttestationStatement attestationStatement =
                 (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-
+        validateAttestationStatementNotNull(attestationStatement);
         validateNonce(registrationObject);
+
+        //noinspection ConstantConditions as null check is already done in the validateNull method.
         validatePublicKey(registrationObject, attestationStatement);
 
         return AttestationType.BASIC;
+    }
+
+    void validateAttestationStatementNotNull(AppleAnonymousAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
     }
 
     private void validateNonce(@NonNull CoreRegistrationObject registrationObject) {
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
+        //noinspection ConstantConditions as null check is already done in caller.
         byte[] extensionValue = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.2.840.113635.100.8.2");
         byte[] extracted;
         try {
@@ -87,7 +99,9 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
     }
 
     private void validatePublicKey(@NonNull CoreRegistrationObject registrationObject, @NonNull AppleAnonymousAttestationStatement attestationStatement) {
+        //noinspection ConstantConditions as null check is already done in caller.
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
+        //noinspection ConstantConditions as null check is already done in caller.
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");

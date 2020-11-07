@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -31,6 +32,8 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class BeanAssertUtilTest {
 
@@ -439,4 +442,21 @@ class BeanAssertUtilTest {
                 () -> BeanAssertUtil.validate(attestationObject)
         );
     }
+
+    @Test
+    void validate_coseKey_with_null_test(){
+        assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate((COSEKey) null)
+        );
+    }
+
+    @Test
+    void validate_coseKey_with_alg_null_test(){
+        COSEKey coseKey = mock(COSEKey.class);
+        when(coseKey.getAlgorithm()).thenReturn(null);
+        assertThrows(ConstraintViolationException.class,
+                () -> BeanAssertUtil.validate(coseKey)
+        );
+    }
+
 }

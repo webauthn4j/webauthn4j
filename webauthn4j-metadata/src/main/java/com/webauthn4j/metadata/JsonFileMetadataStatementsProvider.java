@@ -34,7 +34,7 @@ public class JsonFileMetadataStatementsProvider implements MetadataStatementsPro
 
     private final JsonConverter jsonConverter;
     private final MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
-    private List<Path> paths = Collections.emptyList();
+    private final List<Path> paths;
     private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
 
     public JsonFileMetadataStatementsProvider(ObjectConverter objectConverter, List<Path> paths) {

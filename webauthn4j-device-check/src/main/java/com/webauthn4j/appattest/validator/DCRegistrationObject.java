@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 public class DCRegistrationObject extends CoreRegistrationObject {
 
-    private byte[] keyId;
+    private final byte[] keyId;
 
 
     public DCRegistrationObject(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty, Instant timestamp) {

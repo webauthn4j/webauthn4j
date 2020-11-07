@@ -17,11 +17,16 @@
 package com.webauthn4j.validator.attestation.statement;
 
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.packed.PackedAttestationStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class AbstractStatementValidatorTest {
 
@@ -31,5 +36,12 @@ class AbstractStatementValidatorTest {
     void getJcaName() {
         COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
         assertThatThrownBy(() -> packedAttestationStatementValidator.getJcaName(invalid)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void supports_with_null_test() {
+        CoreRegistrationObject coreRegistrationObject = mock(CoreRegistrationObject.class, Mockito.RETURNS_DEEP_STUBS);
+        when(coreRegistrationObject.getAttestationObject().getAttestationStatement()).thenReturn(null);
+        assertThat(packedAttestationStatementValidator.supports(coreRegistrationObject)).isFalse();
     }
 }

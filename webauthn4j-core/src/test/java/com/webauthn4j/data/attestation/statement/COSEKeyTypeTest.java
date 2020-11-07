@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -38,9 +39,7 @@ class COSEKeyTypeTest {
                 () -> assertThat(COSEKeyType.create(2)).isEqualTo(COSEKeyType.EC2),
                 () -> assertThat(COSEKeyType.create(3)).isEqualTo(COSEKeyType.RSA),
                 () -> assertThat(COSEKeyType.create(4)).isEqualTo(COSEKeyType.SYMMETRIC),
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> COSEKeyType.create(-1)
-                )
+                () -> assertThatThrownBy(() -> COSEKeyType.create(-1)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 

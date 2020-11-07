@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -42,9 +43,7 @@ class TPMIAlgPublicTest {
 
     @Test
     void create_with_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> TPMIAlgPublic.create(0x2)
-        );
+        assertThatThrownBy(() -> TPMIAlgPublic.create(0x2)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

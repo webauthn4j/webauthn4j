@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOAuthenticatorCoreAuthenticationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

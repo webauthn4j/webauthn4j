@@ -33,6 +33,7 @@ import java.io.Serializable;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#credentialType">
  * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
  */
+@SuppressWarnings("SameReturnValue")
 public enum PublicKeyCredentialType implements Serializable {
 
     PUBLIC_KEY("public-key");

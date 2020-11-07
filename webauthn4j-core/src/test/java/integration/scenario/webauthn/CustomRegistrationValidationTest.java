@@ -44,6 +44,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class CustomRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

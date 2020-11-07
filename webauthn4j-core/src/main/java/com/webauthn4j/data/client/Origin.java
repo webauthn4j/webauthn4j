@@ -111,6 +111,7 @@ public class Origin implements Serializable {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull Origin deserialize(@NonNull String value) throws InvalidFormatException {
         try {
@@ -120,8 +121,8 @@ public class Origin implements Serializable {
         }
     }
 
-    private static String toLowerCase(String s) {
-        return (s != null) ? s.toLowerCase() : s;
+    private static @Nullable String toLowerCase(@Nullable String s) {
+        return s == null ? null : s.toLowerCase();
     }
 
     public @Nullable String getScheme() {

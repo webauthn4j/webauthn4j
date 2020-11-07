@@ -54,6 +54,7 @@ class AttestationObjectConverterTest {
 
     @Test
     void convert_null_test() {
+        //noinspection ConstantConditions
         assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
     }

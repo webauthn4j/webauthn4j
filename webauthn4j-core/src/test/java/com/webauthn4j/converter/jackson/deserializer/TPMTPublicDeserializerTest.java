@@ -21,8 +21,6 @@ import com.webauthn4j.data.attestation.statement.TPMTPublic;
 import com.webauthn4j.util.Base64Util;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TPMTPublicDeserializerTest {
@@ -30,7 +28,7 @@ class TPMTPublicDeserializerTest {
     private final TPMTPublicDeserializer deserializer = new TPMTPublicDeserializer();
 
     @Test
-    void deserialize_test() throws IOException {
+    void deserialize_test() {
         String input = "AAEACwAGBHIAIJ3/y/NsODrmmfuYaNxty4nXFTiEvigDkiwSQVi/rSKuABAAEAgAAAAAAAEAxdpvTZNXveIC9cVYzQoxVtJU8uCtmrV5MfmCa3R94axPKdYHCHTc5XkQ4ZhESZ2OQkcDObFw0CK1AauI6cL07TAuRxnHDevohCQD7ZvfwicwphobcPYWxfG3AMrPeEYTfcSy1Gmo4VqrT62GVwhAItKPRNkHUyMSa3AHyYGTn99yTK9PvkdQQEMaTqBkQwvLLPrX0Fvbn2S1sOCVLs+GeSc9bG36gWAfFFAzFqE9B4LDGj5r3e09e8Rrwfqb7w3/g7ferxRrWCxGRIIaPGLtuqa+QivwTkPtr1/TeDCGFT1zYaIDBhpimKsm4TN8ocntBnQaWQVHeYjnIDBOrhidfw";
         byte[] inputBytes = Base64Util.decode(input);
         TPMTPublic value = deserializer.deserialize(inputBytes);

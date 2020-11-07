@@ -28,6 +28,7 @@ class AlternativeDescriptionsTest {
 
     @Test
     void put_test() {
+        //noinspection MismatchedQueryAndUpdateOfCollection
         AlternativeDescriptions target = new AlternativeDescriptions();
         assertThrows(UnsupportedOperationException.class,
                 () -> target.put("key", "value")

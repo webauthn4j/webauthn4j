@@ -60,6 +60,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
     @Override
     public void validate(CoreRegistrationData registrationData, CoreRegistrationParameters registrationParameters) {
         super.validate(registrationData, registrationParameters);
+        //noinspection ConstantConditions as null check is already done in super class
         validateAuthenticatorData(registrationData.getAttestationObject().getAuthenticatorData());
         validateKeyId(registrationData);
     }
@@ -67,6 +68,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
     private void validateKeyId(CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         byte[] keyId = dcAttestationData.getKeyId();
+        //noinspection ConstantConditions as null check is already done in caller
         byte[] credentialId = registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
         if (!Arrays.equals(keyId, credentialId)) {
             throw new BadAttestationStatementException("key identifier doesn't match credentialId.");
@@ -97,8 +99,10 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
             throw new MaliciousCounterValueException("Counter is not zero");
         }
 
+        //noinspection ConstantConditions as null check is already done in caller
         AAGUID aaguid = authenticatorData.getAttestedCredentialData().getAaguid();
         AAGUID expectedAAGUID = isProduction() ? APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION : APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT;
+        //noinspection ConstantConditions as null check is already done in caller
         if (!aaguid.equals(expectedAAGUID)) {
             throw new BadAaguidException("Expected AAGUID of either 'appattestdevelop' or 'appattest'");
         }

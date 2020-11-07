@@ -48,7 +48,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
     @JsonIgnore
-    private Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -144,7 +144,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
         private Boolean uvm;
         private CredentialProtectionPolicy credProtect;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
@@ -178,7 +178,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
         private Boolean uvm;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();

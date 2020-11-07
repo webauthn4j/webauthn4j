@@ -52,7 +52,7 @@ class KeyStoreTrustAnchorsProviderTest {
     }
 
     @Test
-    void provide_test_with_invalid_object() throws Exception {
+    void provide_test_with_invalid_object() {
         target = new KeyStoreTrustAnchorsProvider();
         target.setKeyStore(CertificateUtil.createKeyStore());
 
@@ -61,6 +61,7 @@ class KeyStoreTrustAnchorsProviderTest {
         );
     }
 
+    @SuppressWarnings("SameParameterValue")
     private KeyStore loadKeyStoreFromStream(InputStream inputStream, String password)
             throws CertificateException, NoSuchAlgorithmException, IOException {
         KeyStore keyStoreObject = CertificateUtil.createKeyStore();

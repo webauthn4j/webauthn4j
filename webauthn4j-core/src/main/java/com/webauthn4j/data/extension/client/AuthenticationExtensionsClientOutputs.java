@@ -29,7 +29,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     @JsonProperty
     private CredentialPropertiesOutput credProps;
     @JsonIgnore
-    private Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -138,7 +138,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         private UvmEntries uvm;
         private CredentialPropertiesOutput credProps;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
@@ -174,7 +174,7 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
         private Boolean appid;
         private UvmEntries uvm;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();

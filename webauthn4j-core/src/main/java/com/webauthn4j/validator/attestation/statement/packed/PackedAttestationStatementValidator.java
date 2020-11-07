@@ -56,19 +56,36 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
 
         PackedAttestationStatement attestationStatement = (PackedAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatementNotNull(attestationStatement);
         byte[] sig = attestationStatement.getSig();
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
         // If x5c is present,
         if (attestationStatement.getX5c() != null) {
+            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
         // If x5c is not present, self attestation is in use.
         else {
+            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateSelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
     }
 
+    void validateAttestationStatementNotNull(PackedAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getAlg() == null) {
+            throw new BadAttestationStatementException("alg must not be null");
+        }
+        if (attestationStatement.getSig() == null) {
+            throw new BadAttestationStatementException("sig must not be null");
+        }
+        // if x5c is not present, self attestation is in use
+    }
+
+    @SuppressWarnings("SameReturnValue")
     private @NonNull AttestationType validateX5c(@NonNull CoreRegistrationObject registrationObject, @NonNull PackedAttestationStatement attestationStatement, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
@@ -86,6 +103,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         // the value of this extension matches the aaguid in authenticatorData.
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         AAGUID aaguidInCertificate = extractAAGUIDFromAttestationCertificate(attestationCertificate);
+        //noinspection ConstantConditions as null check is already done in caller
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
             throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
@@ -111,15 +129,18 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
+    @SuppressWarnings("SameReturnValue")
     private @NonNull AttestationType validateSelfAttestation(@NonNull CoreRegistrationObject registrationObject, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
-        COSEKey coseKey =
-                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
+        //noinspection ConstantConditions as null check is already done in caller
+        COSEKey coseKey = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
+        //noinspection ConstantConditions as null check is already done in caller
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
             throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
+        //noinspection ConstantConditions as null check is already done in caller
         if (!verifySignature(coseKey.getPublicKey(), alg, sig, attrToBeSigned)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
@@ -127,6 +148,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.SELF;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean verifySignature(@NonNull PublicKey publicKey, @NonNull COSEAlgorithmIdentifier algorithmIdentifier, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             String jcaName = getJcaName(algorithmIdentifier);

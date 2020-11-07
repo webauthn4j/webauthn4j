@@ -42,6 +42,7 @@ public abstract class AbstractCOSEKey implements COSEKey {
     @JsonProperty("5")
     private final byte[] baseIV;
 
+    @SuppressWarnings("SameParameterValue")
     @JsonCreator
     AbstractCOSEKey(
             @Nullable @JsonProperty("2") byte[] keyId,

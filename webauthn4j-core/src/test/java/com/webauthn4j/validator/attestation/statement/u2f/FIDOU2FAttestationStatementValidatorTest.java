@@ -17,9 +17,7 @@
 package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
-import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
-import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -30,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import java.security.PublicKey;
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -47,6 +46,29 @@ class FIDOU2FAttestationStatementValidatorTest {
         assertThrows(IllegalArgumentException.class,
                 () -> target.validate(registrationObject)
         );
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_test(){
+        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(new AttestationCertificatePath(), new byte[32]);
+        target.validateAttestationStatementNotNull(attestationStatement);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_null_test(){
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_sig_null_test(){
+        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(new AttestationCertificatePath(), null);
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_x5c_null_test(){
+        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(null, new byte[32]);
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

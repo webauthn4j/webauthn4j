@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for ChallengeValidator
  */
+@SuppressWarnings("ConstantConditions")
 class ChallengeValidatorTest {
 
     private final Origin origin = Origin.create("https://example.com");

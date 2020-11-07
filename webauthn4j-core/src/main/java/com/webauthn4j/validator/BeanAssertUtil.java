@@ -21,7 +21,6 @@ import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
@@ -166,8 +165,7 @@ class BeanAssertUtil {
             throw new ConstraintViolationException("attestedCredentialData must not be null");
         }
 
-        AAGUID aaguid = attestedCredentialData.getAaguid();
-        if (aaguid == null) {
+        if (attestedCredentialData.getAaguid() == null) {
             throw new ConstraintViolationException("aaguid must not be null");
         }
 
@@ -211,6 +209,9 @@ class BeanAssertUtil {
 
     public static void validate(@Nullable COSEKey coseKey) {
         if (coseKey == null) {
+            throw new ConstraintViolationException("coseKey must not be null");
+        }
+        if (coseKey.getAlgorithm() == null) {
             throw new ConstraintViolationException("coseKey must not be null");
         }
         coseKey.validate();

@@ -232,6 +232,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 // Set credentialSource.id to credentialId.
                 credentialSource.setId(credentialId);
                 // Let credentials be this authenticator’s credentials map.
+                //noinspection UnnecessaryLocalVariable
                 Map<CredentialMapKey, PublicKeyCredentialSource> credentials = credentialMap;
                 credentials.put(new CredentialMapKey(rpEntity.getId(), userHandle), credentialSource);
             }

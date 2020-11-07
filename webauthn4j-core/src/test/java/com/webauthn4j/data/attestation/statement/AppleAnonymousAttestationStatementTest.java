@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
+@SuppressWarnings("ConstantConditions")
 class AppleAnonymousAttestationStatementTest {
 
     @Test

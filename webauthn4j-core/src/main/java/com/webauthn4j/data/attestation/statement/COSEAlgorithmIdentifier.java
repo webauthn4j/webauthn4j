@@ -38,9 +38,9 @@ public class COSEAlgorithmIdentifier implements Serializable {
     public static final COSEAlgorithmIdentifier ES384;
     public static final COSEAlgorithmIdentifier ES512;
 
-    private static Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
-    private static Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
-    private static Map<SignatureAlgorithm, COSEAlgorithmIdentifier> reverseAlgorithmMap = new HashMap<>();
+    private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
+    private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
+    private static final Map<SignatureAlgorithm, COSEAlgorithmIdentifier> reverseAlgorithmMap = new HashMap<>();
 
     static {
         RS1 = new COSEAlgorithmIdentifier(-65535);

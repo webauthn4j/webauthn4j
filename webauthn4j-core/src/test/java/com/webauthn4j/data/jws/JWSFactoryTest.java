@@ -22,9 +22,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JWSFactoryTest {
 
@@ -47,6 +49,15 @@ class JWSFactoryTest {
         JWS<Payload> jws = target.create(header, payload, signature);
         assertThat(jws).isNotNull();
     }
+
+    @Test
+    void create_with_alg_null_test() {
+        JWSHeader header = new JWSHeader(null, CertificateUtil.generateCertPath(Collections.emptyList()));
+        Payload payload = new Payload();
+        PrivateKey privateKey = ECUtil.createKeyPair().getPrivate();
+        assertThatThrownBy(()->target.create(header, payload, privateKey)).isInstanceOf(IllegalArgumentException.class);
+    }
+
 
     private static class Payload implements Serializable {
         private String dummy;

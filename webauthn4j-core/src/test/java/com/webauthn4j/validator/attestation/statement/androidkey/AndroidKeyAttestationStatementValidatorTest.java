@@ -25,6 +25,7 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -38,6 +39,35 @@ class AndroidKeyAttestationStatementValidatorTest {
     void validate_test() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.validate(registrationObject);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_test(){
+        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath());
+        target.validateAttestationStatementNotNull(attestationStatement);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_null_test(){
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_alg_null_test(){
+        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath());
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_sig_null_test(){
+        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.RS256, null, new AttestationCertificatePath());
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_x5c_null_test(){
+        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

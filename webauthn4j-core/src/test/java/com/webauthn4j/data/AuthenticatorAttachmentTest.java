@@ -65,7 +65,7 @@ class AuthenticatorAttachmentTest {
     }
 
     @Test
-    void deserialize_test_with_invalid() throws IOException {
+    void deserialize_test_with_invalid() {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class)
         );

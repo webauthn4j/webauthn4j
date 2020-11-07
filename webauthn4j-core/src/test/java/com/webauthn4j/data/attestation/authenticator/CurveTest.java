@@ -21,6 +21,7 @@ import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,9 +33,7 @@ class CurveTest {
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> Curve.create(4)
-                )
+                () -> assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 

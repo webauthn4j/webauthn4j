@@ -32,6 +32,7 @@ class AttestationCertificatePathTest {
 
     @Test
     void getEndEntityCertificate_test_with_no_certificates() {
+        //noinspection MismatchedQueryAndUpdateOfCollection
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
         assertThrows(IllegalStateException.class,
                 attestationCertificatePath::getEndEntityAttestationCertificate

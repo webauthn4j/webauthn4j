@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestationStatementTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void serialize_deserialize_with_envelope_class() {
@@ -47,7 +47,7 @@ class AttestationStatementTest {
                 include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
                 property = "fmt"
         )
-        private AttestationStatement attestationStatement;
+        private final AttestationStatement attestationStatement;
 
         @JsonCreator
         public AttestationStatementEnvelope(@JsonProperty("attStmt") AttestationStatement attestationStatement) {
