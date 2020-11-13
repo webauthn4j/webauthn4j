@@ -20,11 +20,12 @@ import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttesta
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class NullAppleAppAttestAttestationStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.",
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));

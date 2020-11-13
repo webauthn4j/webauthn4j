@@ -21,15 +21,16 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.validator.CoreAuthenticationObject;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class DCAuthenticationObject extends CoreAuthenticationObject {
     public DCAuthenticationObject(
-            byte[] credentialId,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            byte[] clientDataHash,
-            CoreServerProperty serverProperty,
-            DCAppleDevice dcAppleDevice) {
+            @NonNull byte[] credentialId,
+            @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NonNull byte[] authenticatorDataBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull DCAppleDevice dcAppleDevice) {
         super(credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, dcAppleDevice);
     }
 }

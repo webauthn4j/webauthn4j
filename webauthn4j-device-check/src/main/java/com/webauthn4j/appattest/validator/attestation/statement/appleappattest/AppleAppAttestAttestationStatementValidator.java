@@ -28,6 +28,8 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1OctetString;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -44,7 +46,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     public static final String APPLE_CRED_CERT_EXTENSION_OID = "1.2.840.113635.100.8.2";
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         if (!(registrationObject instanceof DCRegistrationObject)) {
             throw new IllegalArgumentException("registrationObject must be an instance of DCRegistrationObject.");
         }
@@ -62,7 +64,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
         return AttestationType.BASIC;
     }
 
-    void validateAttestationStatementNotNull(AppleAppAttestAttestationStatement attestationStatement) {
+    void validateAttestationStatementNotNull(@Nullable AppleAppAttestAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
@@ -75,7 +77,8 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     }
 
 
-    void validateX5c(AppleAppAttestAttestationStatement attestationStatement) {
+    void validateX5c(@NonNull AppleAppAttestAttestationStatement attestationStatement) {
+        //noinspection ConstantConditions as null check is already done in caller
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException(
                     "No attestation certificate is found in Apple App Attest attestation statement."
@@ -90,6 +93,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
     private void validateNonce(CoreRegistrationObject registrationObject) {
         AppleAppAttestAttestationStatement attestationStatement = getAttestationStatement(registrationObject);
+        //noinspection ConstantConditions as null check is already done in caller
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         byte[] actualNonce = extractNonce(attestationCertificate);
 
@@ -105,6 +109,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     }
 
     private void validatePublicKey(CoreRegistrationObject registrationObject) {
+        //noinspection ConstantConditions as null check is already done in caller
         byte[] publicKey = ECUtil.createUncompressedPublicKey((ECPublicKey) getAttestationStatement(registrationObject).getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey());
         DCRegistrationObject dcRegistrationObject = (DCRegistrationObject) registrationObject;
         byte[] keyId = dcRegistrationObject.getKeyId();

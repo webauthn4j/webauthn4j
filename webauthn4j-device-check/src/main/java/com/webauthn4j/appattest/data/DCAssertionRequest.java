@@ -17,6 +17,7 @@
 package com.webauthn4j.appattest.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 
@@ -26,21 +27,24 @@ public class DCAssertionRequest {
     private final byte[] assertion;
     private final byte[] clientDataHash;
 
-    public DCAssertionRequest(byte[] keyId, byte[] assertion, byte[] clientDataHash) {
+    public DCAssertionRequest(
+            @Nullable byte[] keyId,
+            @Nullable byte[] assertion,
+            @Nullable byte[] clientDataHash) {
         this.keyId = ArrayUtil.clone(keyId);
         this.assertion = ArrayUtil.clone(assertion);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
-    public byte[] getKeyId() {
+    public @Nullable byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
     }
 
-    public byte[] getAssertion() {
+    public @Nullable byte[] getAssertion() {
         return ArrayUtil.clone(assertion);
     }
 
-    public byte[] getClientDataHash() {
+    public @Nullable byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
 
