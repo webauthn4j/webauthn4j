@@ -29,6 +29,7 @@ import com.webauthn4j.validator.CustomCoreRegistrationValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +42,10 @@ public class DeviceCheckManager {
     private final DeviceCheckAttestationManager deviceCheckAttestationManager;
     private final DeviceCheckAssertionManager deviceCheckAssertionManager;
 
-    public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                              List<CustomCoreRegistrationValidator> customRegistrationValidators,
-                              List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
-                              ObjectConverter objectConverter) {
+    public DeviceCheckManager(@NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                              @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+                              @NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
+                              @NonNull ObjectConverter objectConverter) {
 
         this.deviceCheckAttestationManager = new DeviceCheckAttestationManager(
                 certPathTrustworthinessValidator,
@@ -55,9 +56,9 @@ public class DeviceCheckManager {
                 objectConverter);
     }
 
-    public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                              List<CustomCoreRegistrationValidator> customRegistrationValidators,
-                              List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+    public DeviceCheckManager(@NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                              @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidators,
+                              @NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this(
                 certPathTrustworthinessValidator,
                 customRegistrationValidators,
@@ -66,8 +67,8 @@ public class DeviceCheckManager {
         );
     }
 
-    public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-                              ObjectConverter objectConverter) {
+    public DeviceCheckManager(@NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+                              @NonNull ObjectConverter objectConverter) {
         this(
                 certPathTrustworthinessValidator,
                 new ArrayList<>(),
@@ -76,7 +77,7 @@ public class DeviceCheckManager {
         );
     }
 
-    public DeviceCheckManager(CertPathTrustworthinessValidator certPathTrustworthinessValidator) {
+    public DeviceCheckManager(@NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator) {
         this(
                 certPathTrustworthinessValidator,
                 new ArrayList<>(),
@@ -92,7 +93,7 @@ public class DeviceCheckManager {
      *
      * @return configured {@link DeviceCheckManager}
      */
-    public static DeviceCheckManager createNonStrictDeviceCheckManager() {
+    public static @NonNull DeviceCheckManager createNonStrictDeviceCheckManager() {
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         cborMapper.registerModule(new DeviceCheckCBORModule());
@@ -106,14 +107,14 @@ public class DeviceCheckManager {
      * @param objectConverter ObjectConverter
      * @return configured {@link DeviceCheckManager}
      */
-    public static DeviceCheckManager createNonStrictDeviceCheckManager(ObjectConverter objectConverter) {
+    public static @NonNull DeviceCheckManager createNonStrictDeviceCheckManager(@NonNull ObjectConverter objectConverter) {
         return new DeviceCheckManager(
                 new NullCertPathTrustworthinessValidator(),
                 objectConverter
         );
     }
 
-    private static ObjectConverter createObjectConverter() {
+    private static @NonNull ObjectConverter createObjectConverter() {
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         cborMapper.registerModule(new DeviceCheckCBORModule());
@@ -121,40 +122,40 @@ public class DeviceCheckManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAttestationData parse(DCAttestationRequest dcAttestationRequest) throws DataConversionException {
+    public @NonNull DCAttestationData parse(@NonNull DCAttestationRequest dcAttestationRequest) throws DataConversionException {
         return this.deviceCheckAttestationManager.parse(dcAttestationRequest);
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAttestationData validate(DCAttestationRequest dcAttestationRequest, DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
+    public @NonNull DCAttestationData validate(@NonNull DCAttestationRequest dcAttestationRequest, @NonNull DCAttestationParameters dcAttestationParameters) throws DataConversionException, ValidationException {
         return this.deviceCheckAttestationManager.validate(dcAttestationRequest, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAttestationData validate(DCAttestationData dcAttestationData, DCAttestationParameters dcAttestationParameters) throws ValidationException {
+    public @NonNull DCAttestationData validate(@NonNull DCAttestationData dcAttestationData, @NonNull DCAttestationParameters dcAttestationParameters) throws ValidationException {
         return this.deviceCheckAttestationManager.validate(dcAttestationData, dcAttestationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAssertionData parse(DCAssertionRequest dcAssertionRequest) throws DataConversionException {
+    public @NonNull DCAssertionData parse(@NonNull DCAssertionRequest dcAssertionRequest) throws DataConversionException {
         return this.deviceCheckAssertionManager.parse(dcAssertionRequest);
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAssertionData validate(DCAssertionRequest dcAssertionRequest, DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
+    public @NonNull DCAssertionData validate(@NonNull DCAssertionRequest dcAssertionRequest, @NonNull DCAssertionParameters dcAssertionParameters) throws DataConversionException, ValidationException {
         return this.deviceCheckAssertionManager.validate(dcAssertionRequest, dcAssertionParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public DCAssertionData validate(DCAssertionData dcAssertionData, DCAssertionParameters dcAssertionParameters) throws ValidationException {
+    public @NonNull DCAssertionData validate(@NonNull DCAssertionData dcAssertionData, @NonNull DCAssertionParameters dcAssertionParameters) throws ValidationException {
         return this.deviceCheckAssertionManager.validate(dcAssertionData, dcAssertionParameters);
     }
 
-    public DCAttestationDataValidator getAttestationDataValidator() {
+    public @NonNull DCAttestationDataValidator getAttestationDataValidator() {
         return this.deviceCheckAttestationManager.getDCAttestationDataValidator();
     }
 
-    public DCAssertionDataValidator getAssertionDataValidator() {
+    public @NonNull DCAssertionDataValidator getAssertionDataValidator() {
         return this.deviceCheckAssertionManager.getDCAssertionDataValidator();
     }
 

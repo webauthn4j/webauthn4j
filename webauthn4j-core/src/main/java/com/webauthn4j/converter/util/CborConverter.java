@@ -49,7 +49,7 @@ public class CborConverter implements Serializable {
         this.cborMapper = cborMapper;
     }
 
-    public @NonNull <T> T readValue(@NonNull byte[] src, @NonNull Class<T> valueType) {
+    public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -59,7 +59,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @NonNull <T> T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
+    public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -69,7 +69,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @NonNull <T> T readValue(@NonNull byte[] src, @NonNull TypeReference<T> valueTypeRef) {
+    public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -79,7 +79,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @NonNull <T> T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
+    public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -89,7 +89,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @NonNull JsonNode readTree(@NonNull byte[] bytes) {
+    public @Nullable JsonNode readTree(@NonNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -99,7 +99,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
+    public @Nullable byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {

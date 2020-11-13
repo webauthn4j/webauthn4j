@@ -37,6 +37,12 @@ class JsonConverterTest {
     }
 
     @Test
+    void readValue_null_test() {
+        ConverterTestDto dto = jsonConverter.readValue("null", ConverterTestDto.class);
+        assertThat(dto).isNull();
+    }
+
+    @Test
     void readValue_with_invalid_json_test() {
         assertThrows(DataConversionException.class,
                 () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)

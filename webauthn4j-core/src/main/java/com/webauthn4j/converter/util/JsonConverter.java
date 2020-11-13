@@ -48,7 +48,7 @@ public class JsonConverter implements Serializable {
         this.jsonMapper = jsonMapper;
     }
 
-    public <T> @NonNull T readValue(@NonNull String src, @NonNull Class<T> valueType) {
+    public <T> @Nullable T readValue(@NonNull String src, @NonNull Class<T> valueType) {
         try {
             return jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -58,7 +58,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public <T> @NonNull T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
+    public <T> @Nullable T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
         try {
             return jsonMapper.readValue(src, valueType);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -68,7 +68,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public <T> @NonNull T readValue(@NonNull String src, @NonNull TypeReference<T> valueTypeRef) {
+    public <T> @Nullable T readValue(@NonNull String src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -78,7 +78,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public <T> @NonNull T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
+    public <T> @Nullable T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -88,7 +88,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
+    public @Nullable byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
@@ -96,7 +96,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public @NonNull String writeValueAsString(@Nullable Object value) {
+    public @Nullable String writeValueAsString(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {

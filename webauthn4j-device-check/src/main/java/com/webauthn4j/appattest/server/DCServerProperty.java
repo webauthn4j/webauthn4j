@@ -18,6 +18,8 @@ package com.webauthn4j.appattest.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.CoreServerProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DCServerProperty extends CoreServerProperty {
 
@@ -27,7 +29,7 @@ public class DCServerProperty extends CoreServerProperty {
      * @param rpId      rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
      * @param challenge challenge
      */
-    public DCServerProperty(String rpId, Challenge challenge) {
+    public DCServerProperty(@NonNull String rpId, @Nullable Challenge challenge) {
         super(rpId, challenge);
     }
 
@@ -38,7 +40,7 @@ public class DCServerProperty extends CoreServerProperty {
      * @param cfBundleIdentifier CFBundleIdentifier
      * @param challenge          challenge
      */
-    public DCServerProperty(String teamIdentifier, String cfBundleIdentifier, Challenge challenge) {
+    public DCServerProperty(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier, @Nullable Challenge challenge) {
         super(String.format("%s.%s", teamIdentifier, cfBundleIdentifier), challenge);
     }
 
