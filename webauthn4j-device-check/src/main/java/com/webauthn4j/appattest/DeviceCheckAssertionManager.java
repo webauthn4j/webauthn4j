@@ -16,9 +16,7 @@
 
 package com.webauthn4j.appattest;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.appattest.data.DCAssertion;
 import com.webauthn4j.appattest.data.DCAssertionData;
 import com.webauthn4j.appattest.data.DCAssertionParameters;
 import com.webauthn4j.appattest.data.DCAssertionRequest;
@@ -33,7 +31,6 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -100,31 +97,6 @@ public class DeviceCheckAssertionManager {
 
     public @NonNull DCAssertionDataValidator getDCAssertionDataValidator() {
         return dcAssertionDataValidator;
-    }
-
-    static class DCAssertion {
-
-        private final byte[] signature;
-        private final byte[] authenticatorData;
-
-        @JsonCreator
-        public DCAssertion(
-                @Nullable @JsonProperty("signature") byte[] signature,
-                @Nullable @JsonProperty("authenticatorData") byte[] authenticatorData) {
-            this.signature = signature;
-            this.authenticatorData = authenticatorData;
-        }
-
-        @JsonGetter("signature")
-        public @Nullable byte[] getSignature() {
-            return signature;
-        }
-
-        @JsonGetter("authenticatorData")
-        public @Nullable byte[] getAuthenticatorData() {
-            return authenticatorData;
-        }
-
     }
 
 }
