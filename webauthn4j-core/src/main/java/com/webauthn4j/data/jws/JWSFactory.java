@@ -32,6 +32,9 @@ import java.security.SignatureException;
 
 public class JWSFactory {
 
+    private static final String HEADER_MUST_NOT_BE_NULL = "header must not be null";
+    private static final String PAYLOAD_MUST_NOT_BE_NULL = "payload must not be null";
+
     private final JsonConverter jsonConverter;
 
     public JWSFactory(@NonNull ObjectConverter objectConverter) {
@@ -44,8 +47,8 @@ public class JWSFactory {
     }
 
     public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
-        AssertUtil.notNull(header, "header must not be null");
-        AssertUtil.notNull(payload, "payload must not be null");
+        AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
+        AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(privateKey, "privateKey must not be null");
 
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
@@ -67,8 +70,8 @@ public class JWSFactory {
     }
 
     public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
-        AssertUtil.notNull(header, "header must not be null");
-        AssertUtil.notNull(payload, "payload must not be null");
+        AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
+        AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(signature, "signature must not be null");
 
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
@@ -91,8 +94,8 @@ public class JWSFactory {
         T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
 
-        AssertUtil.notNull(header, "header must not be null");
-        AssertUtil.notNull(payload, "payload must not be null");
+        AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
+        AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
 
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
