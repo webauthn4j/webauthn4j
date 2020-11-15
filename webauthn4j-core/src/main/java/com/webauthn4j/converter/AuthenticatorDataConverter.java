@@ -143,8 +143,9 @@ public class AuthenticatorDataConverter {
         }
     }
 
-    <T extends ExtensionAuthenticatorOutput> @NonNull AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
-        if (byteBuffer.remaining() == 0) { //TODO: revisit
+    <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
+        // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
+        if (byteBuffer.remaining() == 0) {
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
@@ -154,7 +155,7 @@ public class AuthenticatorDataConverter {
                 cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
                 });
         if(envelope == null){
-            return new AuthenticationExtensionsAuthenticatorOutputs<>();
+            return null;
         }
         int leftoverLength = remaining.length - envelope.getLength();
         byteBuffer.position(byteBuffer.position() - leftoverLength);
