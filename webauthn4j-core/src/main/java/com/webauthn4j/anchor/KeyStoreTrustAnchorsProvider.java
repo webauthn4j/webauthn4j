@@ -61,6 +61,7 @@ public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
      * @param keyStore keyStore object
      */
     public void setKeyStore(@NonNull KeyStore keyStore) {
+        AssertUtil.notNull(keyStore, "keyStore must not be null");
         this.keyStore = keyStore;
     }
 

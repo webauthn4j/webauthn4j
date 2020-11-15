@@ -16,6 +16,7 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 class JWSSignatureUtil {
@@ -58,6 +59,8 @@ class JWSSignatureUtil {
      * @author Aleksei Doroganov
      */
     public static @NonNull byte[] convertJwsSignatureToDerSignature(@NonNull byte[] jwsSignature) {
+
+        AssertUtil.notNull(jwsSignature, "jwsSignature must not be null");
 
         // Adapted from org.apache.xml.security.algorithms.implementations.SignatureECDSA
 

@@ -22,6 +22,7 @@ import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -45,6 +46,13 @@ public class CoreRegistrationObject {
             @NonNull byte[] clientDataHash,
             @NonNull CoreServerProperty serverProperty,
             @NonNull Instant timestamp) {
+
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
+        AssertUtil.notNull(attestationObjectBytes, "attestationObjectBytes must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        AssertUtil.notNull(timestamp, "timestamp must not be null");
+
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.clientDataHash = clientDataHash;

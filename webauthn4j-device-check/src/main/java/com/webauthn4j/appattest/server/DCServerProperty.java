@@ -18,6 +18,7 @@ package com.webauthn4j.appattest.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -41,7 +42,13 @@ public class DCServerProperty extends CoreServerProperty {
      * @param challenge          challenge
      */
     public DCServerProperty(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier, @Nullable Challenge challenge) {
-        super(String.format("%s.%s", teamIdentifier, cfBundleIdentifier), challenge);
+        super(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
+    }
+
+    private static @NonNull String formatRpId(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier){
+        AssertUtil.notNull(teamIdentifier, "teamIdentifier must not be null");
+        AssertUtil.notNull(cfBundleIdentifier, "cfBundleIdentifier must not be null");
+        return String.format("%s.%s", teamIdentifier, cfBundleIdentifier);
     }
 
 }

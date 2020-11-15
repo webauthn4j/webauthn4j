@@ -23,6 +23,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs
 import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientInputs}
@@ -44,7 +45,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientInput> @NonNull AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
+    public <T extends ExtensionClientInput> @Nullable AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null");
         return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {
         });
@@ -53,7 +54,6 @@ public class AuthenticationExtensionsClientInputsConverter {
 
     public <T extends ExtensionClientInput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientInputs<T> value) {
         AssertUtil.notNull(value, "value must not be null");
-
         return jsonConverter.writeValueAsString(value);
     }
 

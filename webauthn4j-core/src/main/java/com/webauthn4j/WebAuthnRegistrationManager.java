@@ -165,6 +165,7 @@ public class WebAuthnRegistrationManager {
 
     @SuppressWarnings("squid:S1130")
     public @NonNull RegistrationData parse(@NonNull RegistrationRequest registrationRequest) throws DataConversionException {
+        AssertUtil.notNull(registrationRequest, "registrationRequest must not be null");
 
         byte[] clientDataBytes = registrationRequest.getClientDataJSON();
         byte[] attestationObjectBytes = registrationRequest.getAttestationObject();

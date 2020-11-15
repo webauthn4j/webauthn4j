@@ -19,6 +19,7 @@ package com.webauthn4j.validator.attestation.statement.none;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,6 +31,7 @@ public class NoneAttestationStatementValidator extends AbstractStatementValidato
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

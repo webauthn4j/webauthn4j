@@ -20,6 +20,7 @@ import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttesta
 import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -47,6 +48,8 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
     @Override
     public AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+
         if (!(registrationObject instanceof DCRegistrationObject)) {
             throw new IllegalArgumentException("registrationObject must be an instance of DCRegistrationObject.");
         }

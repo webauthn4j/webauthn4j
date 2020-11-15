@@ -18,6 +18,7 @@ package com.webauthn4j.validator.attestation.statement.apple;
 
 import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
@@ -42,6 +43,7 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }

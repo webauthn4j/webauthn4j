@@ -39,6 +39,7 @@ class RpIdHashValidator {
     // ========================================================================================================
 
     public void validate(@NonNull byte[] rpIdHash, @NonNull CoreServerProperty serverProperty) {
+        AssertUtil.notNull(rpIdHash, "rpIdHash must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();
         AssertUtil.notNull(rpId, "rpId must not be null");

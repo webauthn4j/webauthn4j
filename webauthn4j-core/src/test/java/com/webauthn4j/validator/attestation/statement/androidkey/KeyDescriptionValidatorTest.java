@@ -37,7 +37,7 @@ class KeyDescriptionValidatorTest {
         doThrow(new IOException()).when(target).extractKeyDescription(any());
         X509Certificate x509Certificate = TestAttestationUtil.loadAndroidKeyAttestationCertificate();
         assertThrows(UncheckedIOException.class,
-                () -> target.validate(x509Certificate, null, false)
+                () -> target.validate(x509Certificate, new byte[32], false)
         );
     }
 }

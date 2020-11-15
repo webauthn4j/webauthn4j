@@ -24,6 +24,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -69,6 +70,9 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     }
 
     public static @NonNull AuthenticatorImpl createFromRegistrationData(@NonNull RegistrationData registrationData) {
+        AssertUtil.notNull(registrationData, "registrationData must not be null");
+        AssertUtil.notNull(registrationData.getAttestationObject(), "attestationObject must not be null");
+        AssertUtil.notNull(registrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
         return new AuthenticatorImpl(
                 registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 registrationData.getAttestationObject().getAttestationStatement(),
@@ -96,7 +100,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

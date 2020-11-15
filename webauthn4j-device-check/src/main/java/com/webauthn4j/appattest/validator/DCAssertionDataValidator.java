@@ -48,7 +48,7 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
         DCAppleDevice dcAppleDevice = new DCAppleDeviceImpl(
                 authenticator.getAttestedCredentialData(),
-                authenticator.getAttestationStatement(),
+                authenticator.getAttestationStatement(), //TODO: revisit
                 authenticator.getCounter(),
                 authenticator.getAuthenticatorExtensions());
 

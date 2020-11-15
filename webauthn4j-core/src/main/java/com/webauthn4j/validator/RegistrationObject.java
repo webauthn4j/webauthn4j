@@ -23,6 +23,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -60,6 +61,10 @@ public class RegistrationObject extends CoreRegistrationObject {
             @NonNull Instant timestamp) {
 
         super(attestationObject, attestationObjectBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, timestamp);
+
+        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
+        AssertUtil.notNull(collectedClientDataBytes, "collectedClientDataBytes must not be null");
+
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;

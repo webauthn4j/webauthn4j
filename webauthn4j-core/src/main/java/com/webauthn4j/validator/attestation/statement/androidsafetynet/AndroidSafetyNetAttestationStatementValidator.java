@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificate;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.Response;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -48,6 +49,9 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     @SuppressWarnings("ConstantConditions")
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
@@ -190,6 +194,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     }
 
     public void setVersionValidator(@NonNull GooglePlayServiceVersionValidator versionValidator) {
+        AssertUtil.notNull(versionValidator, "versionValidator must not be null");
         this.versionValidator = versionValidator;
     }
 

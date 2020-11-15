@@ -76,7 +76,7 @@ class AuthenticatorImplTest {
     void getter_setter_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
@@ -99,7 +99,7 @@ class AuthenticatorImplTest {
 
     @Test
     void setCounter_range_test() {
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
 
         assertAll(
                 () -> assertThrows(IllegalArgumentException.class,

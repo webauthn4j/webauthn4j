@@ -39,6 +39,7 @@ public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustwo
 
     @Override
     protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
         return trustAnchorsResolver.resolve(aaguid);
     }
 }

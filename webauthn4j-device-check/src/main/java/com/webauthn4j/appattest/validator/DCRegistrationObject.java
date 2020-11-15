@@ -19,6 +19,7 @@ package com.webauthn4j.appattest.validator;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -39,6 +40,9 @@ public class DCRegistrationObject extends CoreRegistrationObject {
             @NonNull CoreServerProperty serverProperty,
             @NonNull Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
+
+        AssertUtil.notNull(keyId, "keyId must not be null");
+
         this.keyId = ArrayUtil.clone(keyId);
     }
 
@@ -49,6 +53,9 @@ public class DCRegistrationObject extends CoreRegistrationObject {
             @NonNull byte[] clientDataHash,
             @NonNull CoreServerProperty serverProperty) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
+
+        AssertUtil.notNull(keyId, "keyId must not be null");
+
         this.keyId = ArrayUtil.clone(keyId);
     }
 
