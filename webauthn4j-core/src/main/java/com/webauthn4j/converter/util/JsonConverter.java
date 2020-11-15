@@ -88,7 +88,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public @Nullable byte[] writeValueAsBytes(@Nullable Object value) { //TODO: revisit: Is return value nullable?
+    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
@@ -96,7 +96,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public @Nullable String writeValueAsString(@Nullable Object value) { //TODO: revisit: Is return value nullable?
+    public @NonNull String writeValueAsString(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {

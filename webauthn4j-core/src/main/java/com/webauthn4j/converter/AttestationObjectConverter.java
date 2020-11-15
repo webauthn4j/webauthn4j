@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -23,6 +24,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Converter for {@link AttestationObject}
@@ -52,7 +54,7 @@ public class AttestationObjectConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public @NonNull AttestationObject convert(@NonNull String source) { //TODO: revisit return value nullability
+    public @Nullable AttestationObject convert(@NonNull String source) {
         AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
         byte[] value = Base64UrlUtil.decode(source);
         return convert(value);
@@ -64,9 +66,8 @@ public class AttestationObjectConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public @NonNull AttestationObject convert(@NonNull byte[] source) {
+    public @Nullable AttestationObject convert(@NonNull byte[] source) {
         AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
-        //noinspection ConstantConditions as source is non-null
         return cborConverter.readValue(source, AttestationObject.class);
     }
 
@@ -98,10 +99,11 @@ public class AttestationObjectConverter {
      * @param attestationObject the attestationObject byte array
      * @return the extracted authenticatorData byte array
      */
-    public @NonNull byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) { //TODO: revisit
+    public @Nullable byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) {
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
         //noinspection ConstantConditions as attestationObject is non-null
-        return JacksonUtil.binaryValue(cborConverter.readTree(attestationObject).get("authData"));
+        JsonNode authData = cborConverter.readTree(attestationObject).get("authData");
+        return JacksonUtil.binaryValue(authData);
     }
 
     /**
@@ -110,9 +112,11 @@ public class AttestationObjectConverter {
      * @param attestationObject the attestationObject byte array
      * @return the extracted attestation statement byte array
      */
-    public @NonNull byte[] extractAttestationStatement(@NonNull byte[] attestationObject) { //TODO: revisit
+    public @Nullable byte[] extractAttestationStatement(@NonNull byte[] attestationObject) {
         AssertUtil.notNull(attestationObject, "attestationObject must not be null");
-        return cborConverter.writeValueAsBytes(cborConverter.readTree(attestationObject).get("attStmt"));
+        //noinspection ConstantConditions as attestationObject is non-null
+        JsonNode attStmt = cborConverter.readTree(attestationObject).get("attStmt");
+        return cborConverter.writeValueAsBytes(attStmt);
     }
 
 

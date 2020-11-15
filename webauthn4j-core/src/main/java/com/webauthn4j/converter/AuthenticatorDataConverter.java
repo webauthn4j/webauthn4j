@@ -64,7 +64,7 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticatorDataConverter(ObjectConverter objectConverter) {
+    public AuthenticatorDataConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
         this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
@@ -144,7 +144,7 @@ public class AuthenticatorDataConverter {
     }
 
     <T extends ExtensionAuthenticatorOutput> @NonNull AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
-        if (byteBuffer.remaining() == 0) {
+        if (byteBuffer.remaining() == 0) { //TODO: revisit
             return new AuthenticationExtensionsAuthenticatorOutputs<>();
         }
         byte[] remaining = new byte[byteBuffer.remaining()];
@@ -153,6 +153,9 @@ public class AuthenticatorDataConverter {
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
                 cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
                 });
+        if(envelope == null){
+            return new AuthenticationExtensionsAuthenticatorOutputs<>();
+        }
         int leftoverLength = remaining.length - envelope.getLength();
         byteBuffer.position(byteBuffer.position() - leftoverLength);
         return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
