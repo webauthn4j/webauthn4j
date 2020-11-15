@@ -127,6 +127,14 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
+    void convertToExtensions_with_cbor_null_ByteBuffer_test() {
+        byte[] data = new byte[]{(byte)0xF6};
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.wrap(data));
+        assertThat(extensions).isNull();
+    }
+
+    @Test
     void extractAttestedCredentialData_test() {
         //Given
         //noinspection SpellCheckingInspection
