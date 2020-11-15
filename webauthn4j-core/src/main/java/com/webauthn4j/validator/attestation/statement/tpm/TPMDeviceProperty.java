@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator.attestation.statement.tpm;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
@@ -27,21 +26,21 @@ public class TPMDeviceProperty {
     private final String partNumber;
     private final String firmwareVersion;
 
-    public TPMDeviceProperty(@NonNull String manufacturer, @NonNull String partNumber, @NonNull String firmwareVersion) {
+    public TPMDeviceProperty(@Nullable String manufacturer, @Nullable String partNumber, @Nullable String firmwareVersion) {
         this.manufacturer = manufacturer;
         this.partNumber = partNumber;
         this.firmwareVersion = firmwareVersion;
     }
 
-    public @NonNull String getManufacturer() {
+    public @Nullable String getManufacturer() {
         return manufacturer;
     }
 
-    public @NonNull String getPartNumber() {
+    public @Nullable String getPartNumber() {
         return partNumber;
     }
 
-    public @NonNull String getFirmwareVersion() {
+    public @Nullable String getFirmwareVersion() {
         return firmwareVersion;
     }
 

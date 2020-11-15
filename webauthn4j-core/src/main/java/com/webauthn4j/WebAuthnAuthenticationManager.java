@@ -73,6 +73,7 @@ public class WebAuthnAuthenticationManager {
 
     @SuppressWarnings("squid:S1130")
     public @NonNull AuthenticationData parse(@NonNull AuthenticationRequest authenticationRequest) throws DataConversionException {
+        AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
 
         byte[] credentialId = authenticationRequest.getCredentialId();
         byte[] signature = authenticationRequest.getSignature();

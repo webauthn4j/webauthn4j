@@ -53,6 +53,7 @@ public class AuthenticationDataValidator {
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
+        AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 

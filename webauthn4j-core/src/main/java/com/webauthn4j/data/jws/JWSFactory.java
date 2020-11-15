@@ -18,6 +18,7 @@ package com.webauthn4j.data.jws;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -34,6 +35,7 @@ public class JWSFactory {
     private final JsonConverter jsonConverter;
 
     public JWSFactory(@NonNull ObjectConverter objectConverter) {
+        AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
 
@@ -42,6 +44,10 @@ public class JWSFactory {
     }
 
     public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
+        AssertUtil.notNull(header, "header must not be null");
+        AssertUtil.notNull(payload, "payload must not be null");
+        AssertUtil.notNull(privateKey, "privateKey must not be null");
+
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
         String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
@@ -61,12 +67,19 @@ public class JWSFactory {
     }
 
     public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
+        AssertUtil.notNull(header, "header must not be null");
+        AssertUtil.notNull(payload, "payload must not be null");
+        AssertUtil.notNull(signature, "signature must not be null");
+
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
         String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
     public <T extends Serializable> @NonNull JWS<T> parse(@NonNull String value, @NonNull Class<T> payloadType) {
+        AssertUtil.notNull(value, "value must not be null");
+        AssertUtil.notNull(payloadType, "payloadType must not be null");
+
         String[] data = value.split("\\.");
         if (data.length != 3) {
             throw new IllegalArgumentException("JWS value is not divided by two period.");

@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -51,6 +52,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

@@ -33,5 +33,5 @@ public interface TrustAnchorsResolver {
      * @param aaguid {@link AAGUID} for authenticator
      * @return {@link TrustAnchor} {@link Set}.
      */
-    @NonNull Set<TrustAnchor> resolve(AAGUID aaguid);
+    @NonNull Set<TrustAnchor> resolve(@NonNull AAGUID aaguid);
 }

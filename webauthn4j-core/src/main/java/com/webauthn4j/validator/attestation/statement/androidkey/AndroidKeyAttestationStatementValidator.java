@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
@@ -46,6 +47,8 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }

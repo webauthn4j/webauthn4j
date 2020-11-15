@@ -52,6 +52,10 @@ public class CoreAuthenticationDataValidator {
     protected CoreAuthenticationDataValidator(
             @NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
             @NonNull AssertionSignatureValidator assertionSignatureValidator) {
+
+        AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
+        AssertUtil.notNull(assertionSignatureValidator, "assertionSignatureValidator must not be null");
+
         this.customAuthenticationValidators = customAuthenticationValidators;
         this.assertionSignatureValidator = assertionSignatureValidator;
     }

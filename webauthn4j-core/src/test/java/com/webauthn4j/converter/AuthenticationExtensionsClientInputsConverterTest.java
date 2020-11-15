@@ -60,6 +60,13 @@ class AuthenticationExtensionsClientInputsConverterTest {
         assertThat(clientInputs.getExtension(FIDOAppIDExtensionClientInput.class)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
     }
 
+    @Test
+    void convert_null_test() {
+        String source = "null";
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        assertThat(clientInputs).isNull();
+    }
+
     @SuppressWarnings("unused")
     @Test
     void convert_with_invalid_extension_test() {

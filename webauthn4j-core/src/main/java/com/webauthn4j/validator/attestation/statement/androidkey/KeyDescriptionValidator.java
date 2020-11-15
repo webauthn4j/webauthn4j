@@ -19,6 +19,7 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.KeyDescriptionValidationException;
 import org.apache.kerby.asn1.parse.Asn1Container;
@@ -58,6 +59,9 @@ public class KeyDescriptionValidator {
     private final Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
 
     public void validate(@NonNull X509Certificate x509Certificate, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) {
+        AssertUtil.notNull(x509Certificate, "x509Certificate must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+
         try {
             Asn1Container keyDescription = extractKeyDescription(x509Certificate);
             doValidate(keyDescription, clientDataHash, teeEnforcedOnly);

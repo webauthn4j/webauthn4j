@@ -32,6 +32,8 @@ import java.util.Arrays;
 
 public class AttestedCredentialDataConverter implements Serializable {
 
+    private static final String ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL = "attestedCredentialData must not be null";
+
     private static final int AAGUID_LENGTH = 16;
     private static final int L_LENGTH = 2;
 
@@ -48,6 +50,7 @@ public class AttestedCredentialDataConverter implements Serializable {
 
     public @NonNull byte[] convert(@NonNull AttestedCredentialData attestationData) {
 
+        AssertUtil.notNull(attestationData, "attestationData must not be null");
         AssertUtil.notNull(attestationData.getAaguid(), "aaguid must not be null");
         AssertUtil.notNull(attestationData.getCredentialId(), "credentialId must not be null");
         AssertUtil.notNull(attestationData.getCOSEKey(), "coseKey must not be null");
@@ -65,6 +68,8 @@ public class AttestedCredentialDataConverter implements Serializable {
     }
 
     public @NonNull AttestedCredentialData convert(@NonNull ByteBuffer attestedCredentialData) {
+        AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
+
         byte[] aaguidBytes = new byte[AAGUID_LENGTH];
         attestedCredentialData.get(aaguidBytes, 0, AAGUID_LENGTH);
         AAGUID aaguid = new AAGUID(aaguidBytes);
@@ -83,6 +88,7 @@ public class AttestedCredentialDataConverter implements Serializable {
     }
 
     public @NonNull AttestedCredentialData convert(@NonNull byte[] attestedCredentialData) {
+        AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
         return convert(ByteBuffer.wrap(attestedCredentialData));
     }
 
@@ -93,16 +99,20 @@ public class AttestedCredentialDataConverter implements Serializable {
      * @return the extracted credentialId byte array
      */
     public @NonNull byte[] extractCredentialId(@NonNull byte[] attestedCredentialData) {
+        AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
         byte[] lengthBytes = Arrays.copyOfRange(attestedCredentialData, L_INDEX, CREDENTIAL_ID_INDEX);
         int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
     @NonNull COSEKeyEnvelope convertToCredentialPublicKey(@NonNull InputStream inputStream) {
+        AssertUtil.notNull(inputStream, "inputStream must not be null");
+        //noinspection ConstantConditions as input stream is not null
         return cborConverter.readValue(inputStream, COSEKeyEnvelope.class);
     }
 
     @NonNull byte[] convert(@NonNull COSEKey coseKey) {
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
         return cborConverter.writeValueAsBytes(coseKey);
     }
 

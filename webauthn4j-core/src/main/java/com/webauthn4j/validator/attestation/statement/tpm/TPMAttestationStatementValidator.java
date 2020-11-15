@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
@@ -76,6 +77,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

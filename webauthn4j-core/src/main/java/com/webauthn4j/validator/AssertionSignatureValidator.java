@@ -20,6 +20,7 @@ import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
@@ -39,6 +40,9 @@ public class AssertionSignatureValidator {
     // ========================================================================================================
 
     public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull COSEKey coseKey) {
+        AssertUtil.notNull(authenticationData, "authenticationData must not be null");
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
+
         byte[] signedData = getSignedData(authenticationData);
         byte[] signature = authenticationData.getSignature();
         if (!verifySignature(coseKey, signature, signedData)) {

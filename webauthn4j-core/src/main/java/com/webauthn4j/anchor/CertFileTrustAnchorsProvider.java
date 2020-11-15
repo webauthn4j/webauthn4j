@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 
 public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
+    private static final String CERTIFICATES_MUST_NOT_BE_NULL = "challenge must not be null";
+
     // ~ Instance fields
     // ================================================================================================
 
@@ -48,6 +50,7 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     }
 
     public CertFileTrustAnchorsProvider(@NonNull List<Path> certificates) {
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
         this.certificates = certificates;
     }
 
@@ -56,7 +59,7 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     // ========================================================================================================
 
     private void checkConfig() {
-        AssertUtil.notNull(certificates, "certificates must not be null");
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
     }
 
 
@@ -68,6 +71,7 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     }
 
     private @NonNull TrustAnchor loadTrustAnchor(@NonNull Path certificate) {
+        AssertUtil.notNull(certificate, CERTIFICATES_MUST_NOT_BE_NULL);
         try {
             X509Certificate x509Certificate = CertificateUtil.generateX509Certificate(Files.newInputStream(certificate));
             return new TrustAnchor(x509Certificate, null);
@@ -81,6 +85,7 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     }
 
     public void setCertificates(@NonNull List<Path> certificates) {
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
         this.certificates = certificates;
     }
 }

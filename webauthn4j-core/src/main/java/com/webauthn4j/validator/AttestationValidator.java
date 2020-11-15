@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
@@ -55,14 +56,18 @@ class AttestationValidator {
             @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
-        this.attestationStatementValidators = attestationStatementValidators;
+        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
+        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
 
+        this.attestationStatementValidators = attestationStatementValidators;
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
 
 
     public void validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 

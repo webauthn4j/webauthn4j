@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -48,6 +49,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
      */
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }

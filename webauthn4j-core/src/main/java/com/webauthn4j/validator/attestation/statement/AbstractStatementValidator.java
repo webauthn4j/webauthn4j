@@ -19,6 +19,7 @@ package com.webauthn4j.validator.attestation.statement;
 import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -50,6 +51,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
 
     @Override
     public boolean supports(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         if(attestationStatement == null){
             return false;
