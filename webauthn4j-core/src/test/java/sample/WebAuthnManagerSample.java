@@ -32,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("CaughtExceptionImmediatelyRethrown")
+@SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class WebAuthnManagerSample {
 
     private final WebAuthnManager webAuthnManager;

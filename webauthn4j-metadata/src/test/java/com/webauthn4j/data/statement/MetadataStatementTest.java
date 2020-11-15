@@ -83,6 +83,7 @@ class MetadataStatementTest {
         objectConverter = new ObjectConverter(jsonMapper, cborMapper);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void deserialize_test() {
         String data = "{\n" +

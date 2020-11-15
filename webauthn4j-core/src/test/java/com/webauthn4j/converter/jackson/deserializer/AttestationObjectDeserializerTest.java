@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
  */
 class AttestationObjectDeserializerTest {
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void test() {
         ObjectConverter objectConverter = new ObjectConverter();

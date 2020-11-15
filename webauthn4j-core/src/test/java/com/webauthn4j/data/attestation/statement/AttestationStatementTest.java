@@ -29,6 +29,7 @@ class AttestationStatementTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void serialize_deserialize_with_envelope_class() {
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();

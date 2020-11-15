@@ -65,6 +65,7 @@ class TPMEccCurveTest {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);

@@ -26,6 +26,7 @@ import com.webauthn4j.server.ServerProperty;
 
 import java.util.Set;
 
+@SuppressWarnings("ConstantConditions")
 class RegistrationContextValidatorSample {
 
     public void registrationValidationSample() {

@@ -36,6 +36,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
 
+@SuppressWarnings("ConstantConditions")
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override

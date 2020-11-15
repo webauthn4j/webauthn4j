@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsConverterTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

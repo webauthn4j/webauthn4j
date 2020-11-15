@@ -50,6 +50,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");

@@ -61,6 +61,7 @@ class DCRegistrationObjectTest {
         try (MockedStatic<Instant> mocked = mockStatic(Instant.class)) {
             mocked.when(Instant::now).thenReturn(timestamp);
 
+            //noinspection ConstantConditions
             DCRegistrationObject instance = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty);
             assertThat(instance.getKeyId()).isEqualTo(keyId);
             assertThat(instance.getAttestationObjectBytes()).isEqualTo(attestationObjectBytes);
@@ -84,6 +85,7 @@ class DCRegistrationObjectTest {
         DCServerProperty dcServerProperty = new DCServerProperty("8YE23NZS57.com.kayak.travel", new DefaultChallenge(challenge));
         Instant timestamp = Instant.now();
 
+        //noinspection ConstantConditions
         DCRegistrationObject instanceA = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty, timestamp);
         DCRegistrationObject instanceB = new DCRegistrationObject(keyId, attestationObject, attestationObjectBytes, clientDataHash, dcServerProperty, timestamp);
 

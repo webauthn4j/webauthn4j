@@ -42,6 +42,7 @@ class ClientDataTypeTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);

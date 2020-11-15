@@ -64,6 +64,7 @@ class AttestationConveyancePreferenceTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"preference\":\"none\"}", TestDTO.class);

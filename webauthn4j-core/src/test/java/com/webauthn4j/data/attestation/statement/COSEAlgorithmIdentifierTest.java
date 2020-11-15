@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@SuppressWarnings("ConstantConditions")
 class COSEAlgorithmIdentifierTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

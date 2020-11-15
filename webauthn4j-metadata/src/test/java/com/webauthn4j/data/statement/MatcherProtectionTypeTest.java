@@ -72,6 +72,7 @@ class MatcherProtectionTypeTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         MatcherProtectionTypeTest.TestDTO dto1 = jsonConverter.readValue("{\"matcher_protection\":1}", MatcherProtectionTypeTest.TestDTO.class);

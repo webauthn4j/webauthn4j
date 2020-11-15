@@ -72,6 +72,7 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
 /**
  * A utility class for core module test
  */
+@SuppressWarnings("ConstantConditions")
 public class TestDataUtil {
 
     private static final ObjectConverter objectConverter;

@@ -50,6 +50,7 @@ class TPMIAlgHashTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"tpmi_alg_hash\":11}", TestDTO.class);

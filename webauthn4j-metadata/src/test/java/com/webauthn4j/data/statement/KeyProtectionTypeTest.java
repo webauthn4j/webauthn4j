@@ -75,6 +75,7 @@ class KeyProtectionTypeTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         KeyProtectionTypeTest.TestDTO dto1 = jsonConverter.readValue("{\"key_protection\":1}", KeyProtectionTypeTest.TestDTO.class);

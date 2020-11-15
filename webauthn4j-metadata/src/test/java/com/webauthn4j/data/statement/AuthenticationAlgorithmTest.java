@@ -67,6 +67,7 @@ class AuthenticationAlgorithmTest {
         assertThat(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_DER.getValue()).isEqualTo(0x0002);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         TestDTO dto = jsonConverter.readValue("{\"authentication_algorithm\":6}", TestDTO.class);

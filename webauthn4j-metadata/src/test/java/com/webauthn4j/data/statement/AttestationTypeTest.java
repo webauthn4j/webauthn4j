@@ -57,6 +57,7 @@ class AttestationTypeTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         TestDTO dto1 = jsonConverter.readValue("{\"attestation_type\":15879}", TestDTO.class);

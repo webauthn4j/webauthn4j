@@ -37,7 +37,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-@SuppressWarnings("CaughtExceptionImmediatelyRethrown")
+@SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class DeviceCheckManagerSample {
 
     private final DeviceCheckManager deviceCheckManager;

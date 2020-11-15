@@ -41,6 +41,7 @@ class TPMGeneratedTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         byte[] source = new byte[]{(byte) 0xff, (byte) 0x54, (byte) 0x43, (byte) 0x47};
