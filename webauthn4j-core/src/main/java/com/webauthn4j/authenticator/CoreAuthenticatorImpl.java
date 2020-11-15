@@ -42,7 +42,7 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     private AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions;
 
     public CoreAuthenticatorImpl(@NonNull AttestedCredentialData attestedCredentialData,
-                                 @NonNull AttestationStatement attestationStatement,
+                                 @Nullable AttestationStatement attestationStatement,
                                  long counter,
                                  @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
 
@@ -105,11 +105,11 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
     }
 
     @Override
-    public @NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() { //TODO: revisit
+    public @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> getAuthenticatorExtensions() {
         return authenticatorExtensions;
     }
 
-    public void setAuthenticatorExtensions(@NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) { //TODO: revisit
+    public void setAuthenticatorExtensions(@Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         this.authenticatorExtensions = authenticatorExtensions;
     }
 

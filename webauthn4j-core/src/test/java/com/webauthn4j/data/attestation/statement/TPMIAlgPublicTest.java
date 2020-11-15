@@ -46,6 +46,7 @@ class TPMIAlgPublicTest {
         assertThatThrownBy(() -> TPMIAlgPublic.create(0x2)).isInstanceOf(IllegalArgumentException.class);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"tpmi_alg_pub\":24}", TestDTO.class);

@@ -24,6 +24,7 @@ import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationDataValidator;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.CustomCoreRegistrationValidator;
@@ -78,7 +79,12 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
 
     @Override
     protected @NonNull CoreRegistrationObject createCoreRegistrationObject(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
+
+        AssertUtil.notNull(registrationData, "authenticationData must not be null");
+        AssertUtil.notNull(registrationData, "authenticationParameters must not be null");
+
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
+        //noinspection ConstantConditions null check is already done in caller
         return new DCRegistrationObject(
                 dcAttestationData.getKeyId(),
                 registrationData.getAttestationObject(),

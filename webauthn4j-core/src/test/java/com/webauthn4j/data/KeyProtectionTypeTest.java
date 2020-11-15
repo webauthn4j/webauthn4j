@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SuppressWarnings("ConstantConditions")
 class KeyProtectionTypeTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();

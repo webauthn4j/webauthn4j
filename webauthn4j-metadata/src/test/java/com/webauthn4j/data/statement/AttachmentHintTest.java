@@ -83,6 +83,7 @@ class AttachmentHintTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         AttachmentHintTest.TestDTO dto1 = jsonConverter.readValue("{\"attachment_hint\":1}", AttachmentHintTest.TestDTO.class);

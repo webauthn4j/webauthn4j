@@ -48,6 +48,7 @@ class COSEKeyTypeTest {
         assertThat(COSEKeyType.OKP.getValue()).isEqualTo(1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"cose_key_type\":0}", TestDTO.class);

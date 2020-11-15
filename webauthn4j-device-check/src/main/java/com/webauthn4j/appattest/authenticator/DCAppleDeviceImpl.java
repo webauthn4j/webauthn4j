@@ -28,7 +28,7 @@ public class DCAppleDeviceImpl extends CoreAuthenticatorImpl implements DCAppleD
 
     public DCAppleDeviceImpl(
             @NonNull AttestedCredentialData attestedCredentialData,
-            @NonNull AttestationStatement attestationStatement,
+            @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);

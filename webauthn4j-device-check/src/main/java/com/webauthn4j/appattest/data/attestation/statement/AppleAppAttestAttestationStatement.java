@@ -76,7 +76,7 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AppleAppAttestAttestationStatement that = (AppleAppAttestAttestationStatement) o;
-        return x5c.equals(that.x5c) &&
+        return Objects.equals(x5c, that.x5c) &&
                 Arrays.equals(receipt, that.receipt);
     }
 

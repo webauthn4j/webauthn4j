@@ -90,6 +90,10 @@ public class JWSFactory {
         JWSHeader header = jsonConverter.readValue(new String(Base64UrlUtil.decode(headerString)), JWSHeader.class);
         T payload = jsonConverter.readValue(new String(Base64UrlUtil.decode(payloadString)), payloadType);
         byte[] signature = Base64UrlUtil.decode(signatureString);
+
+        AssertUtil.notNull(header, "header must not be null");
+        AssertUtil.notNull(payload, "payload must not be null");
+
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 

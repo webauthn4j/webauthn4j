@@ -58,6 +58,7 @@ class AuthenticatorStatusTest {
         assertThat(AuthenticatorStatus.FIDO_CERTIFIED.getValue()).isEqualTo("FIDO_CERTIFIED");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"authenticator_status\":\"REVOKED\"}", TestDTO.class);

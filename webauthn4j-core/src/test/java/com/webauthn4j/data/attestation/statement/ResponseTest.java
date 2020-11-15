@@ -26,6 +26,7 @@ class ResponseTest {
 
     private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void error_test() {
         Response response = jsonConverter.readValue("{\"error\": \"message\"}", Response.class);

@@ -38,6 +38,7 @@ class CertPathSerializerTest {
     private final ObjectConverter objectConverter = new ObjectConverter();
     private final CborConverter cborConverter = objectConverter.getCborConverter();
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void test() throws CertificateException {
 

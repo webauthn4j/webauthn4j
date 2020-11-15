@@ -75,6 +75,7 @@ class TransactionConfirmationDisplayTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         TransactionConfirmationDisplayTest.TestDTO dto1 = jsonConverter.readValue("{\"transaction_confirmation_display\":1}", TransactionConfirmationDisplayTest.TestDTO.class);
