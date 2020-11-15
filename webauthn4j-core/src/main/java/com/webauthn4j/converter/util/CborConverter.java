@@ -89,7 +89,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @Nullable JsonNode readTree(@NonNull byte[] bytes) {
+    public @NonNull JsonNode readTree(@NonNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -99,7 +99,7 @@ public class CborConverter implements Serializable {
         }
     }
 
-    public @Nullable byte[] writeValueAsBytes(@Nullable Object value) {
+    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {

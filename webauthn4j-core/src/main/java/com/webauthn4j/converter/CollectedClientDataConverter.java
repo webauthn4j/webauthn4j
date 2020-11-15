@@ -22,6 +22,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.charset.StandardCharsets;
 
@@ -52,7 +53,7 @@ public class CollectedClientDataConverter {
      * @param base64UrlString the source byte array to convert
      * @return the converted object
      */
-    public @NonNull CollectedClientData convert(@NonNull String base64UrlString) {
+    public @Nullable CollectedClientData convert(@NonNull String base64UrlString) {
         AssertUtil.notNull(base64UrlString, "base64UrlString must not be null");
         byte[] bytes = Base64UrlUtil.decode(base64UrlString);
         return convert(bytes);
@@ -64,7 +65,7 @@ public class CollectedClientDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public @NonNull CollectedClientData convert(@NonNull byte[] source) {
+    public @Nullable CollectedClientData convert(@NonNull byte[] source) {
         AssertUtil.notNull(source, "source must not be null");
         String jsonString = new String(source, StandardCharsets.UTF_8);
         return jsonConverter.readValue(jsonString, CollectedClientData.class);
