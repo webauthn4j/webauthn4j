@@ -8,24 +8,16 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java_version: [8]
-        os: [ubuntu-20.04]
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Set up JDK ${{ matrix.java_version }}
+      - name: Set up JDK 8
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java_version }}
-
-      - name: Build with Gradle
-        run: |
-          ./gradlew build -PfailBuildOnCVSS=4
+          java-version: 8
 
       - name: Upload to OSS Snapshot artifactory
         env:
