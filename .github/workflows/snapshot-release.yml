@@ -24,4 +24,4 @@ jobs:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
         run: |
-          ./gradlew artifactoryPublish --parallel-threads=1 --max-workers=1
+          ./gradlew artifactoryPublish -d
