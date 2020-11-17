@@ -5,9 +5,6 @@ matrix:
     - jdk: openjdk8
       dist: xenial
 
-branches:
-  only:
-    - master
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -20,10 +17,7 @@ cache:
 script:
   # unshallow git repository
   - 'git fetch --unshallow --quiet'
-  # snapshot release
-  - './gradlew check artifactoryPublish'
-  # release documents
-  - './gradlew javadoc generateReferenceEN generateReferenceJA'
+  - './gradlew check javadoc generateReferenceEN generateReferenceJA'
 deploy:
   - provider: pages
     skip-cleanup: true
