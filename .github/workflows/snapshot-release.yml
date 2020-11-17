@@ -25,3 +25,4 @@ jobs:
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
         run: |
           ./gradlew artifactoryPublish -d
+
