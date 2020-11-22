@@ -41,7 +41,6 @@ import java.util.Objects;
 public class AuthenticationDataValidator {
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
@@ -51,6 +50,7 @@ public class AuthenticationDataValidator {
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
+    private OriginValidator originValidator = new OriginValidator();
 
     public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
@@ -219,5 +219,10 @@ public class AuthenticationDataValidator {
 
     public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
+    }
+
+    public void setOriginValidator(@NonNull OriginValidator originValidator) {
+        AssertUtil.notNull(originValidator, "originValidator must not be null");
+        this.originValidator = originValidator;
     }
 }

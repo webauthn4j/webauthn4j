@@ -141,6 +141,14 @@ public class Origin implements Serializable {
         return schemeSpecificPart;
     }
 
+    public boolean matchesRelaxed(Origin other) {
+        if (SCHEME_HTTPS.equals(scheme) || SCHEME_HTTP.equals(scheme)) {
+            return host.endsWith(other.host);
+        } else {
+            return this.equals(other);
+        }
+    }
+
     @JsonValue
     @Override
     public @NonNull String toString() {

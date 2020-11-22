@@ -32,6 +32,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomRegistrationValidator;
+import com.webauthn4j.validator.OriginValidator;
 import com.webauthn4j.validator.RegistrationDataValidator;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
@@ -69,11 +70,13 @@ public class WebAuthnRegistrationManager {
             @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
             @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
             @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
+            @NonNull OriginValidator originValidator,
             @NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
         AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
         AssertUtil.notNull(customRegistrationValidators, "customRegistrationValidators must not be null");
+        AssertUtil.notNull(originValidator, "originValidator must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         registrationDataValidator = new RegistrationDataValidator(
@@ -82,7 +85,7 @@ public class WebAuthnRegistrationManager {
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
                 objectConverter);
-
+        registrationDataValidator.setOriginValidator(originValidator);
 
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
@@ -99,6 +102,7 @@ public class WebAuthnRegistrationManager {
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
+                new OriginValidator(),
                 new ObjectConverter()
         );
     }
@@ -112,6 +116,7 @@ public class WebAuthnRegistrationManager {
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 Collections.emptyList(),
+                new OriginValidator(),
                 objectConverter
         );
     }

@@ -50,7 +50,6 @@ public class RegistrationDataValidator {
     // ================================================================================================
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
@@ -59,6 +58,8 @@ public class RegistrationDataValidator {
     private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
 
     private final AttestationValidator attestationValidator;
+    
+    private OriginValidator originValidator = new OriginValidator();
 
     public RegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -203,4 +204,8 @@ public class RegistrationDataValidator {
         return customRegistrationValidators;
     }
 
+    public void setOriginValidator(@NonNull OriginValidator originValidator) {
+        AssertUtil.notNull(originValidator, "originValidator must not be null");
+        this.originValidator = originValidator;
+    }
 }

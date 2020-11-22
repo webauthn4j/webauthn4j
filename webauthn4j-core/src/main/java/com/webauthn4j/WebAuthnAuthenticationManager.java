@@ -32,6 +32,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
+import com.webauthn4j.validator.OriginValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -51,11 +52,14 @@ public class WebAuthnAuthenticationManager {
 
     public WebAuthnAuthenticationManager(
             @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+            @NonNull OriginValidator originValidator,
             @NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
+        AssertUtil.notNull(originValidator, "originValidator must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         authenticationDataValidator = new AuthenticationDataValidator(customAuthenticationValidators);
+        authenticationDataValidator.setOriginValidator(originValidator);
 
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
@@ -64,11 +68,11 @@ public class WebAuthnAuthenticationManager {
 
     public WebAuthnAuthenticationManager(
             @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
-        this(customAuthenticationValidators, new ObjectConverter());
+        this(customAuthenticationValidators, new OriginValidator(), new ObjectConverter());
     }
 
     public WebAuthnAuthenticationManager() {
-        this(Collections.emptyList(), new ObjectConverter());
+        this(Collections.emptyList(), new OriginValidator(), new ObjectConverter());
     }
 
     @SuppressWarnings("squid:S1130")

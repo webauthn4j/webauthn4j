@@ -19,10 +19,7 @@ package com.webauthn4j;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
-import com.webauthn4j.validator.AuthenticationDataValidator;
-import com.webauthn4j.validator.CustomAuthenticationValidator;
-import com.webauthn4j.validator.CustomRegistrationValidator;
-import com.webauthn4j.validator.RegistrationDataValidator;
+import com.webauthn4j.validator.*;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
@@ -55,6 +52,7 @@ public class WebAuthnManager {
                            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator,
                            @NonNull List<CustomRegistrationValidator> customRegistrationValidators,
                            @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+                           @NonNull OriginValidator originValidator,
                            @NonNull ObjectConverter objectConverter) {
 
         this.webAuthnRegistrationManager = new WebAuthnRegistrationManager(
@@ -62,9 +60,11 @@ public class WebAuthnManager {
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
+                originValidator,
                 objectConverter);
         this.webAuthnAuthenticationManager = new WebAuthnAuthenticationManager(
                 customAuthenticationValidators,
+                originValidator,
                 objectConverter);
     }
 
@@ -79,6 +79,7 @@ public class WebAuthnManager {
                 selfAttestationTrustworthinessValidator,
                 customRegistrationValidators,
                 customAuthenticationValidators,
+                new OriginValidator(),
                 new ObjectConverter()
         );
     }
@@ -93,6 +94,7 @@ public class WebAuthnManager {
                 selfAttestationTrustworthinessValidator,
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new OriginValidator(),
                 objectConverter
         );
     }
