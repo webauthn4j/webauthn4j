@@ -29,9 +29,6 @@ import java.util.Set;
  * Validates the specified {@link Origin} instance
  */
 public class RelaxedOriginValidator extends OriginValidator {
-    
-    public RelaxedOriginValidator() { }
-
     //~ Instance fields
     // ================================================================================================
 
