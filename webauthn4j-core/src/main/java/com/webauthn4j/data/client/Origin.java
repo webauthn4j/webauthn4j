@@ -142,7 +142,8 @@ public class Origin implements Serializable {
     }
 
     public boolean matchesRelaxed(Origin other) {
-        if (SCHEME_HTTPS.equals(scheme) || SCHEME_HTTP.equals(scheme)) {
+        if (SCHEME_HTTPS.equals(scheme) && SCHEME_HTTPS.equals(other.scheme) ||
+                SCHEME_HTTP.equals(scheme) && SCHEME_HTTP.equals(other.scheme)) {
             return host.endsWith(other.host);
         } else {
             return this.equals(other);
