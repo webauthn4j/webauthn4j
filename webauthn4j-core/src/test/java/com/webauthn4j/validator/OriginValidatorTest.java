@@ -27,6 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -59,7 +60,7 @@ class OriginValidatorTest {
         final Origin originC = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         final Origin originD = new Origin("android:apk-key-hash-sha256:qSiQ5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA, originB, originC, originD),
+        final ServerProperty serverProperty = new ServerProperty(new HashSet<>(Arrays.asList(originA, originB, originC, originD)),
                 "example.com", TestDataUtil.createChallenge(), null);
 
         final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,
@@ -89,7 +90,7 @@ class OriginValidatorTest {
         final Origin badOriginC = new Origin("android:apk-key-hash:0pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         final Origin badOriginD = new Origin("android:apk-key-hash-sha256:0qSiQ5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        final ServerProperty serverProperty = new ServerProperty(Arrays.asList(originA, originB, originC, originD),
+        final ServerProperty serverProperty = new ServerProperty(new HashSet<>(Arrays.asList(originA, originB, originC, originD)),
                 "example.com", TestDataUtil.createChallenge(), null);
 
         final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,
