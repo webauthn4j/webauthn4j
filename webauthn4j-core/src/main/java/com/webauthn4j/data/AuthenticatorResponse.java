@@ -26,7 +26,7 @@ import java.io.Serializable;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#authenticatorresponse">§5.2. Authenticator Responses (interface AuthenticatorResponse)</a>
  */
-abstract class AuthenticatorResponse implements Serializable {
+public abstract class AuthenticatorResponse implements Serializable {
 
     // ~ Instance fields
     // ================================================================================================
