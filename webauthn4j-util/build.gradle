@@ -23,8 +23,8 @@ dependencies {
 
     //Test
     testImplementation project(':webauthn4j-test')
-    implementation("org.bouncycastle:bcprov-jdk15on")
-    implementation("org.bouncycastle:bcpkix-jdk15on")
+    testImplementation("org.bouncycastle:bcprov-jdk15on")
+    testImplementation("org.bouncycastle:bcpkix-jdk15on")
     testImplementation('ch.qos.logback:logback-classic')
     testImplementation('org.projectlombok:lombok')
     testImplementation('org.mockito:mockito-core')
