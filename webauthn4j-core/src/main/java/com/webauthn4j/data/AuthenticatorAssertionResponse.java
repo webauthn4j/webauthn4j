@@ -45,7 +45,7 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
             @NonNull byte[] clientDataJSON,
             @NonNull byte[] authenticatorData,
             @NonNull byte[] signature,
-            @NonNull byte[] userHandle) {
+            @Nullable byte[] userHandle) {
         super(clientDataJSON);
         this.authenticatorData = authenticatorData;
         this.signature = signature;
@@ -60,7 +60,7 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         return ArrayUtil.clone(signature);
     }
 
-    public @NonNull byte[] getUserHandle() {
+    public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
