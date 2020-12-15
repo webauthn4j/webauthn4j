@@ -19,6 +19,7 @@ package com.webauthn4j.converter.util;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
@@ -41,6 +42,17 @@ class JsonConverterTest {
     void readValue_null_test() {
         ConverterTestDto dto = jsonConverter.readValue("null", ConverterTestDto.class);
         assertThat(dto).isNull();
+    }
+
+    @Test
+    void readValue_null_in_nonNull_field_test() {
+        NonNullFieldDto dto = jsonConverter.readValue("{\"value\":null}", NonNullFieldDto.class);
+        assertThat(dto.value).isNull();
+    }
+
+    static class NonNullFieldDto {
+        @NonNull
+        private String value;
     }
 
     @Test
