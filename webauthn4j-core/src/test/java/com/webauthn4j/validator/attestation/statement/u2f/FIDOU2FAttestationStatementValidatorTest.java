@@ -60,18 +60,6 @@ class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_sig_null_test(){
-        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(new AttestationCertificatePath(), null);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_x5c_null_test(){
-        FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(null, new byte[32]);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
     void validateAttestationStatement_test() {
         FIDOU2FAttestationStatement attestationStatement = mock(FIDOU2FAttestationStatement.class);
         when(attestationStatement.getX5c()).thenReturn(

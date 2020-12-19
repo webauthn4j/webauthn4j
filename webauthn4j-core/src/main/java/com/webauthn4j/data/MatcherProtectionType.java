@@ -55,12 +55,13 @@ public enum MatcherProtectionType {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull MatcherProtectionType deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, KeyProtectionType.class);
+            throw new InvalidFormatException(null, "value is out of range", value, MatcherProtectionType.class);
         }
     }
 

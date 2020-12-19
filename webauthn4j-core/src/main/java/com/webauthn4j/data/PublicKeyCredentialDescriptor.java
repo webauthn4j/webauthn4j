@@ -19,7 +19,10 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -44,9 +47,11 @@ public class PublicKeyCredentialDescriptor implements Serializable {
 
     @JsonCreator
     public PublicKeyCredentialDescriptor(
-            @JsonProperty("type") PublicKeyCredentialType type,
-            @JsonProperty("id") byte[] id,
-            @JsonProperty("transports") Set<AuthenticatorTransport> transports) {
+            @NonNull @JsonProperty("type") PublicKeyCredentialType type,
+            @NonNull @JsonProperty("id") byte[] id,
+            @Nullable @JsonProperty("transports") Set<AuthenticatorTransport> transports) {
+        AssertUtil.notNull(type, "type must not be null");
+        AssertUtil.notNull(id, "id must not be null");
         this.type = type;
         this.id = ArrayUtil.clone(id);
         this.transports = CollectionUtil.unmodifiableSet(transports);

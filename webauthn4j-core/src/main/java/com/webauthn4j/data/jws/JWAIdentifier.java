@@ -49,6 +49,7 @@ public enum JWAIdentifier {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid JWA Identifier provided: " + value));
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull JWAIdentifier deserialize(@NonNull String value) throws InvalidFormatException {
         try {

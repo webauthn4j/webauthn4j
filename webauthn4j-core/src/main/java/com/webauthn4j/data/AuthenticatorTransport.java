@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -70,8 +71,12 @@ public class AuthenticatorTransport implements Serializable {
     }
 
     @JsonCreator
-    private static @NonNull AuthenticatorTransport deserialize(@NonNull String value) {
-        return create(value);
+    static @NonNull AuthenticatorTransport deserialize(@NonNull String value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, AuthenticatorTransport.class);
+        }
     }
 
     @JsonValue

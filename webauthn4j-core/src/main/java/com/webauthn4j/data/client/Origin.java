@@ -19,6 +19,7 @@ package com.webauthn4j.data.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -49,6 +50,8 @@ public class Origin implements Serializable {
      */
     @Deprecated
     public Origin(@NonNull String scheme, @NonNull String host, int port) {
+        AssertUtil.notNull(scheme, "scheme must not be null");
+        AssertUtil.notNull(host, "host must not be null");
         String lowerCaseScheme = toLowerCase(scheme);
         if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
             throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
@@ -61,6 +64,7 @@ public class Origin implements Serializable {
     }
 
     public Origin(@NonNull String originUrl) {
+        AssertUtil.notNull(originUrl, "originUrl must not be null");
         URI uri = URI.create(originUrl);
 
         //https://www.ietf.org/rfc/rfc1738.txt  section 2.1
@@ -125,7 +129,7 @@ public class Origin implements Serializable {
         return s == null ? null : s.toLowerCase();
     }
 
-    public @Nullable String getScheme() {
+    public @NonNull String getScheme() {
         return scheme;
     }
 
@@ -137,7 +141,7 @@ public class Origin implements Serializable {
         return port;
     }
 
-    public @Nullable String getSchemeSpecificPart() {
+    public @NonNull String getSchemeSpecificPart() {
         return schemeSpecificPart;
     }
 

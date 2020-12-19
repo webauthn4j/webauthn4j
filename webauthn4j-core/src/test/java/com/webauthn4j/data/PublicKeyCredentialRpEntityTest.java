@@ -44,6 +44,7 @@ class PublicKeyCredentialRpEntityTest {
         );
     }
 
+    @Deprecated
     @Test
     void getter_test() {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
@@ -56,8 +57,8 @@ class PublicKeyCredentialRpEntityTest {
 
     @Test
     void equals_hashCode_test() {
-        PublicKeyCredentialRpEntity instanceA = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
-        PublicKeyCredentialRpEntity instanceB = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
+        PublicKeyCredentialRpEntity instanceA = new PublicKeyCredentialRpEntity("localhost", "name");
+        PublicKeyCredentialRpEntity instanceB = new PublicKeyCredentialRpEntity("localhost", "name");
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

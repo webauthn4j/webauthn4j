@@ -20,6 +20,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class TokenBindingTest {
@@ -30,6 +31,12 @@ class TokenBindingTest {
         TokenBinding tokenBindingB = new TokenBinding(TokenBindingStatus.SUPPORTED, new byte[]{0x01, 0x23, 0x45});
 
         assertThat(tokenBindingA).isEqualTo(tokenBindingB);
+    }
+
+
+    @Test
+    void constructor_status_null_test() {
+        assertThatThrownBy(()->new TokenBinding(null, (byte[]) null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

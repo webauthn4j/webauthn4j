@@ -64,6 +64,7 @@ public enum AuthenticatorAttachment {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull AuthenticatorAttachment deserialize(@NonNull String value) throws InvalidFormatException {
         try {

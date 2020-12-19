@@ -161,7 +161,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param privateKey privateKey
      * @return {@link RSACOSEKey}
      */
-    public static RSACOSEKey create(RSAPrivateKey privateKey) {
+    public static @NonNull RSACOSEKey create(@NonNull RSAPrivateKey privateKey) {
         return create(privateKey, null);
     }
 
@@ -171,7 +171,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param publicKey publicKey
      * @return {@link RSACOSEKey}
      */
-    public static RSACOSEKey create(RSAPublicKey publicKey) {
+    public static @NonNull RSACOSEKey create(@NonNull RSAPublicKey publicKey) {
         return create(publicKey, null);
     }
 
@@ -181,7 +181,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param keyPair keyPair
      * @return {@link RSACOSEKey}
      */
-    public static RSACOSEKey create(KeyPair keyPair) {
+    public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair) {
         return create(keyPair, null);
     }
 

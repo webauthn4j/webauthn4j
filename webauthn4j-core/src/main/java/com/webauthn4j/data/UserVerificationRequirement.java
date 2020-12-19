@@ -69,6 +69,7 @@ public enum UserVerificationRequirement {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
         try {

@@ -20,7 +20,6 @@ import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
@@ -30,8 +29,8 @@ class AttestationObjectTest {
 
     @Test
     void getFormat_with_attestationStatement_test() {
-        AttestationObject instance = new AttestationObject(TestDataUtil.createAuthenticatorData(), null);
-        assertThatThrownBy(instance::getFormat).isInstanceOf(IllegalStateException.class);
+        AttestationObject instance = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        assertThat(instance.getFormat()).isEqualTo("fido-u2f");
     }
 
     @Test

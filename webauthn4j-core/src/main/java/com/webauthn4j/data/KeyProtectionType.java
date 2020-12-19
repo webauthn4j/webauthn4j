@@ -62,6 +62,7 @@ public enum KeyProtectionType {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull KeyProtectionType deserialize(int value) throws InvalidFormatException {
         try {

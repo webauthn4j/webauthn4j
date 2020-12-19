@@ -20,28 +20,27 @@ import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AppleAppAttestAttestationStatementTest {
 
     @Test
+    void constructor_test(){
+        AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
+        assertAll(
+                () -> assertThatThrownBy(()->new AppleAppAttestAttestationStatement(null, new byte[32])).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()->new AppleAppAttestAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
     void validate_test() {
         new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]).validate();
-        assertAll(
-                () -> {
-                    AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(null, new byte[32]);
-                    assertThrows(ConstraintViolationException.class, appleAppAttestAttestationStatement::validate);
-                },
-                () -> {
-                    AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), null);
-                    assertThrows(ConstraintViolationException.class, appleAppAttestAttestationStatement::validate);
-                }
-        );
+
     }
 
     @Test

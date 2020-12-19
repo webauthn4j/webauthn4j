@@ -25,6 +25,7 @@ import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -53,7 +54,7 @@ public class AttestedCredentialDataConverter implements Serializable {
         AssertUtil.notNull(attestationData, "attestationData must not be null");
         AssertUtil.notNull(attestationData.getAaguid(), "aaguid must not be null");
         AssertUtil.notNull(attestationData.getCredentialId(), "credentialId must not be null");
-        AssertUtil.notNull(attestationData.getCOSEKey(), "coseKey must not be null");
+        assertCoseKey(attestationData.getCOSEKey());
 
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -81,7 +82,7 @@ public class AttestedCredentialDataConverter implements Serializable {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
         COSEKeyEnvelope coseKeyEnvelope = convertToCredentialPublicKey(byteArrayInputStream);
         COSEKey coseKey = coseKeyEnvelope.getCOSEKey();
-        AttestedCredentialData result = new AttestedCredentialData(aaguid, credentialId, coseKey);
+        AttestedCredentialData result = createAttestedCredentialData(aaguid, credentialId, coseKey);
         int extensionsBufferLength = remaining.length - coseKeyEnvelope.getLength();
         attestedCredentialData.position(attestedCredentialData.position() - extensionsBufferLength);
         return result;
@@ -105,6 +106,11 @@ public class AttestedCredentialDataConverter implements Serializable {
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
+    private static AttestedCredentialData createAttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey){
+        assertCoseKey(coseKey);
+        return new AttestedCredentialData(aaguid, credentialId, coseKey);
+    }
+
     @NonNull COSEKeyEnvelope convertToCredentialPublicKey(@NonNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
@@ -112,8 +118,12 @@ public class AttestedCredentialDataConverter implements Serializable {
     }
 
     @NonNull byte[] convert(@NonNull COSEKey coseKey) {
-        AssertUtil.notNull(coseKey, "coseKey must not be null");
+        assertCoseKey(coseKey);
         return cborConverter.writeValueAsBytes(coseKey);
+    }
+
+    private static void assertCoseKey(@Nullable COSEKey coseKey) {
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
     }
 
 }

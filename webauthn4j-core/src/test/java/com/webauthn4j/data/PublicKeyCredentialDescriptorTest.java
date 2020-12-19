@@ -16,13 +16,19 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PublicKeyCredentialDescriptorTest {
+
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void getter_test() {
@@ -32,6 +38,13 @@ class PublicKeyCredentialDescriptorTest {
                 () -> assertThat(descriptor.getId()).isEqualTo(new byte[32]),
                 () -> assertThat(descriptor.getTransports()).isEqualTo(CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB))
         );
+    }
+
+    @Test
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"type\": \"public-key\", \"id\": null}", PublicKeyCredentialDescriptor.class)
+        ).isInstanceOf(DataConversionException.class);
     }
 
     @Test

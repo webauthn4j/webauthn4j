@@ -54,6 +54,7 @@ public enum PublicKeyCredentialType implements Serializable {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull PublicKeyCredentialType deserialize(@NonNull String value) throws InvalidFormatException {
         try {

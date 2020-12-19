@@ -50,7 +50,7 @@ class TPMAttestationStatementTest {
 
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea());
+        TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), new AttestationCertificatePath(), source.getSig(), source.getCertInfo(), source.getPubArea());
         assertThrows(ConstraintViolationException.class, tpmAttestationStatement::validate);
     }
 

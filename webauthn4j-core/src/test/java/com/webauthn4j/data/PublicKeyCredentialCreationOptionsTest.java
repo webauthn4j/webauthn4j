@@ -35,7 +35,7 @@ class PublicKeyCredentialCreationOptionsTest {
     void getter_test() {
         String rpId = "example.com";
         PublicKeyCredentialRpEntity rp = new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com");
-        PublicKeyCredentialUserEntity user = new PublicKeyCredentialUserEntity();
+        PublicKeyCredentialUserEntity user = new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName");
         Challenge challenge = new DefaultChallenge();
 
         PublicKeyCredentialParameters publicKeyCredentialParameters
@@ -86,13 +86,13 @@ class PublicKeyCredentialCreationOptionsTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions instanceA = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
         PublicKeyCredentialCreationOptions instanceB = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );

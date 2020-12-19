@@ -72,9 +72,6 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         versionValidator.validate(attestationStatement.getVer());
 
         /// Verify that the nonce in the response is identical to the Base64url encoding of the SHA-256 hash of the concatenation of authenticatorData and clientDataHash.
-        if (attestationStatement.getResponse() == null) {
-            throw new BadAttestationStatementException("Response in android safetynet attestation statement is null.");
-        }
         Response response = attestationStatement.getResponse().getPayload();
         String nonce = response.getNonce();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
@@ -117,9 +114,6 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     void validateAttestationStatementNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
-        }
-        if (attestationStatement.getVer() == null) {
-            throw new BadAttestationStatementException("ver must not be null");
         }
         validateJWSNotNull(attestationStatement.getResponse());
         if (attestationStatement.getX5c() == null) {

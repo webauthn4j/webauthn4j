@@ -85,9 +85,16 @@ class COSEAlgorithmIdentifierTest {
     }
 
     @Test
-    void deserialize_test_with_invalid_value() {
+    void deserialize_test_with_empty_string_value() {
         assertThatThrownBy(
                 () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"cose_alg_id\": \"invalid\"}", TestDTO.class)
         ).isInstanceOf(DataConversionException.class);
     }
 

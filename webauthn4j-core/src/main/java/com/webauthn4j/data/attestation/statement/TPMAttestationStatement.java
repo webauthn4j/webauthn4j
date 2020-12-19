@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -48,12 +49,18 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     private final TPMTPublic pubArea;
 
     public TPMAttestationStatement(
-            @Nullable @JsonProperty("ver") String ver,
-            @Nullable @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @Nullable @JsonProperty("sig") byte[] sig,
-            @Nullable @JsonProperty("certInfo") TPMSAttest certInfo,
-            @Nullable @JsonProperty("pubArea") TPMTPublic pubArea) {
+            @NonNull @JsonProperty("ver") String ver,
+            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NonNull @JsonProperty("sig") byte[] sig,
+            @NonNull @JsonProperty("certInfo") TPMSAttest certInfo,
+            @NonNull @JsonProperty("pubArea") TPMTPublic pubArea) {
+        AssertUtil.notNull(ver, "ver must not be null");
+        AssertUtil.notNull(alg, "alg must not be null");
+        AssertUtil.notNull(x5c, "x5c must not be null");
+        AssertUtil.notNull(sig, "sig must not be null");
+        AssertUtil.notNull(certInfo, "certInfo must not be null");
+        AssertUtil.notNull(pubArea, "pubArea must not be null");
         this.ver = ver;
         this.alg = alg;
         this.x5c = x5c;
@@ -62,37 +69,32 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
         this.pubArea = pubArea;
     }
 
-    public TPMAttestationStatement(@Nullable COSEAlgorithmIdentifier alg, @Nullable AttestationCertificatePath x5c, @Nullable byte[] sig, @Nullable TPMSAttest certInfo, @Nullable TPMTPublic pubArea) {
-        this.ver = VERSION_2_0;
-        this.alg = alg;
-        this.x5c = x5c;
-        this.sig = sig;
-        this.certInfo = certInfo;
-        this.pubArea = pubArea;
+    public TPMAttestationStatement(@NonNull COSEAlgorithmIdentifier alg, @NonNull AttestationCertificatePath x5c, @NonNull byte[] sig, @NonNull TPMSAttest certInfo, @NonNull TPMTPublic pubArea) {
+        this(VERSION_2_0, alg, x5c, sig, certInfo, pubArea);
     }
 
-    public @Nullable String getVer() {
+    public @NonNull String getVer() {
         return ver;
     }
 
-    public @Nullable COSEAlgorithmIdentifier getAlg() {
+    public @NonNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
     @Override
-    public @Nullable AttestationCertificatePath getX5c() {
+    public @NonNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
-    public @Nullable byte[] getSig() {
+    public @NonNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
-    public @Nullable TPMSAttest getCertInfo() {
+    public @NonNull TPMSAttest getCertInfo() {
         return certInfo;
     }
 
-    public @Nullable TPMTPublic getPubArea() {
+    public @NonNull TPMTPublic getPubArea() {
         return pubArea;
     }
 
@@ -103,8 +105,8 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
 
     @Override
     public void validate() {
-        if (x5c == null) {
-            throw new ConstraintViolationException("x5c must be present");
+        if (x5c.isEmpty()) {
+            throw new ConstraintViolationException("x5c must not be empty");
         }
     }
 

@@ -62,7 +62,7 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateAuthenticatorDataField_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         assertThrows(ConstraintViolationException.class,
                 () -> target.validateAuthenticatorDataField(authenticatorData)
         );
@@ -70,19 +70,19 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateUVUPFlags_not_required_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         target.validateUVUPFlags(authenticatorData, false, false);
     }
 
     @Test
     void validateUVUPFlags_required_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(null, (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) (AuthenticatorData.BIT_UP | AuthenticatorData.BIT_UV), 0);
         target.validateUVUPFlags(authenticatorData, true, true);
     }
 
     @Test
     void validateUVUPFlags_UserNotVerifiedException_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         assertThrows(UserNotVerifiedException.class,
                 () -> target.validateUVUPFlags(authenticatorData, true, false)
         );
@@ -90,7 +90,7 @@ class RegistrationDataValidatorTest {
 
     @Test
     void validateUVUPFlags_UserNotPresentException_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(null, (byte) 0, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         assertThrows(UserNotPresentException.class,
                 () -> target.validateUVUPFlags(authenticatorData, false, true)
         );

@@ -46,13 +46,6 @@ class TokenBindingValidatorTest {
     }
 
     @Test
-    void validate_TokenBindingStatus_null_test() {
-        byte[] bindingId = null;
-        TokenBinding tokenBinding = new TokenBinding(null, bindingId);
-        target.validate(tokenBinding, bindingId);
-    }
-
-    @Test
     void validate_TokenBindingStatus_not_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.NOT_SUPPORTED, bindingId);

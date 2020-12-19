@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
@@ -38,27 +40,24 @@ public class AttestedCredentialData implements Serializable {
 
     private final COSEKey coseKey;
 
-    public AttestedCredentialData(@Nullable AAGUID aaguid, @Nullable byte[] credentialId, @Nullable COSEKey coseKey) {
+    public AttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
+        AssertUtil.notNull(credentialId, "credentialId must not be null");
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
         this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.coseKey = coseKey;
     }
 
-    public AttestedCredentialData() {
-        this.aaguid = null;
-        this.credentialId = null;
-        this.coseKey = null;
-    }
-
-    public @Nullable AAGUID getAaguid() {
+    public @NonNull AAGUID getAaguid() {
         return aaguid;
     }
 
-    public @Nullable byte[] getCredentialId() {
+    public @NonNull byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public @Nullable COSEKey getCOSEKey() {
+    public @NonNull COSEKey getCOSEKey() {
         return coseKey;
     }
 

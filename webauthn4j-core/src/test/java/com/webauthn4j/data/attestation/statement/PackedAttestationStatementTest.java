@@ -17,12 +17,10 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestAttestationStatementUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PackedAttestationStatementTest {
 
@@ -30,14 +28,6 @@ class PackedAttestationStatementTest {
     void validate_test() {
         PackedAttestationStatement packedAttestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
         packedAttestationStatement.validate();
-    }
-
-    @Test
-    void validate_invalid_instance_test() {
-        PackedAttestationStatement packedAttestationStatement = new PackedAttestationStatement(null, null, null);
-        assertThrows(ConstraintViolationException.class,
-                packedAttestationStatement::validate
-        );
     }
 
     @Test

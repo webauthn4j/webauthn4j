@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -44,19 +44,22 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
     private final AttestationCertificatePath x5c;
 
     public PackedAttestationStatement(
-            @Nullable @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @Nullable @JsonProperty("sig") byte[] sig,
-            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c) {
+            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @NonNull @JsonProperty("sig") byte[] sig,
+            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c //x5c can be null when self attestation is used
+    ) {
+        AssertUtil.notNull(alg, "alg must not be null");
+        AssertUtil.notNull(sig, "sig must not be null");
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
     }
 
-    public @Nullable COSEAlgorithmIdentifier getAlg() {
+    public @NonNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
-    public @Nullable byte[] getSig() {
+    public @NonNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
@@ -73,9 +76,7 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
 
     @Override
     public void validate() {
-        if (alg == null) {
-            throw new ConstraintViolationException("alg must not be null");
-        }
+        //nop
     }
 
     @Override

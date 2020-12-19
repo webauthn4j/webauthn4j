@@ -18,6 +18,8 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 
@@ -37,31 +39,38 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 
     // ~ Constructor
     // ========================================================================================================
+    /**
+     * @deprecated icon member is no longer available in WebAuthn Level2
+     * @param id id
+     * @param name name
+     * @param icon icon
+     */
+    @Deprecated
     @JsonCreator
     public PublicKeyCredentialRpEntity(
-            @JsonProperty("id") String id,
-            @JsonProperty("name") String name,
-            @JsonProperty("icon") String icon) {
+            @Nullable @JsonProperty("id") String id,
+            @NonNull  @JsonProperty("name") String name,
+            @Nullable @JsonProperty("icon") String icon) {
         super(name, icon);
         this.id = id;
     }
 
-    public PublicKeyCredentialRpEntity(String id, String name) {
+    public PublicKeyCredentialRpEntity(@Nullable String id, @NonNull String name) {
         super(name);
         this.id = id;
     }
 
-    public PublicKeyCredentialRpEntity(String name) {
+    public PublicKeyCredentialRpEntity(@NonNull String name) {
         super(name);
         this.id = null;
     }
 
-    public String getId() {
+    public @Nullable String getId() {
         return id;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

@@ -16,7 +16,6 @@
 
 package com.webauthn4j.validator.attestation.statement.apple;
 
-import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatement;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.RegistrationObject;
@@ -40,13 +39,6 @@ class AppleAnonymousAttestationStatementValidatorTest {
     void validateAttestationStatementNotNull_with_null_test(){
         assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
-
-    @Test
-    void validateAttestationStatementNotNull_with_x5c_null_test(){
-        AppleAnonymousAttestationStatement attestationStatement = new AppleAnonymousAttestationStatement(null);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
 
     @Test
     void validate_non_AppleAnonymousAttestation_test() {

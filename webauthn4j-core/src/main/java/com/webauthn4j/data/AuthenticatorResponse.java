@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public abstract class AuthenticatorResponse implements Serializable {
     // ========================================================================================================
 
     AuthenticatorResponse(@NonNull byte[] clientDataJSON) {
+        AssertUtil.notNull(clientDataJSON, "clientDataJSON must not be null");
         this.clientDataJSON = clientDataJSON;
     }
 

@@ -54,6 +54,7 @@ public enum ResidentKeyRequirement {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull ResidentKeyRequirement deserialize(@NonNull String value) throws InvalidFormatException {
         try {

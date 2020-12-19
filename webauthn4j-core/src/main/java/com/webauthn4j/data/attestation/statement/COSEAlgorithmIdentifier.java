@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.SignatureAlgorithm;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -91,9 +92,15 @@ public class COSEAlgorithmIdentifier implements Serializable {
         return coseAlgorithmIdentifier;
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
-    private static @NonNull COSEAlgorithmIdentifier deserialize(long value) {
-        return create(value);
+    private static @NonNull COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+        }
+
     }
 
     @JsonValue

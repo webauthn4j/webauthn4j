@@ -193,7 +193,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
      *
      * @return {@link EC2COSEKey}
      */
-    public static @NonNull EC2COSEKey create(KeyPair keyPair) {
+    public static @NonNull EC2COSEKey create(@NonNull KeyPair keyPair) {
         return create(keyPair, null);
     }
 

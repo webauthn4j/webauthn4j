@@ -17,13 +17,26 @@
 package com.webauthn4j.data.client;
 
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CollectedClientDataTest {
+
+    @Test
+    void constructor_test(){
+        Challenge challenge = new DefaultChallenge();
+        Origin origin = Origin.create("http://example.com");
+        assertAll(
+                () -> assertThatCode(()-> new CollectedClientData(ClientDataType.CREATE, challenge, origin, null)).doesNotThrowAnyException(),
+                () -> assertThatThrownBy(()-> new CollectedClientData(null, challenge, origin, null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new CollectedClientData(ClientDataType.CREATE, null, origin, null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new CollectedClientData(ClientDataType.CREATE, challenge, null, null)).isInstanceOf(IllegalArgumentException.class)
+        );
+    }
 
     @Test
     void equals_hashCode_test() {

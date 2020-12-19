@@ -18,10 +18,14 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -51,17 +55,20 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     private final AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions;
 
     @SuppressWarnings("squid:S00107")
-    @JsonCreator
     public PublicKeyCredentialCreationOptions(
-            @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
-            @JsonProperty("user") PublicKeyCredentialUserEntity user,
-            @JsonProperty("challenge") Challenge challenge,
-            @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
-            @JsonProperty("timeout") Long timeout,
-            @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
-            @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
-            @JsonProperty("attestation") AttestationConveyancePreference attestation,
-            @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
+            @NonNull PublicKeyCredentialRpEntity rp,
+            @NonNull PublicKeyCredentialUserEntity user,
+            @NonNull Challenge challenge,
+            @NonNull List<PublicKeyCredentialParameters> pubKeyCredParams,
+            @Nullable Long timeout,
+            @Nullable List<PublicKeyCredentialDescriptor> excludeCredentials,
+            @Nullable AuthenticatorSelectionCriteria authenticatorSelection,
+            @Nullable AttestationConveyancePreference attestation,
+            @Nullable AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) {
+        AssertUtil.notNull(rp, "rp must not be null");
+        AssertUtil.notNull(user, "user must not be null");
+        AssertUtil.notNull(challenge, "challenge must not be null");
+        AssertUtil.notNull(pubKeyCredParams, "pubKeyCredParams must not be null");
         this.rp = rp;
         this.user = user;
         this.challenge = challenge;
@@ -74,46 +81,65 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
     }
 
     public PublicKeyCredentialCreationOptions(
-            PublicKeyCredentialRpEntity rp,
-            PublicKeyCredentialUserEntity user,
-            Challenge challenge,
-            List<PublicKeyCredentialParameters> pubKeyCredParams) {
+            @NonNull PublicKeyCredentialRpEntity rp,
+            @NonNull PublicKeyCredentialUserEntity user,
+            @NonNull Challenge challenge,
+            @NonNull List<PublicKeyCredentialParameters> pubKeyCredParams) {
         this(rp, user, challenge, pubKeyCredParams, null, Collections.emptyList(), null, null, null);
     }
 
-    public PublicKeyCredentialRpEntity getRp() {
+    @SuppressWarnings("unused")
+    @JsonCreator
+    private static PublicKeyCredentialCreationOptions deserialize(
+            @NonNull @JsonProperty("rp") PublicKeyCredentialRpEntity rp,
+            @NonNull @JsonProperty("user") PublicKeyCredentialUserEntity user,
+            @NonNull @JsonProperty("challenge") Challenge challenge,
+            @NonNull @JsonProperty("pubKeyCredParams") List<PublicKeyCredentialParameters> pubKeyCredParams,
+            @Nullable @JsonProperty("timeout") Long timeout,
+            @Nullable @JsonProperty("excludeCredentials") List<PublicKeyCredentialDescriptor> excludeCredentials,
+            @Nullable @JsonProperty("authenticatorSelection") AuthenticatorSelectionCriteria authenticatorSelection,
+            @Nullable @JsonProperty("attestation") AttestationConveyancePreference attestation,
+            @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions) throws MismatchedInputException {
+        try {
+            return new PublicKeyCredentialCreationOptions(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, attestation, extensions);
+        } catch (IllegalArgumentException e) {
+            throw MismatchedInputException.from(null, AuthenticatorTransport.class, "failed to parse");
+        }
+    }
+
+    public @NonNull PublicKeyCredentialRpEntity getRp() {
         return rp;
     }
 
-    public PublicKeyCredentialUserEntity getUser() {
+    public @NonNull PublicKeyCredentialUserEntity getUser() {
         return user;
     }
 
-    public Challenge getChallenge() {
+    public @NonNull Challenge getChallenge() {
         return challenge;
     }
 
-    public List<PublicKeyCredentialParameters> getPubKeyCredParams() {
+    public @NonNull List<PublicKeyCredentialParameters> getPubKeyCredParams() {
         return pubKeyCredParams;
     }
 
-    public Long getTimeout() {
+    public @Nullable Long getTimeout() {
         return timeout;
     }
 
-    public List<PublicKeyCredentialDescriptor> getExcludeCredentials() {
+    public @Nullable List<PublicKeyCredentialDescriptor> getExcludeCredentials() {
         return excludeCredentials;
     }
 
-    public AuthenticatorSelectionCriteria getAuthenticatorSelection() {
+    public @Nullable AuthenticatorSelectionCriteria getAuthenticatorSelection() {
         return authenticatorSelection;
     }
 
-    public AttestationConveyancePreference getAttestation() {
+    public @Nullable AttestationConveyancePreference getAttestation() {
         return attestation;
     }
 
-    public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> getExtensions() {
+    public @Nullable AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> getExtensions() {
         return extensions;
     }
 

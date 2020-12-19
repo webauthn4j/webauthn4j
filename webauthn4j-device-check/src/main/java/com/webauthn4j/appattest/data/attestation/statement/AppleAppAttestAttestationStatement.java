@@ -16,13 +16,15 @@
 
 package com.webauthn4j.appattest.data.attestation.statement;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -41,18 +43,32 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
     private final byte[] receipt;
 
     public AppleAppAttestAttestationStatement(
-            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @Nullable @JsonProperty("receipt") byte[] receipt) {
+            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NonNull @JsonProperty("receipt") byte[] receipt) {
+        AssertUtil.notNull(x5c, "x5c must not be null");
+        AssertUtil.notNull(receipt, "receipt must not be null");
         this.x5c = x5c;
         this.receipt = receipt;
     }
 
-    public byte[] getReceipt() {
+    @SuppressWarnings("unused")
+    @JsonCreator
+    private static AppleAppAttestAttestationStatement deserialize(
+            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NonNull @JsonProperty("receipt") byte[] receipt) throws MismatchedInputException {
+        try {
+            return new AppleAppAttestAttestationStatement(x5c, receipt);
+        } catch (IllegalArgumentException e) {
+            throw MismatchedInputException.from(null, AppleAppAttestAttestationStatement.class, "failed to parse");
+        }
+    }
+
+    public @NonNull byte[] getReceipt() {
         return ArrayUtil.clone(receipt);
     }
 
     @Override
-    public @Nullable AttestationCertificatePath getX5c() {
+    public @NonNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
@@ -63,12 +79,7 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
 
     @Override
     public void validate() {
-        if (x5c == null) {
-            throw new ConstraintViolationException("x5c must not be null");
-        }
-        if (receipt == null) {
-            throw new ConstraintViolationException("receipt must not be null");
-        }
+        //nop
     }
 
     @Override

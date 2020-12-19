@@ -89,6 +89,7 @@ public enum AttestationConveyancePreference {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull AttestationConveyancePreference deserialize(@NonNull String value) throws InvalidFormatException {
         try {

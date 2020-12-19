@@ -16,7 +16,11 @@
 
 package com.webauthn4j.data.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
@@ -35,28 +39,29 @@ public class CollectedClientData implements Serializable {
     private Origin origin;
     private TokenBinding tokenBinding;
 
-    public CollectedClientData(@Nullable ClientDataType type,
-                               @Nullable Challenge challenge,
-                               @Nullable Origin origin,
-                               @Nullable TokenBinding tokenBinding) {
+    @JsonCreator
+    public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
+                               @NonNull @JsonProperty("challenge") Challenge challenge,
+                               @NonNull @JsonProperty("origin") Origin origin,
+                               @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
+        AssertUtil.notNull(type, "type must not be null");
+        AssertUtil.notNull(challenge, "challenge must not be null");
+        AssertUtil.notNull(origin, "origin must not be null");
         this.type = type;
         this.challenge = challenge;
         this.origin = origin;
         this.tokenBinding = tokenBinding;
     }
 
-    public CollectedClientData() {
-    }
-
-    public @Nullable ClientDataType getType() {
+    public @NonNull ClientDataType getType() {
         return type;
     }
 
-    public @Nullable Challenge getChallenge() {
+    public @NonNull Challenge getChallenge() {
         return challenge;
     }
 
-    public @Nullable Origin getOrigin() {
+    public @NonNull Origin getOrigin() {
         return origin;
     }
 

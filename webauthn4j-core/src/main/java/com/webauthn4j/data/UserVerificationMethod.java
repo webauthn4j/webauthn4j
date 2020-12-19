@@ -84,6 +84,7 @@ public enum UserVerificationMethod {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
     private static @NonNull UserVerificationMethod deserialize(long value) throws InvalidFormatException {
         try {

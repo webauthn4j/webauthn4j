@@ -44,8 +44,6 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SuppressWarnings("ConstantConditions")
 class AndroidSafetyNetAttestationStatementValidatorTest {
@@ -73,7 +71,7 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
 
         PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
-        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
+        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName");
 
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions
@@ -113,39 +111,6 @@ class AndroidSafetyNetAttestationStatementValidatorTest {
     @Test
     void validateAttestationStatementNotNull_with_null_test() {
         assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_ver_null_test() {
-        String nonce = "nonce";
-        long timestampMs = Instant.now().toEpochMilli();
-        String apkPackageName = "com.android.keystore.androidkeystoredemo";
-        String[] apkCertificateDigestSha256 = new String[]{"bsb4/WQdaaOWYCd/j9OJiQpg7b0iwFgAc/zzA1tCfwE="};
-        String apkDigestSha256 = "dM/LUHSI9SkQhZHHpQWRnzJ3MvvB2ANSauqYAAbS2Jg=";
-        boolean ctsProfileMatch = true;
-        boolean basicIntegrity = true;
-        String advice = null;
-        Response response = new Response(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice);
-        JWS<Response> jws = new JWSFactory().create(new JWSHeader(JWAIdentifier.ES256, CertificateUtil.generateCertPath(Collections.emptyList())), response, new byte[32]);
-        AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(null, jws);
-        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-
-    @Test
-    void validateAttestationStatementNotNull_with_response_null_test() {
-        String ver = "12685023";
-        AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement(ver, null);
-        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_x5c_null_test() {
-        String ver = "12685023";
-        AndroidSafetyNetAttestationStatement attestationStatement = mock(AndroidSafetyNetAttestationStatement.class);
-        when(attestationStatement.getX5c()).thenReturn(null);
-        when(attestationStatement.getVer()).thenReturn(ver);
-        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

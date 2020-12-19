@@ -40,8 +40,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 class BeanAssertUtil {
 
-    private static final String CHALLENGE_MUST_NOT_BE_NULL = "challenge must not be null";
-
     private BeanAssertUtil() {
     }
 
@@ -104,15 +102,6 @@ class BeanAssertUtil {
         if (collectedClientData == null) {
             throw new ConstraintViolationException("collectedClientData must not be null");
         }
-        if (collectedClientData.getType() == null) {
-            throw new ConstraintViolationException("type must not be null");
-        }
-        if (collectedClientData.getChallenge() == null) {
-            throw new ConstraintViolationException(CHALLENGE_MUST_NOT_BE_NULL);
-        }
-        if (collectedClientData.getOrigin() == null) {
-            throw new ConstraintViolationException("origin must not be null");
-        }
         validate(collectedClientData.getTokenBinding());
     }
 
@@ -164,11 +153,6 @@ class BeanAssertUtil {
         if (attestedCredentialData == null) {
             throw new ConstraintViolationException("attestedCredentialData must not be null");
         }
-
-        if (attestedCredentialData.getAaguid() == null) {
-            throw new ConstraintViolationException("aaguid must not be null");
-        }
-
         if (attestedCredentialData.getCredentialId() == null) {
             throw new ConstraintViolationException("credentialId must not be null");
         }

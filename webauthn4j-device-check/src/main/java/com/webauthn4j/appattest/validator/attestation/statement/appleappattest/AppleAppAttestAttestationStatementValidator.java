@@ -71,12 +71,6 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getX5c() == null) {
-            throw new BadAttestationStatementException("x5c must not be null");
-        }
-        if (attestationStatement.getReceipt() == null) {
-            throw new BadAttestationStatementException("receipt must not be null");
-        }
     }
 
 

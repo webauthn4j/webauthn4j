@@ -16,9 +16,9 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -38,32 +38,38 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     private byte[] id;
     private String displayName;
 
-    @JsonCreator
+    /**
+     * @deprecated icon member is no longer available in WebAuthn Level2
+     * @param id id
+     * @param name name
+     * @param displayName displayName
+     * @param icon icon
+     */
+    @Deprecated
     public PublicKeyCredentialUserEntity(
-            @JsonProperty("id") byte[] id,
-            @JsonProperty("name") String name,
-            @JsonProperty("displayName") String displayName,
-            @JsonProperty("icon") String icon) {
+            @NonNull byte[] id,
+            @NonNull String name,
+            @NonNull String displayName,
+            @Nullable String icon) {
         super(name, icon);
         this.id = id;
         this.displayName = displayName;
     }
 
-    public PublicKeyCredentialUserEntity(byte[] id, String name, String displayName) {
+    public PublicKeyCredentialUserEntity(
+            @NonNull byte[] id,
+            @NonNull String name,
+            @NonNull String displayName) {
         super(name);
         this.id = id;
         this.displayName = displayName;
     }
 
-    public PublicKeyCredentialUserEntity() {
-        super();
-    }
-
-    public byte[] getId() {
+    public @NonNull byte[] getId() {
         return ArrayUtil.clone(id);
     }
 
-    public String getDisplayName() {
+    public @NonNull String getDisplayName() {
         return displayName;
     }
 
