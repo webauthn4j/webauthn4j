@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -29,7 +30,6 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class AttestationObjectConverterTest {
@@ -64,8 +64,8 @@ class AttestationObjectConverterTest {
     @Test
     void convert_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -80,7 +80,7 @@ class AttestationObjectConverterTest {
     @Test
     void convertToBytes_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(() -> target.convertToBytes(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convertToBytes(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -115,9 +115,7 @@ class AttestationObjectConverterTest {
     @Test
     void convert_test_with_illegal_input() {
         String testData = "illegal input";
-        assertThrows(IllegalArgumentException.class,
-                () -> target.convert(testData)
-        );
+        assertThatThrownBy(() -> target.convert(testData)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

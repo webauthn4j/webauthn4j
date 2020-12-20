@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -46,14 +47,24 @@ public class AuthenticationExtensionsClientOutputsConverter {
     // ================================================================================================
 
     public <T extends ExtensionClientOutput> @Nullable AuthenticationExtensionsClientOutputs<T> convert(@NonNull String value) {
-        AssertUtil.notNull(value, "value must not be null");
-        return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
-        });
+        try{
+            AssertUtil.notNull(value, "value must not be null");
+            return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientOutputs<T>>() {
+            });
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     public <T extends ExtensionClientOutput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientOutputs<T> value) {
-        AssertUtil.notNull(value, "value must not be null");
-        return jsonConverter.writeValueAsString(value);
+        try{
+            AssertUtil.notNull(value, "value must not be null");
+            return jsonConverter.writeValueAsString(value);
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
 }

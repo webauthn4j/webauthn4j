@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -52,8 +53,10 @@ class CollectedClientDataConverterTest {
 
     @Test
     void convert_null_test() {
-        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBytes( null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBase64UrlString( null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
@@ -31,12 +32,12 @@ class AuthenticationExtensionsClientOutputsConverterTest {
     @Test
     void convert_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(() -> target.convert(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
     void convertToString_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 }
