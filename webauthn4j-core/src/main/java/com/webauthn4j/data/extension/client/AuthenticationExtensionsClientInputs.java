@@ -11,6 +11,8 @@ import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyS
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -39,39 +41,39 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     @JsonProperty
     private Boolean enforceCredentialProtectionPolicy;
     @JsonIgnore
-    private Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnyGetter
-    private Map<String, Serializable> getUnknowns(){
+    private @NonNull Map<String, Serializable> getUnknowns() {
         return Collections.unmodifiableMap(this.unknowns);
     }
 
     @JsonAnySetter
-    private void setUnknowns(String name, Serializable value){
+    private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
         this.unknowns.put(name, value);
     }
 
     @JsonIgnore
-    public Set<String> getKeys() {
+    public @NonNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
-        if(appid != null){
+        if (appid != null) {
             keys.add("appid");
         }
-        if(appidExclude != null){
+        if (appidExclude != null) {
             keys.add("appidExclude");
         }
-        if(uvm != null){
+        if (uvm != null) {
             keys.add("uvm");
         }
-        if(credProps != null){
+        if (credProps != null) {
             keys.add("credProps");
         }
         if (credentialProtectionPolicy != null) {
             keys.add("credentialProtectionPolicy");
         }
-        if(enforceCredentialProtectionPolicy != null){
+        if (enforceCredentialProtectionPolicy != null) {
             keys.add("enforceCredentialProtectionPolicy");
         }
         keys.addAll(getUnknownKeys());
@@ -79,13 +81,13 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public Set<String> getUnknownKeys() {
+    public @NonNull Set<String> getUnknownKeys() {
         return unknowns.keySet();
     }
 
     @JsonIgnore
-    public Serializable getValue(String key) {
-        switch (key){
+    public @Nullable Serializable getValue(@NonNull String key) {
+        switch (key) {
             case "appid":
                 return appid;
             case "appidExclude":
@@ -104,59 +106,59 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public String getAppid(){
+    public @Nullable String getAppid() {
         return this.appid;
     }
 
     @JsonIgnore
-    public String getAppidExclude(){
+    public @Nullable String getAppidExclude() {
         return this.appidExclude;
     }
 
     @JsonIgnore
-    public Boolean getUvm(){
+    public @Nullable Boolean getUvm() {
         return this.uvm;
     }
 
     @JsonIgnore
-    public Boolean getCredProps(){
+    public @Nullable Boolean getCredProps() {
         return this.credProps;
     }
 
     @JsonIgnore
-    public CredentialProtectionPolicy getCredentialProtectionPolicy(){
+    public @Nullable CredentialProtectionPolicy getCredentialProtectionPolicy() {
         return this.credentialProtectionPolicy;
     }
 
     @JsonIgnore
-    public Boolean getEnforceCredentialProtectionPolicy(){
+    public @Nullable Boolean getEnforceCredentialProtectionPolicy() {
         return this.enforceCredentialProtectionPolicy;
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends T> E getExtension(Class<E> tClass) {
-        return (E)getExtensions().get(tClass);
+    public @Nullable <E extends T> E getExtension(Class<E> tClass) {
+        return (E) getExtensions().get(tClass);
     }
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    public Map<Class<? extends T>, T> getExtensions(){
-        if(extensions == null){
+    public @NonNull Map<Class<? extends T>, T> getExtensions() {
+        if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if(appid != null){
-                map.put((Class<? extends T>)FIDOAppIDExtensionClientInput.class, (T)new FIDOAppIDExtensionClientInput(appid));
+            if (appid != null) {
+                map.put((Class<? extends T>) FIDOAppIDExtensionClientInput.class, (T) new FIDOAppIDExtensionClientInput(appid));
             }
-            if(appidExclude != null){
-                map.put((Class<? extends T>)FIDOAppIDExclusionExtensionClientInput.class, (T)new FIDOAppIDExclusionExtensionClientInput(appidExclude));
+            if (appidExclude != null) {
+                map.put((Class<? extends T>) FIDOAppIDExclusionExtensionClientInput.class, (T) new FIDOAppIDExclusionExtensionClientInput(appidExclude));
             }
-            if(uvm != null){
-                map.put((Class<? extends T>)UserVerificationMethodExtensionClientInput.class, (T)new UserVerificationMethodExtensionClientInput(uvm));
+            if (uvm != null) {
+                map.put((Class<? extends T>) UserVerificationMethodExtensionClientInput.class, (T) new UserVerificationMethodExtensionClientInput(uvm));
             }
-            if(credProps != null){
-                map.put((Class<? extends T>)CredentialPropertiesExtensionClientInput.class, (T)new CredentialPropertiesExtensionClientInput(credProps));
+            if (credProps != null) {
+                map.put((Class<? extends T>) CredentialPropertiesExtensionClientInput.class, (T) new CredentialPropertiesExtensionClientInput(credProps));
             }
-            if(credentialProtectionPolicy != null){
-                map.put((Class<? extends T>)CredentialProtectionExtensionClientInput.class, (T)new CredentialProtectionExtensionClientInput(credentialProtectionPolicy, enforceCredentialProtectionPolicy));
+            if (credentialProtectionPolicy != null) {
+                map.put((Class<? extends T>) CredentialProtectionExtensionClientInput.class, (T) new CredentialProtectionExtensionClientInput(credentialProtectionPolicy, enforceCredentialProtectionPolicy));
             }
             extensions = Collections.unmodifiableMap(map);
         }
@@ -164,7 +166,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsClientInputs<?> that = (AuthenticationExtensionsClientInputs<?>) o;
@@ -190,9 +192,9 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private CredentialProtectionPolicy credentialProtectionPolicy;
         private Boolean enforceCredentialProtectionPolicy;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
-        public AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build(){
+        public @NonNull AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
@@ -203,27 +205,27 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return instance;
         }
 
-        public BuilderForRegistration setUvm(Boolean uvm){
+        public @NonNull BuilderForRegistration setUvm(@Nullable Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public BuilderForRegistration setCredProps(Boolean credProps){
+        public @NonNull BuilderForRegistration setCredProps(@Nullable Boolean credProps) {
             this.credProps = credProps;
             return this;
         }
 
-        public BuilderForRegistration setCredentialProtectionPolicy(CredentialProtectionPolicy credentialProtectionPolicy) {
+        public @NonNull BuilderForRegistration setCredentialProtectionPolicy(@Nullable CredentialProtectionPolicy credentialProtectionPolicy) {
             this.credentialProtectionPolicy = credentialProtectionPolicy;
             return this;
         }
 
-        public BuilderForRegistration setEnforceCredentialProtectionPolicy(Boolean enforceCredentialProtectionPolicy) {
+        public @NonNull BuilderForRegistration setEnforceCredentialProtectionPolicy(@Nullable Boolean enforceCredentialProtectionPolicy) {
             this.enforceCredentialProtectionPolicy = enforceCredentialProtectionPolicy;
             return this;
         }
 
-        public BuilderForRegistration set(String key, Serializable value){
+        public @NonNull BuilderForRegistration set(String key, Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -238,9 +240,9 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private String appidExclude;
         private Boolean uvm;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
-        public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build(){
+        public @NonNull AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
             instance.appid = this.appid;
             instance.appidExclude = this.appidExclude;
@@ -250,22 +252,22 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return instance;
         }
 
-        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setAppid(String appid){
+        public @NonNull BuilderForAuthentication setAppid(@NonNull String appid) {
             this.appid = appid;
             return this;
         }
 
-        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setAppidExclude(String appidExclude){
+        public @NonNull BuilderForAuthentication setAppidExclude(@NonNull String appidExclude) {
             this.appidExclude = appidExclude;
             return this;
         }
 
-        public AuthenticationExtensionsClientInputs.BuilderForAuthentication setUvm(Boolean uvm){
+        public @NonNull BuilderForAuthentication setUvm(@NonNull Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public BuilderForAuthentication set(String key, Serializable value){
+        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -273,7 +275,5 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         }
 
     }
-
-
 
 }

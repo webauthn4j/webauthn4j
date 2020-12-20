@@ -16,8 +16,8 @@
 
 package com.webauthn4j.test.authenticator.webauthn;
 
-import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.SignatureAlgorithm;
+import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
@@ -36,6 +36,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
 
+@SuppressWarnings("ConstantConditions")
 public class TPMAuthenticator extends WebAuthnModelAuthenticator {
 
     @Override
@@ -49,7 +50,8 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
-        } else {
+        }
+        else {
             signature = TestDataUtil.calculateSignature(this.getAttestationKeyPair().getPrivate(), certInfo.getBytes());
         }
 

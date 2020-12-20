@@ -19,6 +19,7 @@ package com.webauthn4j.anchor;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
 
 public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
+    private static final String CERTIFICATES_MUST_NOT_BE_NULL = "challenge must not be null";
+
     // ~ Instance fields
     // ================================================================================================
 
@@ -43,9 +46,11 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     // ========================================================================================================
 
     public CertFileTrustAnchorsProvider() {
+        certificates = Collections.emptyList();
     }
 
-    public CertFileTrustAnchorsProvider(List<Path> certificates) {
+    public CertFileTrustAnchorsProvider(@NonNull List<Path> certificates) {
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
         this.certificates = certificates;
     }
 
@@ -54,18 +59,19 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
     // ========================================================================================================
 
     private void checkConfig() {
-        AssertUtil.notNull(certificates, "certificates must not be null");
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
     }
 
 
     @Override
-    protected Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
+    protected @NonNull Map<AAGUID, Set<TrustAnchor>> loadTrustAnchors() {
         checkConfig();
         Set<TrustAnchor> trustAnchors = certificates.stream().map(this::loadTrustAnchor).collect(Collectors.toSet());
         return Collections.singletonMap(AAGUID.NULL, trustAnchors);
     }
 
-    private TrustAnchor loadTrustAnchor(Path certificate) {
+    private @NonNull TrustAnchor loadTrustAnchor(@NonNull Path certificate) {
+        AssertUtil.notNull(certificate, CERTIFICATES_MUST_NOT_BE_NULL);
         try {
             X509Certificate x509Certificate = CertificateUtil.generateX509Certificate(Files.newInputStream(certificate));
             return new TrustAnchor(x509Certificate, null);
@@ -74,11 +80,12 @@ public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBas
         }
     }
 
-    public List<Path> getCertificates() {
+    public @NonNull List<Path> getCertificates() {
         return certificates;
     }
 
-    public void setCertificates(List<Path> certificates) {
+    public void setCertificates(@NonNull List<Path> certificates) {
+        AssertUtil.notNull(certificates, CERTIFICATES_MUST_NOT_BE_NULL);
         this.certificates = certificates;
     }
 }

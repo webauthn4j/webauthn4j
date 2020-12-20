@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.client.Origin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -35,7 +36,7 @@ public class OriginSerializer extends StdSerializer<Origin> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(Origin value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull Origin value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeString(value.toString());
     }
 }

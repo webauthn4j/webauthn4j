@@ -18,6 +18,8 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class CredentialPropertiesExtensionClientOutput
         extends SingleValueExtensionOutputBase<CredentialPropertiesOutput>
@@ -25,22 +27,22 @@ public class CredentialPropertiesExtensionClientOutput
 
     public static final String ID = "credProps";
 
-    public CredentialPropertiesExtensionClientOutput(CredentialPropertiesOutput value) {
+    public CredentialPropertiesExtensionClientOutput(@Nullable CredentialPropertiesOutput value) {
         super(value);
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return ID;
     }
 
-    public CredentialPropertiesOutput getCredProps(){
+    public @Nullable CredentialPropertiesOutput getCredProps() {
         return getValue();
     }
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

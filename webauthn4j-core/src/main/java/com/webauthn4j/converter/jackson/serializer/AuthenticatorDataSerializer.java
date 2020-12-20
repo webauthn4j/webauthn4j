@@ -24,6 +24,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorInput;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -46,7 +47,7 @@ public class AuthenticatorDataSerializer extends StdSerializer<AuthenticatorData
      * {@inheritDoc}
      */
     @Override
-    public void serialize(AuthenticatorData<? extends ExtensionAuthenticatorInput> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull AuthenticatorData<? extends ExtensionAuthenticatorInput> value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeBinary(new AuthenticatorDataConverter(objectConverter).convert(value));
     }
 

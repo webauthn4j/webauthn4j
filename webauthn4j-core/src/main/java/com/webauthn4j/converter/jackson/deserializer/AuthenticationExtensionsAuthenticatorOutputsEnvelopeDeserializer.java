@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.type.SimpleType;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class AuthenticationExtensionsAuthenticatorOutputsEnvelopeDeserializer ex
      * {@inheritDoc}
      */
     @Override
-    public AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull AuthenticationExtensionsAuthenticatorOutputsEnvelope<? extends ExtensionAuthenticatorOutput> deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
         JavaType javaType = SimpleType.constructUnsafe(AuthenticationExtensionsAuthenticatorOutputs.class);
         AuthenticationExtensionsAuthenticatorOutputs<? extends ExtensionAuthenticatorOutput> authenticationExtensionsAuthenticatorOutputs = ctxt.readValue(p, javaType);
         int length = (int) p.getCurrentLocation().getByteOffset();

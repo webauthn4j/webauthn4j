@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -29,31 +31,31 @@ public class TPMSECCParms implements TPMUPublicParms {
     private final TPMEccCurve curveId;
     private final byte[] kdf;
 
-    public TPMSECCParms(byte[] symmetric, byte[] scheme, TPMEccCurve curveId, byte[] kdf) {
+    public TPMSECCParms(@NonNull byte[] symmetric, @NonNull byte[] scheme, @NonNull TPMEccCurve curveId, @NonNull byte[] kdf) {
         this.symmetric = symmetric;
         this.scheme = scheme;
         this.curveId = curveId;
         this.kdf = kdf;
     }
 
-    public byte[] getSymmetric() {
+    public @NonNull byte[] getSymmetric() {
         return ArrayUtil.clone(symmetric);
     }
 
-    public byte[] getScheme() {
+    public @NonNull byte[] getScheme() {
         return ArrayUtil.clone(scheme);
     }
 
-    public TPMEccCurve getCurveId() {
+    public @NonNull TPMEccCurve getCurveId() {
         return curveId;
     }
 
-    public byte[] getKdf() {
+    public @NonNull byte[] getKdf() {
         return ArrayUtil.clone(kdf);
     }
 
     @Override
-    public byte[] getBytes() {
+    public @Nullable byte[] getBytes() {
         return ByteBuffer.allocate(8)
                 .put(symmetric)
                 .put(scheme)
@@ -75,7 +77,7 @@ public class TPMSECCParms implements TPMUPublicParms {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMSECCParms that = (TPMSECCParms) o;

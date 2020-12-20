@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DCAssertionRequestTest {
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
 
         byte[] credentialId = new byte[24];
         byte[] assertion = new byte[64];

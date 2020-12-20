@@ -19,6 +19,7 @@ package com.webauthn4j.data;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -34,11 +35,11 @@ public class CoreAuthenticationData implements Serializable {
 
     @SuppressWarnings("squid:S107")
     public CoreAuthenticationData(
-            byte[] credentialId,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            byte[] clientDataHash,
-            byte[] signature) {
+            @Nullable byte[] credentialId,
+            @Nullable AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @Nullable byte[] authenticatorDataBytes,
+            @Nullable byte[] clientDataHash,
+            @Nullable byte[] signature) {
         this.credentialId = ArrayUtil.clone(credentialId);
         this.authenticatorData = authenticatorData;
         this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
@@ -46,28 +47,28 @@ public class CoreAuthenticationData implements Serializable {
         this.signature = ArrayUtil.clone(signature);
     }
 
-    public byte[] getCredentialId() {
+    public @Nullable byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @Nullable AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
-    public byte[] getAuthenticatorDataBytes() {
+    public @Nullable byte[] getAuthenticatorDataBytes() {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
-    public byte[] getClientDataHash() {
+    public @Nullable byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
 
-    public byte[] getSignature() {
+    public @Nullable byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreAuthenticationData that = (CoreAuthenticationData) o;

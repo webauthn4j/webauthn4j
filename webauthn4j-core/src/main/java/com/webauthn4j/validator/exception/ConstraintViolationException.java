@@ -16,21 +16,23 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if the value violates constraints
  */
 @SuppressWarnings("squid:S110")
 public class ConstraintViolationException extends ValidationException {
 
-    public ConstraintViolationException(String message, Throwable cause) {
+    public ConstraintViolationException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public ConstraintViolationException(String message) {
+    public ConstraintViolationException(@Nullable String message) {
         super(message);
     }
 
-    public ConstraintViolationException(Throwable cause) {
+    public ConstraintViolationException(@Nullable Throwable cause) {
         super(cause);
     }
 

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
@@ -27,8 +28,10 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SuppressWarnings("ConstantConditions")
 class CollectedClientDataConverterTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -50,10 +53,10 @@ class CollectedClientDataConverterTest {
 
     @Test
     void convert_null_test() {
-        assertAll(
-                () -> assertThat(target.convert((String) null)).isNull(),
-                () -> assertThat(target.convert((byte[]) null)).isNull()
-        );
+        assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBytes( null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBase64UrlString( null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

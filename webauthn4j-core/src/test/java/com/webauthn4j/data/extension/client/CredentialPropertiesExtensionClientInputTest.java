@@ -25,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CredentialPropertiesExtensionClientInputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         CredentialPropertiesExtensionClientInput target = new CredentialPropertiesExtensionClientInput(true);
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         CredentialPropertiesExtensionClientInput target = new CredentialPropertiesExtensionClientInput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

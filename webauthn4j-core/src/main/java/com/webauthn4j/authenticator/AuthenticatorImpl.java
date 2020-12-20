@@ -24,6 +24,9 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -32,29 +35,44 @@ import java.util.Set;
 /**
  * An {@link Authenticator} implementation
  */
+@SuppressWarnings("ConstantConditions")
 public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenticator {
 
     //~ Instance fields ================================================================================================
     private AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions;
     private Set<AuthenticatorTransport> transports;
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports,
-                             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-                             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
+    public AuthenticatorImpl(
+            @NonNull AttestedCredentialData attestedCredentialData,
+            @NonNull AttestationStatement attestationStatement,
+            long counter,
+            @Nullable Set<AuthenticatorTransport> transports,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
         super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
         this.clientExtensions = clientExtensions;
         this.transports = transports;
     }
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter, Set<AuthenticatorTransport> transports) {
+    public AuthenticatorImpl(
+            @NonNull AttestedCredentialData attestedCredentialData,
+            @NonNull AttestationStatement attestationStatement,
+            long counter,
+            @Nullable Set<AuthenticatorTransport> transports) {
         this(attestedCredentialData, attestationStatement, counter, transports, new AuthenticationExtensionsClientOutputs<>(), new AuthenticationExtensionsAuthenticatorOutputs<>());
     }
 
-    public AuthenticatorImpl(AttestedCredentialData attestedCredentialData, AttestationStatement attestationStatement, long counter) {
+    public AuthenticatorImpl(
+            @NonNull AttestedCredentialData attestedCredentialData,
+            @NonNull AttestationStatement attestationStatement,
+            long counter) {
         this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
     }
 
-    public static AuthenticatorImpl createFromRegistrationData(RegistrationData registrationData){
+    public static @NonNull AuthenticatorImpl createFromRegistrationData(@NonNull RegistrationData registrationData) {
+        AssertUtil.notNull(registrationData, "registrationData must not be null");
+        AssertUtil.notNull(registrationData.getAttestationObject(), "attestationObject must not be null");
+        AssertUtil.notNull(registrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
         return new AuthenticatorImpl(
                 registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
                 registrationData.getAttestationObject().getAttestationStatement(),
@@ -64,25 +82,25 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
 
     @Override
-    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
-    public void setClientExtensions(AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions) {
+    public void setClientExtensions(@Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions) {
         this.clientExtensions = clientExtensions;
     }
 
     @Override
-    public Set<AuthenticatorTransport> getTransports() {
+    public @Nullable Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
-    public void setTransports(Set<AuthenticatorTransport> transports) {
+    public void setTransports(@Nullable Set<AuthenticatorTransport> transports) {
         this.transports = transports;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

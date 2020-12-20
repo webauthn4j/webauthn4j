@@ -18,26 +18,37 @@ package com.webauthn4j.appattest.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DCServerProperty extends CoreServerProperty {
 
     /**
      * Constructor of {@link DCServerProperty}
-     * @param rpId rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
+     *
+     * @param rpId      rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
      * @param challenge challenge
      */
-    public DCServerProperty(String rpId, Challenge challenge) {
+    public DCServerProperty(@NonNull String rpId, @Nullable Challenge challenge) {
         super(rpId, challenge);
     }
 
     /**
      * Constructor of {@link DCServerProperty}
-     * @param teamIdentifier 10-digit team identifier
+     *
+     * @param teamIdentifier     10-digit team identifier
      * @param cfBundleIdentifier CFBundleIdentifier
-     * @param challenge challenge
+     * @param challenge          challenge
      */
-    public DCServerProperty(String teamIdentifier, String cfBundleIdentifier, Challenge challenge) {
-        super(String.format("%s.%s", teamIdentifier, cfBundleIdentifier), challenge);
+    public DCServerProperty(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier, @Nullable Challenge challenge) {
+        super(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
+    }
+
+    private static @NonNull String formatRpId(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier){
+        AssertUtil.notNull(teamIdentifier, "teamIdentifier must not be null");
+        AssertUtil.notNull(cfBundleIdentifier, "cfBundleIdentifier must not be null");
+        return String.format("%s.%s", teamIdentifier, cfBundleIdentifier);
     }
 
 }

@@ -18,22 +18,28 @@ package com.webauthn4j.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
 import java.time.Instant;
 import java.util.Date;
-
 import java.util.Set;
 
 public abstract class CertPathTrustworthinessValidatorBase implements CertPathTrustworthinessValidator {
 
     private boolean fullChainProhibited = false;
 
-    public void validate(AAGUID aaguid, CertificateBaseAttestationStatement attestationStatement, Instant timestamp) {
+    public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
+        AssertUtil.notNull(aaguid, "attestationStatement must not be null");
+        AssertUtil.notNull(aaguid, "timestamp must not be null");
+
+        //noinspection ConstantConditions as null check is already done in caller
         CertPath certPath = attestationStatement.getX5c().createCertPath();
 
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
@@ -62,7 +68,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         }
     }
 
-    protected abstract Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid);
+    protected abstract @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid);
 
 
     public boolean isFullChainProhibited() {

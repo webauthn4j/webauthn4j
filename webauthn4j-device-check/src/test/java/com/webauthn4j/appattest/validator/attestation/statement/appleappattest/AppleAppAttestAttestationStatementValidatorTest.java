@@ -48,39 +48,37 @@ class AppleAppAttestAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_CoreRegistrationObject_test(){
-        assertThatThrownBy(()->{
-            target.validate(mock(CoreRegistrationObject.class));
-        }).isInstanceOf(IllegalArgumentException.class);
+    void validate_CoreRegistrationObject_test() {
+        assertThatThrownBy(() -> target.validate(mock(CoreRegistrationObject.class))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void supports_CoreRegistrationObject_test(){
+    void validateAttestationStatementNotNull_test(){
+        AppleAppAttestAttestationStatement attestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]);
+        target.validateAttestationStatementNotNull(attestationStatement);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_null_test(){
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void validateX5c_empty_AttestationCertificatePath_test() {
+        final AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]);
+        assertThatThrownBy(() -> target.validateX5c(appleAppAttestAttestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
+    void supports_CoreRegistrationObject_test() {
         assertThat(target.supports(TestDataUtil.createRegistrationObjectWithPackedAttestation())).isFalse();
     }
 
     @Test
-    void validateX5c_null_test(){
-        final AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(null, null);
-        assertThatThrownBy(()->{
-            target.validateX5c(appleAppAttestAttestationStatement);
-        }).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateX5c_empty_AttestationCertificatePath_test(){
-        final AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), null);
-        assertThatThrownBy(()->{
-            target.validateX5c(appleAppAttestAttestationStatement);
-        }).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void extractNonce_from_non_AppleAppAttestAttestationCertificate(){
+    void extractNonce_from_non_AppleAppAttestAttestationCertificate() {
+        //noinspection ConstantConditions
         X509Certificate nonAppleAppAttestAttestationCertificate = TestAttestationStatementUtil.createBasicPackedAttestationStatement().getX5c().getEndEntityAttestationCertificate().getCertificate();
-        assertThatThrownBy(()->{
-            target.extractNonce(nonAppleAppAttestAttestationCertificate);
-        }).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.extractNonce(nonAppleAppAttestAttestationCertificate)).isInstanceOf(BadAttestationStatementException.class);
     }
 
 

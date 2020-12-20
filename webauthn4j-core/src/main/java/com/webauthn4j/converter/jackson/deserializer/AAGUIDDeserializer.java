@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ public class AAGUIDDeserializer extends StdDeserializer<AAGUID> {
     }
 
     @Override
-    public AAGUID deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull AAGUID deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
         return new AAGUID(p.getBinaryValue());
     }
 }

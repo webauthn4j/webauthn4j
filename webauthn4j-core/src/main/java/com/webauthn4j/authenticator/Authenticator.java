@@ -19,6 +19,7 @@ package com.webauthn4j.authenticator;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public interface Authenticator extends CoreAuthenticator {
      *
      * @return the client extensions
      */
-    default AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+    default @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return null;
     }
 
@@ -42,7 +43,7 @@ public interface Authenticator extends CoreAuthenticator {
      * @return the {@link AuthenticatorTransport} {@link Set}
      */
     @SuppressWarnings("squid:S1168")
-    default Set<AuthenticatorTransport> getTransports() {
+    default @Nullable Set<AuthenticatorTransport> getTransports() {
         return null;
     }
 

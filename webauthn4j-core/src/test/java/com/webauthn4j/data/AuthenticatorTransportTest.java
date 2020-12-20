@@ -16,28 +16,37 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AuthenticatorTransportTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(AuthenticatorTransport.create(null)).isNull(),
                 () -> assertThat(AuthenticatorTransport.create("usb")).isEqualTo(AuthenticatorTransport.USB),
                 () -> assertThat(AuthenticatorTransport.create("nfc")).isEqualTo(AuthenticatorTransport.NFC),
                 () -> assertThat(AuthenticatorTransport.create("ble")).isEqualTo(AuthenticatorTransport.BLE),
                 () -> assertThat(AuthenticatorTransport.create("internal")).isEqualTo(AuthenticatorTransport.INTERNAL)
         );
+    }
+
+    @SuppressWarnings({"ConstantConditions"})
+    @Test
+    void create_null_test() {
+        assertThatThrownBy(() -> AuthenticatorTransport.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -54,15 +63,31 @@ class AuthenticatorTransportTest {
 
     @Test
     void deserialize_test() throws IOException {
-        TestDTO dto = objectMapper.readValue("{\"transport\":\"usb\"}", TestDTO.class);
+        TestDTO dto = jsonConverter.readValue("{\"transport\":\"usb\"}", TestDTO.class);
         assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }
 
     @Test
     void deserialize_test_with_unknown_value() {
         assertDoesNotThrow(
-                () -> objectMapper.readValue("{\"transport\":\"unknown\"}", TestDTO.class)
+                () -> jsonConverter.readValue("{\"transport\":\"unknown\"}", TestDTO.class)
         );
+    }
+
+    @Test
+    void deserialize_test_with_invalid_value() {
+        // Actually, deserialize method is not used because ObjectMapper does't call custom serializer when type doesn't match (String and int)
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"transport\": -1}", TestDTO.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void deserialize_test_with_null() {
+        // Actually, deserialize method is not used by ObjectMapper because ObjectMapper doesn't call custom deserializer when the value is null
+        assertThatThrownBy(
+                () -> AuthenticatorTransport.deserialize(null)
+        ).isInstanceOf(InvalidFormatException.class);
     }
 
     static class TestDTO {

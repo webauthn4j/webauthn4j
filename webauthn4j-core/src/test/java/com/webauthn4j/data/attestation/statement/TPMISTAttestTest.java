@@ -52,6 +52,7 @@ class TPMISTAttestTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         byte[] source = new byte[]{(byte) 0x80, (byte) 0x17};

@@ -26,6 +26,8 @@ import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyB
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -46,24 +48,24 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
     @JsonIgnore
-    private Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnyGetter
-    private Map<String, Serializable> getUnknowns(){
+    private Map<String, Serializable> getUnknowns() {
         return Collections.unmodifiableMap(this.unknowns);
     }
 
     @JsonAnySetter
-    private void setUnknowns(String name, Serializable value){
+    private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
         this.unknowns.put(name, value);
     }
 
     @JsonIgnore
-    public Set<String> getKeys() {
+    public @NonNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
-        if(uvm != null){
+        if (uvm != null) {
             keys.add("uvm");
         }
         if (credProtect != null) {
@@ -74,13 +76,13 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonIgnore
-    public Set<String> getUnknownKeys() {
+    public @NonNull Set<String> getUnknownKeys() {
         return unknowns.keySet();
     }
 
     @JsonIgnore
-    public Object getValue(String key) {
-        switch (key){
+    public @Nullable Object getValue(String key) {
+        switch (key) {
             case "uvm":
                 return uvm;
             case "credProtect":
@@ -91,30 +93,30 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonIgnore
-    public Boolean getUvm(){
+    public @Nullable Boolean getUvm() {
         return this.uvm;
     }
 
     @JsonIgnore
-    public CredentialProtectionPolicy getCredProtect(){
+    public @Nullable CredentialProtectionPolicy getCredProtect() {
         return this.credProtect;
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends T> E getExtension(Class<E> tClass) {
-        return (E)getExtensions().get(tClass);
+    public @Nullable <E extends T> E getExtension(@NonNull Class<E> tClass) {
+        return (E) getExtensions().get(tClass);
     }
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    private Map<Class<? extends T>, T> getExtensions(){
-        if(extensions == null){
+    private @NonNull Map<Class<? extends T>, T> getExtensions() {
+        if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
-            if(uvm != null){
-                map.put((Class<? extends T>)UserVerificationMethodExtensionAuthenticatorInput.class, (T)new UserVerificationMethodExtensionAuthenticatorInput(uvm));
+            if (uvm != null) {
+                map.put((Class<? extends T>) UserVerificationMethodExtensionAuthenticatorInput.class, (T) new UserVerificationMethodExtensionAuthenticatorInput(uvm));
             }
-            if(credProtect != null){
-                map.put((Class<? extends T>)CredentialProtectionExtensionAuthenticatorInput.class, (T)new CredentialProtectionExtensionAuthenticatorInput(credProtect));
+            if (credProtect != null) {
+                map.put((Class<? extends T>) CredentialProtectionExtensionAuthenticatorInput.class, (T) new CredentialProtectionExtensionAuthenticatorInput(credProtect));
             }
             extensions = Collections.unmodifiableMap(map);
         }
@@ -122,7 +124,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorInputs<?> that = (AuthenticationExtensionsAuthenticatorInputs<?>) o;
@@ -142,9 +144,9 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
         private Boolean uvm;
         private CredentialProtectionPolicy credProtect;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
-        public AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> build(){
+        public @NonNull AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
             instance.uvm = this.uvm;
             instance.credProtect = this.credProtect;
@@ -153,17 +155,17 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return instance;
         }
 
-        public BuilderForRegistration setUvm(Boolean uvm){
+        public @NonNull BuilderForRegistration setUvm(@Nullable Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration setCredProtect(CredentialProtectionPolicy credProtect) {
+        public @NonNull BuilderForRegistration setCredProtect(@Nullable CredentialProtectionPolicy credProtect) {
             this.credProtect = credProtect;
             return this;
         }
 
-        public BuilderForRegistration set(String key, Serializable value){
+        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -176,9 +178,9 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
         private Boolean uvm;
 
-        private Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Serializable> unknowns = new HashMap<>();
 
-        public AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build(){
+        public @NonNull AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
             instance.uvm = this.uvm;
             instance.unknowns.putAll(this.unknowns);
@@ -186,12 +188,12 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return instance;
         }
 
-        public BuilderForAuthentication setUvm(Boolean uvm){
+        public @NonNull BuilderForAuthentication setUvm(@Nullable Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public BuilderForAuthentication set(String key, Serializable value){
+        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

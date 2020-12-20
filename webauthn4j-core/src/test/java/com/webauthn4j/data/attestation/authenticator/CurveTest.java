@@ -17,14 +17,20 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CurveTest {
+
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {
@@ -32,18 +38,27 @@ class CurveTest {
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
-                //noinspection ResultOfMethodCallIgnored
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> Curve.create(4)
-                )
+                () -> assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
     @Test
     void deserialize_with_invalid_value_test() {
-        assertThrows(InvalidFormatException.class,
-                () -> Curve.deserialize(-1)
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"value\": -1}", CurveDto.class)
         );
+    }
+
+    static class CurveDto{
+        private Curve value;
+
+        public Curve getValue() {
+            return value;
+        }
+
+        public void setValue(Curve value) {
+            this.value = value;
+        }
     }
 
     @Test

@@ -16,12 +16,15 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.junit.jupiter.api.Test;
@@ -29,12 +32,15 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SignatureAlgorithmTest {
 
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+
     @Test
-    void create_test(){
+    void create_test() {
         assertAll(
                 () -> assertThat(SignatureAlgorithm.create("SHA256withECDSA")).isEqualTo(SignatureAlgorithm.ES256),
                 () -> assertThat(SignatureAlgorithm.create("SHA384withECDSA")).isEqualTo(SignatureAlgorithm.ES384),
@@ -47,14 +53,20 @@ class SignatureAlgorithmTest {
     }
 
     @Test
-    void serialize_test(){
-        ObjectConverter objectConverter = new ObjectConverter();
-        String string = objectConverter.getJsonConverter().writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
+    void serialize_test() {
+        String string = jsonConverter.writeValueAsString(new TestDto(SignatureAlgorithm.ES256));
         assertThat(string).isEqualTo("{\"alg\":\"SHA256withECDSA\"}");
     }
 
     @Test
-    void override_serialized_value_by_adding_custom_serializer_test(){
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"alg\": -1}", SignatureAlgorithmTest.TestDto.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void override_serialized_value_by_adding_custom_serializer_test() {
         ObjectMapper jsonMapper = new ObjectMapper();
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(new CustomSignatureAlgorithmSerializer());
@@ -78,9 +90,10 @@ class SignatureAlgorithmTest {
         }
     }
 
-    static class TestDto{
-        private SignatureAlgorithm alg;
+    static class TestDto {
+        private final SignatureAlgorithm alg;
 
+        @JsonCreator
         public TestDto(SignatureAlgorithm alg) {
             this.alg = alg;
         }

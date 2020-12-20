@@ -21,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -43,47 +45,42 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
 
     @JsonCreator
     public AndroidKeyAttestationStatement(
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @JsonProperty("sig") byte[] sig,
-            @JsonProperty("x5c") AttestationCertificatePath x5c) {
+            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
+            @NonNull @JsonProperty("sig") byte[] sig,
+            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c) {
+        AssertUtil.notNull(alg, "alg must not be null");
+        AssertUtil.notNull(sig, "sig must not be null");
+        AssertUtil.notNull(x5c, "x5c must not be null");
         this.alg = alg;
         this.sig = sig;
         this.x5c = x5c;
     }
 
-    public COSEAlgorithmIdentifier getAlg() {
+    public @NonNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
-    public byte[] getSig() {
+    public @NonNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
     @Override
-    public AttestationCertificatePath getX5c() {
+    public @NonNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
     @Override
     public void validate() {
-        if (alg == null) {
-            throw new ConstraintViolationException("alg must not be null");
-        }
-        if (sig == null) {
-            throw new ConstraintViolationException("sig must not be null");
-        }
-        if (x5c == null) {
-            throw new ConstraintViolationException("x5c must not be null");
-        }
+        //nop
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AndroidKeyAttestationStatement that = (AndroidKeyAttestationStatement) o;

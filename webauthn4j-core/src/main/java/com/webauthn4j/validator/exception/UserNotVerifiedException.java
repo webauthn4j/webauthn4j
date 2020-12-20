@@ -17,21 +17,23 @@
 package com.webauthn4j.validator.exception;
 
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if user is to be verified but not verified
  */
 @SuppressWarnings("squid:S110")
 public class UserNotVerifiedException extends ValidationException {
 
-    public UserNotVerifiedException(String message, Throwable cause) {
+    public UserNotVerifiedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public UserNotVerifiedException(String message) {
+    public UserNotVerifiedException(@Nullable String message) {
         super(message);
     }
 
-    public UserNotVerifiedException(Throwable cause) {
+    public UserNotVerifiedException(@Nullable Throwable cause) {
         super(cause);
     }
 

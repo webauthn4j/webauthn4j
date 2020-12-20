@@ -27,6 +27,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientOutputsTest {
 
     @Test
@@ -77,7 +78,7 @@ class AuthenticationExtensionsClientOutputsTest {
         assertThat(target.getCredProps()).isNull();
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
-        assertThat((Boolean)target.getValue("appid")).isTrue();
+        assertThat((Boolean) target.getValue("appid")).isTrue();
         assertThat(target.getValue("uvm")).isEqualTo(uvm);
         assertThat(target.getValue("credProps")).isNull();
         assertThat(target.getValue("unknown")).isEqualTo("data");

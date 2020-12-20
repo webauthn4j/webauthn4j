@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.webauthn4j.data.attestation.statement.TPMEccCurve.TPM_ECC_NIST_P192;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -50,9 +51,8 @@ class TPMEccCurveTest {
 
     @Test
     void create_with_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> TPMEccCurve.create(0xFFFF)
-        );
+        //noinspection ResultOfMethodCallIgnored
+        assertThatThrownBy(() -> TPMEccCurve.create(0xFFFF)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -65,6 +65,7 @@ class TPMEccCurveTest {
         assertThat(TPMEccCurve.TPM_ECC_NIST_P256.getValue()).isEqualTo(3);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"tpm_ecc_curve\":3}", TestDTO.class);

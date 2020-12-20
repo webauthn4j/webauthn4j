@@ -16,6 +16,9 @@
 
 package com.webauthn4j.data.jws;
 
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 class JWSSignatureUtil {
 
     private static final String INVALID_ECDSA_SIGNATURE_FORMAT = "Invalid ECDSA signature format";
@@ -55,7 +58,9 @@ class JWSSignatureUtil {
      * @author Vladimir Dzhuvinov
      * @author Aleksei Doroganov
      */
-    public static byte[] convertJwsSignatureToDerSignature(byte[] jwsSignature) {
+    public static @NonNull byte[] convertJwsSignatureToDerSignature(@NonNull byte[] jwsSignature) {
+
+        AssertUtil.notNull(jwsSignature, "jwsSignature must not be null");
 
         // Adapted from org.apache.xml.security.algorithms.implementations.SignatureECDSA
 
@@ -98,7 +103,8 @@ class JWSSignatureUtil {
         if (len < 128) {
             derSignature = new byte[2 + 2 + j + 2 + l];
             offset = 1;
-        } else {
+        }
+        else {
             derSignature = new byte[3 + 2 + j + 2 + l];
             derSignature[1] = (byte) 0x81;
             offset = 2;
@@ -127,7 +133,7 @@ class JWSSignatureUtil {
      * @param derSignature signature in DER format
      * @return signature in JWS format
      */
-    public static byte[] convertDerSignatureToJwsSignature(byte[] derSignature) {
+    public static @NonNull byte[] convertDerSignatureToJwsSignature(@NonNull byte[] derSignature) {
         if (derSignature.length < 8 || derSignature[0] != 48) {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
@@ -135,9 +141,11 @@ class JWSSignatureUtil {
         int offset;
         if (derSignature[1] > 0) {
             offset = 2;
-        } else if (derSignature[1] == (byte) 0x81) {
+        }
+        else if (derSignature[1] == (byte) 0x81) {
             offset = 3;
-        } else {
+        }
+        else {
             throw new JWSException(INVALID_ECDSA_SIGNATURE_FORMAT);
         }
 

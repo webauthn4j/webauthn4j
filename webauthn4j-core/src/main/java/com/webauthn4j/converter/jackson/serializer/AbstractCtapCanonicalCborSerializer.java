@@ -20,6 +20,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,14 +32,13 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
 
     private final transient List<FieldSerializationRule<T, ?>> rules;
 
-    AbstractCtapCanonicalCborSerializer(Class<T> t, List<FieldSerializationRule<T, ?>> rules) {
+    AbstractCtapCanonicalCborSerializer(@NonNull Class<T> t, @NonNull List<FieldSerializationRule<T, ?>> rules) {
         super(t);
         this.rules = rules;
     }
 
     @Override
-    public void serialize(T value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-
+    public void serialize(@NonNull T value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         List<KeyValue> nonNullValues =
                 rules.stream()
                         .map(rule -> {
@@ -51,7 +52,8 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
         for (KeyValue nonNullValue : nonNullValues) {
             if (nonNullValue.name instanceof String) {
                 gen.writeFieldName((String) nonNullValue.name);
-            } else {
+            }
+            else {
                 gen.writeFieldId((int) nonNullValue.name);
             }
             gen.writeObject(nonNullValue.value);
@@ -61,10 +63,12 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
     }
 
     private static class KeyValue {
+        @NonNull
         private final Object name;
+        @Nullable
         private final Object value;
 
-        public KeyValue(Object name, Object value) {
+        public KeyValue(@NonNull Object name, @Nullable Object value) {
             this.name = name;
             this.value = value;
         }
@@ -72,24 +76,26 @@ abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializer<T> {
 
     static class FieldSerializationRule<T, R> {
 
+        @NonNull
         private final Object name;
+        @NonNull
         private final Function<T, R> getter;
 
-        public FieldSerializationRule(int name, Function<T, R> getter) {
+        public FieldSerializationRule(int name, @NonNull Function<T, @Nullable R> getter) {
             this.name = name;
             this.getter = getter;
         }
 
-        public FieldSerializationRule(String name, Function<T, R> getter) {
+        public FieldSerializationRule(@NonNull String name, @NonNull Function<T, @Nullable R> getter) {
             this.name = name;
             this.getter = getter;
         }
 
-        public Object getName() {
+        public @NonNull Object getName() {
             return name;
         }
 
-        public Function<T, R> getGetter() {
+        public @NonNull Function<T, @NonNull R> getGetter() {
             return getter;
         }
     }

@@ -24,7 +24,6 @@ import com.webauthn4j.appattest.validator.DCRegistrationObject;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.AttestationObjectConverter;
-import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -73,13 +72,13 @@ import static com.webauthn4j.data.attestation.authenticator.AuthenticatorData.BI
 /**
  * A utility class for core module test
  */
+@SuppressWarnings("ConstantConditions")
 public class TestDataUtil {
 
     private static final ObjectConverter objectConverter;
     private static final CollectedClientDataConverter collectedClientDataConverter;
     private static final AttestationObjectConverter attestationObjectConverter;
     private static final AuthenticatorDataConverter authenticatorDataConverter;
-    private static AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter;
 
     static {
         ObjectMapper jsonMapper = new ObjectMapper();
@@ -89,7 +88,6 @@ public class TestDataUtil {
         collectedClientDataConverter = new CollectedClientDataConverter(objectConverter);
         attestationObjectConverter = new AttestationObjectConverter(objectConverter);
         authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
-        authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
     }
 
     private TestDataUtil() {
@@ -413,7 +411,8 @@ public class TestDataUtil {
             Signature signature;
             if (privateKey.getAlgorithm().equals("EC")) {
                 signature = SignatureUtil.createES256();
-            } else {
+            }
+            else {
                 signature = SignatureUtil.createRS256();
             }
             signature.initSign(privateKey);

@@ -17,8 +17,10 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.client.TokenBinding;
+import com.webauthn4j.data.client.TokenBindingStatus;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.TokenBindingException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 
@@ -30,19 +32,21 @@ class TokenBindingValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(TokenBinding clientDataTokenBinding, byte[] serverTokenBindingId) {
-        if (clientDataTokenBinding == null) {
-            // nop
-        } else {
+    public void validate(@Nullable TokenBinding clientDataTokenBinding, @Nullable byte[] serverTokenBindingId) {
+        if (clientDataTokenBinding != null) {
             byte[] clientDataTokenBindingId;
             if (clientDataTokenBinding.getId() == null) {
                 clientDataTokenBindingId = null;
-            } else {
+            }
+            else {
                 clientDataTokenBindingId = Base64UrlUtil.decode(clientDataTokenBinding.getId());
             }
-            switch (clientDataTokenBinding.getStatus()) {
+            TokenBindingStatus tokenBindingStatus = clientDataTokenBinding.getStatus();
+            if(tokenBindingStatus == null){
+                return;
+            }
+            switch (tokenBindingStatus) {
                 case NOT_SUPPORTED:
-                    break;
                 case SUPPORTED:
                     break;
                 case PRESENT:

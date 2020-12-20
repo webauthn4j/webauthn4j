@@ -5,6 +5,9 @@ import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -12,7 +15,6 @@ import java.util.Objects;
 /**
  * Internal data transfer object for authentication data
  */
-@SuppressWarnings("Duplicates")
 public class CoreAuthenticationObject {
 
     //~ Instance fields
@@ -28,12 +30,20 @@ public class CoreAuthenticationObject {
 
     @SuppressWarnings("squid:S00107")
     public CoreAuthenticationObject(
-            byte[] credentialId,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            byte[] clientDataHash,
-            CoreServerProperty serverProperty,
-            CoreAuthenticator authenticator) {
+            @NonNull byte[] credentialId,
+            @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NonNull byte[] authenticatorDataBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull CoreAuthenticator authenticator) {
+
+        AssertUtil.notNull(credentialId, "credentialId must not be null");
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+        AssertUtil.notNull(authenticatorDataBytes, "authenticatorDataBytes must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        AssertUtil.notNull(authenticator, "authenticator must not be null");
+
         this.credentialId = ArrayUtil.clone(credentialId);
         this.authenticatorData = authenticatorData;
         this.authenticatorDataBytes = ArrayUtil.clone(authenticatorDataBytes);
@@ -42,32 +52,32 @@ public class CoreAuthenticationObject {
         this.authenticator = authenticator;
     }
 
-    public byte[] getCredentialId() {
+    public @NonNull byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
-    public byte[] getAuthenticatorDataBytes() {
+    public @NonNull byte[] getAuthenticatorDataBytes() {
         return ArrayUtil.clone(authenticatorDataBytes);
     }
 
-    public byte[] getClientDataHash() {
+    public @NonNull byte[] getClientDataHash() {
         return ArrayUtil.clone(clientDataHash);
     }
 
-    public CoreServerProperty getServerProperty() {
+    public @NonNull CoreServerProperty getServerProperty() {
         return this.serverProperty;
     }
 
-    public CoreAuthenticator getAuthenticator() {
+    public @NonNull CoreAuthenticator getAuthenticator() {
         return authenticator;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreAuthenticationObject that = (CoreAuthenticationObject) o;

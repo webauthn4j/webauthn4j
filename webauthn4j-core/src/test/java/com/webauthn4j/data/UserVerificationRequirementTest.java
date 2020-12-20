@@ -23,9 +23,11 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class UserVerificationRequirementTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -35,13 +37,17 @@ class UserVerificationRequirementTest {
         assertAll(
                 () -> assertThat(UserVerificationRequirement.create("discouraged")).isEqualTo(UserVerificationRequirement.DISCOURAGED),
                 () -> assertThat(UserVerificationRequirement.create("preferred")).isEqualTo(UserVerificationRequirement.PREFERRED),
-                () -> assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED),
-                () -> assertThat(UserVerificationRequirement.create(null)).isNull()
+                () -> assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED)
         );
     }
 
     @Test
-    void create_test_with_invalid() {
+    void create_with_null_value_test() {
+        assertThatThrownBy(() -> UserVerificationRequirement.create(null)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void create_invalid_value_test() {
         assertThrows(IllegalArgumentException.class,
                 () -> UserVerificationRequirement.create("invalid")
         );

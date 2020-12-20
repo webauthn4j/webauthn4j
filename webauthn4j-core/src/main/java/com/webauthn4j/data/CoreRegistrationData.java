@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -30,26 +31,28 @@ public class CoreRegistrationData implements Serializable {
     private final byte[] clientDataHash;
 
     public CoreRegistrationData(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            byte[] clientDataHash) {
+            @Nullable AttestationObject attestationObject,
+            @Nullable byte[] attestationObjectBytes,
+            @Nullable byte[] clientDataHash) {
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = ArrayUtil.clone(attestationObjectBytes);
         this.clientDataHash = ArrayUtil.clone(clientDataHash);
     }
 
-    public AttestationObject getAttestationObject() {
+    public @Nullable AttestationObject getAttestationObject() {
         return attestationObject;
     }
 
-    public byte[] getAttestationObjectBytes() {
+    public @Nullable byte[] getAttestationObjectBytes() {
         return ArrayUtil.clone(attestationObjectBytes);
     }
 
-    public byte[] getClientDataHash(){ return ArrayUtil.clone(clientDataHash); }
+    public @Nullable byte[] getClientDataHash() {
+        return ArrayUtil.clone(clientDataHash);
+    }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreRegistrationData that = (CoreRegistrationData) o;

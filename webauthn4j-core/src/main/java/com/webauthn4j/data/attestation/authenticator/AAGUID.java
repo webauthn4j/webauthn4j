@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.UUIDUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,36 +31,38 @@ public class AAGUID implements Serializable {
 
     private final UUID value;
 
-    public AAGUID(UUID value) {
+    public AAGUID(@Nullable UUID value) {
         this.value = value;
     }
 
-    public AAGUID(byte[] value) {
+    public AAGUID(@Nullable byte[] value) {
         if (value == null) {
             this.value = null;
-        } else {
+        }
+        else {
             this.value = UUIDUtil.fromBytes(value);
         }
     }
 
-    public AAGUID(String value) {
+    public AAGUID(@Nullable String value) {
         if (value == null) {
             this.value = null;
-        } else {
+        }
+        else {
             this.value = UUIDUtil.fromString(value);
         }
     }
 
-    public UUID getValue() {
+    public @Nullable UUID getValue() {
         return value;
     }
 
-    public byte[] getBytes() {
-        return UUIDUtil.convertUUIDToBytes(value);
+    public @Nullable byte[] getBytes() {
+        return value == null ? null : UUIDUtil.convertUUIDToBytes(value);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AAGUID aaguid = (AAGUID) o;
@@ -72,7 +76,7 @@ public class AAGUID implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return String.valueOf(value);
     }
 }

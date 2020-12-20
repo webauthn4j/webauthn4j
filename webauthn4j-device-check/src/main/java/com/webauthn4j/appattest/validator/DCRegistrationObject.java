@@ -19,32 +19,52 @@ package com.webauthn4j.appattest.validator;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
 
 public class DCRegistrationObject extends CoreRegistrationObject {
 
-    private byte[] keyId;
+    private final byte[] keyId;
 
 
-    public DCRegistrationObject(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty, Instant timestamp) {
+    public DCRegistrationObject(
+            @NonNull byte[] keyId,
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull Instant timestamp) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, timestamp);
+
+        AssertUtil.notNull(keyId, "keyId must not be null");
+
         this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public DCRegistrationObject(byte[] keyId, AttestationObject attestationObject, byte[] attestationObjectBytes, byte[] clientDataHash, CoreServerProperty serverProperty) {
+    public DCRegistrationObject(
+            @NonNull byte[] keyId,
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty) {
         super(attestationObject, attestationObjectBytes, clientDataHash, serverProperty);
+
+        AssertUtil.notNull(keyId, "keyId must not be null");
+
         this.keyId = ArrayUtil.clone(keyId);
     }
 
-    public byte[] getKeyId() {
+    public @NonNull byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

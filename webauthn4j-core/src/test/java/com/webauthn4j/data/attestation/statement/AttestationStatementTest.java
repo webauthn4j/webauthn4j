@@ -27,10 +27,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AttestationStatementTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
+    @SuppressWarnings("ConstantConditions")
     @Test
-    void serialize_deserialize_with_envelope_class(){
+    void serialize_deserialize_with_envelope_class() {
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement();
         AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
         byte[] bytes = objectConverter.getCborConverter().writeValueAsBytes(envelope);
@@ -39,7 +40,7 @@ class AttestationStatementTest {
         assertThat(deserializedAttestationStatement).isEqualTo(attestationStatement);
     }
 
-    static class AttestationStatementEnvelope{
+    static class AttestationStatementEnvelope {
 
         @JsonProperty("attStmt")
         @JsonTypeInfo(
@@ -47,7 +48,7 @@ class AttestationStatementTest {
                 include = JsonTypeInfo.As.EXTERNAL_PROPERTY,
                 property = "fmt"
         )
-        private AttestationStatement attestationStatement;
+        private final AttestationStatement attestationStatement;
 
         @JsonCreator
         public AttestationStatementEnvelope(@JsonProperty("attStmt") AttestationStatement attestationStatement) {

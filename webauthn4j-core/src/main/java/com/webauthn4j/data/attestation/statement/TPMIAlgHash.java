@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public enum TPMIAlgHash {
 
@@ -35,27 +36,33 @@ public enum TPMIAlgHash {
         this.value = value;
     }
 
-    public static TPMIAlgHash create(int value) {
+    public static @NonNull TPMIAlgHash create(int value) {
         if (value == TPM_ALG_ERROR.value) {
             return TPM_ALG_ERROR;
-        } else if (value == TPM_ALG_SHA1.value) {
+        }
+        else if (value == TPM_ALG_SHA1.value) {
             return TPM_ALG_SHA1;
-        } else if (value == TPM_ALG_SHA256.value) {
+        }
+        else if (value == TPM_ALG_SHA256.value) {
             return TPM_ALG_SHA256;
-        } else if (value == TPM_ALG_SHA384.value) {
+        }
+        else if (value == TPM_ALG_SHA384.value) {
             return TPM_ALG_SHA384;
-        } else if (value == TPM_ALG_SHA512.value) {
+        }
+        else if (value == TPM_ALG_SHA512.value) {
             return TPM_ALG_SHA512;
-        } else if (value == TPM_ALG_NULL.value) {
+        }
+        else if (value == TPM_ALG_NULL.value) {
             return TPM_ALG_NULL;
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }
 
     @JsonCreator
     @SuppressWarnings("squid:S3776")
-    private static TPMIAlgHash deserialize(int value) throws InvalidFormatException {
+    private static @NonNull TPMIAlgHash deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {

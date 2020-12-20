@@ -16,7 +16,12 @@
 
 package com.webauthn4j.data.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -34,37 +39,38 @@ public class CollectedClientData implements Serializable {
     private Origin origin;
     private TokenBinding tokenBinding;
 
-    public CollectedClientData(ClientDataType type,
-                               Challenge challenge,
-                               Origin origin,
-                               TokenBinding tokenBinding) {
+    @JsonCreator
+    public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
+                               @NonNull @JsonProperty("challenge") Challenge challenge,
+                               @NonNull @JsonProperty("origin") Origin origin,
+                               @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
+        AssertUtil.notNull(type, "type must not be null");
+        AssertUtil.notNull(challenge, "challenge must not be null");
+        AssertUtil.notNull(origin, "origin must not be null");
         this.type = type;
         this.challenge = challenge;
         this.origin = origin;
         this.tokenBinding = tokenBinding;
     }
 
-    public CollectedClientData() {
-    }
-
-    public ClientDataType getType() {
+    public @NonNull ClientDataType getType() {
         return type;
     }
 
-    public Challenge getChallenge() {
+    public @NonNull Challenge getChallenge() {
         return challenge;
     }
 
-    public Origin getOrigin() {
+    public @NonNull Origin getOrigin() {
         return origin;
     }
 
-    public TokenBinding getTokenBinding() {
+    public @Nullable TokenBinding getTokenBinding() {
         return tokenBinding;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CollectedClientData that = (CollectedClientData) o;

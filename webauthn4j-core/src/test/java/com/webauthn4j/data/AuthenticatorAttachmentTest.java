@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,17 +32,20 @@ class AuthenticatorAttachmentTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @SuppressWarnings("ConstantConditions")
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(AuthenticatorAttachment.create(null)).isNull(),
                 () -> assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM),
                 () -> assertThat(AuthenticatorAttachment.create("cross-platform")).isEqualTo(AuthenticatorAttachment.CROSS_PLATFORM)
         );
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    void create_null_test() {
+        assertThatThrownBy(() -> AuthenticatorAttachment.create(null)).isInstanceOf(IllegalArgumentException.class);
+    }
+
     @Test
     void create_invalid_value_test() {
         assertThrows(IllegalArgumentException.class,
@@ -61,7 +65,7 @@ class AuthenticatorAttachmentTest {
     }
 
     @Test
-    void deserialize_test_with_invalid() throws IOException {
+    void deserialize_test_with_invalid() {
         assertThrows(InvalidFormatException.class,
                 () -> objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class)
         );

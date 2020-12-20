@@ -16,17 +16,23 @@
 
 package com.webauthn4j.converter;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Converter for {@link AttestationObject}
  */
 public class AttestationObjectConverter {
+
+    private static final String SOURCE_NULL_CHECK_MESSAGE = "source must not be null";
 
     // ~ Instance fields
     // ================================================================================================
@@ -35,7 +41,7 @@ public class AttestationObjectConverter {
     // ~ Constructors
     // ================================================================================================
 
-    public AttestationObjectConverter(ObjectConverter objectConverter) {
+    public AttestationObjectConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
     }
@@ -49,12 +55,15 @@ public class AttestationObjectConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public AttestationObject convert(String source) {
-        if (source == null) {
-            return null;
+    public @Nullable AttestationObject convert(@NonNull String source) {
+        try{
+            AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
+            byte[] value = Base64UrlUtil.decode(source);
+            return convert(value);
         }
-        byte[] value = Base64UrlUtil.decode(source);
-        return convert(value);
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -63,11 +72,14 @@ public class AttestationObjectConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public AttestationObject convert(byte[] source) {
-        if (source == null) {
-            return null;
+    public @Nullable AttestationObject convert(@NonNull byte[] source) {
+        try{
+            AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
+            return cborConverter.readValue(source, AttestationObject.class);
         }
-        return cborConverter.readValue(source, AttestationObject.class);
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -76,8 +88,14 @@ public class AttestationObjectConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public byte[] convertToBytes(AttestationObject source) {
-        return cborConverter.writeValueAsBytes(source);
+    public @NonNull byte[] convertToBytes(@NonNull AttestationObject source) {
+        try{
+            AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
+            return cborConverter.writeValueAsBytes(source);
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -86,9 +104,14 @@ public class AttestationObjectConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public String convertToBase64urlString(AttestationObject source) {
-        byte[] bytes = convertToBytes(source);
-        return Base64UrlUtil.encodeToString(bytes);
+    public @NonNull String convertToBase64urlString(@NonNull AttestationObject source) {
+        try{
+            byte[] bytes = convertToBytes(source);
+            return Base64UrlUtil.encodeToString(bytes);
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -97,8 +120,11 @@ public class AttestationObjectConverter {
      * @param attestationObject the attestationObject byte array
      * @return the extracted authenticatorData byte array
      */
-    public byte[] extractAuthenticatorData(byte[] attestationObject) {
-        return JacksonUtil.binaryValue(cborConverter.readTree(attestationObject).get("authData"));
+    public @Nullable byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) {
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
+        //noinspection ConstantConditions as attestationObject is non-null
+        JsonNode authData = cborConverter.readTree(attestationObject).get("authData");
+        return JacksonUtil.binaryValue(authData);
     }
 
     /**
@@ -107,8 +133,11 @@ public class AttestationObjectConverter {
      * @param attestationObject the attestationObject byte array
      * @return the extracted attestation statement byte array
      */
-    public byte[] extractAttestationStatement(byte[] attestationObject) {
-        return cborConverter.writeValueAsBytes(cborConverter.readTree(attestationObject).get("attStmt"));
+    public @Nullable byte[] extractAttestationStatement(@NonNull byte[] attestationObject) {
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
+        //noinspection ConstantConditions as attestationObject is non-null
+        JsonNode attStmt = cborConverter.readTree(attestationObject).get("attStmt");
+        return cborConverter.writeValueAsBytes(attStmt);
     }
 
 

@@ -58,6 +58,7 @@ class COSEKeyOperationTest {
         assertThat(COSEKeyOperation.SIGN.getValue()).isEqualTo(1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"cose_key_op\":1}", TestDTO.class);

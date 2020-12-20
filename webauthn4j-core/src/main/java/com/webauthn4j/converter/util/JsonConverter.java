@@ -21,9 +21,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,54 +42,54 @@ public class JsonConverter implements Serializable {
 
     private final ObjectMapper jsonMapper;
 
-    JsonConverter(ObjectMapper jsonMapper) {
+    JsonConverter(@NonNull ObjectMapper jsonMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
 
         this.jsonMapper = jsonMapper;
     }
 
-    public <T> T readValue(String src, Class<T> valueType) {
+    public <T> @Nullable T readValue(@NonNull String src, @NonNull Class<T> valueType) {
         try {
             return jsonMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public <T> T readValue(InputStream src, Class<T> valueType) {
+    public <T> @Nullable T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
         try {
             return jsonMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public <T> T readValue(String src, TypeReference<T> valueTypeRef) {
+    public <T> @Nullable T readValue(@NonNull String src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public <T> T readValue(InputStream src, TypeReference<T> valueTypeRef) {
+    public <T> @Nullable T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return jsonMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public byte[] writeValueAsBytes(Object value) {
+    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
@@ -94,7 +97,7 @@ public class JsonConverter implements Serializable {
         }
     }
 
-    public String writeValueAsString(Object value) {
+    public @NonNull String writeValueAsString(@Nullable Object value) {
         try {
             return jsonMapper.writeValueAsString(value);
         } catch (JsonProcessingException e) {

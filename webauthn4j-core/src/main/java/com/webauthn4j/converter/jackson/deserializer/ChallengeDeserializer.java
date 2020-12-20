@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 
@@ -38,7 +39,7 @@ public class ChallengeDeserializer extends StdDeserializer<Challenge> {
      * {@inheritDoc}
      */
     @Override
-    public Challenge deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+    public @NonNull Challenge deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
         String str = p.getValueAsString();
         try {
             return new DefaultChallenge(str);

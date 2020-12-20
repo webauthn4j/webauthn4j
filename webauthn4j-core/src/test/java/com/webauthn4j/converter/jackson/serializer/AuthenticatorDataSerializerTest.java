@@ -33,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 /**
  * Created by ynojima on 2017/08/18.
  */
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorDataSerializerTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -56,7 +57,8 @@ class AuthenticatorDataSerializerTest {
 
         //When
         byte[] result = cborConverter.writeValueAsBytes(authenticatorData);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {});
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> restored = cborConverter.readValue(result, new TypeReference<AuthenticatorData<RegistrationExtensionAuthenticatorOutput>>() {
+        });
 
         //Then
 

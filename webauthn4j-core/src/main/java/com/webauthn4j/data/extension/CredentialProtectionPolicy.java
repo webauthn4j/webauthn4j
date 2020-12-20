@@ -16,22 +16,24 @@
 
 package com.webauthn4j.data.extension;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public enum CredentialProtectionPolicy {
 
-    USER_VERIFICATION_OPTIONAL("userVerificationOptional", (byte)0x01),
-    USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST("userVerificationOptionalWithCredentialIDList", (byte)0x02),
-    USER_VERIFICATION_REQUIRED("userVerificationRequired", (byte)0x03);
+    USER_VERIFICATION_OPTIONAL("userVerificationOptional", (byte) 0x01),
+    USER_VERIFICATION_OPTIONAL_WITH_CREDENTIAL_ID_LIST("userVerificationOptionalWithCredentialIDList", (byte) 0x02),
+    USER_VERIFICATION_REQUIRED("userVerificationRequired", (byte) 0x03);
 
-    String string;
-    byte value;
+    final String string;
+    final byte value;
 
-    CredentialProtectionPolicy(String string, byte value) {
+    CredentialProtectionPolicy(@NonNull String string, @NonNull byte value) {
         this.string = string;
         this.value = value;
     }
 
-    public static CredentialProtectionPolicy create(String string) {
-        switch (string){
+    public static CredentialProtectionPolicy create(@NonNull String string) {
+        switch (string) {
             case "userVerificationOptional":
                 return USER_VERIFICATION_OPTIONAL;
             case "userVerificationOptionalWithCredentialIDList":
@@ -44,7 +46,7 @@ public enum CredentialProtectionPolicy {
     }
 
     public static CredentialProtectionPolicy create(byte value) {
-        switch (value){
+        switch (value) {
             case 0x01:
                 return USER_VERIFICATION_OPTIONAL;
             case 0x02:
@@ -57,11 +59,11 @@ public enum CredentialProtectionPolicy {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return string;
     }
 
-    public byte toByte(){
+    public byte toByte() {
         return value;
     }
 

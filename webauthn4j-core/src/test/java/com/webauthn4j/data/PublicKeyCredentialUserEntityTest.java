@@ -34,6 +34,7 @@ class PublicKeyCredentialUserEntityTest {
         );
     }
 
+    @Deprecated
     @Test
     void getter_test() {
         PublicKeyCredentialUserEntity userEntity = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
@@ -47,8 +48,8 @@ class PublicKeyCredentialUserEntityTest {
 
     @Test
     void equals_hashCode_test() {
-        PublicKeyCredentialUserEntity instanceA = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
-        PublicKeyCredentialUserEntity instanceB = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
+        PublicKeyCredentialUserEntity instanceA = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName");
+        PublicKeyCredentialUserEntity instanceB = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName");
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),

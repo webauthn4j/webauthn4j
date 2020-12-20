@@ -28,6 +28,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AttestationObjectTest {
 
     @Test
+    void getFormat_with_attestationStatement_test() {
+        AttestationObject instance = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        assertThat(instance.getFormat()).isEqualTo("fido-u2f");
+    }
+
+    @Test
     void equals_hashCode_test() {
         AttestationObject instanceA = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         AttestationObject instanceB = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();

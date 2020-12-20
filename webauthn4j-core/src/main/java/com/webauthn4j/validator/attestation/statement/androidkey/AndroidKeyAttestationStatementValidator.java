@@ -16,14 +16,19 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationType;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.PublicKeyMismatchException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -41,7 +46,9 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
     private boolean teeEnforcedOnly = true;
 
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
@@ -49,7 +56,10 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         AndroidKeyAttestationStatement attestationStatement =
                 (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
-        if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
+        validateAttestationStatementNotNull(attestationStatement);
+
+        //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
+        if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
         }
 
@@ -60,7 +70,9 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
 
         /// Verify that the public key in the first certificate in x5c matches the credentialPublicKey in the attestedCredentialData in authenticatorData.
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
-        PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
+        //noinspection ConstantConditions as null check is already done in caller
+        PublicKey publicKeyInCredentialData = authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
         if (!publicKeyInEndEntityCert.equals(publicKeyInCredentialData)) {
             throw new PublicKeyMismatchException("The public key in the first certificate in x5c doesn't matches the credentialPublicKey in the attestedCredentialData in authenticatorData.");
         }
@@ -71,15 +83,26 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         return AttestationType.BASIC;
     }
 
-    private void validateSignature(CoreRegistrationObject registrationObject) {
+    void validateAttestationStatementNotNull(AndroidKeyAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getSig() == null) {
+            throw new BadAttestationStatementException("sig must not be null.");
+        }
+    }
+
+    private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {
         AndroidKeyAttestationStatement attestationStatement = (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
+        //noinspection ConstantConditions as null check is already done in caller
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
             String jcaName;
+            //noinspection ConstantConditions as null check is already done in caller
             jcaName = getJcaName(attestationStatement.getAlg());
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
@@ -93,14 +116,16 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
     }
 
-    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
+    private @NonNull byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
     }
 
-    private PublicKey getPublicKey(AndroidKeyAttestationStatement attestationStatement) {
-        Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
+    private @NonNull PublicKey getPublicKey(@NonNull AndroidKeyAttestationStatement attestationStatement) {
+        AttestationCertificatePath x5c = attestationStatement.getX5c();
+        //noinspection ConstantConditions as null check is already done in caller
+        Certificate cert = x5c.getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }
 

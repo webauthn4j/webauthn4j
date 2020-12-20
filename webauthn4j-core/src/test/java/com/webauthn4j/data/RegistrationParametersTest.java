@@ -19,19 +19,21 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class RegistrationParametersTest {
 
     @Test
     void equals_hashCode_test() {
         // Server properties
-        Origin origin = null /* set origin */;
-        String rpId = null /* set rpId */;
-        Challenge challenge = null /* set challenge */;
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 

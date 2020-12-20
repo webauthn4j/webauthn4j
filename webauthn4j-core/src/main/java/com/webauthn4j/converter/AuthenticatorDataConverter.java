@@ -28,6 +28,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,7 +64,7 @@ public class AuthenticatorDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public AuthenticatorDataConverter(ObjectConverter objectConverter) {
+    public AuthenticatorDataConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
         this.attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
@@ -75,10 +77,10 @@ public class AuthenticatorDataConverter {
      * Converts from a {@link AuthenticatorData} to byte[].
      *
      * @param source the source object to convert
-     * @param <T> extension type
+     * @param <T>    extension type
      * @return the converted byte array
      */
-    public <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticatorData<T> source) {
+    public <T extends ExtensionAuthenticatorOutput> @NonNull byte[] convert(@NonNull AuthenticatorData<T> source) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] rpIdHash = source.getRpIdHash();
@@ -90,7 +92,11 @@ public class AuthenticatorDataConverter {
             }
             byteArrayOutputStream.write(convert(source.getExtensions()));
             return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
+        catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -102,7 +108,7 @@ public class AuthenticatorDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public <T extends ExtensionAuthenticatorOutput> AuthenticatorData<T> convert(byte[] source) {
+    public <T extends ExtensionAuthenticatorOutput> @NonNull AuthenticatorData<T> convert(@NonNull byte[] source) {
         try {
             ByteBuffer byteBuffer = ByteBuffer.wrap(source);
 
@@ -114,7 +120,7 @@ public class AuthenticatorDataConverter {
             AttestedCredentialData attestedCredentialData;
             AuthenticationExtensionsAuthenticatorOutputs<T> extensions;
             if (AuthenticatorData.checkFlagAT(flags)) {
-                if(byteBuffer.hasRemaining()){
+                if (byteBuffer.hasRemaining()) {
                     attestedCredentialData = attestedCredentialDataConverter.convert(byteBuffer);
                 }
                 else {
@@ -126,7 +132,8 @@ public class AuthenticatorDataConverter {
             }
             if (AuthenticatorData.checkFlagED(flags)) {
                 extensions = convertToExtensions(byteBuffer);
-            } else {
+            }
+            else {
                 extensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
             }
             if (byteBuffer.hasRemaining()) {
@@ -135,23 +142,13 @@ public class AuthenticatorDataConverter {
 
             return new AuthenticatorData<>(rpIdHash, flags, counter, attestedCredentialData, extensions);
 
-        } catch (BufferUnderflowException e) {
+        }
+        catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
+        catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
-    }
-
-    <T extends ExtensionAuthenticatorOutput> AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(ByteBuffer byteBuffer) {
-        if (byteBuffer.remaining() == 0) {
-            return new AuthenticationExtensionsAuthenticatorOutputs<>();
-        }
-        byte[] remaining = new byte[byteBuffer.remaining()];
-        byteBuffer.get(remaining);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>(){});
-        int leftoverLength = remaining.length - envelope.getLength();
-        byteBuffer.position(byteBuffer.position() - leftoverLength);
-        return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
     /**
@@ -160,7 +157,7 @@ public class AuthenticatorDataConverter {
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted attestedCredData byte array
      */
-    public byte[] extractAttestedCredentialData(byte[] authenticatorData) {
+    public @NonNull byte[] extractAttestedCredentialData(@NonNull byte[] authenticatorData) {
         byte[] lengthBytes = Arrays.copyOfRange(authenticatorData, L_INDEX, CREDENTIAL_ID_INDEX);
         int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         int credentialPublicKeyIndex = CREDENTIAL_ID_INDEX + credentialIdLength;
@@ -179,18 +176,38 @@ public class AuthenticatorDataConverter {
      * @param authenticatorData the authenticatorData byte array
      * @return the extracted signCount
      */
-    public long extractSignCount(byte[] authenticatorData) {
+    public long extractSignCount(@NonNull byte[] authenticatorData) {
         byte[] counterBytes = Arrays.copyOfRange(authenticatorData, COUNTER_INDEX, COUNTER_INDEX + COUNTER_LENGTH);
         return UnsignedNumberUtil.getUnsignedInt(counterBytes);
     }
 
 
-    <T extends ExtensionAuthenticatorOutput> byte[] convert(AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
+    @NonNull <T extends ExtensionAuthenticatorOutput> byte[] convert(@Nullable AuthenticationExtensionsAuthenticatorOutputs<T> extensions) {
         if (extensions == null || extensions.getKeys().isEmpty()) {
             return new byte[0];
-        } else {
+        }
+        else {
             return cborConverter.writeValueAsBytes(extensions);
         }
+    }
+
+    <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
+        // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
+        if (byteBuffer.remaining() == 0) {
+            return new AuthenticationExtensionsAuthenticatorOutputs<>();
+        }
+        byte[] remaining = new byte[byteBuffer.remaining()];
+        byteBuffer.get(remaining);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
+        AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
+                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
+                });
+        if(envelope == null){
+            return null;
+        }
+        int leftoverLength = remaining.length - envelope.getLength();
+        byteBuffer.position(byteBuffer.position() - leftoverLength);
+        return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
 

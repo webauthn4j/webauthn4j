@@ -20,11 +20,15 @@ import com.webauthn4j.data.attestation.statement.AndroidSafetyNetAttestationStat
 import com.webauthn4j.data.attestation.statement.AttestationCertificate;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.Response;
+import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.ByteBuffer;
 import java.time.Duration;
@@ -42,15 +46,19 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
     private int forwardThreshold = 0;
     private int backwardThreshold = 60;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         AndroidSafetyNetAttestationStatement attestationStatement =
                 (AndroidSafetyNetAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-
+        validateAttestationStatementNotNull(attestationStatement);
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in android safetynet attestation statement.");
         }
@@ -77,8 +85,12 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         }
 
         /// Verify that the ctsProfileMatch attribute in the payload of response is true.
-        if (!response.isCtsProfileMatch()) {
+        if (!Objects.equals(response.getCtsProfileMatch(), true)) {
             throw new BadAttestationStatementException("The profile of the device doesn't match the profile of a device that has passed Android Compatibility Test Suite.");
+        }
+
+        if (response.getTimestampMs() == null) {
+            throw new BadAttestationStatementException("timestampMs is null.");
         }
 
         // Verify the timestampMs doesn't violate backwardThreshold
@@ -99,7 +111,54 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         return AttestationType.BASIC;
     }
 
-    private void validateNonce(String nonce, byte[] authenticatorData, byte[] clientDataHash) {
+    void validateAttestationStatementNotNull(AndroidSafetyNetAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        validateJWSNotNull(attestationStatement.getResponse());
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
+    }
+
+    void validateJWSNotNull(JWS<Response> response) {
+        if (response == null) {
+            throw new BadAttestationStatementException("response must not be null.");
+        }
+        validateResponseNotNull(response.getPayload());
+    }
+
+    void validateResponseNotNull(Response response) {
+        if (response == null) {
+            throw new BadAttestationStatementException("response must not be null.");
+        }
+        if (response.getNonce() == null) {
+            throw new BadAttestationStatementException("nonce must not be null.");
+        }
+        if (response.getTimestampMs() == null) {
+            throw new BadAttestationStatementException("timeStampMs must not be null.");
+        }
+        if (response.getApkPackageName() == null) {
+            throw new BadAttestationStatementException("apkPackageName must not be null.");
+        }
+        if (response.getApkCertificateDigestSha256() == null) {
+            throw new BadAttestationStatementException("apkCertificateDigestSha256 must not be null.");
+        }
+        if (response.getApkDigestSha256() == null) {
+            throw new BadAttestationStatementException("apkDigestSha256 must not be null.");
+        }
+        if (response.getCtsProfileMatch() == null) {
+            throw new BadAttestationStatementException("ctsProfileMatch must not be null.");
+        }
+        if (response.getBasicIntegrity() == null) {
+            throw new BadAttestationStatementException("basicIntegrity must not be null.");
+        }
+    }
+
+    private void validateNonce(@Nullable String nonce, @NonNull byte[] authenticatorData, @NonNull byte[] clientDataHash) {
+        if (nonce == null) {
+            throw new BadAttestationStatementException("Nonce in the Android safetynet response is null.");
+        }
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
@@ -124,11 +183,12 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         this.backwardThreshold = backwardThreshold;
     }
 
-    public GooglePlayServiceVersionValidator getVersionValidator() {
+    public @NonNull GooglePlayServiceVersionValidator getVersionValidator() {
         return versionValidator;
     }
 
-    public void setVersionValidator(GooglePlayServiceVersionValidator versionValidator) {
+    public void setVersionValidator(@NonNull GooglePlayServiceVersionValidator versionValidator) {
+        AssertUtil.notNull(versionValidator, "versionValidator must not be null");
         this.versionValidator = versionValidator;
     }
 
@@ -137,7 +197,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         private static final int MINIMAL_VERSION = 0;
 
         @Override
-        public void validate(String version) {
+        public void validate(@NonNull String version) {
             try {
                 int versionNumber = Integer.parseInt(version);
                 if (versionNumber < MINIMAL_VERSION) {

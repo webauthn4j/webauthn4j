@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -16,7 +19,10 @@ public class JacksonUtil {
     private JacksonUtil() {
     }
 
-    public static JsonNode readTree(ObjectMapper objectMapper, byte[] bytes) {
+    public static @NonNull JsonNode readTree(@NonNull ObjectMapper objectMapper, @NonNull byte[] bytes) {
+        AssertUtil.notNull(objectMapper, "objectMapper must not be null");
+        AssertUtil.notNull(bytes, "bytes must not be null");
+
         try {
             return objectMapper.readTree(bytes);
         } catch (MismatchedInputException | JsonParseException e) {
@@ -26,9 +32,9 @@ public class JacksonUtil {
         }
     }
 
-    public static byte[] binaryValue(JsonNode jsonNode) {
+    public static @NonNull byte[] binaryValue(@Nullable JsonNode jsonNode) {
         try {
-            return jsonNode.binaryValue();
+            return jsonNode == null ? null : jsonNode.binaryValue();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

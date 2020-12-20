@@ -16,10 +16,12 @@
 
 package com.webauthn4j.validator;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 /**
  * Strategy interface to handle malicious counter value
  */
 public interface MaliciousCounterValueHandler {
 
-    void maliciousCounterValueDetected(AuthenticationObject authenticationObject);
+    void maliciousCounterValueDetected(@NonNull AuthenticationObject authenticationObject);
 }

@@ -21,6 +21,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -30,6 +31,7 @@ class AuthenticatorStatusTest {
 
     @Test
     void create_test() {
+        //noinspection ConstantConditions,ResultOfMethodCallIgnored
         assertAll(
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED),
                 () -> assertThat(AuthenticatorStatus.create("NOT_FIDO_CERTIFIED")).isEqualTo(AuthenticatorStatus.NOT_FIDO_CERTIFIED),
@@ -46,8 +48,7 @@ class AuthenticatorStatusTest {
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L2plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L2_PLUS),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3_PLUS),
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> AuthenticatorStatus.create("FIDO_CERTIFIED_L1PLUS")),
+                () -> assertThatThrownBy(() -> AuthenticatorStatus.create("FIDO_CERTIFIED_L1PLUS")).isInstanceOf(IllegalArgumentException.class),
                 () -> assertThat(AuthenticatorStatus.create(null)).isNull()
         );
     }
@@ -57,6 +58,7 @@ class AuthenticatorStatusTest {
         assertThat(AuthenticatorStatus.FIDO_CERTIFIED.getValue()).isEqualTo("FIDO_CERTIFIED");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"authenticator_status\":\"REVOKED\"}", TestDTO.class);

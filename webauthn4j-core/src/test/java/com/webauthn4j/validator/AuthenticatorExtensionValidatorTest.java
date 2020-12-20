@@ -19,6 +19,7 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import org.junit.jupiter.api.Test;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorExtensionValidatorTest {
 
     private final AuthenticatorExtensionValidator extensionValidator = new AuthenticatorExtensionValidator();

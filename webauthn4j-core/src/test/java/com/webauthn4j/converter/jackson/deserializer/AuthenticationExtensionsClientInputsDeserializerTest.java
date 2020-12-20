@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsDeserializerTest {
 
     @Test
@@ -37,7 +38,8 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                         "{ " +
                                 "\"credProps\": true " +
                                 "}",
-                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {}
+                        new TypeReference<AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput>>() {
+                        }
                 );
 
         assertAll(
@@ -54,7 +56,8 @@ class AuthenticationExtensionsClientInputsDeserializerTest {
                         "{ " +
                                 "\"appid\": \"dummy\" " +
                                 "}",
-                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {}
+                        new TypeReference<AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput>>() {
+                        }
                 );
 
         assertAll(

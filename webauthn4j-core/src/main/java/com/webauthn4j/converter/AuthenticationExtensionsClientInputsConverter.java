@@ -17,10 +17,14 @@
 package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.ExtensionClientInput;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Converter for {@link AuthenticationExtensionsClientInputs}
@@ -34,7 +38,7 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Constructors
     // ================================================================================================
 
-    public AuthenticationExtensionsClientInputsConverter(ObjectConverter objectConverter) {
+    public AuthenticationExtensionsClientInputsConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -42,19 +46,26 @@ public class AuthenticationExtensionsClientInputsConverter {
     // ~ Methods
     // ================================================================================================
 
-    public <T extends ExtensionClientInput> AuthenticationExtensionsClientInputs<T> convert(String value) {
-        if (value == null) {
-            return null;
+    public <T extends ExtensionClientInput> @Nullable AuthenticationExtensionsClientInputs<T> convert(@NonNull String value) {
+        try{
+            AssertUtil.notNull(value, "value must not be null");
+            return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {
+            });
         }
-        return jsonConverter.readValue(value, new TypeReference<AuthenticationExtensionsClientInputs<T>>() {});
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
 
-    public <T extends ExtensionClientInput> String convertToString(AuthenticationExtensionsClientInputs<T> value) {
-        if (value == null) {
-            return null;
+    public <T extends ExtensionClientInput> @NonNull String convertToString(@NonNull AuthenticationExtensionsClientInputs<T> value) {
+        try{
+            AssertUtil.notNull(value, "value must not be null");
+            return jsonConverter.writeValueAsString(value);
         }
-        return jsonConverter.writeValueAsString(value);
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
 }

@@ -27,6 +27,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class CoreAuthenticationDataValidator {
     private AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
     private CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
-    public CoreAuthenticationDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
+    public CoreAuthenticationDataValidator(@NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators) {
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 
@@ -48,7 +49,13 @@ public class CoreAuthenticationDataValidator {
         this(new ArrayList<>());
     }
 
-    protected CoreAuthenticationDataValidator(List<CustomCoreAuthenticationValidator> customAuthenticationValidators, AssertionSignatureValidator assertionSignatureValidator) {
+    protected CoreAuthenticationDataValidator(
+            @NonNull List<CustomCoreAuthenticationValidator> customAuthenticationValidators,
+            @NonNull AssertionSignatureValidator assertionSignatureValidator) {
+
+        AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
+        AssertUtil.notNull(assertionSignatureValidator, "assertionSignatureValidator must not be null");
+
         this.customAuthenticationValidators = customAuthenticationValidators;
         this.assertionSignatureValidator = assertionSignatureValidator;
     }
@@ -56,10 +63,12 @@ public class CoreAuthenticationDataValidator {
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
      */
-    public void validate(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    public void validate(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
-        BeanAssertUtil.validate(authenticationParameters);
+
+        AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
         //spec| Step1
         //spec| If the allowCredentials option was given when this authentication ceremony was initiated,
@@ -96,8 +105,6 @@ public class CoreAuthenticationDataValidator {
         CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
 
         BeanAssertUtil.validate(authenticatorData);
-        BeanAssertUtil.validate(serverProperty);
-
         validateAuthenticatorData(authenticatorData);
 
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
@@ -165,7 +172,7 @@ public class CoreAuthenticationDataValidator {
 
     }
 
-    protected CoreAuthenticationObject createCoreAuthenticationObject(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
+    protected @NonNull CoreAuthenticationObject createCoreAuthenticationObject(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
         byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
@@ -174,27 +181,29 @@ public class CoreAuthenticationDataValidator {
         CoreServerProperty serverProperty = authenticationParameters.getServerProperty();
         CoreAuthenticator authenticator = authenticationParameters.getAuthenticator();
 
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+
         return new CoreAuthenticationObject(
                 credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, authenticator
         );
     }
 
-    void validateAuthenticatorData(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
     }
 
-    public CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+    public @NonNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return coreMaliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
+    public void setMaliciousCounterValueHandler(@NonNull CoreMaliciousCounterValueHandler coreMaliciousCounterValueHandler) {
         AssertUtil.notNull(coreMaliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.coreMaliciousCounterValueHandler = coreMaliciousCounterValueHandler;
     }
 
-    public List<CustomCoreAuthenticationValidator> getCustomAuthenticationValidators() {
+    public @NonNull List<CustomCoreAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
     }
 }

@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if unexpected extension is contained
  */
 @SuppressWarnings("squid:S110")
 public class UnexpectedExtensionException extends ValidationException {
-    public UnexpectedExtensionException(String message, Throwable cause) {
+    public UnexpectedExtensionException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public UnexpectedExtensionException(String message) {
+    public UnexpectedExtensionException(@Nullable String message) {
         super(message);
     }
 
-    public UnexpectedExtensionException(Throwable cause) {
+    public UnexpectedExtensionException(@Nullable Throwable cause) {
         super(cause);
     }
 }

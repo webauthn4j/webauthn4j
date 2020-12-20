@@ -18,13 +18,11 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Data transfer object that represents relying party server property for validators
@@ -40,41 +38,36 @@ public class ServerProperty extends CoreServerProperty {
     // ~ Constructor
     // ========================================================================================================
 
-    public ServerProperty(Origin origin, String rpId, Challenge challenge, byte[] tokenBindingId) {
-        this(origin != null ? Collections.singleton(origin) : Collections.emptySet(),
-                rpId,
-                challenge, tokenBindingId);
+    public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+        super(rpId, challenge);
+        AssertUtil.notNull(origin, "origin must not be null");
+        this.origins = Collections.singleton(origin);
+        this.tokenBindingId = tokenBindingId;
     }
 
-    public ServerProperty(Collection<Origin> origins, String rpId, Challenge challenge, byte[] tokenBindingId) {
+    public ServerProperty(@NonNull Set<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
-        this.origins = (origins != null && !origins.isEmpty()) ? Collections.unmodifiableSet(new HashSet<>(origins)) : Collections.emptySet();
+        AssertUtil.notNull(origins, "origins must not be null");
+        this.origins = Collections.unmodifiableSet(origins);
         this.tokenBindingId = tokenBindingId;
+    }
+
+    /**
+     * @deprecated
+     * @param origins origins
+     * @param rpId rpId
+     * @param challenge challenge
+     * @param tokenBindingId tokenBindingId
+     */
+    @Deprecated
+    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+        this(new HashSet<>(origins), rpId, challenge, tokenBindingId);
     }
 
     // ~ Methods
     // ========================================================================================================
 
-    /**
-     * @deprecated
-     * Returns a single {@link Origin}, provided that this ServerProperty is configured with only a single origin
-     *
-     * @return the {@link Origin}
-     */
-    @Deprecated
-    public Origin getOrigin() {
-        final int originsSize = origins.size();
-        switch (originsSize){
-            case 0:
-                return null;
-            case 1:
-                return origins.iterator().next();
-            default:
-                throw new IllegalStateException("There are multiple Origins associated with this ServerProperty");
-        }
-    }
-
-    public Set<Origin> getOrigins(){
+    public @NonNull Set<Origin> getOrigins() {
         return this.origins;
     }
 
@@ -83,12 +76,12 @@ public class ServerProperty extends CoreServerProperty {
      *
      * @return the tokenBindingId
      */
-    public byte[] getTokenBindingId() {
+    public @Nullable byte[] getTokenBindingId() {
         return tokenBindingId;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

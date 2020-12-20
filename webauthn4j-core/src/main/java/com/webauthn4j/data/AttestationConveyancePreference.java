@@ -19,6 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * WebAuthn Relying Parties may use AttestationConveyancePreference to specify their preference
@@ -59,7 +61,7 @@ public enum AttestationConveyancePreference {
      * to tie registrations to specific authenticators.
      * User agents MUST NOT provide such an attestation unless the user agent or authenticator configuration permits it
      * for the requested RP ID.
-     *
+     * <p>
      * If permitted, the user agent SHOULD signal to the authenticator (at invocation time) that enterprise attestation
      * is requested, and convey the resulting AAGUID and attestation statement, unaltered, to the Relying Party.
      */
@@ -67,14 +69,12 @@ public enum AttestationConveyancePreference {
 
     private final String value;
 
-    AttestationConveyancePreference(String value) {
+    AttestationConveyancePreference(@NonNull String value) {
         this.value = value;
     }
 
-    public static AttestationConveyancePreference create(String value) {
-        if (value == null) {
-            return null;
-        }
+    public static @NonNull AttestationConveyancePreference create(@NonNull String value) {
+        AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "none":
                 return NONE;
@@ -89,8 +89,9 @@ public enum AttestationConveyancePreference {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
-    private static AttestationConveyancePreference deserialize(String value) throws InvalidFormatException {
+    private static @NonNull AttestationConveyancePreference deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -99,7 +100,7 @@ public enum AttestationConveyancePreference {
     }
 
     @JsonValue
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 

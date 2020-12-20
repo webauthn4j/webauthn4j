@@ -18,27 +18,30 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
+public class
+FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appid";
 
-    public FIDOAppIDExtensionClientInput(String appId) {
+    public FIDOAppIDExtensionClientInput(@Nullable String appId) {
         super(appId);
     }
 
     @Override
-    public String getIdentifier() {
+    public @NonNull String getIdentifier() {
         return ID;
     }
 
-    public String getAppid() {
+    public @Nullable String getAppid() {
         return getValue(ID);
     }
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

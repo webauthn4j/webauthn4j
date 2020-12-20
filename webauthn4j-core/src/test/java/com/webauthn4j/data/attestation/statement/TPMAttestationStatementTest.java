@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class TPMAttestationStatementTest {
 
     @Test
@@ -49,7 +50,7 @@ class TPMAttestationStatementTest {
 
         RegistrationObject registrationObjectA = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement source = (TPMAttestationStatement) registrationObjectA.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea());
+        TPMAttestationStatement tpmAttestationStatement = new TPMAttestationStatement(source.getAlg(), new AttestationCertificatePath(), source.getSig(), source.getCertInfo(), source.getPubArea());
         assertThrows(ConstraintViolationException.class, tpmAttestationStatement::validate);
     }
 

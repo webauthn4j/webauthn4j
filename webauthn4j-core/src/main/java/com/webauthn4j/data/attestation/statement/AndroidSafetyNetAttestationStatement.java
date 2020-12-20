@@ -18,9 +18,15 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.security.cert.CertPath;
+import java.security.cert.X509Certificate;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
 public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
@@ -32,46 +38,51 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
     @JsonCreator
     public AndroidSafetyNetAttestationStatement(
-            @JsonProperty("ver") String ver,
-            @JsonProperty("response") JWS<Response> response) {
+            @NonNull @JsonProperty("ver") String ver,
+            @NonNull @JsonProperty("response") JWS<Response> response) {
+        AssertUtil.notNull(ver, "ver must not be null");
+        AssertUtil.notNull(response, "response must not be null");
         this.ver = ver;
         this.response = response;
     }
 
     @JsonIgnore
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
     @JsonIgnore
     @Override
-    public AttestationCertificatePath getX5c() {
-        return getResponse().getHeader().getX5c();
+    public @Nullable AttestationCertificatePath getX5c() {
+        JWS<Response> res = getResponse();
+        CertPath x5c = res.getHeader().getX5c();
+        if(x5c == null){
+            return null;
+        }
+        return new AttestationCertificatePath(x5c.getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));
     }
 
     @Override
     public void validate() {
-        if (ver == null) {
-            throw new ConstraintViolationException("ver must not be null");
-        }
-        if (response == null) {
-            throw new ConstraintViolationException("response must not be null");
+        CertPath x5c = getResponse().getHeader().getX5c();
+        if (x5c == null || x5c.getCertificates().isEmpty()) {
+            throw new ConstraintViolationException("No attestation certificate is found in android safetynet attestation statement.");
         }
     }
 
     @JsonGetter("ver")
-    public String getVer() {
+    public @NonNull String getVer() {
         return ver;
     }
 
     @JsonGetter("response")
-    public JWS<Response> getResponse() {
+    public @NonNull JWS<Response> getResponse() {
         return response;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AndroidSafetyNetAttestationStatement that = (AndroidSafetyNetAttestationStatement) o;

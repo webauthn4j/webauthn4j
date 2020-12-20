@@ -19,6 +19,9 @@ package com.webauthn4j.data.client;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -46,7 +49,9 @@ public class Origin implements Serializable {
      * @deprecated this constructor will be removed before GA release.
      */
     @Deprecated
-    public Origin(String scheme, String host, int port) {
+    public Origin(@NonNull String scheme, @NonNull String host, int port) {
+        AssertUtil.notNull(scheme, "scheme must not be null");
+        AssertUtil.notNull(host, "host must not be null");
         String lowerCaseScheme = toLowerCase(scheme);
         if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
             throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
@@ -58,11 +63,8 @@ public class Origin implements Serializable {
         this.schemeSpecificPart = "//" + this.host + ":" + port;
     }
 
-    private static String toLowerCase(String s){
-        return (s!=null)? s.toLowerCase() : s;
-    }
-
-    public Origin(String originUrl) {
+    public Origin(@NonNull String originUrl) {
+        AssertUtil.notNull(originUrl, "originUrl must not be null");
         URI uri = URI.create(originUrl);
 
         //https://www.ietf.org/rfc/rfc1738.txt  section 2.1
@@ -73,7 +75,7 @@ public class Origin implements Serializable {
         //lowercase.
 
         this.scheme = toLowerCase(uri.getScheme());
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             //https://tools.ietf.org/html/rfc3986#section-3.2.2 , host component is case insensitive
             this.host = toLowerCase(uri.getHost());
             int originPort = uri.getPort();
@@ -93,7 +95,7 @@ public class Origin implements Serializable {
             //https://tools.ietf.org/html/rfc2396#section-3
             this.port = originPort;
             String schemeSpecificPartStr = "//" + this.host;
-            if (explicitPortNotation){
+            if (explicitPortNotation) {
                 schemeSpecificPartStr += ":" + this.port;
             }
             this.schemeSpecificPart = schemeSpecificPartStr;
@@ -105,7 +107,7 @@ public class Origin implements Serializable {
         }
     }
 
-    public static Origin create(String value) {
+    public static @NonNull Origin create(@NonNull String value) {
         try {
             return new Origin(value);
         } catch (NullPointerException e) {
@@ -113,8 +115,9 @@ public class Origin implements Serializable {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
-    private static Origin deserialize(String value) throws InvalidFormatException {
+    private static @NonNull Origin deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -122,30 +125,34 @@ public class Origin implements Serializable {
         }
     }
 
-    public String getScheme() {
+    private static @Nullable String toLowerCase(@Nullable String s) {
+        return s == null ? null : s.toLowerCase();
+    }
+
+    public @NonNull String getScheme() {
         return scheme;
     }
 
-    public String getHost() {
+    public @Nullable String getHost() {
         return host;
     }
 
-    public Integer getPort() {
+    public @Nullable Integer getPort() {
         return port;
     }
 
-    public String getSchemeSpecificPart() {
+    public @NonNull String getSchemeSpecificPart() {
         return schemeSpecificPart;
     }
 
     @JsonValue
     @Override
-    public String toString() {
-        if(this.scheme == null){
+    public @NonNull String toString() {
+        if (this.scheme == null) {
             return this.schemeSpecificPart;
         }
         String result;
-        switch (this.scheme){
+        switch (this.scheme) {
             case SCHEME_HTTPS:
             case SCHEME_HTTP:
                 result = this.scheme + "://" + this.host;
@@ -159,12 +166,12 @@ public class Origin implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         // explicitPortNotation is not taken into count
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Origin origin = (Origin) o;
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             return Objects.equals(scheme, origin.scheme) &&
                     Objects.equals(host, origin.host) &&
                     Objects.equals(port, origin.port);
@@ -175,15 +182,15 @@ public class Origin implements Serializable {
         }
     }
 
-
     @Override
     public int hashCode() {
         // explicitPortNotation is not taken into count
-        if(SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)){
+        if (SCHEME_HTTPS.equals(this.scheme) || SCHEME_HTTP.equals(this.scheme)) {
             return Objects.hash(scheme, host, port);
         }
         else {
             return Objects.hash(scheme, schemeSpecificPart);
         }
     }
+
 }

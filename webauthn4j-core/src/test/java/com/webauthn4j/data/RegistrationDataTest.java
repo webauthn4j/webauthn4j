@@ -20,15 +20,38 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
+import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("ConstantConditions")
 class RegistrationDataTest {
+
+    @Test
+    void constructor_RegistrationParameters_test() {
+        RegistrationParameters registrationParameters = new RegistrationParameters(
+                TestDataUtil.createServerProperty(),
+                true
+        );
+        assertThat(registrationParameters.getServerProperty()).isInstanceOf(ServerProperty.class);
+        assertThat(registrationParameters.isUserPresenceRequired()).isTrue();
+        assertThat(registrationParameters.isUserVerificationRequired()).isTrue();
+    }
+
+    @Test
+    void constructor_with_serverProperty_null_test() {
+        assertThatThrownBy(() -> new RegistrationParameters(
+                null,
+                true
+        )).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void equals_hashCode_test() {

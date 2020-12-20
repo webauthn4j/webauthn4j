@@ -21,7 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -40,42 +43,37 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
 
     @JsonCreator
     public FIDOU2FAttestationStatement(
-            @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @JsonProperty("sig") byte[] sig) {
+            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NonNull @JsonProperty("sig") byte[] sig) {
+        AssertUtil.notNull(x5c, "x5c must not be null");
+        AssertUtil.notNull(sig, "sig must not be null");
         this.x5c = x5c;
         this.sig = sig;
     }
 
     @Override
-    public AttestationCertificatePath getX5c() {
+    public @NonNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
-    public byte[] getSig() {
+    public @NonNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
     @Override
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return FORMAT;
     }
 
     @Override
     public void validate() {
-        if (x5c == null) {
-            throw new ConstraintViolationException("x5c must not be null");
-        }
         if (x5c.size() != 1) {
             throw new ConstraintViolationException("x5c must have exactly one certificate");
-        }
-
-        if (sig == null) {
-            throw new ConstraintViolationException("sig must not be null");
         }
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FIDOU2FAttestationStatement that = (FIDOU2FAttestationStatement) o;

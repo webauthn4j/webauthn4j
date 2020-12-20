@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.UnsignedNumberUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -30,14 +32,14 @@ public class TPMSClockInfo implements Serializable {
     private final long restartCount;
     private final boolean safe;
 
-    public TPMSClockInfo(BigInteger clock, long resetCount, long restartCount, boolean safe) {
+    public TPMSClockInfo(@NonNull BigInteger clock, long resetCount, long restartCount, boolean safe) {
         this.clock = clock;
         this.resetCount = resetCount;
         this.restartCount = restartCount;
         this.safe = safe;
     }
 
-    public BigInteger getClock() {
+    public @NonNull BigInteger getClock() {
         return clock;
     }
 
@@ -54,7 +56,7 @@ public class TPMSClockInfo implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMSClockInfo that = (TPMSClockInfo) o;

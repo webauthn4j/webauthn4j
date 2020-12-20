@@ -24,9 +24,11 @@ import com.webauthn4j.data.CoreAuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreAuthenticationDataValidator;
 import com.webauthn4j.validator.CoreAuthenticationObject;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 
@@ -37,7 +39,11 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
     }
 
     @Override
-    protected CoreAuthenticationObject createCoreAuthenticationObject(CoreAuthenticationData authenticationData, CoreAuthenticationParameters authenticationParameters) {
+    protected @NonNull CoreAuthenticationObject createCoreAuthenticationObject(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
+
+        AssertUtil.notNull(authenticationData, "authenticationData must not be null");
+        AssertUtil.notNull(authenticationData, "authenticationParameters must not be null");
+
         byte[] credentialId = authenticationData.getCredentialId();
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticationData.getAuthenticatorData();
         byte[] authenticatorDataBytes = authenticationData.getAuthenticatorDataBytes();
@@ -51,6 +57,7 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
                 authenticator.getCounter(),
                 authenticator.getAuthenticatorExtensions());
 
+        //noinspection ConstantConditions null check is already done in caller
         return new DCAuthenticationObject(
                 credentialId, authenticatorData, authenticatorDataBytes, clientDataHash, serverProperty, dcAppleDevice
         );

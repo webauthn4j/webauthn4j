@@ -17,6 +17,9 @@
 package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,7 +29,8 @@ public class CoreServerProperty implements Serializable {
     private final String rpId;
     private final Challenge challenge;
 
-    public CoreServerProperty(String rpId, Challenge challenge) {
+    public CoreServerProperty(@NonNull String rpId, @Nullable Challenge challenge) {
+        AssertUtil.notNull(rpId, "rpId must not be null");
         this.rpId = rpId;
         this.challenge = challenge;
     }
@@ -36,7 +40,7 @@ public class CoreServerProperty implements Serializable {
      *
      * @return the rpId
      */
-    public String getRpId() {
+    public @NonNull String getRpId() {
         return rpId;
     }
 
@@ -45,12 +49,12 @@ public class CoreServerProperty implements Serializable {
      *
      * @return the {@link Challenge}
      */
-    public Challenge getChallenge() {
+    public @Nullable Challenge getChallenge() {
         return challenge;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreServerProperty that = (CoreServerProperty) o;

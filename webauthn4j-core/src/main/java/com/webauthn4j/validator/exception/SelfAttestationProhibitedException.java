@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if self attestation is specified while prohibited
  */
 @SuppressWarnings("squid:S110")
 public class SelfAttestationProhibitedException extends ValidationException {
-    public SelfAttestationProhibitedException(String message, Throwable cause) {
+    public SelfAttestationProhibitedException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public SelfAttestationProhibitedException(String message) {
+    public SelfAttestationProhibitedException(@Nullable String message) {
         super(message);
     }
 
-    public SelfAttestationProhibitedException(Throwable cause) {
+    public SelfAttestationProhibitedException(@Nullable Throwable cause) {
         super(cause);
     }
 }

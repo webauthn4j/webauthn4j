@@ -44,6 +44,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class CustomRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -74,7 +75,7 @@ class CustomRegistrationValidationTest {
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );

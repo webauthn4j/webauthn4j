@@ -16,6 +16,10 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -37,24 +41,29 @@ public abstract class PublicKeyCredentialEntity implements Serializable {
     // ~ Constructor
     // ========================================================================================================
 
-    protected PublicKeyCredentialEntity(String name, String icon) {
+    /**
+     * @deprecated icon member is no longer available in WebAuthn Level2
+     * @param name name
+     * @param icon icon
+     */
+    @Deprecated
+    protected PublicKeyCredentialEntity(@NonNull String name, @Nullable String icon) {
+        AssertUtil.notNull(name, "name must not be null");
         this.name = name;
         this.icon = icon;
     }
 
-    protected PublicKeyCredentialEntity(String name) {
+    protected PublicKeyCredentialEntity(@NonNull String name) {
+        AssertUtil.notNull(name, "name must not be null");
         this.name = name;
         this.icon = null;
     }
 
-    protected PublicKeyCredentialEntity() {
-    }
-
-    public String getName() {
+    public @NonNull String getName() {
         return name;
     }
 
-    public String getIcon() {
+    public @Nullable String getIcon() {
         return icon;
     }
 

@@ -16,10 +16,15 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,12 +49,14 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     private final UserVerificationRequirement userVerification;
     private final AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions;
 
-    public PublicKeyCredentialRequestOptions(Challenge challenge,
-                                             Long timeout,
-                                             String rpId,
-                                             List<PublicKeyCredentialDescriptor> allowCredentials,
-                                             UserVerificationRequirement userVerification,
-                                             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
+    @JsonCreator
+    public PublicKeyCredentialRequestOptions(@NonNull @JsonProperty("challenge") Challenge challenge,
+                                             @Nullable @JsonProperty("timeout") Long timeout,
+                                             @Nullable @JsonProperty("rpId") String rpId,
+                                             @Nullable @JsonProperty("allowCredentials") List<PublicKeyCredentialDescriptor> allowCredentials,
+                                             @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification,
+                                             @Nullable @JsonProperty("extensions") AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> extensions) {
+        AssertUtil.notNull(challenge, "challenge must not be null");
         this.challenge = challenge;
         this.timeout = timeout;
         this.rpId = rpId;
@@ -58,32 +65,32 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         this.extensions = extensions;
     }
 
-    public Challenge getChallenge() {
+    public @NonNull Challenge getChallenge() {
         return challenge;
     }
 
-    public Long getTimeout() {
+    public @Nullable Long getTimeout() {
         return timeout;
     }
 
-    public String getRpId() {
+    public @Nullable String getRpId() {
         return rpId;
     }
 
-    public List<PublicKeyCredentialDescriptor> getAllowCredentials() {
+    public @Nullable List<PublicKeyCredentialDescriptor> getAllowCredentials() {
         return allowCredentials;
     }
 
-    public UserVerificationRequirement getUserVerification() {
+    public @Nullable UserVerificationRequirement getUserVerification() {
         return userVerification;
     }
 
-    public AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
+    public @Nullable AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> getExtensions() {
         return extensions;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialRequestOptions that = (PublicKeyCredentialRequestOptions) o;

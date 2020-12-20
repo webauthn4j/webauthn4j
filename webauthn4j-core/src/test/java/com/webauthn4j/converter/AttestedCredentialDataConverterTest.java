@@ -16,12 +16,16 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.util.Base64UrlUtil;
 import org.junit.jupiter.api.Test;
 
+import java.nio.ByteBuffer;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AttestedCredentialDataConverterTest {
 
@@ -36,9 +40,17 @@ class AttestedCredentialDataConverterTest {
         //When
         AttestedCredentialData attestedCredentialData = target.convert(Base64UrlUtil.decode(input));
 
+        //noinspection ConstantConditions
         assertThat(attestedCredentialData.getAaguid().getBytes()).isEqualTo(Base64UrlUtil.decode("VQ5LVKpHQJ-alRq3bBMBMQ"));
         assertThat(attestedCredentialData.getCredentialId()).isEqualTo(Base64UrlUtil.decode("cSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCA"));
 
+    }
+
+    @Test
+    void convert_null_test(){
+        assertThatThrownBy(()-> target.convert((AttestedCredentialData) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(()-> target.convert((ByteBuffer) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(()-> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

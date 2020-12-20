@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +42,13 @@ public abstract class AbstractCOSEKey implements COSEKey {
     @JsonProperty("5")
     private final byte[] baseIV;
 
+    @SuppressWarnings("SameParameterValue")
     @JsonCreator
     AbstractCOSEKey(
-            @JsonProperty("2") byte[] keyId,
-            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOps,
-            @JsonProperty("5") byte[] baseIV
+            @Nullable @JsonProperty("2") byte[] keyId,
+            @Nullable @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @Nullable @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @Nullable @JsonProperty("5") byte[] baseIV
     ) {
         this.keyId = keyId;
         this.algorithm = algorithm;
@@ -55,26 +57,26 @@ public abstract class AbstractCOSEKey implements COSEKey {
     }
 
     @JsonProperty("1")
-    public abstract COSEKeyType getKeyType();
+    public abstract @Nullable COSEKeyType getKeyType();
 
-    public byte[] getKeyId() {
+    public @Nullable byte[] getKeyId() {
         return ArrayUtil.clone(keyId);
     }
 
-    public COSEAlgorithmIdentifier getAlgorithm() {
+    public @Nullable COSEAlgorithmIdentifier getAlgorithm() {
         return algorithm;
     }
 
-    public List<COSEKeyOperation> getKeyOps() {
+    public @Nullable List<COSEKeyOperation> getKeyOps() {
         return keyOps;
     }
 
-    public byte[] getBaseIV() {
+    public @Nullable byte[] getBaseIV() {
         return ArrayUtil.clone(baseIV);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractCOSEKey that = (AbstractCOSEKey) o;

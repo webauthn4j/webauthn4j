@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.jws.JWS;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public class JWSSerializer extends StdSerializer<JWS<? extends Serializable>> {
     }
 
     @Override
-    public void serialize(JWS<? extends Serializable> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull JWS<? extends Serializable> value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeBinary(value.getBytes());
     }
 }

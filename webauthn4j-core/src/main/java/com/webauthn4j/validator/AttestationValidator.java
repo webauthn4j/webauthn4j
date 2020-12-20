@@ -22,11 +22,13 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.attestation.statement.AttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,18 +52,22 @@ class AttestationValidator {
     // ========================================================================================================
 
     AttestationValidator(
-            List<AttestationStatementValidator> attestationStatementValidators,
-            CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
+            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
-        this.attestationStatementValidators = attestationStatementValidators;
+        AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
+        AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
+        AssertUtil.notNull(selfAttestationTrustworthinessValidator, "selfAttestationTrustworthinessValidator must not be null");
 
+        this.attestationStatementValidators = attestationStatementValidators;
         this.certPathTrustworthinessValidator = certPathTrustworthinessValidator;
         this.selfAttestationTrustworthinessValidator = selfAttestationTrustworthinessValidator;
     }
 
 
-    public void validate(CoreRegistrationObject registrationObject) {
+    public void validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
@@ -96,7 +102,8 @@ class AttestationValidator {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
                     selfAttestationTrustworthinessValidator.validate(certificateBaseAttestationStatement);
-                } else {
+                }
+                else {
                     throw new IllegalStateException();
                 }
                 break;
@@ -108,9 +115,12 @@ class AttestationValidator {
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
                             (CertificateBaseAttestationStatement) attestationStatement;
+                    //noinspection ConstantConditions as null check is already done in caller
                     AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
+                    //noinspection ConstantConditions as null check is already done in caller
                     certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement, registrationObject.getTimestamp());
-                } else {
+                }
+                else {
                     throw new IllegalStateException();
                 }
                 break;
@@ -123,8 +133,9 @@ class AttestationValidator {
 
     }
 
-    void validateAAGUID(AttestationObject attestationObject) {
+    void validateAAGUID(@NonNull AttestationObject attestationObject) {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
+            //noinspection ConstantConditions as null check is already done in caller
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
             if (!Objects.equals(aaguid, U2F_AAGUID)) {
                 throw new BadAaguidException("AAGUID is expected to be zero filled in U2F attestation, but it isn't.");
@@ -132,7 +143,7 @@ class AttestationValidator {
         }
     }
 
-    private AttestationType validateAttestationStatement(CoreRegistrationObject registrationObject) {
+    private @NonNull AttestationType validateAttestationStatement(@NonNull CoreRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 return validator.validate(registrationObject);

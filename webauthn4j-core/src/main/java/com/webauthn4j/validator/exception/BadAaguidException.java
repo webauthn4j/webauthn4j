@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad aaguid is detected
  */
 @SuppressWarnings("squid:S110")
 public class BadAaguidException extends ValidationException {
-    public BadAaguidException(String message, Throwable cause) {
+    public BadAaguidException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadAaguidException(String message) {
+    public BadAaguidException(@Nullable String message) {
         super(message);
     }
 
-    public BadAaguidException(Throwable cause) {
+    public BadAaguidException(@Nullable Throwable cause) {
         super(cause);
     }
 }

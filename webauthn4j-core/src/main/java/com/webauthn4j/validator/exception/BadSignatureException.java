@@ -17,20 +17,22 @@
 package com.webauthn4j.validator.exception;
 
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad signature is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadSignatureException extends ValidationException {
-    public BadSignatureException(String message, Throwable cause) {
+    public BadSignatureException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadSignatureException(String message) {
+    public BadSignatureException(@Nullable String message) {
         super(message);
     }
 
-    public BadSignatureException(Throwable cause) {
+    public BadSignatureException(@Nullable Throwable cause) {
         super(cause);
     }
 }

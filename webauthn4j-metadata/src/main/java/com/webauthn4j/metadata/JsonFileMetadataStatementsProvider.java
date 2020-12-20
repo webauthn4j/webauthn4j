@@ -33,9 +33,9 @@ import java.util.stream.Collectors;
 public class JsonFileMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private final JsonConverter jsonConverter;
-    private List<Path> paths = Collections.emptyList();
-    private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
     private final MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
+    private final List<Path> paths;
+    private Map<AAGUID, Set<MetadataStatement>> cachedMetadataItems;
 
     public JsonFileMetadataStatementsProvider(ObjectConverter objectConverter, List<Path> paths) {
         this.jsonConverter = objectConverter.getJsonConverter();

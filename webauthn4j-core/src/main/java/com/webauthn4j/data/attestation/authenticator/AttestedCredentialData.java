@@ -17,6 +17,9 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -37,32 +40,38 @@ public class AttestedCredentialData implements Serializable {
 
     private final COSEKey coseKey;
 
-    public AttestedCredentialData(AAGUID aaguid, byte[] credentialId, COSEKey coseKey) {
+    public AttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
+        AssertUtil.notNull(credentialId, "credentialId must not be null");
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
         this.aaguid = aaguid;
         this.credentialId = credentialId;
         this.coseKey = coseKey;
     }
 
-    public AttestedCredentialData() {
-        this.aaguid = null;
-        this.credentialId = null;
-        this.coseKey = null;
+    /**
+     * Default constructor for JPA
+     */
+    private AttestedCredentialData(){
+        aaguid = null;
+        credentialId = null;
+        coseKey =null;
     }
 
-    public AAGUID getAaguid() {
+    public @NonNull AAGUID getAaguid() {
         return aaguid;
     }
 
-    public byte[] getCredentialId() {
+    public @NonNull byte[] getCredentialId() {
         return ArrayUtil.clone(credentialId);
     }
 
-    public COSEKey getCOSEKey() {
+    public @NonNull COSEKey getCOSEKey() {
         return coseKey;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttestedCredentialData that = (AttestedCredentialData) o;

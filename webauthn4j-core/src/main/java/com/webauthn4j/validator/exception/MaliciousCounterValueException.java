@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if the counter value is lower than expected value
  */
 @SuppressWarnings("squid:S110")
 public class MaliciousCounterValueException extends ValidationException {
-    public MaliciousCounterValueException(String message) {
+    public MaliciousCounterValueException(@Nullable String message) {
         super(message);
     }
 
-    public MaliciousCounterValueException(String message, Throwable cause) {
+    public MaliciousCounterValueException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public MaliciousCounterValueException(Throwable cause) {
+    public MaliciousCounterValueException(@Nullable Throwable cause) {
         super(cause);
     }
 

@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data.client.challenge;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.Serializable;
 
 public interface Challenge extends Serializable {
@@ -25,6 +27,6 @@ public interface Challenge extends Serializable {
      *
      * @return the challenge value
      */
-    byte[] getValue();
+    @NonNull byte[] getValue();
 
 }

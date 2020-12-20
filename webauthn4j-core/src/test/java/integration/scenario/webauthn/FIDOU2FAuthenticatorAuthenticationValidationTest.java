@@ -46,16 +46,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
 
     private final Origin origin = new Origin("http://example.com");
-    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
     private final WebAuthnManager target = WebAuthnManager.createNonStrictWebAuthnManager(objectConverter);
-
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
+    private ClientPlatform clientPlatform = new ClientPlatform(origin, new FIDOU2FAuthenticatorAdaptor());
 
     @Test
     void validate_test() {
@@ -518,7 +518,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );

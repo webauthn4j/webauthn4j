@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if bad algorithm is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadAlgorithmException extends ValidationException {
-    public BadAlgorithmException(String message, Throwable cause) {
+    public BadAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadAlgorithmException(String message) {
+    public BadAlgorithmException(@Nullable String message) {
         super(message);
     }
 
-    public BadAlgorithmException(Throwable cause) {
+    public BadAlgorithmException(@Nullable Throwable cause) {
         super(cause);
     }
 }

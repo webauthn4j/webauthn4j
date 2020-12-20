@@ -18,15 +18,22 @@ package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Null validator for {@link FIDOU2FAttestationStatement}
  */
 public class NullFIDOU2FAttestationStatementValidator extends AbstractStatementValidator<FIDOU2FAttestationStatement> {
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
+        if (!supports(registrationObject)) {
+            throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
+        }
+
         return AttestationType.NONE;
     }
 }

@@ -18,28 +18,28 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
+@SuppressWarnings("ConstantConditions")
 class AppleAnonymousAttestationStatementTest {
 
     @Test
-    void validate(){
+    void constructor_x5c_null() {
+        assertThatThrownBy(()->new AppleAnonymousAttestationStatement(null)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void validate() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         assertThatCode(instance::validate).doesNotThrowAnyException();
     }
 
-    @Test
-    void validate_x5c_null_instance(){
-        AppleAnonymousAttestationStatement instance = new AppleAnonymousAttestationStatement(null);
-        assertThatThrownBy(instance::validate).isInstanceOf(ConstraintViolationException.class);
-    }
 
     @Test
-    void getter_test(){
+    void getter_test() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAppleAttestation();
         AppleAnonymousAttestationStatement instance = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 

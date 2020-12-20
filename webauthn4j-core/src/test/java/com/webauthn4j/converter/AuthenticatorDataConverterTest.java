@@ -38,9 +38,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for AuthenticatorDataConverter
  */
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorDataConverterTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
+    private final ObjectConverter objectConverter = new ObjectConverter();
 
     @Test
     void convert_test() {
@@ -61,7 +62,7 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
-    void convert_apple_app_attest_authenticatorData(){
+    void convert_apple_app_attest_authenticatorData() {
         byte[] authenticatorDataBytes = Base64UrlUtil.decode("MGACygVeBsWIpS7GqlSC9TaOAq8wh7Hp0wnQQMr12VpAAAAAAQ");
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
@@ -85,6 +86,7 @@ class AuthenticatorDataConverterTest {
     void serialize_deserialize_test() {
         //Given
         byte[] rpIdHash = new byte[32];
+        //noinspection UnnecessaryLocalVariable
         byte flags = BIT_ED;
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.setUvm(new UvmEntries());
@@ -118,10 +120,18 @@ class AuthenticatorDataConverterTest {
     }
 
     @Test
-    void convertToExtensions_with_0_length_ByteBuffer_test(){
+    void convertToExtensions_with_0_length_ByteBuffer_test() {
         AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
         AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.allocate(0));
         assertThat(extensions.getKeys()).isEmpty();
+    }
+
+    @Test
+    void convertToExtensions_with_cbor_null_ByteBuffer_test() {
+        byte[] data = new byte[]{(byte)0xF6};
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AuthenticationExtensionsAuthenticatorOutputs<?> extensions = authenticatorDataConverter.convertToExtensions(ByteBuffer.wrap(data));
+        assertThat(extensions).isNull();
     }
 
     @Test

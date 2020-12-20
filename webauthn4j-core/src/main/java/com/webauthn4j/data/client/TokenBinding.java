@@ -16,7 +16,12 @@
 
 package com.webauthn4j.data.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,31 +35,35 @@ import java.util.Objects;
  */
 public class TokenBinding implements Serializable {
 
-    private TokenBindingStatus status;
-    private String id;
+    private @NonNull TokenBindingStatus status;
+    private @Nullable String id;
 
-    public TokenBinding(TokenBindingStatus status, String id) {
+    @JsonCreator
+    public TokenBinding(
+            @NonNull @JsonProperty("status") TokenBindingStatus status,
+            @Nullable @JsonProperty("id") String id) {
+        AssertUtil.notNull(status, "status must not be null");
         this.status = status;
         this.id = id;
     }
 
-    public TokenBinding(TokenBindingStatus status, byte[] id) {
+    public TokenBinding(@NonNull TokenBindingStatus status, @Nullable byte[] id) {
+        AssertUtil.notNull(status, "status must not be null");
         this.status = status;
         if (id == null) {
             this.id = null;
-        } else {
+        }
+        else {
             this.id = Base64UrlUtil.encodeToString(id);
         }
     }
 
-    public TokenBinding() {
-    }
 
-    public TokenBindingStatus getStatus() {
+    public @Nullable TokenBindingStatus getStatus() {
         return status;
     }
 
-    public String getId() {
+    public @Nullable String getId() {
         return id;
     }
 

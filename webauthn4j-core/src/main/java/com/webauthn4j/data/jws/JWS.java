@@ -19,6 +19,7 @@ package com.webauthn4j.data.jws;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ public class JWS<T extends Serializable> implements Serializable {
     private final String headerString;
     private final String payloadString;
 
-    JWS(JWSHeader header, String headerString, T payload, String payloadString, byte[] signature) {
+    JWS(@NonNull JWSHeader header, @NonNull String headerString, @NonNull T payload, @NonNull String payloadString, @NonNull byte[] signature) {
         logger = LoggerFactory.getLogger(JWS.class);
 
         this.header = header;
@@ -51,15 +52,15 @@ public class JWS<T extends Serializable> implements Serializable {
         this.payloadString = payloadString;
     }
 
-    public JWSHeader getHeader() {
+    public @NonNull JWSHeader getHeader() {
         return header;
     }
 
-    public T getPayload() {
+    public @NonNull T getPayload() {
         return payload;
     }
 
-    public byte[] getSignature() {
+    public @NonNull byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 
@@ -71,14 +72,18 @@ public class JWS<T extends Serializable> implements Serializable {
     public boolean isValidSignature() {
         String signedData = headerString + "." + payloadString;
         try {
+            if (header.getAlg() == null || header.getX5c() == null || header.getX5c().getCertificates().isEmpty()) {
+                return false;
+            }
             Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());
-            PublicKey publicKey = header.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
+            PublicKey publicKey = header.getX5c().getCertificates().get(0).getPublicKey();
             signatureObj.initVerify(publicKey);
             signatureObj.update(signedData.getBytes());
             byte[] sig;
             if (publicKey instanceof ECPublicKey) {
                 sig = JWSSignatureUtil.convertJwsSignatureToDerSignature(signature);
-            } else {
+            }
+            else {
                 sig = signature;
             }
             return signatureObj.verify(sig);
@@ -88,12 +93,12 @@ public class JWS<T extends Serializable> implements Serializable {
         }
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         return toString().getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return headerString + "." + payloadString + "." + Base64UrlUtil.encodeToString(signature);
     }
 

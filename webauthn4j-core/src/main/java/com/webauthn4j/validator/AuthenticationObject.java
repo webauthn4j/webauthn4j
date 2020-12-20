@@ -8,7 +8,10 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -16,8 +19,7 @@ import java.util.Objects;
 /**
  * Internal data transfer object for authentication data
  */
-@SuppressWarnings("Duplicates")
-public class AuthenticationObject extends CoreAuthenticationObject{
+public class AuthenticationObject extends CoreAuthenticationObject {
 
     //~ Instance fields
     // ================================================================================================
@@ -28,46 +30,49 @@ public class AuthenticationObject extends CoreAuthenticationObject{
 
     @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
-            byte[] credentialId,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
-            ServerProperty serverProperty,
-            Authenticator authenticator) {
+            @NonNull byte[] credentialId,
+            @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NonNull byte[] authenticatorDataBytes,
+            @NonNull CollectedClientData collectedClientData,
+            @NonNull byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
+            @NonNull ServerProperty serverProperty,
+            @NonNull Authenticator authenticator) {
 
         super(credentialId, authenticatorData, authenticatorDataBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, authenticator);
+
+        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
+        AssertUtil.notNull(collectedClientDataBytes, "collectedClientDataBytes must not be null");
 
         this.collectedClientData = collectedClientData;
         this.collectedClientDataBytes = ArrayUtil.clone(collectedClientDataBytes);
         this.clientExtensions = clientExtensions;
     }
 
-    public CollectedClientData getCollectedClientData() {
+    public @NonNull CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getCollectedClientDataBytes() {
+    public @NonNull byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return this.clientExtensions;
     }
 
     @Override
-    public ServerProperty getServerProperty() {
+    public @NonNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
     @Override
-    public Authenticator getAuthenticator() {
+    public @NonNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

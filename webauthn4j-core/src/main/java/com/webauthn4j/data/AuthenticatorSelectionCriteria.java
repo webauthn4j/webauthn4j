@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     private final AuthenticatorAttachment authenticatorAttachment;
 
     @SuppressWarnings("UnusedAssignment")
-    private boolean requireResidentKey = false;
+    private Boolean requireResidentKey = null;
 
     private ResidentKeyRequirement residentKey = null;
 
@@ -46,17 +47,18 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     /**
      * Constructor for Jackson deserializer
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param requireResidentKey This describes resident key requirement if residentKey member is absent.
-     * @param residentKey relying party's requirement for resident-key
-     * @param userVerification relying party's requirement for user verification
+     * @param requireResidentKey      This describes resident key requirement if residentKey member is absent.
+     * @param residentKey             relying party's requirement for resident-key
+     * @param userVerification        relying party's requirement for user verification
      */
     @JsonCreator
     public AuthenticatorSelectionCriteria(
-            @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
-            @JsonProperty("requireResidentKey") boolean requireResidentKey,
-            @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
-            @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
+            @Nullable @JsonProperty("authenticatorAttachment") AuthenticatorAttachment authenticatorAttachment,
+            @Nullable @JsonProperty("requireResidentKey") Boolean requireResidentKey,
+            @Nullable @JsonProperty("residentKey") ResidentKeyRequirement residentKey,
+            @Nullable @JsonProperty("userVerification") UserVerificationRequirement userVerification) {
         this.authenticatorAttachment = authenticatorAttachment;
         this.requireResidentKey = requireResidentKey;
         this.residentKey = residentKey;
@@ -65,43 +67,45 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     /**
      * Constructor for WebAuthn Level2 spec
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param residentKey relying party's requirement for resident-key
-     * @param userVerification relying party's requirement for user verification
+     * @param residentKey             relying party's requirement for resident-key
+     * @param userVerification        relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
-            AuthenticatorAttachment authenticatorAttachment,
-            ResidentKeyRequirement residentKey,
-            UserVerificationRequirement userVerification) {
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            @Nullable ResidentKeyRequirement residentKey,
+            @Nullable UserVerificationRequirement userVerification) {
         this(authenticatorAttachment, false, residentKey, userVerification);
     }
 
     /**
      * Constructor for WebAuthn Level1 spec backward-compatibility
+     *
      * @param authenticatorAttachment authenticator attachment
-     * @param requireResidentKey This describes resident key requirement
-     * @param userVerification relying party's requirement for user verification
+     * @param requireResidentKey      This describes resident key requirement
+     * @param userVerification        relying party's requirement for user verification
      */
     public AuthenticatorSelectionCriteria(
-            AuthenticatorAttachment authenticatorAttachment,
-            boolean requireResidentKey,
-            UserVerificationRequirement userVerification) {
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            @Nullable Boolean requireResidentKey,
+            @Nullable UserVerificationRequirement userVerification) {
         this(authenticatorAttachment, requireResidentKey, null, userVerification);
     }
 
-    public AuthenticatorAttachment getAuthenticatorAttachment() {
+    public @Nullable AuthenticatorAttachment getAuthenticatorAttachment() {
         return authenticatorAttachment;
     }
 
-    public boolean isRequireResidentKey() {
+    public @Nullable Boolean isRequireResidentKey() {
         return requireResidentKey;
     }
 
-    public ResidentKeyRequirement getResidentKey() {
+    public @Nullable ResidentKeyRequirement getResidentKey() {
         return residentKey;
     }
 
-    public UserVerificationRequirement getUserVerification() {
+    public @Nullable UserVerificationRequirement getUserVerification() {
         return userVerification;
     }
 
@@ -110,8 +114,8 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
-        return requireResidentKey == that.requireResidentKey &&
-                authenticatorAttachment == that.authenticatorAttachment &&
+        return authenticatorAttachment == that.authenticatorAttachment &&
+                Objects.equals(requireResidentKey, that.requireResidentKey) &&
                 residentKey == that.residentKey &&
                 userVerification == that.userVerification;
     }

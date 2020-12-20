@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.webauthn4j.data.attestation.authenticator.RSACOSEKey;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,8 +46,8 @@ public class RSACOSEKeySerializer extends AbstractCtapCanonicalCborSerializer<RS
     }
 
     @Override
-    public void serializeWithType(RSACOSEKey value, JsonGenerator gen,
-                                  SerializerProvider provider, TypeSerializer typeSer) throws IOException {
+    public void serializeWithType(@NonNull RSACOSEKey value, @NonNull JsonGenerator gen,
+                                  @NonNull SerializerProvider provider, @NonNull TypeSerializer typeSer) throws IOException {
         super.serialize(value, gen, provider);
     }
 }

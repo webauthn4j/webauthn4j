@@ -16,6 +16,9 @@
 
 package com.webauthn4j.data.attestation.statement;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Objects;
@@ -85,12 +88,12 @@ public class TPMAObject implements Serializable {
         return (value & SIGN_ENCRYPT_BIT) != 0;
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         return ByteBuffer.allocate(4).putInt(value).array();
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMAObject that = (TPMAObject) o;

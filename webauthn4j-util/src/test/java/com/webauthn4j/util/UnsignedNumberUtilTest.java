@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for CUnsignedNumberUtil
  */
+@SuppressWarnings("ConstantConditions")
 class UnsignedNumberUtilTest {
 
 

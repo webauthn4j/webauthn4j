@@ -22,10 +22,10 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 class AttestationConveyancePreferenceTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -43,7 +43,8 @@ class AttestationConveyancePreferenceTest {
 
     @Test
     void create_test_with_null_value() {
-        assertThat(AttestationConveyancePreference.create(null)).isNull();
+        //noinspection ConstantConditions
+        assertThatThrownBy(() -> AttestationConveyancePreference.create(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -63,6 +64,7 @@ class AttestationConveyancePreferenceTest {
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"preference\":\"none\"}", TestDTO.class);

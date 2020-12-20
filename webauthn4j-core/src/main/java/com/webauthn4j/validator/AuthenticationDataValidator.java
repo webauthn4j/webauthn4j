@@ -32,6 +32,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,8 @@ public class AuthenticationDataValidator {
 
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
-    public AuthenticationDataValidator(List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
+        AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
 
@@ -59,11 +61,11 @@ public class AuthenticationDataValidator {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
-    @SuppressWarnings("deprecation")
-    public void validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) {
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    public void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
-        BeanAssertUtil.validate(authenticationParameters);
+        AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
         //spec| Step1
         //spec| If the allowCredentials option was given when this authentication ceremony was initiated,
@@ -106,7 +108,6 @@ public class AuthenticationDataValidator {
 
         BeanAssertUtil.validate(collectedClientData);
         BeanAssertUtil.validate(authenticatorData);
-        BeanAssertUtil.validate(serverProperty);
 
         validateAuthenticatorData(authenticatorData);
 
@@ -201,22 +202,22 @@ public class AuthenticationDataValidator {
 
     }
 
-    void validateAuthenticatorData(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
     }
 
-    public CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+    public @NonNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return maliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
+    public void setMaliciousCounterValueHandler(@NonNull CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
         AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.maliciousCounterValueHandler = maliciousCounterValueHandler;
     }
 
-    public List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
+    public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
     }
 }

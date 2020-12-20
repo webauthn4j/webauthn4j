@@ -17,6 +17,9 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.server.CoreServerProperty;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -30,17 +33,18 @@ public class CoreRegistrationParameters implements Serializable {
     private final boolean userVerificationRequired;
     private final boolean userPresenceRequired;
 
-    public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         this.serverProperty = serverProperty;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
     }
 
-    public CoreRegistrationParameters(CoreServerProperty serverProperty, boolean userVerificationRequired) {
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty, boolean userVerificationRequired) {
         this(serverProperty, userVerificationRequired, true);
     }
 
-    public CoreServerProperty getServerProperty() {
+    public @NonNull CoreServerProperty getServerProperty() {
         return serverProperty;
     }
 
@@ -53,7 +57,7 @@ public class CoreRegistrationParameters implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreRegistrationParameters that = (CoreRegistrationParameters) o;

@@ -25,19 +25,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MessageDigestAlgorithmTest {
 
     @Test
-    void getJcaName_test(){
+    void getJcaName_test() {
         MessageDigestAlgorithm target = MessageDigestAlgorithm.SHA1;
         assertThat(target.getJcaName()).isEqualTo("SHA-1");
     }
 
     @Test
-    void createMessageDigestObject_test(){
+    void createMessageDigestObject_test() {
         MessageDigestAlgorithm target = MessageDigestAlgorithm.SHA256;
         assertThat(target.createMessageDigestObject().getAlgorithm()).isEqualTo(MessageDigestUtil.createSHA256().getAlgorithm());
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         assertThat(MessageDigestAlgorithm.create("SHA-256")).isEqualTo(MessageDigestAlgorithm.create("SHA-256"));
         assertThat(MessageDigestAlgorithm.create("SHA-256")).hasSameHashCodeAs(MessageDigestAlgorithm.create("SHA-256"));
     }

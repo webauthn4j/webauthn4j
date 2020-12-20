@@ -21,6 +21,7 @@ import com.webauthn4j.data.attestation.authenticator.EC2COSEKey;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -28,6 +29,7 @@ import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import com.webauthn4j.validator.exception.CertificateException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -46,19 +48,35 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
      * @return AttestationType.BASIC
      */
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         FIDOU2FAttestationStatement attestationStatement =
                 (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatementNotNull(attestationStatement);
+        //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
         validateAttestationStatement(attestationStatement);
         validateSignature(registrationObject);
         return AttestationType.BASIC;
     }
 
-    void validateAttestationStatement(FIDOU2FAttestationStatement attestationStatement) {
+    void validateAttestationStatementNotNull(FIDOU2FAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getSig() == null) {
+            throw new BadAttestationStatementException("sig must not be null");
+        }
+        if (attestationStatement.getX5c() == null) {
+            throw new BadAttestationStatementException("x5c must not be null");
+        }
+    }
+
+    void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
+        //noinspection ConstantConditions as null check is already done in caller
         if (attestationStatement.getX5c().size() != 1) {
             throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
         }
@@ -66,7 +84,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         validatePublicKey(publicKey);
     }
 
-    void validatePublicKey(PublicKey publicKey) {
+    void validatePublicKey(@NonNull PublicKey publicKey) {
         if (!publicKey.getAlgorithm().equals("EC")) {
             throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
         }
@@ -75,10 +93,11 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private void validateSignature(CoreRegistrationObject registrationObject) {
+    private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
+        //noinspection ConstantConditions as null check is already done in caller
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
@@ -95,12 +114,13 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         }
     }
 
-    private byte[] getSignedData(CoreRegistrationObject registrationObject) {
+    private byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
 
         String rpId = registrationObject.getServerProperty().getRpId();
         MessageDigest messageDigest = MessageDigestUtil.createSHA256();
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
+        //noinspection ConstantConditions as null check is already done in caller
         EC2COSEKey credentialPublicKey =
                 (EC2COSEKey) attestationObject.getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
 
@@ -109,6 +129,7 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = registrationObject.getClientDataHash();
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
+        //noinspection ConstantConditions as null check is already done in caller
         byte[] userPublicKeyBytes = getPublicKeyBytes(credentialPublicKey);
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
@@ -120,14 +141,15 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         return byteBuffer.array();
     }
 
-    private byte[] getPublicKeyBytes(EC2COSEKey ec2CoseKey) {
+    private byte[] getPublicKeyBytes(@NonNull EC2COSEKey ec2CoseKey) {
         byte[] x = ec2CoseKey.getX();
         byte[] y = ec2CoseKey.getY();
         byte format = 0x04;
         return ByteBuffer.allocate(1 + x.length + y.length).put(format).put(x).put(y).array();
     }
 
-    private PublicKey getPublicKey(FIDOU2FAttestationStatement attestationStatement) {
+    private PublicKey getPublicKey(@NonNull FIDOU2FAttestationStatement attestationStatement) {
+        //noinspection ConstantConditions as null check is already done in caller
         Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }

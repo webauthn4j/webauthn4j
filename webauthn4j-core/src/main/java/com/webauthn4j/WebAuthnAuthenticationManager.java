@@ -16,7 +16,9 @@
 
 package com.webauthn4j;
 
-import com.webauthn4j.converter.*;
+import com.webauthn4j.converter.AuthenticationExtensionsClientOutputsConverter;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AuthenticationData;
@@ -31,6 +33,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +49,9 @@ public class WebAuthnAuthenticationManager {
 
     private final AuthenticationDataValidator authenticationDataValidator;
 
-    public WebAuthnAuthenticationManager(List<CustomAuthenticationValidator> customAuthenticationValidators, ObjectConverter objectConverter) {
+    public WebAuthnAuthenticationManager(
+            @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators,
+            @NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
@@ -57,7 +62,8 @@ public class WebAuthnAuthenticationManager {
         authenticationExtensionsClientOutputsConverter = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
     }
 
-    public WebAuthnAuthenticationManager(List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public WebAuthnAuthenticationManager(
+            @NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         this(customAuthenticationValidators, new ObjectConverter());
     }
 
@@ -66,18 +72,20 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData parse(AuthenticationRequest authenticationRequest) throws DataConversionException {
+    public @NonNull AuthenticationData parse(@NonNull AuthenticationRequest authenticationRequest) throws DataConversionException {
+        AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
 
         byte[] credentialId = authenticationRequest.getCredentialId();
         byte[] signature = authenticationRequest.getSignature();
         byte[] userHandle = authenticationRequest.getUserHandle();
         byte[] clientDataBytes = authenticationRequest.getClientDataJSON();
-        CollectedClientData collectedClientData = collectedClientDataConverter.convert(clientDataBytes);
+        CollectedClientData collectedClientData =
+                clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
         byte[] authenticatorDataBytes = authenticationRequest.getAuthenticatorData();
-        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = authenticatorDataConverter.convert(authenticatorDataBytes);
-
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData =
+                authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
-                authenticationExtensionsClientOutputsConverter.convert(authenticationRequest.getClientExtensionsJSON());
+                authenticationRequest.getClientExtensionsJSON() == null ? null : authenticationExtensionsClientOutputsConverter.convert(authenticationRequest.getClientExtensionsJSON());
 
         return new AuthenticationData(
                 credentialId,
@@ -93,19 +101,23 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData validate(AuthenticationRequest authenticationRequest, AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+    public @NonNull AuthenticationData validate(
+            @NonNull AuthenticationRequest authenticationRequest,
+            @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         AuthenticationData authenticationData = parse(authenticationRequest);
         validate(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
     @SuppressWarnings("squid:S1130")
-    public AuthenticationData validate(AuthenticationData authenticationData, AuthenticationParameters authenticationParameters) throws ValidationException {
+    public @NonNull AuthenticationData validate(
+            @NonNull AuthenticationData authenticationData,
+            @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
         authenticationDataValidator.validate(authenticationData, authenticationParameters);
         return authenticationData;
     }
 
-    public AuthenticationDataValidator getAuthenticationDataValidator() {
+    public @NonNull AuthenticationDataValidator getAuthenticationDataValidator() {
         return authenticationDataValidator;
     }
 }

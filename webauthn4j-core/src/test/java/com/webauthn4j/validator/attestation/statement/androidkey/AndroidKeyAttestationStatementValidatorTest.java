@@ -25,6 +25,7 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Answers.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
@@ -41,6 +42,18 @@ class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
+    void validateAttestationStatementNotNull_test(){
+        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath());
+        target.validateAttestationStatementNotNull(attestationStatement);
+    }
+
+    @Test
+    void validateAttestationStatementNotNull_with_null_test(){
+        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+
+    @Test
     void validate_with_teeEnforcedOnly_option_test() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithAndroidKeyAttestation();
         target.setTeeEnforcedOnly(true);
@@ -49,16 +62,7 @@ class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_null_x5c_test1() {
-        RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
-        when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null));
-        assertThrows(BadAttestationStatementException.class,
-                () -> target.validate(registrationObject)
-        );
-    }
-
-    @Test
-    void validate_null_x5c_test2() {
+    void validate_empty_x5c_test2() {
         RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
         when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()));
         assertThrows(BadAttestationStatementException.class,

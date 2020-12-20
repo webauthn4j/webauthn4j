@@ -21,17 +21,18 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class SignatureUtilTest {
 
     @SuppressWarnings("deprecation")
     @Test
-    void getRS256_test(){
+    void getRS256_test() {
         assertThat(SignatureUtil.getRS256().getAlgorithm()).isEqualTo("SHA256withRSA");
     }
 
     @SuppressWarnings("deprecation")
     @Test
-    void getES256_test(){
+    void getES256_test() {
         assertThat(SignatureUtil.getES256().getAlgorithm()).isEqualTo("SHA256withECDSA");
     }
 

@@ -17,10 +17,9 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.AuthenticationData;
-import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.RegistrationData;
-import com.webauthn4j.data.RegistrationParameters;
 import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
@@ -33,6 +32,8 @@ import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class BeanAssertUtilTest {
 
@@ -143,35 +144,6 @@ class BeanAssertUtilTest {
         );
         assertDoesNotThrow(
                 () -> BeanAssertUtil.validate(registrationData)
-        );
-    }
-
-
-
-    @Test
-    void validate_RegistrationParameters_test() {
-        RegistrationParameters registrationParameters = new RegistrationParameters(
-                TestDataUtil.createServerProperty(),
-                true
-        );
-        BeanAssertUtil.validate(registrationParameters);
-    }
-
-    @Test
-    void validate_RegistrationParameters_with_null_test() {
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate((RegistrationParameters) null)
-        );
-    }
-
-    @Test
-    void validate_RegistrationParameters_with_serverProperty_null_test() {
-        RegistrationParameters registrationParameters = new RegistrationParameters(
-                null,
-                true
-        );
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(registrationParameters)
         );
     }
 
@@ -337,50 +309,6 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_AuthenticationParameters_test() {
-        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
-                TestDataUtil.createServerProperty(),
-                TestDataUtil.createAuthenticator(),
-                true,
-                true
-        );
-        BeanAssertUtil.validate(authenticationParameters);
-    }
-
-    @Test
-    void validate_AuthenticationParameters_with_null_test() {
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate((AuthenticationParameters) null)
-        );
-    }
-
-    @Test
-    void validate_AuthenticationParameters_with_serverProperty_null_test() {
-        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
-                null,
-                TestDataUtil.createAuthenticator(),
-                true,
-                true
-        );
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(authenticationParameters)
-        );
-    }
-
-    @Test
-    void validate_AuthenticationParameters_with_authenticator_null_test() {
-        AuthenticationParameters authenticationParameters = new AuthenticationParameters(
-                TestDataUtil.createServerProperty(),
-                null,
-                true,
-                true
-        );
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(authenticationParameters)
-        );
-    }
-
-    @Test
     void validate_clientData_test() {
         CollectedClientData collectedClientData = new CollectedClientData(
                 ClientDataType.GET,
@@ -396,48 +324,6 @@ class BeanAssertUtilTest {
     void validate_clientData_with_null_test() {
         assertThrows(ConstraintViolationException.class,
                 () -> BeanAssertUtil.validate((CollectedClientData) null)
-        );
-    }
-
-    @Test
-    void validate_clientData_with_clientDataType_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                null,
-                new DefaultChallenge(),
-                new Origin("https://example.com"),
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
-        );
-    }
-
-    @Test
-    void validate_clientData_with_challenge_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
-                null,
-                new Origin("https://example.com"),
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
-        );
-    }
-
-    @Test
-    void validate_clientData_with_origin_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
-                new DefaultChallenge(),
-                null,
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
         );
     }
 
@@ -475,15 +361,6 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_tokenBinding_with_status_null_test() {
-        TokenBinding tokenBinding = new TokenBinding(null, (String) null);
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(tokenBinding)
-        );
-    }
-
-    @Test
     void validate_attestationObject_test() {
         AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
 
@@ -498,20 +375,19 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_attestationObject_with_authenticatorData_null_test() {
-        AttestationObject attestationObject = new AttestationObject(null, TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
-
+    void validate_coseKey_with_null_test(){
         assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(attestationObject)
+                () -> BeanAssertUtil.validate((COSEKey) null)
         );
     }
 
     @Test
-    void validate_attestationObject_with_attestationStatement_null_test() {
-        AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), null);
-
+    void validate_coseKey_with_alg_null_test(){
+        COSEKey coseKey = mock(COSEKey.class);
+        when(coseKey.getAlgorithm()).thenReturn(null);
         assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(attestationObject)
+                () -> BeanAssertUtil.validate(coseKey)
         );
     }
+
 }

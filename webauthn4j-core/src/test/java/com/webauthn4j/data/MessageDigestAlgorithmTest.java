@@ -16,15 +16,33 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class MessageDigestAlgorithmTest {
 
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+
     @Test
-    void test(){
+    void test() {
         assertThat(MessageDigestAlgorithm.create("SHA-256")).isEqualTo(MessageDigestAlgorithm.SHA256);
+    }
+
+    @Test
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"alg\": -1}", MessageDigestAlgorithmTest.TestDTO.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    static class TestDTO {
+        @SuppressWarnings("WeakerAccess")
+        public MessageDigestAlgorithm alg;
     }
 
 }

@@ -17,6 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -28,30 +30,30 @@ public class TPMSRSAParms implements TPMUPublicParms {
     private final byte[] keyBits;
     private final byte[] exponent;
 
-    public TPMSRSAParms(byte[] symmetric, byte[] scheme, byte[] keyBits, byte[] exponent) {
+    public TPMSRSAParms(@NonNull byte[] symmetric, @NonNull byte[] scheme, @NonNull byte[] keyBits, @NonNull byte[] exponent) {
         this.symmetric = symmetric;
         this.scheme = scheme;
         this.keyBits = keyBits;
         this.exponent = exponent;
     }
 
-    public byte[] getSymmetric() {
+    public @NonNull byte[] getSymmetric() {
         return ArrayUtil.clone(symmetric);
     }
 
-    public byte[] getScheme() {
+    public @NonNull byte[] getScheme() {
         return ArrayUtil.clone(scheme);
     }
 
-    public byte[] getKeyBits() {
+    public @NonNull byte[] getKeyBits() {
         return ArrayUtil.clone(keyBits);
     }
 
-    public byte[] getExponent() {
+    public @NonNull byte[] getExponent() {
         return ArrayUtil.clone(exponent);
     }
 
-    public byte[] getBytes() {
+    public @NonNull byte[] getBytes() {
         return ByteBuffer.allocate(10)
                 .put(symmetric)
                 .put(scheme)
@@ -61,7 +63,7 @@ public class TPMSRSAParms implements TPMUPublicParms {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TPMSRSAParms that = (TPMSRSAParms) o;

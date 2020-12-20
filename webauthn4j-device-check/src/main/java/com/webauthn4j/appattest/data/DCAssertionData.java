@@ -19,23 +19,30 @@ package com.webauthn4j.appattest.data;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DCAssertionData extends CoreAuthenticationData {
 
     /**
      * Constructor
-     * @param keyId keyId or credentialId
-     * @param authenticatorData authenticatorData
+     *
+     * @param keyId                  keyId or credentialId
+     * @param authenticatorData      authenticatorData
      * @param authenticatorDataBytes authenticatorData in bytes
-     * @param clientDataHash clientDataHash
-     * @param signature signature
+     * @param clientDataHash         clientDataHash
+     * @param signature              signature
      */
-    public DCAssertionData(byte[] keyId, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData, byte[] authenticatorDataBytes, byte[] clientDataHash, byte[] signature) {
+    public DCAssertionData(
+            @Nullable byte[] keyId,
+            @Nullable AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @Nullable byte[] authenticatorDataBytes,
+            @Nullable byte[] clientDataHash,
+            @Nullable byte[] signature) {
         super(keyId, authenticatorData, authenticatorDataBytes, clientDataHash, signature);
     }
 
     // keyId is an alias of credentialId
-    public byte[] getKeyId(){
+    public @Nullable byte[] getKeyId() {
         return getCredentialId();
     }
 }

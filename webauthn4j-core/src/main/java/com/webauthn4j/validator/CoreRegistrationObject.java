@@ -22,6 +22,9 @@ import com.webauthn4j.converter.jackson.JacksonUtil;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -38,11 +41,18 @@ public class CoreRegistrationObject {
     private final Instant timestamp;
 
     public CoreRegistrationObject(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            byte[] clientDataHash,
-            CoreServerProperty serverProperty,
-            Instant timestamp) {
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull Instant timestamp) {
+
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
+        AssertUtil.notNull(attestationObjectBytes, "attestationObjectBytes must not be null");
+        AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
+        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
+        AssertUtil.notNull(timestamp, "timestamp must not be null");
+
         this.attestationObject = attestationObject;
         this.attestationObjectBytes = attestationObjectBytes;
         this.clientDataHash = clientDataHash;
@@ -51,41 +61,44 @@ public class CoreRegistrationObject {
     }
 
     public CoreRegistrationObject(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            byte[] clientDataHash,
-            CoreServerProperty serverProperty) {
+            @NonNull AttestationObject attestationObject,
+            @NonNull byte[] attestationObjectBytes,
+            @NonNull byte[] clientDataHash,
+            @NonNull CoreServerProperty serverProperty) {
 
         this(attestationObject, attestationObjectBytes, clientDataHash, serverProperty, Instant.now());
     }
 
-    public AttestationObject getAttestationObject() {
+    private static @NonNull byte[] extractAuthenticatorData(@NonNull byte[] attestationObject) {
+        return JacksonUtil.binaryValue(JacksonUtil.readTree(cborMapper, attestationObject).get("authData"));
+    }
+
+    public @NonNull AttestationObject getAttestationObject() {
         return attestationObject;
     }
 
-    public byte[] getAttestationObjectBytes() {
+    public @NonNull byte[] getAttestationObjectBytes() {
         return ArrayUtil.clone(attestationObjectBytes);
     }
 
-
-    public byte[] getAuthenticatorDataBytes() {
+    public @NonNull byte[] getAuthenticatorDataBytes() {
         return extractAuthenticatorData(attestationObjectBytes);
     }
 
-    public byte[] getClientDataHash() {
+    public @NonNull byte[] getClientDataHash() {
         return clientDataHash;
     }
 
-    public CoreServerProperty getServerProperty() {
+    public @NonNull CoreServerProperty getServerProperty() {
         return serverProperty;
     }
 
-    public Instant getTimestamp() {
+    public @NonNull Instant getTimestamp() {
         return timestamp;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreRegistrationObject that = (CoreRegistrationObject) o;
@@ -102,10 +115,5 @@ public class CoreRegistrationObject {
         result = 31 * result + Arrays.hashCode(attestationObjectBytes);
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;
-    }
-
-
-    private static byte[] extractAuthenticatorData(byte[] attestationObject) {
-        return JacksonUtil.binaryValue(JacksonUtil.readTree(cborMapper, attestationObject).get("authData"));
     }
 }

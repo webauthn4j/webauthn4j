@@ -22,6 +22,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -35,12 +36,12 @@ public class RegistrationData extends CoreRegistrationData {
     private final Set<AuthenticatorTransport> transports;
 
     public RegistrationData(
-            AttestationObject attestationObject,
-            byte[] attestationObjectBytes,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
-            Set<AuthenticatorTransport> transports) {
+            @Nullable AttestationObject attestationObject,
+            @Nullable byte[] attestationObjectBytes,
+            @Nullable CollectedClientData collectedClientData,
+            @Nullable byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
+            @Nullable Set<AuthenticatorTransport> transports) {
 
         super(attestationObject, attestationObjectBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes));
 
@@ -50,24 +51,24 @@ public class RegistrationData extends CoreRegistrationData {
         this.transports = transports;
     }
 
-    public CollectedClientData getCollectedClientData() {
+    public @Nullable CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getCollectedClientDataBytes() {
+    public @Nullable byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
-    public Set<AuthenticatorTransport> getTransports() {
+    public @Nullable Set<AuthenticatorTransport> getTransports() {
         return transports;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

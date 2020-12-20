@@ -16,20 +16,48 @@
 
 package com.webauthn4j.appattest;
 
+import com.webauthn4j.appattest.data.DCAssertion;
+import com.webauthn4j.appattest.data.DCAssertionData;
+import com.webauthn4j.appattest.data.DCAssertionRequest;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.util.CborConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 class DeviceCheckAssertionManagerTest {
 
+    private ObjectConverter objectConverter = new ObjectConverter();
+    private CborConverter cborConverter = objectConverter.getCborConverter();
+    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+
     @Test
-    void constructor_test(){
+    void constructor_test() {
         assertThatCode(DeviceCheckAssertionManager::new).doesNotThrowAnyException();
-        assertThatCode(()->{
-            new DeviceCheckAssertionManager(Collections.emptyList());
-        }).doesNotThrowAnyException();
+        assertThatCode(() -> new DeviceCheckAssertionManager(Collections.emptyList())).doesNotThrowAnyException();
+    }
+
+    @Test
+    void parse_DCAssertion_with_signature_null_authenticatorData_null_test(){
+        DeviceCheckAssertionManager deviceCheckAssertionManager = new DeviceCheckAssertionManager();
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
+        byte[] keyId = new byte[64];
+        byte[] authenticatorDataBytes = authenticatorDataConverter.convert(authenticatorData);
+        byte[] assertion = cborConverter.writeValueAsBytes(new DCAssertion(new byte[32], authenticatorDataBytes));
+        byte[] clientDataHash = new byte[32];
+        DCAssertionData dcAssertionData = deviceCheckAssertionManager.parse(new DCAssertionRequest(keyId, assertion, clientDataHash));
+
+        assertThat(dcAssertionData.getKeyId()).isEqualTo(new byte[64]);
+        assertThat(dcAssertionData.getSignature()).isEqualTo(new byte[32]);
+        assertThat(dcAssertionData.getAuthenticatorData()).isEqualTo(authenticatorData);
+        assertThat(dcAssertionData.getClientDataHash()).isEqualTo(new byte[32]);
     }
 
 }

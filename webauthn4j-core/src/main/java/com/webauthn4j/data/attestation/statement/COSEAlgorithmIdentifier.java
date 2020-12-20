@@ -19,7 +19,10 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.SignatureAlgorithm;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -36,9 +39,9 @@ public class COSEAlgorithmIdentifier implements Serializable {
     public static final COSEAlgorithmIdentifier ES384;
     public static final COSEAlgorithmIdentifier ES512;
 
-    private static Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
-    private static Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
-    private static Map<SignatureAlgorithm, COSEAlgorithmIdentifier> reverseAlgorithmMap = new HashMap<>();
+    private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
+    private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
+    private static final Map<SignatureAlgorithm, COSEAlgorithmIdentifier> reverseAlgorithmMap = new HashMap<>();
 
     static {
         RS1 = new COSEAlgorithmIdentifier(-65535);
@@ -52,7 +55,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES512, COSEKeyType.EC2);
-        keyTypeMap.put(COSEAlgorithmIdentifier.RS1,   COSEKeyType.RSA);
+        keyTypeMap.put(COSEAlgorithmIdentifier.RS1, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS384, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS512, COSEKeyType.RSA);
@@ -60,12 +63,12 @@ public class COSEAlgorithmIdentifier implements Serializable {
         algorithmMap.put(COSEAlgorithmIdentifier.ES256, SignatureAlgorithm.ES256);
         algorithmMap.put(COSEAlgorithmIdentifier.ES384, SignatureAlgorithm.ES384);
         algorithmMap.put(COSEAlgorithmIdentifier.ES512, SignatureAlgorithm.ES512);
-        algorithmMap.put(COSEAlgorithmIdentifier.RS1,   SignatureAlgorithm.RS1);
+        algorithmMap.put(COSEAlgorithmIdentifier.RS1, SignatureAlgorithm.RS1);
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
         algorithmMap.put(COSEAlgorithmIdentifier.RS384, SignatureAlgorithm.RS384);
         algorithmMap.put(COSEAlgorithmIdentifier.RS512, SignatureAlgorithm.RS512);
 
-        for (Map.Entry<COSEAlgorithmIdentifier, SignatureAlgorithm> entry: algorithmMap.entrySet()) {
+        for (Map.Entry<COSEAlgorithmIdentifier, SignatureAlgorithm> entry : algorithmMap.entrySet()) {
             reverseAlgorithmMap.put(entry.getValue(), entry.getKey());
         }
     }
@@ -77,21 +80,27 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     // COSEAlgorithmIdentifier doesn't accept jcaName and messageDigestJcaName from caller for the time being
-    public static COSEAlgorithmIdentifier create(long value) {
+    public static @NonNull COSEAlgorithmIdentifier create(long value) {
         return new COSEAlgorithmIdentifier(value);
     }
 
-    public static COSEAlgorithmIdentifier create(SignatureAlgorithm signatureAlgorithm) {
+    public static @NonNull COSEAlgorithmIdentifier create(@NonNull SignatureAlgorithm signatureAlgorithm) {
         COSEAlgorithmIdentifier coseAlgorithmIdentifier = reverseAlgorithmMap.get(signatureAlgorithm);
-        if(coseAlgorithmIdentifier == null){
+        if (coseAlgorithmIdentifier == null) {
             throw new IllegalArgumentException(String.format("SignatureAlgorithm %s is not supported.", signatureAlgorithm.getJcaName()));
         }
         return coseAlgorithmIdentifier;
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
-    private static COSEAlgorithmIdentifier deserialize(long value) {
-        return create(value);
+    private static @NonNull COSEAlgorithmIdentifier deserialize(long value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, COSEAlgorithmIdentifier.class);
+        }
+
     }
 
     @JsonValue
@@ -100,24 +109,24 @@ public class COSEAlgorithmIdentifier implements Serializable {
     }
 
     @JsonIgnore
-    public COSEKeyType getKeyType(){
+    public @NonNull COSEKeyType getKeyType() {
         COSEKeyType coseKeyType = keyTypeMap.get(this);
-        if(coseKeyType == null){
+        if (coseKeyType == null) {
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));
         }
         return coseKeyType;
     }
 
-    public SignatureAlgorithm toSignatureAlgorithm(){
+    public @NonNull SignatureAlgorithm toSignatureAlgorithm() {
         SignatureAlgorithm signatureAlgorithm = algorithmMap.get(this);
-        if(signatureAlgorithm == null){
+        if (signatureAlgorithm == null) {
             throw new IllegalArgumentException(String.format("COSEAlgorithmIdentifier %d is unknown.", this.getValue()));
         }
         return signatureAlgorithm;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         COSEAlgorithmIdentifier that = (COSEAlgorithmIdentifier) o;

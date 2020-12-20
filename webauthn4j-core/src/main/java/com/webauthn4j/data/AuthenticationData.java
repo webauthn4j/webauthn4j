@@ -23,6 +23,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -36,14 +37,14 @@ public class AuthenticationData extends CoreAuthenticationData {
 
     @SuppressWarnings("squid:S107")
     public AuthenticationData(
-            byte[] credentialId,
-            byte[] userHandle,
-            AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            byte[] authenticatorDataBytes,
-            CollectedClientData collectedClientData,
-            byte[] collectedClientDataBytes,
-            AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
-            byte[] signature) {
+            @Nullable byte[] credentialId,
+            @Nullable byte[] userHandle,
+            @Nullable AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @Nullable byte[] authenticatorDataBytes,
+            @Nullable CollectedClientData collectedClientData,
+            @Nullable byte[] collectedClientDataBytes,
+            @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
+            @Nullable byte[] signature) {
         super(credentialId, authenticatorData, authenticatorDataBytes, collectedClientDataBytes == null ? null : MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), signature);
         this.userHandle = ArrayUtil.clone(userHandle);
         this.collectedClientData = collectedClientData;
@@ -51,24 +52,24 @@ public class AuthenticationData extends CoreAuthenticationData {
         this.clientExtensions = clientExtensions;
     }
 
-    public byte[] getUserHandle() {
+    public @Nullable byte[] getUserHandle() {
         return ArrayUtil.clone(userHandle);
     }
 
-    public CollectedClientData getCollectedClientData() {
+    public @Nullable CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public byte[] getCollectedClientDataBytes() {
+    public @Nullable byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
-    public AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
+    public @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> getClientExtensions() {
         return clientExtensions;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

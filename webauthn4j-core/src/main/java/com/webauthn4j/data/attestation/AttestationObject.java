@@ -22,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -48,27 +51,29 @@ public class AttestationObject implements Serializable {
 
     @JsonCreator
     public AttestationObject(
-            @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
-            @JsonProperty("attStmt") AttestationStatement attestationStatement) {
+            @NonNull @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
+            @NonNull @JsonProperty("attStmt") AttestationStatement attestationStatement) {
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+        AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
     }
 
-    public AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @Nullable AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
     @JsonProperty("fmt")
-    public String getFormat() {
+    public @NonNull String getFormat() {
         return attestationStatement.getFormat();
     }
 
-    public AttestationStatement getAttestationStatement() {
+    public @Nullable AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttestationObject that = (AttestationObject) o;

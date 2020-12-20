@@ -82,7 +82,8 @@ public class FIDOU2FAuthenticator {
         byte[] signature;
         if (registrationEmulationOption.isSignatureOverrideEnabled()) {
             signature = registrationEmulationOption.getSignature();
-        } else {
+        }
+        else {
             signature = calculateSignature(attestationPrivateKey, signedData);
         }
 

@@ -18,40 +18,54 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.security.MessageDigest;
 import java.util.Objects;
 
 public class MessageDigestAlgorithm {
 
-    public static final MessageDigestAlgorithm SHA1   = new MessageDigestAlgorithm("SHA-1");
+    public static final MessageDigestAlgorithm SHA1 = new MessageDigestAlgorithm("SHA-1");
     public static final MessageDigestAlgorithm SHA256 = new MessageDigestAlgorithm("SHA-256");
     public static final MessageDigestAlgorithm SHA384 = new MessageDigestAlgorithm("SHA-384");
     public static final MessageDigestAlgorithm SHA512 = new MessageDigestAlgorithm("SHA-512");
 
     private final String jcaName;
 
-    private MessageDigestAlgorithm(String jcaName){
+    private MessageDigestAlgorithm(@NonNull String jcaName) {
         this.jcaName = jcaName;
     }
 
-    @JsonCreator
-    public static MessageDigestAlgorithm create(String jcaName){
+    public static @NonNull MessageDigestAlgorithm create(@NonNull String jcaName) {
+        AssertUtil.notNull(jcaName, "jcaName must not be null");
         return new MessageDigestAlgorithm(jcaName);
     }
 
+    @SuppressWarnings("unused")
+    @JsonCreator
+    private static @NonNull MessageDigestAlgorithm deserialize(String value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, MessageDigestAlgorithm.class);
+        }
+    }
+
     @JsonValue
-    public String getJcaName() {
+    public @NonNull String getJcaName() {
         return jcaName;
     }
 
-    public MessageDigest createMessageDigestObject() {
+    public @NonNull MessageDigest createMessageDigestObject() {
         return MessageDigestUtil.createMessageDigest(jcaName);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MessageDigestAlgorithm that = (MessageDigestAlgorithm) o;

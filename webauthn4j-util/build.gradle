@@ -21,6 +21,8 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
 
+    implementation("org.checkerframework:checker-qual")
+
     //Test
     testImplementation project(':webauthn4j-test')
     testImplementation("org.bouncycastle:bcprov-jdk15on")

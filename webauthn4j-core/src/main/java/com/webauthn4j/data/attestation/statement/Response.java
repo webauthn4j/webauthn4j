@@ -19,6 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
@@ -27,7 +28,7 @@ public class Response implements Serializable {
     @JsonProperty
     private final String nonce;
     @JsonProperty
-    private final long timestampMs;
+    private final Long timestampMs;
     @JsonProperty
     private final String apkPackageName;
     @JsonProperty
@@ -35,22 +36,27 @@ public class Response implements Serializable {
     @JsonProperty
     private final String apkDigestSha256;
     @JsonProperty
-    private final boolean ctsProfileMatch;
+    private final Boolean ctsProfileMatch;
     @JsonProperty
-    private final boolean basicIntegrity;
+    private final Boolean basicIntegrity;
     @JsonProperty
     private final String advice;
+    @JsonProperty
+    private final String error;
 
+    @SuppressWarnings("java:S107")
     @JsonCreator
     public Response(
-            @JsonProperty("nonce") String nonce,
-            @JsonProperty("timestampMs") long timestampMs,
-            @JsonProperty("apkPackageName") String apkPackageName,
-            @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
-            @JsonProperty("apkDigestSha256") String apkDigestSha256,
-            @JsonProperty("ctsProfileMatch") boolean ctsProfileMatch,
-            @JsonProperty("basicIntegrity") boolean basicIntegrity,
-            @JsonProperty("advice") String advice) {
+            // fields are marked as Nullable because they may be null when error field is filled
+            @Nullable @JsonProperty("nonce") String nonce,
+            @Nullable @JsonProperty("timestampMs") Long timestampMs,
+            @Nullable @JsonProperty("apkPackageName") String apkPackageName,
+            @Nullable @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
+            @Nullable @JsonProperty("apkDigestSha256") String apkDigestSha256,
+            @Nullable @JsonProperty("ctsProfileMatch") Boolean ctsProfileMatch,
+            @Nullable @JsonProperty("basicIntegrity") Boolean basicIntegrity,
+            @Nullable @JsonProperty("advice") String advice,
+            @Nullable @JsonProperty("error") String error) {
         this.nonce = nonce;
         this.timestampMs = timestampMs;
         this.apkPackageName = apkPackageName;
@@ -59,37 +65,55 @@ public class Response implements Serializable {
         this.ctsProfileMatch = ctsProfileMatch;
         this.basicIntegrity = basicIntegrity;
         this.advice = advice;
+        this.error = error;
     }
 
-    public String getNonce() {
+    @SuppressWarnings("java:S107")
+    public Response(
+            @Nullable @JsonProperty("nonce") String nonce,
+            @Nullable @JsonProperty("timestampMs") Long timestampMs,
+            @Nullable @JsonProperty("apkPackageName") String apkPackageName,
+            @Nullable @JsonProperty("apkCertificateDigestSha256") String[] apkCertificateDigestSha256,
+            @Nullable @JsonProperty("apkDigestSha256") String apkDigestSha256,
+            @Nullable @JsonProperty("ctsProfileMatch") Boolean ctsProfileMatch,
+            @Nullable @JsonProperty("basicIntegrity") Boolean basicIntegrity,
+            @Nullable @JsonProperty("advice") String advice) {
+        this(nonce, timestampMs, apkPackageName, apkCertificateDigestSha256, apkDigestSha256, ctsProfileMatch, basicIntegrity, advice, null);
+    }
+
+    public @Nullable String getNonce() {
         return nonce;
     }
 
-    public long getTimestampMs() {
+    public @Nullable Long getTimestampMs() {
         return timestampMs;
     }
 
-    public String getApkPackageName() {
+    public @Nullable String getApkPackageName() {
         return apkPackageName;
     }
 
-    public String[] getApkCertificateDigestSha256() {
+    public @Nullable String[] getApkCertificateDigestSha256() {
         return ArrayUtil.clone(apkCertificateDigestSha256);
     }
 
-    public String getApkDigestSha256() {
+    public @Nullable String getApkDigestSha256() {
         return apkDigestSha256;
     }
 
-    public boolean isCtsProfileMatch() {
+    public @Nullable Boolean getCtsProfileMatch() {
         return ctsProfileMatch;
     }
 
-    public boolean isBasicIntegrity() {
+    public @Nullable Boolean getBasicIntegrity() {
         return basicIntegrity;
     }
 
-    public String getAdvice() {
+    public @Nullable String getAdvice() {
         return advice;
+    }
+
+    public @Nullable String getError() {
+        return error;
     }
 }

@@ -16,21 +16,23 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if user is to be present but not present
  */
 @SuppressWarnings("squid:S110")
 public class UserNotPresentException extends ValidationException {
 
-    public UserNotPresentException(String message, Throwable cause) {
+    public UserNotPresentException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public UserNotPresentException(String message) {
+    public UserNotPresentException(@Nullable String message) {
         super(message);
     }
 
-    public UserNotPresentException(Throwable cause) {
+    public UserNotPresentException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -29,7 +29,10 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
-import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
+import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticatorAdaptor;
@@ -51,6 +54,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOU2FAuthenticatorRegistrationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -71,7 +75,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
     private final AuthenticationExtensionsClientOutputsConverter authenticationExtensionsClientOutputsConverter
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_test() {
         String rpId = "example.com";
@@ -82,7 +85,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -116,7 +119,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_direct_attestation_conveyance_preference_test() {
         String rpId = "example.com";
@@ -133,7 +135,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,
@@ -172,7 +174,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_clientData_type_test() {
         String rpId = "example.com";
@@ -182,7 +183,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -214,7 +215,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_challenge_test() {
         String rpId = "example.com";
@@ -225,7 +225,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 badChallenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -252,7 +252,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_origin_test() {
         String rpId = "example.com";
@@ -262,7 +261,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -290,7 +289,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_rpId_test() {
         String rpId = "example.com";
@@ -300,7 +298,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(badRpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -325,7 +323,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_with_bad_attestationStatement_test() {
         String rpId = "example.com";
@@ -334,7 +331,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -365,7 +362,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_invalid_format_attestation_signature_test() {
         String rpId = "example.com";
@@ -383,7 +379,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,
@@ -418,7 +414,6 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         );
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void validate_malicious_client_data_test() {
         Origin phishingSiteOrigin = new Origin("http://phishing.site.example.com");
@@ -441,7 +436,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,

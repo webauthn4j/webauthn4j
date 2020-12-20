@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
@@ -24,7 +25,9 @@ import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientInputsConverterTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -32,10 +35,10 @@ class AuthenticationExtensionsClientInputsConverterTest {
     private final AuthenticationExtensionsClientInputsConverter authenticationExtensionsClientInputsConverter = new AuthenticationExtensionsClientInputsConverter(objectConverter);
 
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void convertRegistrationExtensions_null_test() {
-        AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> value = authenticationExtensionsClientInputsConverter.convert(null);
-        assertThat(value).isNull();
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -46,9 +49,10 @@ class AuthenticationExtensionsClientInputsConverterTest {
         assertThat(authenticationExtensionsClientInputsConverter.convertToString(extensions)).isEqualTo("{\"appid\":\"test\"}");
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void convertAuthenticationExtensionsToString_null_test() {
-        assertThat(authenticationExtensionsClientInputsConverter.convertToString(null)).isNull();
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -56,6 +60,13 @@ class AuthenticationExtensionsClientInputsConverterTest {
         String source = "{\"appid\":\"dummy\"}";
         AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
         assertThat(clientInputs.getExtension(FIDOAppIDExtensionClientInput.class)).isEqualTo(new FIDOAppIDExtensionClientInput("dummy"));
+    }
+
+    @Test
+    void convert_null_test() {
+        String source = "null";
+        AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> clientInputs = authenticationExtensionsClientInputsConverter.convert(source);
+        assertThat(clientInputs).isNull();
     }
 
     @SuppressWarnings("unused")

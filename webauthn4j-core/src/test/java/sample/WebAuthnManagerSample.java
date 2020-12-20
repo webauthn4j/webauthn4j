@@ -32,11 +32,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class WebAuthnManagerSample {
 
-    private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
-
     private final WebAuthnManager webAuthnManager;
+    private Logger logger = LoggerFactory.getLogger(WebAuthnManagerSample.class);
 
     public WebAuthnManagerSample() {
         // WebAuthnManager.createNonStrictWebAuthnManager() returns a WebAuthnManager instance
@@ -46,7 +46,6 @@ public class WebAuthnManagerSample {
         webAuthnManager = WebAuthnManager.createNonStrictWebAuthnManager();
     }
 
-    @SuppressWarnings("deprecation")
     public void registrationValidationSample() {
 
         // Client properties
@@ -93,7 +92,6 @@ public class WebAuthnManagerSample {
     }
 
 
-    @SuppressWarnings("deprecation")
     public void authenticationValidationSample() {
         // Client properties
         byte[] credentialId = null /* set credentialId */;

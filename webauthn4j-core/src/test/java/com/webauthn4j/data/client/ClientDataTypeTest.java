@@ -22,6 +22,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,17 +33,16 @@ class ClientDataTypeTest {
 
     @Test
     void create_test() {
+        //noinspection ConstantConditions,ResultOfMethodCallIgnored
         assertAll(
                 () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE),
                 () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
                 () -> assertThat(ClientDataType.create(null)).isNull(),
-                //noinspection ResultOfMethodCallIgnored
-                () -> assertThrows(IllegalArgumentException.class,
-                        () -> ClientDataType.create("invalid")
-                )
+                () -> assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);

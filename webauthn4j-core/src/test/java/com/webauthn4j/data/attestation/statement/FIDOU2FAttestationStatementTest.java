@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
@@ -34,6 +35,17 @@ import static org.mockito.Mockito.mock;
  * Test for FIDOU2FAttestationStatement
  */
 class FIDOU2FAttestationStatementTest {
+
+
+    @Test
+    void constructor_with_null_x5c_test() {
+        assertThatThrownBy(()->new FIDOU2FAttestationStatement(null, new byte[0])).isInstanceOf(IllegalArgumentException.class);
+    }
+    @Test
+    void constructor_with_null_signature_test() {
+        AttestationCertificatePath attestationCertificatePath = TestAttestationUtil.load2tierTestAttestationCertificatePath();
+        assertThatThrownBy(()->new FIDOU2FAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @Test
     void getter_setter_test() {
@@ -97,15 +109,6 @@ class FIDOU2FAttestationStatementTest {
         instance.validate();
     }
 
-
-    @Test
-    void validate_with_null_x5c_test() {
-        FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(null, new byte[0]);
-        assertThrows(ConstraintViolationException.class,
-                instance::validate
-        );
-    }
-
     @Test
     void validate_with_empty_x5c_test() {
         FIDOU2FAttestationStatement instance = new FIDOU2FAttestationStatement(new AttestationCertificatePath(Collections.emptyList()), new byte[0]);
@@ -126,15 +129,5 @@ class FIDOU2FAttestationStatementTest {
         );
     }
 
-    @Test
-    void validate_with_null_signature_test() {
-        FIDOU2FAttestationStatement instance =
-                new FIDOU2FAttestationStatement(
-                        TestAttestationUtil.load2tierTestAttestationCertificatePath(),
-                        null
-                );
-        assertThrows(ConstraintViolationException.class,
-                instance::validate
-        );
-    }
+
 }

@@ -37,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for RSACOSEKey
  */
+@SuppressWarnings("ConstantConditions")
 class RSACOSEKeyTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -44,7 +45,7 @@ class RSACOSEKeyTest {
     private final CborConverter cborConverter = objectConverter.getCborConverter();
 
     @Test
-    void create_with_alg_test(){
+    void create_with_alg_test() {
         RSACOSEKey key;
         key = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.RS256);
         assertThat(key.getAlgorithm()).isEqualTo(COSEAlgorithmIdentifier.RS256);
@@ -55,8 +56,8 @@ class RSACOSEKeyTest {
     }
 
     @Test
-    void create_with_null_keyPair_test(){
-        assertThatThrownBy(()-> RSACOSEKey.create((KeyPair)null, COSEAlgorithmIdentifier.RS256)).isInstanceOf(IllegalArgumentException.class);
+    void create_with_null_keyPair_test() {
+        assertThatThrownBy(() -> RSACOSEKey.create((KeyPair) null, COSEAlgorithmIdentifier.RS256)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -127,7 +128,7 @@ class RSACOSEKeyTest {
     }
 
     @Test
-    void hasPrivateKey_test(){
+    void hasPrivateKey_test() {
         RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair(), COSEAlgorithmIdentifier.RS256);
         RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate(), COSEAlgorithmIdentifier.RS256);
         RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic(), COSEAlgorithmIdentifier.RS256);
@@ -150,7 +151,7 @@ class RSACOSEKeyTest {
 
 
     @Test
-    void getPublicKey_test(){
+    void getPublicKey_test() {
         RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
         RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
         RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());
@@ -160,7 +161,7 @@ class RSACOSEKeyTest {
     }
 
     @Test
-    void getPrivateKey_test(){
+    void getPrivateKey_test() {
         RSACOSEKey keyPair = RSACOSEKey.create(RSAUtil.createKeyPair());
         RSACOSEKey privateKey = RSACOSEKey.create((RSAPrivateKey) RSAUtil.createKeyPair().getPrivate());
         RSACOSEKey publicKey = RSACOSEKey.create((RSAPublicKey) RSAUtil.createKeyPair().getPublic());

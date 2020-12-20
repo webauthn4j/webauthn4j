@@ -23,6 +23,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.metadata.data.MetadataItem;
 import com.webauthn4j.metadata.data.statement.AttestationType;
 import com.webauthn4j.metadata.exception.BadStatusException;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomRegistrationValidator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
@@ -52,6 +53,10 @@ public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
 
     @Override
     public void validate(RegistrationObject registrationObject) {
+
+        AssertUtil.notNull(registrationObject.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
+        AssertUtil.notNull(registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(), "attestedCredentialData must not be null");
+
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
 

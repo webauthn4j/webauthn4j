@@ -21,11 +21,11 @@ import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NullAppleAnonymousAttestationStatementValidatorTest {
 
-    private NullAppleAnonymousAttestationStatementValidator target = new NullAppleAnonymousAttestationStatementValidator();
+    private final NullAppleAnonymousAttestationStatementValidator target = new NullAppleAnonymousAttestationStatementValidator();
 
     @Test
     void validate_test() {

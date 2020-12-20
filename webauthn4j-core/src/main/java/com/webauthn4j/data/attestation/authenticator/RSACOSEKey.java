@@ -22,8 +22,11 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -73,17 +76,17 @@ public class RSACOSEKey extends AbstractCOSEKey {
     @SuppressWarnings("squid:S00107")
     @JsonCreator
     public RSACOSEKey(
-            @JsonProperty("2") byte[] keyId,
-            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOps,
-            @JsonProperty("-1") byte[] n,
-            @JsonProperty("-2") byte[] e,
-            @JsonProperty("-3") byte[] d,
-            @JsonProperty("-4") byte[] p,
-            @JsonProperty("-5") byte[] q,
-            @JsonProperty("-6") byte[] dP,
-            @JsonProperty("-7") byte[] dQ,
-            @JsonProperty("-8") byte[] qInv
+            @Nullable @JsonProperty("2") byte[] keyId,
+            @Nullable @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @Nullable @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @Nullable @JsonProperty("-1") byte[] n,
+            @Nullable @JsonProperty("-2") byte[] e,
+            @Nullable @JsonProperty("-3") byte[] d,
+            @Nullable @JsonProperty("-4") byte[] p,
+            @Nullable @JsonProperty("-5") byte[] q,
+            @Nullable @JsonProperty("-6") byte[] dP,
+            @Nullable @JsonProperty("-7") byte[] dQ,
+            @Nullable @JsonProperty("-8") byte[] qInv
     ) {
         super(keyId, algorithm, keyOps, null);
         this.n = n;
@@ -107,34 +110,40 @@ public class RSACOSEKey extends AbstractCOSEKey {
      */
     @SuppressWarnings("squid:S00107")
     public RSACOSEKey(
-            @JsonProperty("2") byte[] keyId,
-            @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
-            @JsonProperty("4") List<COSEKeyOperation> keyOps,
-            @JsonProperty("-1") byte[] n,
-            @JsonProperty("-2") byte[] e) {
+            @Nullable @JsonProperty("2") byte[] keyId,
+            @Nullable @JsonProperty("3") COSEAlgorithmIdentifier algorithm,
+            @Nullable @JsonProperty("4") List<COSEKeyOperation> keyOps,
+            @Nullable @JsonProperty("-1") byte[] n,
+            @Nullable @JsonProperty("-2") byte[] e) {
         super(keyId, algorithm, keyOps, null);
         this.n = n;
         this.e = e;
     }
 
-    public static RSACOSEKey create(RSAPrivateKey privateKey, COSEAlgorithmIdentifier alg) {
+    public static @NonNull RSACOSEKey create(@NonNull RSAPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(privateKey, "privateKey must not be null");
+
         byte[] n = privateKey.getModulus().toByteArray();
         byte[] d = privateKey.getPrivateExponent().toByteArray();
-        return new RSACOSEKey(null,alg,null, n, null, d, null, null, null, null, null);
+        return new RSACOSEKey(null, alg, null, n, null, d, null, null, null, null, null);
     }
 
 
-    public static RSACOSEKey create(RSAPublicKey publicKey, COSEAlgorithmIdentifier alg) {
+    public static @NonNull RSACOSEKey create(@NonNull RSAPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(publicKey, "publicKey must not be null");
+
         publicKey.getPublicExponent();
         byte[] n = publicKey.getModulus().toByteArray();
         byte[] e = publicKey.getPublicExponent().toByteArray();
         return new RSACOSEKey(null, alg, null, n, e);
     }
 
-    public static RSACOSEKey create(KeyPair keyPair, COSEAlgorithmIdentifier alg) {
-        if(keyPair != null && keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey){
-            RSAPublicKey rsaPublicKey = (RSAPublicKey)keyPair.getPublic();
-            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey)keyPair.getPrivate();
+    public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(keyPair, "keyPair must not be null");
+
+        if (keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey) {
+            RSAPublicKey rsaPublicKey = (RSAPublicKey) keyPair.getPublic();
+            RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) keyPair.getPrivate();
 
             byte[] n = rsaPublicKey.getModulus().toByteArray();
             byte[] e = rsaPublicKey.getPublicExponent().toByteArray();
@@ -146,16 +155,33 @@ public class RSACOSEKey extends AbstractCOSEKey {
         }
     }
 
-    public static RSACOSEKey create(RSAPrivateKey privateKey) {
+    /**
+     * Create {@link RSACOSEKey} from {@link RSAPrivateKey}.
+     *
+     * @param privateKey privateKey
+     * @return {@link RSACOSEKey}
+     */
+    public static @NonNull RSACOSEKey create(@NonNull RSAPrivateKey privateKey) {
         return create(privateKey, null);
     }
 
-
-    public static RSACOSEKey create(RSAPublicKey publicKey) {
+    /**
+     * Create {@link RSACOSEKey} from {@link RSAPublicKey}.
+     *
+     * @param publicKey publicKey
+     * @return {@link RSACOSEKey}
+     */
+    public static @NonNull RSACOSEKey create(@NonNull RSAPublicKey publicKey) {
         return create(publicKey, null);
     }
 
-    public static RSACOSEKey create(KeyPair keyPair) {
+    /**
+     * Create {@link RSACOSEKey} from {@link KeyPair}.
+     *
+     * @param keyPair keyPair
+     * @return {@link RSACOSEKey}
+     */
+    public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair) {
         return create(keyPair, null);
     }
 
@@ -164,36 +190,36 @@ public class RSACOSEKey extends AbstractCOSEKey {
         return COSEKeyType.RSA;
     }
 
-    public byte[] getN() {
+    public @Nullable byte[] getN() {
         return ArrayUtil.clone(n);
     }
 
-    public byte[] getE() {
+    public @Nullable byte[] getE() {
         return ArrayUtil.clone(e);
     }
 
-    public byte[] getD() {
+    public @Nullable byte[] getD() {
         return ArrayUtil.clone(d);
     }
 
-    public byte[] getP() {
-        return p;
+    public @Nullable byte[] getP() {
+        return ArrayUtil.clone(p);
     }
 
-    public byte[] getQ() {
-        return q;
+    public @Nullable byte[] getQ() {
+        return ArrayUtil.clone(q);
     }
 
-    public byte[] getDP() {
-        return dP;
+    public @Nullable byte[] getDP() {
+        return ArrayUtil.clone(dP);
     }
 
-    public byte[] getDQ() {
-        return dQ;
+    public @Nullable byte[] getDQ() {
+        return ArrayUtil.clone(dQ);
     }
 
-    public byte[] getQInv() {
-        return qInv;
+    public @Nullable byte[] getQInv() {
+        return ArrayUtil.clone(qInv);
     }
 
     @Override
@@ -219,8 +245,8 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public PrivateKey getPrivateKey() {
-        if(!hasPrivateKey()){
+    public @Nullable PrivateKey getPrivateKey() {
+        if (!hasPrivateKey()) {
             return null;
         }
         RSAPrivateKeySpec rsaPrivateKeySpec = new RSAPrivateKeySpec(
@@ -244,7 +270,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;

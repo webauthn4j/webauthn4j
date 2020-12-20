@@ -17,6 +17,8 @@
 package com.webauthn4j.util;
 
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class HexUtil {
 
     private static final String HEX_CHARS = "0123456789ABCDEF";
@@ -25,22 +27,22 @@ public class HexUtil {
     private HexUtil() {
     }
 
-    public static byte[] decode(String source) {
+    public static @NonNull byte[] decode(@NonNull String source) {
         source = source.toUpperCase();
         int sourceLength = source.length();
-        if(sourceLength % 2 != 0){
+        if (sourceLength % 2 != 0) {
             throw new IllegalArgumentException("source length must be even-length.");
         }
-        byte[] bytes = new byte[sourceLength/2];
+        byte[] bytes = new byte[sourceLength / 2];
         char[] sourceChars = source.toCharArray();
         for (int i = 0; i < bytes.length; i++) {
-            bytes[i] = (byte) ((HEX_CHARS.indexOf(sourceChars[i*2]) << 4) + HEX_CHARS.indexOf(sourceChars[i*2 + 1]));
+            bytes[i] = (byte) ((HEX_CHARS.indexOf(sourceChars[i * 2]) << 4) + HEX_CHARS.indexOf(sourceChars[i * 2 + 1]));
         }
 
         return bytes;
     }
 
-    public static String encodeToString(byte[] source) {
+    public static @NonNull String encodeToString(@NonNull byte[] source) {
         StringBuilder stringBuilder = new StringBuilder(source.length * 2);
         for (byte item : source) {
             stringBuilder.append(HEX_CHAR_ARRAY[(item >> 4) & 0xF]);

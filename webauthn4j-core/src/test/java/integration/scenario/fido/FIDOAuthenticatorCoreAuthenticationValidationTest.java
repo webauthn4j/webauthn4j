@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+@SuppressWarnings("ConstantConditions")
 class FIDOAuthenticatorCoreAuthenticationValidationTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -106,7 +107,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
 
         PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
-        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
+        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName");
 
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions

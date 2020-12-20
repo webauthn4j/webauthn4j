@@ -38,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticatorImplTest {
 
     @Test
@@ -54,7 +55,7 @@ class AuthenticatorImplTest {
     }
 
     @Test
-    void createFromRegistrationData_test(){
+    void createFromRegistrationData_test() {
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new byte[32];
         CollectedClientData collectedClientData = mock(CollectedClientData.class);
@@ -75,7 +76,7 @@ class AuthenticatorImplTest {
     void getter_setter_test() {
         AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         AttestationStatement attestationStatement = TestAttestationStatementUtil.createFIDOU2FAttestationStatement();
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
         AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions = new AuthenticationExtensionsAuthenticatorOutputs<>();
         AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions = new AuthenticationExtensionsClientOutputs<>();
         Set<AuthenticatorTransport> transports = Collections.singleton(AuthenticatorTransport.USB);
@@ -98,7 +99,7 @@ class AuthenticatorImplTest {
 
     @Test
     void setCounter_range_test() {
-        AuthenticatorImpl authenticator = new AuthenticatorImpl(null, null, 0);
+        AuthenticatorImpl authenticator = new AuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), TestAttestationStatementUtil.createBasicPackedAttestationStatement(), 0);
 
         assertAll(
                 () -> assertThrows(IllegalArgumentException.class,

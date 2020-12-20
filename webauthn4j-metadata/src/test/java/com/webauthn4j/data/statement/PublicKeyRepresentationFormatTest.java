@@ -54,6 +54,7 @@ public class PublicKeyRepresentationFormatTest {
         assertThat(PublicKeyRepresentationFormat.ECC_X962_DER.getValue()).isEqualTo(0x0101);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     void fromInt_test() {
         TestDTO dto = jsonConverter.readValue("{\"pubkey_representation\":256}", TestDTO.class);

@@ -19,19 +19,20 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
 class CredentialPropertiesExtensionClientOutputTest {
 
     @Test
-    void validate_test(){
+    void validate_test() {
         CredentialPropertiesExtensionClientOutput target = new CredentialPropertiesExtensionClientOutput(mock(CredentialPropertiesOutput.class));
         assertThatCode(target::validate).doesNotThrowAnyException();
     }
 
     @Test
-    void validate_invalid_data_test(){
+    void validate_invalid_data_test() {
         CredentialPropertiesExtensionClientOutput target = new CredentialPropertiesExtensionClientOutput(null);
         assertThatThrownBy(target::validate).isInstanceOf(ConstraintViolationException.class);
     }

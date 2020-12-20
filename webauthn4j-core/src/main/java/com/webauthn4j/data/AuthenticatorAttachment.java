@@ -19,6 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * This enumeration’s values describe authenticators' attachment modalities. Relying Parties use this for two purposes:
@@ -46,14 +48,12 @@ public enum AuthenticatorAttachment {
 
     private final String value;
 
-    AuthenticatorAttachment(String value) {
+    AuthenticatorAttachment(@NonNull String value) {
         this.value = value;
     }
 
-    public static AuthenticatorAttachment create(String value) {
-        if (value == null) {
-            return null;
-        }
+    public static @NonNull AuthenticatorAttachment create(@NonNull String value) {
+        AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "platform":
                 return PLATFORM;
@@ -64,8 +64,9 @@ public enum AuthenticatorAttachment {
         }
     }
 
+    @SuppressWarnings("unused")
     @JsonCreator
-    private static AuthenticatorAttachment deserialize(String value) throws InvalidFormatException {
+    private static @NonNull AuthenticatorAttachment deserialize(@NonNull String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -74,7 +75,7 @@ public enum AuthenticatorAttachment {
     }
 
     @JsonValue
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 

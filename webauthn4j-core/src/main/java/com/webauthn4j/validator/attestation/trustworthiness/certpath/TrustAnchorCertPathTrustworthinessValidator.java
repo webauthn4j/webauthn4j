@@ -20,6 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorsResolver;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.util.Set;
@@ -31,13 +32,14 @@ public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustwo
 
     private final TrustAnchorsResolver trustAnchorsResolver;
 
-    public TrustAnchorCertPathTrustworthinessValidator(TrustAnchorsResolver trustAnchorsResolver) {
+    public TrustAnchorCertPathTrustworthinessValidator(@NonNull TrustAnchorsResolver trustAnchorsResolver) {
         AssertUtil.notNull(trustAnchorsResolver, "trustAnchorsResolver must not be null");
         this.trustAnchorsResolver = trustAnchorsResolver;
     }
 
     @Override
-    protected Set<TrustAnchor> resolveTrustAnchors(AAGUID aaguid) {
+    protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
         return trustAnchorsResolver.resolve(aaguid);
     }
 }

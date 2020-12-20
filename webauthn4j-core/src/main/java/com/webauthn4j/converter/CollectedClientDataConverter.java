@@ -16,11 +16,14 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.nio.charset.StandardCharsets;
 
@@ -36,7 +39,7 @@ public class CollectedClientDataConverter {
     //~ Constructors
     // ================================================================================================
 
-    public CollectedClientDataConverter(ObjectConverter objectConverter) {
+    public CollectedClientDataConverter(@NonNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.jsonConverter = objectConverter.getJsonConverter();
     }
@@ -51,12 +54,15 @@ public class CollectedClientDataConverter {
      * @param base64UrlString the source byte array to convert
      * @return the converted object
      */
-    public CollectedClientData convert(String base64UrlString) {
-        if (base64UrlString == null) {
-            return null;
+    public @Nullable CollectedClientData convert(@NonNull String base64UrlString) {
+        try{
+            AssertUtil.notNull(base64UrlString, "base64UrlString must not be null");
+            byte[] bytes = Base64UrlUtil.decode(base64UrlString);
+            return convert(bytes);
         }
-        byte[] bytes = Base64UrlUtil.decode(base64UrlString);
-        return convert(bytes);
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -65,12 +71,15 @@ public class CollectedClientDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public CollectedClientData convert(byte[] source) {
-        if (source == null) {
-            return null;
+    public @Nullable CollectedClientData convert(@NonNull byte[] source) {
+        try{
+            AssertUtil.notNull(source, "source must not be null");
+            String jsonString = new String(source, StandardCharsets.UTF_8);
+            return jsonConverter.readValue(jsonString, CollectedClientData.class);
         }
-        String jsonString = new String(source, StandardCharsets.UTF_8);
-        return jsonConverter.readValue(jsonString, CollectedClientData.class);
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -79,8 +88,14 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public byte[] convertToBytes(CollectedClientData source) {
-        return jsonConverter.writeValueAsBytes(source);
+    public @NonNull byte[] convertToBytes(@NonNull CollectedClientData source) {
+        try{
+            AssertUtil.notNull(source, "source must not be null");
+            return jsonConverter.writeValueAsBytes(source);
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
     /**
@@ -89,9 +104,14 @@ public class CollectedClientDataConverter {
      * @param source the source object to convert
      * @return the converted byte array
      */
-    public String convertToBase64UrlString(CollectedClientData source) {
-        byte[] bytes = convertToBytes(source);
-        return Base64UrlUtil.encodeToString(bytes);
+    public @NonNull String convertToBase64UrlString(@NonNull CollectedClientData source) {
+        try{
+            byte[] bytes = convertToBytes(source);
+            return Base64UrlUtil.encodeToString(bytes);
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
     }
 
 }

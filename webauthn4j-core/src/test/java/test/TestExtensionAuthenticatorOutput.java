@@ -22,7 +22,7 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 
 public class TestExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<Boolean> implements RegistrationExtensionAuthenticatorOutput {
 
-    public static String ID = "test";
+    public static final String ID = "test";
 
     public TestExtensionAuthenticatorOutput(boolean value) {
         super(value);
@@ -35,7 +35,7 @@ public class TestExtensionAuthenticatorOutput extends SingleValueExtensionOutput
 
     @Override
     public void validate() {
-        if(getValue() == null){
+        if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
     }

@@ -37,11 +37,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 
+@SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "ConstantConditions"})
 public class DeviceCheckManagerSample {
 
-    private Logger logger = LoggerFactory.getLogger(DeviceCheckManagerSample.class);
-
     private final DeviceCheckManager deviceCheckManager;
+    private Logger logger = LoggerFactory.getLogger(DeviceCheckManagerSample.class);
 
     public DeviceCheckManagerSample() {
         CertFileTrustAnchorsProvider certFileTrustAnchorsProvider = getAppleAppAttestCertFileTrustAnchorsProvider();
@@ -150,7 +150,7 @@ public class DeviceCheckManagerSample {
         // Arrays.equals(authenticator.getAttestedCredentialData().getCredentialId(), keyId)
     }
 
-    private CertFileTrustAnchorsProvider getAppleAppAttestCertFileTrustAnchorsProvider()  {
+    private CertFileTrustAnchorsProvider getAppleAppAttestCertFileTrustAnchorsProvider() {
         CertFileTrustAnchorsProvider certFileTrustAnchorsProvider = new CertFileTrustAnchorsProvider();
         try {
             Path path = Paths.get(ClassLoader.getSystemResource("apple-app-attest/Apple_App_Attestation_Root_CA.pem").toURI());

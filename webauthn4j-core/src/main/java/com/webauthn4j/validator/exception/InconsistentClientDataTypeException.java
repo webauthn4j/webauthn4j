@@ -16,20 +16,22 @@
 
 package com.webauthn4j.validator.exception;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Thrown if inconsistent type is specified for client data
  */
 @SuppressWarnings("squid:S110")
 public class InconsistentClientDataTypeException extends ValidationException {
-    public InconsistentClientDataTypeException(String message, Throwable cause) {
+    public InconsistentClientDataTypeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public InconsistentClientDataTypeException(String message) {
+    public InconsistentClientDataTypeException(@Nullable String message) {
         super(message);
     }
 
-    public InconsistentClientDataTypeException(Throwable cause) {
+    public InconsistentClientDataTypeException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -22,6 +22,7 @@ import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.util.UUIDUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
@@ -30,6 +31,7 @@ import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.apache.kerby.asn1.type.Asn1OctetString;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -48,27 +50,46 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
 
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public AttestationType validate(CoreRegistrationObject registrationObject) {
+    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+        AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
         }
 
         PackedAttestationStatement attestationStatement = (PackedAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        validateAttestationStatementNotNull(attestationStatement);
         byte[] sig = attestationStatement.getSig();
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
         // If x5c is present,
         if (attestationStatement.getX5c() != null) {
+            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
         // If x5c is not present, self attestation is in use.
         else {
+            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateSelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
     }
 
-    private AttestationType validateX5c(CoreRegistrationObject registrationObject, PackedAttestationStatement attestationStatement, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
+    void validateAttestationStatementNotNull(PackedAttestationStatement attestationStatement) {
+        if (attestationStatement == null) {
+            throw new BadAttestationStatementException("attestation statement is not found.");
+        }
+        if (attestationStatement.getAlg() == null) {
+            throw new BadAttestationStatementException("alg must not be null");
+        }
+        if (attestationStatement.getSig() == null) {
+            throw new BadAttestationStatementException("sig must not be null");
+        }
+        // if x5c is not present, self attestation is in use
+    }
+
+    @SuppressWarnings("SameReturnValue")
+    private @NonNull AttestationType validateX5c(@NonNull CoreRegistrationObject registrationObject, @NonNull PackedAttestationStatement attestationStatement, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
         }
@@ -85,6 +106,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         // the value of this extension matches the aaguid in authenticatorData.
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         AAGUID aaguidInCertificate = extractAAGUIDFromAttestationCertificate(attestationCertificate);
+        //noinspection ConstantConditions as null check is already done in caller
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
         if (aaguidInCertificate != AAGUID.NULL && !Objects.equals(aaguidInCertificate, aaguid)) {
             throw new BadAttestationStatementException("AAGUID in attestation certificate doesn't match the AAGUID in authenticatorData.");
@@ -94,7 +116,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.BASIC;
     }
 
-    AAGUID extractAAGUIDFromAttestationCertificate(X509Certificate certificate) {
+    @NonNull AAGUID extractAAGUIDFromAttestationCertificate(@NonNull X509Certificate certificate) {
         byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
         if (extensionValue == null) {
             return AAGUID.NULL;
@@ -110,15 +132,18 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private AttestationType validateSelfAttestation(CoreRegistrationObject registrationObject, byte[] sig, COSEAlgorithmIdentifier alg, byte[] attrToBeSigned) {
-        COSEKey coseKey =
-                registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
+    @SuppressWarnings("SameReturnValue")
+    private @NonNull AttestationType validateSelfAttestation(@NonNull CoreRegistrationObject registrationObject, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
+        //noinspection ConstantConditions as null check is already done in caller
+        COSEKey coseKey = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
+        //noinspection ConstantConditions as null check is already done in caller
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
             throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
+        //noinspection ConstantConditions as null check is already done in caller
         if (!verifySignature(coseKey.getPublicKey(), alg, sig, attrToBeSigned)) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.");
         }
@@ -126,7 +151,8 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.SELF;
     }
 
-    private boolean verifySignature(PublicKey publicKey, COSEAlgorithmIdentifier algorithmIdentifier, byte[] signature, byte[] data) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean verifySignature(@NonNull PublicKey publicKey, @NonNull COSEAlgorithmIdentifier algorithmIdentifier, @NonNull byte[] signature, @NonNull byte[] data) {
         try {
             String jcaName = getJcaName(algorithmIdentifier);
             Signature verifier = SignatureUtil.createSignature(jcaName);
@@ -139,7 +165,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
+    private @NonNull byte[] getAttToBeSigned(@NonNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

@@ -17,7 +17,6 @@
 description = "WebAuthn4J Device Check library"
 
 
-
 dependencies {
     api project(':webauthn4j-core')
 
@@ -26,6 +25,8 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
+
+    implementation("org.checkerframework:checker-qual")
 
     //Test
     testImplementation project(':webauthn4j-test')

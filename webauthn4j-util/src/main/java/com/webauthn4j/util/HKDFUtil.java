@@ -17,6 +17,7 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -40,7 +41,7 @@ public class HKDFUtil {
      * @param outputLength length of output keying material in bytes
      * @return output keying material
      */
-    public static byte[] calculateHKDFSHA256(byte[] ikm, byte[] salt, byte[] info, int outputLength) {
+    public static @NonNull byte[] calculateHKDFSHA256(@NonNull byte[] ikm, @NonNull byte[] salt, @NonNull byte[] info, int outputLength) {
         byte[] pseudoRandomKey = extract(salt, ikm);
         return expand(pseudoRandomKey, info, outputLength);
     }
@@ -52,7 +53,7 @@ public class HKDFUtil {
      * @param salt salt
      * @return a pseudo random key
      */
-    static byte[] extract(byte[] ikm, byte[] salt) {
+    static @NonNull byte[] extract(@NonNull byte[] ikm, @NonNull byte[] salt) {
         AssertUtil.notNull(ikm, "ikm must not be null");
         if (salt == null || salt.length == 0) {
             salt = new byte[HASH_LENGTH];
@@ -66,7 +67,7 @@ public class HKDFUtil {
      * @param ikm input keying material
      * @return a pseudo random key
      */
-    static byte[] extract(byte[] ikm) {
+    static @NonNull byte[] extract(@NonNull byte[] ikm) {
         return extract(ikm, null);
     }
 
@@ -78,7 +79,7 @@ public class HKDFUtil {
      * @param outputLength length of output keying material in bytes
      * @return output keying material
      */
-    static byte[] expand(byte[] key, byte[] info, int outputLength) {
+    static @NonNull byte[] expand(@NonNull byte[] key, @NonNull byte[] info, int outputLength) {
         AssertUtil.notNull(key, "key must not be null");
         if (outputLength <= 0) {
             throw new IllegalArgumentException("outputLength must be positive");
@@ -117,7 +118,7 @@ public class HKDFUtil {
         return result;
     }
 
-    private static Mac createMac(byte[] key) {
+    private static @NonNull Mac createMac(@NonNull byte[] key) {
         Mac mac;
         try {
             mac = Mac.getInstance("HmacSHA256");

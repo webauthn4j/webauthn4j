@@ -26,9 +26,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsAuthenticatorInputsTest {
 
-    private CborConverter cborConverter = new ObjectConverter().getCborConverter();
+    private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
 
     @Test
     void registration_variant_test() {
@@ -44,7 +45,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         assertThat(target.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
-        assertThat((Boolean)target.getValue("uvm")).isTrue();
+        assertThat((Boolean) target.getValue("uvm")).isTrue();
         assertThat(target.getValue("credProtect")).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
@@ -67,7 +68,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         assertThat(target.getUvm()).isTrue();
         assertThat(target.getUnknownKeys()).containsExactly("unknown");
 
-        assertThat((Boolean)target.getValue("uvm")).isTrue();
+        assertThat((Boolean) target.getValue("uvm")).isTrue();
         assertThat(target.getValue("unknown")).isEqualTo(1);
         assertThat(target.getValue("invalid")).isNull();
 
@@ -78,7 +79,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     }
 
     @Test
-    void serialize_registration_test(){
+    void serialize_registration_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
         builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> registrationExtensions = builder.build();
@@ -87,9 +88,10 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     }
 
     @Test
-    void deserialize_registration_test(){
+    void deserialize_registration_test() {
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance =
-                cborConverter.readValue(HexUtil.decode("BF6B6372656450726F7465637401FF"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {});
+                cborConverter.readValue(HexUtil.decode("BF6B6372656450726F7465637401FF"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {
+                });
         assertThat(instance.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
     }
 
@@ -106,7 +108,6 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
                 .isEqualTo(instance2)
                 .hasSameHashCodeAs(instance2);
     }
-
 
 
 }

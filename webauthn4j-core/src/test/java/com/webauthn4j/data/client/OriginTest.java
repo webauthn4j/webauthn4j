@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for Origin
  */
+@SuppressWarnings("ConstantConditions")
 class OriginTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -66,17 +67,17 @@ class OriginTest {
     }
 
     @Test
-    void toString_test(){
+    void toString_test() {
         assertAll(
-                ()-> assertThat(new Origin("example.com")).hasToString("example.com"),
-                ()-> assertThat(new Origin("https://example.com")).hasToString("https://example.com"),
-                ()-> assertThat(new Origin("https://example.com:443")).hasToString("https://example.com:443"),
-                ()-> assertThat(new Origin("https://example.com:8443")).hasToString("https://example.com:8443"),
-                ()-> assertThat(new Origin("http://example.com")).hasToString("http://example.com"),
-                ()-> assertThat(new Origin("http://example.com:80")).hasToString("http://example.com:80"),
-                ()-> assertThat(new Origin("http://example.com:8080")).hasToString("http://example.com:8080"),
-                ()-> assertThat(new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck")).hasToString("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck"),
-                ()-> assertThat(new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=")).hasToString("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=")
+                () -> assertThat(new Origin("example.com")).hasToString("example.com"),
+                () -> assertThat(new Origin("https://example.com")).hasToString("https://example.com"),
+                () -> assertThat(new Origin("https://example.com:443")).hasToString("https://example.com:443"),
+                () -> assertThat(new Origin("https://example.com:8443")).hasToString("https://example.com:8443"),
+                () -> assertThat(new Origin("http://example.com")).hasToString("http://example.com"),
+                () -> assertThat(new Origin("http://example.com:80")).hasToString("http://example.com:80"),
+                () -> assertThat(new Origin("http://example.com:8080")).hasToString("http://example.com:8080"),
+                () -> assertThat(new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck")).hasToString("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck"),
+                () -> assertThat(new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=")).hasToString("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=")
         );
     }
 
@@ -85,7 +86,7 @@ class OriginTest {
     void constructor_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("https", "example.com", 443);
-        Origin originC = new Origin("HTTPs","EXAMPLE.COM",443);
+        Origin originC = new Origin("HTTPs", "EXAMPLE.COM", 443);
         assertThat(originA)
                 .isEqualTo(originB)
                 .isEqualTo(originC);
@@ -108,14 +109,14 @@ class OriginTest {
     }
 
     @Test
-    void create_with_null_test(){
+    void create_with_null_test() {
         assertThrows(IllegalArgumentException.class,
                 () -> Origin.create(null)
         );
     }
 
     @Test
-    void explicit_port_notation_and_non_explicit_port_notation_comparison_test(){
+    void explicit_port_notation_and_non_explicit_port_notation_comparison_test() {
         assertThat(new Origin("https://example.com:443")).isEqualTo(new Origin("https://example.com"));
         assertThat(new Origin("https://example.com:443")).hasToString("https://example.com:443");
     }
@@ -253,7 +254,6 @@ class OriginTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void hashCode_https_case_insensitive_test() {
         Origin originA = new Origin("https://example.com");
         Origin originB = new Origin("HTTPS://example.com");
@@ -263,14 +263,13 @@ class OriginTest {
 
 
         assertThat(originA)
-            .hasSameHashCodeAs(originB)
-            .hasSameHashCodeAs(originC)
-            .hasSameHashCodeAs(originD)
-            .hasSameHashCodeAs(originE);
+                .hasSameHashCodeAs(originB)
+                .hasSameHashCodeAs(originC)
+                .hasSameHashCodeAs(originD)
+                .hasSameHashCodeAs(originE);
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void hashCode_http_case_insensitive_test() {
         Origin originA = new Origin("http://localhost");
         Origin originB = new Origin("HTTP://localhost");
@@ -280,10 +279,10 @@ class OriginTest {
 
 
         assertThat(originA)
-            .hasSameHashCodeAs(originB)
-            .hasSameHashCodeAs(originC)
-            .hasSameHashCodeAs(originD)
-            .hasSameHashCodeAs(originE);
+                .hasSameHashCodeAs(originB)
+                .hasSameHashCodeAs(originC)
+                .hasSameHashCodeAs(originD)
+                .hasSameHashCodeAs(originE);
     }
 
     @Test

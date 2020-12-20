@@ -52,17 +52,17 @@ import java.util.stream.Collectors;
 public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";
-    Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
-    OffsetDateTime nextUpdate;
-    OffsetDateTime lastRefresh;
     private final Logger logger = LoggerFactory.getLogger(FidoMdsMetadataItemsProvider.class);
     private final JsonConverter jsonConverter;
     private final JWSFactory jwsFactory;
-    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-    private String token = null;
     private final HttpClient httpClient;
     private final TrustAnchor trustAnchor;
     private final MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
+    Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
+    OffsetDateTime nextUpdate;
+    OffsetDateTime lastRefresh;
+    private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
+    private final String token;
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();
@@ -113,6 +113,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
         InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
                 .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
+        //noinspection ConstantConditions
         return CertificateUtil.generateX509Certificate(inputStream);
     }
 
@@ -128,7 +129,8 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
             String query = uriObject.getQuery();
             if (query == null) {
                 query = "token=" + token;
-            } else {
+            }
+            else {
                 query += "&" + "token=" + token;
             }
             return new URI(uriObject.getScheme(), uriObject.getAuthority(),
@@ -218,7 +220,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private void validateCertPath(JWS<MetadataTOCPayload> jws) {
         Set<TrustAnchor> trustAnchors = Collections.singleton(trustAnchor);
-        CertPath certPath = jws.getHeader().getX5c().createCertPath();
+        CertPath certPath = jws.getHeader().getX5c();
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);

@@ -29,9 +29,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Created by ynojima on 2017/08/27.
  */
+@SuppressWarnings("ConstantConditions")
 class RpIdHashValidatorTest {
 
-    private final Origin origin = null;
+    private final Origin origin = Origin.create("https://example.com");
 
     private final RpIdHashValidator target = new RpIdHashValidator();
 
@@ -69,7 +70,6 @@ class RpIdHashValidatorTest {
     void verifyRpIdHash_test_with_relyingParty_null() {
 
         String rpIdA = "example.com";
-        String rpIdB = "example.com";
         byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
         byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
 
@@ -79,19 +79,4 @@ class RpIdHashValidatorTest {
         );
     }
 
-    @Test
-    void verifyRpIdHash_test_with_relyingParty_rpId_null() {
-
-        String rpIdA = "example.com";
-        String rpIdB = "example.com";
-        byte[] rpIdBytesA = rpIdA.getBytes(StandardCharsets.UTF_8);
-        byte[] rpIdHashA = MessageDigestUtil.createSHA256().digest(rpIdBytesA);
-
-        ServerProperty serverProperty = new ServerProperty(origin, null, null, null);
-
-        //When
-        assertThrows(IllegalArgumentException.class,
-                () -> target.validate(rpIdHashA, serverProperty)
-        );
-    }
 }

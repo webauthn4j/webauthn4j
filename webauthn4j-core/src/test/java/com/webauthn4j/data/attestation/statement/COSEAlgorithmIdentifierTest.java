@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+@SuppressWarnings("ConstantConditions")
 class COSEAlgorithmIdentifierTest {
 
     private final ObjectConverter objectConverter = new ObjectConverter();
@@ -84,9 +85,16 @@ class COSEAlgorithmIdentifierTest {
     }
 
     @Test
-    void deserialize_test_with_invalid_value() {
+    void deserialize_test_with_empty_string_value() {
         assertThatThrownBy(
                 () -> jsonConverter.readValue("{\"cose_alg_id\": \"\"}", TestDTO.class)
+        ).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
+    void deserialize_test_with_invalid_value() {
+        assertThatThrownBy(
+                () -> jsonConverter.readValue("{\"cose_alg_id\": \"invalid\"}", TestDTO.class)
         ).isInstanceOf(DataConversionException.class);
     }
 

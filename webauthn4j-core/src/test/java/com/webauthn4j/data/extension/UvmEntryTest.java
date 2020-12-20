@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UvmEntryTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         UvmEntry target = new UvmEntry(new Number[]{2, 2, 2});
         assertThat(target.getUserVerificationMethod()).isEqualTo(UserVerificationMethod.FINGERPRINT);
         assertThat(target.getKeyProtectionType()).isEqualTo(KeyProtectionType.HARDWARE);
@@ -36,25 +36,25 @@ class UvmEntryTest {
     }
 
     @Test
-    void getUserVerificationMethod_with_invalid_data_test(){
+    void getUserVerificationMethod_with_invalid_data_test() {
         UvmEntry target = new UvmEntry(new Number[]{});
         assertThatThrownBy(target::getUserVerificationMethod).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    void getKeyProtectionType_with_invalid_data_test(){
+    void getKeyProtectionType_with_invalid_data_test() {
         UvmEntry target = new UvmEntry(new Number[]{});
         assertThatThrownBy(target::getKeyProtectionType).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    void getMatcherProtectionType_with_invalid_data_test(){
+    void getMatcherProtectionType_with_invalid_data_test() {
         UvmEntry target = new UvmEntry(new Number[]{});
         assertThatThrownBy(target::getMatcherProtectionType).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    void getter_test(){
+    void getter_test() {
         //noinspection MismatchedQueryAndUpdateOfCollection
         UvmEntry instance = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
 
@@ -70,7 +70,7 @@ class UvmEntryTest {
     }
 
     @Test
-    void equals_hashCode_test(){
+    void equals_hashCode_test() {
         UvmEntry instanceA = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
         UvmEntry instanceB = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
 
@@ -78,7 +78,6 @@ class UvmEntryTest {
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
     }
-
 
 
 }

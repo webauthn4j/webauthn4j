@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@SuppressWarnings("ConstantConditions")
 class TokenBindingValidatorTest {
 
     private final TokenBindingValidator target = new TokenBindingValidator();
@@ -45,14 +46,14 @@ class TokenBindingValidatorTest {
     }
 
     @Test
-    void validate_TokenBinding_not_supported_test() {
+    void validate_TokenBindingStatus_not_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.NOT_SUPPORTED, bindingId);
         target.validate(tokenBinding, bindingId);
     }
 
     @Test
-    void validate_TokenBinding_supported_test() {
+    void validate_TokenBindingStatus_supported_test() {
         byte[] bindingId = null;
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.SUPPORTED, bindingId);
         target.validate(tokenBinding, bindingId);
