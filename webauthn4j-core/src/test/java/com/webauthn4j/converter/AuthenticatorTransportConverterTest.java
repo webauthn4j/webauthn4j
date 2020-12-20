@@ -17,6 +17,7 @@
 package com.webauthn4j.converter;
 
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.AuthenticatorTransport;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,11 @@ class AuthenticatorTransportConverterTest {
     }
 
     @Test
+    void convert_null_test() {
+        assertThatThrownBy(() -> converter.convert(null)).isInstanceOf(DataConversionException.class);
+    }
+
+    @Test
     void convert_unknown_value_test() {
         assertThat(converter.convert("unknown")).isEqualTo(AuthenticatorTransport.create("unknown"));
     }
@@ -48,12 +54,17 @@ class AuthenticatorTransportConverterTest {
 
     @Test
     void convertSet_null_test() {
-        assertThatThrownBy(() -> converter.convertSet(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> converter.convertSet(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
     void convertToString_test() {
         assertThat(converter.convertToString(AuthenticatorTransport.USB)).isEqualTo("usb");
+    }
+
+    @Test
+    void convertToString_null_test() {
+        assertThatThrownBy(() -> converter.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -64,7 +75,7 @@ class AuthenticatorTransportConverterTest {
     @Test
     void convertSetToStringSet_null_test() {
         //noinspection ConstantConditions
-        assertThatThrownBy(() -> converter.convertSetToStringSet(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> converter.convertSetToStringSet(null)).isInstanceOf(DataConversionException.class);
     }
 
 }

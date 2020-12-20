@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 public class AuthenticatorTransportConverter {
 
     public @NonNull AuthenticatorTransport convert(@NonNull String value) {
-        AssertUtil.notNull(value, "value must not be null");
         try {
+            AssertUtil.notNull(value, "value must not be null");
             return AuthenticatorTransport.create(value);
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
@@ -37,19 +37,31 @@ public class AuthenticatorTransportConverter {
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<AuthenticatorTransport> convertSet(@NonNull Set<String> values) {
-        AssertUtil.notNull(values, "values must not be null");
-        return values.stream().map(this::convert).collect(Collectors.toSet());
+        try{
+            AssertUtil.notNull(values, "values must not be null");
+            return values.stream().map(this::convert).collect(Collectors.toSet());
+        } catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
     }
 
     public @NonNull String convertToString(@NonNull AuthenticatorTransport value) {
-        AssertUtil.notNull(value, "value must not be null");
-        return value.getValue();
+        try{
+            AssertUtil.notNull(value, "value must not be null");
+            return value.getValue();
+        } catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
     }
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<String> convertSetToStringSet(@NonNull Set<AuthenticatorTransport> values) {
-        AssertUtil.notNull(values, "values must not be null");
-        return values.stream().map(this::convertToString).collect(Collectors.toSet());
+        try{
+            AssertUtil.notNull(values, "values must not be null");
+            return values.stream().map(this::convertToString).collect(Collectors.toSet());
+        } catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
     }
 
 }

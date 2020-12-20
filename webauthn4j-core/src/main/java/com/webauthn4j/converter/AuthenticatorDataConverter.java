@@ -92,7 +92,11 @@ public class AuthenticatorDataConverter {
             }
             byteArrayOutputStream.write(convert(source.getExtensions()));
             return byteArrayOutputStream.toByteArray();
-        } catch (IOException e) {
+        }
+        catch (IllegalArgumentException e){
+            throw new DataConversionException(e);
+        }
+        catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -138,28 +142,13 @@ public class AuthenticatorDataConverter {
 
             return new AuthenticatorData<>(rpIdHash, flags, counter, attestedCredentialData, extensions);
 
-        } catch (BufferUnderflowException e) {
+        }
+        catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
+        catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
-    }
-
-    <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
-        // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
-        if (byteBuffer.remaining() == 0) {
-            return new AuthenticationExtensionsAuthenticatorOutputs<>();
-        }
-        byte[] remaining = new byte[byteBuffer.remaining()];
-        byteBuffer.get(remaining);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
-        AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
-                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
-                });
-        if(envelope == null){
-            return null;
-        }
-        int leftoverLength = remaining.length - envelope.getLength();
-        byteBuffer.position(byteBuffer.position() - leftoverLength);
-        return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
     /**
@@ -200,6 +189,25 @@ public class AuthenticatorDataConverter {
         else {
             return cborConverter.writeValueAsBytes(extensions);
         }
+    }
+
+    <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
+        // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
+        if (byteBuffer.remaining() == 0) {
+            return new AuthenticationExtensionsAuthenticatorOutputs<>();
+        }
+        byte[] remaining = new byte[byteBuffer.remaining()];
+        byteBuffer.get(remaining);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(remaining);
+        AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
+                cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
+                });
+        if(envelope == null){
+            return null;
+        }
+        int leftoverLength = remaining.length - envelope.getLength();
+        byteBuffer.position(byteBuffer.position() - leftoverLength);
+        return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
 

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.converter;
 
+import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientInput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
@@ -37,7 +38,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertRegistrationExtensions_null_test() {
-        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convert(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
@@ -51,7 +52,7 @@ class AuthenticationExtensionsClientInputsConverterTest {
     @SuppressWarnings("ConstantConditions")
     @Test
     void convertAuthenticationExtensionsToString_null_test() {
-        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> authenticationExtensionsClientInputsConverter.convertToString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test
