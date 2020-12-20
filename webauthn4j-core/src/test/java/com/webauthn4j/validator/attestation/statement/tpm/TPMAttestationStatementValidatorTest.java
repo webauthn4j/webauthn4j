@@ -121,54 +121,6 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_ver_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(null, source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_alg_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(null, source.getX5c(), source.getSig(), source.getCertInfo(), source.getPubArea());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_x5c_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(source.getAlg(), null, source.getSig(), source.getCertInfo(), source.getPubArea());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_sig_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), null, source.getCertInfo(), source.getPubArea());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_certInfo_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), null, source.getPubArea());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_pubArea_null_test(){
-        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
-        TPMAttestationStatement source = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
-        TPMAttestationStatement attestationStatement = new TPMAttestationStatement(source.getAlg(), source.getX5c(), source.getSig(), source.getCertInfo(), null);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
     void validateAikCert_with_non_empty_subjectDN_test() {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setSubjectDN("O=SharpLab., C=US");

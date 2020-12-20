@@ -31,10 +31,10 @@ class AuthenticatorDataTest {
 
     @Test
     void flag_operation_test() {
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target1 = new AuthenticatorData<>(null, BIT_UP, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target2 = new AuthenticatorData<>(null, BIT_UV, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target3 = new AuthenticatorData<>(null, BIT_AT, 0);
-        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target4 = new AuthenticatorData<>(null, BIT_ED, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target1 = new AuthenticatorData<>(new byte[32], BIT_UP, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target2 = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target3 = new AuthenticatorData<>(new byte[32], BIT_AT, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target4 = new AuthenticatorData<>(new byte[32], BIT_ED, 0);
 
         assertAll(
                 () -> assertThat(target1.isFlagUP()).isTrue(),

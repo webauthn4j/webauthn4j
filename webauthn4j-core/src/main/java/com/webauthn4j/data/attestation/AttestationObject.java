@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -50,8 +51,10 @@ public class AttestationObject implements Serializable {
 
     @JsonCreator
     public AttestationObject(
-            @Nullable @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
-            @Nullable @JsonProperty("attStmt") AttestationStatement attestationStatement) {
+            @NonNull @JsonProperty("authData") AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData,
+            @NonNull @JsonProperty("attStmt") AttestationStatement attestationStatement) {
+        AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
+        AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
         this.authenticatorData = authenticatorData;
         this.attestationStatement = attestationStatement;
     }
@@ -62,9 +65,6 @@ public class AttestationObject implements Serializable {
 
     @JsonProperty("fmt")
     public @NonNull String getFormat() {
-        if(attestationStatement == null){
-            throw new IllegalStateException("attestationStatement must not be null");
-        }
         return attestationStatement.getFormat();
     }
 

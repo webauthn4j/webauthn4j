@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -43,7 +44,6 @@ public class SignatureAlgorithm {
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
-    @JsonCreator
     public static SignatureAlgorithm create(@NonNull String jcaName) {
         switch (jcaName) {
             case "SHA256withECDSA":
@@ -67,6 +67,16 @@ public class SignatureAlgorithm {
 
     public static SignatureAlgorithm create(@NonNull String jcaName, @NonNull String messageDigestJcaName) {
         return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
+    }
+
+    @SuppressWarnings("unused")
+    @JsonCreator
+    private static @NonNull SignatureAlgorithm deserialize(String value) throws InvalidFormatException {
+        try {
+            return create(value);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidFormatException(null, "value is out of range", value, SignatureAlgorithm.class);
+        }
     }
 
     @JsonValue

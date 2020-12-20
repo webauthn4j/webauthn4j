@@ -46,7 +46,7 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x00});
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, Origin.create("http://example.com"), null);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
@@ -59,7 +59,7 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = new DefaultChallenge(new byte[]{0x01});
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, Origin.create("http://example.com"), null);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When
@@ -74,7 +74,7 @@ class ChallengeValidatorTest {
         Challenge challengeA = new DefaultChallenge(new byte[]{0x00});
         Challenge challengeB = null;
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, null, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, challengeA, Origin.create("http://example.com"), null);
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challengeB, null);
 
         //When

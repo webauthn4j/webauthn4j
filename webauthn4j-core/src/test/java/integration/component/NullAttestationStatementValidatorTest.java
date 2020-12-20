@@ -60,7 +60,7 @@ class NullAttestationStatementValidatorTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,
@@ -96,7 +96,7 @@ class NullAttestationStatementValidatorTest {
 
         PublicKeyCredentialParameters publicKeyCredentialParameters = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
 
-        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity();
+        PublicKeyCredentialUserEntity publicKeyCredentialUserEntity = new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName");
 
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(

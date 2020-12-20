@@ -19,31 +19,22 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AndroidKeyAttestationStatementTest {
 
     @Test
-    void validate_test() {
-        new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()).validate();
+    void constructor_test() {
+        AttestationCertificatePath certificatePath =  new AttestationCertificatePath();
+        new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], certificatePath).validate();
         assertAll(
-                () -> {
-                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
-                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
-                },
-                () -> {
-                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, new AttestationCertificatePath());
-                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
-                },
-                () -> {
-                    AndroidKeyAttestationStatement androidKeyAttestationStatement = new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath());
-                    assertThrows(ConstraintViolationException.class, androidKeyAttestationStatement::validate);
-                }
+                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, certificatePath)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(null, new byte[32], certificatePath)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 

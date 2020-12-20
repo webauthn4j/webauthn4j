@@ -17,6 +17,9 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.util.JsonConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +29,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class CurveTest {
+
+    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {
@@ -39,9 +44,21 @@ class CurveTest {
 
     @Test
     void deserialize_with_invalid_value_test() {
-        assertThrows(InvalidFormatException.class,
-                () -> Curve.deserialize(-1)
+        assertThrows(DataConversionException.class,
+                () -> jsonConverter.readValue("{\"value\": -1}", CurveDto.class)
         );
+    }
+
+    static class CurveDto{
+        private Curve value;
+
+        public Curve getValue() {
+            return value;
+        }
+
+        public void setValue(Curve value) {
+            this.value = value;
+        }
     }
 
     @Test

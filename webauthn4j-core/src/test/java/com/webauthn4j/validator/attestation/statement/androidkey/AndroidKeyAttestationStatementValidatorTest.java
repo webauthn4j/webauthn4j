@@ -52,23 +52,6 @@ class AndroidKeyAttestationStatementValidatorTest {
         assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
-    @Test
-    void validateAttestationStatementNotNull_with_alg_null_test(){
-        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(null, new byte[32], new AttestationCertificatePath());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_sig_null_test(){
-        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.RS256, null, new AttestationCertificatePath());
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_x5c_null_test(){
-        AndroidKeyAttestationStatement attestationStatement = new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
 
     @Test
     void validate_with_teeEnforcedOnly_option_test() {
@@ -79,16 +62,7 @@ class AndroidKeyAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_null_x5c_test1() {
-        RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
-        when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null));
-        assertThrows(BadAttestationStatementException.class,
-                () -> target.validate(registrationObject)
-        );
-    }
-
-    @Test
-    void validate_null_x5c_test2() {
+    void validate_empty_x5c_test2() {
         RegistrationObject registrationObject = mock(RegistrationObject.class, RETURNS_DEEP_STUBS);
         when(registrationObject.getAttestationObject().getAttestationStatement()).thenReturn(new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath()));
         assertThrows(BadAttestationStatementException.class,

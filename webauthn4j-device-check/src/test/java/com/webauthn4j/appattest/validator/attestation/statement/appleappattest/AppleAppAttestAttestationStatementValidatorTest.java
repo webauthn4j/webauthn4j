@@ -29,13 +29,12 @@ import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.security.cert.X509Certificate;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class AppleAppAttestAttestationStatementValidatorTest {
 
@@ -54,15 +53,6 @@ class AppleAppAttestAttestationStatementValidatorTest {
     }
 
     @Test
-    void validate_X5c_null_test() {
-        final DCRegistrationObject dcRegistrationObject = mock(DCRegistrationObject.class, Mockito.RETURNS_DEEP_STUBS);
-        AppleAppAttestAttestationStatement attestationStatement = mock(AppleAppAttestAttestationStatement.class);
-        when(dcRegistrationObject.getAttestationObject().getAttestationStatement()).thenReturn(attestationStatement);
-        when(attestationStatement.getX5c()).thenReturn(null);
-        assertThatThrownBy(() -> target.validate(dcRegistrationObject)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
     void validateAttestationStatementNotNull_test(){
         AppleAppAttestAttestationStatement attestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]);
         target.validateAttestationStatementNotNull(attestationStatement);
@@ -74,20 +64,8 @@ class AppleAppAttestAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_x5c_null_test(){
-        AppleAppAttestAttestationStatement attestationStatement = new AppleAppAttestAttestationStatement(null, new byte[32]);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
-    void validateAttestationStatementNotNull_with_receipt_null_test(){
-        AppleAppAttestAttestationStatement attestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), null);
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
-    }
-
-    @Test
     void validateX5c_empty_AttestationCertificatePath_test() {
-        final AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), null);
+        final AppleAppAttestAttestationStatement appleAppAttestAttestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]);
         assertThatThrownBy(() -> target.validateX5c(appleAppAttestAttestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 

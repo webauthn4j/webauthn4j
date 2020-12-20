@@ -328,48 +328,6 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_clientData_with_clientDataType_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                null,
-                new DefaultChallenge(),
-                new Origin("https://example.com"),
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
-        );
-    }
-
-    @Test
-    void validate_clientData_with_challenge_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
-                null,
-                new Origin("https://example.com"),
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
-        );
-    }
-
-    @Test
-    void validate_clientData_with_origin_null_test() {
-        CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
-                new DefaultChallenge(),
-                null,
-                new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
-        );
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(collectedClientData)
-        );
-    }
-
-    @Test
     void validate_clientData_with_tokenBinding_null_test() {
         CollectedClientData collectedClientData = new CollectedClientData(
                 ClientDataType.GET,
@@ -403,15 +361,6 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_tokenBinding_with_status_null_test() {
-        TokenBinding tokenBinding = new TokenBinding(null, (String) null);
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(tokenBinding)
-        );
-    }
-
-    @Test
     void validate_attestationObject_test() {
         AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
 
@@ -422,24 +371,6 @@ class BeanAssertUtilTest {
     void validate_attestationObject_with_null_test() {
         assertThrows(ConstraintViolationException.class,
                 () -> BeanAssertUtil.validate((AttestationObject) null)
-        );
-    }
-
-    @Test
-    void validate_attestationObject_with_authenticatorData_null_test() {
-        AttestationObject attestationObject = new AttestationObject(null, TestAttestationStatementUtil.createFIDOU2FAttestationStatement());
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(attestationObject)
-        );
-    }
-
-    @Test
-    void validate_attestationObject_with_attestationStatement_null_test() {
-        AttestationObject attestationObject = new AttestationObject(TestDataUtil.createAuthenticatorData(), null);
-
-        assertThrows(ConstraintViolationException.class,
-                () -> BeanAssertUtil.validate(attestationObject)
         );
     }
 

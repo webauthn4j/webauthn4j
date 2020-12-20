@@ -16,9 +16,14 @@
 
 package com.webauthn4j.converter.util;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.Base64UrlUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.UncheckedIOException;
@@ -29,41 +34,88 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SuppressWarnings("ConstantConditions")
 class JsonConverterTest {
 
-    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private static final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
-    @Test
-    void readValue_test() {
-        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
-        assertThat(dto.getValue()).isEqualTo("dummy");
-    }
+    static class readValue{
+        @Test
+        void test() {
+            ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", ConverterTestDto.class);
+            assertThat(dto.getValue()).isEqualTo("dummy");
+        }
 
-    @Test
-    void readValue_null_test() {
-        ConverterTestDto dto = jsonConverter.readValue("null", ConverterTestDto.class);
-        assertThat(dto).isNull();
-    }
+        @Test
+        void null_test() {
+            ConverterTestDto dto = jsonConverter.readValue("null", ConverterTestDto.class);
+            assertThat(dto).isNull();
+        }
 
-    @Test
-    void readValue_with_invalid_json_test() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)
-        );
-    }
+        @Test
+        void invalid_json_test() {
+            assertThrows(DataConversionException.class,
+                    () -> jsonConverter.readValue("{value:\"dummy\"}", ConverterTestDto.class)
+            );
+        }
 
-    @Test
-    void readValue_with_TypeReference_test() {
-        ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
-        });
-        assertThat(dto.getValue()).isEqualTo("dummy");
-    }
+        @Test
+        void fill_null_to_nonNull_field_test(){
+            assertThrows(DataConversionException.class,
+                    () -> jsonConverter.readValue("{\"value\": null}", NonNullDto.class)
+            );
+        }
 
-    @Test
-    void readValue_with_invalid_json_and_TypeReference_test() {
-        TypeReference<ConverterTestDto> typeReference = new TypeReference<ConverterTestDto>() {
-        };
-        assertThrows(DataConversionException.class, () ->
-                jsonConverter.readValue("{value:\"dummy\"}", typeReference)
-        );
+        static class NonNullDto{
+            private String value;
+
+            @JsonCreator
+            public NonNullDto(@NonNull @JsonProperty("value") String value) {
+                AssertUtil.notNull(value, "value must not be null");
+                this.value = value;
+            }
+
+            @JsonGetter
+            public String getValue() {
+                return value;
+            }
+        }
+
+        @Test
+        void fill_String_to_Integer_field_test(){
+            assertThrows(DataConversionException.class,
+                    () -> jsonConverter.readValue("{\"value\": \"invalid\"}", IntegerDto.class)
+            );
+        }
+
+        static class IntegerDto{
+            private Integer value;
+
+            @JsonCreator
+            public IntegerDto(@NonNull @JsonProperty("value") Integer value) {
+                AssertUtil.notNull(value, "value must not be null");
+                this.value = value;
+            }
+
+            @JsonGetter
+            public Integer getValue() {
+                return value;
+            }
+        }
+
+        @Test
+        void TypeReference_test() {
+            ConverterTestDto dto = jsonConverter.readValue("{\"value\":\"dummy\"}", new TypeReference<ConverterTestDto>() {
+            });
+            assertThat(dto.getValue()).isEqualTo("dummy");
+        }
+
+        @Test
+        void invalid_json_and_TypeReference_test() {
+            TypeReference<ConverterTestDto> typeReference = new TypeReference<ConverterTestDto>() {
+            };
+            assertThrows(DataConversionException.class, () ->
+                    jsonConverter.readValue("{value:\"dummy\"}", typeReference)
+            );
+        }
+
     }
 
     @Test

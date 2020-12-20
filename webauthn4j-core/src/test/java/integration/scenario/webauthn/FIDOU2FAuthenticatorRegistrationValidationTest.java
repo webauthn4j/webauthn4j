@@ -85,7 +85,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -135,7 +135,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,
@@ -183,7 +183,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -225,7 +225,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 badChallenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -261,7 +261,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -298,7 +298,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(badRpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -331,7 +331,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 = new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256);
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters)
         );
@@ -379,7 +379,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,
@@ -436,7 +436,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> extensions = new AuthenticationExtensionsClientInputs<>();
         PublicKeyCredentialCreationOptions credentialCreationOptions = new PublicKeyCredentialCreationOptions(
                 new PublicKeyCredentialRpEntity(rpId, "valid.site.example.com"),
-                new PublicKeyCredentialUserEntity(),
+                new PublicKeyCredentialUserEntity(new byte[32], "username", "displayName"),
                 challenge,
                 Collections.singletonList(publicKeyCredentialParameters),
                 null,

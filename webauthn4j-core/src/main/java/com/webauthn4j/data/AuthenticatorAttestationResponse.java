@@ -17,6 +17,7 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
+import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -52,6 +53,7 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
                                             @NonNull byte[] attestationObject,
                                             @Nullable Set<AuthenticatorTransport> transports) {
         super(clientDataJSON);
+        AssertUtil.notNull(attestationObject, "attestationObject must not be null");
 
 
         this.attestationObject = attestationObject;

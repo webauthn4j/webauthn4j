@@ -97,7 +97,7 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         return authenticatorAttachment;
     }
 
-    public Boolean isRequireResidentKey() {
+    public @Nullable Boolean isRequireResidentKey() {
         return requireResidentKey;
     }
 

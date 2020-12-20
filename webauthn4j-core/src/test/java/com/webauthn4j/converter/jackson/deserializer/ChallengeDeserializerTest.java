@@ -19,7 +19,7 @@ package com.webauthn4j.converter.jackson.deserializer;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.challenge.Challenge;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,7 +43,7 @@ class ChallengeDeserializerTest {
         String input = "{ \"challenge\" : \"\" }";
 
         //When
-        CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
+        ChallengeDto result = jsonConverter.readValue(input, ChallengeDto.class);
 
         //Then
         assertAll(
@@ -59,7 +59,7 @@ class ChallengeDeserializerTest {
         String input = "{ \"challenge\" : null }";
 
         //When
-        CollectedClientData result = jsonConverter.readValue(input, CollectedClientData.class);
+        ChallengeDto result = jsonConverter.readValue(input, ChallengeDto.class);
 
         //Then
         assertThat(result.getChallenge()).isNull();
@@ -73,7 +73,19 @@ class ChallengeDeserializerTest {
 
         //When
         assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue(input, CollectedClientData.class)
+                () -> jsonConverter.readValue(input, ChallengeDto.class)
         );
+    }
+
+    static class ChallengeDto{
+        private Challenge challenge;
+
+        public Challenge getChallenge() {
+            return challenge;
+        }
+
+        public void setChallenge(Challenge challenge) {
+            this.challenge = challenge;
+        }
     }
 }

@@ -27,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,28 +34,19 @@ import static org.mockito.Mockito.when;
 class AndroidSafetyNetAttestationStatementTest {
 
     @Test
-    void validate(@Mock JWS<Response> jwsMock) {
-        new AndroidSafetyNetAttestationStatement("dummy", jwsMock).validate();
+    void constructor_test(@Mock JWS<Response> jwsMock) {
         assertAll(
-                () -> {
-                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement("dummy", null);
-                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
-                },
-                () -> {
-                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement(null, jwsMock);
-                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
-                },
-                () -> {
-                    AndroidSafetyNetAttestationStatement androidSafetyNetAttestationStatement = new AndroidSafetyNetAttestationStatement(null, null);
-                    assertThrows(ConstraintViolationException.class, androidSafetyNetAttestationStatement::validate);
-                }
+                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement("dummy", null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement(null, jwsMock)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement(null, null)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
     @Test
-    void getX5c_with_res_null_test(){
-        AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement("dummy", null);
-        assertThatThrownBy(attestationStatement::getX5c).isInstanceOf(IllegalStateException.class);
+    void validate_test(@Mock JWS<Response> jwsMock, @Mock JWSHeader header){
+        when(jwsMock.getHeader()).thenReturn(header);
+        AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
+        assertThatThrownBy(attestationStatement::validate).isInstanceOf(ConstraintViolationException.class);
     }
 
     @SuppressWarnings("unchecked")

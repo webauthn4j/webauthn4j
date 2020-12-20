@@ -32,11 +32,11 @@ class AttestedCredentialDataTest {
      */
     @Test
     void constructor_test() {
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData();
+        AttestedCredentialData attestedCredentialData = TestDataUtil.createAttestedCredentialData();
         assertAll(
-                () -> assertThat(attestedCredentialData.getCredentialId()).isNull(),
-                () -> assertThat(attestedCredentialData.getAaguid()).isNull(),
-                () -> assertThat(attestedCredentialData.getCOSEKey()).isNull()
+                () -> assertThat(attestedCredentialData.getCredentialId()).isNotNull(),
+                () -> assertThat(attestedCredentialData.getAaguid()).isNotNull(),
+                () -> assertThat(attestedCredentialData.getCOSEKey()).isNotNull()
         );
     }
 

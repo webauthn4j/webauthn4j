@@ -19,6 +19,9 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -39,22 +42,24 @@ public class PublicKeyCredentialParameters implements Serializable {
 
     @JsonCreator
     public PublicKeyCredentialParameters(
-            @JsonProperty("type") PublicKeyCredentialType type,
-            @JsonProperty("alg") COSEAlgorithmIdentifier alg) {
+            @NonNull @JsonProperty("type") PublicKeyCredentialType type,
+            @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg) {
+        AssertUtil.notNull(type, "type must not be null");
+        AssertUtil.notNull(alg, "alg must not be null");
         this.type = type;
         this.alg = alg;
     }
 
-    public PublicKeyCredentialType getType() {
+    public @NonNull PublicKeyCredentialType getType() {
         return type;
     }
 
-    public COSEAlgorithmIdentifier getAlg() {
+    public @NonNull COSEAlgorithmIdentifier getAlg() {
         return alg;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialParameters that = (PublicKeyCredentialParameters) o;

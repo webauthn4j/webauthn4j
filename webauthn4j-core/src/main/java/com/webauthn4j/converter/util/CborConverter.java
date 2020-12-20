@@ -22,6 +22,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
@@ -52,7 +53,7 @@ public class CborConverter implements Serializable {
     public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -62,7 +63,7 @@ public class CborConverter implements Serializable {
     public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -72,7 +73,7 @@ public class CborConverter implements Serializable {
     public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -82,7 +83,7 @@ public class CborConverter implements Serializable {
     public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -92,7 +93,7 @@ public class CborConverter implements Serializable {
     public @NonNull JsonNode readTree(@NonNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
-        } catch (MismatchedInputException | JsonParseException e) {
+        } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
             throw new DataConversionException(INPUT_MISMATCH_ERROR_MESSAGE, e);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

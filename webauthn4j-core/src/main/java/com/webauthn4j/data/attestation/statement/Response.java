@@ -47,6 +47,7 @@ public class Response implements Serializable {
     @SuppressWarnings("java:S107")
     @JsonCreator
     public Response(
+            // fields are marked as Nullable because they may be null when error field is filled
             @Nullable @JsonProperty("nonce") String nonce,
             @Nullable @JsonProperty("timestampMs") Long timestampMs,
             @Nullable @JsonProperty("apkPackageName") String apkPackageName,
@@ -112,7 +113,7 @@ public class Response implements Serializable {
         return advice;
     }
 
-    public String getError() {
+    public @Nullable String getError() {
         return error;
     }
 }
