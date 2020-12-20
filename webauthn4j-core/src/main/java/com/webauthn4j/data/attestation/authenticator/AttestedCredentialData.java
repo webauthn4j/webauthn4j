@@ -49,6 +49,15 @@ public class AttestedCredentialData implements Serializable {
         this.coseKey = coseKey;
     }
 
+    /**
+     * Default constructor for JPA
+     */
+    private AttestedCredentialData(){
+        aaguid = null;
+        credentialId = null;
+        coseKey =null;
+    }
+
     public @NonNull AAGUID getAaguid() {
         return aaguid;
     }
