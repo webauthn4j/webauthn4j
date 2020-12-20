@@ -45,11 +45,23 @@ public class ServerProperty extends CoreServerProperty {
         this.tokenBindingId = tokenBindingId;
     }
 
-    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+    public ServerProperty(@NonNull Set<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
         super(rpId, challenge);
         AssertUtil.notNull(origins, "origins must not be null");
-        this.origins = Collections.unmodifiableSet(new HashSet<>(origins));
+        this.origins = Collections.unmodifiableSet(origins);
         this.tokenBindingId = tokenBindingId;
+    }
+
+    /**
+     * @deprecated
+     * @param origins origins
+     * @param rpId rpId
+     * @param challenge challenge
+     * @param tokenBindingId tokenBindingId
+     */
+    @Deprecated
+    public ServerProperty(@NonNull Collection<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
+        this(new HashSet<>(origins), rpId, challenge, tokenBindingId);
     }
 
     // ~ Methods
