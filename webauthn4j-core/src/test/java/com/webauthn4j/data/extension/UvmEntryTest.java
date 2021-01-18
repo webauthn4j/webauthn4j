@@ -30,7 +30,7 @@ class UvmEntryTest {
     @Test
     void constructor_test() {
         UvmEntry target = new UvmEntry(new Number[]{2, 2, 2});
-        assertThat(target.getUserVerificationMethod()).isEqualTo(UserVerificationMethod.FINGERPRINT);
+        assertThat(target.getUserVerificationMethod()).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
         assertThat(target.getKeyProtectionType()).isEqualTo(KeyProtectionType.HARDWARE);
         assertThat(target.getMatcherProtectionType()).isEqualTo(MatcherProtectionType.TEE);
     }
@@ -56,13 +56,13 @@ class UvmEntryTest {
     @Test
     void getter_test() {
         //noinspection MismatchedQueryAndUpdateOfCollection
-        UvmEntry instance = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
+        UvmEntry instance = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
 
-        assertThat(instance.getUserVerificationMethod()).isEqualTo(UserVerificationMethod.FINGERPRINT);
+        assertThat(instance.getUserVerificationMethod()).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
         assertThat(instance.getKeyProtectionType()).isEqualTo(KeyProtectionType.HARDWARE);
         assertThat(instance.getMatcherProtectionType()).isEqualTo(MatcherProtectionType.TEE);
 
-        assertThat(instance.get(0)).isEqualTo(UserVerificationMethod.FINGERPRINT.getValue());
+        assertThat(instance.get(0)).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL.getValue());
         assertThat(instance.get(1)).isEqualTo(KeyProtectionType.HARDWARE.getValue());
         assertThat(instance.get(2)).isEqualTo(MatcherProtectionType.TEE.getValue());
 
@@ -71,8 +71,8 @@ class UvmEntryTest {
 
     @Test
     void equals_hashCode_test() {
-        UvmEntry instanceA = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
-        UvmEntry instanceB = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
+        UvmEntry instanceA = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
+        UvmEntry instanceB = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.HARDWARE, MatcherProtectionType.TEE);
 
         assertThat(instanceA)
                 .isEqualTo(instanceB)

@@ -33,7 +33,7 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
 
     @Test
     void registration_variant_test() {
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForRegistration();
         builder.setUvm(uvm);
         builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_REQUIRED);
@@ -59,7 +59,7 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
 
     @Test
     void authentication_variant_test() {
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication();
         builder.setUvm(uvm);
         builder.set("unknown", 1);
@@ -82,7 +82,7 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
 
     @Test
     void equals_hashCode_test() {
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication();
         builder1.setUvm(uvm);
         AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance1 = builder1.build();

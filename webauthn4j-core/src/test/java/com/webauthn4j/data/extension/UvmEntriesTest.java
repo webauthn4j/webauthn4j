@@ -34,7 +34,7 @@ class UvmEntriesTest {
     @Test
     void serialize_test() {
         //noinspection MismatchedQueryAndUpdateOfCollection
-        UvmEntry uvmEntry = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
+        UvmEntry uvmEntry = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries = new UvmEntries(Collections.singletonList(uvmEntry));
 
         String json = jsonConverter.writeValueAsString(uvmEntries);
@@ -44,10 +44,10 @@ class UvmEntriesTest {
     @Test
     void equals_hashCode_test() {
         //noinspection MismatchedQueryAndUpdateOfCollection
-        UvmEntry uvmEntry1 = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
+        UvmEntry uvmEntry1 = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries1 = new UvmEntries(Collections.singletonList(uvmEntry1));
         //noinspection MismatchedQueryAndUpdateOfCollection
-        UvmEntry uvmEntry2 = new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
+        UvmEntry uvmEntry2 = new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.TEE);
         UvmEntries uvmEntries2 = new UvmEntries(Collections.singletonList(uvmEntry2));
 
         assertThat(uvmEntries1)

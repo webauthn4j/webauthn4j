@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class UserVerificationMethodTest {
@@ -34,15 +35,17 @@ class UserVerificationMethodTest {
     @Test
     void create_test() {
         assertAll(
-                () -> assertThat(UserVerificationMethod.create(0x0001)).isEqualTo(UserVerificationMethod.PRESENCE),
-                () -> assertThat(UserVerificationMethod.create(0x0002)).isEqualTo(UserVerificationMethod.FINGERPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x0004)).isEqualTo(UserVerificationMethod.PASSCODE),
-                () -> assertThat(UserVerificationMethod.create(0x0008)).isEqualTo(UserVerificationMethod.VOICEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x0010)).isEqualTo(UserVerificationMethod.FACEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x0020)).isEqualTo(UserVerificationMethod.LOCATION),
-                () -> assertThat(UserVerificationMethod.create(0x0040)).isEqualTo(UserVerificationMethod.EYEPRINT),
-                () -> assertThat(UserVerificationMethod.create(0x0080)).isEqualTo(UserVerificationMethod.PATTERN),
-                () -> assertThat(UserVerificationMethod.create(0x0100)).isEqualTo(UserVerificationMethod.HANDPRINT),
+                () -> assertThat(UserVerificationMethod.create(0x0001)).isEqualTo(UserVerificationMethod.PRESENCE_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0002)).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0004)).isEqualTo(UserVerificationMethod.PASSCODE_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0008)).isEqualTo(UserVerificationMethod.VOICEPRINT_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0010)).isEqualTo(UserVerificationMethod.FACEPRINT_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0020)).isEqualTo(UserVerificationMethod.LOCATION_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0040)).isEqualTo(UserVerificationMethod.EYEPRINT_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0080)).isEqualTo(UserVerificationMethod.PATTERN_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0100)).isEqualTo(UserVerificationMethod.HANDPRINT_INTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x0800)).isEqualTo(UserVerificationMethod.PASSCODE_EXTERNAL),
+                () -> assertThat(UserVerificationMethod.create(0x1000)).isEqualTo(UserVerificationMethod.PATTERN_EXTERNAL),
                 () -> assertThat(UserVerificationMethod.create(0x0200)).isEqualTo(UserVerificationMethod.NONE),
                 () -> assertThat(UserVerificationMethod.create(0x0400)).isEqualTo(UserVerificationMethod.ALL)
         );
@@ -50,13 +53,13 @@ class UserVerificationMethodTest {
 
     @Test
     void getValue_test() {
-        assertThat(UserVerificationMethod.FINGERPRINT.getValue()).isEqualTo(0x0002);
+        assertThat(UserVerificationMethod.FINGERPRINT_INTERNAL.getValue()).isEqualTo(0x0002);
     }
 
     @Test
     void deserialize_test() {
         UserVerificationMethodTest.TestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\": 16}", UserVerificationMethodTest.TestDTO.class);
-        assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FACEPRINT);
+        assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FACEPRINT_INTERNAL);
     }
 
     @Test

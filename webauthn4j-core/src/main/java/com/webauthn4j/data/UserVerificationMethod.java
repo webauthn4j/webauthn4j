@@ -23,19 +23,21 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 /**
  * The supported user verification method(s).
  *
- * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#user-verification-methods">§3.1 User Verification Methods</a>
+ * @see <a href="https://fidoalliance.org/specs/common-specs/fido-registry-v2.1-ps-20191217.html#user-verification-methods">§3.1 User Verification Methods</a>
  */
 public enum UserVerificationMethod {
 
-    PRESENCE(0x00000001L),
-    FINGERPRINT(0x00000002L),
-    PASSCODE(0x00000004L),
-    VOICEPRINT(0x00000008L),
-    FACEPRINT(0x00000010L),
-    LOCATION(0x00000020L),
-    EYEPRINT(0x00000040L),
-    PATTERN(0x00000080L),
-    HANDPRINT(0x00000100L),
+    PRESENCE_INTERNAL(0x00000001L),
+    FINGERPRINT_INTERNAL(0x00000002L),
+    PASSCODE_INTERNAL(0x00000004L),
+    VOICEPRINT_INTERNAL(0x00000008L),
+    FACEPRINT_INTERNAL(0x00000010L),
+    LOCATION_INTERNAL(0x00000020L),
+    EYEPRINT_INTERNAL(0x00000040L),
+    PATTERN_INTERNAL(0x00000080L),
+    HANDPRINT_INTERNAL(0x00000100L),
+    PASSCODE_EXTERNAL(0x00000800L),
+    PATTERN_EXTERNAL(0x00001000L),
     NONE(0x00000200L),
     ALL(0x00000400L);
 
@@ -47,31 +49,37 @@ public enum UserVerificationMethod {
 
     public static UserVerificationMethod create(long value) {
         if (value == 0x00000001L) {
-            return PRESENCE;
+            return PRESENCE_INTERNAL;
         }
         else if (value == 0x00000002L) {
-            return FINGERPRINT;
+            return FINGERPRINT_INTERNAL;
         }
         else if (value == 0x00000004L) {
-            return PASSCODE;
+            return PASSCODE_INTERNAL;
         }
         else if (value == 0x00000008L) {
-            return VOICEPRINT;
+            return VOICEPRINT_INTERNAL;
         }
         else if (value == 0x00000010L) {
-            return FACEPRINT;
+            return FACEPRINT_INTERNAL;
         }
         else if (value == 0x00000020L) {
-            return LOCATION;
+            return LOCATION_INTERNAL;
         }
         else if (value == 0x00000040L) {
-            return EYEPRINT;
+            return EYEPRINT_INTERNAL;
         }
         else if (value == 0x00000080L) {
-            return PATTERN;
+            return PATTERN_INTERNAL;
         }
         else if (value == 0x00000100L) {
-            return HANDPRINT;
+            return HANDPRINT_INTERNAL;
+        }
+        else if (value == 0x00000800L) {
+            return PASSCODE_EXTERNAL;
+        }
+        else if (value == 0x00001000L) {
+            return PATTERN_EXTERNAL;
         }
         else if (value == 0x00000200L) {
             return NONE;

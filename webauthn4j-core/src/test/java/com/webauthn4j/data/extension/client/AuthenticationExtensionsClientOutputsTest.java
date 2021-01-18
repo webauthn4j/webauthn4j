@@ -33,7 +33,7 @@ class AuthenticationExtensionsClientOutputsTest {
     @Test
     void registration_variant_test() {
         CredentialPropertiesOutput credProps = new CredentialPropertiesOutput(true);
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForRegistration builder = new AuthenticationExtensionsClientOutputs.BuilderForRegistration();
         builder.setCredProps(credProps);
         builder.setUvm(uvm);
@@ -64,7 +64,7 @@ class AuthenticationExtensionsClientOutputsTest {
 
     @Test
     void authentication_variant_test() {
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder.setAppid(true);
         builder.setUvm(uvm);
@@ -95,7 +95,7 @@ class AuthenticationExtensionsClientOutputsTest {
 
     @Test
     void equals_hashCode_test() {
-        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
         AuthenticationExtensionsClientOutputs.BuilderForAuthentication builder1 = new AuthenticationExtensionsClientOutputs.BuilderForAuthentication();
         builder1.setAppid(true);
         builder1.setUvm(uvm);
