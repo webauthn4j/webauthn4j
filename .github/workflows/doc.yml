@@ -30,7 +30,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew javadoc asciidoc
+          ./gradlew javadoc generateReferenceJA generateReferenceEN
       - name: Commit & Push pages
         run: |
           rm -rf docs
