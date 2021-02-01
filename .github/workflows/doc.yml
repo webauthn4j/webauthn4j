@@ -1,0 +1,41 @@
+name: Doc
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java_version: [8]
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure git
+        run: |
+          git submodule init
+          git submodule update
+          git config --local user.email "mail@ynojima.net"
+          git config --local user.name "ynojima"
+      - name: Set up JDK ${{ matrix.java_version }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java_version }}
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew javadoc asciidoc
+      - name: Commit & Push pages
+        run: |
+          rm -rf docs
+          mv build/asciidoc/html5 docs
+          git add docs
+          git commit -m "Update docs"
+          git checkout -b gh-pages
+          git push origin gh-pages -f
