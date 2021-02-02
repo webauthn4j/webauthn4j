@@ -103,7 +103,7 @@ subprojects {
     def springBootVersion = "2.4.2"
     def kerbyVersion = "2.0.1"
     def bouncyCastleVersion = "1.68"
-    def checkerframeworkVersion = "3.9.1"
+    def checkerframeworkVersion = "3.10.0"
     def mockitoVersion = "3.7.7"
 
     dependencies {
