@@ -34,7 +34,7 @@ jobs:
       - name: Commit & Push pages
         run: |
           rm -rf docs
-          mv build/asciidoc/html5 docs
+          mv build/docs/asciidoc/html5 docs
           git add docs
           git commit -m "Update docs"
           git checkout -b gh-pages
