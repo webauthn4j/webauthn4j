@@ -114,7 +114,11 @@ public class DeviceCheckManager {
         );
     }
 
-    private static @NonNull ObjectConverter createObjectConverter() {
+    /**
+     * Create {@link ObjectConverter} instance with {@link DeviceCheckCBORModule}
+     * @return {@link ObjectConverter} instance with {@link DeviceCheckCBORModule}
+     */
+    public static @NonNull ObjectConverter createObjectConverter() {
         ObjectMapper jsonMapper = new ObjectMapper();
         ObjectMapper cborMapper = new ObjectMapper(new CBORFactory());
         cborMapper.registerModule(new DeviceCheckCBORModule());
