@@ -87,6 +87,16 @@ class TrustAnchorCertPathTrustworthinessValidatorTest {
     }
 
     @Test
+    void getter_setter_test(){
+        target.setFullChainProhibited(true);
+        assertThat(target.isFullChainProhibited()).isTrue();
+        target.setPolicyQualifiersRejected(true);
+        assertThat(target.isPolicyQualifiersRejected()).isTrue();
+        target.setRevocationCheckEnabled(true);
+        assertThat(target.isRevocationCheckEnabled()).isTrue();
+    }
+
+    @Test
     void test() {
         assertThat(target.isFullChainProhibited()).isFalse();
     }
