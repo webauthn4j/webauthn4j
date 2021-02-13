@@ -34,9 +34,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Test for OriginValidator
  */
-class OriginValidatorTest {
+class OriginValidatorImplTest {
 
-    private final OriginValidator target = new OriginValidator();
+    private final OriginValidatorImpl target = new OriginValidatorImpl();
 
     @ParameterizedTest
     @ValueSource(strings = {

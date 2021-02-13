@@ -16,32 +16,14 @@
 
 package com.webauthn4j.validator;
 
-import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
-import com.webauthn4j.server.ServerProperty;
-import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.exception.BadOriginException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
  * Validates the specified {@link Origin} instance
  */
-class OriginValidator {
+public interface OriginValidator {
 
-    //~ Instance fields
-    // ================================================================================================
-
-
-    // ~ Methods
-    // ========================================================================================================
-
-    public void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
-        AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
-        AssertUtil.notNull(serverProperty, "serverProperty must not be null");
-
-        final Origin clientOrigin = collectedClientData.getOrigin();
-        if (!serverProperty.getOrigins().contains(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData '" + clientOrigin + "' origin doesn't match any of the preconfigured server origin.");
-        }
-    }
+    void validate(@NonNull RegistrationObject registrationObject);
+    void validate(@NonNull AuthenticationObject authenticationObject);
 }
