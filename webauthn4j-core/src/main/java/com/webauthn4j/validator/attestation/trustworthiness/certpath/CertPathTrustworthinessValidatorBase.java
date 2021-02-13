@@ -34,6 +34,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
 
     private boolean fullChainProhibited = false;
     private boolean revocationCheckEnabled = false;
+    private boolean policyQualifiersRejected = false;
 
     public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
         AssertUtil.notNull(aaguid, "aaguid must not be null");
@@ -51,7 +52,7 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
-        certPathParameters.setPolicyQualifiersRejected(false); // As policy qualifiers are checked manually in attestation statement validator, it is turned off
+        certPathParameters.setPolicyQualifiersRejected(policyQualifiersRejected);
 
         certPathParameters.setRevocationEnabled(revocationCheckEnabled);
         certPathParameters.setDate(Date.from(timestamp));
@@ -86,5 +87,13 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
 
     public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
         this.revocationCheckEnabled = revocationCheckEnabled;
+    }
+
+    public boolean isPolicyQualifiersRejected() {
+        return policyQualifiersRejected;
+    }
+
+    public void setPolicyQualifiersRejected(boolean policyQualifiersRejected) {
+        this.policyQualifiersRejected = policyQualifiersRejected;
     }
 }
