@@ -103,6 +103,14 @@ clientExtensionsは元来JSONデータの為、JSONに変換できます。
 String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
 ----
 
+=== DCAppleDeviceのシリアライズ、デシリアライズ
+
+webauthn4j-device-checkでは、`Authenticator` インタフェースの代わりに、`DCAppleDevice` インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。
+概ね<<Authenticatorのシリアライズ、デシリアライズ>>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、
+webauthn4j-device-check独自のクラス（例えば `AppleAppAttestAttestationStatement` )のシリアライズ、デシリアライズを行う為に、
+`ObjectConverter` は `DeviceCheckCBORModule` が登録されたものを使用する必要があります。
+`DeviceCheckCBORModule` が登録された`ObjectConverter` は `DeviceCheckManager#createObjectConverter` で得ることが出来ます。
+
 === WebAuthn以外のFIDO CTAP2セキュリティキーを用いた独自アプリケーションでの利用
 
 FIDO CTAP2セキュリティキーにとって、WebAuthnは一つの応用例でしかなく、セキュアな認証を必要とする独自アプリケーションで

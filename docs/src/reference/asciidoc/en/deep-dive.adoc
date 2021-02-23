@@ -103,6 +103,13 @@ This member can be serialized as JSON as it is originally JSON data.
 String serializedClientExtensions = objectConverter.getJsonConverter().writeValueAsString(clientExtensions);
 ----
 
+=== DCAppleDevice serialization and deserialization
+
+When you use `webauthn4j-device-check`, you need to persist `DCAppleDevice` instead of `Authenticator` interface between attestation and assertion.
+In general, you can serialize and deserialize it by the method explained in <<Authenticator serialization and deserialization>>,
+but `ObjectConverter` must be the one with `DeviceCheckCBORModule` registered.
+A `ObjectConverter` with a `DeviceCheckCBORModule` can be obtained with `DeviceCheckManager.createObjectConverter` static method.
+
 === Using FIDO CTAP2 Security key in your own application other than WebAuthn
 
 For FIDO CTAP2 Security key, WebAuthn is just an application. An original application can use a a security key too.
