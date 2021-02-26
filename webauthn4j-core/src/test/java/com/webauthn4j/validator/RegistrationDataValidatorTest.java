@@ -102,4 +102,13 @@ class RegistrationDataValidatorTest {
         target.getCustomRegistrationValidators().add(customRegistrationValidator);
         assertThat(target.getCustomRegistrationValidators()).contains(customRegistrationValidator);
     }
+
+    @Test
+    void getter_setter_test(){
+        target.setOriginValidator(new TestOriginValidator());
+        assertThat(target.getOriginValidator()).isInstanceOf(TestOriginValidator.class);
+    }
+
+    private static class TestOriginValidator extends OriginValidatorImpl {
+    }
 }

@@ -48,9 +48,7 @@ public class RegistrationDataValidator {
 
     // ~ Instance fields
     // ================================================================================================
-
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
@@ -59,6 +57,8 @@ public class RegistrationDataValidator {
     private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
 
     private final AttestationValidator attestationValidator;
+
+    private OriginValidator originValidator = new OriginValidatorImpl();
 
     public RegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -120,7 +120,7 @@ public class RegistrationDataValidator {
 
         //spec| Step5
         //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
+        originValidator.validate(registrationObject);
 
         //spec| Step6
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
@@ -197,6 +197,14 @@ public class RegistrationDataValidator {
         if (isUserPresenceRequired && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }
+    }
+
+    public OriginValidator getOriginValidator() {
+        return originValidator;
+    }
+
+    public void setOriginValidator(OriginValidator originValidator) {
+        this.originValidator = originValidator;
     }
 
     public List<CustomRegistrationValidator> getCustomRegistrationValidators() {

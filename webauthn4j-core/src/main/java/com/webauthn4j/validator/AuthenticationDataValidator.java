@@ -41,7 +41,6 @@ import java.util.Objects;
 public class AuthenticationDataValidator {
 
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
-    private final OriginValidator originValidator = new OriginValidator();
     private final TokenBindingValidator tokenBindingValidator = new TokenBindingValidator();
     private final RpIdHashValidator rpIdHashValidator = new RpIdHashValidator();
     private final AssertionSignatureValidator assertionSignatureValidator = new AssertionSignatureValidator();
@@ -50,6 +49,7 @@ public class AuthenticationDataValidator {
 
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
+    private OriginValidator originValidator = new OriginValidatorImpl();
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
@@ -132,7 +132,7 @@ public class AuthenticationDataValidator {
 
         //spec| Step9
         //spec| Verify that the value of C.origin matches the Relying Party's origin.
-        originValidator.validate(collectedClientData, serverProperty);
+        originValidator.validate(authenticationObject);
 
         //spec| Step10
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
@@ -215,6 +215,14 @@ public class AuthenticationDataValidator {
     public void setMaliciousCounterValueHandler(@NonNull CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
         AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.maliciousCounterValueHandler = maliciousCounterValueHandler;
+    }
+
+    public OriginValidator getOriginValidator() {
+        return originValidator;
+    }
+
+    public void setOriginValidator(OriginValidator originValidator) {
+        this.originValidator = originValidator;
     }
 
     public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {

@@ -48,4 +48,14 @@ class AuthenticationDataValidatorTest {
         target.getCustomAuthenticationValidators().add(customAuthenticationValidator);
         assertThat(target.getCustomAuthenticationValidators()).contains(customAuthenticationValidator);
     }
+
+    @Test
+    void getter_setter_test(){
+        target.setOriginValidator(new TestOriginValidator());
+        assertThat(target.getOriginValidator()).isInstanceOf(TestOriginValidator.class);
+    }
+
+    private static class TestOriginValidator extends OriginValidatorImpl {
+    }
+
 }
