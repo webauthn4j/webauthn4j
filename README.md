@@ -27,6 +27,11 @@ All attestation statement formats are supported.
 * None attestation
 * Apple App Attest attestation
 
+### Kotlin friendly
+
+Although WebAuthn4J is written in Java, public members are marked by `NonNull` or `Nullable` annotation 
+to declare nullability explicitly.
+
 ### Projects using WebAuthn4J
 
 * [Keycloak](https://www.keycloak.org/)
