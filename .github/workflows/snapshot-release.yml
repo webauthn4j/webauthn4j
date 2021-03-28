@@ -25,8 +25,8 @@ jobs:
 
       - name: Publish to oss.sonatype.org snapshot
         env:
-          GITHUB_ACTOR: ${{ env.GITHUB_ACTOR }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_CENTRAL_USER: ${{ secrets.MAVEN_CENTRAL_USER }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
           PGP_SIGNING_KEY_PASSPHRASE: ${{ secrets.PGP_SIGNING_KEY_PASSPHRASE }}
         run: |
