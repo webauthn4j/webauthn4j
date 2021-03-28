@@ -160,6 +160,8 @@ subprojects {
     def githubUrl = "https://github.com/webauthn4j/webauthn4j"
     def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
     def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
+    def githubActor = getVariable('GITHUB_ACTOR', 'githubActor')
+    def githubToken = getVariable('GITHUB_TOKEN', 'githubToken')
     def pgpSigningKey = getVariable('PGP_SIGNING_KEY', 'pgpSigningKey')
     def pgpSigningKeyPassphrase = getVariable('PGP_SIGNING_KEY_PASSPHRASE', 'pgpSigningKeyPassphrase')
 
@@ -222,10 +224,10 @@ subprojects {
             }
             maven {
                 name = "snapshot"
-                url = "https://oss.sonatype.org/content/repositories/snapshots"
+                url = "https://maven.pkg.github.com/webauthn4j/webauthn4j"
                 credentials {
-                    username = "${mavenCentralUser}"
-                    password = "${mavenCentralPassword}"
+                    username = "${githubActor}"
+                    password = "${githubToken}"
                 }
             }
         }
