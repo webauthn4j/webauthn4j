@@ -29,7 +29,7 @@ class AuthenticationExtensionsClientInputsTest {
 
     private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
-    @SuppressWarnings("S5961")
+    @SuppressWarnings("java:S5961")
     @Test
     void registration_variant_test() {
         AuthenticationExtensionsClientInputs.BuilderForRegistration builder = new AuthenticationExtensionsClientInputs.BuilderForRegistration();

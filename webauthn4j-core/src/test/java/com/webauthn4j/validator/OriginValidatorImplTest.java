@@ -117,6 +117,7 @@ class OriginValidatorImplTest {
         );
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void test_with_not_equal_origins() {
         Origin originA = new Origin("https://example.com:14443");
@@ -129,6 +130,7 @@ class OriginValidatorImplTest {
         );
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void apk_key_hash_test_with_not_equal_origins() {
         Origin originA = new Origin("android:apk-key-hash:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
@@ -141,6 +143,7 @@ class OriginValidatorImplTest {
         );
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void apk_key_hash_sha256_test_with_not_equal_origins() {
         Origin originA = new Origin("android:apk-key-hash-sha256:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
@@ -153,6 +156,7 @@ class OriginValidatorImplTest {
         );
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void apk_key_hash_sha256_test_with_not_equal_origins_apk_key_hash_sha1() {
         Origin originA = new Origin("android:apk-key-hash-sha256:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
@@ -165,6 +169,7 @@ class OriginValidatorImplTest {
         );
     }
 
+    @SuppressWarnings("java:S5976")
     @Test
     void apk_key_hash_sha1_test_with_not_equal_origins_apk_key_hash_sha256() {
         Origin originA = new Origin("android:apk-key-hash:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
