@@ -22,8 +22,6 @@ buildscript {
 
     def sonarqubeVersion = "3.1.1"
     def asciidoctorGradleVersion = "3.3.2"
-    def artifactoryVersion="4.21.0"
-    def bintrayVersion = "1.8.5"
     def owaspDependencyCheckVersion = "6.1.3"
     def httpBuilderVersion = "0.7.2"
 
@@ -38,8 +36,6 @@ buildscript {
     dependencies {
         classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:$sonarqubeVersion")
         classpath("org.asciidoctor:asciidoctor-gradle-jvm:$asciidoctorGradleVersion")
-        classpath("org.jfrog.buildinfo:build-info-extractor-gradle:$artifactoryVersion")
-        classpath("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
         classpath("org.owasp:dependency-check-gradle:$owaspDependencyCheckVersion")
         classpath("org.codehaus.groovy.modules.http-builder:http-builder:$httpBuilderVersion")
     }
@@ -55,10 +51,8 @@ repositories {
 
 apply plugin: 'java'
 apply plugin: 'org.sonarqube'
-apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'org.asciidoctor.jvm.convert'
 apply plugin: 'org.owasp.dependencycheck'
-
 
 allprojects {
     group 'com.webauthn4j'
@@ -76,9 +70,8 @@ subprojects {
 
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
-    apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'signing'
     apply plugin: "maven-publish"
-    apply plugin: "com.jfrog.artifactory"
 
     sourceCompatibility = 1.8
 
@@ -165,6 +158,10 @@ subprojects {
     apply from: "../helper.gradle"
 
     def githubUrl = "https://github.com/webauthn4j/webauthn4j"
+    def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
+    def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
+    def pgpSigningKey = getVariable('PGP_SIGNING_KEY', 'pgpSigningKey')
+    def pgpSigningKeyPassphrase = getVariable('PGP_SIGNING_KEY_PASSPHRASE', 'pgpSigningKeyPassphrase')
 
     publishing {
         publications {
@@ -214,76 +211,24 @@ subprojects {
                 }
             }
         }
-    }
-
-    def bintrayUser = getVariable('BINTRAY_USER', 'bintrayUser')
-    def bintrayToken = getVariable('BINTRAY_TOKEN', 'bintrayToken')
-    def artifactoryUser = getVariable('ARTIFACTORY_USER', 'artifactoryUser')
-    def artifactoryPassword = getVariable('ARTIFACTORY_PASSWORD', 'artifactoryPassword')
-    def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
-    def mavenCentralPassword = getVariable('MAVEN_CENTRAL_PASSWORD', 'mavenCentralPassword')
-
-    task bintrayGpgSign() {
-        group = "publishing"
-        doLast {
-            signArtifactsOnBintray(bintrayUser, bintrayToken)
-        }
-    }
-
-    task bintrayMavenCentralSync() {
-        group = "publishing"
-        doLast {
-            syncMavenCentralToBintray(bintrayUser, bintrayToken)
-        }
-    }
-
-    artifactory {
-        contextUrl = 'http://oss.jfrog.org/artifactory/simple/'
-        publish {
-            repository {
-                repoKey = 'oss-snapshot-local' // The Artifactory repository key to publish to
-                username = artifactoryUser
-                password = artifactoryPassword
-            }
-            defaults {
-                publications('standard')
-            }
-        }
-    }
-
-    artifactoryPublish {
-        skip = !"${webAuthn4JVersion}".endsWith("-SNAPSHOT") // Publish only when it is SNAPSHOT release
-    }
-
-    bintray {
-        user = bintrayUser
-        key = bintrayToken
-        configurations = ['archives']
-        publish = true
-        dryRun = !("${webAuthn4JVersion}".endsWith(".RELEASE")) // Publish only when it is RELEASE release
-        publications = ['standard']
-        pkg {
-            userOrg = "webauthn4j"
-            repo = "webauthn4j"
-            name = project.name
-            desc = project.description
-            licenses = ['Apache-2.0']
-            vcsUrl = githubUrl
-            version {
-                name = "${webAuthn4JVersion}"
-                released = new Date()
-                vcsTag = "${webAuthn4JVersion}"
-                gpg {
-                    sign = true
-                }
-                //Optional configuration for Maven Central sync of the version
-                mavenCentralSync {
-                    user = mavenCentralUser
-                    password = mavenCentralPassword
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = "${mavenCentralUser}"
+                    password = "${mavenCentralPassword}"
                 }
             }
         }
     }
+
+    signing {
+        useInMemoryPgpKeys(pgpSigningKey, pgpSigningKeyPassphrase)
+        sign publishing.publications.standard
+    }
+
 }
 
 task updateVersionsInDocuments() {
