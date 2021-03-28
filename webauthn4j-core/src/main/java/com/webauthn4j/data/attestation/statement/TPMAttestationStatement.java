@@ -51,7 +51,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     public TPMAttestationStatement(
             @NonNull @JsonProperty("ver") String ver,
             @NonNull @JsonProperty("alg") COSEAlgorithmIdentifier alg,
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @Nullable @JsonProperty("x5c") AttestationCertificatePath x5c,
             @NonNull @JsonProperty("sig") byte[] sig,
             @NonNull @JsonProperty("certInfo") TPMSAttest certInfo,
             @NonNull @JsonProperty("pubArea") TPMTPublic pubArea) {
@@ -82,7 +82,7 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
     }
 
     @Override
-    public @NonNull AttestationCertificatePath getX5c() {
+    public @Nullable AttestationCertificatePath getX5c() {
         return x5c;
     }
 
