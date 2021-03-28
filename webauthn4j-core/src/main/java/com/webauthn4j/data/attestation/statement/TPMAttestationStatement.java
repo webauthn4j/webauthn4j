@@ -57,7 +57,6 @@ public class TPMAttestationStatement implements CertificateBaseAttestationStatem
             @NonNull @JsonProperty("pubArea") TPMTPublic pubArea) {
         AssertUtil.notNull(ver, "ver must not be null");
         AssertUtil.notNull(alg, "alg must not be null");
-        AssertUtil.notNull(x5c, "x5c must not be null");
         AssertUtil.notNull(sig, "sig must not be null");
         AssertUtil.notNull(certInfo, "certInfo must not be null");
         AssertUtil.notNull(pubArea, "pubArea must not be null");

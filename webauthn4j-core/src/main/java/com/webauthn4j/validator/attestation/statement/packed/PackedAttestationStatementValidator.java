@@ -65,12 +65,10 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         byte[] attrToBeSigned = getAttToBeSigned(registrationObject);
         // If x5c is present,
         if (attestationStatement.getX5c() != null) {
-            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateX5c(registrationObject, attestationStatement, sig, alg, attrToBeSigned);
         }
         // If x5c is not present, self attestation is in use.
         else {
-            //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
             return validateSelfAttestation(registrationObject, sig, alg, attrToBeSigned);
         }
     }
@@ -78,12 +76,6 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     void validateAttestationStatementNotNull(PackedAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
-        }
-        if (attestationStatement.getAlg() == null) {
-            throw new BadAttestationStatementException("alg must not be null");
-        }
-        if (attestationStatement.getSig() == null) {
-            throw new BadAttestationStatementException("sig must not be null");
         }
         // if x5c is not present, self attestation is in use
     }
@@ -137,7 +129,6 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         //noinspection ConstantConditions as null check is already done in caller
         COSEKey coseKey = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
-        //noinspection ConstantConditions as null check is already done in caller
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
             throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");

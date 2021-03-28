@@ -116,7 +116,7 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
         validateJWSNotNull(attestationStatement.getResponse());
-        if (attestationStatement.getX5c() == null) {
+        if (attestationStatement.getX5c() == null) { //x5c is nullable here as x5c is extracted from header
             throw new BadAttestationStatementException("x5c must not be null");
         }
     }
