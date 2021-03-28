@@ -60,7 +60,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
         if(x5c == null){
             return null;
         }
-        return new AttestationCertificatePath(x5c.getCertificates().stream().map(item -> (X509Certificate) item).collect(Collectors.toList()));
+        return new AttestationCertificatePath(x5c.getCertificates().stream().map(X509Certificate.class::cast).collect(Collectors.toList()));
     }
 
     @Override
