@@ -63,9 +63,6 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getX5c() == null) {
-            throw new BadAttestationStatementException("x5c must not be null");
-        }
     }
 
     private void validateNonce(@NonNull CoreRegistrationObject registrationObject) {

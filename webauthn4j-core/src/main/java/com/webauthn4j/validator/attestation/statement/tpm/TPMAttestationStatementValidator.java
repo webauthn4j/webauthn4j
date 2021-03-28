@@ -151,18 +151,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getVer() == null) {
-            throw new BadAttestationStatementException("ver must not be null");
-        }
-        if (attestationStatement.getAlg() == null) {
-            throw new BadAttestationStatementException("alg must not be null");
-        }
-        if (attestationStatement.getX5c() == null) {
-            throw new BadAttestationStatementException("x5c must not be null");
-        }
-        if (attestationStatement.getSig() == null) {
-            throw new BadAttestationStatementException("sig must not be null");
-        }
         validateTPMSAttestNotNull(attestationStatement.getCertInfo());
         validateTPMTPublicNotNull(attestationStatement.getPubArea());
     }

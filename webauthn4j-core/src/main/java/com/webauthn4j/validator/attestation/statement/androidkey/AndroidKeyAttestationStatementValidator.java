@@ -87,9 +87,6 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getSig() == null) {
-            throw new BadAttestationStatementException("sig must not be null.");
-        }
     }
 
     private void validateSignature(@NonNull CoreRegistrationObject registrationObject) {

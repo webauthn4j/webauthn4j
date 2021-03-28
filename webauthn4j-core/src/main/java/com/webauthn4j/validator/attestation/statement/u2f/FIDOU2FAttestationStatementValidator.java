@@ -67,12 +67,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         if (attestationStatement == null) {
             throw new BadAttestationStatementException("attestation statement is not found.");
         }
-        if (attestationStatement.getSig() == null) {
-            throw new BadAttestationStatementException("sig must not be null");
-        }
-        if (attestationStatement.getX5c() == null) {
-            throw new BadAttestationStatementException("x5c must not be null");
-        }
     }
 
     void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
