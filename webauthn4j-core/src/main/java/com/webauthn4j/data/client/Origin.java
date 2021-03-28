@@ -47,6 +47,9 @@ public class Origin implements Serializable {
 
     /**
      * @deprecated this constructor will be removed before GA release.
+     * @param scheme scheme
+     * @param host host
+     * @param port port
      */
     @Deprecated
     public Origin(@NonNull String scheme, @NonNull String host, int port) {

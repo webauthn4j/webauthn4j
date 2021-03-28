@@ -171,7 +171,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     /**
      * Create {@link EC2COSEKey} from {@link ECPrivateKey}.
      *
-     * @param privateKey privateKey
+     * @param privateKey private key
      * @return {@link EC2COSEKey}
      */
     public static @NonNull EC2COSEKey create(@NonNull ECPrivateKey privateKey) {
@@ -181,7 +181,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     /**
      * Create {@link EC2COSEKey} from {@link ECPublicKey}.
      *
-     * @param publicKey publicKey
+     * @param publicKey public key
      * @return {@link EC2COSEKey}
      */
     public static @NonNull EC2COSEKey create(@NonNull ECPublicKey publicKey) {
@@ -190,7 +190,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     /**
      * Create {@link EC2COSEKey} from {@link KeyPair}.
-     *
+     * @param keyPair key pair
      * @return {@link EC2COSEKey}
      */
     public static @NonNull EC2COSEKey create(@NonNull KeyPair keyPair) {
@@ -200,7 +200,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     /**
      * create from uncompressed ECC 256-bit key
      *
-     * @param publicKey publicKey
+     * @param publicKey public key
      * @return {@link EC2COSEKey}
      */
     public static @NonNull EC2COSEKey createFromUncompressedECCKey(@NonNull byte[] publicKey) {
