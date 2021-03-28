@@ -135,7 +135,7 @@ class OriginValidatorImplTest {
         Origin originB = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
-        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
+        ServerProperty serverProperty = new ServerProperty(originB, "1.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
         );
@@ -147,7 +147,7 @@ class OriginValidatorImplTest {
         Origin originB = new Origin("android:apk-key-hash-sha256:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
-        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
+        ServerProperty serverProperty = new ServerProperty(originB, "2.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
         );
@@ -159,7 +159,7 @@ class OriginValidatorImplTest {
         Origin originB = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
-        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
+        ServerProperty serverProperty = new ServerProperty(originB, "3.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
         );
@@ -171,7 +171,7 @@ class OriginValidatorImplTest {
         Origin originB = new Origin("android:apk-key-hash-sha256:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
         CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
-        ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
+        ServerProperty serverProperty = new ServerProperty(originB, "4.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
         );
