@@ -213,9 +213,16 @@ subprojects {
         }
         repositories {
             maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                name = "mavenCentral"
+                url = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username = "${mavenCentralUser}"
+                    password = "${mavenCentralPassword}"
+                }
+            }
+            maven {
+                name = "snapshot"
+                url = "https://oss.sonatype.org/content/repositories/snapshots"
                 credentials {
                     username = "${mavenCentralUser}"
                     password = "${mavenCentralPassword}"
