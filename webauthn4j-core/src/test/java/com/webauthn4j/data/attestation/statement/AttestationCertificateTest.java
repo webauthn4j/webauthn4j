@@ -19,6 +19,8 @@ package com.webauthn4j.data.attestation.statement;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.security.auth.x500.X500Principal;
 import java.security.cert.X509Certificate;
@@ -73,58 +75,18 @@ class AttestationCertificateTest {
         );
     }
 
-    @Test
-    void validate_with_invalid_CN_certificate_test() {
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "OU=Authenticator Attestation, O=SharpLab., C=JP",
+            "OU=Authenticator Attestation, CN=webauthn4j test 3tier authenticator attestation, C=JP",
+            "O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP",
+            "OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation",
+            "OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"
+    })
+    void validate_with_invalid_certificate_parameterized_test(String principal) {
         X509Certificate certificate = mock(X509Certificate.class);
         when(certificate.getVersion()).thenReturn(3); //v3
-        when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., C=JP"));
-        AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
-        assertThrows(CertificateException.class,
-                attestationCertificate::validate
-        );
-    }
-
-    @Test
-    void validate_with_invalid_O_certificate_test() {
-        X509Certificate certificate = mock(X509Certificate.class);
-        when(certificate.getVersion()).thenReturn(3); //v3
-        when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal("OU=Authenticator Attestation, CN=webauthn4j test 3tier authenticator attestation, C=JP"));
-        AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
-        assertThrows(CertificateException.class,
-                attestationCertificate::validate
-        );
-    }
-
-    @Test
-    void validate_with_invalid_OU_certificate_test() {
-        X509Certificate certificate = mock(X509Certificate.class);
-        when(certificate.getVersion()).thenReturn(3); //v3
-        when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
-        AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
-        assertThrows(CertificateException.class,
-                attestationCertificate::validate
-        );
-    }
-
-    @Test
-    void validate_with_invalid_C_certificate_test() {
-        X509Certificate certificate = mock(X509Certificate.class);
-        when(certificate.getVersion()).thenReturn(3); //v3
-        when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation"));
-        AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
-        assertThrows(CertificateException.class,
-                attestationCertificate::validate
-        );
-    }
-
-    @Test
-    void validate_with_invalid_basicConstraints_certificate_test() {
-        X509Certificate certificate = mock(X509Certificate.class);
-        when(certificate.getVersion()).thenReturn(3); //v3
-        when(certificate.getSubjectX500Principal())
-                .thenReturn(new X500Principal("OU=Authenticator Attestation, O=SharpLab., CN=webauthn4j test 3tier authenticator attestation, C=JP"));
+        when(certificate.getSubjectX500Principal()).thenReturn(new X500Principal(principal));
         AttestationCertificate attestationCertificate = new AttestationCertificate(certificate);
         assertThrows(CertificateException.class,
                 attestationCertificate::validate
