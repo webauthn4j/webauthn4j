@@ -222,7 +222,7 @@ subprojects {
             }
             maven {
                 name = "snapshot"
-                url = "https://s01.oss.sonatype.org/content/repositories/snapshots"
+                url = "https://oss.sonatype.org/content/repositories/snapshots"
                 credentials {
                     username = "${mavenCentralUser}"
                     password = "${mavenCentralPassword}"
