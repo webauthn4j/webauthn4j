@@ -59,7 +59,7 @@ public class TokenBinding implements Serializable {
     }
 
 
-    public @Nullable TokenBindingStatus getStatus() {
+    public @NonNull TokenBindingStatus getStatus() {
         return status;
     }
 

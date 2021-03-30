@@ -186,7 +186,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public COSEKeyType getKeyType() {
+    public @NonNull COSEKeyType getKeyType() {
         return COSEKeyType.RSA;
     }
 
@@ -233,7 +233,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
     @Override
-    public PublicKey getPublicKey() {
+    public @Nullable PublicKey getPublicKey() {
         if (!hasPublicKey()) {
             return null;
         }

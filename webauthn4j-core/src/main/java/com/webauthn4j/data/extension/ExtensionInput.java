@@ -16,13 +16,16 @@
 
 package com.webauthn4j.data.extension;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.io.Serializable;
 
 public interface ExtensionInput extends Serializable {
 
-    String getIdentifier();
+    @NonNull String getIdentifier();
 
-    Serializable getValue(String key);
+    @Nullable Serializable getValue(String key);
 
     void validate();
 
