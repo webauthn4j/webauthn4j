@@ -59,7 +59,7 @@ public enum CredentialProtectionPolicy {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return string;
     }
 

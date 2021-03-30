@@ -59,7 +59,7 @@ public class AttestationObject implements Serializable {
         this.attestationStatement = attestationStatement;
     }
 
-    public @Nullable AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
+    public @NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> getAuthenticatorData() {
         return authenticatorData;
     }
 
@@ -68,7 +68,7 @@ public class AttestationObject implements Serializable {
         return attestationStatement.getFormat();
     }
 
-    public @Nullable AttestationStatement getAttestationStatement() {
+    public @NonNull AttestationStatement getAttestationStatement() {
         return attestationStatement;
     }
 
