@@ -70,13 +70,9 @@ git tag <version>.RELEASE
 git push origin <version>.RELEASE
 ```
 
-##### Retry maven central sync (if release job failed)
-Sometimes release job invoked by tag push fails because of some files are not signed by bintray.
-Following command resolves GPG signing problem and syncs to Maven Central.
+##### Close and Release Staging Repository
 
-```
-BINTRAY_USER=<BINTRAY_USER> BINTRAY_TOKEN=<BINTRAY_TOKEN> ./gradlew bintrayGpgSign bintrayMavenCentralSync
-```
+Close and release the staging repository by following [OSSRH manual](https://central.sonatype.org/pages/releasing-the-deployment.html#close-and-drop-or-release-your-staging-repository).
 
 ##### Update the release note on GitHub
 
