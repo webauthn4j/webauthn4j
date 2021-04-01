@@ -40,22 +40,13 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
     // ~ Constructor
     // ========================================================================================================
     /**
-     * @deprecated icon member is no longer available in WebAuthn Level2
      * @param id id
      * @param name name
-     * @param icon icon
      */
-    @Deprecated
     @JsonCreator
     public PublicKeyCredentialRpEntity(
             @Nullable @JsonProperty("id") String id,
-            @NonNull  @JsonProperty("name") String name,
-            @Nullable @JsonProperty("icon") String icon) {
-        super(name, icon);
-        this.id = id;
-    }
-
-    public PublicKeyCredentialRpEntity(@Nullable String id, @NonNull String name) {
+            @NonNull  @JsonProperty("name") String name) {
         super(name);
         this.id = id;
     }

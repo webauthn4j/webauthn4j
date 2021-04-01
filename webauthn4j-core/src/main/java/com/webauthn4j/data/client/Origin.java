@@ -37,34 +37,12 @@ public class Origin implements Serializable {
 
     private static final String SCHEME_HTTPS = "https";
     private static final String SCHEME_HTTP = "http";
-    private static final String SCHEME_ERROR_MESSAGE = "scheme must be 'http' or 'https'";
 
     private String scheme;
     private String host;
     private Integer port;
     private String schemeSpecificPart;
     private boolean explicitPortNotation;
-
-    /**
-     * @deprecated this constructor will be removed before GA release.
-     * @param scheme scheme
-     * @param host host
-     * @param port port
-     */
-    @Deprecated
-    public Origin(@NonNull String scheme, @NonNull String host, int port) {
-        AssertUtil.notNull(scheme, "scheme must not be null");
-        AssertUtil.notNull(host, "host must not be null");
-        String lowerCaseScheme = toLowerCase(scheme);
-        if (!Objects.equals(SCHEME_HTTPS, lowerCaseScheme) && !Objects.equals(SCHEME_HTTP, lowerCaseScheme)) {
-            throw new IllegalArgumentException(SCHEME_ERROR_MESSAGE);
-        }
-
-        this.scheme = lowerCaseScheme;
-        this.host = toLowerCase(host);
-        this.port = port;
-        this.schemeSpecificPart = "//" + this.host + ":" + port;
-    }
 
     public Origin(@NonNull String originUrl) {
         AssertUtil.notNull(originUrl, "originUrl must not be null");

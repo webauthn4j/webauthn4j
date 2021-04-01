@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -39,23 +38,10 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     private String displayName;
 
     /**
-     * @deprecated icon member is no longer available in WebAuthn Level2
      * @param id id
      * @param name name
      * @param displayName displayName
-     * @param icon icon
      */
-    @Deprecated
-    public PublicKeyCredentialUserEntity(
-            @NonNull byte[] id,
-            @NonNull String name,
-            @NonNull String displayName,
-            @Nullable String icon) {
-        super(name, icon);
-        this.id = id;
-        this.displayName = displayName;
-    }
-
     public PublicKeyCredentialUserEntity(
             @NonNull byte[] id,
             @NonNull String name,

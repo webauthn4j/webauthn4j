@@ -29,16 +29,6 @@ public class SignatureUtil {
     private SignatureUtil() {
     }
 
-    @Deprecated
-    public static @NonNull Signature getRS256() {
-        return createRS256();
-    }
-
-    @Deprecated
-    public static @NonNull Signature getES256() {
-        return createES256();
-    }
-
     public static @NonNull Signature createRS256() {
         return createSignature("SHA256withRSA");
     }

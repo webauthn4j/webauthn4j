@@ -82,31 +82,22 @@ class OriginTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void constructor_test() {
         Origin originA = new Origin("https://example.com");
-        Origin originB = new Origin("https", "example.com", 443);
-        Origin originC = new Origin("HTTPs", "EXAMPLE.COM", 443);
+        Origin originB = new Origin("https://example.com:443");
+        Origin originC = new Origin("HTTPs://EXAMPLE.COM:443");
         assertThat(originA)
                 .isEqualTo(originB)
                 .isEqualTo(originC);
     }
 
     @Test
-    @SuppressWarnings("deprecation")
-    void constructor_test_with_illegal_input() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new Origin("ftp", "example.com", 80)
-        );
+    void constructor_test_with_non_http_or_https_input() {
+        assertThatCode(
+                () -> new Origin("ftp://example.com:80")
+        ).doesNotThrowAnyException();
     }
 
-    @Test
-    @SuppressWarnings("deprecation")
-    void constructor_test_with_null_input() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new Origin(null, "example.com", 80)
-        );
-    }
 
     @Test
     void create_with_null_test() {
@@ -235,19 +226,15 @@ class OriginTest {
 
 
     @Test
-    @SuppressWarnings("deprecation")
     void hashCode_test() {
         Origin originA = new Origin("https://example.com");
-        Origin originB = new Origin("https", "example.com", 443);
-        Origin originC = new Origin("http://localhost:8080");
-        Origin originD = new Origin("http", "localhost", 8080);
+        Origin originB = new Origin("https://example.com:443");
         Origin android_apk_key_hash_abc123_a = new Origin("android:apk-key-hash:abc123");
         Origin android_apk_key_hash_abc123_b = new Origin("android:apk-key-hash:abc123");
         Origin android_apk_key_hash_def456 = new Origin("android:apk-key-hash:def");
         Origin invalid_data = new Origin("invalid:data");
 
         assertThat(originA).hasSameHashCodeAs(originB);
-        assertThat(originC).hasSameHashCodeAs(originD);
         assertThat(android_apk_key_hash_abc123_a).hasSameHashCodeAs(android_apk_key_hash_abc123_b);
         assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(android_apk_key_hash_def456.hashCode());
         assertThat(android_apk_key_hash_abc123_a.hashCode()).isNotEqualTo(invalid_data.hashCode());
