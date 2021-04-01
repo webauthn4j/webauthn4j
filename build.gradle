@@ -236,7 +236,11 @@ subprojects {
         sign publishing.publications.standard
     }
 
+    publishStandardPublicationToSnapshotRepository.onlyIf { webAuthn4JVersion.endsWith("-SNAPSHOT") }
+    publishStandardPublicationToMavenCentralRepository.onlyIf { !webAuthn4JVersion.endsWith("-SNAPSHOT") }
+
 }
+
 
 task updateVersionsInDocuments() {
     group = "documentation"
