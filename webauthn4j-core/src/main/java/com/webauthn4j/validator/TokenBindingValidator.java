@@ -42,9 +42,6 @@ class TokenBindingValidator {
                 clientDataTokenBindingId = Base64UrlUtil.decode(clientDataTokenBinding.getId());
             }
             TokenBindingStatus tokenBindingStatus = clientDataTokenBinding.getStatus();
-            if(tokenBindingStatus == null){
-                return;
-            }
             switch (tokenBindingStatus) {
                 case NOT_SUPPORTED:
                 case SUPPORTED:
