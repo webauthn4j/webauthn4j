@@ -29,20 +29,7 @@ class PublicKeyCredentialUserEntityTest {
         assertAll(
                 () -> assertThat(userEntity.getId()).isEqualTo(new byte[16]),
                 () -> assertThat(userEntity.getName()).isEqualTo("name"),
-                () -> assertThat(userEntity.getDisplayName()).isEqualTo("displayName"),
-                () -> assertThat(userEntity.getIcon()).isNull()
-        );
-    }
-
-    @Deprecated
-    @Test
-    void getter_test() {
-        PublicKeyCredentialUserEntity userEntity = new PublicKeyCredentialUserEntity(new byte[16], "name", "displayName", "icon");
-        assertAll(
-                () -> assertThat(userEntity.getId()).isEqualTo(new byte[16]),
-                () -> assertThat(userEntity.getName()).isEqualTo("name"),
-                () -> assertThat(userEntity.getDisplayName()).isEqualTo("displayName"),
-                () -> assertThat(userEntity.getIcon()).isEqualTo("icon")
+                () -> assertThat(userEntity.getDisplayName()).isEqualTo("displayName")
         );
     }
 

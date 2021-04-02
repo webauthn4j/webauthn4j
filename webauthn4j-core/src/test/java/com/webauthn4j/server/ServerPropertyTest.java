@@ -39,22 +39,6 @@ class ServerPropertyTest {
     private final Origin apk1Origin = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
     private final Origin apk2Origin = new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo=");
 
-    @Deprecated
-    @Test
-    void deprecated_constructor_null() {
-
-        final Challenge challenge = new DefaultChallenge();
-        final ServerProperty serverPropertyA =
-                new ServerProperty(Arrays.asList(webApp1Origin, webApp2Origin, apk1Origin, apk2Origin), rpId, challenge, new byte[32]);
-        final ServerProperty serverPropertyB =
-                new ServerProperty(new HashSet<>(Arrays.asList(webApp1Origin, apk1Origin, webApp2Origin, apk2Origin)), rpId, challenge, new byte[32]);
-
-        assertAll(
-                () -> assertThat(serverPropertyA).isEqualTo(serverPropertyB),
-                () -> assertThat(serverPropertyA).hasSameHashCodeAs(serverPropertyB)
-        );
-    }
-
 
     @Test
     void constructor_rpId_null() {

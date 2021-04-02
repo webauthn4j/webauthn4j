@@ -29,8 +29,7 @@ class PublicKeyCredentialRpEntityTest {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo("localhost"),
-                () -> assertThat(rpEntity.getName()).isEqualTo("name"),
-                () -> assertThat(rpEntity.getIcon()).isNull()
+                () -> assertThat(rpEntity.getName()).isEqualTo("name")
         );
     }
 
@@ -39,19 +38,17 @@ class PublicKeyCredentialRpEntityTest {
         PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("name");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isNull(),
-                () -> assertThat(rpEntity.getName()).isEqualTo("name"),
-                () -> assertThat(rpEntity.getIcon()).isNull()
+                () -> assertThat(rpEntity.getName()).isEqualTo("name")
         );
     }
 
     @Deprecated
     @Test
     void getter_test() {
-        PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name", "icon");
+        PublicKeyCredentialRpEntity rpEntity = new PublicKeyCredentialRpEntity("localhost", "name");
         assertAll(
                 () -> assertThat(rpEntity.getId()).isEqualTo("localhost"),
-                () -> assertThat(rpEntity.getName()).isEqualTo("name"),
-                () -> assertThat(rpEntity.getIcon()).isEqualTo("icon")
+                () -> assertThat(rpEntity.getName()).isEqualTo("name")
         );
     }
 
