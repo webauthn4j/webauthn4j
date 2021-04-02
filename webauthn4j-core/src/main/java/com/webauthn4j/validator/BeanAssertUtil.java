@@ -105,13 +105,8 @@ class BeanAssertUtil {
         validate(collectedClientData.getTokenBinding());
     }
 
-    public static void validate(@Nullable TokenBinding tokenBinding) {
-        if (tokenBinding == null) {
-            return;
-        }
-        if (tokenBinding.getStatus() == null) {
-            throw new ConstraintViolationException("status must not be null");
-        }
+    public static void validate(@SuppressWarnings("unused") @Nullable TokenBinding tokenBinding) {
+        //nop
     }
 
     public static void validate(@Nullable AttestationObject attestationObject) {
