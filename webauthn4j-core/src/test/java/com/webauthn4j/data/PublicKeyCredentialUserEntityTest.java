@@ -16,6 +16,8 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.util.Base64Util;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,5 +44,11 @@ class PublicKeyCredentialUserEntityTest {
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
+    }
+
+    @Test
+    void deserialize_test(){
+        PublicKeyCredentialUserEntity user = new ObjectConverter().getJsonConverter().readValue("{\"id\": \"ZHVtbXk=\", \"name\": \"name\", \"displayName\": \"displayName\"}", PublicKeyCredentialUserEntity.class);
+        assertThat(user.getId()).isEqualTo(Base64Util.decode("ZHVtbXk="));
     }
 }
