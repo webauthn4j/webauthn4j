@@ -76,6 +76,8 @@ public class RegistrationDataValidator {
                 attestationStatementValidators,
                 certPathTrustworthinessValidator,
                 selfAttestationTrustworthinessValidator);
+
+        this.customRegistrationValidators = customRegistrationValidators;
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
