@@ -54,7 +54,7 @@ public class RegistrationDataValidator {
     private final ClientExtensionValidator clientExtensionValidator = new ClientExtensionValidator();
     private final AuthenticatorExtensionValidator authenticatorExtensionValidator = new AuthenticatorExtensionValidator();
 
-    private final List<CustomRegistrationValidator> customRegistrationValidators = new ArrayList<>();
+    private final List<CustomRegistrationValidator> customRegistrationValidators;
 
     private final AttestationValidator attestationValidator;
 
