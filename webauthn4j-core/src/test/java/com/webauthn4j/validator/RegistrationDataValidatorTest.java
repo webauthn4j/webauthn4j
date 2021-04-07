@@ -32,8 +32,8 @@ import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -56,7 +56,7 @@ class RegistrationDataValidatorTest {
         ),
                 new NullCertPathTrustworthinessValidator(),
                 new NullSelfAttestationTrustworthinessValidator(),
-                Collections.emptyList(),
+                new ArrayList<>(),
                 objectConverter);
     }
 
