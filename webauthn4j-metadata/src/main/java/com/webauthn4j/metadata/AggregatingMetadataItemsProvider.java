@@ -21,11 +21,7 @@ import com.webauthn4j.metadata.data.MetadataItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
 
@@ -39,16 +35,18 @@ public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
 
     @Override
     public Map<AAGUID, Set<MetadataItem>> provide() {
-        return metadataItemsProviders.stream()
-                .flatMap(provider -> {
-                    try {
-                        return provider.provide().entrySet().stream();
-                    } catch (RuntimeException e) {
-                        logger.warn("Failed to load metadata from one of metadataItemsProviders", e);
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<AAGUID, Set<MetadataItem>> map = new HashMap<>();
+        metadataItemsProviders.forEach(provider ->{
+            try {
+                Map<AAGUID, Set<MetadataItem>> provided = provider.provide();
+                provided.keySet().forEach(aaguid -> {
+                    map.putIfAbsent(aaguid, new HashSet<>());
+                    map.get(aaguid).addAll(provided.get(aaguid));
+                });
+            } catch (RuntimeException e) {
+                logger.warn("Failed to load metadata from one of metadataItemsProviders", e);
+            }
+        });
+        return map;
     }
 }

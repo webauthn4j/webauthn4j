@@ -46,6 +46,27 @@ class AggregatingMetadataStatementsProviderTest {
     }
 
     @Test
+    void provide_test_common_entry_returned_from_providers(){
+
+        MetadataStatement metadataStatementA = mock(MetadataStatement.class);
+        MetadataStatement metadataStatementB = mock(MetadataStatement.class);
+
+        MetadataStatementsProvider providerA = mock(MetadataStatementsProvider.class);
+        Map<AAGUID, Set<MetadataStatement>> mapA = new HashMap<>();
+        mapA.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>(Collections.singletonList(metadataStatementA)));
+        when(providerA.provide()).thenReturn(mapA);
+
+        MetadataStatementsProvider providerB = mock(MetadataStatementsProvider.class);
+        Map<AAGUID, Set<MetadataStatement>> mapB = new HashMap<>();
+        mapB.put(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"), new HashSet<>(Arrays.asList(metadataStatementA, metadataStatementB)));
+        when(providerB.provide()).thenReturn(mapB);
+
+        AggregatingMetadataStatementsProvider target = new AggregatingMetadataStatementsProvider(Arrays.asList(providerA, providerB));
+        assertThat(target.provide().keySet()).containsExactly(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"));
+        assertThat(target.provide().get(new AAGUID("df495bdc-223a-429d-9f0e-ebfa29155812"))).containsExactlyInAnyOrder(metadataStatementA, metadataStatementB);
+    }
+
+    @Test
     void provide_with_one_of_provider_throws_exception_test() {
         MetadataStatementsProvider providerA = mock(MetadataStatementsProvider.class);
         Map<AAGUID, Set<MetadataStatement>> mapA = new HashMap<>();
