@@ -31,6 +31,7 @@ class CollectedClientDataTest {
         Challenge challenge = new DefaultChallenge();
         Origin origin = Origin.create("http://example.com");
         assertAll(
+                () -> assertThatCode(()-> new CollectedClientData(ClientDataType.CREATE, challenge, origin, true,null)).doesNotThrowAnyException(),
                 () -> assertThatCode(()-> new CollectedClientData(ClientDataType.CREATE, challenge, origin, null)).doesNotThrowAnyException(),
                 () -> assertThatThrownBy(()-> new CollectedClientData(null, challenge, origin, null)).isInstanceOf(IllegalArgumentException.class),
                 () -> assertThatThrownBy(()-> new CollectedClientData(ClientDataType.CREATE, null, origin, null)).isInstanceOf(IllegalArgumentException.class),

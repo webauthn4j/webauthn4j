@@ -41,13 +41,14 @@ class CollectedClientDataConverterTest {
     @Test
     void convert_deserialization_test() {
         //noinspection SpellCheckingInspection
-        String clientDataJson = "{\"challenge\":\"tk31UH1ETGGTPj33OhOMzw\",\"origin\":\"http://localhost:8080\",\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.get\"}";
+        String clientDataJson = "{\"challenge\":\"tk31UH1ETGGTPj33OhOMzw\",\"origin\":\"http://localhost:8080\",\"crossOrigin\":true,\"tokenBinding\":{\"status\":\"not-supported\"},\"type\":\"webauthn.get\"}";
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
                 () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.GET),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("tk31UH1ETGGTPj33OhOMzw")),
-                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"))
+                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080")),
+                () -> assertThat(collectedClientData.getCrossOrigin()).isTrue()
         );
     }
 
@@ -68,7 +69,8 @@ class CollectedClientDataConverterTest {
         assertAll(
                 () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("Tgup0LZZQKinvtQcZFYdRw")),
-                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080"))
+                () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080")),
+                () -> assertThat(collectedClientData.getCrossOrigin()).isNull()
         );
     }
 
