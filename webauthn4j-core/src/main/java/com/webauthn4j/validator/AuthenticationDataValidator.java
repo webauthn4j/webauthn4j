@@ -28,10 +28,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
@@ -51,6 +48,8 @@ public class AuthenticationDataValidator {
 
     private OriginValidator originValidator = new OriginValidatorImpl();
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
+
+    private boolean crossOriginAllowed = false;
 
     public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
@@ -134,6 +133,9 @@ public class AuthenticationDataValidator {
         //spec| Verify that the value of C.origin matches the Relying Party's origin.
         originValidator.validate(authenticationObject);
 
+        // not defined in spec
+        validateClientDataCrossOrigin(collectedClientData);
+
         //spec| Step10
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
@@ -202,6 +204,12 @@ public class AuthenticationDataValidator {
 
     }
 
+    void validateClientDataCrossOrigin(CollectedClientData collectedClientData) {
+        if (!crossOriginAllowed && Objects.equals(true, collectedClientData.getCrossOrigin())){
+            throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataValidator config if necessary.");
+        }
+    }
+
     void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
@@ -227,5 +235,13 @@ public class AuthenticationDataValidator {
 
     public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
+    }
+
+    public boolean isCrossOriginAllowed() {
+        return crossOriginAllowed;
+    }
+
+    public void setCrossOriginAllowed(boolean crossOriginAllowed) {
+        this.crossOriginAllowed = crossOriginAllowed;
     }
 }

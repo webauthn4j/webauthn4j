@@ -18,8 +18,13 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.validator.exception.CrossOriginException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -27,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +49,25 @@ class AuthenticationDataValidatorTest {
     }
 
     @Test
+    void validateClientDataCrossOrigin_with_expected_crossOrigin_test() {
+        target.setCrossOriginAllowed(true);
+        Origin origin = new Origin("http://example.com");
+
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), origin, true, null);
+        target.validateClientDataCrossOrigin(collectedClientData);
+    }
+
+    @Test
+    void validateClientDataCrossOrigin_with_unexpected_crossOrigin_test() {
+        Origin origin = new Origin("http://example.com");
+
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), origin, true, null);
+        assertThrows(CrossOriginException.class,
+                () -> target.validateClientDataCrossOrigin(collectedClientData)
+        );
+    }
+
+    @Test
     void getCustomAuthenticationValidators() {
         CustomAuthenticationValidator customAuthenticationValidator = mock(CustomAuthenticationValidator.class);
         target.getCustomAuthenticationValidators().add(customAuthenticationValidator);
@@ -53,6 +78,8 @@ class AuthenticationDataValidatorTest {
     void getter_setter_test(){
         target.setOriginValidator(new TestOriginValidator());
         assertThat(target.getOriginValidator()).isInstanceOf(TestOriginValidator.class);
+        target.setCrossOriginAllowed(true);
+        assertThat(target.isCrossOriginAllowed()).isTrue();
     }
 
     private static class TestOriginValidator extends OriginValidatorImpl {

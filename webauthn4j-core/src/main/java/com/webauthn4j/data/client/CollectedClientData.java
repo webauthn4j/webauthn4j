@@ -37,12 +37,14 @@ public class CollectedClientData implements Serializable {
     private ClientDataType type;
     private Challenge challenge;
     private Origin origin;
+    private Boolean crossOrigin;
     private TokenBinding tokenBinding;
 
     @JsonCreator
     public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
                                @NonNull @JsonProperty("challenge") Challenge challenge,
                                @NonNull @JsonProperty("origin") Origin origin,
+                               @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
                                @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         AssertUtil.notNull(type, "type must not be null");
         AssertUtil.notNull(challenge, "challenge must not be null");
@@ -50,8 +52,17 @@ public class CollectedClientData implements Serializable {
         this.type = type;
         this.challenge = challenge;
         this.origin = origin;
+        this.crossOrigin = crossOrigin;
         this.tokenBinding = tokenBinding;
     }
+
+    public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
+                               @NonNull @JsonProperty("challenge") Challenge challenge,
+                               @NonNull @JsonProperty("origin") Origin origin,
+                               @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
+        this(type, challenge, origin, null, tokenBinding);
+    }
+
 
     public @NonNull ClientDataType getType() {
         return type;
@@ -63,6 +74,10 @@ public class CollectedClientData implements Serializable {
 
     public @NonNull Origin getOrigin() {
         return origin;
+    }
+
+    public @NonNull Boolean getCrossOrigin() {
+        return crossOrigin;
     }
 
     public @Nullable TokenBinding getTokenBinding() {
@@ -77,12 +92,12 @@ public class CollectedClientData implements Serializable {
         return type == that.type &&
                 Objects.equals(challenge, that.challenge) &&
                 Objects.equals(origin, that.origin) &&
+                Objects.equals(crossOrigin, that.crossOrigin) &&
                 Objects.equals(tokenBinding, that.tokenBinding);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(type, challenge, origin, tokenBinding);
+        return Objects.hash(type, challenge, origin, crossOrigin, tokenBinding);
     }
 }
