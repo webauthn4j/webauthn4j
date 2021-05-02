@@ -53,7 +53,6 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         validateAttestationStatementNotNull(attestationStatement);
         validateNonce(registrationObject);
 
-        //noinspection ConstantConditions as null check is already done in the validateNull method.
         validatePublicKey(registrationObject, attestationStatement);
 
         return AttestationType.BASIC;
@@ -69,7 +68,6 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
-        //noinspection ConstantConditions as null check is already done in caller.
         byte[] extensionValue = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue("1.2.840.113635.100.8.2");
         byte[] extracted;
         try {
