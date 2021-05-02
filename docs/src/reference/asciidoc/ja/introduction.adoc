@@ -2,21 +2,15 @@
 
 === Web Authenticationとは
 
-Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケーションの新しいセキュアな認証方式仕様です。
-ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固な認証を実現しています。
-主要ブラウザでの実装が進みつつあり、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。
-当初はFIDO AllianceでFIDO2.0の一部として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
+Web Authenticationは、W3Cで2019年3月に勧告になった、Webアプリケーションの新しいセキュアな認証方式仕様です。 ローカル認証や公開鍵認証、Origin別の鍵管理を組み合わせることで、フィッシングなど認証プロセスに対する攻撃に対して堅固な認証を実現しています。 主要ブラウザでの実装が進みつつあり、セキュリティ、利便性を重視するユーザーに対して優れた選択肢を提供します。 当初はFIDO AllianceでFIDO2.0の一部として仕様策定が進められていましたが、現在はW3Cに移管され、仕様策定が行われています。
 
 === WebAuthn4Jとは
 
-WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。
-Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
+WebAuthn4Jは、Web Authentication仕様に基づくサーバーサイド検証を行うためのJavaライブラリです。WebAuthnではなく、Apple App Attestや、FIDO CTAP2セキュリティキーを用いた独自アプリケーションのサーバーサイド検証に用いることも可能です。 Web Authentication仕様で定められた全ての構成証明ステートメント（Attestation）をサポートしながら、外部ライブラリへの依存関係は最小限に抑えたポータブルなライブラリです。
 
 === WebAuthn4J Spring Securityとは
 
-WebAuthn4Jの関連プロジェクトとして、Spring SecurityでWebAuthnを利用するためのラッパーライブラリを https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security] という名前で開発しています。
-Spring Securityを活用したアプリケーションでWebAuthnを導入する場合は、WebAuthn4Jを直接利用するのではなく、
-WebAuthn4J Spring Securityを利用するのが良いでしょう。
+WebAuthn4Jの関連プロジェクトとして、Spring SecurityでWebAuthnを利用するためのラッパーライブラリを https://github.com/webauthn4j/webauthn4j-spring-security[WebAuthn4J Spring Security] という名前で開発しています。 Spring Securityを活用したアプリケーションでWebAuthnを導入する場合は、WebAuthn4Jを直接利用するのではなく、 WebAuthn4J Spring Securityを利用するのが良いでしょう。
 
 === 特徴
 
@@ -38,13 +32,11 @@ WebAuthn4Jでは、以下の通り全ての構成証明ステートメントフ�
 https://fidoalliance.org/certification/functional-certification/conformance/[FIDO Allianceが提供するFIDO2 Test Tools]
 で必須のテストケースに加え、オプションのAndroid Key attestationのテストケースを全て合格しています。
 
-NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテストを実行する為、WebAuthn4J Spring Securityが
-提供するFIDO2 Transport Binding ProfileのREST API実装に対して実行して検証を行っています。
+NOTE: FIDO2 Test ToolsはFIDO2 Transport Binding ProfileのREST API経由でテストを実行する為、WebAuthn4J Spring Securityが 提供するFIDO2 Transport Binding ProfileのREST API実装に対して実行して検証を行っています。
 
 ==== ポータビリティ
 
-WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常に高いポータビリティを持っています。
-あなたのJavaアプリへの導入の障害は殆どないでしょう。
+WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常に高いポータビリティを持っています。 あなたのJavaアプリへの導入の障害は殆どないでしょう。
 
 === 要件
 
@@ -57,9 +49,10 @@ WebAuthn4JはSLF4JとJackson、Apache Kerbyにのみ依存しており、非常�
 - SecureContext（サイトがHTTPS接続か、localhost）
 
 === Maven Centralからの取得
+
 Mavenを使用している場合、webauthn4jを依存関係として追加して使用してください：
 
-[source, xml]
+[source,xml]
 ----
 <properties>
   ...
@@ -82,17 +75,16 @@ Mavenを使用している場合、webauthn4jを依存関係として追加し�
 === ソースコード
 
 ソースコードは https://github.com/webauthn4j/webauthn4j[Github] で管理されています。
+
 ----
 git clone git@github.com:webauthn4j/webauthn4j.git
 ----
 
 === ライセンス
 
-WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの
-オープンソースソフトウェアです。
+WebAuthn4jは http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license] ライセンスの オープンソースソフトウェアです。
 
 === 開発への参加
 
-WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。
-お気軽にIssueやPull Requestをお寄せ下さい。
+WebAuthn4Jに興味を持って頂きありがとうございます。WebAuthn4JはGitHub上で開発を進めています。 お気軽にIssueやPull Requestをお寄せ下さい。
 

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 class AggregatingMetadataItemsProviderTest {
 
     @Test
-    void provide_test_common_entry_returned_from_providers(){
+    void provide_test_common_entry_returned_from_providers() {
 
         MetadataItem metadataItemA = mock(MetadataItem.class);
         MetadataItem metadataItemB = mock(MetadataItem.class);

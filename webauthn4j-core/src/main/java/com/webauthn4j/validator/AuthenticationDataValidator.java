@@ -205,7 +205,7 @@ public class AuthenticationDataValidator {
     }
 
     void validateClientDataCrossOrigin(CollectedClientData collectedClientData) {
-        if (!crossOriginAllowed && Objects.equals(true, collectedClientData.getCrossOrigin())){
+        if (!crossOriginAllowed && Objects.equals(true, collectedClientData.getCrossOrigin())) {
             throw new CrossOriginException("Cross-origin request is prohibited. Relax AuthenticationDataValidator config if necessary.");
         }
     }

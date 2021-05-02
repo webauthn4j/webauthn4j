@@ -68,7 +68,8 @@ public class CoreRegistrationDataValidator {
 
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
-     * @param registrationData registration data
+     *
+     * @param registrationData       registration data
      * @param registrationParameters registration parameters
      */
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
@@ -140,7 +141,7 @@ public class CoreRegistrationDataValidator {
     }
 
     void validateCOSEKey(COSEKey coseKey) {
-        if(coseKey.getPublicKey() == null){
+        if (coseKey.getPublicKey() == null) {
             throw new ConstraintViolationException("coseKey doesn't contain public key");
         }
     }

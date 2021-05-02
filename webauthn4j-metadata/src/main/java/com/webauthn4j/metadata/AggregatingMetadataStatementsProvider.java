@@ -36,7 +36,7 @@ public class AggregatingMetadataStatementsProvider implements MetadataStatements
     @Override
     public Map<AAGUID, Set<MetadataStatement>> provide() {
         Map<AAGUID, Set<MetadataStatement>> map = new HashMap<>();
-        metadataStatementsProviders.forEach(provider ->{
+        metadataStatementsProviders.forEach(provider -> {
             try {
                 Map<AAGUID, Set<MetadataStatement>> provided = provider.provide();
                 provided.keySet().forEach(aaguid -> {

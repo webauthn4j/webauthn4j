@@ -22,7 +22,10 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Data transfer object that represents relying party server property for validators
@@ -37,10 +40,11 @@ public class ServerProperty extends CoreServerProperty {
 
     // ~ Constructor
     // ========================================================================================================
+
     /**
-     * @param origin origin
-     * @param rpId rpId
-     * @param challenge challenge
+     * @param origin         origin
+     * @param rpId           rpId
+     * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
      */
     public ServerProperty(@NonNull Origin origin, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {
@@ -51,9 +55,9 @@ public class ServerProperty extends CoreServerProperty {
     }
 
     /**
-     * @param origins origins
-     * @param rpId rpId
-     * @param challenge challenge
+     * @param origins        origins
+     * @param rpId           rpId
+     * @param challenge      challenge
      * @param tokenBindingId tokenBindingId
      */
     public ServerProperty(@NonNull Set<Origin> origins, @NonNull String rpId, @Nullable Challenge challenge, @Nullable byte[] tokenBindingId) {

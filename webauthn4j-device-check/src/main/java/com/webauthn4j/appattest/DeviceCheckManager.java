@@ -116,6 +116,7 @@ public class DeviceCheckManager {
 
     /**
      * Create {@link ObjectConverter} instance with {@link DeviceCheckCBORModule}
+     *
      * @return {@link ObjectConverter} instance with {@link DeviceCheckCBORModule}
      */
     public static @NonNull ObjectConverter createObjectConverter() {

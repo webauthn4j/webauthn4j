@@ -53,14 +53,14 @@ class AppleAppAttestAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_test(){
+    void validateAttestationStatementNotNull_test() {
         AppleAppAttestAttestationStatement attestationStatement = new AppleAppAttestAttestationStatement(new AttestationCertificatePath(), new byte[32]);
         target.validateAttestationStatementNotNull(attestationStatement);
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_null_test(){
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateAttestationStatementNotNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

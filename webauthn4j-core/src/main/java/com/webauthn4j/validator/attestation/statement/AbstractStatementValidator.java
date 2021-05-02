@@ -53,7 +53,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     public boolean supports(@NonNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
-        if(attestationStatement == null){
+        if (attestationStatement == null) {
             return false;
         }
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());

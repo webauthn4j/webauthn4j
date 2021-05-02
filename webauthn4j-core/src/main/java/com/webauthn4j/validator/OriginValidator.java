@@ -25,5 +25,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public interface OriginValidator {
 
     void validate(@NonNull RegistrationObject registrationObject);
+
     void validate(@NonNull AuthenticationObject authenticationObject);
 }

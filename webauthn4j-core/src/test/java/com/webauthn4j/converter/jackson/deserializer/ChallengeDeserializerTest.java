@@ -77,7 +77,7 @@ class ChallengeDeserializerTest {
         );
     }
 
-    static class ChallengeDto{
+    static class ChallengeDto {
         private Challenge challenge;
 
         public Challenge getChallenge() {

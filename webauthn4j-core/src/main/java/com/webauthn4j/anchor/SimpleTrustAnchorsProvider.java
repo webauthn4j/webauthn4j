@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class SimpleTrustAnchorsProvider implements TrustAnchorsProvider{
+public class SimpleTrustAnchorsProvider implements TrustAnchorsProvider {
 
     private final Map<AAGUID, Set<TrustAnchor>> trustAnchors;
 

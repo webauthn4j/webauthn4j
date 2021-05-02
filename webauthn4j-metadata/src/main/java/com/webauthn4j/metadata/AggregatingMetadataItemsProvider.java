@@ -36,7 +36,7 @@ public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
     @Override
     public Map<AAGUID, Set<MetadataItem>> provide() {
         Map<AAGUID, Set<MetadataItem>> map = new HashMap<>();
-        metadataItemsProviders.forEach(provider ->{
+        metadataItemsProviders.forEach(provider -> {
             try {
                 Map<AAGUID, Set<MetadataItem>> provided = provider.provide();
                 provided.keySet().forEach(aaguid -> {

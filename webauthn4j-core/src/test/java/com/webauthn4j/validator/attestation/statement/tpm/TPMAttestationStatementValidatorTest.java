@@ -17,7 +17,8 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.TPMAttestationStatement;
+import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.webauthn.TPMAttestationOption;
 import com.webauthn4j.test.authenticator.webauthn.TPMAuthenticator;
@@ -109,15 +110,15 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_test(){
+    void validateAttestationStatementNotNull_test() {
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         target.validateAttestationStatementNotNull(attestationStatement);
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_null_test(){
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateAttestationStatementNotNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

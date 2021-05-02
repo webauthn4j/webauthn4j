@@ -54,7 +54,7 @@ public class JWSFactory {
         String headerString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(header).getBytes(StandardCharsets.UTF_8));
         String payloadString = Base64UrlUtil.encodeToString(jsonConverter.writeValueAsString(payload).getBytes(StandardCharsets.UTF_8));
         String signedData = headerString + "." + payloadString;
-        if(header.getAlg() == null){
+        if (header.getAlg() == null) {
             throw new IllegalArgumentException("alg must not be null");
         }
         Signature signatureObj = SignatureUtil.createSignature(header.getAlg().getJcaName());

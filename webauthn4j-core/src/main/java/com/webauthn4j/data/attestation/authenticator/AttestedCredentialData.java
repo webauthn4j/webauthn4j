@@ -52,10 +52,10 @@ public class AttestedCredentialData implements Serializable {
     /**
      * Default constructor for JPA
      */
-    private AttestedCredentialData(){
+    private AttestedCredentialData() {
         aaguid = null;
         credentialId = null;
-        coseKey =null;
+        coseKey = null;
     }
 
     public @NonNull AAGUID getAaguid() {

@@ -45,7 +45,7 @@ public class DCServerProperty extends CoreServerProperty {
         super(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
     }
 
-    private static @NonNull String formatRpId(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier){
+    private static @NonNull String formatRpId(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier) {
         AssertUtil.notNull(teamIdentifier, "teamIdentifier must not be null");
         AssertUtil.notNull(cfBundleIdentifier, "cfBundleIdentifier must not be null");
         return String.format("%s.%s", teamIdentifier, cfBundleIdentifier);

@@ -55,7 +55,7 @@ class JWSFactoryTest {
         JWSHeader header = new JWSHeader(null, CertificateUtil.generateCertPath(Collections.emptyList()));
         Payload payload = new Payload();
         PrivateKey privateKey = ECUtil.createKeyPair().getPrivate();
-        assertThatThrownBy(()->target.create(header, payload, privateKey)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.create(header, payload, privateKey)).isInstanceOf(IllegalArgumentException.class);
     }
 
 

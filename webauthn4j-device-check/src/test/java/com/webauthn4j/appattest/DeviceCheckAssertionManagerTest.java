@@ -45,7 +45,7 @@ class DeviceCheckAssertionManagerTest {
     }
 
     @Test
-    void parse_DCAssertion_with_signature_null_authenticatorData_null_test(){
+    void parse_DCAssertion_with_signature_null_authenticatorData_null_test() {
         DeviceCheckAssertionManager deviceCheckAssertionManager = new DeviceCheckAssertionManager();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] keyId = new byte[64];

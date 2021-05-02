@@ -41,19 +41,19 @@ class CoreRegistrationDataValidatorTest {
     ObjectConverter objectConverter = new ObjectConverter();
     CoreRegistrationDataValidator target = new CoreRegistrationDataValidator(Arrays.asList(
             new NoneAttestationStatementValidator(),
-                new NullFIDOU2FAttestationStatementValidator(),
-                new NullPackedAttestationStatementValidator(),
-                new NullTPMAttestationStatementValidator(),
-                new NullAndroidKeyAttestationStatementValidator(),
-                new NullAndroidSafetyNetAttestationStatementValidator()
-            ),
+            new NullFIDOU2FAttestationStatementValidator(),
+            new NullPackedAttestationStatementValidator(),
+            new NullTPMAttestationStatementValidator(),
+            new NullAndroidKeyAttestationStatementValidator(),
+            new NullAndroidSafetyNetAttestationStatementValidator()
+    ),
             new NullCertPathTrustworthinessValidator(),
             new NullSelfAttestationTrustworthinessValidator(),
             Collections.emptyList(),
             objectConverter);
 
     @Test
-    void validateCOSEKey_test(){
+    void validateCOSEKey_test() {
         EC2COSEKey original = EC2COSEKey.create((ECPrivateKey) ECUtil.createKeyPair().getPrivate());
         EC2COSEKey ec2COSEKey = new EC2COSEKey(
                 original.getKeyId(),
@@ -64,7 +64,7 @@ class CoreRegistrationDataValidatorTest {
                 null,
                 original.getD()
         );
-        assertThatThrownBy(()->target.validateCOSEKey(ec2COSEKey)).isInstanceOf(ConstraintViolationException.class);
+        assertThatThrownBy(() -> target.validateCOSEKey(ec2COSEKey)).isInstanceOf(ConstraintViolationException.class);
     }
 
 }

@@ -29,12 +29,12 @@ class AndroidKeyAttestationStatementTest {
 
     @Test
     void constructor_test() {
-        AttestationCertificatePath certificatePath =  new AttestationCertificatePath();
+        AttestationCertificatePath certificatePath = new AttestationCertificatePath();
         new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], certificatePath).validate();
         assertAll(
-                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, certificatePath)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(()-> new AndroidKeyAttestationStatement(null, new byte[32], certificatePath)).isInstanceOf(IllegalArgumentException.class)
+                () -> assertThatThrownBy(() -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new AndroidKeyAttestationStatement(COSEAlgorithmIdentifier.ES256, null, certificatePath)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new AndroidKeyAttestationStatement(null, new byte[32], certificatePath)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 

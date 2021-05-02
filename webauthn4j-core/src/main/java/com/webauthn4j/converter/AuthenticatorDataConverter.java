@@ -92,11 +92,9 @@ public class AuthenticatorDataConverter {
             }
             byteArrayOutputStream.write(convert(source.getExtensions()));
             return byteArrayOutputStream.toByteArray();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
@@ -142,11 +140,9 @@ public class AuthenticatorDataConverter {
 
             return new AuthenticatorData<>(rpIdHash, flags, counter, attestedCredentialData, extensions);
 
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
-        }
-        catch (BufferUnderflowException e) {
+        } catch (BufferUnderflowException e) {
             throw new DataConversionException("provided data does not have proper byte layout", e);
         }
     }
@@ -202,7 +198,7 @@ public class AuthenticatorDataConverter {
         AuthenticationExtensionsAuthenticatorOutputsEnvelope<T> envelope =
                 cborConverter.readValue(byteArrayInputStream, new TypeReference<AuthenticationExtensionsAuthenticatorOutputsEnvelope<T>>() {
                 });
-        if(envelope == null){
+        if (envelope == null) {
             return null;
         }
         int leftoverLength = remaining.length - envelope.getLength();

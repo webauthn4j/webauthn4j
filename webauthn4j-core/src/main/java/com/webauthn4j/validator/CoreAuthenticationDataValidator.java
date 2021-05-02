@@ -62,7 +62,8 @@ public class CoreAuthenticationDataValidator {
 
     /**
      * It is up to caller responsibility to inject challenge into clientData and validate it equals to challenge stored in server side
-     * @param authenticationData authentication data
+     *
+     * @param authenticationData       authentication data
      * @param authenticationParameters authentication parameters
      */
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate

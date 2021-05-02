@@ -136,7 +136,7 @@ class AttestationObjectConverterTest {
 
     @Test
     void extractAuthenticatorData_null_test() {
-        assertThatThrownBy(()->target.extractAuthenticatorData(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.extractAuthenticatorData(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
