@@ -40,7 +40,6 @@ class AttestedCredentialDataConverterTest {
         //When
         AttestedCredentialData attestedCredentialData = target.convert(Base64UrlUtil.decode(input));
 
-        //noinspection ConstantConditions
         assertThat(attestedCredentialData.getAaguid().getBytes()).isEqualTo(Base64UrlUtil.decode("VQ5LVKpHQJ-alRq3bBMBMQ"));
         assertThat(attestedCredentialData.getCredentialId()).isEqualTo(Base64UrlUtil.decode("cSLOLIaiEIVRz-EklkZ21K71OGcRvvgro1kLdT4pvCA"));
 

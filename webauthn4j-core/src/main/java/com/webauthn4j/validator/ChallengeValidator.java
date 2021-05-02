@@ -37,7 +37,6 @@ class ChallengeValidator {
 
     // ~ Methods
     // ========================================================================================================
-    @SuppressWarnings("ConstantConditions")
     public void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
