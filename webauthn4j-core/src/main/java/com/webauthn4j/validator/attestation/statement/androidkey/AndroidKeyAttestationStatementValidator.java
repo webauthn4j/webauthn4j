@@ -58,7 +58,6 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
 
         validateAttestationStatementNotNull(attestationStatement);
 
-        //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
         }
@@ -93,13 +92,11 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         AndroidKeyAttestationStatement attestationStatement = (AndroidKeyAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
-        //noinspection ConstantConditions as null check is already done in caller
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
         try {
             String jcaName;
-            //noinspection ConstantConditions as null check is already done in caller
             jcaName = getJcaName(attestationStatement.getAlg());
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
@@ -121,7 +118,6 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
 
     private @NonNull PublicKey getPublicKey(@NonNull AndroidKeyAttestationStatement attestationStatement) {
         AttestationCertificatePath x5c = attestationStatement.getX5c();
-        //noinspection ConstantConditions as null check is already done in caller
         Certificate cert = x5c.getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }
