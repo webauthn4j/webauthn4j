@@ -84,7 +84,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         TPMAttestationStatement attestationStatement = (TPMAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         validateAttestationStatementNotNull(attestationStatement);
 
-        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         if (!attestationStatement.getVer().equals(TPMAttestationStatement.VERSION_2_0)) {
             throw new BadAttestationStatementException("TPM version is not supported.");
         }
@@ -94,7 +93,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = registrationObject.getAttestationObject().getAuthenticatorData();
 
         /// Verify that the public key specified by the parameters and unique fields of pubArea is identical to the credentialPublicKey in the attestedCredentialData in authenticatorData.
-        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         validatePublicKeyEquality(pubArea, authenticatorData);
 
         /// Concatenate authenticatorData and clientDataHash to form attToBeSigned.
@@ -103,7 +101,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         /// Validate that certInfo is valid:
 
         /// Verify that magic is set to TPM_GENERATED_VALUE.
-        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         if (certInfo.getMagic() != TPMGenerated.TPM_GENERATED_VALUE) {
             throw new BadAttestationStatementException("magic must be TPM_GENERATED_VALUE");
         }
@@ -115,7 +112,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         MessageDigest messageDigest = getMessageDigest(alg);
         byte[] hash = messageDigest.digest(attToBeSigned);
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
@@ -182,7 +178,6 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         X509Certificate aikCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
 
         /// Verify the sig is a valid signature over certInfo using the attestation public key in aikCert with the algorithm specified in alg.
-        //noinspection ConstantConditions as null check is already done in validateTPMAttestationStatementNull
         String jcaName = getJcaName(attestationStatement.getAlg());
         Signature certInfoSignature = SignatureUtil.createSignature(jcaName);
         try {
