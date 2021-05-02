@@ -21,6 +21,8 @@ import java.util.*;
  */
 public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutput> implements Serializable {
 
+    @JsonIgnore
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
     private Boolean appid;
     //appidExclude doesn't exist in ExtensionsClientOutputs
@@ -28,8 +30,6 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     private UvmEntries uvm;
     @JsonProperty
     private CredentialPropertiesOutput credProps;
-    @JsonIgnore
-    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -135,10 +135,9 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     public static class BuilderForRegistration {
 
+        private final Map<String, Serializable> unknowns = new HashMap<>();
         private UvmEntries uvm;
         private CredentialPropertiesOutput credProps;
-
-        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();
@@ -171,10 +170,9 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
 
     public static class BuilderForAuthentication {
 
+        private final Map<String, Serializable> unknowns = new HashMap<>();
         private Boolean appid;
         private UvmEntries uvm;
-
-        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> build() {
             AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> instance = new AuthenticationExtensionsClientOutputs<>();

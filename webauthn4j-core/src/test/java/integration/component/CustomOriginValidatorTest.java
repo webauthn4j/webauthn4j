@@ -60,7 +60,7 @@ class CustomOriginValidatorTest {
             = new AuthenticationExtensionsClientOutputsConverter(objectConverter);
 
     @BeforeEach
-    void setup(){
+    void setup() {
         target.getRegistrationDataValidator().setOriginValidator(new CustomOriginValidator());
     }
 
@@ -111,8 +111,8 @@ class CustomOriginValidatorTest {
 
 
         RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
-        assertThatThrownBy(()->{
-                target.validate(registrationData, registrationParameters);
+        assertThatThrownBy(() -> {
+            target.validate(registrationData, registrationParameters);
         }).isInstanceOf(BadOriginException.class);
 
     }
@@ -120,14 +120,14 @@ class CustomOriginValidatorTest {
     private static class CustomOriginValidator implements OriginValidator {
         @Override
         public void validate(@NonNull RegistrationObject registrationObject) {
-            if(!Objects.equals(registrationObject.getCollectedClientData().getOrigin(), new Origin("http://example.com"))){
+            if (!Objects.equals(registrationObject.getCollectedClientData().getOrigin(), new Origin("http://example.com"))) {
                 throw new BadOriginException("origin must be http://example.com");
             }
         }
 
         @Override
         public void validate(@NonNull AuthenticationObject authenticationObject) {
-            if(!Objects.equals(authenticationObject.getCollectedClientData().getOrigin(), new Origin("http://localhost"))){
+            if (!Objects.equals(authenticationObject.getCollectedClientData().getOrigin(), new Origin("http://localhost"))) {
                 throw new BadOriginException("origin must be http://example.com");
             }
         }

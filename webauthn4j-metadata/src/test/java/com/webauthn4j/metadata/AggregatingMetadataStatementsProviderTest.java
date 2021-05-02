@@ -46,7 +46,7 @@ class AggregatingMetadataStatementsProviderTest {
     }
 
     @Test
-    void provide_test_common_entry_returned_from_providers(){
+    void provide_test_common_entry_returned_from_providers() {
 
         MetadataStatement metadataStatementA = mock(MetadataStatement.class);
         MetadataStatement metadataStatementB = mock(MetadataStatement.class);

@@ -27,7 +27,7 @@ class AppleAnonymousAttestationStatementTest {
 
     @Test
     void constructor_x5c_null() {
-        assertThatThrownBy(()->new AppleAnonymousAttestationStatement(null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new AppleAnonymousAttestationStatement(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

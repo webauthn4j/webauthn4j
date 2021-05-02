@@ -56,12 +56,11 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @Nullable AttestationObject convert(@NonNull String source) {
-        try{
+        try {
             AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
             byte[] value = Base64UrlUtil.decode(source);
             return convert(value);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -73,11 +72,10 @@ public class AttestationObjectConverter {
      * @return the converted object
      */
     public @Nullable AttestationObject convert(@NonNull byte[] source) {
-        try{
+        try {
             AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
             return cborConverter.readValue(source, AttestationObject.class);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -89,11 +87,10 @@ public class AttestationObjectConverter {
      * @return the converted byte array
      */
     public @NonNull byte[] convertToBytes(@NonNull AttestationObject source) {
-        try{
+        try {
             AssertUtil.notNull(source, SOURCE_NULL_CHECK_MESSAGE);
             return cborConverter.writeValueAsBytes(source);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -105,11 +102,10 @@ public class AttestationObjectConverter {
      * @return the converted byte array
      */
     public @NonNull String convertToBase64urlString(@NonNull AttestationObject source) {
-        try{
+        try {
             byte[] bytes = convertToBytes(source);
             return Base64UrlUtil.encodeToString(bytes);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }

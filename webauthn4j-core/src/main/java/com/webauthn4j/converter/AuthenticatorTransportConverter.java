@@ -37,7 +37,7 @@ public class AuthenticatorTransportConverter {
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<AuthenticatorTransport> convertSet(@NonNull Set<String> values) {
-        try{
+        try {
             AssertUtil.notNull(values, "values must not be null");
             return values.stream().map(this::convert).collect(Collectors.toSet());
         } catch (IllegalArgumentException e) {
@@ -46,7 +46,7 @@ public class AuthenticatorTransportConverter {
     }
 
     public @NonNull String convertToString(@NonNull AuthenticatorTransport value) {
-        try{
+        try {
             AssertUtil.notNull(value, "value must not be null");
             return value.getValue();
         } catch (IllegalArgumentException e) {
@@ -56,7 +56,7 @@ public class AuthenticatorTransportConverter {
 
     @SuppressWarnings("squid:S1168")
     public @NonNull Set<String> convertSetToStringSet(@NonNull Set<AuthenticatorTransport> values) {
-        try{
+        try {
             AssertUtil.notNull(values, "values must not be null");
             return values.stream().map(this::convertToString).collect(Collectors.toSet());
         } catch (IllegalArgumentException e) {

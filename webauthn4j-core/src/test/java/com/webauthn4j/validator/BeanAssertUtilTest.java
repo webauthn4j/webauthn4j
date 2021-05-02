@@ -375,14 +375,14 @@ class BeanAssertUtilTest {
     }
 
     @Test
-    void validate_coseKey_with_null_test(){
+    void validate_coseKey_with_null_test() {
         assertThrows(ConstraintViolationException.class,
                 () -> BeanAssertUtil.validate((COSEKey) null)
         );
     }
 
     @Test
-    void validate_coseKey_with_alg_null_test(){
+    void validate_coseKey_with_alg_null_test() {
         COSEKey coseKey = mock(COSEKey.class);
         when(coseKey.getAlgorithm()).thenReturn(null);
         assertThrows(ConstraintViolationException.class,

@@ -41,8 +41,8 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     private String displayName;
 
     /**
-     * @param id id
-     * @param name name
+     * @param id          id
+     * @param name        name
      * @param displayName displayName
      */
     @JsonCreator

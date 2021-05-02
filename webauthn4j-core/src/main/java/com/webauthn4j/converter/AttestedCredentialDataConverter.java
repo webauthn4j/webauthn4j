@@ -50,6 +50,14 @@ public class AttestedCredentialDataConverter implements Serializable {
         this.cborConverter = objectConverter.getCborConverter();
     }
 
+    private static AttestedCredentialData createAttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey) {
+        return new AttestedCredentialData(aaguid, credentialId, coseKey);
+    }
+
+    private static void assertCoseKey(@Nullable COSEKey coseKey) {
+        AssertUtil.notNull(coseKey, "coseKey must not be null");
+    }
+
     public @NonNull byte[] convert(@NonNull AttestedCredentialData attestationData) {
         try {
             AssertUtil.notNull(attestationData, "attestationData must not be null");
@@ -63,17 +71,15 @@ public class AttestedCredentialDataConverter implements Serializable {
             byteArrayOutputStream.write(attestationData.getCredentialId());
             byteArrayOutputStream.write(convert(attestationData.getCOSEKey()));
             return byteArrayOutputStream.toByteArray();
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
     public @NonNull AttestedCredentialData convert(@NonNull ByteBuffer attestedCredentialData) {
-        try{
+        try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
 
             byte[] aaguidBytes = new byte[AAGUID_LENGTH];
@@ -92,18 +98,16 @@ public class AttestedCredentialDataConverter implements Serializable {
             int extensionsBufferLength = remaining.length - coseKeyEnvelope.getLength();
             attestedCredentialData.position(attestedCredentialData.position() - extensionsBufferLength);
             return result;
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
 
     public @NonNull AttestedCredentialData convert(@NonNull byte[] attestedCredentialData) {
-        try{
+        try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
             return convert(ByteBuffer.wrap(attestedCredentialData));
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -121,10 +125,6 @@ public class AttestedCredentialDataConverter implements Serializable {
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
-    private static AttestedCredentialData createAttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey){
-        return new AttestedCredentialData(aaguid, credentialId, coseKey);
-    }
-
     @NonNull COSEKeyEnvelope convertToCredentialPublicKey(@NonNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
@@ -134,10 +134,6 @@ public class AttestedCredentialDataConverter implements Serializable {
     @NonNull byte[] convert(@NonNull COSEKey coseKey) {
         assertCoseKey(coseKey);
         return cborConverter.writeValueAsBytes(coseKey);
-    }
-
-    private static void assertCoseKey(@Nullable COSEKey coseKey) {
-        AssertUtil.notNull(coseKey, "coseKey must not be null");
     }
 
 }

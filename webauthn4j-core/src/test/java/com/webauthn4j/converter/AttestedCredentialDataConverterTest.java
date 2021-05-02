@@ -47,10 +47,10 @@ class AttestedCredentialDataConverterTest {
     }
 
     @Test
-    void convert_null_test(){
-        assertThatThrownBy(()-> target.convert((AttestedCredentialData) null)).isInstanceOf(DataConversionException.class);
-        assertThatThrownBy(()-> target.convert((ByteBuffer) null)).isInstanceOf(DataConversionException.class);
-        assertThatThrownBy(()-> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
+    void convert_null_test() {
+        assertThatThrownBy(() -> target.convert((AttestedCredentialData) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert((ByteBuffer) null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

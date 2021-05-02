@@ -57,7 +57,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.",
                     registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
         }
-        AppleAppAttestAttestationStatement attestationStatement =(AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
+        AppleAppAttestAttestationStatement attestationStatement = (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         validateAttestationStatementNotNull(attestationStatement);
 
         //noinspection ConstantConditions as null check is already done in above

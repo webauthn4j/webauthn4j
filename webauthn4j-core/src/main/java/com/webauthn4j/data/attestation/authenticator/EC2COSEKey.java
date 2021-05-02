@@ -190,6 +190,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
     /**
      * Create {@link EC2COSEKey} from {@link KeyPair}.
+     *
      * @param keyPair key pair
      * @return {@link EC2COSEKey}
      */

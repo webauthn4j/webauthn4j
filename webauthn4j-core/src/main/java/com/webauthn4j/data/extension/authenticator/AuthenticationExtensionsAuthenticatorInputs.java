@@ -41,14 +41,14 @@ import java.util.*;
  */
 public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuthenticatorInput> implements Serializable {
 
+    @JsonIgnore
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
     private Boolean uvm;
     @JsonSerialize(using = CredentialProtectionPolicyByteSerializer.class)
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
-    @JsonIgnore
-    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -141,10 +141,9 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     public static class BuilderForRegistration {
 
+        private final Map<String, Serializable> unknowns = new HashMap<>();
         private Boolean uvm;
         private CredentialProtectionPolicy credProtect;
-
-        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
@@ -176,9 +175,8 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     public static class BuilderForAuthentication {
 
-        private Boolean uvm;
-
         private final Map<String, Serializable> unknowns = new HashMap<>();
+        private Boolean uvm;
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();

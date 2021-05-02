@@ -23,7 +23,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class OriginValidatorImpl implements OriginValidator{
+public class OriginValidatorImpl implements OriginValidator {
 
     //~ Instance fields
     // ================================================================================================

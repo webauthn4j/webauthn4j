@@ -58,11 +58,11 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
     private final HttpClient httpClient;
     private final TrustAnchor trustAnchor;
     private final MetadataStatementValidator metadataStatementValidator = new MetadataStatementValidator();
+    private final String token;
     Map<AAGUID, Set<MetadataItem>> cachedMetadataItemMap;
     OffsetDateTime nextUpdate;
     OffsetDateTime lastRefresh;
     private String fidoMetadataServiceEndpoint = DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT;
-    private final String token;
 
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient, X509Certificate rootCertificate) {
         this.jsonConverter = objectConverter.getJsonConverter();

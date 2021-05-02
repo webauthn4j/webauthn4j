@@ -56,8 +56,8 @@ class CollectedClientDataConverterTest {
     void convert_null_test() {
         assertThatThrownBy(() -> target.convert((String) null)).isInstanceOf(DataConversionException.class);
         assertThatThrownBy(() -> target.convert((byte[]) null)).isInstanceOf(DataConversionException.class);
-        assertThatThrownBy(() -> target.convertToBytes( null)).isInstanceOf(DataConversionException.class);
-        assertThatThrownBy(() -> target.convertToBase64UrlString( null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBytes(null)).isInstanceOf(DataConversionException.class);
+        assertThatThrownBy(() -> target.convertToBase64UrlString(null)).isInstanceOf(DataConversionException.class);
     }
 
     @Test

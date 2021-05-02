@@ -1,42 +1,26 @@
 == クイックスタート
 
-WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサーバーに登録し、認証時に認証デバイスで生成した署名を公開鍵で検証することで認証が成立する認証方式です。
-このクイックスタートでは、WebAuthn4Jを用いてWebAuthn認証における登録時にサーバーに送信される公開鍵やデバイスの構成情報を
-含むデータ（構成証明、Attestation）の検証と、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を検証する方法を解説します。
-また、Apple App Attestの構成証明、アサーションを検証する方法も示します。
+WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサーバーに登録し、認証時に認証デバイスで生成した署名を公開鍵で検証することで認証が成立する認証方式です。 このクイックスタートでは、WebAuthn4Jを用いてWebAuthn認証における登録時にサーバーに送信される公開鍵やデバイスの構成情報を 含むデータ（構成証明、Attestation）の検証と、認証時にサーバーに送信される署名を含んだデータ（アサーション、Assertion）を検証する方法を解説します。 また、Apple App Attestの構成証明、アサーションを検証する方法も示します。
 
 === WebAuthnの検証
 
 ==== WebAuthn構成証明の検証
 
 認証デバイスの登録時に構成証明を検証する際は、`RegistrationRequest` を引数に
-`WebAuthnManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。
-登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
-`WebAuthnManager#parse` メソッドを用いて登録リクエストをパースしたうえで、
-得られた `RegistrationData` のインスタンスを `WebAuthnManager#validate` メソッドに渡して実行してください。
+`WebAuthnManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。 登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+`WebAuthnManager#parse` メソッドを用いて登録リクエストをパースしたうえで、 得られた `RegistrationData` のインスタンスを `WebAuthnManager#validate` メソッドに渡して実行してください。
 
-`RegistrationRequest` のメンバー はフロントエンド側でWebAuthn JS APIを実行して取得した値となります。
-何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+`RegistrationRequest` のメンバー はフロントエンド側でWebAuthn JS APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
 
-`RegistrationParameters` は、`WebAuthnManager#validate` メソッドのもう一つの引数であり、
-サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `serverProperty` としてまとめています。
+`RegistrationParameters` は、`WebAuthnManager#validate` メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `serverProperty` としてまとめています。
 `ServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
-- `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginを
-ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、
-フィッシング攻撃を防ぎます。
-- `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。
-詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
-- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。
-サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に
-パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。
-発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
+- `origin` にはWebAuthnによる認証を提供するサイトのOriginを指定して下さい。WebAuthnでは、ブラウザが認識しているOriginを ClientDataに書き込んで署名を行います。WebAuthn4Jは書き込まれたOriginが指定されたOriginと合致するかを検証することで、 フィッシング攻撃を防ぎます。
+- `rpId` にはWebAuthnによる認証を提供するサイトのrpIdを指定して下さい。rpIdは資格情報のスコープを指定するパラメータです。 詳しくは https://www.w3.org/TR/webauthn-1/#relying-party-identifier[WebAuthnの仕様書のrpIdの項] を参照して下さい。
+- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 - `tokenBindingId` はToken bindingを利用する場合のパラメータです。利用しない場合は `null` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証に成功した場合は、返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
-認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#authenticatorのシリアライズデシリアライズ,Authenticatorのシリアライズ、デシリアライズ>> を参照して下さい。
-
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#authenticatorのシリアライズデシリアライズ,Authenticatorのシリアライズ、デシリアライズ>> を参照して下さい。
 
 [source,java]
 ----
@@ -88,23 +72,14 @@ save(authenticator); // please persist authenticator in your manner
 
 ==== WebAuthnアサーションの検証
 
-認証時にアサーションを検証する際は、`AuthenticationRequest` を引数に  `WebAuthnManager#validate` メソッドを
-実行してください。`AuthenticationRequest` の
-コンストラクタの引数に指定する、 `credentialId` と `userHandle` 、 `authenticatorData`  、 `clientDataJSON` 、`signature` は
-フロントエンド側でWebAuthn JS APIを実行して取得した値となります。
-何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
-`WebAuthnManager#validate` メソッドのもう一つの引数である `AuthenticationParameters`  の
-コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
+認証時にアサーションを検証する際は、`AuthenticationRequest` を引数に  `WebAuthnManager#validate` メソッドを 実行してください。`AuthenticationRequest` の コンストラクタの引数に指定する、 `credentialId` と `userHandle` 、 `authenticatorData`  、 `clientDataJSON` 、`signature` は フロントエンド側でWebAuthn JS APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+`WebAuthnManager#validate` メソッドのもう一つの引数である `AuthenticationParameters`  の コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
 
-`userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。
-パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。
-パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
+`userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。 パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
 
 `Authenticator` には、登録時に永続化した `Authenticator` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証後は、 `Authenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
-作成された場合を検知するために用意されています。カウンタについて詳しくは
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `Authenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]
@@ -173,16 +148,13 @@ updateCounter(
 
 === Apple App Attestの検証
 
-続いて、Apple App Attestの検証方法について解説します。
-Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Validatorの設計も、WebAuthn用のValidatorを踏襲しています。
-なお、リスクメトリックの評価には対応していません。
+続いて、Apple App Attestの検証方法について解説します。 Apple App Attestは、WebAuthnに類似したデータ構造を持つため、Validatorの設計も、WebAuthn用のValidatorを踏襲しています。 なお、リスクメトリックの評価には対応していません。
 
 ==== Maven Centralからの取得
 
-Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-device-checkというモジュールとして配布されています。
-Mavenを使用している場合、以下のようにwebauthn4j-device-checkを依存関係として追加してください。
+Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)とは別の、webauthn4j-device-checkというモジュールとして配布されています。 Mavenを使用している場合、以下のようにwebauthn4j-device-checkを依存関係として追加してください。
 
-[source, xml]
+[source,xml]
 ----
 <properties>
   ...
@@ -205,30 +177,19 @@ Mavenを使用している場合、以下のようにwebauthn4j-device-checkを�
 ==== Apple App Attest構成証明の検証
 
 認証デバイスの登録時に構成証明を検証する際は、`DCAttestationRequest` を引数に
-`DeviceCheckManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。
-登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
-`DeviceCheckManager#parse` メソッドを用いて登録リクエストをパースしたうえで、
-得られた `DCAttestationData` のインスタンスを `DeviceCheckManager#validate` メソッドに渡して実行してください。
+`DeviceCheckManager#validate` メソッドを用いて登録リクエストのパース、検証を行ってください。 登録リクエストの検証でエラーが発生した場合に、元のパースされたデータにアクセスしたい場合は、
+`DeviceCheckManager#parse` メソッドを用いて登録リクエストをパースしたうえで、 得られた `DCAttestationData` のインスタンスを `DeviceCheckManager#validate` メソッドに渡して実行してください。
 
-`DCAttestationRequest` のメンバー はiOS上でDevice Check App Attest APIを実行して取得した値となります。
-何らかの方法でiOSデバイス側からサーバー側に伝送し、指定してください。
+`DCAttestationRequest` のメンバー はiOS上でDevice Check App Attest APIを実行して取得した値となります。 何らかの方法でiOSデバイス側からサーバー側に伝送し、指定してください。
 
-`DCAttestationParameters` は、`DeviceCheckManager#validate` メソッドのもう一つの引数であり、
-サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `DCServerProperty` としてまとめています。
+`DCAttestationParameters` は、`DeviceCheckManager#validate` メソッドのもう一つの引数であり、 サーバーの状態や検証条件をまとめたパラメータです。 サーバーの状態については、 `DCServerProperty` としてまとめています。
 `DCServerProperty` のコンストラクタを呼び出す際のパラメータには以下の値を指定して下さい。
 
-- `teamIdentifier` にはiOSアプリ開発時のteam identifierを指定してください。
-詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
-- `cfBundleIdentifier` にはiOSアプリ開発時のbundle identifierを指定してください。
-詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
-- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。
-サーバー側で `challenge` としてランダムなバイト列を生成し、iOS側でApp Attest APIを実行する際に
-パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。
-発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
+- `teamIdentifier` にはiOSアプリ開発時のteam identifierを指定してください。 詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
+- `cfBundleIdentifier` にはiOSアプリ開発時のbundle identifierを指定してください。 詳しくは https://developer.apple.com/documentation/devicecheck/validating_apps_that_connect_to_your_server[Apple Apple Attestのサーバサイド検証手順] を参照して下さい。
+- `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、iOS側でApp Attest APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。
-認証時に必要となります。
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。
 
 [source,java]
 ----
@@ -272,19 +233,12 @@ save(dcAppleDevice); // please persist authenticator in your manner
 
 ==== Apple App Attestアサーションの検証
 
-認証時にアサーションを検証する際は、`DCAssertionRequest` を引数に  `DeviceCheckManager#validate` メソッドを
-実行してください。`DCAssertionRequest` の
-コンストラクタの引数に指定する、 `keyId` と `assertion` 、 `clientDataHash` は
-iOS側でApple App Attest APIを実行して取得した値となります。
-何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
-`DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の
-コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
+認証時にアサーションを検証する際は、`DCAssertionRequest` を引数に  `DeviceCheckManager#validate` メソッドを 実行してください。`DCAssertionRequest` の コンストラクタの引数に指定する、 `keyId` と `assertion` 、 `clientDataHash` は iOS側でApple App Attest APIを実行して取得した値となります。 何らかの方法でフロントエンド側からサーバー側に伝送し、指定してください。
+`DeviceCheckManager#validate` メソッドのもう一つの引数である `DCAssertionParameters`  の コンストラクタの引数に指定する、 `serverProperty` はサーバー側から取得する値をまとめたパラメータです。
 
 `DCAppleDevice` には、登録時に永続化した `DCAppleDevice` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。
-検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが
-作成された場合を検知するために用意されています。カウンタについて詳しくは
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `DCAppleDevice` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]

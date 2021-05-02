@@ -39,12 +39,13 @@ class FIDOU2FAttestationStatementTest {
 
     @Test
     void constructor_with_null_x5c_test() {
-        assertThatThrownBy(()->new FIDOU2FAttestationStatement(null, new byte[0])).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new FIDOU2FAttestationStatement(null, new byte[0])).isInstanceOf(IllegalArgumentException.class);
     }
+
     @Test
     void constructor_with_null_signature_test() {
         AttestationCertificatePath attestationCertificatePath = TestAttestationUtil.load2tierTestAttestationCertificatePath();
-        assertThatThrownBy(()->new FIDOU2FAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new FIDOU2FAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

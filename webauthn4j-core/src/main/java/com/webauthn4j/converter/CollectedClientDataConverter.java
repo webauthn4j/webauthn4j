@@ -55,12 +55,11 @@ public class CollectedClientDataConverter {
      * @return the converted object
      */
     public @Nullable CollectedClientData convert(@NonNull String base64UrlString) {
-        try{
+        try {
             AssertUtil.notNull(base64UrlString, "base64UrlString must not be null");
             byte[] bytes = Base64UrlUtil.decode(base64UrlString);
             return convert(bytes);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -72,12 +71,11 @@ public class CollectedClientDataConverter {
      * @return the converted object
      */
     public @Nullable CollectedClientData convert(@NonNull byte[] source) {
-        try{
+        try {
             AssertUtil.notNull(source, "source must not be null");
             String jsonString = new String(source, StandardCharsets.UTF_8);
             return jsonConverter.readValue(jsonString, CollectedClientData.class);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -89,11 +87,10 @@ public class CollectedClientDataConverter {
      * @return the converted byte array
      */
     public @NonNull byte[] convertToBytes(@NonNull CollectedClientData source) {
-        try{
+        try {
             AssertUtil.notNull(source, "source must not be null");
             return jsonConverter.writeValueAsBytes(source);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }
@@ -105,11 +102,10 @@ public class CollectedClientDataConverter {
      * @return the converted byte array
      */
     public @NonNull String convertToBase64UrlString(@NonNull CollectedClientData source) {
-        try{
+        try {
             byte[] bytes = convertToBytes(source);
             return Base64UrlUtil.encodeToString(bytes);
-        }
-        catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
         }
     }

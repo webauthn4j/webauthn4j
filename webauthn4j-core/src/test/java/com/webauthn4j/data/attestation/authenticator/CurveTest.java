@@ -16,7 +16,6 @@
 
 package com.webauthn4j.data.attestation.authenticator;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
@@ -49,7 +48,16 @@ class CurveTest {
         );
     }
 
-    static class CurveDto{
+    @Test
+    void getECParameterSpec_test() {
+        assertAll(
+                () -> assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
+                () -> assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
+                () -> assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC)
+        );
+    }
+
+    static class CurveDto {
         private Curve value;
 
         public Curve getValue() {
@@ -59,14 +67,5 @@ class CurveTest {
         public void setValue(Curve value) {
             this.value = value;
         }
-    }
-
-    @Test
-    void getECParameterSpec_test() {
-        assertAll(
-                () -> assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
-                () -> assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
-                () -> assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC)
-        );
     }
 }

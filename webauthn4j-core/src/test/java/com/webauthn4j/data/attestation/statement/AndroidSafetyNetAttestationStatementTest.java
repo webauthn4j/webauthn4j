@@ -36,14 +36,14 @@ class AndroidSafetyNetAttestationStatementTest {
     @Test
     void constructor_test(@Mock JWS<Response> jwsMock) {
         assertAll(
-                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement("dummy", null)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement(null, jwsMock)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(()-> new AndroidSafetyNetAttestationStatement(null, null)).isInstanceOf(IllegalArgumentException.class)
+                () -> assertThatThrownBy(() -> new AndroidSafetyNetAttestationStatement("dummy", null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new AndroidSafetyNetAttestationStatement(null, jwsMock)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new AndroidSafetyNetAttestationStatement(null, null)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
     @Test
-    void validate_test(@Mock JWS<Response> jwsMock, @Mock JWSHeader header){
+    void validate_test(@Mock JWS<Response> jwsMock, @Mock JWSHeader header) {
         when(jwsMock.getHeader()).thenReturn(header);
         AndroidSafetyNetAttestationStatement attestationStatement = new AndroidSafetyNetAttestationStatement("dummy", jwsMock);
         assertThatThrownBy(attestationStatement::validate).isInstanceOf(ConstraintViolationException.class);
@@ -51,7 +51,7 @@ class AndroidSafetyNetAttestationStatementTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    void getX5c_with_x5cHeader_x5c_null_test(){
+    void getX5c_with_x5cHeader_x5c_null_test() {
         JWS<Response> jws = mock(JWS.class);
         JWSHeader jwsHeader = mock(JWSHeader.class);
         when(jws.getHeader()).thenReturn(jwsHeader);

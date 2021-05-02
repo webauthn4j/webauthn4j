@@ -29,11 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class AppleAppAttestAttestationStatementTest {
 
     @Test
-    void constructor_test(){
+    void constructor_test() {
         AttestationCertificatePath attestationCertificatePath = new AttestationCertificatePath();
         assertAll(
-                () -> assertThatThrownBy(()->new AppleAppAttestAttestationStatement(null, new byte[32])).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(()->new AppleAppAttestAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class)
+                () -> assertThatThrownBy(() -> new AppleAppAttestAttestationStatement(null, new byte[32])).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new AppleAppAttestAttestationStatement(attestationCertificatePath, null)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 

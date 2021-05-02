@@ -36,8 +36,8 @@ class AppleAnonymousAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_null_test(){
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateAttestationStatementNotNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

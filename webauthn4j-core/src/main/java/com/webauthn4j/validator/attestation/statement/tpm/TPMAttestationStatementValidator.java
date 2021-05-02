@@ -155,14 +155,14 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         validateTPMTPublicNotNull(attestationStatement.getPubArea());
     }
 
-    void validateTPMSAttestNotNull(TPMSAttest tpmsAttest){
+    void validateTPMSAttestNotNull(TPMSAttest tpmsAttest) {
         if (tpmsAttest == null) {
             throw new BadAttestationStatementException("certInfo must not be null");
         }
     }
 
-    void validateTPMTPublicNotNull(TPMTPublic tpmtPublic){
-        if (tpmtPublic== null) {
+    void validateTPMTPublicNotNull(TPMTPublic tpmtPublic) {
+        if (tpmtPublic == null) {
             throw new BadAttestationStatementException("pubArea must not be null");
         }
     }

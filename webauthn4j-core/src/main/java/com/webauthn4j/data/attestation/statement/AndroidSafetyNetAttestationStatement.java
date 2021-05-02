@@ -57,7 +57,7 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
     public @Nullable AttestationCertificatePath getX5c() {
         JWS<Response> res = getResponse();
         CertPath x5c = res.getHeader().getX5c();
-        if(x5c == null){
+        if (x5c == null) {
             return null;
         }
         return new AttestationCertificatePath(x5c.getCertificates().stream().map(X509Certificate.class::cast).collect(Collectors.toList()));

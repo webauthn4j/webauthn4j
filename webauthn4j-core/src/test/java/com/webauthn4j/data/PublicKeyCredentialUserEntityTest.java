@@ -47,7 +47,7 @@ class PublicKeyCredentialUserEntityTest {
     }
 
     @Test
-    void deserialize_test(){
+    void deserialize_test() {
         PublicKeyCredentialUserEntity user = new ObjectConverter().getJsonConverter().readValue("{\"id\": \"ZHVtbXk=\", \"name\": \"name\", \"displayName\": \"displayName\"}", PublicKeyCredentialUserEntity.class);
         assertThat(user.getId()).isEqualTo(Base64Util.decode("ZHVtbXk="));
     }

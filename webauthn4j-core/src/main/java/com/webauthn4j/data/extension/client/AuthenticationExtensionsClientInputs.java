@@ -26,6 +26,8 @@ import java.util.*;
  */
 public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput> implements Serializable {
 
+    @JsonIgnore
+    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
     private String appid;
     @JsonProperty
@@ -40,8 +42,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private CredentialProtectionPolicy credentialProtectionPolicy;
     @JsonProperty
     private Boolean enforceCredentialProtectionPolicy;
-    @JsonIgnore
-    private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -187,12 +187,11 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
     public static class BuilderForRegistration {
 
+        private final Map<String, Serializable> unknowns = new HashMap<>();
         private Boolean uvm;
         private Boolean credProps;
         private CredentialProtectionPolicy credentialProtectionPolicy;
         private Boolean enforceCredentialProtectionPolicy;
-
-        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
@@ -236,11 +235,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
     public static class BuilderForAuthentication {
 
+        private final Map<String, Serializable> unknowns = new HashMap<>();
         private String appid;
         private String appidExclude;
         private Boolean uvm;
-
-        private final Map<String, Serializable> unknowns = new HashMap<>();
 
         public @NonNull AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();

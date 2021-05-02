@@ -104,7 +104,7 @@ class RegistrationDataValidatorTest {
     }
 
     @Test
-    void getter_setter_test(){
+    void getter_setter_test() {
         target.setOriginValidator(new TestOriginValidator());
         assertThat(target.getOriginValidator()).isInstanceOf(TestOriginValidator.class);
     }

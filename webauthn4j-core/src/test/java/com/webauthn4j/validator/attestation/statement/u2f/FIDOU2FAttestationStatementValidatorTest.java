@@ -17,7 +17,9 @@
 package com.webauthn4j.validator.attestation.statement.u2f;
 
 import com.webauthn4j.data.attestation.AttestationObject;
-import com.webauthn4j.data.attestation.statement.*;
+import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
+import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.ECUtil;
 import com.webauthn4j.validator.RegistrationObject;
@@ -49,14 +51,14 @@ class FIDOU2FAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_test(){
+    void validateAttestationStatementNotNull_test() {
         FIDOU2FAttestationStatement attestationStatement = new FIDOU2FAttestationStatement(new AttestationCertificatePath(), new byte[32]);
         target.validateAttestationStatementNotNull(attestationStatement);
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_null_test(){
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateAttestationStatementNotNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test

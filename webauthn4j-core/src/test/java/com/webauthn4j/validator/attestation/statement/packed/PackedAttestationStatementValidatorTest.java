@@ -99,20 +99,20 @@ class PackedAttestationStatementValidatorTest {
     }
 
     @Test
-    void validateAttestationStatementNotNull_test(){
+    void validateAttestationStatementNotNull_test() {
         PackedAttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], new AttestationCertificatePath());
         target.validateAttestationStatementNotNull(attestationStatement);
     }
 
     @Test
-    void validateAttestationStatementNotNull_with_null_test(){
-        assertThatThrownBy(()->target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
+    void validateAttestationStatementNotNull_with_null_test() {
+        assertThatThrownBy(() -> target.validateAttestationStatementNotNull(null)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     @Test
-    void validateAttestationStatementNotNull_x5c_null_test(){
+    void validateAttestationStatementNotNull_x5c_null_test() {
         PackedAttestationStatement attestationStatement = new PackedAttestationStatement(COSEAlgorithmIdentifier.ES256, new byte[32], null);
-        assertThatCode(()->target.validateAttestationStatementNotNull(attestationStatement)).doesNotThrowAnyException();
+        assertThatCode(() -> target.validateAttestationStatementNotNull(attestationStatement)).doesNotThrowAnyException();
     }
 
 

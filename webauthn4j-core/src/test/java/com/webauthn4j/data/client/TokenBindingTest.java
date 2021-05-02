@@ -36,7 +36,7 @@ class TokenBindingTest {
 
     @Test
     void constructor_status_null_test() {
-        assertThatThrownBy(()->new TokenBinding(null, (byte[]) null)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> new TokenBinding(null, (byte[]) null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
