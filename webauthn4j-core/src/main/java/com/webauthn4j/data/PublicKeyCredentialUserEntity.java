@@ -37,8 +37,8 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
     // ~ Instance fields
     // ================================================================================================
 
-    private byte[] id;
-    private String displayName;
+    private final byte[] id;
+    private final String displayName;
 
     /**
      * @param id          id

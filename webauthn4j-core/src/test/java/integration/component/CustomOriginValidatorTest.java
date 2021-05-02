@@ -111,9 +111,7 @@ class CustomOriginValidatorTest {
 
 
         RegistrationData registrationData = target.parse(webAuthnRegistrationRequest);
-        assertThatThrownBy(() -> {
-            target.validate(registrationData, registrationParameters);
-        }).isInstanceOf(BadOriginException.class);
+        assertThatThrownBy(() -> target.validate(registrationData, registrationParameters)).isInstanceOf(BadOriginException.class);
 
     }
 

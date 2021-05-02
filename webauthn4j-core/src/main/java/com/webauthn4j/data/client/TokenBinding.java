@@ -35,8 +35,10 @@ import java.util.Objects;
  */
 public class TokenBinding implements Serializable {
 
-    private @NonNull TokenBindingStatus status;
-    private @Nullable String id;
+    @NonNull
+    private final TokenBindingStatus status;
+    @Nullable
+    private final String id;
 
     @JsonCreator
     public TokenBinding(

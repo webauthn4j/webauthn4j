@@ -22,8 +22,6 @@ import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -62,7 +60,7 @@ class AuthenticatorTransportTest {
     }
 
     @Test
-    void deserialize_test() throws IOException {
+    void deserialize_test() {
         TestDTO dto = jsonConverter.readValue("{\"transport\":\"usb\"}", TestDTO.class);
         assertThat(dto.transport).isEqualTo(AuthenticatorTransport.USB);
     }

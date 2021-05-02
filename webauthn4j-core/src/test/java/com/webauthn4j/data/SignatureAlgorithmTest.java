@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SignatureAlgorithmTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void create_test() {

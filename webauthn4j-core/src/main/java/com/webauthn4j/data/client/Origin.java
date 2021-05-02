@@ -38,11 +38,11 @@ public class Origin implements Serializable {
     private static final String SCHEME_HTTPS = "https";
     private static final String SCHEME_HTTP = "http";
 
-    private String scheme;
+    private final String scheme;
     private String host;
-    private Integer port;
-    private String schemeSpecificPart;
-    private boolean explicitPortNotation;
+    private final Integer port;
+    private final String schemeSpecificPart;
+    private final boolean explicitPortNotation;
 
     public Origin(@NonNull String originUrl) {
         AssertUtil.notNull(originUrl, "originUrl must not be null");

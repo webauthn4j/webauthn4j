@@ -38,8 +38,8 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CoreRegistrationDataValidatorTest {
-    ObjectConverter objectConverter = new ObjectConverter();
-    CoreRegistrationDataValidator target = new CoreRegistrationDataValidator(Arrays.asList(
+    final ObjectConverter objectConverter = new ObjectConverter();
+    final CoreRegistrationDataValidator target = new CoreRegistrationDataValidator(Arrays.asList(
             new NoneAttestationStatementValidator(),
             new NullFIDOU2FAttestationStatementValidator(),
             new NullPackedAttestationStatementValidator(),

@@ -34,11 +34,11 @@ import java.util.Objects;
 public class CollectedClientData implements Serializable {
 
     //~ Instance fields ================================================================================================
-    private ClientDataType type;
-    private Challenge challenge;
-    private Origin origin;
-    private Boolean crossOrigin;
-    private TokenBinding tokenBinding;
+    private final ClientDataType type;
+    private final Challenge challenge;
+    private final Origin origin;
+    private final Boolean crossOrigin;
+    private final TokenBinding tokenBinding;
 
     @JsonCreator
     public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,

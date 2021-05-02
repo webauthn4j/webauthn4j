@@ -34,7 +34,7 @@ public abstract class PublicKeyCredentialEntity implements Serializable {
     // ~ Instance fields
     // ================================================================================================
 
-    private String name;
+    private final String name;
 
     // ~ Constructor
     // ========================================================================================================
