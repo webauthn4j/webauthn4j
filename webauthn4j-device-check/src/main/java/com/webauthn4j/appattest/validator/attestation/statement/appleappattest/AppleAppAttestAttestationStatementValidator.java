@@ -60,7 +60,6 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
         AppleAppAttestAttestationStatement attestationStatement = (AppleAppAttestAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         validateAttestationStatementNotNull(attestationStatement);
 
-        //noinspection ConstantConditions as null check is already done in above
         validateX5c(attestationStatement);
         validateNonce(registrationObject);
         validatePublicKey(registrationObject);
@@ -75,7 +74,6 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
 
     void validateX5c(@NonNull AppleAppAttestAttestationStatement attestationStatement) {
-        //noinspection ConstantConditions as null check is already done in caller
         if (attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException(
                     "No attestation certificate is found in Apple App Attest attestation statement."
@@ -90,7 +88,6 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
 
     private void validateNonce(CoreRegistrationObject registrationObject) {
         AppleAppAttestAttestationStatement attestationStatement = getAttestationStatement(registrationObject);
-        //noinspection ConstantConditions as null check is already done in caller
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         byte[] actualNonce = extractNonce(attestationCertificate);
 
@@ -106,7 +103,6 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
     }
 
     private void validatePublicKey(CoreRegistrationObject registrationObject) {
-        //noinspection ConstantConditions as null check is already done in caller
         byte[] publicKey = ECUtil.createUncompressedPublicKey((ECPublicKey) getAttestationStatement(registrationObject).getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey());
         DCRegistrationObject dcRegistrationObject = (DCRegistrationObject) registrationObject;
         byte[] keyId = dcRegistrationObject.getKeyId();

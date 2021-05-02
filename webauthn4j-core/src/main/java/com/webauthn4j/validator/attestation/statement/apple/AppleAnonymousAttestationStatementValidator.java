@@ -96,7 +96,6 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
     }
 
     private void validatePublicKey(@NonNull CoreRegistrationObject registrationObject, @NonNull AppleAnonymousAttestationStatement attestationStatement) {
-        //noinspection ConstantConditions as null check is already done in caller.
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         //noinspection ConstantConditions as null check is already done in caller.
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();

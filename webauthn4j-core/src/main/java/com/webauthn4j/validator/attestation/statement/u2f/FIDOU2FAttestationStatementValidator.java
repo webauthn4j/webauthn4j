@@ -57,7 +57,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         FIDOU2FAttestationStatement attestationStatement =
                 (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
         validateAttestationStatementNotNull(attestationStatement);
-        //noinspection ConstantConditions as null check is already done in validateAttestationStatementNotNull
         validateAttestationStatement(attestationStatement);
         validateSignature(registrationObject);
         return AttestationType.BASIC;
@@ -70,7 +69,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
     }
 
     void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
-        //noinspection ConstantConditions as null check is already done in caller
         if (attestationStatement.getX5c().size() != 1) {
             throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
         }
@@ -91,7 +89,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         FIDOU2FAttestationStatement attestationStatement = (FIDOU2FAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] signedData = getSignedData(registrationObject);
-        //noinspection ConstantConditions as null check is already done in caller
         byte[] signature = attestationStatement.getSig();
         PublicKey publicKey = getPublicKey(attestationStatement);
 
@@ -123,7 +120,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
         byte[] applicationParameter = messageDigest.digest(rpIdBytes);
         byte[] challengeParameter = registrationObject.getClientDataHash();
         byte[] keyHandle = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
-        //noinspection ConstantConditions as null check is already done in caller
         byte[] userPublicKeyBytes = getPublicKeyBytes(credentialPublicKey);
 
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32 + keyHandle.length + 65);
@@ -143,7 +139,6 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
     }
 
     private PublicKey getPublicKey(@NonNull FIDOU2FAttestationStatement attestationStatement) {
-        //noinspection ConstantConditions as null check is already done in caller
         Certificate cert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
         return cert.getPublicKey();
     }

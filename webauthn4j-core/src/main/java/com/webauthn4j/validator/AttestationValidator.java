@@ -117,7 +117,6 @@ class AttestationValidator {
                             (CertificateBaseAttestationStatement) attestationStatement;
                     //noinspection ConstantConditions as null check is already done in caller
                     AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
-                    //noinspection ConstantConditions as null check is already done in caller
                     certPathTrustworthinessValidator.validate(aaguid, certificateBaseAttestationStatement, registrationObject.getTimestamp());
                 }
                 else {

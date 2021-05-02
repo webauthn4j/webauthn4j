@@ -109,7 +109,6 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
         //noinspection ConstantConditions as null check is already done in caller
         AAGUID aaguid = authenticatorData.getAttestedCredentialData().getAaguid();
         AAGUID expectedAAGUID = isProduction() ? APPLE_APP_ATTEST_ENVIRONMENT_PRODUCTION : APPLE_APP_ATTEST_ENVIRONMENT_DEVELOPMENT;
-        //noinspection ConstantConditions as null check is already done in caller
         if (!aaguid.equals(expectedAAGUID)) {
             throw new BadAaguidException("Expected AAGUID of either 'appattestdevelop' or 'appattest'");
         }
