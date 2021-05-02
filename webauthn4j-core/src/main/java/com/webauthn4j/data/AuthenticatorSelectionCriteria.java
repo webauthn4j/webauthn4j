@@ -37,13 +37,11 @@ public class AuthenticatorSelectionCriteria implements Serializable {
 
     private final AuthenticatorAttachment authenticatorAttachment;
 
-    @SuppressWarnings("UnusedAssignment")
-    private Boolean requireResidentKey = null;
+    private final Boolean requireResidentKey;
 
-    private ResidentKeyRequirement residentKey = null;
+    private final ResidentKeyRequirement residentKey;
 
-    @SuppressWarnings("UnusedAssignment")
-    private UserVerificationRequirement userVerification = UserVerificationRequirement.PREFERRED;
+    private final UserVerificationRequirement userVerification;
 
     /**
      * Constructor for Jackson deserializer

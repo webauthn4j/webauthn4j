@@ -34,9 +34,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 class DeviceCheckAssertionManagerTest {
 
-    private ObjectConverter objectConverter = new ObjectConverter();
-    private CborConverter cborConverter = objectConverter.getCborConverter();
-    private AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+    private final ObjectConverter objectConverter = new ObjectConverter();
+    private final CborConverter cborConverter = objectConverter.getCborConverter();
+    private final AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
 
     @Test
     void constructor_test() {

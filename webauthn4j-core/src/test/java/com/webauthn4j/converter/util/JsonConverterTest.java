@@ -126,7 +126,7 @@ class JsonConverterTest {
         }
 
         static class NonNullDto {
-            private String value;
+            private final String value;
 
             @JsonCreator
             public NonNullDto(@NonNull @JsonProperty("value") String value) {
@@ -141,7 +141,7 @@ class JsonConverterTest {
         }
 
         static class IntegerDto {
-            private Integer value;
+            private final Integer value;
 
             @JsonCreator
             public IntegerDto(@NonNull @JsonProperty("value") Integer value) {

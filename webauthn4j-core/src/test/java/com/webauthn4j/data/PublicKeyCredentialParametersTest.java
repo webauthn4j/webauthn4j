@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 class PublicKeyCredentialParametersTest {
 
-    private JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
+    private final JsonConverter jsonConverter = new ObjectConverter().getJsonConverter();
 
     @Test
     void deserialize_test_with_invalid_value() {
