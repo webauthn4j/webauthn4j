@@ -28,6 +28,7 @@ import com.webauthn4j.validator.CustomRegistrationValidator;
 import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 
+import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,14 +42,14 @@ public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
         this.metadataItemsResolver = metadataItemsResolver;
     }
 
-    public FidoMdsMetadataValidator(ObjectConverter objectConverter, String fidoMetadataServiceEndpoint) {
-        FidoMdsMetadataItemsProvider metadataItemsProvider = new FidoMdsMetadataItemsProvider(objectConverter);
+    public FidoMdsMetadataValidator(ObjectConverter objectConverter, String fidoMetadataServiceEndpoint, X509Certificate x509Certificate) {
+        FidoMdsMetadataItemsProvider metadataItemsProvider = new FidoMdsMetadataItemsProvider(objectConverter, x509Certificate);
         metadataItemsProvider.setFidoMetadataServiceEndpoint(fidoMetadataServiceEndpoint);
         this.metadataItemsResolver = new MetadataItemsResolverImpl(metadataItemsProvider);
     }
 
-    public FidoMdsMetadataValidator(String fidoMetadataServiceEndpoint) {
-        this(new ObjectConverter(), fidoMetadataServiceEndpoint);
+    public FidoMdsMetadataValidator(String fidoMetadataServiceEndpoint, X509Certificate x509Certificate) {
+        this(new ObjectConverter(), fidoMetadataServiceEndpoint, x509Certificate);
     }
 
     @Override
