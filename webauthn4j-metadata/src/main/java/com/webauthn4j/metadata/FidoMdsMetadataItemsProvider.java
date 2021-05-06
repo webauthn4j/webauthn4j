@@ -76,14 +76,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         this(objectConverter, token, httpClient, loadRootCertificateFromPath(path));
     }
 
-    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token, HttpClient httpClient) {
-        this(objectConverter, token, httpClient, loadEmbeddedFidoMdsRootCertificate());
-    }
-
-    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, String token) {
-        this(objectConverter, token, new SimpleHttpClient(), loadEmbeddedFidoMdsRootCertificate());
-    }
-
     public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient, X509Certificate rootCertificate) {
         this(objectConverter, null, httpClient, rootCertificate);
     }
@@ -92,13 +84,8 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         this(objectConverter, null, httpClient, path);
     }
 
-    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, HttpClient httpClient) {
-        this(objectConverter, null, httpClient);
-    }
-
-
-    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter) {
-        this(objectConverter, (String) null);
+    public FidoMdsMetadataItemsProvider(ObjectConverter objectConverter, X509Certificate x509Certificate) {
+        this(objectConverter, new SimpleHttpClient(), x509Certificate);
     }
 
     private static X509Certificate loadRootCertificateFromPath(Path path) {
@@ -108,13 +95,6 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    private static X509Certificate loadEmbeddedFidoMdsRootCertificate() {
-        InputStream inputStream = FidoMdsMetadataItemsProvider.class.getClassLoader()
-                .getResourceAsStream("metadata/certs/FIDOMetadataService.cer");
-        //noinspection ConstantConditions
-        return CertificateUtil.generateX509Certificate(inputStream);
     }
 
     static String appendToken(String url, String token) {
