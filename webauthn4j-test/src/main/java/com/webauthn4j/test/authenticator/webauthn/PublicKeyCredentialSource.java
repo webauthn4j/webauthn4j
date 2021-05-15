@@ -17,14 +17,13 @@
 package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.data.PublicKeyCredentialType;
-
-import java.security.PrivateKey;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
 
 public class PublicKeyCredentialSource {
 
     private PublicKeyCredentialType type;
     private byte[] id;
-    private PrivateKey privateKey;
+    private COSEKey privateKey;
     private String rpId;
     private byte[] userHandle;
     private Object otherUI;
@@ -45,11 +44,11 @@ public class PublicKeyCredentialSource {
         this.id = id;
     }
 
-    public PrivateKey getPrivateKey() {
+    public COSEKey getPrivateKey() {
         return privateKey;
     }
 
-    public void setPrivateKey(PrivateKey privateKey) {
+    public void setPrivateKey(COSEKey privateKey) {
         this.privateKey = privateKey;
     }
 
