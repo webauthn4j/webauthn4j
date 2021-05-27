@@ -51,6 +51,7 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,6 +73,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     // feature flags
     private final boolean capableOfUserVerification;
     private final AuthenticatorDataConverter authenticatorDataConverter;
+    private final byte[] credentialEncryptionKey;
     private int counter;
     private boolean countUpEnabled = true;
 
@@ -93,6 +95,8 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         this.objectConverter = objectConverter;
         this.cborConverter = objectConverter.getCborConverter();
         this.authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        this.credentialEncryptionKey = new byte[32];
+        secureRandom.nextBytes(this.credentialEncryptionKey);
     }
 
     public WebAuthnModelAuthenticator() {
@@ -111,15 +115,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     public PublicKeyCredentialSource lookup(byte[] credentialId) {
 
-        if (!isCapableOfStoringClientSideResidentCredential()) {
-            byte[] cbor = CipherUtil.decrypt(credentialId, attestationKeyPair.getPrivate());
-            return cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
-        }
-        for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
-            if (Arrays.equals(credentialId, entry.getValue().getId())) {
-                return entry.getValue();
+        if (isCapableOfStoringClientSideResidentCredential()) {
+            for (Map.Entry<CredentialMapKey, PublicKeyCredentialSource> entry : credentialMap.entrySet()) {
+                if (Arrays.equals(credentialId, entry.getValue().getId())) {
+                    return entry.getValue();
+                }
             }
         }
+
+        try {
+            byte[] cbor = CipherUtil.decrypt(credentialId, credentialEncryptionKey);
+            return cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
+        } catch (RuntimeException e) {
+            // Do nothing; it wasn't an encrypted credential
+        }
+
         return null;
     }
 
@@ -206,19 +216,21 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // PublicKeyCredentialType and cryptographic parameters represented by the first item in
         // credTypesAndPubKeyAlgs that is supported by this authenticator.
         KeyPair credentialKeyPair;
-        PrivateKey credentialPrivateKey;
-        COSEKey coseKey;
+        COSEKey cosePublicKey;
+        COSEKey cosePrivateKey;
         try {
             credentialKeyPair = ECUtil.createKeyPair();
-            credentialPrivateKey = credentialKeyPair.getPrivate();
-            coseKey = TestDataUtil.createEC2COSEPublicKey((ECPublicKey) credentialKeyPair.getPublic());
+            ECPublicKey publicKey = (ECPublicKey) credentialKeyPair.getPublic();
+            ECPrivateKey privateKey = (ECPrivateKey) credentialKeyPair.getPrivate();
+            cosePublicKey = TestDataUtil.createEC2COSEPublicKey(publicKey);
+            cosePrivateKey = TestDataUtil.createEC2COSEPrivateKey(publicKey, privateKey);
 
             // Let userHandle be userEntity.id.
             byte[] userHandle = makeCredentialRequest.getUserEntity().getId();
             // Let credentialSource be a new public key credential source with the fields:
             PublicKeyCredentialSource credentialSource = new PublicKeyCredentialSource();
             credentialSource.setType(PublicKeyCredentialType.PUBLIC_KEY);
-            credentialSource.setPrivateKey(credentialPrivateKey);
+            credentialSource.setPrivateKey(cosePrivateKey);
             credentialSource.setRpId(rpEntity.getId());
             credentialSource.setUserHandle(userHandle);
             credentialSource.setOtherUI(null);
@@ -242,7 +254,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
                 // so that only this authenticator can decrypt it.
 
                 byte[] data = cborConverter.writeValueAsBytes(credentialSource);
-                credentialId = CipherUtil.encrypt(data, attestationKeyPair.getPublic());
+                credentialId = CipherUtil.encrypt(data, credentialEncryptionKey);
             }
         }
         // If any error occurred while creating the new credential object,
@@ -272,7 +284,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         if (userVerification) flag |= BIT_UV;
         if (!registrationExtensionAuthenticatorOutputs.getKeys().isEmpty()) flag |= BIT_ED;
 
-        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, coseKey);
+        AttestedCredentialData attestedCredentialData = new AttestedCredentialData(aaguid, credentialId, cosePublicKey);
 
         // Let authenticatorData be the byte array specified in §6.1 Authenticator data,
         // including attestedCredentialData as the attestedCredentialData and processedExtensions, if any, as the extensions.
@@ -390,7 +402,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
         // The hash of the serialized client data (which potentially has a variable length) is always the last element.
         byte[] clientDataHash = getAssertionRequest.getHash();
         byte[] signedData = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
-        byte[] signature = TestDataUtil.calculateSignature(selectedCredential.getPrivateKey(), signedData);
+        byte[] signature = TestDataUtil.calculateSignature(selectedCredential.getPrivateKey().getPrivateKey(), signedData);
         // If any error occurred while generating the assertion signature,
         // return an error code equivalent to "UnknownError" and terminate the operation.
 
@@ -417,7 +429,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
         return publicKeyCredentialParameters.getType() == PublicKeyCredentialType.PUBLIC_KEY &&
-                publicKeyCredentialParameters.getAlg() == COSEAlgorithmIdentifier.ES256;
+                COSEAlgorithmIdentifier.ES256.equals(publicKeyCredentialParameters.getAlg());
     }
 
     public boolean isCountUpEnabled() {

@@ -22,32 +22,50 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.SecureRandom;
 
 public class CipherUtil {
+    private static final SecureRandom secureRandom = new SecureRandom();
+
+    // https://crypto.stackexchange.com/questions/26783/ciphertext-and-tag-size-and-iv-transmission-with-aes-in-gcm-mode
+    private static final int IV_SIZE = 96;
+    private static final int TAG_SIZE = 128;
 
     private CipherUtil() {
     }
 
-    public static byte[] encrypt(byte[] data, PublicKey publicKey) {
+    public static byte[] encrypt(byte[] data, byte[] encryptionKey) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA"); //RSA/ECB/PKCS1Padding
-            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            return cipher.doFinal(data);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            final byte[] iv = new byte[IV_SIZE / 8];
+            secureRandom.nextBytes(iv);
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(encryptionKey, "AES"), new GCMParameterSpec(TAG_SIZE, iv));
+            byte[] cipherBytes = cipher.doFinal(data);
+            byte[] output = new byte[iv.length + cipherBytes.length];
+            System.arraycopy(iv, 0, output, 0, iv.length);
+            System.arraycopy(cipherBytes, 0, output, iv.length, cipherBytes.length);
+            return output;
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new UnexpectedCheckedException(e);
         }
     }
 
-    public static byte[] decrypt(byte[] encrypted, PrivateKey privateKey) {
+    public static byte[] decrypt(byte[] encrypted, byte[] encryptionKey) {
         try {
-            Cipher cipher = Cipher.getInstance("RSA"); //RSA/ECB/PKCS1Padding
-            cipher.init(Cipher.DECRYPT_MODE, privateKey);
-            return cipher.doFinal(encrypted);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            byte[] iv = new byte[IV_SIZE / 8];
+            byte[] cipherBytes = new byte[encrypted.length - iv.length];
+            System.arraycopy(encrypted, 0, iv, 0, iv.length);
+            System.arraycopy(encrypted, iv.length, cipherBytes, 0, cipherBytes.length);
+
+            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(encryptionKey, "AES"), new GCMParameterSpec(TAG_SIZE, iv));
+            return cipher.doFinal(cipherBytes);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new UnexpectedCheckedException(e);
         }
     }

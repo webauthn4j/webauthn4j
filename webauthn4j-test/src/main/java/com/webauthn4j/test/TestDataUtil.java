@@ -54,8 +54,10 @@ import com.webauthn4j.util.*;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.RegistrationObject;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.*;
+import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECPoint;
@@ -318,6 +320,21 @@ public class TestDataUtil {
      * @return {@link EC2COSEKey}
      */
     public static EC2COSEKey createEC2COSEPublicKey(ECPublicKey publicKey) {
+        return createEC2COSEKey(publicKey, null);
+    }
+
+    /**
+     * createEC2COSEPrivateKey from {@code ECPrivateKey}
+     *
+     * @param publicKey publicKey
+     * @param privateKey privateKey
+     * @return {@link EC2COSEKey}
+     */
+    public static EC2COSEKey createEC2COSEPrivateKey(ECPublicKey publicKey, ECPrivateKey privateKey) {
+        return createEC2COSEKey(publicKey, privateKey.getS());
+    }
+
+    private static EC2COSEKey createEC2COSEKey(ECPublicKey publicKey, BigInteger d) {
         ECPoint ecPoint = publicKey.getW();
         EllipticCurve ellipticCurve = publicKey.getParams().getCurve();
         Curve curve;
@@ -348,7 +365,8 @@ public class TestDataUtil {
                 null,
                 curve,
                 x,
-                y
+                y,
+                d == null ? null : d.toByteArray()
         );
     }
 
