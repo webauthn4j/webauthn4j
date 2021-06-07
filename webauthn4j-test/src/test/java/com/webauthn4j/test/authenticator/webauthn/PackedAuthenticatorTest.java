@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 class PackedAuthenticatorTest {
@@ -79,13 +80,14 @@ class PackedAuthenticatorTest {
         ));
         byte[] credentialId = response.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
-        assertThatCode(() -> target.getAssertion(new GetAssertionRequest(rpId,
+        GetAssertionResponse assertion = target.getAssertion(new GetAssertionRequest(rpId,
                 new byte[32],
                 Collections.singletonList(new PublicKeyCredentialDescriptor(PublicKeyCredentialType.PUBLIC_KEY,
                         credentialId, null)),
                 true,
                 false,
-                null))).doesNotThrowAnyException();
+                null));
+        assertThat(assertion.getCredentialId()).isEqualTo(credentialId);
     }
 
     private String serialize(PublicKeyCredentialCreationOptions options) {
