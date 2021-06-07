@@ -125,7 +125,9 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
 
         try {
             byte[] cbor = CipherUtil.decrypt(credentialId, credentialEncryptionKey);
-            return cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
+            PublicKeyCredentialSource src = cborConverter.readValue(cbor, PublicKeyCredentialSource.class);
+            src.setId(credentialId);
+            return src;
         } catch (RuntimeException e) {
             // Do nothing; it wasn't an encrypted credential
         }
