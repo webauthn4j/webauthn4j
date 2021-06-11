@@ -20,7 +20,7 @@ import org.asciidoctor.gradle.jvm.AsciidoctorTask
 
 buildscript {
 
-    def sonarqubeVersion = "3.2.0"
+    def sonarqubeVersion = "3.3"
     def asciidoctorGradleVersion = "3.3.2"
     def owaspDependencyCheckVersion = "6.2.1"
     def httpBuilderVersion = "0.7.2"
