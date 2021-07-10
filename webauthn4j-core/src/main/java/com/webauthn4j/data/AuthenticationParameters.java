@@ -19,9 +19,38 @@ package com.webauthn4j.data;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.List;
 
 public class AuthenticationParameters extends CoreAuthenticationParameters {
 
+    /**
+     * {@link AuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     * @param userPresenceRequired true if user presence is required. Otherwise, false
+     */
+    public AuthenticationParameters(@NonNull ServerProperty serverProperty, @NonNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
+        super(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
+    }
+
+    /**
+     * {@link AuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     */
+    public AuthenticationParameters(@NonNull ServerProperty serverProperty, @NonNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired) {
+        super(serverProperty, authenticator, allowCredentials, userVerificationRequired);
+    }
+
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
     public AuthenticationParameters(
             @NonNull ServerProperty serverProperty,
             @NonNull Authenticator authenticator,
@@ -30,6 +59,11 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
         super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
     }
 
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
     public AuthenticationParameters(
             @NonNull ServerProperty serverProperty,
             @NonNull Authenticator authenticator,

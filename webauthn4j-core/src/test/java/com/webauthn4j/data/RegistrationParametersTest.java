@@ -29,6 +29,75 @@ import static org.assertj.core.api.Assertions.assertThat;
 class RegistrationParametersTest {
 
     @Test
+    void constructor_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        RegistrationParameters instance =
+                new RegistrationParameters(
+                        serverProperty,
+                        null,
+                        false,
+                        true
+                );
+
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getPubKeyCredParams()).isNull();
+        assertThat(instance.isUserVerificationRequired()).isFalse();
+        assertThat(instance.isUserPresenceRequired()).isTrue();
+    }
+
+    @Deprecated
+    @Test
+    void constructor_without_pubKeyCredParams_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        RegistrationParameters instance =
+                new RegistrationParameters(
+                        serverProperty,
+                        false,
+                        true
+                );
+
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getPubKeyCredParams()).isNull();
+        assertThat(instance.isUserVerificationRequired()).isFalse();
+        assertThat(instance.isUserPresenceRequired()).isTrue();
+    }
+
+    @Deprecated
+    @Test
+    void constructor_without_pubKeyCredParams_userPresenceRequired_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        RegistrationParameters instance =
+                new RegistrationParameters(
+                        serverProperty,
+                        false
+                );
+
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getPubKeyCredParams()).isNull();
+        assertThat(instance.isUserVerificationRequired()).isFalse();
+        assertThat(instance.isUserPresenceRequired()).isTrue();
+    }
+
+
+    @Test
     void equals_hashCode_test() {
         // Server properties
         Origin origin = Origin.create("https://example.com") /* set origin */;
@@ -43,11 +112,13 @@ class RegistrationParametersTest {
         RegistrationParameters instanceA =
                 new RegistrationParameters(
                         serverProperty,
+                        null,
                         userVerificationRequired
                 );
         RegistrationParameters instanceB =
                 new RegistrationParameters(
                         serverProperty,
+                        null,
                         userVerificationRequired
                 );
 

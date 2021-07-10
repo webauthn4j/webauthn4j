@@ -26,6 +26,6 @@ public class DCAssertionParameters extends CoreAuthenticationParameters {
     public DCAssertionParameters(
             @NonNull DCServerProperty serverProperty,
             @NonNull DCAppleDevice dcAppleDevice) {
-        super(serverProperty, dcAppleDevice, false, false);
+        super(serverProperty, dcAppleDevice, null, false, false);
     }
 }

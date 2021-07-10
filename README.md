@@ -98,7 +98,7 @@ If your would like to validate Apple App Attest, please see the reference.
 // Client properties
 byte[] attestationObject = null /* set attestationObject */;
 byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null;  /* set clientExtensionJSON */;
+String clientExtensionJSON = null;  /* set clientExtensionJSON */
 Set<String> transports = null /* set transports */;
 
 // Server properties
@@ -111,22 +111,19 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 // expectations
 boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
-List<String> expectedExtensionIds = Collections.emptyList();
 
 RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
 RegistrationData registrationData;
-try{
+try {
     registrationData = webAuthnManager.parse(registrationRequest);
-}
-catch (DataConversionException e){
+} catch (DataConversionException e) {
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
-try{
+try {
     webAuthnManager.validate(registrationData, registrationParameters);
-}
-catch (ValidationException e){
+} catch (ValidationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
@@ -159,6 +156,7 @@ byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
 // expectations
+List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 List<String> expectedExtensionIds = Collections.emptyList();
@@ -178,23 +176,21 @@ AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
                 authenticator,
+                allowCredentials,
                 userVerificationRequired,
-                userPresenceRequired,
-                expectedExtensionIds
+                userPresenceRequired
         );
 
 AuthenticationData authenticationData;
-try{
+try {
     authenticationData = webAuthnManager.parse(authenticationRequest);
-}
-catch (DataConversionException e){
+} catch (DataConversionException e) {
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
-try{
+try {
     webAuthnManager.validate(authenticationData, authenticationParameters);
-}
-catch (ValidationException e){
+} catch (ValidationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
@@ -203,7 +199,6 @@ updateCounter(
         authenticationData.getCredentialId(),
         authenticationData.getAuthenticatorData().getSignCount()
 );
-
 ```
 
 ## Sample application

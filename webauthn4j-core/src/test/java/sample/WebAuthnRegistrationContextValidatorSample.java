@@ -24,6 +24,7 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 
+import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("ConstantConditions")
@@ -41,6 +42,7 @@ class RegistrationContextValidatorSample {
         Challenge challenge = null /* set challenge */;
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         boolean userVerificationRequired = false;
 
         RegistrationRequest registrationRequest = new RegistrationRequest(
@@ -50,6 +52,7 @@ class RegistrationContextValidatorSample {
         );
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
+                pubKeyCredParams,
                 userVerificationRequired
         );
 
@@ -86,6 +89,7 @@ class RegistrationContextValidatorSample {
         byte[] tokenBindingId = null /* set tokenBindingId */;
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
         Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
+        List<byte[]> allowCredentials = null;
         boolean userVerificationRequired = true;
 
         AuthenticationRequest authenticationRequest =
@@ -99,6 +103,7 @@ class RegistrationContextValidatorSample {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        allowCredentials,
                         userVerificationRequired
                 );
 

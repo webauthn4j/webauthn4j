@@ -106,6 +106,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -160,6 +161,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -205,6 +207,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -243,6 +246,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -280,6 +284,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -314,6 +319,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -348,6 +354,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -405,6 +412,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
@@ -461,6 +469,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );

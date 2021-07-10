@@ -109,6 +109,7 @@ class TPMAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
