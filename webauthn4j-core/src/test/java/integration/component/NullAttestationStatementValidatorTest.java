@@ -78,7 +78,7 @@ class NullAttestationStatementValidatorTest {
                         registrationRequest.getClientDataJSON(),
                         transports);
         RegistrationParameters registrationParameters =
-                new RegistrationParameters(serverProperty, false);
+                new RegistrationParameters(serverProperty, null,false);
         target.validate(webAuthnRegistrationRequest, registrationParameters);
     }
 
@@ -120,7 +120,7 @@ class NullAttestationStatementValidatorTest {
                         registrationRequest.getClientDataJSON(),
                         transports);
         RegistrationParameters registrationParameters =
-                new RegistrationParameters(serverProperty, false);
+                new RegistrationParameters(serverProperty, null, false);
         target.validate(webAuthnRegistrationRequest, registrationParameters);
 
     }

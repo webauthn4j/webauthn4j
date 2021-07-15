@@ -106,6 +106,7 @@ class CustomOriginValidatorTest {
         );
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
+                null,
                 false
         );
 

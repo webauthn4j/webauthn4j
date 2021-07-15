@@ -71,32 +71,32 @@ class AttestationValidator {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
-        //spec| Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against the set
-        //spec| of supported WebAuthn Attestation Statement Format Identifier values. The up-to-date list of registered
-        //spec| WebAuthn Attestation Statement Format Identifier values is maintained in the in the IANA registry of the same
-        //spec| name [WebAuthn-Registries].
+        //spec| Step18
+        //spec| Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against
+        //spec| the set of supported WebAuthn Attestation Statement Format Identifier values.
+        //spec| An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values is maintained in
+        //spec| the IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
+        //spec| Step19
+        //spec| Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
+        //spec| by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
 
-        //spec| Verify that attStmt is a correct attestation statement, conveying a valid attestation signature, by using the
-        //spec| attestation statement format fmt’s verification procedure given attStmt, authData and the hash of the
-        //spec| serialized client data computed in step 7.
-
-        //spec| Note: Each attestation statement format specifies its own verification procedure. See §8 Defined Attestation
-        //spec| Statement Formats for the initially-defined formats, and  [WebAuthn-Registries] for the up-to-date list.
         AttestationType attestationType = validateAttestationStatement(registrationObject);
 
         validateAAGUID(attestationObject);
 
-        //spec| If validation is successful, obtain a list of acceptable trust anchors (attestation root certificates or
-        //spec| ECDAA-Issuer public keys) for that attestation type and attestation statement format fmt,
-        //spec| from a trusted source or from policy.
+        //spec| Step20
+        //spec| If validation is successful, obtain a list of acceptable trust anchors (i.e. attestation root certificates)
+        //spec| for that attestation type and attestation statement format fmt, from a trusted source or from policy.
         //spec| For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
         //spec| using the aaguid in the attestedCredentialData in authData.
-
-        //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 14, as follows:
+        //spec| Step21
+        //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 19, as follows:
+        //spec| If no attestation was provided, verify that None attestation is acceptable under Relying Party policy.
+        //      (This is already done in validateAttestationStatement method)
 
         AttestationStatement attestationStatement = attestationObject.getAttestationStatement();
         switch (attestationType) {
-            // If self attestation was used, check if self attestation is acceptable under Relying Party policy.
+            //spec| If self attestation was used, check if self attestation is acceptable under Relying Party policy.
             case SELF:
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {
                     CertificateBaseAttestationStatement certificateBaseAttestationStatement =
@@ -108,8 +108,9 @@ class AttestationValidator {
                 }
                 break;
 
-            // Otherwise, use the X.509 certificates returned by the verification procedure to verify that
-            // the attestation public key correctly chains up to an acceptable root certificate.
+            //spec| Otherwise, use the X.509 certificates returned as the attestation trust path from the verification procedure
+            //spec| to verify that the attestation public key either correctly chains up to an acceptable root certificate,
+            //spec| or is itself an acceptable certificate (i.e., it and the root certificate obtained in Step 20 may be the same).
             case BASIC:
             case ATT_CA:
                 if (attestationStatement instanceof CertificateBaseAttestationStatement) {

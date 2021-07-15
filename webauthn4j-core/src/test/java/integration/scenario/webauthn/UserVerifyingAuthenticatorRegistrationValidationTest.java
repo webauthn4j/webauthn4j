@@ -44,6 +44,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -116,8 +117,10 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
                 clientExtensionJSON,
                 transports
         );
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
+                pubKeyCredParams,
                 false
         );
 
@@ -173,8 +176,10 @@ class UserVerifyingAuthenticatorRegistrationValidationTest {
                 clientExtensionJSON,
                 transports
         );
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 serverProperty,
+                pubKeyCredParams,
                 false
         );
 

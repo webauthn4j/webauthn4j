@@ -97,6 +97,7 @@ class CustomAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        null,
                         false,
                         true
                 );

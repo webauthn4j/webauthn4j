@@ -25,10 +25,14 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.CrossOriginException;
+import com.webauthn4j.validator.exception.NotAllowedCredentialIdException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -40,6 +44,19 @@ import static org.mockito.Mockito.when;
 class AuthenticationDataValidatorTest {
 
     private final AuthenticationDataValidator target = new AuthenticationDataValidator();
+
+    @Test
+    void validateCredentialId_test(){
+        byte[] credentialId = new byte[32];
+        target.validateCredentialId(credentialId, Collections.singletonList(credentialId));
+    }
+
+    @Test
+    void validateCredentialId_not_allowed_credential_test(){
+        byte[] credentialId = new byte[32];
+        List<byte[]> allowCredentials = Collections.emptyList();
+        assertThatThrownBy(() -> target.validateCredentialId(credentialId, allowCredentials)).isInstanceOf(NotAllowedCredentialIdException.class);
+    }
 
     @Test
     void validateAuthenticatorData_with_non_null_AttestedCredentialData(@Mock AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {

@@ -45,17 +45,73 @@ class AuthenticationParametersTest {
         // expectations
         boolean userVerificationRequired = true;
 
-        AuthenticationParameters authenticationParameters =
+        AuthenticationParameters instance =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        null,
+                        userVerificationRequired
+                );
+
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getAuthenticator()).isEqualTo(authenticator);
+        assertThat(instance.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
+        assertThat(instance.isUserPresenceRequired()).isTrue();
+    }
+
+    @Deprecated
+    @Test
+    void constructor_without_allowCredentials_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        Authenticator authenticator = mock(Authenticator.class);
+
+        AuthenticationParameters instance =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        false,
+                        true
+                );
+
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getAuthenticator()).isEqualTo(authenticator);
+        assertThat(instance.getAllowCredentials()).isNull();
+        assertThat(instance.isUserVerificationRequired()).isFalse();
+        assertThat(instance.isUserPresenceRequired()).isTrue();
+    }
+
+    @Deprecated
+    @Test
+    void constructor_without_allowCredentials_userPresenceRequired_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        Authenticator authenticator = mock(Authenticator.class);
+
+        // expectations
+        boolean userVerificationRequired = true;
+
+        AuthenticationParameters instance =
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
                         userVerificationRequired
                 );
 
-        assertThat(authenticationParameters.getServerProperty()).isEqualTo(serverProperty);
-        assertThat(authenticationParameters.getAuthenticator()).isEqualTo(authenticator);
-        assertThat(authenticationParameters.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
-        assertThat(authenticationParameters.isUserPresenceRequired()).isTrue();
+        assertThat(instance.getServerProperty()).isEqualTo(serverProperty);
+        assertThat(instance.getAuthenticator()).isEqualTo(authenticator);
+        assertThat(instance.isUserVerificationRequired()).isEqualTo(userVerificationRequired);
+        assertThat(instance.isUserPresenceRequired()).isTrue();
     }
 
     @Test
@@ -64,6 +120,7 @@ class AuthenticationParametersTest {
         assertThatThrownBy(() -> new AuthenticationParameters(
                 null,
                 authenticator,
+                null,
                 true,
                 true
         )).isInstanceOf(IllegalArgumentException.class);
@@ -74,6 +131,7 @@ class AuthenticationParametersTest {
         ServerProperty serverProperty = TestDataUtil.createServerProperty();
         assertThatThrownBy(() -> new AuthenticationParameters(
                 serverProperty,
+                null,
                 null,
                 true,
                 true
@@ -99,6 +157,7 @@ class AuthenticationParametersTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        null,
                         userVerificationRequired,
                         userPresenceRequired
                 );
@@ -106,6 +165,7 @@ class AuthenticationParametersTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        null,
                         userVerificationRequired,
                         userPresenceRequired
                 );

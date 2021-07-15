@@ -65,6 +65,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -101,6 +102,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false,
                         true
                 );
@@ -122,6 +124,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -156,6 +159,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false
                 );
 
@@ -173,6 +177,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -206,6 +211,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false
                 );
 
@@ -222,6 +228,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -256,6 +263,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false
                 );
 
@@ -273,6 +281,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -306,6 +315,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false
                 );
         assertThrows(BadRpIdException.class,
@@ -321,6 +331,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -354,6 +365,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         true
                 );
         assertThrows(UserNotVerifiedException.class,
@@ -372,6 +384,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -405,6 +418,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false,
                         true
                 );
@@ -421,6 +435,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -454,6 +469,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false,
                         true
                 );
@@ -470,6 +486,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
 
         // create
         AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
 
         // get
         PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
@@ -504,6 +521,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        Collections.singletonList(credentialId),
                         false,
                         true
                 );

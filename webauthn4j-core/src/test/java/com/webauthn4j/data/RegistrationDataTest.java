@@ -38,6 +38,7 @@ class RegistrationDataTest {
     void constructor_RegistrationParameters_test() {
         RegistrationParameters registrationParameters = new RegistrationParameters(
                 TestDataUtil.createServerProperty(),
+                null,
                 true
         );
         assertThat(registrationParameters.getServerProperty()).isInstanceOf(ServerProperty.class);
@@ -48,6 +49,7 @@ class RegistrationDataTest {
     @Test
     void constructor_with_serverProperty_null_test() {
         assertThatThrownBy(() -> new RegistrationParameters(
+                null,
                 null,
                 true
         )).isInstanceOf(IllegalArgumentException.class);

@@ -16,36 +16,81 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class CoreRegistrationParameters implements Serializable {
 
     // server property
     private final CoreServerProperty serverProperty;
+    private final List<PublicKeyCredentialParameters> pubKeyCredParams;
 
     // verification condition
     private final boolean userVerificationRequired;
     private final boolean userPresenceRequired;
 
-    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty, boolean userVerificationRequired, boolean userPresenceRequired) {
+    /**
+     * {@link CoreRegistrationParameters} constructor
+     * @param serverProperty server property
+     * @param pubKeyCredParams allowed {@link PublicKeyCredentialParameters}. If all {@link COSEAlgorithmIdentifier} are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     * @param userPresenceRequired true if user presence is required. Otherwise, false
+     */
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty,
+                                      @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams,
+                                      boolean userVerificationRequired, boolean userPresenceRequired) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         this.serverProperty = serverProperty;
+        this.pubKeyCredParams = pubKeyCredParams;
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
     }
 
-    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty, boolean userVerificationRequired) {
-        this(serverProperty, userVerificationRequired, true);
+    /**
+     * {@link CoreRegistrationParameters} constructor
+     * @param serverProperty server property
+     * @param pubKeyCredParams allowed {@link PublicKeyCredentialParameters}. If all {@link COSEAlgorithmIdentifier} are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     */
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty,
+                                      @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams,
+                                      boolean userVerificationRequired) {
+        this(serverProperty, pubKeyCredParams, userVerificationRequired, true);
+    }
+
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty,
+                                      boolean userVerificationRequired, boolean userPresenceRequired) {
+        this(serverProperty, null ,userVerificationRequired, userPresenceRequired);
+    }
+
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
+    public CoreRegistrationParameters(@NonNull CoreServerProperty serverProperty,
+                                      boolean userVerificationRequired) {
+        this(serverProperty, null, userVerificationRequired, true);
     }
 
     public @NonNull CoreServerProperty getServerProperty() {
         return serverProperty;
+    }
+
+    public @Nullable List<PublicKeyCredentialParameters> getPubKeyCredParams() {
+        return pubKeyCredParams;
     }
 
     public boolean isUserVerificationRequired() {
@@ -57,17 +102,18 @@ public class CoreRegistrationParameters implements Serializable {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreRegistrationParameters that = (CoreRegistrationParameters) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
-                Objects.equals(serverProperty, that.serverProperty);
+                Objects.equals(serverProperty, that.serverProperty) &&
+                Objects.equals(pubKeyCredParams, that.pubKeyCredParams);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serverProperty, userVerificationRequired, userPresenceRequired);
+        return Objects.hash(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
     }
 }

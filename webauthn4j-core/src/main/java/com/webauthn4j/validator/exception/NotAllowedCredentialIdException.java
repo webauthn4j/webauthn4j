@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.appattest.data;
+package com.webauthn4j.validator.exception;
 
-import com.webauthn4j.appattest.server.DCServerProperty;
-import com.webauthn4j.data.CoreRegistrationParameters;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class DCAttestationParameters extends CoreRegistrationParameters {
+public class NotAllowedCredentialIdException extends ValidationException {
 
-    public DCAttestationParameters(@NonNull DCServerProperty serverProperty) {
-        super(serverProperty, null, false, false);
+    public NotAllowedCredentialIdException(@Nullable String message, @Nullable Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotAllowedCredentialIdException(@Nullable String message) {
+        super(message);
+    }
+
+    public NotAllowedCredentialIdException(@Nullable Throwable cause) {
+        super(cause);
     }
 }

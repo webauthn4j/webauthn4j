@@ -108,6 +108,7 @@ class AndroidKeyAuthenticatorRegistrationValidationTest {
         RegistrationParameters webAuthnRegistrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );

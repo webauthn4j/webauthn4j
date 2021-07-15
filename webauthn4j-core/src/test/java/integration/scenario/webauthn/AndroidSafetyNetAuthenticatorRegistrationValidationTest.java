@@ -109,6 +109,7 @@ class AndroidSafetyNetAuthenticatorRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );

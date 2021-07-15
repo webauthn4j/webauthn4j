@@ -96,6 +96,7 @@ class CustomRegistrationValidationTest {
         RegistrationParameters registrationParameters
                 = new RegistrationParameters(
                 serverProperty,
+                null,
                 false,
                 true
         );
