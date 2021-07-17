@@ -62,11 +62,12 @@ public class WebAuthnManagerSample {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
         // expectations
+        List<PublicKeyCredentialParameters> pubKeyCredParams = null;
         boolean userVerificationRequired = false;
         boolean userPresenceRequired = true;
 
         RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
+        RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
         RegistrationData registrationData;
         try {
             registrationData = webAuthnManager.parse(registrationRequest);
@@ -109,6 +110,7 @@ public class WebAuthnManagerSample {
         ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
         // expectations
+        List<byte[]> allowCredentials = null;
         boolean userVerificationRequired = true;
         boolean userPresenceRequired = true;
         List<String> expectedExtensionIds = Collections.emptyList();
@@ -128,6 +130,7 @@ public class WebAuthnManagerSample {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        allowCredentials,
                         userVerificationRequired,
                         userPresenceRequired
                 );

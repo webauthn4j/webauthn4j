@@ -17,7 +17,10 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.PublicKeyCredentialParameters;
+import com.webauthn4j.data.PublicKeyCredentialType;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.validator.attestation.statement.androidkey.NullAndroidKeyAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.statement.androidsafetynet.NullAndroidSafetyNetAttestationStatementValidator;
@@ -28,12 +31,15 @@ import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestation
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
+import com.webauthn4j.validator.exception.NotAllowedAlgorithmException;
 import com.webauthn4j.validator.exception.UserNotPresentException;
 import com.webauthn4j.validator.exception.UserNotVerifiedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,6 +64,20 @@ class RegistrationDataValidatorTest {
                 new NullSelfAttestationTrustworthinessValidator(),
                 new ArrayList<>(),
                 objectConverter);
+    }
+
+    @Test
+    void validateAlg_test(){
+        List<PublicKeyCredentialParameters> pubKeyCredParams = Arrays.asList(new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.ES256), new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.RS256));
+        target.validateAlg(COSEAlgorithmIdentifier.ES256, pubKeyCredParams);
+    }
+
+    @Test
+    void validateAlg_not_allowed_alg_test(){
+        List<PublicKeyCredentialParameters> pubKeyCredParams = Collections.singletonList(new PublicKeyCredentialParameters(PublicKeyCredentialType.PUBLIC_KEY, COSEAlgorithmIdentifier.RS256));
+        assertThrows(NotAllowedAlgorithmException.class,
+                () -> target.validateAlg(COSEAlgorithmIdentifier.ES256, pubKeyCredParams)
+        );
     }
 
     @Test

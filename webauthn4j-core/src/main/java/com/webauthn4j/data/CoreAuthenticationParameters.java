@@ -19,10 +19,12 @@ package com.webauthn4j.data;
 import com.webauthn4j.authenticator.CoreAuthenticator;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 public class CoreAuthenticationParameters implements Serializable {
@@ -31,22 +33,76 @@ public class CoreAuthenticationParameters implements Serializable {
     private final CoreAuthenticator authenticator;
 
     // verification condition
+    private final List<byte[]> allowCredentials;
     private final boolean userVerificationRequired;
     private final boolean userPresenceRequired;
 
+    /**
+     * {@link CoreAuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     * @param userPresenceRequired true if user presence is required. Otherwise, false
+     */
     public CoreAuthenticationParameters(
             @NonNull CoreServerProperty serverProperty,
             @NonNull CoreAuthenticator authenticator,
+            @Nullable List<byte[]> allowCredentials,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         AssertUtil.notNull(authenticator, "authenticator must not be null");
         this.serverProperty = serverProperty;
         this.authenticator = authenticator;
+        this.allowCredentials = CollectionUtil.unmodifiableList(allowCredentials);
         this.userVerificationRequired = userVerificationRequired;
         this.userPresenceRequired = userPresenceRequired;
     }
 
+    /**
+     * {@link CoreAuthenticationParameters} constructor
+     * @param serverProperty server property
+     * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
+     * @param userVerificationRequired true if user verification is required. Otherwise, false
+     */
+    public CoreAuthenticationParameters(
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull CoreAuthenticator authenticator,
+            @Nullable List<byte[]> allowCredentials,
+            boolean userVerificationRequired) {
+        this(
+                serverProperty,
+                authenticator,
+                allowCredentials,
+                userVerificationRequired,
+                true
+        );
+    }
+
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
+    public CoreAuthenticationParameters(
+            @NonNull CoreServerProperty serverProperty,
+            @NonNull CoreAuthenticator authenticator,
+            boolean userVerificationRequired,
+            boolean userPresenceRequired) {
+        this(
+                serverProperty,
+                authenticator,
+                null,
+                userVerificationRequired,
+                userPresenceRequired
+        );
+    }
+
+    /**
+     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     */
+    @SuppressWarnings("squid:S1133")
+    @Deprecated
     public CoreAuthenticationParameters(
             @NonNull CoreServerProperty serverProperty,
             @NonNull CoreAuthenticator authenticator,
@@ -54,6 +110,7 @@ public class CoreAuthenticationParameters implements Serializable {
         this(
                 serverProperty,
                 authenticator,
+                null,
                 userVerificationRequired,
                 true
         );
@@ -67,6 +124,10 @@ public class CoreAuthenticationParameters implements Serializable {
         return authenticator;
     }
 
+    public @Nullable List<byte[]> getAllowCredentials() {
+        return allowCredentials;
+    }
+
     public boolean isUserVerificationRequired() {
         return userVerificationRequired;
     }
@@ -75,20 +136,20 @@ public class CoreAuthenticationParameters implements Serializable {
         return userPresenceRequired;
     }
 
-
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CoreAuthenticationParameters that = (CoreAuthenticationParameters) o;
         return userVerificationRequired == that.userVerificationRequired &&
                 userPresenceRequired == that.userPresenceRequired &&
                 Objects.equals(serverProperty, that.serverProperty) &&
-                Objects.equals(authenticator, that.authenticator);
+                Objects.equals(authenticator, that.authenticator) &&
+                Objects.equals(allowCredentials, that.allowCredentials);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
+        return Objects.hash(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
     }
 }

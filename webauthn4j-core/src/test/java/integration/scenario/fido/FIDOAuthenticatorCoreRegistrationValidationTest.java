@@ -115,6 +115,7 @@ class FIDOAuthenticatorCoreRegistrationValidationTest {
         );
         CoreRegistrationParameters coreRegistrationParameters = new CoreRegistrationParameters(
                 serverProperty,
+                null,
                 false
         );
 

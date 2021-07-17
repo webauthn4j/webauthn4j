@@ -92,6 +92,7 @@ class FIDOAuthenticatorCoreAuthenticationValidationTest {
                 new AuthenticationParameters(
                         serverProperty,
                         authenticator,
+                        null,
                         true
                 );
 
