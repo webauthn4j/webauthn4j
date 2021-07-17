@@ -22,11 +22,12 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import static com.webauthn4j.data.MessageDigestAlgorithm.*;
 
-public class SignatureAlgorithm {
+public class SignatureAlgorithm implements Serializable {
 
     public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", SHA256);
     public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", SHA384);
