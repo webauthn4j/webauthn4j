@@ -139,7 +139,7 @@ public class AuthenticationDataValidator {
 
         //spec| Step11
         //spec| Verify that the value of C.type is the string webauthn.get.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
+        if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET) && !Objects.equals(collectedClientData.getType(), ClientDataType.PAYMENT_GET)) {
             throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
         }
 

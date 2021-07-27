@@ -37,6 +37,8 @@ class ClientDataTypeTest {
         assertAll(
                 () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE),
                 () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
+                () -> assertThat(ClientDataType.create("payment.create")).isEqualTo(ClientDataType.PAYMENT_CREATE),
+                () -> assertThat(ClientDataType.create("payment.get")).isEqualTo(ClientDataType.PAYMENT_GET),
                 () -> assertThat(ClientDataType.create(null)).isNull(),
                 () -> assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
