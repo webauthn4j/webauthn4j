@@ -24,7 +24,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public enum ClientDataType {
     CREATE("webauthn.create"),
-    GET("webauthn.get");
+    GET("webauthn.get"),
+    PAYMENT_GET("payment.get");
 
     private final String value;
 
@@ -41,6 +42,8 @@ public enum ClientDataType {
                 return CREATE;
             case "webauthn.get":
                 return GET;
+            case "payment.get":
+                return PAYMENT_GET;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }

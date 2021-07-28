@@ -117,6 +117,23 @@ public class WebAuthnAuthenticationManager {
         return authenticationData;
     }
 
+    @SuppressWarnings("squid:S1130")
+    public @NonNull AuthenticationData validatePayment(
+            @NonNull AuthenticationRequest authenticationRequest,
+            @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+        AuthenticationData authenticationData = parse(authenticationRequest);
+        validatePayment(authenticationData, authenticationParameters);
+        return authenticationData;
+    }
+
+    @SuppressWarnings("squid:S1130")
+    public @NonNull AuthenticationData validatePayment(
+            @NonNull AuthenticationData authenticationData,
+            @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
+        authenticationDataValidator.validatePayment(authenticationData, authenticationParameters);
+        return authenticationData;
+    }
+
     public @NonNull AuthenticationDataValidator getAuthenticationDataValidator() {
         return authenticationDataValidator;
     }
