@@ -236,6 +236,10 @@ subprojects {
         sign publishing.publications.standard
     }
 
+    tasks.withType(Sign) {
+        onlyIf { pgpSigningKey != null && pgpSigningKeyPassphrase != null }
+    }
+
     publishStandardPublicationToSnapshotRepository.onlyIf { webAuthn4JVersion.endsWith("-SNAPSHOT") }
     publishStandardPublicationToMavenCentralRepository.onlyIf { !webAuthn4JVersion.endsWith("-SNAPSHOT") }
 
