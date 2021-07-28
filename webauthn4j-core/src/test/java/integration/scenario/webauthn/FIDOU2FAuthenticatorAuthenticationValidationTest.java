@@ -117,6 +117,67 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
+    void validate_payment_test() {
+        String rpId = "example.com";
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge();
+
+        // create
+        AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+        byte[] credentialId = attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId();
+
+        // get
+        PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                Collections.singletonList(
+                        new PublicKeyCredentialDescriptor(
+                                PublicKeyCredentialType.PUBLIC_KEY,
+                                attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId(),
+                                CollectionUtil.unmodifiableSet(AuthenticatorTransport.USB, AuthenticatorTransport.NFC, AuthenticatorTransport.BLE)
+                        )
+                ),
+                UserVerificationRequirement.DISCOURAGED,
+                null
+        );
+
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.PAYMENT_GET, challenge);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
+        String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
+
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
+                        credential.getRawId(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getClientDataJSON(),
+                        clientExtensionJSON,
+                        authenticationRequest.getSignature()
+                );
+        AuthenticationParameters webAuthnAuthenticationParameters =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        Collections.singletonList(credentialId),
+                        false,
+                        true
+                );
+
+        AuthenticationData response = target.validatePayment(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
+
+        assertAll(
+                () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(response.getClientExtensions()).isNotNull()
+        );
+    }
+
+    @Test
     void validate_assertion_test_with_bad_clientData_type() {
         String rpId = "example.com";
         long timeout = 0;

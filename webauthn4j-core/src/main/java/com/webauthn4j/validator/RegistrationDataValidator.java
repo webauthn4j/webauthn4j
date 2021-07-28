@@ -138,7 +138,7 @@ public class RegistrationDataValidator {
 
         //spec| Step7
         //spec| Verify that the value of C.type is webauthn.create.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE) && !Objects.equals(collectedClientData.getType(), ClientDataType.PAYMENT_CREATE)) {
+        if (!Objects.equals(collectedClientData.getType(), ClientDataType.CREATE)) {
             throw new InconsistentClientDataTypeException("ClientData.type must be 'create' on registration, but it isn't.");
         }
 

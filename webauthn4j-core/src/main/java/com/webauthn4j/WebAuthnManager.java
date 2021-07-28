@@ -176,6 +176,16 @@ public class WebAuthnManager {
         return this.webAuthnAuthenticationManager.validate(authenticationData, authenticationParameters);
     }
 
+    @SuppressWarnings("squid:S1130")
+    public @NonNull AuthenticationData validatePayment(@NonNull AuthenticationRequest authenticationRequest, @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
+        return this.webAuthnAuthenticationManager.validatePayment(authenticationRequest, authenticationParameters);
+    }
+
+    @SuppressWarnings("squid:S1130")
+    public @NonNull AuthenticationData validatePayment(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
+        return this.webAuthnAuthenticationManager.validatePayment(authenticationData, authenticationParameters);
+    }
+
 
     public @NonNull RegistrationDataValidator getRegistrationDataValidator() {
         return this.webAuthnRegistrationManager.getRegistrationDataValidator();

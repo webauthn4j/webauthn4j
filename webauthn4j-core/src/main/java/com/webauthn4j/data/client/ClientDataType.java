@@ -25,7 +25,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public enum ClientDataType {
     CREATE("webauthn.create"),
     GET("webauthn.get"),
-    PAYMENT_CREATE("payment.create"),
     PAYMENT_GET("payment.get");
 
     private final String value;
@@ -43,8 +42,6 @@ public enum ClientDataType {
                 return CREATE;
             case "webauthn.get":
                 return GET;
-            case "payment.create":
-                return PAYMENT_CREATE;
             case "payment.get":
                 return PAYMENT_GET;
             default:
