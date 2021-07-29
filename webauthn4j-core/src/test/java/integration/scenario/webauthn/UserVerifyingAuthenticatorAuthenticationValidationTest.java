@@ -114,6 +114,61 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
     }
 
     @Test
+    void validate_payment_test() {
+        String rpId = "example.com";
+        long timeout = 0;
+        Challenge challenge = new DefaultChallenge();
+
+        // create
+        AttestationObject attestationObject = createAttestationObject(rpId, challenge);
+
+        // get
+        PublicKeyCredentialRequestOptions credentialRequestOptions = new PublicKeyCredentialRequestOptions(
+                challenge,
+                timeout,
+                rpId,
+                null,
+                UserVerificationRequirement.REQUIRED,
+                null
+        );
+
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.PAYMENT_GET, challenge);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
+        String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
+
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
+        Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
+
+        AuthenticationRequest webAuthnAuthenticationRequest =
+                new AuthenticationRequest(
+                        credential.getRawId(),
+                        authenticationRequest.getAuthenticatorData(),
+                        authenticationRequest.getClientDataJSON(),
+                        clientExtensionJSON,
+                        authenticationRequest.getSignature()
+                );
+        List<byte[]> allowCredentials = null;
+        AuthenticationParameters authenticationParameters =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        allowCredentials,
+                        true
+                );
+
+        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
+        target.validatePayment(authenticationData, authenticationParameters);
+
+        assertAll(
+                () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(authenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(authenticationData.getClientExtensions()).isNotNull()
+        );
+    }
+
+    @Test
     void validate_assertion_with_tokenBinding_test() {
         String rpId = "example.com";
         long timeout = 0;

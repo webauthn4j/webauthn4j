@@ -62,9 +62,16 @@ public class AuthenticationDataValidator {
         this.customAuthenticationValidators = new ArrayList<>();
     }
 
-    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
     public void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
+        validate(authenticationData, authenticationParameters, ClientDataType.GET);
+    }
 
+    public void validatePayment(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
+        validate(authenticationData, authenticationParameters, ClientDataType.PAYMENT_GET);
+    }
+
+    @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
+    private void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters, @NonNull ClientDataType expectedClientDataType) {
         BeanAssertUtil.validate(authenticationData);
         AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
@@ -137,11 +144,11 @@ public class AuthenticationDataValidator {
                 serverProperty, authenticator
         );
 
+        //WebAuthn spec.
         //spec| Step11
         //spec| Verify that the value of C.type is the string webauthn.get.
-        if (!Objects.equals(collectedClientData.getType(), ClientDataType.GET)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
-        }
+        //But SPC spec. requests C.type to be "payment.get"
+        validateClientDataType(collectedClientData, expectedClientDataType);
 
         //spec| Step12
         //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
@@ -224,8 +231,12 @@ public class AuthenticationDataValidator {
 
         //spec| Step18
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
+    }
 
-
+    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType expectedClientDataType) {
+        if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
+            throw new InconsistentClientDataTypeException("ClientData.type must be " + expectedClientDataType.getValue() + " on authentication, but it isn't.");
+        }
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
