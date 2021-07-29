@@ -71,7 +71,7 @@ public class AuthenticationDataValidator {
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    private void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters, @NonNull ClientDataType clientDataType) {
+    private void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters, @NonNull ClientDataType expectedClientDataType) {
         BeanAssertUtil.validate(authenticationData);
         AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
 
@@ -144,11 +144,11 @@ public class AuthenticationDataValidator {
                 serverProperty, authenticator
         );
 
+        //WebAuthn spec.
         //spec| Step11
-        //spec| Verify that the value of C.type is valid
-        //spec| - webauthn.get during authentication
-        //spec| - payment.get during payment
-        validateClientDataType(collectedClientData, clientDataType);
+        //spec| Verify that the value of C.type is the string webauthn.get.
+        //But SPC spec. requests C.type to be "payment.get"
+        validateClientDataType(collectedClientData, expectedClientDataType);
 
         //spec| Step12
         //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
@@ -233,9 +233,9 @@ public class AuthenticationDataValidator {
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
     }
 
-    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType type) {
-        if (!Objects.equals(collectedClientData.getType(), type)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be " + type.getValue() + " on authentication, but it isn't.");
+    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType expectedClientDataType) {
+        if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
+            throw new InconsistentClientDataTypeException("ClientData.type must be " + expectedClientDataType.getValue() + " on authentication, but it isn't.");
         }
     }
 

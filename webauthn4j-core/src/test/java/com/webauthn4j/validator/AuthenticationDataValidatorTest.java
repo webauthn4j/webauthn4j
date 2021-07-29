@@ -25,6 +25,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.CrossOriginException;
+import com.webauthn4j.validator.exception.InconsistentClientDataTypeException;
 import com.webauthn4j.validator.exception.NotAllowedCredentialIdException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +45,12 @@ import static org.mockito.Mockito.when;
 class AuthenticationDataValidatorTest {
 
     private final AuthenticationDataValidator target = new AuthenticationDataValidator();
+
+    @Test
+    void validateClientDataType_with_unexpected_clientData_test(){
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.GET);
+        assertThatThrownBy(() -> target.validateClientDataType(clientData, ClientDataType.PAYMENT_GET)).isInstanceOf(InconsistentClientDataTypeException.class);
+    }
 
     @Test
     void validateCredentialId_test(){
