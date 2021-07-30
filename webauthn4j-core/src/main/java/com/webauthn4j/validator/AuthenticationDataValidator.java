@@ -245,7 +245,7 @@ public class AuthenticationDataValidator {
 
         // validate the rpId
         if (!Objects.equals(clientAdditionalPaymentData.getRp(), paymentAuthenticationParameters.getServerProperty().getRpId())) {
-            throw new ConstraintViolationException("payment rpId does not match server value");
+            throw new BadRpIdException("payment rpId does not match server value");
         }
 
         // validate top origin
@@ -265,7 +265,7 @@ public class AuthenticationDataValidator {
         AssertUtil.notNull(expectedInstrument, "client data payment instrument must not be null");
         AssertUtil.notNull(actualInstrument, "server property instrument must not be null");
         if (!Objects.equals(expectedInstrument, actualInstrument)) {
-            throw new ConstraintViolationException("actual payment instrument does not match expected instrument");
+            throw new BadPaymentInstrumentException("actual payment instrument does not match expected instrument");
         }
     }
 
@@ -273,7 +273,7 @@ public class AuthenticationDataValidator {
         AssertUtil.notNull(expectedAmount, "client data payment amount must not be null");
         AssertUtil.notNull(actualAmount, "server property amount must not be null");
         if (!Objects.equals(expectedAmount, actualAmount)) {
-            throw new ConstraintViolationException("actual payment amount does not match expected amount");
+            throw new BadPaymentAmountException("actual payment amount does not match expected amount");
         }
     }
 

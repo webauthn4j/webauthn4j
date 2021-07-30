@@ -1,4 +1,14 @@
 package com.webauthn4j.validator.exception;
 
-public class BadPaymentInstrumentException {
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+/**
+ * Thrown if bad payment instrument is specified
+ */
+public class BadPaymentInstrumentException extends ValidationException {
+
+    public BadPaymentInstrumentException(@Nullable String message) {
+        super(message);
+    }
+
 }
