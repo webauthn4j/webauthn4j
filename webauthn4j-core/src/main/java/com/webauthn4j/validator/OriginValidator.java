@@ -19,6 +19,8 @@ package com.webauthn4j.validator;
 import com.webauthn4j.data.client.Origin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Set;
+
 /**
  * Validates the specified {@link Origin} instance
  */
@@ -27,4 +29,6 @@ public interface OriginValidator {
     void validate(@NonNull RegistrationObject registrationObject);
 
     void validate(@NonNull AuthenticationObject authenticationObject);
+
+    void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins);
 }

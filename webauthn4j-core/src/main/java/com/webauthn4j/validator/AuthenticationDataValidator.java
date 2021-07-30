@@ -22,10 +22,12 @@ import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
+import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.payment.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.*;
@@ -66,8 +68,9 @@ public class AuthenticationDataValidator {
         validate(authenticationData, authenticationParameters, ClientDataType.GET);
     }
 
-    public void validatePayment(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
-        validate(authenticationData, authenticationParameters, ClientDataType.PAYMENT_GET);
+    public void validatePayment(@NonNull PaymentAuthenticationData paymentAuthenticationData, @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) {
+        validate(paymentAuthenticationData, paymentAuthenticationParameters, ClientDataType.PAYMENT_GET);
+        validateClientPaymentData(paymentAuthenticationData.getCollectedClientData().getAdditionalPaymentData(), paymentAuthenticationParameters);
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
@@ -233,9 +236,50 @@ public class AuthenticationDataValidator {
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
     }
 
-    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType expectedClientDataType) {
-        if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be " + expectedClientDataType.getValue() + " on authentication, but it isn't.");
+    void validateClientPaymentData(CollectedClientAdditionalPaymentData clientAdditionalPaymentData, PaymentAuthenticationParameters paymentAuthenticationParameters) {
+        AssertUtil.notNull(clientAdditionalPaymentData, "clientAdditionalPaymentData must not be null during payment");
+        AssertUtil.notNull(paymentAuthenticationParameters, "paymentAuthenticationParameters must not be null during payment");
+
+        PaymentServerProperty paymentServerProperty = (PaymentServerProperty) paymentAuthenticationParameters.getServerProperty();
+        AssertUtil.notNull(paymentServerProperty, "paymentServerProperty must not be null during payment");
+
+        // validate the rpId
+        if (!Objects.equals(clientAdditionalPaymentData.getRp(), paymentAuthenticationParameters.getServerProperty().getRpId())) {
+            throw new ConstraintViolationException("payment rpId does not match server value");
+        }
+
+        // validate top origin
+        originValidator.validate(new Origin(clientAdditionalPaymentData.getTopOrigin()), paymentServerProperty.getOrigins());
+
+        // validate payee origin
+        originValidator.validate(new Origin(clientAdditionalPaymentData.getPayeeOrigin()), paymentServerProperty.getPayeeOrigins());
+
+        // validate total payment amount
+        validatePaymentAmount(paymentServerProperty.getTotal(), clientAdditionalPaymentData.getTotal());
+
+        // validate payment instrument
+        validatePaymentInstrument(paymentServerProperty.getInstrument(), clientAdditionalPaymentData.getInstrument());
+    }
+
+    private void validatePaymentInstrument(@NonNull PaymentCredentialInstrument expectedInstrument, @NonNull PaymentCredentialInstrument actualInstrument) {
+        AssertUtil.notNull(expectedInstrument, "client data payment instrument must not be null");
+        AssertUtil.notNull(actualInstrument, "server property instrument must not be null");
+        if (!Objects.equals(expectedInstrument, actualInstrument)) {
+            throw new ConstraintViolationException("actual payment instrument does not match expected instrument");
+        }
+    }
+
+    private void validatePaymentAmount(@NonNull PaymentCurrencyAmount expectedAmount, @NonNull PaymentCurrencyAmount actualAmount) {
+        AssertUtil.notNull(expectedAmount, "client data payment amount must not be null");
+        AssertUtil.notNull(actualAmount, "server property amount must not be null");
+        if (!Objects.equals(expectedAmount, actualAmount)) {
+            throw new ConstraintViolationException("actual payment amount does not match expected amount");
+        }
+    }
+
+    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType type) {
+        if (!Objects.equals(collectedClientData.getType(), type)) {
+            throw new InconsistentClientDataTypeException("ClientData.type must be " + type.getValue() + " on authentication, but it isn't.");
         }
     }
 

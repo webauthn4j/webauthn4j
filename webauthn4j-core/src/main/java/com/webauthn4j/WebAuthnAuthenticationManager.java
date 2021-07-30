@@ -29,6 +29,10 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.payment.CollectedClientPaymentData;
+import com.webauthn4j.data.payment.PaymentAuthenticationData;
+import com.webauthn4j.data.payment.PaymentAuthenticationParameters;
+import com.webauthn4j.data.payment.PaymentAuthenticationRequest;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
@@ -100,6 +104,34 @@ public class WebAuthnAuthenticationManager {
 
     }
 
+    public @NonNull PaymentAuthenticationData parse(@NonNull PaymentAuthenticationRequest paymentAuthenticationRequest) throws DataConversionException {
+        AssertUtil.notNull(paymentAuthenticationRequest, "authenticationRequest must not be null");
+
+        byte[] credentialId = paymentAuthenticationRequest.getCredentialId();
+        byte[] signature = paymentAuthenticationRequest.getSignature();
+        byte[] userHandle = paymentAuthenticationRequest.getUserHandle();
+        byte[] clientDataBytes = paymentAuthenticationRequest.getClientDataJSON();
+        CollectedClientPaymentData collectedClientPaymentData =
+                clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes, CollectedClientPaymentData.class);
+        byte[] authenticatorDataBytes = paymentAuthenticationRequest.getAuthenticatorData();
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData =
+                authenticatorDataBytes == null ? null : authenticatorDataConverter.convert(authenticatorDataBytes);
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions =
+                paymentAuthenticationRequest.getClientExtensionsJSON() == null ? null : authenticationExtensionsClientOutputsConverter.convert(paymentAuthenticationRequest.getClientExtensionsJSON());
+
+        return new PaymentAuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
+                collectedClientPaymentData,
+                clientDataBytes,
+                clientExtensions,
+                signature
+        );
+    }
+
+
     @SuppressWarnings("squid:S1130")
     public @NonNull AuthenticationData validate(
             @NonNull AuthenticationRequest authenticationRequest,
@@ -118,20 +150,20 @@ public class WebAuthnAuthenticationManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validatePayment(
-            @NonNull AuthenticationRequest authenticationRequest,
-            @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
-        AuthenticationData authenticationData = parse(authenticationRequest);
-        validatePayment(authenticationData, authenticationParameters);
+    public @NonNull PaymentAuthenticationData validatePayment(
+            @NonNull PaymentAuthenticationRequest paymentAuthenticationRequest,
+            @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) throws DataConversionException, ValidationException {
+        PaymentAuthenticationData authenticationData = parse(paymentAuthenticationRequest);
+        validatePayment(authenticationData, paymentAuthenticationParameters);
         return authenticationData;
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validatePayment(
-            @NonNull AuthenticationData authenticationData,
-            @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
-        authenticationDataValidator.validatePayment(authenticationData, authenticationParameters);
-        return authenticationData;
+    public @NonNull PaymentAuthenticationData validatePayment(
+            @NonNull PaymentAuthenticationData paymentAuthenticationData,
+            @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) throws ValidationException {
+        authenticationDataValidator.validatePayment(paymentAuthenticationData, paymentAuthenticationParameters);
+        return paymentAuthenticationData;
     }
 
     public @NonNull AuthenticationDataValidator getAuthenticationDataValidator() {

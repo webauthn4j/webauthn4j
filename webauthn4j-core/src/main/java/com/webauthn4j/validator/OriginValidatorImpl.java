@@ -23,6 +23,8 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Set;
+
 public class OriginValidatorImpl implements OriginValidator {
 
     //~ Instance fields
@@ -48,14 +50,21 @@ public class OriginValidatorImpl implements OriginValidator {
         validate(collectedClientData, serverProperty);
     }
 
+    @Override
+    public void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins) {
+        AssertUtil.notNull(clientOrigin, "client origin must not be null");
+        AssertUtil.notNull(serverOrigins, "server origins set must not be null");
+        if (!serverOrigins.contains(clientOrigin)) {
+            throw new BadOriginException("The collectedClientData '" + clientOrigin + "' origin doesn't match any of the preconfigured server origin.");
+        }
+    }
+
     protected void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
 
         final Origin clientOrigin = collectedClientData.getOrigin();
-        if (!serverProperty.getOrigins().contains(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData '" + clientOrigin + "' origin doesn't match any of the preconfigured server origin.");
-        }
+        validate(clientOrigin, serverProperty.getOrigins());
     }
 
 }

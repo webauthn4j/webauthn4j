@@ -130,5 +130,9 @@ class CustomOriginValidatorTest {
                 throw new BadOriginException("origin must be http://example.com");
             }
         }
+
+        @Override
+        public void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins) {
+        }
     }
 }

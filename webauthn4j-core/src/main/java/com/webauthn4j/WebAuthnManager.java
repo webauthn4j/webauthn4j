@@ -19,6 +19,9 @@ package com.webauthn4j;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.*;
+import com.webauthn4j.data.payment.PaymentAuthenticationData;
+import com.webauthn4j.data.payment.PaymentAuthenticationParameters;
+import com.webauthn4j.data.payment.PaymentAuthenticationRequest;
 import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
 import com.webauthn4j.validator.CustomRegistrationValidator;
@@ -167,6 +170,11 @@ public class WebAuthnManager {
     }
 
     @SuppressWarnings("squid:S1130")
+    public @NonNull PaymentAuthenticationData parse(@NonNull PaymentAuthenticationRequest paymentAuthenticationRequest) throws DataConversionException {
+        return this.webAuthnAuthenticationManager.parse(paymentAuthenticationRequest);
+    }
+
+    @SuppressWarnings("squid:S1130")
     public @NonNull AuthenticationData validate(@NonNull AuthenticationRequest authenticationRequest, @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
         return this.webAuthnAuthenticationManager.validate(authenticationRequest, authenticationParameters);
     }
@@ -177,13 +185,13 @@ public class WebAuthnManager {
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validatePayment(@NonNull AuthenticationRequest authenticationRequest, @NonNull AuthenticationParameters authenticationParameters) throws DataConversionException, ValidationException {
-        return this.webAuthnAuthenticationManager.validatePayment(authenticationRequest, authenticationParameters);
+    public @NonNull PaymentAuthenticationData validatePayment(@NonNull PaymentAuthenticationRequest paymentAuthenticationRequest, @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) throws DataConversionException, ValidationException {
+        return this.webAuthnAuthenticationManager.validatePayment(paymentAuthenticationRequest, paymentAuthenticationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
-    public @NonNull AuthenticationData validatePayment(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
-        return this.webAuthnAuthenticationManager.validatePayment(authenticationData, authenticationParameters);
+    public @NonNull PaymentAuthenticationData validatePayment(@NonNull PaymentAuthenticationData paymentAuthenticationData, @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) throws ValidationException {
+        return this.webAuthnAuthenticationManager.validatePayment(paymentAuthenticationData, paymentAuthenticationParameters);
     }
 
 

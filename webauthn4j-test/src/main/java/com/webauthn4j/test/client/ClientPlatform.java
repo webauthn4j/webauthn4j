@@ -26,6 +26,10 @@ import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
 import com.webauthn4j.data.client.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.client.*;
+import com.webauthn4j.data.payment.CollectedClientAdditionalPaymentData;
+import com.webauthn4j.data.payment.CollectedClientPaymentData;
+import com.webauthn4j.data.payment.PaymentCredentialInstrument;
+import com.webauthn4j.data.payment.PaymentCurrencyAmount;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
 import com.webauthn4j.test.authenticator.CredentialCreationResponse;
 import com.webauthn4j.test.authenticator.CredentialRequestResponse;
@@ -198,6 +202,13 @@ public class ClientPlatform {
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge) {
         return new CollectedClientData(type, challenge, origin, null);
+    }
+
+    public CollectedClientPaymentData createCollectedClientPaymentData(Challenge challenge, String rpId) {
+        PaymentCurrencyAmount total = new PaymentCurrencyAmount("EUR", "100");
+        PaymentCredentialInstrument instrument = new PaymentCredentialInstrument("Store", "favicon.ico");
+        CollectedClientAdditionalPaymentData additionalPaymentData = new CollectedClientAdditionalPaymentData(rpId, origin.toString(), origin.toString(), total, instrument);
+        return new CollectedClientPaymentData(ClientDataType.PAYMENT_GET, challenge, origin, additionalPaymentData, null);
     }
 
     public CollectedClientData createCollectedClientData(ClientDataType type, Challenge challenge, byte[] tokenBindingId) {

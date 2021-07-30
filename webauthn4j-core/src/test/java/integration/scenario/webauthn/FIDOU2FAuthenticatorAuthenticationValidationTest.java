@@ -31,6 +31,7 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.payment.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.test.authenticator.u2f.FIDOU2FAuthenticator;
@@ -142,36 +143,46 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 null
         );
 
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.PAYMENT_GET, challenge);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientPaymentData(challenge, rpId);
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        AuthenticationRequest webAuthnAuthenticationRequest =
-                new AuthenticationRequest(
+        PaymentAuthenticationRequest paymentAuthenticationRequest =
+                new PaymentAuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
                         clientExtensionJSON,
                         authenticationRequest.getSignature()
                 );
-        AuthenticationParameters webAuthnAuthenticationParameters =
-                new AuthenticationParameters(
-                        serverProperty,
+        PaymentServerProperty paymentServerProperty = new PaymentServerProperty(
+                Collections.singleton(origin),
+                rpId,
+                challenge,
+                null,
+                new PaymentCredentialInstrument("Store", "favicon.ico"),
+                new PaymentCurrencyAmount("EUR", "100"),
+                Collections.singleton(origin)
+        );
+        PaymentAuthenticationParameters paymentAuthenticationParameters =
+                new PaymentAuthenticationParameters(
+                        paymentServerProperty,
                         authenticator,
                         Collections.singletonList(credentialId),
                         false,
                         true
                 );
 
-        AuthenticationData response = target.validatePayment(webAuthnAuthenticationRequest, webAuthnAuthenticationParameters);
+        PaymentAuthenticationData response = target.validatePayment(paymentAuthenticationRequest, paymentAuthenticationParameters);
 
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
+                () -> assertThat(response.getCollectedClientData()).isExactlyInstanceOf(CollectedClientPaymentData.class),
+                () -> assertThat(response.getCollectedClientData().getAdditionalPaymentData()).isNotNull(),
                 () -> assertThat(response.getAuthenticatorData()).isNotNull(),
                 () -> assertThat(response.getClientExtensions()).isNotNull()
         );

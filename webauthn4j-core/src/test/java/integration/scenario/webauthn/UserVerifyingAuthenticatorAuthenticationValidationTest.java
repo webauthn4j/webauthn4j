@@ -33,6 +33,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientInputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientInput;
+import com.webauthn4j.data.payment.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.EmulatorUtil;
 import com.webauthn4j.test.TestDataUtil;
@@ -132,17 +133,16 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 null
         );
 
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.PAYMENT_GET, challenge);
-        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
+        CollectedClientPaymentData collectedClientPaymentData = clientPlatform.createCollectedClientPaymentData(challenge, rpId);
+        PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientPaymentData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
         AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensionResults = credential.getClientExtensionResults();
         String clientExtensionJSON = authenticationExtensionsClientOutputsConverter.convertToString(clientExtensionResults);
 
-        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, null);
         Authenticator authenticator = TestDataUtil.createAuthenticator(attestationObject);
 
-        AuthenticationRequest webAuthnAuthenticationRequest =
-                new AuthenticationRequest(
+        PaymentAuthenticationRequest paymentAuthenticationRequest =
+                new PaymentAuthenticationRequest(
                         credential.getRawId(),
                         authenticationRequest.getAuthenticatorData(),
                         authenticationRequest.getClientDataJSON(),
@@ -150,21 +150,32 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getSignature()
                 );
         List<byte[]> allowCredentials = null;
-        AuthenticationParameters authenticationParameters =
-                new AuthenticationParameters(
-                        serverProperty,
+        PaymentServerProperty paymentServerProperty = new PaymentServerProperty(
+                Collections.singleton(origin),
+                rpId,
+                challenge,
+                null,
+                new PaymentCredentialInstrument("Store", "favicon.ico"),
+                new PaymentCurrencyAmount("EUR", "100"),
+                Collections.singleton(origin)
+        );
+        PaymentAuthenticationParameters paymentAuthenticationParameters =
+                new PaymentAuthenticationParameters(
+                        paymentServerProperty,
                         authenticator,
                         allowCredentials,
                         true
                 );
 
-        AuthenticationData authenticationData = target.parse(webAuthnAuthenticationRequest);
-        target.validatePayment(authenticationData, authenticationParameters);
+        PaymentAuthenticationData paymentAuthenticationData = target.parse(paymentAuthenticationRequest);
+        target.validatePayment(paymentAuthenticationData, paymentAuthenticationParameters);
 
         assertAll(
-                () -> assertThat(authenticationData.getCollectedClientData()).isNotNull(),
-                () -> assertThat(authenticationData.getAuthenticatorData()).isNotNull(),
-                () -> assertThat(authenticationData.getClientExtensions()).isNotNull()
+                () -> assertThat(paymentAuthenticationData.getCollectedClientData()).isNotNull(),
+                () -> assertThat(paymentAuthenticationData.getCollectedClientData()).isExactlyInstanceOf(CollectedClientPaymentData.class),
+                () -> assertThat(paymentAuthenticationData.getCollectedClientData().getAdditionalPaymentData()).isNotNull(),
+                () -> assertThat(paymentAuthenticationData.getAuthenticatorData()).isNotNull(),
+                () -> assertThat(paymentAuthenticationData.getClientExtensions()).isNotNull()
         );
     }
 

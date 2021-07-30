@@ -81,6 +81,22 @@ public class CollectedClientDataConverter {
     }
 
     /**
+     * Converts from a byte array to {@link CollectedClientData}.
+     *
+     * @param source the source byte array to convert
+     * @return the converted object
+     */
+    public @Nullable <T extends CollectedClientData> T convert(@NonNull byte[] source, Class<T> type) {
+        try {
+            AssertUtil.notNull(source, "source must not be null");
+            String jsonString = new String(source, StandardCharsets.UTF_8);
+            return jsonConverter.readValue(jsonString, type);
+        } catch (IllegalArgumentException e) {
+            throw new DataConversionException(e);
+        }
+    }
+
+    /**
      * Converts from a {@link CollectedClientData} to byte[].
      *
      * @param source the source object to convert
