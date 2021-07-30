@@ -277,9 +277,9 @@ public class AuthenticationDataValidator {
         }
     }
 
-    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType type) {
-        if (!Objects.equals(collectedClientData.getType(), type)) {
-            throw new InconsistentClientDataTypeException("ClientData.type must be " + type.getValue() + " on authentication, but it isn't.");
+    void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType expectedClientDataType) {
+        if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
+            throw new InconsistentClientDataTypeException("ClientData.type must be " + expectedClientDataType.getValue() + " on authentication, but it isn't.");
         }
     }
 
