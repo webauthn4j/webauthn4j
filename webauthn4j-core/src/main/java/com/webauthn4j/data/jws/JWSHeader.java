@@ -57,4 +57,12 @@ public class JWSHeader implements Serializable {
 
         return Objects.hash(alg, x5c);
     }
+
+    @Override
+    public String toString() {
+        return "JWSHeader(" +
+                "alg=" + alg +
+                ", x5c=" + x5c +
+                ')';
+    }
 }

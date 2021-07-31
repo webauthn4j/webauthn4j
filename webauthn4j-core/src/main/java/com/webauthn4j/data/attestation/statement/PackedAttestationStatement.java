@@ -93,4 +93,13 @@ public class PackedAttestationStatement implements CertificateBaseAttestationSta
         result = 31 * result + Arrays.hashCode(sig);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PackedAttestationStatement(" +
+                "alg=" + alg +
+                ", sig=" + ArrayUtil.toHexString(sig) +
+                ", x5c=" + x5c +
+                ')';
+    }
 }

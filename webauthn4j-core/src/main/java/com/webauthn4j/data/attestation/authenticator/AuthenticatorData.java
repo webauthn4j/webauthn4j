@@ -163,6 +163,17 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "AuthenticatorData(" +
+                "rpIdHash=" + ArrayUtil.toHexString(rpIdHash) +
+                ", flags=" + String.format("%02X", flags) +
+                ", signCount=" + signCount +
+                ", attestedCredentialData=" + attestedCredentialData +
+                ", extensions=" + extensions +
+                ')';
+    }
+
     private void assertRpIdHash(@Nullable @NonNull byte[] rpIdHash) {
         AssertUtil.notNull(rpIdHash, "rpIdHash must not be null");
     }

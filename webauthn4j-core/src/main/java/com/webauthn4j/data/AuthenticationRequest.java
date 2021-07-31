@@ -120,4 +120,16 @@ public class AuthenticationRequest implements Serializable {
         result = 31 * result + Arrays.hashCode(signature);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticationRequest(" +
+                "credentialId=" + ArrayUtil.toHexString(credentialId) +
+                ", userHandle=" + ArrayUtil.toHexString(userHandle) +
+                ", authenticatorData=" + ArrayUtil.toHexString(authenticatorData) +
+                ", clientDataJSON=" + ArrayUtil.toHexString(clientDataJSON) +
+                ", clientExtensionsJSON=" + clientExtensionsJSON +
+                ", signature=" + ArrayUtil.toHexString(signature) +
+                ')';
+    }
 }

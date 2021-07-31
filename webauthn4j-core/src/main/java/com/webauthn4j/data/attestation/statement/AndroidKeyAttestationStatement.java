@@ -93,4 +93,13 @@ public class AndroidKeyAttestationStatement implements CertificateBaseAttestatio
         result = 31 * result + Arrays.hashCode(sig);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AndroidKeyAttestationStatement(" +
+                "alg=" + alg +
+                ", sig=" + ArrayUtil.toHexString(sig) +
+                ", x5c=" + x5c +
+                ')';
+    }
 }

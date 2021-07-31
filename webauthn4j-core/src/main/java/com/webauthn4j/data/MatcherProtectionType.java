@@ -70,4 +70,17 @@ public enum MatcherProtectionType {
         return value;
     }
 
+    @Override
+    public String toString() {
+        switch (value){
+            case 0x0001:
+                return "SOFTWARE";
+            case 0x0002:
+                return "TEE";
+            case 0x0004:
+                return "ON_CHIP";
+            default:
+                return "UNKNOWN(" + String.format("%04X", value) + ")";
+        }
+    }
 }

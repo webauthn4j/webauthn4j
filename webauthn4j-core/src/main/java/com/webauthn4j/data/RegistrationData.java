@@ -85,4 +85,13 @@ public class RegistrationData extends CoreRegistrationData {
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RegistrationData(" +
+                "collectedClientData=" + collectedClientData +
+                ", clientExtensions=" + clientExtensions +
+                ", transports=" + transports +
+                ')';
+    }
 }

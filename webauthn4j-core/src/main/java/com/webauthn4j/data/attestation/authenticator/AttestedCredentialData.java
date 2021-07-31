@@ -86,4 +86,13 @@ public class AttestedCredentialData implements Serializable {
         result = 31 * result + Arrays.hashCode(credentialId);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AttestedCredentialData(" +
+                "aaguid=" + aaguid +
+                ", credentialId=" + ArrayUtil.toHexString(credentialId) +
+                ", coseKey=" + coseKey +
+                ')';
+    }
 }

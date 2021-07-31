@@ -94,4 +94,13 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         result = 31 * result + Arrays.hashCode(rawId);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredential(" +
+                "id=" + id +
+                ", authenticatorResponse=" + authenticatorResponse +
+                ", clientExtensionResults=" + clientExtensionResults +
+                ')';
+    }
 }

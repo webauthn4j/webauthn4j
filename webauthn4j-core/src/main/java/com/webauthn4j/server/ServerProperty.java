@@ -18,6 +18,7 @@ package com.webauthn4j.server;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -99,5 +100,15 @@ public class ServerProperty extends CoreServerProperty {
         int result = Objects.hash(super.hashCode(), origins);
         result = 31 * result + Arrays.hashCode(tokenBindingId);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ServerProperty{" +
+                "rpId=" + getRpId() +
+                ", challenge=" + getChallenge() +
+                "origins=" + origins +
+                ", tokenBindingId=" + ArrayUtil.toHexString(tokenBindingId) +
+                '}';
     }
 }

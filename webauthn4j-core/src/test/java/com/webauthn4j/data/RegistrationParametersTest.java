@@ -24,6 +24,7 @@ import com.webauthn4j.server.ServerProperty;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @SuppressWarnings("ConstantConditions")
 class RegistrationParametersTest {
@@ -125,6 +126,29 @@ class RegistrationParametersTest {
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
+    }
+
+    @Test
+    void toString_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        // expectations
+        boolean userVerificationRequired = true;
+
+        RegistrationParameters instance =
+                new RegistrationParameters(
+                        serverProperty,
+                        null,
+                        userVerificationRequired
+                );
+
+        //noinspection ResultOfMethodCallIgnored
+        assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 
 }

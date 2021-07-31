@@ -298,4 +298,18 @@ public class RSACOSEKey extends AbstractCOSEKey {
         result = 31 * result + Arrays.hashCode(qInv);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RSACOSEKey(" +
+                "n=" + ArrayUtil.toHexString(n) +
+                ", e=" + ArrayUtil.toHexString(e) +
+                ", d=" + ArrayUtil.toHexString(d) +
+                ", p=" + ArrayUtil.toHexString(p) +
+                ", q=" + ArrayUtil.toHexString(q) +
+                ", dP=" + ArrayUtil.toHexString(dP) +
+                ", dQ=" + ArrayUtil.toHexString(dQ) +
+                ", qInv=" + ArrayUtil.toHexString(qInv) +
+                ')';
+    }
 }

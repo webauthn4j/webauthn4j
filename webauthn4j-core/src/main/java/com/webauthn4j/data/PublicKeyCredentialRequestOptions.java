@@ -106,4 +106,16 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
     public int hashCode() {
         return Objects.hash(challenge, timeout, rpId, allowCredentials, userVerification, extensions);
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialRequestOptions(" +
+                "challenge=" + challenge +
+                ", timeout=" + timeout +
+                ", rpId=" + rpId +
+                ", allowCredentials=" + allowCredentials +
+                ", userVerification=" + userVerification +
+                ", extensions=" + extensions +
+                ')';
+    }
 }

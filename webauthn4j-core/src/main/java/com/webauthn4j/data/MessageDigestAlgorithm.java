@@ -78,4 +78,8 @@ public class MessageDigestAlgorithm implements Serializable {
         return Objects.hash(jcaName);
     }
 
+    @Override
+    public String toString() {
+        return jcaName;
+    }
 }

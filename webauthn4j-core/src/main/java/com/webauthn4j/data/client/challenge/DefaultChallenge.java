@@ -68,4 +68,9 @@ public class DefaultChallenge implements Challenge {
     public int hashCode() {
         return Arrays.hashCode(value);
     }
+
+    @Override
+    public String toString() {
+        return ArrayUtil.toHexString(value);
+    }
 }

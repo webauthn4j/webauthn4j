@@ -68,4 +68,13 @@ public class CoreRegistrationData implements Serializable {
         result = 31 * result + Arrays.hashCode(clientDataHash);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "CoreRegistrationData(" +
+                "attestationObject=" + attestationObject +
+                ", attestationObjectBytes=" + ArrayUtil.toHexString(attestationObjectBytes) +
+                ", clientDataHash=" + ArrayUtil.toHexString(clientDataHash) +
+                ')';
+    }
 }

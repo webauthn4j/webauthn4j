@@ -152,4 +152,15 @@ public class CoreAuthenticationParameters implements Serializable {
     public int hashCode() {
         return Objects.hash(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
     }
+
+    @Override
+    public String toString() {
+        return "CoreAuthenticationParameters(" +
+                "serverProperty=" + serverProperty +
+                ", authenticator=" + authenticator +
+                ", allowCredentials=" + allowCredentials +
+                ", userVerificationRequired=" + userVerificationRequired +
+                ", userPresenceRequired=" + userPresenceRequired +
+                ')';
+    }
 }

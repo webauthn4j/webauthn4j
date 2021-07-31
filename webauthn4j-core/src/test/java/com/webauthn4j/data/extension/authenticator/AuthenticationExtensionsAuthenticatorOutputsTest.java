@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsAuthenticatorOutputsTest {
@@ -115,6 +116,17 @@ class AuthenticationExtensionsAuthenticatorOutputsTest {
         assertThat(instance1)
                 .isEqualTo(instance2)
                 .hasSameHashCodeAs(instance2);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Test
+    void toString_test(){
+        UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));
+        AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication builder = new AuthenticationExtensionsAuthenticatorOutputs.BuilderForAuthentication();
+        builder.setUvm(uvm);
+        builder.set("test", "value");
+        AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance = builder.build();
+        assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 
 

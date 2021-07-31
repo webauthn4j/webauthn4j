@@ -90,4 +90,11 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> im
         result = 31 * result + Arrays.hashCode(certificates);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AttestationCertificatePath(" +
+                ", certificates=" + Arrays.deepToString(Arrays.stream(certificates).map(cert -> "[" + cert.getSubjectDN().toString() + "]").toArray()) +
+                ')';
+    }
 }

@@ -13,6 +13,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Map containing the client extension output values for zero or more WebAuthn
@@ -159,6 +160,21 @@ public class AuthenticationExtensionsClientOutputs<T extends ExtensionClientOutp
     @Override
     public int hashCode() {
         return Objects.hash(unknowns, appid, uvm, credProps, hmacCreateSecret, hmacGetSecret, extensions);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("AuthenticationExtensionsAuthenticatorInputs(");
+        String entries = getExtensions().values().stream().map(t -> String.format("%s=%s", t.getIdentifier(), t)).collect(Collectors.joining(", "));
+        builder.append(entries);
+        String unknownsStr = getUnknowns().entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
+        if(!unknownsStr.isEmpty()){
+            builder.append(", ");
+            builder.append(unknownsStr);
+        }
+        builder.append(")");
+        return builder.toString();
     }
 
     public static class BuilderForRegistration {

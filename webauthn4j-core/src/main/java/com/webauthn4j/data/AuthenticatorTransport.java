@@ -96,4 +96,9 @@ public class AuthenticatorTransport implements Serializable {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

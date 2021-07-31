@@ -55,4 +55,9 @@ public abstract class SingleValueExtensionBase<T extends Serializable> implement
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

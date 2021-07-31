@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("ConstantConditions")
@@ -85,6 +84,29 @@ class RegistrationDataTest {
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
+    }
+
+    @Test
+    void toString_test() {
+
+        AttestationObject attestationObject = mock(AttestationObject.class);
+        byte[] attestationObjectBytes = new byte[32];
+        CollectedClientData collectedClientData = mock(CollectedClientData.class);
+        byte[] collectedClientDataBytes = new byte[128];
+        AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
+        Set<AuthenticatorTransport> transports = Collections.emptySet();
+
+        RegistrationData instance = new RegistrationData(
+                attestationObject,
+                attestationObjectBytes,
+                collectedClientData,
+                collectedClientDataBytes,
+                authenticationExtensionsClientOutputs,
+                transports
+        );
+
+        //noinspection ResultOfMethodCallIgnored
+        assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 
 }

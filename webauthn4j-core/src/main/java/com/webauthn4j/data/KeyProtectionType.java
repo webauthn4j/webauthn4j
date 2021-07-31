@@ -77,4 +77,21 @@ public enum KeyProtectionType {
         return value;
     }
 
+    @Override
+    public String toString() {
+        switch (value){
+            case 0x0001:
+                return "SOFTWARE";
+            case 0x0002:
+                return "HARDWARE";
+            case 0x0004:
+                return "TEE";
+            case 0x0008:
+                return "SECURE_ELEMENT";
+            case 0x0010:
+                return "REMOTE_HANDLE";
+            default:
+                return "UNKNOWN(" + String.format("%04X", value) + ")";
+        }
+    }
 }

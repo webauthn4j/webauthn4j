@@ -81,4 +81,9 @@ public enum TokenBindingStatus {
     public @NonNull String getValue() {
         return this.value;
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

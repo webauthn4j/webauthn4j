@@ -75,4 +75,12 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
 
         return Objects.hash(super.hashCode(), id);
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialRpEntity(" +
+                "id=" + id+
+                "name=" + getName() +
+                ')';
+    }
 }

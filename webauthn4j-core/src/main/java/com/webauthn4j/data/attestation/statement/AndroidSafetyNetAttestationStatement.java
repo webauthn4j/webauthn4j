@@ -96,4 +96,12 @@ public class AndroidSafetyNetAttestationStatement implements CertificateBaseAtte
 
         return Objects.hash(ver, response);
     }
+
+    @Override
+    public String toString() {
+        return "AndroidSafetyNetAttestationStatement(" +
+                "ver=" + ver +
+                ", response=" + response +
+                ')';
+    }
 }

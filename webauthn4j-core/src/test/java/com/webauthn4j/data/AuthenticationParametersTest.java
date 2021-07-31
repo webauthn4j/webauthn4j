@@ -24,8 +24,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("ConstantConditions")
@@ -173,6 +172,35 @@ class AuthenticationParametersTest {
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
+
+    }
+
+    @Test
+    void toString_test() {
+        // Server properties
+        Origin origin = Origin.create("https://example.com") /* set origin */;
+        String rpId = "example.com" /* set rpId */;
+        Challenge challenge = new DefaultChallenge() /* set challenge */;
+        byte[] tokenBindingId = null /* set tokenBindingId */;
+        ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
+
+        Authenticator authenticator = mock(Authenticator.class);
+
+        // expectations
+        boolean userVerificationRequired = true;
+        boolean userPresenceRequired = true;
+
+        AuthenticationParameters instance =
+                new AuthenticationParameters(
+                        serverProperty,
+                        authenticator,
+                        null,
+                        userVerificationRequired,
+                        userPresenceRequired
+                );
+
+        //noinspection ResultOfMethodCallIgnored
+        assertThatCode(instance::toString).doesNotThrowAnyException();
 
     }
 

@@ -88,4 +88,14 @@ public class CoreAuthenticationData implements Serializable {
         result = 31 * result + Arrays.hashCode(signature);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "CoreAuthenticationData(" +
+                "credentialId=" + ArrayUtil.toHexString(credentialId) +
+                ", authenticatorData=" + authenticatorData +
+                ", clientDataHash=" + ArrayUtil.toHexString(clientDataHash) +
+                ", signature=" + ArrayUtil.toHexString(signature) +
+                ')';
+    }
 }

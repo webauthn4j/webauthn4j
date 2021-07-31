@@ -75,4 +75,19 @@ public enum Curve {
     public @NonNull ECParameterSpec getECParameterSpec() {
         return parameterSpec;
     }
+
+    @Override
+    public String toString() {
+        switch (this){
+            case SECP256R1:
+                return "SECP256R1";
+            case SECP384R1:
+                return "SECP384R1";
+            case SECP521R1:
+                return "SECP521R1";
+            default:
+                return "Unknown Curve";
+        }
+    }
+
 }

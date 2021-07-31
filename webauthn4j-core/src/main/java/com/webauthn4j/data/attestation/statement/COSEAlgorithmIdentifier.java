@@ -137,4 +137,32 @@ public class COSEAlgorithmIdentifier implements Serializable {
     public int hashCode() {
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        if(value == RS1.value){
+            return "RS1";
+        }
+        else if(value == RS256.value){
+            return "RS256";
+        }
+        else if(value == RS384.value){
+            return "RS384";
+        }
+        else if(value == RS512.value){
+            return "RS512";
+        }
+        else if(value == ES256.value){
+            return "ES256";
+        }
+        else if(value == ES384.value){
+            return "ES384";
+        }
+        else if(value == ES512.value){
+            return "ES512";
+        }
+        else {
+            return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);
+        }
+    }
 }
