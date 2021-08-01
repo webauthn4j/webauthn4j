@@ -47,7 +47,7 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     }
 
     /**
-     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     * @deprecated Deprecated as allowCredentials verification was introduced from WebAuthn Level2.
      */
     @SuppressWarnings("squid:S1133")
     @Deprecated
@@ -60,7 +60,7 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     }
 
     /**
-     * @deprecated Deprecated as pubKeyCredParams verification was introduced from WebAuthn Level2.
+     * @deprecated Deprecated as allowCredentials verification was introduced from WebAuthn Level2.
      */
     @SuppressWarnings("squid:S1133")
     @Deprecated
