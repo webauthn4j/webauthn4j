@@ -51,6 +51,7 @@ public class AuthenticationDataValidator {
 
     private OriginValidator originValidator = new OriginValidatorImpl();
     private PaymentOriginValidator paymentOriginValidator = new PaymentOriginValidatorImpl();
+
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     private boolean crossOriginAllowed = false;
@@ -313,6 +314,14 @@ public class AuthenticationDataValidator {
 
     public void setOriginValidator(OriginValidator originValidator) {
         this.originValidator = originValidator;
+    }
+
+    public PaymentOriginValidator getPaymentOriginValidator() {
+        return paymentOriginValidator;
+    }
+
+    public void setPaymentOriginValidator(PaymentOriginValidator paymentOriginValidator) {
+        this.paymentOriginValidator = paymentOriginValidator;
     }
 
     public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
