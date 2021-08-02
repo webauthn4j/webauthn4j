@@ -150,12 +150,11 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         authenticationRequest.getSignature()
                 );
         List<byte[]> allowCredentials = null;
-        PaymentServerProperty paymentServerProperty = new PaymentServerProperty(
+        ServerProperty paymentServerProperty = new ServerProperty(
                 Collections.singleton(origin),
                 rpId,
                 challenge,
-                null,
-                Collections.singleton(origin)
+                null
         );
         PaymentAuthenticationParameters paymentAuthenticationParameters =
                 new PaymentAuthenticationParameters(
@@ -164,7 +163,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         allowCredentials,
                         new PaymentCredentialInstrument("Store", "favicon.ico"),
                         new PaymentCurrencyAmount("EUR", "100"),
-                        true
+                        Collections.singleton(origin),
+        true
                 );
 
         PaymentAuthenticationData paymentAuthenticationData = target.parse(paymentAuthenticationRequest);

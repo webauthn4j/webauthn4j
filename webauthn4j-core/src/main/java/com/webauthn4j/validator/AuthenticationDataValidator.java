@@ -241,16 +241,13 @@ public class AuthenticationDataValidator {
         AssertUtil.notNull(clientAdditionalPaymentData, "clientAdditionalPaymentData must not be null during payment");
         AssertUtil.notNull(paymentAuthenticationParameters, "paymentAuthenticationParameters must not be null during payment");
 
-        PaymentServerProperty paymentServerProperty = (PaymentServerProperty) paymentAuthenticationParameters.getServerProperty();
-        AssertUtil.notNull(paymentServerProperty, "paymentServerProperty must not be null during payment");
-
         // validate the rpId
         if (!Objects.equals(clientAdditionalPaymentData.getRp(), paymentAuthenticationParameters.getServerProperty().getRpId())) {
             throw new BadRpIdException("payment rpId does not match server value");
         }
 
         // validate top origin and payee origin
-        paymentOriginValidator.validate(clientAdditionalPaymentData, paymentServerProperty);
+        paymentOriginValidator.validate(clientAdditionalPaymentData, paymentAuthenticationParameters);
 
         // validate total payment amount
         validatePaymentAmount(paymentAuthenticationParameters.getTotal(), clientAdditionalPaymentData.getTotal());

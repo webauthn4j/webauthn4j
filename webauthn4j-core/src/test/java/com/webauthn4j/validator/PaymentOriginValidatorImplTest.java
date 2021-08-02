@@ -2,9 +2,10 @@ package com.webauthn4j.validator;
 
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.payment.CollectedClientAdditionalPaymentData;
+import com.webauthn4j.data.payment.PaymentAuthenticationParameters;
 import com.webauthn4j.data.payment.PaymentCredentialInstrument;
 import com.webauthn4j.data.payment.PaymentCurrencyAmount;
-import com.webauthn4j.data.payment.PaymentServerProperty;
+import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
 import org.junit.jupiter.api.Test;
@@ -30,9 +31,8 @@ public class PaymentOriginValidatorImplTest {
                 new PaymentCurrencyAmount("EUR", "15"),
                 new PaymentCredentialInstrument("Store", "favicon.ico")
         );
-        PaymentServerProperty paymentServerProperty = mockPaymentServerProperty();
 
-        target.validate(collectedClientAdditionalPaymentData, paymentServerProperty);
+        target.validate(collectedClientAdditionalPaymentData, mockPaymentAuthenticationParameters());
     }
 
     @Test
@@ -44,9 +44,8 @@ public class PaymentOriginValidatorImplTest {
                 new PaymentCurrencyAmount("EUR", "15"),
                 new PaymentCredentialInstrument("Store", "favicon.ico")
         );
-        PaymentServerProperty paymentServerProperty = mockPaymentServerProperty();
 
-        assertThrows(BadOriginException.class, () -> target.validate(collectedClientAdditionalPaymentData, paymentServerProperty));
+        assertThrows(BadOriginException.class, () -> target.validate(collectedClientAdditionalPaymentData, mockPaymentAuthenticationParameters()));
     }
 
     @Test
@@ -58,18 +57,28 @@ public class PaymentOriginValidatorImplTest {
                 new PaymentCurrencyAmount("EUR", "15"),
                 new PaymentCredentialInstrument("Store", "favicon.ico")
         );
-        PaymentServerProperty paymentServerProperty = mockPaymentServerProperty();
 
-        assertThrows(BadOriginException.class, () -> target.validate(collectedClientAdditionalPaymentData, paymentServerProperty));
+        assertThrows(BadOriginException.class, () -> target.validate(collectedClientAdditionalPaymentData, mockPaymentAuthenticationParameters()));
     }
 
-    private PaymentServerProperty mockPaymentServerProperty() {
-        return new PaymentServerProperty(
+    private PaymentAuthenticationParameters mockPaymentAuthenticationParameters() {
+        ServerProperty serverProperty = new ServerProperty(
                 Collections.singleton(topOrigin),
                 "example.com",
                 TestDataUtil.createChallenge(),
+                null
+        );
+
+        return new PaymentAuthenticationParameters(
+                serverProperty,
+                TestDataUtil.createAuthenticator(),
                 null,
-                Collections.singleton(payeeOrigin)
+                new PaymentCredentialInstrument("Store", "favicon.ico"),
+                new PaymentCurrencyAmount("EUR", "100"),
+                Collections.singleton(payeeOrigin),
+                false,
+                true
+
         );
     }
 

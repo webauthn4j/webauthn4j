@@ -159,12 +159,11 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         clientExtensionJSON,
                         authenticationRequest.getSignature()
                 );
-        PaymentServerProperty paymentServerProperty = new PaymentServerProperty(
+        ServerProperty paymentServerProperty = new ServerProperty(
                 Collections.singleton(origin),
                 rpId,
                 challenge,
-                null,
-                Collections.singleton(origin)
+                null
         );
         PaymentAuthenticationParameters paymentAuthenticationParameters =
                 new PaymentAuthenticationParameters(
@@ -173,6 +172,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         Collections.singletonList(credentialId),
                         new PaymentCredentialInstrument("Store", "favicon.ico"),
                         new PaymentCurrencyAmount("EUR", "100"),
+                        Collections.singleton(origin),
                         false,
                         true
                 );
