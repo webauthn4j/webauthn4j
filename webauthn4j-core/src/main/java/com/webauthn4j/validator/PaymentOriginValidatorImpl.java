@@ -23,7 +23,7 @@ public class PaymentOriginValidatorImpl implements PaymentOriginValidator {
             throw new BadOriginException("The collectedClientAdditionalPaymentData '" + topOrigin + "' top origin doesn't match any of the preconfigured origins.");
         }
 
-        if (!paymentAuthenticationParameters.getPayeeOrigins().contains(clientAdditionalPaymentData.getPayeeOrigin())) {
+        if (!paymentAuthenticationParameters.getPayeeOrigins().contains(payeeOrigin)) {
             throw new BadOriginException("The collectedClientAdditionalPaymentData '" + payeeOrigin + "' payee origin doesn't match any of the preconfigured origins.");
         }
 
