@@ -2,6 +2,7 @@ package com.webauthn4j.data.payment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
@@ -14,15 +15,17 @@ public class PaymentCredentialInstrument implements Serializable {
     @JsonCreator
     public PaymentCredentialInstrument(@NonNull @JsonProperty("displayName") String displayName,
                                        @NonNull @JsonProperty("icon") String icon) {
+        AssertUtil.notNull(displayName, "payment instrument display name must not be null");
+        AssertUtil.notNull(icon, "payment instrument icon must not be null");
         this.displayName = displayName;
         this.icon = icon;
     }
 
-    public String getDisplayName() {
+    public @NonNull String getDisplayName() {
         return displayName;
     }
 
-    public String getIcon() {
+    public @NonNull String getIcon() {
         return icon;
     }
 

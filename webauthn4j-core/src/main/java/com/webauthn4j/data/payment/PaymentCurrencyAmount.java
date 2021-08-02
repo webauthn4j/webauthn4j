@@ -2,6 +2,7 @@ package com.webauthn4j.data.payment;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
@@ -14,15 +15,17 @@ public class PaymentCurrencyAmount implements Serializable {
     @JsonCreator
     public PaymentCurrencyAmount(@NonNull @JsonProperty("currency") String currency,
                                  @NonNull @JsonProperty("value") String value) {
+        AssertUtil.notNull(currency, "payment amount currency must not be null");
+        AssertUtil.notNull(value, "payment amount value must not be null");
         this.currency = currency;
         this.value = value;
     }
 
-    public String getCurrency() {
+    public @NonNull String getCurrency() {
         return currency;
     }
 
-    public String getValue() {
+    public @NonNull String getValue() {
         return value;
     }
 

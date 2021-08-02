@@ -105,7 +105,7 @@ public class WebAuthnAuthenticationManager {
     }
 
     public @NonNull PaymentAuthenticationData parse(@NonNull PaymentAuthenticationRequest paymentAuthenticationRequest) throws DataConversionException {
-        AssertUtil.notNull(paymentAuthenticationRequest, "authenticationRequest must not be null");
+        AssertUtil.notNull(paymentAuthenticationRequest, "paymentAuthenticationRequest must not be null");
 
         byte[] credentialId = paymentAuthenticationRequest.getCredentialId();
         byte[] signature = paymentAuthenticationRequest.getSignature();

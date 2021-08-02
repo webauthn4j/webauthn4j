@@ -50,15 +50,15 @@ public class PaymentAuthenticationParameters extends AuthenticationParameters {
         this.payeeOrigins = payeeOrigins;
     }
 
-    public PaymentCredentialInstrument getInstrument() {
+    public @NonNull PaymentCredentialInstrument getInstrument() {
         return instrument;
     }
 
-    public PaymentCurrencyAmount getTotal() {
+    public @NonNull PaymentCurrencyAmount getTotal() {
         return total;
     }
 
-    public Set<Origin> getPayeeOrigins() {
+    public @NonNull Set<Origin> getPayeeOrigins() {
         return payeeOrigins;
     }
 
