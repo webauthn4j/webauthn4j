@@ -22,7 +22,6 @@ import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
-import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
@@ -249,16 +248,16 @@ public class AuthenticationDataValidator {
         }
 
         // validate top origin
-        originValidator.validate(new Origin(clientAdditionalPaymentData.getTopOrigin()), paymentServerProperty.getOrigins());
+        originValidator.validate(clientAdditionalPaymentData.getTopOrigin(), paymentServerProperty.getOrigins());
 
         // validate payee origin
-        originValidator.validate(new Origin(clientAdditionalPaymentData.getPayeeOrigin()), paymentServerProperty.getPayeeOrigins());
+        originValidator.validate(clientAdditionalPaymentData.getPayeeOrigin(), paymentServerProperty.getPayeeOrigins());
 
         // validate total payment amount
-        validatePaymentAmount(paymentServerProperty.getTotal(), clientAdditionalPaymentData.getTotal());
+        validatePaymentAmount(paymentAuthenticationParameters.getTotal(), clientAdditionalPaymentData.getTotal());
 
         // validate payment instrument
-        validatePaymentInstrument(paymentServerProperty.getInstrument(), clientAdditionalPaymentData.getInstrument());
+        validatePaymentInstrument(paymentAuthenticationParameters.getInstrument(), clientAdditionalPaymentData.getInstrument());
     }
 
     private void validatePaymentInstrument(@NonNull PaymentCredentialInstrument expectedInstrument, @NonNull PaymentCredentialInstrument actualInstrument) {

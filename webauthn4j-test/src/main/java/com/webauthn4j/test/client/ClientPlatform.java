@@ -207,7 +207,7 @@ public class ClientPlatform {
     public CollectedClientPaymentData createCollectedClientPaymentData(Challenge challenge, String rpId) {
         PaymentCurrencyAmount total = new PaymentCurrencyAmount("EUR", "100");
         PaymentCredentialInstrument instrument = new PaymentCredentialInstrument("Store", "favicon.ico");
-        CollectedClientAdditionalPaymentData additionalPaymentData = new CollectedClientAdditionalPaymentData(rpId, origin.toString(), origin.toString(), total, instrument);
+        CollectedClientAdditionalPaymentData additionalPaymentData = new CollectedClientAdditionalPaymentData(rpId, origin, origin, total, instrument);
         return new CollectedClientPaymentData(ClientDataType.PAYMENT_GET, challenge, origin, additionalPaymentData, null);
     }
 

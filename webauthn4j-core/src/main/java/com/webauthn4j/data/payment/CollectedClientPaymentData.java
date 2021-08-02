@@ -10,6 +10,8 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Objects;
+
 public class CollectedClientPaymentData extends CollectedClientData {
     private final CollectedClientAdditionalPaymentData additionalPaymentData;
 
@@ -37,4 +39,17 @@ public class CollectedClientPaymentData extends CollectedClientData {
         return additionalPaymentData;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CollectedClientPaymentData that = (CollectedClientPaymentData) o;
+        return additionalPaymentData.equals(that.additionalPaymentData);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), additionalPaymentData);
+    }
 }

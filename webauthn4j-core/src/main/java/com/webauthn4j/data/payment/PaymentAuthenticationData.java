@@ -8,8 +8,6 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PaymentAuthenticationData extends AuthenticationData {
-    private final CollectedClientPaymentData collectedClientPaymentData;
-
 
     public PaymentAuthenticationData(@Nullable byte[] credentialId,
                                      @Nullable byte[] userHandle,
@@ -20,11 +18,10 @@ public class PaymentAuthenticationData extends AuthenticationData {
                                      @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
                                      @Nullable byte[] signature) {
         super(credentialId, userHandle, authenticatorData, authenticatorDataBytes, collectedClientPaymentData, collectedClientPaymentDataBytes, clientExtensions, signature);
-        this.collectedClientPaymentData = collectedClientPaymentData;
     }
 
     @Override
     public CollectedClientPaymentData getCollectedClientData() {
-        return collectedClientPaymentData;
+        return (CollectedClientPaymentData) super.getCollectedClientData();
     }
 }

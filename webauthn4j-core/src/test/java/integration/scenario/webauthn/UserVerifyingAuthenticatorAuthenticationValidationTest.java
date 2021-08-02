@@ -155,8 +155,6 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 rpId,
                 challenge,
                 null,
-                new PaymentCredentialInstrument("Store", "favicon.ico"),
-                new PaymentCurrencyAmount("EUR", "100"),
                 Collections.singleton(origin)
         );
         PaymentAuthenticationParameters paymentAuthenticationParameters =
@@ -164,6 +162,8 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                         paymentServerProperty,
                         authenticator,
                         allowCredentials,
+                        new PaymentCredentialInstrument("Store", "favicon.ico"),
+                        new PaymentCurrencyAmount("EUR", "100"),
                         true
                 );
 

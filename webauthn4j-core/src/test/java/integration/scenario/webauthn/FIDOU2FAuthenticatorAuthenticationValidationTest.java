@@ -164,8 +164,6 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 rpId,
                 challenge,
                 null,
-                new PaymentCredentialInstrument("Store", "favicon.ico"),
-                new PaymentCurrencyAmount("EUR", "100"),
                 Collections.singleton(origin)
         );
         PaymentAuthenticationParameters paymentAuthenticationParameters =
@@ -173,6 +171,8 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                         paymentServerProperty,
                         authenticator,
                         Collections.singletonList(credentialId),
+                        new PaymentCredentialInstrument("Store", "favicon.ico"),
+                        new PaymentCurrencyAmount("EUR", "100"),
                         false,
                         true
                 );
