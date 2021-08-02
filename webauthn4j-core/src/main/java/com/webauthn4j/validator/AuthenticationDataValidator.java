@@ -50,6 +50,7 @@ public class AuthenticationDataValidator {
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
     private OriginValidator originValidator = new OriginValidatorImpl();
+    private PaymentOriginValidator paymentOriginValidator = new PaymentOriginValidatorImpl();
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     private boolean crossOriginAllowed = false;
@@ -247,11 +248,8 @@ public class AuthenticationDataValidator {
             throw new BadRpIdException("payment rpId does not match server value");
         }
 
-        // validate top origin
-        originValidator.validate(clientAdditionalPaymentData.getTopOrigin(), paymentServerProperty.getOrigins());
-
-        // validate payee origin
-        originValidator.validate(clientAdditionalPaymentData.getPayeeOrigin(), paymentServerProperty.getPayeeOrigins());
+        // validate top origin and payee origin
+        paymentOriginValidator.validate(clientAdditionalPaymentData, paymentServerProperty);
 
         // validate total payment amount
         validatePaymentAmount(paymentAuthenticationParameters.getTotal(), clientAdditionalPaymentData.getTotal());

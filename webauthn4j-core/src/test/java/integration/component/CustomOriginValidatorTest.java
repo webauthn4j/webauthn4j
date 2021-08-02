@@ -131,8 +131,5 @@ class CustomOriginValidatorTest {
             }
         }
 
-        @Override
-        public void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins) {
-        }
     }
 }

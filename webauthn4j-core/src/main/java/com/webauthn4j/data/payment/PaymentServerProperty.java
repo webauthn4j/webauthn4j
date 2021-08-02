@@ -3,6 +3,7 @@ package com.webauthn4j.data.payment;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -17,6 +18,7 @@ public class PaymentServerProperty extends ServerProperty {
                                  @Nullable byte[] tokenBindingId,
                                  @NonNull Set<Origin> payeeOrigins) {
         super(origins, rpId, challenge, tokenBindingId);
+        AssertUtil.notNull(payeeOrigins, "payeeOrigins must not be null");
         this.payeeOrigins = payeeOrigins;
     }
 

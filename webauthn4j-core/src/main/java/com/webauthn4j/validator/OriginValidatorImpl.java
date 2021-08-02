@@ -50,8 +50,7 @@ public class OriginValidatorImpl implements OriginValidator {
         validate(collectedClientData, serverProperty);
     }
 
-    @Override
-    public void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins) {
+    private void validate(@NonNull Origin clientOrigin, @NonNull Set<Origin> serverOrigins) {
         AssertUtil.notNull(clientOrigin, "client origin must not be null");
         AssertUtil.notNull(serverOrigins, "server origins set must not be null");
         if (!serverOrigins.contains(clientOrigin)) {
