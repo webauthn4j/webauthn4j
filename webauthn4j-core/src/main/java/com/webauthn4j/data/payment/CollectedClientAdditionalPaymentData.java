@@ -3,6 +3,7 @@ package com.webauthn4j.data.payment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
@@ -21,6 +22,11 @@ public class CollectedClientAdditionalPaymentData implements Serializable {
                                                 @NonNull @JsonProperty("payeeOrigin") Origin payeeOrigin,
                                                 @NonNull @JsonProperty("total") PaymentCurrencyAmount total,
                                                 @NonNull @JsonProperty("instrument") PaymentCredentialInstrument instrument) {
+        AssertUtil.notNull(rp, "rp must not be null");
+        AssertUtil.notNull(topOrigin, "topOrigin must not be null");
+        AssertUtil.notNull(payeeOrigin, "payeeOrigin must not be null");
+        AssertUtil.notNull(total, "total payment amount must not be null");
+        AssertUtil.notNull(instrument, "payment instrument must not be null");
         this.rp = rp;
         this.topOrigin = topOrigin;
         this.payeeOrigin = payeeOrigin;
@@ -28,23 +34,23 @@ public class CollectedClientAdditionalPaymentData implements Serializable {
         this.instrument = instrument;
     }
 
-    public String getRp() {
+    public @NonNull String getRp() {
         return rp;
     }
 
-    public Origin getTopOrigin() {
+    public @NonNull Origin getTopOrigin() {
         return topOrigin;
     }
 
-    public Origin getPayeeOrigin() {
+    public @NonNull Origin getPayeeOrigin() {
         return payeeOrigin;
     }
 
-    public PaymentCurrencyAmount getTotal() {
+    public @NonNull PaymentCurrencyAmount getTotal() {
         return total;
     }
 
-    public PaymentCredentialInstrument getInstrument() {
+    public @NonNull PaymentCredentialInstrument getInstrument() {
         return instrument;
     }
 

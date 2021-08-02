@@ -7,6 +7,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.TokenBinding;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -23,6 +24,7 @@ public class CollectedClientPaymentData extends CollectedClientData {
                                       @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
                                       @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         super(type, challenge, origin, crossOrigin, tokenBinding);
+        AssertUtil.notNull(additionalPaymentData, "additionalPaymentData must not be null");
         this.additionalPaymentData = additionalPaymentData;
     }
 
@@ -32,6 +34,7 @@ public class CollectedClientPaymentData extends CollectedClientData {
                                       @NonNull @JsonProperty("additionalPaymentData") CollectedClientAdditionalPaymentData additionalPaymentData,
                                       @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         super(type, challenge, origin, tokenBinding);
+        AssertUtil.notNull(additionalPaymentData, "additionalPaymentData must not be null");
         this.additionalPaymentData = additionalPaymentData;
     }
 
