@@ -32,7 +32,7 @@ public class PaymentOriginValidatorImplTest {
                 new PaymentCredentialInstrument("Store", "favicon.ico")
         );
 
-        target.validate(collectedClientAdditionalPaymentData, mockPaymentAuthenticationParameters());
+        assertThatCode(()->target.validate(collectedClientAdditionalPaymentData, mockPaymentAuthenticationParameters())).doesNotThrowAnyException();
     }
 
     @Test
