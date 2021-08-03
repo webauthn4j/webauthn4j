@@ -313,7 +313,7 @@ public class AuthenticationDataValidator {
         this.originValidator = originValidator;
     }
 
-    public PaymentOriginValidator getPaymentOriginValidator() {
+    public @NonNull PaymentOriginValidator getPaymentOriginValidator() {
         return paymentOriginValidator;
     }
 
