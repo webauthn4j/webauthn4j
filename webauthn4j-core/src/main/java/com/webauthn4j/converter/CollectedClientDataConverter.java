@@ -86,7 +86,7 @@ public class CollectedClientDataConverter {
      * @param source the source byte array to convert
      * @return the converted object
      */
-    public @Nullable <T extends CollectedClientData> T convert(@NonNull byte[] source, Class<T> type) {
+    public @Nullable <T extends CollectedClientData> T convert(@NonNull byte[] source, @NonNull Class<T> type) {
         try {
             AssertUtil.notNull(source, "source must not be null");
             String jsonString = new String(source, StandardCharsets.UTF_8);
