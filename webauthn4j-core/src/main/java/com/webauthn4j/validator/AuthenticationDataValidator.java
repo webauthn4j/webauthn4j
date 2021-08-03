@@ -71,7 +71,7 @@ public class AuthenticationDataValidator {
 
     public void validatePayment(@NonNull PaymentAuthenticationData paymentAuthenticationData, @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) {
         validate(paymentAuthenticationData, paymentAuthenticationParameters, ClientDataType.PAYMENT_GET);
-        validateClientPaymentData(paymentAuthenticationData.getCollectedClientData().getAdditionalPaymentData(), paymentAuthenticationParameters);
+        validateClientPaymentData(paymentAuthenticationData.getCollectedClientData().getPayment(), paymentAuthenticationParameters);
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate

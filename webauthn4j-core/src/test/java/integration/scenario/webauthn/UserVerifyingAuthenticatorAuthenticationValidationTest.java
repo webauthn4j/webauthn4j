@@ -173,7 +173,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         assertAll(
                 () -> assertThat(paymentAuthenticationData.getCollectedClientData()).isNotNull(),
                 () -> assertThat(paymentAuthenticationData.getCollectedClientData()).isExactlyInstanceOf(CollectedClientPaymentData.class),
-                () -> assertThat(paymentAuthenticationData.getCollectedClientData().getAdditionalPaymentData()).isNotNull(),
+                () -> assertThat(paymentAuthenticationData.getCollectedClientData().getPayment()).isNotNull(),
                 () -> assertThat(paymentAuthenticationData.getAuthenticatorData()).isNotNull(),
                 () -> assertThat(paymentAuthenticationData.getClientExtensions()).isNotNull()
         );

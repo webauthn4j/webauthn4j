@@ -14,32 +14,32 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 
 public class CollectedClientPaymentData extends CollectedClientData {
-    private final CollectedClientAdditionalPaymentData additionalPaymentData;
+    private final CollectedClientAdditionalPaymentData payment;
 
     @JsonCreator
     public CollectedClientPaymentData(@NonNull @JsonProperty("type") ClientDataType type,
                                       @NonNull @JsonProperty("challenge") Challenge challenge,
                                       @NonNull @JsonProperty("origin") Origin origin,
-                                      @NonNull @JsonProperty("additionalPaymentData") CollectedClientAdditionalPaymentData additionalPaymentData,
+                                      @NonNull @JsonProperty("payment") CollectedClientAdditionalPaymentData payment,
                                       @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
                                       @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         super(type, challenge, origin, crossOrigin, tokenBinding);
-        AssertUtil.notNull(additionalPaymentData, "additionalPaymentData must not be null");
-        this.additionalPaymentData = additionalPaymentData;
+        AssertUtil.notNull(payment, "additionalPaymentData must not be null");
+        this.payment = payment;
     }
 
     public CollectedClientPaymentData(@NonNull @JsonProperty("type") ClientDataType type,
                                       @NonNull @JsonProperty("challenge") Challenge challenge,
                                       @NonNull @JsonProperty("origin") Origin origin,
-                                      @NonNull @JsonProperty("additionalPaymentData") CollectedClientAdditionalPaymentData additionalPaymentData,
+                                      @NonNull @JsonProperty("payment") CollectedClientAdditionalPaymentData payment,
                                       @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         super(type, challenge, origin, tokenBinding);
-        AssertUtil.notNull(additionalPaymentData, "additionalPaymentData must not be null");
-        this.additionalPaymentData = additionalPaymentData;
+        AssertUtil.notNull(payment, "additionalPaymentData must not be null");
+        this.payment = payment;
     }
 
-    public @NonNull CollectedClientAdditionalPaymentData getAdditionalPaymentData() {
-        return additionalPaymentData;
+    public @NonNull CollectedClientAdditionalPaymentData getPayment() {
+        return payment;
     }
 
     @Override
@@ -48,11 +48,11 @@ public class CollectedClientPaymentData extends CollectedClientData {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CollectedClientPaymentData that = (CollectedClientPaymentData) o;
-        return additionalPaymentData.equals(that.additionalPaymentData);
+        return payment.equals(that.payment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), additionalPaymentData);
+        return Objects.hash(super.hashCode(), payment);
     }
 }

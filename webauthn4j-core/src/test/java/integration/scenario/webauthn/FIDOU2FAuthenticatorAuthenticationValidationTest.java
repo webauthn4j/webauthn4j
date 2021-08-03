@@ -182,7 +182,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
         assertAll(
                 () -> assertThat(response.getCollectedClientData()).isNotNull(),
                 () -> assertThat(response.getCollectedClientData()).isExactlyInstanceOf(CollectedClientPaymentData.class),
-                () -> assertThat(response.getCollectedClientData().getAdditionalPaymentData()).isNotNull(),
+                () -> assertThat(response.getCollectedClientData().getPayment()).isNotNull(),
                 () -> assertThat(response.getAuthenticatorData()).isNotNull(),
                 () -> assertThat(response.getClientExtensions()).isNotNull()
         );
