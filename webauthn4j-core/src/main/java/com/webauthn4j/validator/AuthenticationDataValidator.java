@@ -317,7 +317,7 @@ public class AuthenticationDataValidator {
         return paymentOriginValidator;
     }
 
-    public void setPaymentOriginValidator(PaymentOriginValidator paymentOriginValidator) {
+    public void setPaymentOriginValidator(@NonNull PaymentOriginValidator paymentOriginValidator) {
         this.paymentOriginValidator = paymentOriginValidator;
     }
 
