@@ -26,6 +26,7 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
+import com.webauthn4j.data.payment.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.*;
@@ -49,6 +50,8 @@ public class AuthenticationDataValidator {
     private final List<CustomAuthenticationValidator> customAuthenticationValidators;
 
     private OriginValidator originValidator = new OriginValidatorImpl();
+    private PaymentOriginValidator paymentOriginValidator = new PaymentOriginValidatorImpl();
+
     private CoreMaliciousCounterValueHandler maliciousCounterValueHandler = new DefaultCoreMaliciousCounterValueHandler();
 
     private boolean crossOriginAllowed = false;
@@ -66,8 +69,9 @@ public class AuthenticationDataValidator {
         validate(authenticationData, authenticationParameters, ClientDataType.GET);
     }
 
-    public void validatePayment(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
-        validate(authenticationData, authenticationParameters, ClientDataType.PAYMENT_GET);
+    public void validatePayment(@NonNull PaymentAuthenticationData paymentAuthenticationData, @NonNull PaymentAuthenticationParameters paymentAuthenticationParameters) {
+        validate(paymentAuthenticationData, paymentAuthenticationParameters, ClientDataType.PAYMENT_GET);
+        validateClientPaymentData(paymentAuthenticationData.getCollectedClientData().getPayment(), paymentAuthenticationParameters);
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
@@ -233,6 +237,53 @@ public class AuthenticationDataValidator {
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
     }
 
+    void validateClientPaymentData(CollectedClientAdditionalPaymentData clientAdditionalPaymentData, PaymentAuthenticationParameters paymentAuthenticationParameters) {
+        AssertUtil.notNull(clientAdditionalPaymentData, "clientAdditionalPaymentData must not be null during payment");
+        AssertUtil.notNull(paymentAuthenticationParameters, "paymentAuthenticationParameters must not be null during payment");
+
+        // validate the rpId
+        if (!Objects.equals(clientAdditionalPaymentData.getRp(), paymentAuthenticationParameters.getServerProperty().getRpId())) {
+            throw new BadRpIdException("payment rpId does not match server value");
+        }
+
+        // validate top origin and payee origin
+        paymentOriginValidator.validate(clientAdditionalPaymentData, paymentAuthenticationParameters);
+
+        // validate total payment amount
+        validatePaymentAmount(paymentAuthenticationParameters.getTotal(), clientAdditionalPaymentData.getTotal());
+
+        // validate payment instrument
+        validatePaymentInstrument(paymentAuthenticationParameters.getInstrument(), clientAdditionalPaymentData.getInstrument());
+    }
+
+    private void validatePaymentInstrument(@NonNull PaymentCredentialInstrument expectedInstrument, @NonNull PaymentCredentialInstrument actualInstrument) {
+        AssertUtil.notNull(expectedInstrument, "client data payment instrument must not be null");
+        AssertUtil.notNull(actualInstrument, "server property instrument must not be null");
+        if (!Objects.equals(expectedInstrument, actualInstrument)) {
+            throw new BadPaymentInstrumentException("actual payment instrument does not match expected instrument");
+        }
+    }
+
+    private void validatePaymentAmount(@NonNull PaymentCurrencyAmount expectedAmount, @NonNull PaymentCurrencyAmount actualAmount) {
+        AssertUtil.notNull(expectedAmount, "client data payment amount must not be null");
+        AssertUtil.notNull(actualAmount, "server property amount must not be null");
+
+        if (!Objects.equals(expectedAmount.getCurrency(), actualAmount.getCurrency())) {
+            throw new BadPaymentAmountException(String.format("expected currency '%s' does not match actual currency '%s'", expectedAmount.getCurrency(), actualAmount.getCurrency()));
+        }
+
+        try {
+            double expectedValue = Double.parseDouble(expectedAmount.getValue());
+            double actualValue = Double.parseDouble(actualAmount.getValue());
+
+            if (expectedValue != actualValue) {
+                throw new BadPaymentAmountException(String.format("expected value '%f' does not match actual value '%f'", expectedValue, actualValue));
+            }
+        } catch (NumberFormatException e) {
+            throw new BadPaymentAmountException("payment amount value must be a valid number", e);
+        }
+    }
+
     void validateClientDataType(@NonNull CollectedClientData collectedClientData, @NonNull ClientDataType expectedClientDataType) {
         if (!Objects.equals(collectedClientData.getType(), expectedClientDataType)) {
             throw new InconsistentClientDataTypeException("ClientData.type must be " + expectedClientDataType.getValue() + " on authentication, but it isn't.");
@@ -240,7 +291,7 @@ public class AuthenticationDataValidator {
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
-        if(allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))){
+        if (allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))) {
             throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.");
         }
     }
@@ -272,6 +323,14 @@ public class AuthenticationDataValidator {
 
     public void setOriginValidator(OriginValidator originValidator) {
         this.originValidator = originValidator;
+    }
+
+    public @NonNull PaymentOriginValidator getPaymentOriginValidator() {
+        return paymentOriginValidator;
+    }
+
+    public void setPaymentOriginValidator(@NonNull PaymentOriginValidator paymentOriginValidator) {
+        this.paymentOriginValidator = paymentOriginValidator;
     }
 
     public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
