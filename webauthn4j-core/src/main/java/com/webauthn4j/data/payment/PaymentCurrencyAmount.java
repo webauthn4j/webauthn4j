@@ -34,14 +34,8 @@ public class PaymentCurrencyAmount implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PaymentCurrencyAmount that = (PaymentCurrencyAmount) o;
-
-        if (!currency.equals(that.currency)) return false;
-
-        try {
-            return Double.parseDouble(value) == Double.parseDouble(that.value);
-        } catch (NumberFormatException e) {
-            return false;
-        }
+        return currency.equals(that.currency) &&
+                value.equals(that.value);
     }
 
     @Override

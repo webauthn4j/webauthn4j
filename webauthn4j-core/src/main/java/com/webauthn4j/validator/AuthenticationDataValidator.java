@@ -267,8 +267,20 @@ public class AuthenticationDataValidator {
     private void validatePaymentAmount(@NonNull PaymentCurrencyAmount expectedAmount, @NonNull PaymentCurrencyAmount actualAmount) {
         AssertUtil.notNull(expectedAmount, "client data payment amount must not be null");
         AssertUtil.notNull(actualAmount, "server property amount must not be null");
-        if (!Objects.equals(expectedAmount, actualAmount)) {
-            throw new BadPaymentAmountException("actual payment amount does not match expected amount");
+
+        if (!Objects.equals(expectedAmount.getCurrency(), actualAmount.getCurrency())) {
+            throw new BadPaymentAmountException(String.format("expected currency '%s' does not match actual currency '%s'", expectedAmount.getCurrency(), actualAmount.getCurrency()));
+        }
+
+        try {
+            double expectedValue = Double.parseDouble(expectedAmount.getValue());
+            double actualValue = Double.parseDouble(actualAmount.getValue());
+
+            if (expectedValue != actualValue) {
+                throw new BadPaymentAmountException(String.format("expected value '%f' does not match actual value '%f'", expectedValue, actualValue));
+            }
+        } catch (NumberFormatException e) {
+            throw new BadPaymentAmountException("payment amount value must be a valid number", e);
         }
     }
 
@@ -279,7 +291,7 @@ public class AuthenticationDataValidator {
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
-        if(allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))){
+        if (allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))) {
             throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.");
         }
     }

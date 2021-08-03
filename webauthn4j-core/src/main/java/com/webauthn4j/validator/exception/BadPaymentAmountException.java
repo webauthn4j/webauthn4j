@@ -9,4 +9,9 @@ public class BadPaymentAmountException extends ValidationException {
     public BadPaymentAmountException(@Nullable String message) {
         super(message);
     }
+
+    public BadPaymentAmountException(@Nullable String message, @Nullable Throwable cause) {
+        super(message, cause);
+    }
+
 }
