@@ -255,7 +255,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public @NonNull BuilderForRegistration set(String key, Serializable value) {
+        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

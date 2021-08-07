@@ -16,18 +16,17 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<HMACGetSecretOutput> implements AuthenticationExtensionAuthenticatorOutput{
+public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<byte[]> implements AuthenticationExtensionAuthenticatorOutput{
 
     public static final String ID = "hmac-secret";
-    public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
+    public static final String KEY_HMAC_SECRET = "hmac-secret";
 
-    public HMACSecretAuthenticationExtensionAuthenticatorOutput(@Nullable HMACGetSecretOutput value) {
+    public HMACSecretAuthenticationExtensionAuthenticatorOutput(@Nullable byte[] value) {
         super(value);
     }
 
@@ -36,17 +35,13 @@ public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends Single
         return ID;
     }
 
-    public @Nullable HMACGetSecretOutput getValue(@NonNull String key) {
-        if (!key.equals(KEY_HMAC_GET_SECRET)) {
-            throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
-        }
-        return getValue();
-    }
-
     @Override
     public void validate() {
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
+        }
+        if (getValue().length != 32 && getValue().length != 64) {
+            throw new ConstraintViolationException("saltAuth must be 32 bytes length or 64 bytes length");
         }
     }
 }

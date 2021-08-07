@@ -16,22 +16,20 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.HMACSecretAuthenticatorInputDeserializer;
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
-import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
+
 
 /**
  * {@link AuthenticationExtensionsAuthenticatorInputs} containing the authenticator extension input values for
@@ -42,6 +40,10 @@ import java.util.*;
  */
 public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuthenticatorInput> implements Serializable {
 
+    private static final String KEY_UVM = "uvm";
+    private static final String KEY_CRED_PROTECT = "credProtect";
+    private static final String KEY_HMAC_SECRET = "hmac-secret";
+
     @JsonIgnore
     private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
@@ -50,12 +52,25 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
-    @JsonProperty
+    @JsonIgnore
     private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretInput hmacGetSecret;
+    @JsonIgnore
+    private HMACGetSecretAuthenticatorInput hmacGetSecret;
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
+
+    @JsonSetter(KEY_HMAC_SECRET)
+    @JsonDeserialize(using = HMACSecretAuthenticatorInputDeserializer.class)
+    private void setHMACSecret(Object hmacSecret){
+        if(hmacSecret instanceof Boolean){
+            hmacCreateSecret = (Boolean)hmacSecret;
+            hmacGetSecret = null;
+        }
+        else {
+            hmacCreateSecret = null;
+            hmacGetSecret = (HMACGetSecretAuthenticatorInput)hmacSecret;
+        }
+    }
 
     @JsonAnyGetter
     private Map<String, Serializable> getUnknowns() {
@@ -71,16 +86,16 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     public @NonNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
         if (uvm != null) {
-            keys.add("uvm");
+            keys.add(KEY_UVM);
         }
         if (credProtect != null) {
-            keys.add("credProtect");
+            keys.add(KEY_CRED_PROTECT);
         }
         if(hmacCreateSecret != null){
-            keys.add("hmacCreateSecret");
+            keys.add(KEY_HMAC_SECRET);
         }
         if(hmacGetSecret != null){
-            keys.add("hmacGetSecret");
+            keys.add(KEY_HMAC_SECRET);
         }
         keys.addAll(getUnknownKeys());
         return keys;
@@ -94,14 +109,12 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     @JsonIgnore
     public @Nullable Object getValue(String key) {
         switch (key) {
-            case "uvm":
+            case KEY_UVM:
                 return uvm;
-            case "credProtect":
+            case KEY_CRED_PROTECT:
                 return credProtect;
-            case "hmacCreateSecret":
-                return hmacCreateSecret;
-            case "hmacGetSecret":
-                return hmacGetSecret;
+            case KEY_HMAC_SECRET:
+                return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
             default:
                 return unknowns.get(key);
         }
@@ -117,13 +130,18 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
         return this.credProtect;
     }
 
+    @JsonGetter(KEY_HMAC_SECRET)
+    public @Nullable Object getHMACSecret(){
+        return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+    }
+
     @JsonIgnore
     public @Nullable Boolean getHMACCreateSecret() {
         return hmacCreateSecret;
     }
 
     @JsonIgnore
-    public @Nullable HMACGetSecretInput getHMACGetSecret() {
+    public @Nullable HMACGetSecretAuthenticatorInput getHMACGetSecret() {
         return hmacGetSecret;
     }
 
@@ -212,7 +230,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
         private final Map<String, Serializable> unknowns = new HashMap<>();
         private Boolean uvm;
-        private HMACGetSecretInput hmacGetSecret;
+        private HMACGetSecretAuthenticatorInput hmacGetSecret;
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
@@ -228,7 +246,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretInput hmacGetSecret) {
+        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretAuthenticatorInput hmacGetSecret) {
             this.hmacGetSecret = hmacGetSecret;
             return this;
         }

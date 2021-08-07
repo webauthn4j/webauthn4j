@@ -20,14 +20,13 @@ import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class HMACSecretAuthenticationExtensionClientOutput extends SingleValueExtensionOutputBase<HMACGetSecretOutput> implements AuthenticationExtensionClientOutput {
 
     public static final String ID = "hmac-secret";
     public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
 
-    public HMACSecretAuthenticationExtensionClientOutput(@Nullable HMACGetSecretOutput value) {
+    public HMACSecretAuthenticationExtensionClientOutput(@NonNull HMACGetSecretOutput value) {
         super(value);
     }
 
@@ -36,7 +35,8 @@ public class HMACSecretAuthenticationExtensionClientOutput extends SingleValueEx
         return ID;
     }
 
-    public @Nullable HMACGetSecretOutput getValue(@NonNull String key) {
+    @Override
+    public @NonNull HMACGetSecretOutput getValue(@NonNull String key) {
         if (!key.equals(KEY_HMAC_GET_SECRET)) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
         }
@@ -47,6 +47,18 @@ public class HMACSecretAuthenticationExtensionClientOutput extends SingleValueEx
     public void validate() {
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
+        }
+        if (getValue().getOutput1() == null) {
+            throw new ConstraintViolationException("output1 must not be null");
+        }
+        if (getValue().getOutput2() == null) {
+            throw new ConstraintViolationException("output2 must not be null");
+        }
+        if (getValue().getOutput1().length != 32) {
+            throw new ConstraintViolationException("output1 must be 32 bytes length");
+        }
+        if (getValue().getOutput2().length != 32) {
+            throw new ConstraintViolationException("output2 must be 32 bytes length");
         }
     }
 }

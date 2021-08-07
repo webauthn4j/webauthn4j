@@ -20,14 +20,13 @@ import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class HMACSecretAuthenticationExtensionClientInput extends SingleValueExtensionInputBase<HMACGetSecretInput> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "hmac-secret";
     public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
 
-    public HMACSecretAuthenticationExtensionClientInput(@Nullable HMACGetSecretInput value) {
+    public HMACSecretAuthenticationExtensionClientInput(@NonNull HMACGetSecretInput value) {
         super(value);
     }
 
@@ -36,7 +35,8 @@ public class HMACSecretAuthenticationExtensionClientInput extends SingleValueExt
         return ID;
     }
 
-    public @Nullable HMACGetSecretInput getValue(@NonNull String key) {
+    @Override
+    public @NonNull HMACGetSecretInput getValue(@NonNull String key) {
         if (!key.equals(KEY_HMAC_GET_SECRET)) {
             throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
         }
@@ -47,6 +47,18 @@ public class HMACSecretAuthenticationExtensionClientInput extends SingleValueExt
     public void validate() {
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
+        }
+        if (getValue().getSalt1() == null) {
+            throw new ConstraintViolationException("salt1 must not be null");
+        }
+        if (getValue().getSalt2() == null) {
+            throw new ConstraintViolationException("salt2 must not be null");
+        }
+        if (getValue().getSalt1().length != 32) {
+            throw new ConstraintViolationException("salt1 must be 32 bytes length");
+        }
+        if (getValue().getSalt2().length != 32) {
+            throw new ConstraintViolationException("salt2 must be 32 bytes length");
         }
     }
 }
