@@ -20,7 +20,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 
-public abstract class SingleValueExtensionInputBase<T extends Serializable> extends SingleValueExtensionOutputBase<T> implements ExtensionInput {
+public abstract class SingleValueExtensionInputBase<T extends Serializable> extends SingleValueExtensionBase<T> implements ExtensionInput {
 
     protected SingleValueExtensionInputBase(@Nullable T value) {
         super(value);
