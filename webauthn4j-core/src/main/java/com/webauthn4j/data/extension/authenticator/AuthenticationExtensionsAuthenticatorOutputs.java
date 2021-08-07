@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -44,6 +45,10 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
+    @JsonProperty
+    private Boolean hmacCreateSecret;
+    @JsonProperty
+    private HMACGetSecretOutput hmacGetSecret;
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
 
@@ -66,6 +71,12 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         if (credProtect != null) {
             keys.add("credProtect");
         }
+        if(hmacCreateSecret != null){
+            keys.add("hmacCreateSecret");
+        }
+        if(hmacGetSecret != null){
+            keys.add("hmacGetSecret");
+        }
         keys.addAll(getUnknownKeys());
         return keys;
     }
@@ -82,6 +93,10 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
                 return uvm;
             case "credProtect":
                 return credProtect;
+            case "hmacCreateSecret":
+                return hmacCreateSecret;
+            case "hmacGetSecret":
+                return hmacGetSecret;
             default:
                 return unknowns.get(key);
         }
@@ -95,6 +110,16 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonIgnore
     public @Nullable CredentialProtectionPolicy getCredProtect() {
         return credProtect;
+    }
+
+    @JsonIgnore
+    public @Nullable Boolean getHmacCreateSecret() {
+        return hmacCreateSecret;
+    }
+
+    @JsonIgnore
+    public @Nullable HMACGetSecretOutput getHmacGetSecret() {
+        return hmacGetSecret;
     }
 
     @SuppressWarnings("unchecked")
@@ -113,25 +138,28 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             if (credProtect != null) {
                 map.put((Class<? extends T>) CredentialProtectionExtensionAuthenticatorOutput.class, (T) new CredentialProtectionExtensionAuthenticatorOutput(credProtect));
             }
+            if (hmacCreateSecret != null) {
+                map.put((Class<? extends T>) HMACSecretRegistrationExtensionAuthenticatorOutput.class, (T) new HMACSecretRegistrationExtensionAuthenticatorOutput(hmacCreateSecret));
+            }
+            if (hmacGetSecret != null) {
+                map.put((Class<? extends T>) HMACSecretAuthenticationExtensionAuthenticatorOutput.class, (T) new HMACSecretAuthenticationExtensionAuthenticatorOutput(hmacGetSecret));
+            }
             extensions = Collections.unmodifiableMap(map);
         }
         return extensions;
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorOutputs<?> that = (AuthenticationExtensionsAuthenticatorOutputs<?>) o;
-        return Objects.equals(uvm, that.uvm) &&
-                Objects.equals(credProtect, that.credProtect) &&
-                Objects.equals(unknowns, that.unknowns) &&
-                Objects.equals(extensions, that.extensions);
+        return Objects.equals(unknowns, that.unknowns) && Objects.equals(uvm, that.uvm) && credProtect == that.credProtect && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uvm, credProtect, unknowns, extensions);
+        return Objects.hash(unknowns, uvm, credProtect, hmacCreateSecret, hmacGetSecret, extensions);
     }
 
     public static class BuilderForRegistration {
@@ -139,12 +167,14 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         private final Map<String, Serializable> unknowns = new HashMap<>();
         private UvmEntries uvm;
         private CredentialProtectionPolicy credProtect;
+        private Boolean hmacCreateSecret;
 
         public @NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> build() {
             AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
             instance.uvm = this.uvm;
             instance.credProtect = this.credProtect;
             instance.unknowns.putAll(this.unknowns);
+            instance.hmacCreateSecret = this.hmacCreateSecret;
 
             return instance;
         }
@@ -156,6 +186,11 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         public @NonNull BuilderForRegistration setCredProtect(@Nullable CredentialProtectionPolicy credProtect) {
             this.credProtect = credProtect;
+            return this;
+        }
+
+        public @NonNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
+            this.hmacCreateSecret = hmacCreateSecret;
             return this;
         }
 
@@ -172,17 +207,24 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         private final Map<String, Serializable> unknowns = new HashMap<>();
         private UvmEntries uvm;
+        private HMACGetSecretOutput hmacGetSecret;
 
         public @NonNull AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build() {
             AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
             instance.uvm = this.uvm;
             instance.unknowns.putAll(this.unknowns);
+            instance.hmacGetSecret = this.hmacGetSecret;
 
             return instance;
         }
 
         public @NonNull BuilderForAuthentication setUvm(@Nullable UvmEntries uvm) {
             this.uvm = uvm;
+            return this;
+        }
+
+        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretOutput hmacGetSecret) {
+            this.hmacGetSecret = hmacGetSecret;
             return this;
         }
 
