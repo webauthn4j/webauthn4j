@@ -25,7 +25,6 @@ public class HMACSecretRegistrationExtensionAuthenticatorOutput extends SingleVa
         implements RegistrationExtensionAuthenticatorOutput {
 
     public static final String ID = "hmac-secret";
-    public static final String KEY_HMAC_CREATE_SECRET = "hmacCreateSecret";
 
     public HMACSecretRegistrationExtensionAuthenticatorOutput(@Nullable Boolean value) {
         super(value);
@@ -34,13 +33,6 @@ public class HMACSecretRegistrationExtensionAuthenticatorOutput extends SingleVa
     @Override
     public @NonNull String getIdentifier() {
         return ID;
-    }
-
-    public @Nullable Boolean getValue(@NonNull String key) {
-        if (!key.equals(KEY_HMAC_CREATE_SECRET)) {
-            throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_CREATE_SECRET));
-        }
-        return getValue();
     }
 
     @Override

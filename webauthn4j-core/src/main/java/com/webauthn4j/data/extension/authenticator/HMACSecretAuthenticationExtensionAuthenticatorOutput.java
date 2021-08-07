@@ -25,7 +25,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<HMACGetSecretOutput> implements AuthenticationExtensionAuthenticatorOutput{
 
     public static final String ID = "hmac-secret";
-    public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
 
     public HMACSecretAuthenticationExtensionAuthenticatorOutput(@Nullable HMACGetSecretOutput value) {
         super(value);
@@ -34,13 +33,6 @@ public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends Single
     @Override
     public @NonNull String getIdentifier() {
         return ID;
-    }
-
-    public @Nullable HMACGetSecretOutput getValue(@NonNull String key) {
-        if (!key.equals(KEY_HMAC_GET_SECRET)) {
-            throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
-        }
-        return getValue();
     }
 
     @Override

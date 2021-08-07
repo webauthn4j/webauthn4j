@@ -17,10 +17,7 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
@@ -45,12 +42,29 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
-    @JsonProperty
+    @JsonIgnore
     private Boolean hmacCreateSecret;
-    @JsonProperty
+    @JsonIgnore
     private HMACGetSecretOutput hmacGetSecret;
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
+
+    @JsonSetter("hmac-secret")
+    private void setHMACSecret(Object hmacSecret){
+        if(hmacSecret instanceof Boolean){
+            hmacCreateSecret = (Boolean)hmacSecret;
+            hmacGetSecret = null;
+        }
+        else {
+            hmacCreateSecret = null;
+            hmacGetSecret = (HMACGetSecretOutput)hmacSecret;
+        }
+    }
+
+    @JsonGetter("hmac-secret")
+    private Object getHMACSecret(){
+        return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+    }
 
     @JsonAnySetter
     private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
