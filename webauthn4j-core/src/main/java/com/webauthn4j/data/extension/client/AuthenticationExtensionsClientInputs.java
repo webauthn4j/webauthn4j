@@ -11,8 +11,6 @@ import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyS
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
-import com.webauthn4j.data.extension.authenticator.HMACSecretAuthenticationExtensionAuthenticatorInput;
-import com.webauthn4j.data.extension.authenticator.HMACSecretRegistrationExtensionAuthenticatorInput;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -153,12 +151,12 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public @Nullable Boolean getHmacCreateSecret() {
+    public @Nullable Boolean getHMACCreateSecret() {
         return hmacCreateSecret;
     }
 
     @JsonIgnore
-    public @Nullable HMACGetSecretInput getHmacGetSecret() {
+    public @Nullable HMACGetSecretInput getHMACGetSecret() {
         return hmacGetSecret;
     }
 
@@ -188,10 +186,10 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
                 map.put((Class<? extends T>) CredentialProtectionExtensionClientInput.class, (T) new CredentialProtectionExtensionClientInput(credentialProtectionPolicy, enforceCredentialProtectionPolicy));
             }
             if (hmacCreateSecret != null) {
-                map.put((Class<? extends T>) HMACSecretRegistrationExtensionAuthenticatorInput.class, (T) new HMACSecretRegistrationExtensionAuthenticatorInput(hmacCreateSecret));
+                map.put((Class<? extends T>) HMACSecretRegistrationExtensionClientInput.class, (T) new HMACSecretRegistrationExtensionClientInput(hmacCreateSecret));
             }
             if (hmacGetSecret != null) {
-                map.put((Class<? extends T>) HMACSecretAuthenticationExtensionAuthenticatorInput.class, (T) new HMACSecretAuthenticationExtensionAuthenticatorInput(hmacGetSecret));
+                map.put((Class<? extends T>) HMACSecretAuthenticationExtensionClientInput.class, (T) new HMACSecretAuthenticationExtensionClientInput(hmacGetSecret));
             }
             extensions = Collections.unmodifiableMap(map);
         }

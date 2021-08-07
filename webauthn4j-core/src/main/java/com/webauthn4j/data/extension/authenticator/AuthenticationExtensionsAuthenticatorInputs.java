@@ -118,12 +118,12 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonIgnore
-    public @Nullable Boolean getHmacCreateSecret() {
+    public @Nullable Boolean getHMACCreateSecret() {
         return hmacCreateSecret;
     }
 
     @JsonIgnore
-    public @Nullable HMACGetSecretInput getHmacGetSecret() {
+    public @Nullable HMACGetSecretInput getHMACGetSecret() {
         return hmacGetSecret;
     }
 
@@ -134,7 +134,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    private @NonNull Map<Class<? extends T>, T> getExtensions() {
+    public @NonNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
             if (uvm != null) {
