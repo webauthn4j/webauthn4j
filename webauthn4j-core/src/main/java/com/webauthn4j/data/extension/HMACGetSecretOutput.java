@@ -25,25 +25,25 @@ import java.util.Arrays;
 
 public class HMACGetSecretOutput implements Serializable {
 
-    private final byte[] salt1;
-    private final byte[] salt2;
+    private final byte[] output1;
+    private final byte[] output2;
 
-    public HMACGetSecretOutput(@NonNull byte[] salt1, @Nullable byte[] salt2) {
-        this.salt1 = ArrayUtil.clone(salt1);
-        this.salt2 = ArrayUtil.clone(salt2);
+    public HMACGetSecretOutput(@NonNull byte[] output1, @Nullable byte[] output2) {
+        this.output1 = ArrayUtil.clone(output1);
+        this.output2 = ArrayUtil.clone(output2);
     }
 
-    public HMACGetSecretOutput(@NonNull byte[] salt1) {
-        this.salt1 = ArrayUtil.clone(salt1);
-        this.salt2 = null;
+    public HMACGetSecretOutput(@NonNull byte[] output1) {
+        this.output1 = ArrayUtil.clone(output1);
+        this.output2 = null;
     }
 
-    public @NonNull byte[] getSalt1() {
-        return ArrayUtil.clone(salt1);
+    public @NonNull byte[] getOutput1() {
+        return ArrayUtil.clone(output1);
     }
 
-    public @Nullable byte[] getSalt2() {
-        return ArrayUtil.clone(salt2);
+    public @Nullable byte[] getOutput2() {
+        return ArrayUtil.clone(output2);
     }
 
     @Override
@@ -51,13 +51,13 @@ public class HMACGetSecretOutput implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HMACGetSecretOutput that = (HMACGetSecretOutput) o;
-        return Arrays.equals(salt1, that.salt1) && Arrays.equals(salt2, that.salt2);
+        return Arrays.equals(output1, that.output1) && Arrays.equals(output2, that.output2);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(salt1);
-        result = 31 * result + Arrays.hashCode(salt2);
+        int result = Arrays.hashCode(output1);
+        result = 31 * result + Arrays.hashCode(output2);
         return result;
     }
 }

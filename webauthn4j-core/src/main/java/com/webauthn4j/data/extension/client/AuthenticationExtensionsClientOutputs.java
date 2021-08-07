@@ -7,8 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
-import com.webauthn4j.data.extension.authenticator.HMACSecretAuthenticationExtensionAuthenticatorOutput;
-import com.webauthn4j.data.extension.authenticator.HMACSecretRegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

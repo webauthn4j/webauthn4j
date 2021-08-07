@@ -16,16 +16,12 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
-import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -50,12 +46,29 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
-    @JsonProperty
+    @JsonIgnore
     private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretInput hmacGetSecret;
+    @JsonIgnore
+    private HMACGetSecretAuthenticatorInput hmacGetSecret;
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
+
+    @JsonSetter("hmac-secret")
+    private void setHMACSecret(Object hmacSecret){
+        if(hmacSecret instanceof Boolean){
+            hmacCreateSecret = (Boolean)hmacSecret;
+            hmacGetSecret = null;
+        }
+        else {
+            hmacCreateSecret = null;
+            hmacGetSecret = (HMACGetSecretAuthenticatorInput)hmacSecret;
+        }
+    }
+
+    @JsonGetter("hmac-secret")
+    private Object getHMACSecret(){
+        return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+    }
 
     @JsonAnyGetter
     private Map<String, Serializable> getUnknowns() {
@@ -123,7 +136,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonIgnore
-    public @Nullable HMACGetSecretInput getHMACGetSecret() {
+    public @Nullable HMACGetSecretAuthenticatorInput getHMACGetSecret() {
         return hmacGetSecret;
     }
 
@@ -212,7 +225,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
         private final Map<String, Serializable> unknowns = new HashMap<>();
         private Boolean uvm;
-        private HMACGetSecretInput hmacGetSecret;
+        private HMACGetSecretAuthenticatorInput hmacGetSecret;
 
         public @NonNull AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> build() {
             AuthenticationExtensionsAuthenticatorInputs<AuthenticationExtensionAuthenticatorInput> instance = new AuthenticationExtensionsAuthenticatorInputs<>();
@@ -228,7 +241,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretInput hmacGetSecret) {
+        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretAuthenticatorInput hmacGetSecret) {
             this.hmacGetSecret = hmacGetSecret;
             return this;
         }

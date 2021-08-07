@@ -17,16 +17,12 @@
 
 package com.webauthn4j.data.extension.authenticator;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
 import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
-import com.webauthn4j.data.extension.HMACGetSecretOutput;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -45,12 +41,29 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
-    @JsonProperty
+    @JsonIgnore
     private Boolean hmacCreateSecret;
-    @JsonProperty
-    private HMACGetSecretOutput hmacGetSecret;
+    @JsonIgnore
+    private byte[] hmacGetSecret;
     @JsonIgnore
     private Map<Class<? extends T>, T> extensions;
+
+    @JsonSetter("hmac-secret")
+    private void setHMACSecret(Object hmacSecret){
+        if(hmacSecret instanceof Boolean){
+            hmacCreateSecret = (Boolean)hmacSecret;
+            hmacGetSecret = null;
+        }
+        else {
+            hmacCreateSecret = null;
+            hmacGetSecret = (byte[])hmacSecret;
+        }
+    }
+
+    @JsonGetter("hmac-secret")
+    private Object getHMACSecret(){
+        return hmacCreateSecret != null ? hmacCreateSecret : hmacGetSecret;
+    }
 
     @JsonAnySetter
     private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
@@ -118,7 +131,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     }
 
     @JsonIgnore
-    public @Nullable HMACGetSecretOutput getHmacGetSecret() {
+    public @Nullable byte[] getHmacGetSecret() {
         return hmacGetSecret;
     }
 
@@ -154,12 +167,14 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorOutputs<?> that = (AuthenticationExtensionsAuthenticatorOutputs<?>) o;
-        return Objects.equals(unknowns, that.unknowns) && Objects.equals(uvm, that.uvm) && credProtect == that.credProtect && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
+        return Objects.equals(unknowns, that.unknowns) && Objects.equals(uvm, that.uvm) && credProtect == that.credProtect && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Arrays.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(unknowns, uvm, credProtect, hmacCreateSecret, hmacGetSecret, extensions);
+        int result = Objects.hash(unknowns, uvm, credProtect, hmacCreateSecret, extensions);
+        result = 31 * result + Arrays.hashCode(hmacGetSecret);
+        return result;
     }
 
     public static class BuilderForRegistration {
@@ -207,7 +222,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
 
         private final Map<String, Serializable> unknowns = new HashMap<>();
         private UvmEntries uvm;
-        private HMACGetSecretOutput hmacGetSecret;
+        private byte[] hmacGetSecret;
 
         public @NonNull AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> build() {
             AuthenticationExtensionsAuthenticatorOutputs<AuthenticationExtensionAuthenticatorOutput> instance = new AuthenticationExtensionsAuthenticatorOutputs<>();
@@ -223,7 +238,7 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretOutput hmacGetSecret) {
+        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable byte[] hmacGetSecret) {
             this.hmacGetSecret = hmacGetSecret;
             return this;
         }
