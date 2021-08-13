@@ -22,7 +22,7 @@ import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.TokenBindingException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Arrays;
+import java.security.MessageDigest;
 
 /**
  * Validates the specified {@link TokenBinding}
@@ -47,7 +47,7 @@ class TokenBindingValidator {
                 case SUPPORTED:
                     break;
                 case PRESENT:
-                    if (!Arrays.equals(clientDataTokenBindingId, serverTokenBindingId)) {
+                    if (!MessageDigest.isEqual(clientDataTokenBindingId, serverTokenBindingId)) {
                         throw new TokenBindingException("TokenBinding id does not match");
                     }
             }
