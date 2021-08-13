@@ -83,6 +83,8 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         } catch (IOException | RuntimeException e) {
             throw new BadAttestationStatementException("Failed to extract nonce from Apple anonymous attestation statement.", e);
         }
+        // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(extracted, nonce)) {
             throw new BadAttestationStatementException("nonce doesn't match.");
         }

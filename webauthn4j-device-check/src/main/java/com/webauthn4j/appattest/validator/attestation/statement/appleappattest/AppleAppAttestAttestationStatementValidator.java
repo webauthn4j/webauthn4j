@@ -97,6 +97,7 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
                 .put(authenticatorData).put(clientDataHash).array();
         byte[] expectedNonce = MessageDigestUtil.createSHA256().digest(composite);
 
+        // As nonce is known data to client side(potential attacker), there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if (!Arrays.equals(actualNonce, expectedNonce)) {
             throw new BadAttestationStatementException("App Attest nonce doesn't match.");
         }
@@ -106,6 +107,8 @@ public class AppleAppAttestAttestationStatementValidator extends AbstractStateme
         byte[] publicKey = ECUtil.createUncompressedPublicKey((ECPublicKey) getAttestationStatement(registrationObject).getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey());
         DCRegistrationObject dcRegistrationObject = (DCRegistrationObject) registrationObject;
         byte[] keyId = dcRegistrationObject.getKeyId();
+        // As publicKey is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(MessageDigestUtil.createSHA256().digest(publicKey), keyId)) {
             throw new BadAttestationStatementException("key identifier doesn't match SHA-256 of the publickey");
         }

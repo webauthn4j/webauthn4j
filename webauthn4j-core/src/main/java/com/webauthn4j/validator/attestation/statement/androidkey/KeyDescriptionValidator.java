@@ -84,6 +84,8 @@ public class KeyDescriptionValidator {
     void doValidate(@NonNull Asn1Container keyDescription, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
+        // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
             throw new KeyDescriptionValidationException("Attestation challenge doesn't match.");
         }
