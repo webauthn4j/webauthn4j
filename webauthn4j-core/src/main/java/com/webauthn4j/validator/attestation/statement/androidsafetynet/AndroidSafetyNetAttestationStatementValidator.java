@@ -162,6 +162,8 @@ public class AndroidSafetyNetAttestationStatementValidator extends AbstractState
         ByteBuffer buffer = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length);
         byte[] data = buffer.put(authenticatorData).put(clientDataHash).array();
         byte[] hash = MessageDigestUtil.createSHA256().digest(data);
+        // As nonce is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(hash, Base64Util.decode(nonce))) {
             throw new BadAttestationStatementException("Nonce in the Android safetynet response doesn't match.");
         }

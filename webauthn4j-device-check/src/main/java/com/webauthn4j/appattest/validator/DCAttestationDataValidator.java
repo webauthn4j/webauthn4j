@@ -72,6 +72,8 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
         byte[] keyId = dcAttestationData.getKeyId();
         //noinspection ConstantConditions as null check is already done in caller
         byte[] credentialId = registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCredentialId();
+        // As keyId is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(keyId, credentialId)) {
             throw new BadAttestationStatementException("key identifier doesn't match credentialId.");
         }

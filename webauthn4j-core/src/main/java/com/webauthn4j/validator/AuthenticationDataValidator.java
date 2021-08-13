@@ -229,6 +229,8 @@ public class AuthenticationDataValidator {
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
+        // As allowCredentials are known data to client side(potential attacker),
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if(allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))){
             throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.");
         }

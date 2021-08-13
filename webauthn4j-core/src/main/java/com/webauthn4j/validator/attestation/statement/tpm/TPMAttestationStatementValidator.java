@@ -114,6 +114,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
         MessageDigest messageDigest = getMessageDigest(alg);
         byte[] hash = messageDigest.digest(attToBeSigned);
+        // As hash is public data(not secret data) to client side, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
         }
@@ -127,6 +128,8 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         algJcaName = getAlgJcaName(hashAlg);
 
         byte[] pubAreaDigest = MessageDigestUtil.createMessageDigest(algJcaName).digest(pubArea.getBytes());
+        // As pubAreaDigest is known data to client side(potential attacker) because it is calculated from parts of a message,
+        // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(pubAreaDigest, certifyInfo.getName().getDigest())) {
             throw new BadAttestationStatementException("hash of `attested` doesn't match with name field of certifyInfo");
         }

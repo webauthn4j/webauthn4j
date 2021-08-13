@@ -222,6 +222,7 @@ public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
         String metadataStatementBase64url = httpClient.fetch(uriWithToken);
         String metadataStatementStr = new String(Base64UrlUtil.decode(metadataStatementBase64url));
         byte[] hash = MessageDigestUtil.createSHA256().digest(metadataStatementBase64url.getBytes(StandardCharsets.UTF_8));
+        // As hash is known data to statement provider, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(hash, expectedHash)) {
             throw new MDSException("Hash of metadataStatement doesn't match");
         }

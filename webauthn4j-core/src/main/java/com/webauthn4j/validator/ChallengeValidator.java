@@ -24,7 +24,7 @@ import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Arrays;
+import java.security.MessageDigest;
 
 /**
  * Validates the specified {@link Challenge}
@@ -58,7 +58,7 @@ class ChallengeValidator {
         byte[] expectedChallengeBytes = expected.getValue();
         byte[] actualChallengeBytes = actual.getValue();
 
-        if (!Arrays.equals(expectedChallengeBytes, actualChallengeBytes)) {
+        if (!MessageDigest.isEqual(expectedChallengeBytes, actualChallengeBytes)) {
             throw new BadChallengeException("The actual challenge does not match the expected challenge");
         }
     }
