@@ -1,21 +1,17 @@
 package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
+import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
-
-public class CredentialProtectionExtensionAuthenticatorInput implements RegistrationExtensionAuthenticatorInput {
+public class CredentialProtectionExtensionAuthenticatorInput extends SingleValueExtensionInputBase<CredentialProtectionPolicy> implements RegistrationExtensionAuthenticatorInput {
 
     public static final String ID = "credProtect";
     public static final String KEY_CRED_PROTECT = "credProtect";
 
-    private final CredentialProtectionPolicy credProtect;
-
-    public CredentialProtectionExtensionAuthenticatorInput(@Nullable CredentialProtectionPolicy credProtect) {
-        this.credProtect = credProtect;
+    public CredentialProtectionExtensionAuthenticatorInput(@NonNull CredentialProtectionPolicy value) {
+        super(value);
     }
 
     @Override
@@ -23,21 +19,23 @@ public class CredentialProtectionExtensionAuthenticatorInput implements Registra
         return ID;
     }
 
-    public @Nullable CredentialProtectionPolicy getCredProtect() {
-        return credProtect;
+    public @NonNull CredentialProtectionPolicy getCredProtect() {
+        return getValue();
     }
 
     @Override
-    public @Nullable Serializable getValue(@NonNull String key) {
+    public @NonNull CredentialProtectionPolicy getValue(@NonNull String key) {
         if (KEY_CRED_PROTECT.equals(key)) {
-            return credProtect;
+            return getValue();
         }
         throw new IllegalArgumentException(String.format("%s is not valid key.", key));
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
-        if (credProtect == null) {
+        // value can be null when deserialized by Jackson
+        if (getValue() == null) {
             throw new ConstraintViolationException("credProtect must not be null");
         }
     }

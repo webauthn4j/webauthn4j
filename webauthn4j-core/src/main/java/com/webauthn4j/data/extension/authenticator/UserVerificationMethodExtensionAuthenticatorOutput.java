@@ -20,7 +20,6 @@ import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<UvmEntries>
         implements RegistrationExtensionAuthenticatorOutput, AuthenticationExtensionAuthenticatorOutput {
@@ -28,7 +27,7 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
     public static final String ID = "uvm";
     public static final String KEY_UVM = "uvm";
 
-    public UserVerificationMethodExtensionAuthenticatorOutput(@Nullable UvmEntries value) {
+    public UserVerificationMethodExtensionAuthenticatorOutput(@NonNull UvmEntries value) {
         super(value);
     }
 
@@ -37,12 +36,14 @@ public class UserVerificationMethodExtensionAuthenticatorOutput extends SingleVa
         return ID;
     }
 
-    public @Nullable UvmEntries getUvm() {
+    public @NonNull UvmEntries getUvm() {
         return getValue(KEY_UVM);
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }

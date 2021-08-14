@@ -19,13 +19,12 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class CredentialPropertiesExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProps";
 
-    public CredentialPropertiesExtensionClientInput(@Nullable Boolean value) {
+    public CredentialPropertiesExtensionClientInput(@NonNull Boolean value) {
         super(value);
     }
 
@@ -34,12 +33,14 @@ public class CredentialPropertiesExtensionClientInput extends SingleValueExtensi
         return ID;
     }
 
-    public @Nullable Boolean getCredProps() {
+    public @NonNull Boolean getCredProps() {
         return getValue();
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }

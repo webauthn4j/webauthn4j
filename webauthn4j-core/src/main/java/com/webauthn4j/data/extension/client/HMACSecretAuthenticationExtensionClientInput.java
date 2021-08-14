@@ -16,16 +16,18 @@
 
 package com.webauthn4j.data.extension.client;
 
+import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class UserVerificationMethodExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput, AuthenticationExtensionClientInput {
+public class HMACSecretAuthenticationExtensionClientInput extends SingleValueExtensionInputBase<HMACGetSecretInput> implements AuthenticationExtensionClientInput {
 
-    public static final String ID = "uvm";
+    public static final String ID = "hmac-secret";
+    public static final String KEY_HMAC_GET_SECRET = "hmacGetSecret";
 
-    public UserVerificationMethodExtensionClientInput(@NonNull Boolean appId) {
-        super(appId);
+    public HMACSecretAuthenticationExtensionClientInput(@NonNull HMACGetSecretInput value) {
+        super(value);
     }
 
     @Override
@@ -33,8 +35,12 @@ public class UserVerificationMethodExtensionClientInput extends SingleValueExten
         return ID;
     }
 
-    public @NonNull Boolean getUvm() {
-        return getValue(ID);
+    @Override
+    public @NonNull HMACGetSecretInput getValue(@NonNull String key) {
+        if (!key.equals(KEY_HMAC_GET_SECRET)) {
+            throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_GET_SECRET));
+        }
+        return getValue();
     }
 
     @SuppressWarnings({"ConstantConditions", "java:S2583"})
@@ -44,6 +50,14 @@ public class UserVerificationMethodExtensionClientInput extends SingleValueExten
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
+        if (getValue().getSalt1() == null) {
+            throw new ConstraintViolationException("salt1 must not be null");
+        }
+        if (getValue().getSalt1().length != 32) {
+            throw new ConstraintViolationException("salt1 must be 32 bytes length");
+        }
+        if (getValue().getSalt2() != null && getValue().getSalt2().length != 32) {
+            throw new ConstraintViolationException("salt2 must be 32 bytes length");
+        }
     }
-
 }

@@ -20,13 +20,12 @@ import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class UserVerificationMethodExtensionAuthenticatorInput extends SingleValueExtensionInputBase<Boolean>
-        implements RegistrationExtensionAuthenticatorInput, AuthenticationExtensionAuthenticatorInput {
+public class HMACSecretAuthenticationExtensionAuthenticatorInput extends SingleValueExtensionInputBase<HMACGetSecretAuthenticatorInput> implements AuthenticationExtensionAuthenticatorInput{
 
-    public static final String ID = "uvm";
-    public static final String KEY_UVM = "uvm";
+    public static final String ID = "hmac-secret";
+    public static final String KEY_HMAC_SECRET = "hmac-secret";
 
-    public UserVerificationMethodExtensionAuthenticatorInput(@NonNull Boolean value) {
+    public HMACSecretAuthenticationExtensionAuthenticatorInput(@NonNull HMACGetSecretAuthenticatorInput value) {
         super(value);
     }
 
@@ -35,16 +34,28 @@ public class UserVerificationMethodExtensionAuthenticatorInput extends SingleVal
         return ID;
     }
 
-    public @NonNull Boolean getUvm() {
-        return getValue(KEY_UVM);
-    }
-
     @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
         // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
+        }
+        // value can be null when deserialized by Jackson
+        if (getValue().getKeyAgreement() == null) {
+            throw new ConstraintViolationException("keyAgreement must not be null");
+        }
+        if (getValue().getSaltAuth() == null) {
+            throw new ConstraintViolationException("saltAuth must not be null");
+        }
+        if (getValue().getSaltEnc() == null) {
+            throw new ConstraintViolationException("saltEnc must not be null");
+        }
+        if (getValue().getSaltAuth().length != 32) {
+            throw new ConstraintViolationException("saltAuth must be 32 bytes length");
+        }
+        if (getValue().getSaltEnc().length != 32) {
+            throw new ConstraintViolationException("saltEnc must be 32 bytes length");
         }
     }
 }

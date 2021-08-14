@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.extension.client;
+package com.webauthn4j.data.extension.authenticator;
 
-import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
-import com.webauthn4j.data.extension.UvmEntries;
+import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class UserVerificationMethodExtensionClientOutput
-        extends SingleValueExtensionOutputBase<UvmEntries>
-        implements RegistrationExtensionClientOutput, AuthenticationExtensionClientOutput {
+public class HMACSecretRegistrationExtensionAuthenticatorInput extends SingleValueExtensionInputBase<Boolean>
+        implements RegistrationExtensionAuthenticatorInput {
 
-    public static final String ID = "uvm";
+    public static final String ID = "hmac-secret";
 
-    public UserVerificationMethodExtensionClientOutput(@NonNull UvmEntries value) {
+    public HMACSecretRegistrationExtensionAuthenticatorInput(@NonNull Boolean value) {
         super(value);
     }
 
@@ -36,9 +34,6 @@ public class UserVerificationMethodExtensionClientOutput
         return ID;
     }
 
-    public @NonNull UvmEntries getUvm() {
-        return getValue(ID);
-    }
 
     @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
@@ -48,5 +43,4 @@ public class UserVerificationMethodExtensionClientOutput
             throw new ConstraintViolationException("value must not be null");
         }
     }
-
 }

@@ -60,6 +60,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new CertPathSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new EC2COSEKeySerializer());
+        this.addSerializer(new HMACGetSecretAuthenticatorInputSerializer());
         this.addSerializer(new JWSSerializer());
         this.addSerializer(new OriginSerializer());
         this.addSerializer(new RSACOSEKeySerializer());

@@ -19,14 +19,13 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class
 FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> implements AuthenticationExtensionClientInput {
 
     public static final String ID = "appid";
 
-    public FIDOAppIDExtensionClientInput(@Nullable String appId) {
+    public FIDOAppIDExtensionClientInput(@NonNull String appId) {
         super(appId);
     }
 
@@ -35,12 +34,14 @@ FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> impl
         return ID;
     }
 
-    public @Nullable String getAppid() {
+    public @NonNull String getAppid() {
         return getValue(ID);
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }

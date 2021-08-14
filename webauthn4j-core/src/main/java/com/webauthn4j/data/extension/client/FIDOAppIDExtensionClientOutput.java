@@ -19,7 +19,6 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class FIDOAppIDExtensionClientOutput
         extends SingleValueExtensionOutputBase<Boolean>
@@ -27,7 +26,7 @@ public class FIDOAppIDExtensionClientOutput
 
     public static final String ID = "appid";
 
-    public FIDOAppIDExtensionClientOutput(@Nullable Boolean value) {
+    public FIDOAppIDExtensionClientOutput(@NonNull Boolean value) {
         super(value);
     }
 
@@ -36,12 +35,14 @@ public class FIDOAppIDExtensionClientOutput
         return ID;
     }
 
-    public @Nullable Boolean getAppid() {
+    public @NonNull Boolean getAppid() {
         return getValue(ID);
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }

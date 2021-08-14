@@ -17,17 +17,16 @@
 package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
-import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class UserVerificationMethodExtensionClientOutput
-        extends SingleValueExtensionOutputBase<UvmEntries>
-        implements RegistrationExtensionClientOutput, AuthenticationExtensionClientOutput {
+public class HMACSecretRegistrationExtensionClientOutput extends SingleValueExtensionOutputBase<Boolean>
+        implements RegistrationExtensionClientOutput {
 
-    public static final String ID = "uvm";
+    public static final String ID = "hmac-secret";
+    public static final String KEY_HMAC_CREATE_SECRET = "hmacCreateSecret";
 
-    public UserVerificationMethodExtensionClientOutput(@NonNull UvmEntries value) {
+    public HMACSecretRegistrationExtensionClientOutput(@NonNull Boolean value) {
         super(value);
     }
 
@@ -36,8 +35,12 @@ public class UserVerificationMethodExtensionClientOutput
         return ID;
     }
 
-    public @NonNull UvmEntries getUvm() {
-        return getValue(ID);
+    @Override
+    public @NonNull Boolean getValue(@NonNull String key) {
+        if (!key.equals(KEY_HMAC_CREATE_SECRET)) {
+            throw new IllegalArgumentException(String.format("%s is the only valid key.", KEY_HMAC_CREATE_SECRET));
+        }
+        return getValue();
     }
 
     @SuppressWarnings({"ConstantConditions", "java:S2583"})
@@ -48,5 +51,4 @@ public class UserVerificationMethodExtensionClientOutput
             throw new ConstraintViolationException("value must not be null");
         }
     }
-
 }

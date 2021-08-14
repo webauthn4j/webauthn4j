@@ -14,30 +14,24 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.data.extension.client;
+package com.webauthn4j.data.extension.authenticator;
 
 import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
-import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-public class UserVerificationMethodExtensionClientOutput
-        extends SingleValueExtensionOutputBase<UvmEntries>
-        implements RegistrationExtensionClientOutput, AuthenticationExtensionClientOutput {
+public class HMACSecretAuthenticationExtensionAuthenticatorOutput extends SingleValueExtensionOutputBase<byte[]> implements AuthenticationExtensionAuthenticatorOutput{
 
-    public static final String ID = "uvm";
+    public static final String ID = "hmac-secret";
+    public static final String KEY_HMAC_SECRET = "hmac-secret";
 
-    public UserVerificationMethodExtensionClientOutput(@NonNull UvmEntries value) {
+    public HMACSecretAuthenticationExtensionAuthenticatorOutput(@NonNull byte[] value) {
         super(value);
     }
 
     @Override
     public @NonNull String getIdentifier() {
         return ID;
-    }
-
-    public @NonNull UvmEntries getUvm() {
-        return getValue(ID);
     }
 
     @SuppressWarnings({"ConstantConditions", "java:S2583"})
@@ -47,6 +41,8 @@ public class UserVerificationMethodExtensionClientOutput
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
+        if (getValue().length != 32 && getValue().length != 64) {
+            throw new ConstraintViolationException("saltAuth must be 32 bytes length or 64 bytes length");
+        }
     }
-
 }
