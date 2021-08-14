@@ -26,12 +26,8 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
 
     private final T value;
 
-    protected SingleValueExtensionBase(@Nullable T value) {
+    protected SingleValueExtensionBase(@NonNull T value) {
         this.value = value;
-    }
-
-    protected SingleValueExtensionBase() {
-        this.value = null;
     }
 
     public T getValue(@NonNull String key) {
@@ -43,7 +39,7 @@ public abstract class SingleValueExtensionBase<T extends Serializable> {
 
     protected abstract @NonNull String getIdentifier();
 
-    public @Nullable T getValue() {
+    public @NonNull T getValue() {
         return value;
     }
 

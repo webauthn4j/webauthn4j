@@ -25,7 +25,7 @@ public interface ExtensionInput extends Serializable {
 
     @NonNull String getIdentifier();
 
-    @Nullable Serializable getValue(String key);
+    @Nullable Serializable getValue(@NonNull String key);
 
     void validate();
 

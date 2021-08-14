@@ -16,13 +16,13 @@
 
 package com.webauthn4j.data.extension;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.Serializable;
 
 public abstract class SingleValueExtensionInputBase<T extends Serializable> extends SingleValueExtensionBase<T> implements ExtensionInput {
 
-    protected SingleValueExtensionInputBase(@Nullable T value) {
+    protected SingleValueExtensionInputBase(@NonNull T value) {
         super(value);
     }
 }

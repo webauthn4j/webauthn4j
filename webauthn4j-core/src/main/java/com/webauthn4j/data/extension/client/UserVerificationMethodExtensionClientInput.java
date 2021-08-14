@@ -19,13 +19,12 @@ package com.webauthn4j.data.extension.client;
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UserVerificationMethodExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput, AuthenticationExtensionClientInput {
 
     public static final String ID = "uvm";
 
-    public UserVerificationMethodExtensionClientInput(@Nullable Boolean appId) {
+    public UserVerificationMethodExtensionClientInput(@NonNull Boolean appId) {
         super(appId);
     }
 
@@ -34,7 +33,7 @@ public class UserVerificationMethodExtensionClientInput extends SingleValueExten
         return ID;
     }
 
-    public @Nullable Boolean getUvm() {
+    public @NonNull Boolean getUvm() {
         return getValue(ID);
     }
 

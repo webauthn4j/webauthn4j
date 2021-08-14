@@ -20,7 +20,6 @@ import com.webauthn4j.data.extension.SingleValueExtensionOutputBase;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UserVerificationMethodExtensionClientOutput
         extends SingleValueExtensionOutputBase<UvmEntries>
@@ -28,7 +27,7 @@ public class UserVerificationMethodExtensionClientOutput
 
     public static final String ID = "uvm";
 
-    public UserVerificationMethodExtensionClientOutput(@Nullable UvmEntries value) {
+    public UserVerificationMethodExtensionClientOutput(@NonNull UvmEntries value) {
         super(value);
     }
 
@@ -37,7 +36,7 @@ public class UserVerificationMethodExtensionClientOutput
         return ID;
     }
 
-    public @Nullable UvmEntries getUvm() {
+    public @NonNull UvmEntries getUvm() {
         return getValue(ID);
     }
 
