@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SuppressWarnings("ConstantConditions")
 class AuthenticationExtensionsClientOutputsTest {
 
-    @SuppressWarnings("S5961")
+    @SuppressWarnings("java:S5961")
     @Test
     void registration_variant_test() {
         CredentialPropertiesOutput credProps = new CredentialPropertiesOutput(true);
@@ -77,7 +77,7 @@ class AuthenticationExtensionsClientOutputsTest {
         assertThatThrownBy(()->hmacSecretRegistrationExtensionClientOutput.getValue("hmacGetSecret")).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @SuppressWarnings("S5961")
+    @SuppressWarnings("java:S5961")
     @Test
     void authentication_variant_test() {
         UvmEntries uvm = new UvmEntries(Collections.singletonList(new UvmEntry(UserVerificationMethod.FINGERPRINT_INTERNAL, KeyProtectionType.SOFTWARE, MatcherProtectionType.ON_CHIP)));

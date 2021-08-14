@@ -43,21 +43,20 @@ public class HMACSecretAuthenticationExtensionClientOutput extends SingleValueEx
         return getValue();
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }
         if (getValue().getOutput1() == null) {
             throw new ConstraintViolationException("output1 must not be null");
         }
-        if (getValue().getOutput2() == null) {
-            throw new ConstraintViolationException("output2 must not be null");
-        }
         if (getValue().getOutput1().length != 32) {
             throw new ConstraintViolationException("output1 must be 32 bytes length");
         }
-        if (getValue().getOutput2().length != 32) {
+        if (getValue().getOutput2() != null && getValue().getOutput2().length != 32) {
             throw new ConstraintViolationException("output2 must be 32 bytes length");
         }
     }

@@ -28,8 +28,6 @@ import java.util.Objects;
 
 public class HMACGetSecretAuthenticatorInput implements Serializable {
 
-    //TODO: cbor custom serialization
-
     private final COSEKey keyAgreement;
     private final byte[] saltEnc;
     private final byte[] saltAuth;

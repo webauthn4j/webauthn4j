@@ -34,7 +34,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
 
     private final CborConverter cborConverter = new ObjectConverter().getCborConverter();
 
-    @SuppressWarnings("S5961")
+    @SuppressWarnings("java:S5961")
     @Test
     void registration_variant_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
@@ -74,7 +74,7 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
         assertThatThrownBy(()->hmacSecretRegistrationExtensionAuthenticatorInput.getValue("hmacGetSecret")).isInstanceOf(IllegalArgumentException.class);
     }
 
-    @SuppressWarnings("S5961")
+    @SuppressWarnings("java:S5961")
     @Test
     void authentication_variant_test() {
         HMACGetSecretAuthenticatorInput hmacGetSecretAuthenticatorInput = new HMACGetSecretAuthenticatorInput(mock(COSEKey.class), new byte[16], new byte[16]);

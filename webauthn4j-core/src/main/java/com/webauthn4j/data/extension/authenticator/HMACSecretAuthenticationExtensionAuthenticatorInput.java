@@ -34,10 +34,16 @@ public class HMACSecretAuthenticationExtensionAuthenticatorInput extends SingleV
         return ID;
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
+        }
+        // value can be null when deserialized by Jackson
+        if (getValue().getKeyAgreement() == null) {
+            throw new ConstraintViolationException("keyAgreement must not be null");
         }
         if (getValue().getSaltAuth() == null) {
             throw new ConstraintViolationException("saltAuth must not be null");

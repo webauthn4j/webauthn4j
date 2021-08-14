@@ -31,8 +31,10 @@ public class CredentialProtectionExtensionAuthenticatorOutput extends SingleValu
         return getValue();
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("credProtect must not be null");
         }

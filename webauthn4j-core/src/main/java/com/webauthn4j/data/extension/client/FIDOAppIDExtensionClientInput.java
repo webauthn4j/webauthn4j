@@ -38,8 +38,10 @@ FIDOAppIDExtensionClientInput extends SingleValueExtensionInputBase<String> impl
         return getValue(ID);
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("value must not be null");
         }

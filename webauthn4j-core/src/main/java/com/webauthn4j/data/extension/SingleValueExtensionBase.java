@@ -22,7 +22,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class SingleValueExtensionBase<T extends Serializable> {
+public abstract class SingleValueExtensionBase<T extends Serializable> implements Serializable {
 
     private final T value;
 

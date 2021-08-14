@@ -31,8 +31,10 @@ public class CredentialProtectionExtensionAuthenticatorInput extends SingleValue
         throw new IllegalArgumentException(String.format("%s is not valid key.", key));
     }
 
+    @SuppressWarnings({"ConstantConditions", "java:S2583"})
     @Override
     public void validate() {
+        // value can be null when deserialized by Jackson
         if (getValue() == null) {
             throw new ConstraintViolationException("credProtect must not be null");
         }
