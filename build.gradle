@@ -93,7 +93,7 @@ subprojects {
         mavenCentral()
     }
 
-    def springBootVersion = "2.5.3"
+    def springBootVersion = "2.5.4"
     def kerbyVersion = "2.0.1"
     def bouncyCastleVersion = "1.69"
     def checkerframeworkVersion = "3.17.0"
