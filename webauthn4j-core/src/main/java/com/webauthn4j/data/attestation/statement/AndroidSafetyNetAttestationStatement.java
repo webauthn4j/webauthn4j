@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @JsonTypeName(AndroidSafetyNetAttestationStatement.FORMAT)
+@JsonPropertyOrder({"ver", "response"})
 public class AndroidSafetyNetAttestationStatement implements CertificateBaseAttestationStatement {
 
     public static final String FORMAT = "android-safetynet";

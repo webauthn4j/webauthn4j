@@ -16,10 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -28,6 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
+@JsonPropertyOrder({"x5c"})
 @JsonTypeName(AppleAnonymousAttestationStatement.FORMAT)
 public class AppleAnonymousAttestationStatement implements CertificateBaseAttestationStatement {
 
