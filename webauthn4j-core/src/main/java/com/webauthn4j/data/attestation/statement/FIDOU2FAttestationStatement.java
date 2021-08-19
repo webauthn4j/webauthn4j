@@ -16,10 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
@@ -30,6 +27,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
+@JsonPropertyOrder({"sig", "x5c"})
 @JsonTypeName(FIDOU2FAttestationStatement.FORMAT)
 public class FIDOU2FAttestationStatement implements CertificateBaseAttestationStatement {
 

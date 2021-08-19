@@ -16,10 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -29,6 +26,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
+@JsonPropertyOrder({"alg", "sig", "x5c"})
 @JsonTypeName(AndroidKeyAttestationStatement.FORMAT)
 public class AndroidKeyAttestationStatement implements CertificateBaseAttestationStatement {
 
