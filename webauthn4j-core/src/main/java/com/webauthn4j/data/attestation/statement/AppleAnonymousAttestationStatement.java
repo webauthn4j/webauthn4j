@@ -25,7 +25,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonPropertyOrder({"x5c"})
 @JsonTypeName(AppleAnonymousAttestationStatement.FORMAT)
 public class AppleAnonymousAttestationStatement implements CertificateBaseAttestationStatement {
 

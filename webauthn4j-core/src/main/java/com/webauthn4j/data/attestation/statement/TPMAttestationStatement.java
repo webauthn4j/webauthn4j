@@ -18,7 +18,6 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
@@ -30,7 +29,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonPropertyOrder({"alg", "sig", "x5c", "ver", "pubArea", "certInfo"})
 @JsonTypeName(TPMAttestationStatement.FORMAT)
 public class TPMAttestationStatement implements CertificateBaseAttestationStatement {
 

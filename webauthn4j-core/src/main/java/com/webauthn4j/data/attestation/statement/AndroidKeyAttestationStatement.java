@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonPropertyOrder({"alg", "sig", "x5c"})
 @JsonTypeName(AndroidKeyAttestationStatement.FORMAT)
 public class AndroidKeyAttestationStatement implements CertificateBaseAttestationStatement {
 

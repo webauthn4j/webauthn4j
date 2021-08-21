@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonPropertyOrder({"alg", "sig", "x5c"})
 @JsonTypeName(PackedAttestationStatement.FORMAT)
 public class PackedAttestationStatement implements CertificateBaseAttestationStatement {
 

@@ -55,15 +55,22 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
 
         this.addSerializer(new AAGUIDSerializer());
+        this.addSerializer(new AndroidKeyAttestationStatementSerializer());
+        this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
+        this.addSerializer(new AppleAnonymousAttestationStatementSerializer());
         this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
         this.addSerializer(new AuthenticatorDataSerializer(objectConverter));
         this.addSerializer(new CertPathSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new EC2COSEKeySerializer());
+        this.addSerializer(new FIDOU2FAttestationStatementSerializer());
         this.addSerializer(new HMACGetSecretAuthenticatorInputSerializer());
         this.addSerializer(new JWSSerializer());
         this.addSerializer(new OriginSerializer());
+        this.addSerializer(new PackedAttestationStatementSerializer());
+        this.addSerializer(new PublicKeyCredentialDescriptorSerializer());
         this.addSerializer(new RSACOSEKeySerializer());
+        this.addSerializer(new TPMAttestationStatementSerializer());
         this.addSerializer(new TPMSAttestSerializer());
         this.addSerializer(new TPMTPublicSerializer());
         this.addSerializer(new X509CertificateSerializer());
