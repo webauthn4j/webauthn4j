@@ -32,7 +32,7 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
 
     private final transient List<FieldSerializationRule<T, ?>> rules;
 
-    AbstractCtapCanonicalCborSerializer(@NonNull Class<T> t, @NonNull List<FieldSerializationRule<T, ?>> rules) {
+    protected AbstractCtapCanonicalCborSerializer(@NonNull Class<T> t, @NonNull List<FieldSerializationRule<T, ?>> rules) {
         super(t);
         this.rules = rules;
     }
@@ -74,7 +74,7 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
         }
     }
 
-    static class FieldSerializationRule<T, R> {
+    public static class FieldSerializationRule<T, R> {
 
         @NonNull
         private final Object name;

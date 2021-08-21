@@ -18,12 +18,15 @@ package com.webauthn4j.appattest.converter.jackson;
 
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.webauthn4j.appattest.converter.jackson.serializer.AppleAppAttestAttestationStatementSerializer;
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
 
 public class DeviceCheckCBORModule extends SimpleModule {
 
     public DeviceCheckCBORModule() {
         super("DeviceCheckCBORModule");
+
+        this.addSerializer(new AppleAppAttestAttestationStatementSerializer());
 
         this.registerSubtypes(new NamedType(AppleAppAttestAttestationStatement.class, AppleAppAttestAttestationStatement.FORMAT));
     }

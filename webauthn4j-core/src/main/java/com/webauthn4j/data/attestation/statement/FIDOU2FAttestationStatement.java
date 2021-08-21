@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 @JsonIgnoreProperties(value = "format")
-@JsonPropertyOrder({"sig", "x5c"})
 @JsonTypeName(FIDOU2FAttestationStatement.FORMAT)
 public class FIDOU2FAttestationStatement implements CertificateBaseAttestationStatement {
 
