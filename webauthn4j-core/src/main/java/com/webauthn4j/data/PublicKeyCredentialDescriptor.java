@@ -18,6 +18,7 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
@@ -36,6 +37,7 @@ import java.util.Set;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialdescriptor">
  * §5.10.3. Credential Descriptor (dictionary PublicKeyCredentialDescriptor)</a>
  */
+@JsonPropertyOrder({"id", "type", "transports"})
 public class PublicKeyCredentialDescriptor implements Serializable {
 
     // ~ Instance fields
