@@ -97,7 +97,7 @@ subprojects {
     def kerbyVersion = "2.0.1"
     def bouncyCastleVersion = "1.69"
     def checkerframeworkVersion = "3.17.0"
-    def mockitoVersion = "3.12.3"
+    def mockitoVersion = "3.12.4"
 
     dependencies {
         constraints {
