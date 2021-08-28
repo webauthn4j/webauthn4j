@@ -103,4 +103,12 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
         result = 31 * result + Arrays.hashCode(attestationObject);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticatorAttestationResponse(" +
+                "attestationObject=" + ArrayUtil.toHexString(attestationObject) +
+                ", transports=" + transports +
+                ')';
+    }
 }

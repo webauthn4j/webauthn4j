@@ -145,4 +145,19 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
 
         return Objects.hash(rp, user, challenge, pubKeyCredParams, timeout, excludeCredentials, authenticatorSelection, attestation, extensions);
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialCreationOptions(" +
+                "rp=" + rp +
+                ", user=" + user +
+                ", challenge=" + challenge +
+                ", pubKeyCredParams=" + pubKeyCredParams +
+                ", timeout=" + timeout +
+                ", excludeCredentials=" + excludeCredentials +
+                ", authenticatorSelection=" + authenticatorSelection +
+                ", attestation=" + attestation +
+                ", extensions=" + extensions +
+                ')';
+    }
 }

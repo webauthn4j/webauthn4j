@@ -100,4 +100,15 @@ public class CollectedClientData implements Serializable {
     public int hashCode() {
         return Objects.hash(type, challenge, origin, crossOrigin, tokenBinding);
     }
+
+    @Override
+    public String toString() {
+        return "CollectedClientData(" +
+                "type=" + type +
+                ", challenge=" + challenge +
+                ", origin=" + origin +
+                ", crossOrigin=" + crossOrigin +
+                ", tokenBinding=" + tokenBinding +
+                ')';
+    }
 }

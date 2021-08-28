@@ -106,4 +106,38 @@ public enum UserVerificationMethod {
     public long getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        switch (this){
+            case PRESENCE_INTERNAL:
+                return "PRESENCE_INTERNAL";
+            case FINGERPRINT_INTERNAL:
+                return "FINGERPRINT_INTERNAL";
+            case PASSCODE_INTERNAL:
+                return "PASSCODE_INTERNAL";
+            case VOICEPRINT_INTERNAL:
+                return "VOICEPRINT_INTERNAL";
+            case FACEPRINT_INTERNAL:
+                return "FACEPRINT_INTERNAL";
+            case LOCATION_INTERNAL:
+                return "LOCATION_INTERNAL";
+            case EYEPRINT_INTERNAL:
+                return "EYEPRINT_INTERNAL";
+            case PATTERN_INTERNAL:
+                return "PATTERN_INTERNAL";
+            case HANDPRINT_INTERNAL:
+                return "HANDPRINT_INTERNAL";
+            case PASSCODE_EXTERNAL:
+                return "PASSCODE_EXTERNAL";
+            case PATTERN_EXTERNAL:
+                return "PATTERN_EXTERNAL";
+            case NONE:
+                return "NONE";
+            case ALL:
+                return "ALL";
+            default:
+                return String.format("UNKNOWN(%08X)", value);
+        }
+    }
 }

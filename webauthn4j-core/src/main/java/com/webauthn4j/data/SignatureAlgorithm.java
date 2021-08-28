@@ -29,13 +29,22 @@ import static com.webauthn4j.data.MessageDigestAlgorithm.*;
 
 public class SignatureAlgorithm implements Serializable {
 
-    public static final SignatureAlgorithm ES256 = new SignatureAlgorithm("SHA256withECDSA", SHA256);
-    public static final SignatureAlgorithm ES384 = new SignatureAlgorithm("SHA384withECDSA", SHA384);
-    public static final SignatureAlgorithm ES512 = new SignatureAlgorithm("SHA512withECDSA", SHA512);
-    public static final SignatureAlgorithm RS1 = new SignatureAlgorithm("SHA1withRSA", SHA1);
-    public static final SignatureAlgorithm RS256 = new SignatureAlgorithm("SHA256withRSA", SHA256);
-    public static final SignatureAlgorithm RS384 = new SignatureAlgorithm("SHA384withRSA", SHA384);
-    public static final SignatureAlgorithm RS512 = new SignatureAlgorithm("SHA512withRSA", SHA512);
+    public static final String SHA_256_WITH_ECDSA = "SHA256withECDSA";
+    public static final String SHA_384_WITH_ECDSA = "SHA384withECDSA";
+    public static final String SHA_512_WITH_ECDSA = "SHA512withECDSA";
+    public static final String SHA_1_WITH_RSA = "SHA1withRSA";
+    public static final String SHA_256_WITH_RSA = "SHA256withRSA";
+    public static final String SHA_384_WITH_RSA = "SHA384withRSA";
+    public static final String SHA_512_WITH_RSA = "SHA512withRSA";
+
+    public static final SignatureAlgorithm ES256 = new SignatureAlgorithm(SHA_256_WITH_ECDSA, SHA256);
+    public static final SignatureAlgorithm ES384 = new SignatureAlgorithm(SHA_384_WITH_ECDSA, SHA384);
+    public static final SignatureAlgorithm ES512 = new SignatureAlgorithm(SHA_512_WITH_ECDSA, SHA512);
+    public static final SignatureAlgorithm RS1 = new SignatureAlgorithm(SHA_1_WITH_RSA, SHA1);
+    public static final SignatureAlgorithm RS256 = new SignatureAlgorithm(SHA_256_WITH_RSA, SHA256);
+    public static final SignatureAlgorithm RS384 = new SignatureAlgorithm(SHA_384_WITH_RSA, SHA384);
+    public static final SignatureAlgorithm RS512 = new SignatureAlgorithm(SHA_512_WITH_RSA, SHA512);
+
 
     private final String jcaName;
     private final MessageDigestAlgorithm messageDigestAlgorithm;
@@ -47,19 +56,19 @@ public class SignatureAlgorithm implements Serializable {
 
     public static SignatureAlgorithm create(@NonNull String jcaName) {
         switch (jcaName) {
-            case "SHA256withECDSA":
+            case SHA_256_WITH_ECDSA:
                 return ES256;
-            case "SHA384withECDSA":
+            case SHA_384_WITH_ECDSA:
                 return ES384;
-            case "SHA512withECDSA":
+            case SHA_512_WITH_ECDSA:
                 return ES512;
-            case "SHA1withRSA":
+            case SHA_1_WITH_RSA:
                 return RS1;
-            case "SHA256withRSA":
+            case SHA_256_WITH_RSA:
                 return RS256;
-            case "SHA384withRSA":
+            case SHA_384_WITH_RSA:
                 return RS384;
-            case "SHA512withRSA":
+            case SHA_512_WITH_RSA:
                 return RS512;
             default:
                 throw new IllegalArgumentException(String.format("jcaName %s is not supported.", jcaName));
@@ -101,5 +110,27 @@ public class SignatureAlgorithm implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(jcaName, messageDigestAlgorithm);
+    }
+
+    @Override
+    public String toString() {
+        switch (jcaName) {
+            case SHA_256_WITH_ECDSA:
+                return "ES256";
+            case SHA_384_WITH_ECDSA:
+                return "ES384";
+            case SHA_512_WITH_ECDSA:
+                return "ES512";
+            case SHA_1_WITH_RSA:
+                return "RS1";
+            case SHA_256_WITH_RSA:
+                return "RS256";
+            case SHA_384_WITH_RSA:
+                return "RS384";
+            case SHA_512_WITH_RSA:
+                return "RS512";
+            default:
+                return "Unknown jcaName: " + jcaName;
+        }
     }
 }

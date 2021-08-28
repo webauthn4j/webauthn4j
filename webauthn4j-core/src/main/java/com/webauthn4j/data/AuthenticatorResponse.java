@@ -45,4 +45,11 @@ public abstract class AuthenticatorResponse implements Serializable {
     public @NonNull byte[] getClientDataJSON() {
         return ArrayUtil.clone(clientDataJSON);
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticatorResponse(" +
+                "clientDataJSON=" + ArrayUtil.toHexString(clientDataJSON) +
+                ')';
+    }
 }

@@ -22,6 +22,7 @@ import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Response implements Serializable {
 
@@ -115,5 +116,20 @@ public class Response implements Serializable {
 
     public @Nullable String getError() {
         return error;
+    }
+
+    @Override
+    public String toString() {
+        return "Response(" +
+                "nonce=" + nonce +
+                ", timestampMs=" + timestampMs +
+                ", apkPackageName=" + apkPackageName +
+                ", apkCertificateDigestSha256=" + Arrays.toString(apkCertificateDigestSha256) +
+                ", apkDigestSha256=" + apkDigestSha256 +
+                ", ctsProfileMatch=" + ctsProfileMatch +
+                ", basicIntegrity=" + basicIntegrity +
+                ", advice=" + advice +
+                ", error=" + error +
+                ')';
     }
 }

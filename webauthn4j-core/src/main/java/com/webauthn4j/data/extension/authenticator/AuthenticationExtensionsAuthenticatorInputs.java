@@ -29,6 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -178,6 +179,21 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticationExtensionsAuthenticatorInputs<?> that = (AuthenticationExtensionsAuthenticatorInputs<?>) o;
         return Objects.equals(unknowns, that.unknowns) && Objects.equals(uvm, that.uvm) && credProtect == that.credProtect && Objects.equals(hmacCreateSecret, that.hmacCreateSecret) && Objects.equals(hmacGetSecret, that.hmacGetSecret) && Objects.equals(extensions, that.extensions);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("AuthenticationExtensionsAuthenticatorInputs(");
+        String entries = getExtensions().values().stream().map(t -> String.format("%s=%s", t.getIdentifier(), t)).collect(Collectors.joining(", "));
+        builder.append(entries);
+        String unknownsStr = getUnknowns().entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
+        if(!unknownsStr.isEmpty()){
+            builder.append(", ");
+            builder.append(unknownsStr);
+        }
+        builder.append(")");
+        return builder.toString();
     }
 
     @Override

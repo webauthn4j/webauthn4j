@@ -67,4 +67,9 @@ public enum JWAIdentifier {
     public @NonNull String getJcaName() {
         return jcaName;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

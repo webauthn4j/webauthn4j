@@ -59,4 +59,9 @@ public enum ClientDataType {
     public @NonNull String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

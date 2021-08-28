@@ -116,4 +116,14 @@ public class CoreRegistrationParameters implements Serializable {
     public int hashCode() {
         return Objects.hash(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
     }
+
+    @Override
+    public String toString() {
+        return "CoreRegistrationParameters(" +
+                "serverProperty=" + serverProperty +
+                ", pubKeyCredParams=" + pubKeyCredParams +
+                ", userVerificationRequired=" + userVerificationRequired +
+                ", userPresenceRequired=" + userPresenceRequired +
+                ')';
+    }
 }

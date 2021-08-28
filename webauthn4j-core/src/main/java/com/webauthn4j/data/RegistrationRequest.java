@@ -101,4 +101,14 @@ public class RegistrationRequest implements Serializable {
         result = 31 * result + Arrays.hashCode(clientDataJSON);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RegistrationRequest{" +
+                "attestationObject=" + ArrayUtil.toHexString(attestationObject) +
+                ", clientDataJSON=" + ArrayUtil.toHexString(clientDataJSON) +
+                ", clientExtensionsJSON=" + clientExtensionsJSON +
+                ", transports=" + transports +
+                '}';
+    }
 }

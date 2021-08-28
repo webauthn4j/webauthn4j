@@ -83,4 +83,12 @@ public class TokenBinding implements Serializable {
 
         return Objects.hash(status, id);
     }
+
+    @Override
+    public String toString() {
+        return "TokenBinding(" +
+                "status=" + status +
+                ", id=" + id +
+                ')';
+    }
 }

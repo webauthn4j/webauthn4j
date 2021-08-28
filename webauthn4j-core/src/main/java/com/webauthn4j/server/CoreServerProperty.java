@@ -66,4 +66,12 @@ public class CoreServerProperty implements Serializable {
     public int hashCode() {
         return Objects.hash(rpId, challenge);
     }
+
+    @Override
+    public String toString() {
+        return "CoreServerProperty(" +
+                "rpId=" + rpId +
+                ", challenge=" + challenge +
+                ')';
+    }
 }

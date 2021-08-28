@@ -86,4 +86,13 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         result = 31 * result + Arrays.hashCode(id);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialDescriptor(" +
+                "type=" + type +
+                ", id=" + ArrayUtil.toHexString(id) +
+                ", transports=" + transports +
+                ')';
+    }
 }

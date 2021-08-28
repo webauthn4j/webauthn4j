@@ -69,4 +69,11 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
     public int hashCode() {
         return Objects.hash(x5c);
     }
+
+    @Override
+    public String toString() {
+        return "AppleAnonymousAttestationStatement(" +
+                "x5c=" + x5c +
+                ')';
+    }
 }

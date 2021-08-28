@@ -342,4 +342,13 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "EC2COSEKey(" +
+                "curve=" + curve +
+                ", x=" + ArrayUtil.toHexString(x) +
+                ", y=" + ArrayUtil.toHexString(y) +
+                ", d=" + ArrayUtil.toHexString(d) +
+                ')';
+    }
 }

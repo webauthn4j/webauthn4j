@@ -72,4 +72,12 @@ public class PublicKeyCredentialParameters implements Serializable {
 
         return Objects.hash(type, alg);
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialParameters(" +
+                "type=" + type +
+                ", alg=" + alg +
+                ')';
+    }
 }

@@ -54,4 +54,8 @@ public class NoneAttestationStatement implements AttestationStatement {
         unknownProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "NoneAttestationStatement()";
+    }
 }

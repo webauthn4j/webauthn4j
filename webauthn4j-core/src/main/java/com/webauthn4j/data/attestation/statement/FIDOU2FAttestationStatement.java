@@ -85,4 +85,12 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
         result = 31 * result + Arrays.hashCode(sig);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "FIDOU2FAttestationStatement(" +
+                "x5c=" + x5c +
+                ", sig=" + ArrayUtil.toHexString(sig) +
+                ')';
+    }
 }

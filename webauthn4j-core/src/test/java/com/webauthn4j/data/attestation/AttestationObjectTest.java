@@ -19,7 +19,7 @@ package com.webauthn4j.data.attestation;
 import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
@@ -41,5 +41,11 @@ class AttestationObjectTest {
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
+    }
+
+    @Test
+    void toString_test() {
+        AttestationObject instance = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 }

@@ -122,4 +122,14 @@ public class AuthenticatorSelectionCriteria implements Serializable {
     public int hashCode() {
         return Objects.hash(authenticatorAttachment, requireResidentKey, residentKey, userVerification);
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticatorSelectionCriteria(" +
+                "authenticatorAttachment=" + authenticatorAttachment +
+                ", requireResidentKey=" + requireResidentKey +
+                ", residentKey=" + residentKey +
+                ", userVerification=" + userVerification +
+                ')';
+    }
 }

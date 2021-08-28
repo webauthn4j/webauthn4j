@@ -30,6 +30,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAuthenticatorOutput> implements Serializable {
 
@@ -177,6 +178,21 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
         int result = Objects.hash(unknowns, uvm, credProtect, hmacCreateSecret, extensions);
         result = 31 * result + Arrays.hashCode(hmacGetSecret);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("AuthenticationExtensionsAuthenticatorInputs(");
+        String entries = getExtensions().values().stream().map(t -> String.format("%s=%s", t.getIdentifier(), t)).collect(Collectors.joining(", "));
+        builder.append(entries);
+        String unknownsStr = getUnknowns().entrySet().stream().map(entry -> String.format("%s=%s", entry.getKey(), entry.getValue())).collect(Collectors.joining(", "));
+        if(!unknownsStr.isEmpty()){
+            builder.append(", ");
+            builder.append(unknownsStr);
+        }
+        builder.append(")");
+        return builder.toString();
     }
 
     public static class BuilderForRegistration {

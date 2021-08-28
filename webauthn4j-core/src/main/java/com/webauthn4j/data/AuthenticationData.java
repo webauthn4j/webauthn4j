@@ -87,4 +87,13 @@ public class AuthenticationData extends CoreAuthenticationData {
         result = 31 * result + Arrays.hashCode(collectedClientDataBytes);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticationData(" +
+                "userHandle=" + ArrayUtil.toHexString(userHandle) +
+                ", collectedClientData=" + collectedClientData +
+                ", clientExtensions=" + clientExtensions +
+                ')';
+    }
 }

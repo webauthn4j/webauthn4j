@@ -69,5 +69,8 @@ public enum ResidentKeyRequirement {
         return value;
     }
 
-
+    @Override
+    public String toString() {
+        return value;
+    }
 }

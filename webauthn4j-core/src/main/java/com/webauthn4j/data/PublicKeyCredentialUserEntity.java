@@ -81,4 +81,12 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         result = 31 * result + Arrays.hashCode(id);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PublicKeyCredentialUserEntity(" +
+                "id=" + ArrayUtil.toHexString(id) +
+                ", displayName=" + displayName +
+                ')';
+    }
 }

@@ -85,4 +85,13 @@ public class AttestationObject implements Serializable {
     public int hashCode() {
         return Objects.hash(authenticatorData, attestationStatement);
     }
+
+    @Override
+    public String toString() {
+        return "AttestationObject(" +
+                "authenticatorData=" + authenticatorData +
+                ", fmt=" + getFormat() +
+                ", attestationStatement=" + attestationStatement +
+                ')';
+    }
 }

@@ -31,4 +31,8 @@ public class ArrayUtil {
     public static @Nullable String[] clone(@Nullable String[] value) {
         return value == null ? null : value.clone();
     }
+
+    public static @Nullable String toHexString(@Nullable byte[] value){
+        return value == null ? null : HexUtil.encodeToString(value);
+    }
 }

@@ -85,4 +85,13 @@ public class AuthenticatorAssertionResponse extends AuthenticatorResponse {
         result = 31 * result + Arrays.hashCode(userHandle);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticatorAssertionResponse(" +
+                "authenticatorData=" + ArrayUtil.toHexString(authenticatorData) +
+                ", signature=" + ArrayUtil.toHexString(signature) +
+                ", userHandle=" + ArrayUtil.toHexString(userHandle) +
+                ')';
+    }
 }

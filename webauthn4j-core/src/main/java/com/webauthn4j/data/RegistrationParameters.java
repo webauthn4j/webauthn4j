@@ -73,5 +73,4 @@ public class RegistrationParameters extends CoreRegistrationParameters {
     public @NonNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
-
 }

@@ -24,6 +24,7 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 
 
@@ -98,6 +99,32 @@ class AuthenticationDataTest {
         assertThat(instanceA)
                 .isEqualTo(instanceB)
                 .hasSameHashCodeAs(instanceB);
+    }
+
+    @Test
+    void toString_test() {
+
+        byte[] credentialId = new byte[32];
+        byte[] userHandle = new byte[32];
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = null;
+        byte[] authenticatorDataBytes = new byte[64];
+        CollectedClientData collectedClientData = mock(CollectedClientData.class);
+        byte[] collectedClientDataBytes = new byte[128];
+        AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> authenticationExtensionsClientOutputs = null;
+        byte[] signature = new byte[32];
+
+        AuthenticationData instance = new AuthenticationData(
+                credentialId,
+                userHandle,
+                authenticatorData,
+                authenticatorDataBytes,
+                collectedClientData,
+                collectedClientDataBytes,
+                authenticationExtensionsClientOutputs,
+                signature
+        );
+        //noinspection ResultOfMethodCallIgnored
+        assertThatCode(instance::toString).doesNotThrowAnyException();
     }
 
 }
