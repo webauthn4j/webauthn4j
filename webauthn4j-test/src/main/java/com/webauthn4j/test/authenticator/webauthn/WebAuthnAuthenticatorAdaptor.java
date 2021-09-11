@@ -20,6 +20,7 @@ import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
 import com.webauthn4j.data.PublicKeyCredentialRequestOptions;
+import com.webauthn4j.data.ResidentKeyRequirement;
 import com.webauthn4j.data.UserVerificationRequirement;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.test.authenticator.AuthenticatorAdaptor;
@@ -59,18 +60,17 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
             effectiveResidentKeyRequirement = requireResidentKey == null ? false : requireResidentKey;
         }
         else {
-            switch (publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey()) {
-                case REQUIRED:
-                    effectiveResidentKeyRequirement = true;
-                    break;
-                case PREFERRED:
-                    effectiveResidentKeyRequirement = webAuthnAuthenticator.isCapableOfStoringClientSideResidentCredential();
-                    break;
-                case DISCOURAGED:
-                    effectiveResidentKeyRequirement = false;
-                    break;
-                default:
-                    throw new IllegalStateException();
+            if (ResidentKeyRequirement.REQUIRED.equals(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey())) {
+                effectiveResidentKeyRequirement = true;
+            }
+            else if (ResidentKeyRequirement.PREFERRED.equals(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey())) {
+                effectiveResidentKeyRequirement = webAuthnAuthenticator.isCapableOfStoringClientSideResidentCredential();
+            }
+            else if (ResidentKeyRequirement.DISCOURAGED.equals(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getResidentKey())) {
+                effectiveResidentKeyRequirement = false;
+            }
+            else {
+                throw new IllegalStateException();
             }
         }
         boolean requireUserVerification = getEffectiveUserVerificationRequirementForAssertion(publicKeyCredentialCreationOptions.getAuthenticatorSelection().getUserVerification());

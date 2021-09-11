@@ -22,21 +22,23 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
+
 /**
  * This enumeration’s values describe the Relying Party's requirements for client-side discoverable credentials (formerly known as resident credentials or resident keys)
  *
  * @see <a href="https://www.w3.org/TR/2019/WD-webauthn-2-20191126/#enum-residentKeyRequirement">
  * §5.4.6. Resident Key Requirement Enumeration (enum ResidentKeyRequirement)</a>
  */
-public enum ResidentKeyRequirement {
+public class ResidentKeyRequirement {
 
-    DISCOURAGED("discouraged"),
-    PREFERRED("preferred"),
-    REQUIRED("required");
+    public static final ResidentKeyRequirement DISCOURAGED = new ResidentKeyRequirement("discouraged");
+    public static final ResidentKeyRequirement PREFERRED = new ResidentKeyRequirement("preferred");
+    public static final ResidentKeyRequirement REQUIRED = new ResidentKeyRequirement("required");
 
     private final String value;
 
-    ResidentKeyRequirement(@NonNull String value) {
+    private ResidentKeyRequirement(@NonNull String value) {
         this.value = value;
     }
 
@@ -50,7 +52,7 @@ public enum ResidentKeyRequirement {
             case "required":
                 return REQUIRED;
             default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
+                return new ResidentKeyRequirement(value);
         }
     }
 
@@ -72,5 +74,18 @@ public enum ResidentKeyRequirement {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ResidentKeyRequirement that = (ResidentKeyRequirement) o;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
