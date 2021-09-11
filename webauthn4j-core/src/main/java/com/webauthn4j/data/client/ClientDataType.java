@@ -27,8 +27,14 @@ import java.util.Objects;
 public class ClientDataType {
     public static final ClientDataType WEBAUTHN_CREATE = new ClientDataType("webauthn.create");
     public static final ClientDataType WEBAUTHN_GET = new ClientDataType("webauthn.get");
+    /**
+     * @deprecated ClientDataType.CREATE is renamed to ClientDataType.WEBAUTHN_CREATE
+     */
     @Deprecated
     public static final ClientDataType CREATE = WEBAUTHN_CREATE;
+    /**
+     * @deprecated ClientDataType.GET is renamed to ClientDataType.WEBAUTHN_GET
+     */
     @Deprecated
     public static final ClientDataType GET = WEBAUTHN_GET;
 
@@ -38,6 +44,7 @@ public class ClientDataType {
         this.value = value;
     }
 
+    @SuppressWarnings("java:S1845")
     public static @Nullable ClientDataType create(@Nullable String value) {
         if (value == null) {
             return null;
