@@ -46,7 +46,7 @@ class RegistrationObjectTest {
     @Test
     void getter_test() {
 
-        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new AttestationObjectConverter(objectConverter).convertToBytes(attestationObject);
@@ -82,7 +82,7 @@ class RegistrationObjectTest {
 
     @Test
     void equals_hashCode_test() {
-        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         byte[] attestationObjectBytes = new AttestationObjectConverter(objectConverter).convertToBytes(attestationObject);

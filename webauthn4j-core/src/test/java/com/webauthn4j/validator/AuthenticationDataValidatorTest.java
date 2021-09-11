@@ -70,7 +70,7 @@ class AuthenticationDataValidatorTest {
         target.setCrossOriginAllowed(true);
         Origin origin = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), origin, true, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), origin, true, null);
         target.validateClientDataCrossOrigin(collectedClientData);
     }
 
@@ -78,7 +78,7 @@ class AuthenticationDataValidatorTest {
     void validateClientDataCrossOrigin_with_unexpected_crossOrigin_test() {
         Origin origin = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), origin, true, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), origin, true, null);
         assertThrows(CrossOriginException.class,
                 () -> target.validateClientDataCrossOrigin(collectedClientData)
         );

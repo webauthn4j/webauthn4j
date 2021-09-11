@@ -28,7 +28,7 @@ public class RegistrationEmulationOption {
     private boolean signatureOverrideEnabled = false;
     private byte[] signature = new byte[]{0x01, 0x23, 0x45, 0x67};
     private boolean collectedClientDataOverrideEnabled = false;
-    private CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+    private CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
 
     public AttestationOption getAttestationOption() {
         return attestationOption;

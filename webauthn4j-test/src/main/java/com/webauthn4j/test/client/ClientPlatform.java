@@ -67,7 +67,7 @@ public class ClientPlatform {
             collectedClientData = registrationEmulationOption.getCollectedClientData();
         }
         else {
-            collectedClientData = createCollectedClientData(ClientDataType.CREATE, publicKeyCredentialCreationOptions.getChallenge());
+            collectedClientData = createCollectedClientData(ClientDataType.WEBAUTHN_CREATE, publicKeyCredentialCreationOptions.getChallenge());
         }
 
         if (authenticatorAdaptor == null) {
@@ -192,7 +192,7 @@ public class ClientPlatform {
     }
 
     public PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> get(PublicKeyCredentialRequestOptions publicKeyCredentialRequestOptions) {
-        CollectedClientData collectedClientData = createCollectedClientData(ClientDataType.GET, publicKeyCredentialRequestOptions.getChallenge());
+        CollectedClientData collectedClientData = createCollectedClientData(ClientDataType.WEBAUTHN_GET, publicKeyCredentialRequestOptions.getChallenge());
         return get(publicKeyCredentialRequestOptions, collectedClientData);
     }
 
