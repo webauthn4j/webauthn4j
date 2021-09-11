@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
+
 /**
  * {@link TokenBindingStatus} is one of the following:
  * <ul>
@@ -31,26 +33,26 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-tokenbindingstatus">§5.10.1. Client Data Used in WebAuthn Signatures - TokenBindingStatus</a>
  */
-public enum TokenBindingStatus {
+public class TokenBindingStatus {
 
     /**
      * Indicates token binding was used when communicating with the Relying Party. In this case, the id member MUST be present.
      */
-    PRESENT("present"),
+    public static final TokenBindingStatus PRESENT = new TokenBindingStatus("present");
 
     /**
      * Indicates the client supports token binding, but it was not negotiated when communicating with the Relying Party.
      */
-    SUPPORTED("supported"),
+    public static final TokenBindingStatus SUPPORTED = new TokenBindingStatus("supported");
 
     /**
      *
      */
-    NOT_SUPPORTED("not-supported");
+    public static final TokenBindingStatus NOT_SUPPORTED = new TokenBindingStatus("not-supported");
 
     private final String value;
 
-    TokenBindingStatus(@NonNull String value) {
+    private TokenBindingStatus(@NonNull String value) {
         this.value = value;
     }
 
@@ -64,7 +66,7 @@ public enum TokenBindingStatus {
             case "not-supported":
                 return NOT_SUPPORTED;
             default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
+                return new TokenBindingStatus(value);
         }
     }
 
@@ -85,5 +87,18 @@ public enum TokenBindingStatus {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TokenBindingStatus that = (TokenBindingStatus) o;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

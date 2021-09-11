@@ -16,15 +16,12 @@
 
 package com.webauthn4j.data.client;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class TokenBindingStatusTest {
@@ -43,10 +40,10 @@ class TokenBindingStatusTest {
     }
 
     @Test
-    void create_with_illegal_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> TokenBindingStatus.create("illegal")
-        );
+    void create_with_unknown_value_test() {
+        assertThatCode(
+                () -> TokenBindingStatus.create("unknown")
+        ).doesNotThrowAnyException();
     }
 
     @Test
@@ -56,18 +53,18 @@ class TokenBindingStatusTest {
 
     @Test
     void fromString_test() {
-        TestDTO dto = jsonConverter.readValue("{\"token_binding_id\":\"present\"}", TestDTO.class);
-        assertThat(dto.token_binding_id).isEqualTo(TokenBindingStatus.PRESENT);
+        TestDTO dto = jsonConverter.readValue("{\"status\":\"present\"}", TestDTO.class);
+        assertThat(dto.status).isEqualTo(TokenBindingStatus.PRESENT);
     }
 
     @Test
-    void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"token_binding_id\":\" not-supported\"}", TestDTO.class)
-        );
+    void fromString_test_with_unknown_value() {
+        assertThatCode(
+                () -> jsonConverter.readValue("{\"status\":\"unknown\"}", TestDTO.class)
+        ).doesNotThrowAnyException();
     }
 
     static class TestDTO {
-        public TokenBindingStatus token_binding_id;
+        public TokenBindingStatus status;
     }
 }
