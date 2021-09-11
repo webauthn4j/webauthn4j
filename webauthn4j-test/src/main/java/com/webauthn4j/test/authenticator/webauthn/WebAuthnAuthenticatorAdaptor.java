@@ -128,15 +128,17 @@ public class WebAuthnAuthenticatorAdaptor implements AuthenticatorAdaptor {
     }
 
     private boolean getEffectiveUserVerificationRequirementForAssertion(UserVerificationRequirement userVerificationRequirement) {
-        switch (userVerificationRequirement) {
-            case REQUIRED:
-                return true;
-            case PREFERRED:
-                return webAuthnAuthenticator.isCapableOfUserVerification();
-            case DISCOURAGED:
-                return false;
-            default:
-                throw new NotImplementedException();
+        if (UserVerificationRequirement.REQUIRED.equals(userVerificationRequirement)) {
+            return true;
+        }
+        else if (UserVerificationRequirement.PREFERRED.equals(userVerificationRequirement)) {
+            return webAuthnAuthenticator.isCapableOfUserVerification();
+        }
+        else if (UserVerificationRequirement.DISCOURAGED.equals(userVerificationRequirement)) {
+            return false;
+        }
+        else {
+            throw new NotImplementedException();
         }
     }
 }
