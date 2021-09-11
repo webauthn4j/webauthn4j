@@ -430,7 +430,7 @@ public abstract class WebAuthnModelAuthenticator implements WebAuthnAuthenticato
     }
 
     private boolean isCapableOfHandling(PublicKeyCredentialParameters publicKeyCredentialParameters) {
-        return publicKeyCredentialParameters.getType() == PublicKeyCredentialType.PUBLIC_KEY &&
+        return publicKeyCredentialParameters.getType().equals(PublicKeyCredentialType.PUBLIC_KEY) &&
                 COSEAlgorithmIdentifier.ES256.equals(publicKeyCredentialParameters.getAlg());
     }
 

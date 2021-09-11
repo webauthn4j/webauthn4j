@@ -17,14 +17,11 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
 
 
 @SuppressWarnings("ConstantConditions")
@@ -56,9 +53,9 @@ class PublicKeyCredentialTypeTest {
     }
 
     @Test
-    void invalid_data_test() {
-        assertThrows(InvalidFormatException.class,
-                () -> objectMapper.readValue("{\"type\": \"invalid-data\"}", TestDto.class)
-        );
+    void unknown_data_test() {
+        assertThatCode(
+                () -> objectMapper.readValue("{\"type\": \"unknown-data\"}", TestDto.class)
+        ).doesNotThrowAnyException();
     }
 }
