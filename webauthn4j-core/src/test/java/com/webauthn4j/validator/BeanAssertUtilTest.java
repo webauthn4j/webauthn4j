@@ -42,7 +42,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new HashSet<>()
@@ -62,7 +62,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 null,
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new HashSet<>()
@@ -77,7 +77,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 null,
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new HashSet<>()
@@ -107,7 +107,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 null,
                 new AuthenticationExtensionsClientOutputs<>(),
                 new HashSet<>()
@@ -122,7 +122,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 new byte[32],
                 null,
                 new HashSet<>()
@@ -137,7 +137,7 @@ class BeanAssertUtilTest {
         RegistrationData registrationData = new RegistrationData(
                 TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.CREATE),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 null
@@ -154,7 +154,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -177,7 +177,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -194,7 +194,7 @@ class BeanAssertUtilTest {
                 null,
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -211,7 +211,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 null,
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -228,7 +228,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 null,
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -263,7 +263,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 null,
                 new AuthenticationExtensionsClientOutputs<>(),
                 new byte[32]
@@ -280,7 +280,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 null,
                 new byte[32]
@@ -298,7 +298,7 @@ class BeanAssertUtilTest {
                 new byte[32],
                 TestDataUtil.createAuthenticatorData(),
                 new byte[32],
-                TestDataUtil.createClientData(ClientDataType.GET),
+                TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET),
                 new byte[32],
                 new AuthenticationExtensionsClientOutputs<>(),
                 null
@@ -311,7 +311,7 @@ class BeanAssertUtilTest {
     @Test
     void validate_clientData_test() {
         CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
+                ClientDataType.WEBAUTHN_GET,
                 new DefaultChallenge(),
                 new Origin("https://example.com"),
                 new TokenBinding(TokenBindingStatus.PRESENT, new byte[32])
@@ -330,7 +330,7 @@ class BeanAssertUtilTest {
     @Test
     void validate_clientData_with_tokenBinding_null_test() {
         CollectedClientData collectedClientData = new CollectedClientData(
-                ClientDataType.GET,
+                ClientDataType.WEBAUTHN_GET,
                 new DefaultChallenge(),
                 new Origin("https://example.com"),
                 null

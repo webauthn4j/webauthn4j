@@ -141,7 +141,7 @@ class FIDOU2FAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.DISCOURAGED,
                 null
         );
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge); // bad clientData type
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> publicKeyCredential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = publicKeyCredential.getAuthenticatorResponse();
 

@@ -31,19 +31,19 @@ class CollectedClientDataTest {
         Challenge challenge = new DefaultChallenge();
         Origin origin = Origin.create("http://example.com");
         assertAll(
-                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.CREATE, challenge, origin, true, null)).doesNotThrowAnyException(),
-                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.CREATE, challenge, origin, null)).doesNotThrowAnyException(),
+                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, true, null)).doesNotThrowAnyException(),
+                () -> assertThatCode(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, origin, null)).doesNotThrowAnyException(),
                 () -> assertThatThrownBy(() -> new CollectedClientData(null, challenge, origin, null)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(() -> new CollectedClientData(ClientDataType.CREATE, null, origin, null)).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThatThrownBy(() -> new CollectedClientData(ClientDataType.CREATE, challenge, null, null)).isInstanceOf(IllegalArgumentException.class)
+                () -> assertThatThrownBy(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, null, origin, null)).isInstanceOf(IllegalArgumentException.class),
+                () -> assertThatThrownBy(() -> new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, null, null)).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
     @Test
     void equals_hashCode_test() {
         Challenge challenge = TestDataUtil.createChallenge();
-        CollectedClientData collectedClientDataA = TestDataUtil.createClientData(ClientDataType.GET, challenge);
-        CollectedClientData collectedClientDataB = TestDataUtil.createClientData(ClientDataType.GET, challenge);
+        CollectedClientData collectedClientDataA = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET, challenge);
+        CollectedClientData collectedClientDataB = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_GET, challenge);
         assertAll(
                 () -> assertThat(collectedClientDataA).isEqualTo(collectedClientDataB),
                 () -> assertThat(collectedClientDataA).hasSameHashCodeAs(collectedClientDataB)
