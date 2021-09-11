@@ -16,15 +16,12 @@
 
 package com.webauthn4j.data;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AttestationConveyancePreferenceTest {
 
@@ -48,10 +45,10 @@ class AttestationConveyancePreferenceTest {
     }
 
     @Test
-    void create_test_with_invalid_value() {
-        assertThrows(IllegalArgumentException.class,
-                () -> AttestationConveyancePreference.create("invalid")
-        );
+    void create_test_with_unknown_value() {
+        assertThatCode(
+                () -> AttestationConveyancePreference.create("unknown")
+        ).doesNotThrowAnyException();
     }
 
     @Test
@@ -72,10 +69,10 @@ class AttestationConveyancePreferenceTest {
     }
 
     @Test
-    void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"preference\":\"invalid\"}", TestDTO.class)
-        );
+    void fromString_test_with_unknown_value() {
+        assertThatCode(
+                () -> jsonConverter.readValue("{\"preference\":\"unknown\"}", TestDTO.class)
+        ).doesNotThrowAnyException();
     }
 
     static class TestDTO {

@@ -82,17 +82,17 @@ public class ClientPlatform {
         if (attestationConveyancePreference == null) {
             attestationConveyancePreference = AttestationConveyancePreference.NONE;
         }
-        switch (attestationConveyancePreference) {
-            case DIRECT:
-                // nop
-                break;
-            case INDIRECT:
-                throw new NotImplementedException();
-            case NONE:
-                attestationStatement = new NoneAttestationStatement();
-                break;
-            default:
-                throw new NotImplementedException();
+        if (AttestationConveyancePreference.DIRECT.equals(attestationConveyancePreference)) {
+            // nop
+        }
+        else if (AttestationConveyancePreference.INDIRECT.equals(attestationConveyancePreference)) {
+            throw new NotImplementedException();
+        }
+        else if (AttestationConveyancePreference.NONE.equals(attestationConveyancePreference)) {
+            attestationStatement = new NoneAttestationStatement();
+        }
+        else {
+            throw new NotImplementedException();
         }
         attestationObject = new AttestationObject(attestationObject.getAuthenticatorData(), attestationStatement);
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);
