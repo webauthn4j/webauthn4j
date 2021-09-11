@@ -99,7 +99,7 @@ public class TestDataUtil {
     // ========================================================================================================
 
     public static RegistrationObject createRegistrationObjectWithPackedAttestation() {
-        CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData collectedClientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(collectedClientDataBytes);
         AttestationObject attestationObject = createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
@@ -178,7 +178,7 @@ public class TestDataUtil {
     }
 
     public static RegistrationObject createRegistrationObject(Function<byte[], AttestationObject> attestationObjectProvider) {
-        CollectedClientData collectedClientData = createClientData(ClientDataType.CREATE);
+        CollectedClientData collectedClientData = createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] collectedClientDataBytes = collectedClientDataConverter.convertToBytes(collectedClientData);
         AttestationObject attestationObject = attestationObjectProvider.apply(collectedClientDataBytes);
         byte[] attestationObjectBytes = attestationObjectConverter.convertToBytes(attestationObject);

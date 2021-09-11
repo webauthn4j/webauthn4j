@@ -190,7 +190,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
                 Collections.singletonList(publicKeyCredentialParameters)
         );
 
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.WEBAUTHN_GET, challenge);
         RegistrationEmulationOption registrationEmulationOption = new RegistrationEmulationOption();
         registrationEmulationOption.setCollectedClientData(collectedClientData);
         registrationEmulationOption.setCollectedClientDataOverrideEnabled(true);
@@ -456,7 +456,7 @@ class FIDOU2FAuthenticatorRegistrationValidationTest {
 
         AuthenticatorAttestationResponse authenticatorAttestationResponse = clientPlatform.create(credentialCreationOptions).getAuthenticatorResponse();
 
-        CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.CREATE, challenge, phishingSiteClaimingOrigin, null);
+        CollectedClientData maliciousClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge, phishingSiteClaimingOrigin, null);
         byte[] maliciousClientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(maliciousClientData);
         Set<String> transports = authenticatorTransportConverter.convertSetToStringSet(authenticatorAttestationResponse.getTransports());
         ServerProperty serverProperty = new ServerProperty(validSiteOrigin, rpId, challenge, null);

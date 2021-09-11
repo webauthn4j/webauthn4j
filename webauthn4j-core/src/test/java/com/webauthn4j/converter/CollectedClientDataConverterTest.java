@@ -45,7 +45,7 @@ class CollectedClientDataConverterTest {
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
-                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.GET),
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.WEBAUTHN_GET),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("tk31UH1ETGGTPj33OhOMzw")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080")),
                 () -> assertThat(collectedClientData.getCrossOrigin()).isTrue()
@@ -67,7 +67,7 @@ class CollectedClientDataConverterTest {
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
-                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.WEBAUTHN_CREATE),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("Tgup0LZZQKinvtQcZFYdRw")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("http://localhost:8080")),
                 () -> assertThat(collectedClientData.getCrossOrigin()).isNull()
@@ -96,7 +96,7 @@ class CollectedClientDataConverterTest {
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
-                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.WEBAUTHN_CREATE),
                 () -> assertThat(collectedClientData.getTokenBinding()).isNull(),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("AAABcXKin1fLrZx0o4RL64fs-RUVSxCu")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS00H1xKCQcfIoGLck"))
@@ -114,7 +114,7 @@ class CollectedClientDataConverterTest {
         String clientDataBase64UrlString = Base64UrlUtil.encodeToString(clientDataJson.getBytes(StandardCharsets.UTF_8));
         CollectedClientData collectedClientData = target.convert(clientDataBase64UrlString);
         assertAll(
-                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.CREATE),
+                () -> assertThat(collectedClientData.getType()).isEqualTo(ClientDataType.WEBAUTHN_CREATE),
                 () -> assertThat(collectedClientData.getTokenBinding()).isNull(),
                 () -> assertThat(collectedClientData.getChallenge()).isEqualTo(new DefaultChallenge("AAABcXKin1fLrZx0o4RL64fs-RUVSxCu")),
                 () -> assertThat(collectedClientData.getOrigin()).isEqualTo(new Origin("android:apk-key-hash-sha256:xT5ZucZJ9N7oq3j3awG8J/NlKf8trfo6AAJB8deuuNo="))

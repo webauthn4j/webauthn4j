@@ -42,14 +42,11 @@ class TokenBindingValidator {
                 clientDataTokenBindingId = Base64UrlUtil.decode(clientDataTokenBinding.getId());
             }
             TokenBindingStatus tokenBindingStatus = clientDataTokenBinding.getStatus();
-            switch (tokenBindingStatus) {
-                case NOT_SUPPORTED:
-                case SUPPORTED:
-                    break;
-                case PRESENT:
-                    if (!MessageDigest.isEqual(clientDataTokenBindingId, serverTokenBindingId)) {
-                        throw new TokenBindingException("TokenBinding id does not match");
-                    }
+            if (TokenBindingStatus.NOT_SUPPORTED.equals(tokenBindingStatus) || TokenBindingStatus.SUPPORTED.equals(tokenBindingStatus)) {
+                //nop
+            }
+            else if (TokenBindingStatus.PRESENT.equals(tokenBindingStatus) && !MessageDigest.isEqual(clientDataTokenBindingId, serverTokenBindingId)) {
+                throw new TokenBindingException("TokenBinding id does not match");
             }
         }
     }

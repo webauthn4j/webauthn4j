@@ -133,7 +133,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.WEBAUTHN_GET, challenge, tokenBindingId);
 
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
@@ -189,7 +189,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
                 UserVerificationRequirement.REQUIRED,
                 null
         );
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.CREATE, challenge); // bad clientData type
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.WEBAUTHN_CREATE, challenge); // bad clientData type
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 
@@ -325,7 +325,7 @@ class UserVerifyingAuthenticatorAuthenticationValidationTest {
         );
 
         byte[] tokenBindingId = new byte[]{0x01, 0x23, 0x45};
-        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.GET, challenge, tokenBindingId);
+        CollectedClientData collectedClientData = clientPlatform.createCollectedClientData(ClientDataType.WEBAUTHN_GET, challenge, tokenBindingId);
         PublicKeyCredential<AuthenticatorAssertionResponse, AuthenticationExtensionClientOutput> credential = clientPlatform.get(credentialRequestOptions, collectedClientData);
         AuthenticatorAssertionResponse authenticationRequest = credential.getAuthenticatorResponse();
 

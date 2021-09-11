@@ -18,15 +18,12 @@ package com.webauthn4j.data;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AuthenticatorAttachmentTest {
 
@@ -47,10 +44,10 @@ class AuthenticatorAttachmentTest {
     }
 
     @Test
-    void create_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> AuthenticatorAttachment.create("invalid")
-        );
+    void create_unknown_value_test() {
+        assertThatCode(
+                () -> AuthenticatorAttachment.create("unknown")
+        ).doesNotThrowAnyException();
     }
 
     @Test
@@ -65,10 +62,10 @@ class AuthenticatorAttachmentTest {
     }
 
     @Test
-    void deserialize_test_with_invalid() {
-        assertThrows(InvalidFormatException.class,
-                () -> objectMapper.readValue("{\"attachment\": \"invalid\"}", TestDTO.class)
-        );
+    void deserialize_test_with_unknown_value() {
+        assertThatCode(
+                () -> objectMapper.readValue("{\"attachment\": \"unknown\"}", TestDTO.class)
+        ).doesNotThrowAnyException();
     }
 
     public static class TestDTO {

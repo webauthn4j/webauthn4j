@@ -16,15 +16,13 @@
 
 package com.webauthn4j.data.client;
 
-import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ClientDataTypeTest {
 
@@ -35,10 +33,10 @@ class ClientDataTypeTest {
     void create_test() {
         //noinspection ConstantConditions,ResultOfMethodCallIgnored
         assertAll(
-                () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.CREATE),
-                () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.GET),
+                () -> assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE),
+                () -> assertThat(ClientDataType.create("webauthn.get")).isEqualTo(ClientDataType.WEBAUTHN_GET),
                 () -> assertThat(ClientDataType.create(null)).isNull(),
-                () -> assertThatThrownBy(() -> ClientDataType.create("invalid")).isInstanceOf(IllegalArgumentException.class)
+                () -> assertThatCode(() -> ClientDataType.create("unknown")).doesNotThrowAnyException()
         );
     }
 
@@ -46,14 +44,14 @@ class ClientDataTypeTest {
     @Test
     void fromString_test() {
         TestDTO dto = jsonConverter.readValue("{\"client_data_type\":\"webauthn.create\"}", TestDTO.class);
-        assertThat(dto.client_data_type).isEqualTo(ClientDataType.CREATE);
+        assertThat(dto.client_data_type).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
     }
 
     @Test
-    void fromString_test_with_invalid_value() {
-        assertThrows(DataConversionException.class,
-                () -> jsonConverter.readValue("{\"client_data_type\":\"webauthn.get \"}", TestDTO.class)
-        );
+    void fromString_test_with_unknown_value() {
+        assertThatCode(
+                () -> jsonConverter.readValue("{\"client_data_type\":\"unknown\"}", TestDTO.class)
+        ).doesNotThrowAnyException();
     }
 
     static class TestDTO {

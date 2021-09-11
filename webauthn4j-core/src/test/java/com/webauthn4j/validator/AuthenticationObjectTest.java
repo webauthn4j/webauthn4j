@@ -41,7 +41,7 @@ class AuthenticationObjectTest {
     void getter_test() {
 
         byte[] credentialId = new byte[32];
-        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);
@@ -75,7 +75,7 @@ class AuthenticationObjectTest {
     void equals_hashCode_test() {
 
         byte[] credentialId = new byte[32];
-        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.CREATE);
+        CollectedClientData clientData = TestDataUtil.createClientData(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataBytes = new CollectedClientDataConverter(objectConverter).convertToBytes(clientData);
         AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
         byte[] authenticatorDataBytes = new AuthenticatorDataConverter(objectConverter).convert(authenticatorData);

@@ -118,7 +118,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_ECx5c_test() {
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
 
@@ -130,7 +130,7 @@ class PackedAttestationStatementValidatorTest {
         KeyPair keyPair = RSAUtil.createKeyPair();
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = TestDataUtil.createAuthenticatorData();
 
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] signature = generateSignature("SHA256withRSA", keyPair, authenticatorData, clientData);
 
         AttestationCertificatePath x5c = generateCertPath(keyPair, "SHA256withRSA");
@@ -153,7 +153,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_ECSelfAttestation_test() {
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedECAttestationStatement(clientDataHash);
 
@@ -162,7 +162,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_RSASelfAttestation_test() {
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = MessageDigestUtil.createSHA256().digest(clientData);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithSelfPackedRSAAttestationStatement(clientDataHash);
 
@@ -172,7 +172,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_invalid_AttestationStatement_test() {
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
         assertThrows(IllegalArgumentException.class,
                 () -> validate(clientData, attestationObject)
@@ -181,7 +181,7 @@ class PackedAttestationStatementValidatorTest {
 
     @Test
     void validate_with_bad_signature_test() {
-        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.CREATE);
+        byte[] clientData = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
         byte[] clientDataHash = new byte[32];
         AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithBasicPackedECAttestationStatement(clientDataHash);
 

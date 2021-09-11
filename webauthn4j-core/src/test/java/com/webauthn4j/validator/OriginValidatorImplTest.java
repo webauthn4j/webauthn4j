@@ -48,7 +48,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin(origin);
         Origin originB = new Origin(origin);
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
         target.validate(collectedClientData, serverProperty);
     }
@@ -63,13 +63,13 @@ class OriginValidatorImplTest {
         final ServerProperty serverProperty = new ServerProperty(new HashSet<>(Arrays.asList(originA, originB, originC, originD)),
                 "example.com", TestDataUtil.createChallenge(), null);
 
-        final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,
+        final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE,
                 TestDataUtil.createChallenge(), originA, null);
-        final CollectedClientData collectedClientDataB = new CollectedClientData(ClientDataType.CREATE,
+        final CollectedClientData collectedClientDataB = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE,
                 TestDataUtil.createChallenge(), originB, null);
-        final CollectedClientData collectedClientDataC = new CollectedClientData(ClientDataType.GET,
+        final CollectedClientData collectedClientDataC = new CollectedClientData(ClientDataType.WEBAUTHN_GET,
                 TestDataUtil.createChallenge(), originC, null);
-        final CollectedClientData collectedClientDataD = new CollectedClientData(ClientDataType.GET,
+        final CollectedClientData collectedClientDataD = new CollectedClientData(ClientDataType.WEBAUTHN_GET,
                 TestDataUtil.createChallenge(), originD, null);
 
         target.validate(collectedClientDataA, serverProperty);
@@ -93,13 +93,13 @@ class OriginValidatorImplTest {
         final ServerProperty serverProperty = new ServerProperty(new HashSet<>(Arrays.asList(originA, originB, originC, originD)),
                 "example.com", TestDataUtil.createChallenge(), null);
 
-        final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.CREATE,
+        final CollectedClientData collectedClientDataA = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE,
                 TestDataUtil.createChallenge(), badOriginA, null);
-        final CollectedClientData collectedClientDataB = new CollectedClientData(ClientDataType.CREATE,
+        final CollectedClientData collectedClientDataB = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE,
                 TestDataUtil.createChallenge(), badOriginB, null);
-        final CollectedClientData collectedClientDataC = new CollectedClientData(ClientDataType.GET,
+        final CollectedClientData collectedClientDataC = new CollectedClientData(ClientDataType.WEBAUTHN_GET,
                 TestDataUtil.createChallenge(), badOriginC, null);
-        final CollectedClientData collectedClientDataD = new CollectedClientData(ClientDataType.GET,
+        final CollectedClientData collectedClientDataD = new CollectedClientData(ClientDataType.WEBAUTHN_GET,
                 TestDataUtil.createChallenge(), badOriginD, null);
 
 
@@ -123,7 +123,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin("https://example.com:14443");
         Origin originB = new Origin("http://example.com");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
@@ -136,7 +136,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin("android:apk-key-hash:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         Origin originB = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "1.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
@@ -149,7 +149,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin("android:apk-key-hash-sha256:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         Origin originB = new Origin("android:apk-key-hash-sha256:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "2.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
@@ -162,7 +162,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin("android:apk-key-hash-sha256:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         Origin originB = new Origin("android:apk-key-hash:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "3.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
@@ -175,7 +175,7 @@ class OriginValidatorImplTest {
         Origin originA = new Origin("android:apk-key-hash:aNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
         Origin originB = new Origin("android:apk-key-hash-sha256:pNiP5iKyQ8JwgGOaKA1zGPUPJIS-0H1xKCQcfIoGLck");
 
-        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.CREATE, TestDataUtil.createChallenge(), originA, null);
+        CollectedClientData collectedClientData = new CollectedClientData(ClientDataType.WEBAUTHN_CREATE, TestDataUtil.createChallenge(), originA, null);
         ServerProperty serverProperty = new ServerProperty(originB, "4.example.com", TestDataUtil.createChallenge(), null);
         assertThrows(BadOriginException.class,
                 () -> target.validate(collectedClientData, serverProperty)
