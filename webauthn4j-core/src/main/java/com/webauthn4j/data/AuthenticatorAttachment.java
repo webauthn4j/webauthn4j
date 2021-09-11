@@ -22,6 +22,8 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
+
 /**
  * This enumeration’s values describe authenticators' attachment modalities. Relying Parties use this for two purposes:
  * <ul>
@@ -34,21 +36,21 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#attachment">
  * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
  */
-public enum AuthenticatorAttachment {
+public class AuthenticatorAttachment {
 
     /**
      * This value indicates platform attachment.
      */
-    PLATFORM("platform"),
+    public static final AuthenticatorAttachment PLATFORM = new AuthenticatorAttachment("platform");
 
     /**
      * This value indicates cross-platform attachment.
      */
-    CROSS_PLATFORM("cross-platform");
+    public static final AuthenticatorAttachment CROSS_PLATFORM = new AuthenticatorAttachment("cross-platform");
 
     private final String value;
 
-    AuthenticatorAttachment(@NonNull String value) {
+    private AuthenticatorAttachment(@NonNull String value) {
         this.value = value;
     }
 
@@ -60,7 +62,7 @@ public enum AuthenticatorAttachment {
             case "cross-platform":
                 return CROSS_PLATFORM;
             default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
+                return new AuthenticatorAttachment(value);
         }
     }
 
@@ -82,5 +84,18 @@ public enum AuthenticatorAttachment {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthenticatorAttachment that = (AuthenticatorAttachment) o;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
