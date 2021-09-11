@@ -26,6 +26,7 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
 import com.webauthn4j.data.client.challenge.Challenge;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -48,6 +49,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(CertPath.class, new CertPathDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(COSEKeyEnvelope.class, new COSEKeyEnvelopeDeserializer());
+        this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyByteDeserializer());
         this.addDeserializer(AuthenticatorData.class, new AuthenticatorDataDeserializer(objectConverter));
         this.addDeserializer(TPMSAttest.class, new TPMSAttestDeserializer());
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
@@ -59,9 +61,12 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
         this.addSerializer(new AppleAnonymousAttestationStatementSerializer());
         this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
+        this.addSerializer(new AuthenticationExtensionsAuthenticatorInputsSerializer());
+        this.addSerializer(new AuthenticationExtensionsAuthenticatorOutputsSerializer());
         this.addSerializer(new AuthenticatorDataSerializer(objectConverter));
         this.addSerializer(new CertPathSerializer());
         this.addSerializer(new ChallengeSerializer());
+        this.addSerializer(new CredentialProtectionPolicyByteSerializer());
         this.addSerializer(new EC2COSEKeySerializer());
         this.addSerializer(new FIDOU2FAttestationStatementSerializer());
         this.addSerializer(new HMACGetSecretAuthenticatorInputSerializer());

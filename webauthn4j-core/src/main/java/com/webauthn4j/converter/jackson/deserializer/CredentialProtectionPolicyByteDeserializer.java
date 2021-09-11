@@ -28,7 +28,7 @@ import java.io.IOException;
 
 public class CredentialProtectionPolicyByteDeserializer extends StdDeserializer<CredentialProtectionPolicy> {
 
-    protected CredentialProtectionPolicyByteDeserializer() {
+    public CredentialProtectionPolicyByteDeserializer() {
         super(CredentialProtectionPolicy.class);
     }
 
