@@ -114,18 +114,20 @@ class AuthenticationExtensionsAuthenticatorInputsTest {
     @Test
     void serialize_registration_test() {
         AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration builder = new AuthenticationExtensionsAuthenticatorInputs.BuilderForRegistration();
+        builder.setUvm(true);
         builder.setCredProtect(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         builder.setHMACCreateSecret(true);
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> registrationExtensions = builder.build();
         byte[] bytes = cborConverter.writeValueAsBytes(registrationExtensions);
-        assertThat(HexUtil.encodeToString(bytes)).isEqualTo("BF6B6372656450726F74656374016B686D61632D736563726574F5FF");
+        assertThat(HexUtil.encodeToString(bytes)).isEqualTo("A36375766DF56B6372656450726F74656374016B686D61632D736563726574F5");
     }
 
     @Test
     void deserialize_registration_test() {
         AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput> instance =
-                cborConverter.readValue(HexUtil.decode("BF6B6372656450726F74656374016B686D61632D736563726574F5FF"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {
+                cborConverter.readValue(HexUtil.decode("A36375766DF56B6372656450726F74656374016B686D61632D736563726574F5"), new TypeReference<AuthenticationExtensionsAuthenticatorInputs<RegistrationExtensionAuthenticatorInput>>() {
                 });
+        assertThat(instance.getUvm()).isTrue();
         assertThat(instance.getCredProtect()).isEqualTo(CredentialProtectionPolicy.USER_VERIFICATION_OPTIONAL);
         assertThat(instance.getHMACCreateSecret()).isTrue();
     }

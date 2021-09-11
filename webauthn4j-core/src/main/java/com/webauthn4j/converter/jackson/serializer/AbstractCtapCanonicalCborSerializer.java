@@ -47,6 +47,7 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
                         })
                         .filter(item -> item.value != null)
                         .collect(Collectors.toList());
+
         ((CBORGenerator) gen).writeStartObject(nonNullValues.size()); // This is important to write finite length map
 
         for (KeyValue nonNullValue : nonNullValues) {

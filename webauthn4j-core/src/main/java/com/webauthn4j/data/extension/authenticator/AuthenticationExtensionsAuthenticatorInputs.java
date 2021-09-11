@@ -18,10 +18,7 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
 import com.webauthn4j.converter.jackson.deserializer.HMACSecretAuthenticatorInputDeserializer;
-import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -49,8 +46,6 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
     private Boolean uvm;
-    @JsonSerialize(using = CredentialProtectionPolicyByteSerializer.class)
-    @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
     @JsonIgnore
