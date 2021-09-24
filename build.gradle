@@ -160,7 +160,7 @@ subprojects {
         }
     }
 
-    apply from: "../helper.gradle"
+    apply from: "../util.gradle"
 
     def githubUrl = "https://github.com/webauthn4j/webauthn4j"
     def mavenCentralUser = getVariable('MAVEN_CENTRAL_USER', 'mavenCentralUser')
