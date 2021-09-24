@@ -275,7 +275,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
                 throw new BadAttestationStatementException("x5c must be version 3.");
             }
             /// Subject field MUST be set to empty.
-            if (!certificate.getSubjectDN().getName().isEmpty()) {
+            if (!certificate.getSubjectX500Principal().getName().isEmpty()) {
                 throw new BadAttestationStatementException("x5c subject field MUST be set to empty");
             }
             /// The Subject Alternative Name extension MUST be set as defined in [TPMv2-EK-Profile] section 3.2.9.
