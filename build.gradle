@@ -209,7 +209,7 @@ subprojects {
                         url = githubUrl
                     }
 
-                    resolveStrategy = DELEGATE_FIRST
+                    resolveStrategy = Closure.DELEGATE_FIRST
                 }
                 pom.withXml { pom ->
                     pom.asNode().appendNode("description", project.description) // workaround for https://github.com/gradle/gradle/issues/12259
