@@ -18,7 +18,7 @@ package com.webauthn4j.data.client;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticatorAttachment;
+import com.webauthn4j.data.UserVerificationRequirement;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,6 +61,7 @@ class ClientDataTypeTest {
 
     @Test
     void equals_hashCode_test(){
+        assertThat(ClientDataType.create("unknown")).isEqualTo(ClientDataType.create("unknown"));
         assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
         assertThat(ClientDataType.create("webauthn.create")).hasSameHashCodeAs(ClientDataType.WEBAUTHN_CREATE);
     }

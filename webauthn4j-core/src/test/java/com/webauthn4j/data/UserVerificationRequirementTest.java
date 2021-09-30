@@ -75,6 +75,7 @@ class UserVerificationRequirementTest {
 
     @Test
     void equals_hashCode_test(){
+        assertThat(UserVerificationRequirement.create("unknown")).isEqualTo(UserVerificationRequirement.create("unknown"));
         assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED);
         assertThat(UserVerificationRequirement.create("required")).hasSameHashCodeAs(UserVerificationRequirement.REQUIRED);
     }

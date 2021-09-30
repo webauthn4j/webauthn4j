@@ -74,6 +74,7 @@ class AuthenticatorAttachmentTest {
 
     @Test
     void equals_hashCode_test(){
+        assertThat(AuthenticatorAttachment.create("unknown")).isEqualTo(AuthenticatorAttachment.create("unknown"));
         assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM);
         assertThat(AuthenticatorAttachment.create("platform")).hasSameHashCodeAs(AuthenticatorAttachment.PLATFORM);
     }

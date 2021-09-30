@@ -75,6 +75,7 @@ class ResidentKeyRequirementTest {
 
     @Test
     void equals_hashCode_test(){
+        assertThat(ResidentKeyRequirement.create("unknown")).isEqualTo(ResidentKeyRequirement.create("unknown"));
         assertThat(ResidentKeyRequirement.create("required")).isEqualTo(ResidentKeyRequirement.REQUIRED);
         assertThat(ResidentKeyRequirement.create("required")).hasSameHashCodeAs(ResidentKeyRequirement.REQUIRED);
     }
