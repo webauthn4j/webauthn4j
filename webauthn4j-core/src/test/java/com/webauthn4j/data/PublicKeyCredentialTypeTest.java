@@ -64,4 +64,9 @@ class PublicKeyCredentialTypeTest {
         assertThat(PublicKeyCredentialType.create("public-key")).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
         assertThat(PublicKeyCredentialType.create("public-key")).hasSameHashCodeAs(PublicKeyCredentialType.PUBLIC_KEY);
     }
+
+    @Test
+    void toString_test(){
+        assertThat(PublicKeyCredentialType.PUBLIC_KEY).asString().isEqualTo("public-key");
+    }
 }

@@ -18,6 +18,7 @@ package com.webauthn4j.data.client;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorAttachment;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,5 +63,10 @@ class ClientDataTypeTest {
     void equals_hashCode_test(){
         assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
         assertThat(ClientDataType.create("webauthn.create")).hasSameHashCodeAs(ClientDataType.WEBAUTHN_CREATE);
+    }
+
+    @Test
+    void toString_test(){
+        assertThat(ClientDataType.WEBAUTHN_CREATE).asString().isEqualTo("webauthn.create");
     }
 }

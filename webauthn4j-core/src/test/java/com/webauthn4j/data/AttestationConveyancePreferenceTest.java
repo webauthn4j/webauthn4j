@@ -85,4 +85,9 @@ class AttestationConveyancePreferenceTest {
         assertThat(AttestationConveyancePreference.create("direct")).isEqualTo(AttestationConveyancePreference.DIRECT);
         assertThat(AttestationConveyancePreference.create("direct")).hasSameHashCodeAs(AttestationConveyancePreference.DIRECT);
     }
+
+    @Test
+    void toString_test(){
+        assertThat(AttestationConveyancePreference.DIRECT).asString().isEqualTo("direct");
+    }
 }

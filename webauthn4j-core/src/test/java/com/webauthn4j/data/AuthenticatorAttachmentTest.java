@@ -77,4 +77,9 @@ class AuthenticatorAttachmentTest {
         assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM);
         assertThat(AuthenticatorAttachment.create("platform")).hasSameHashCodeAs(AuthenticatorAttachment.PLATFORM);
     }
+
+    @Test
+    void toString_test(){
+        assertThat(AuthenticatorAttachment.PLATFORM).asString().isEqualTo("platform");
+    }
 }

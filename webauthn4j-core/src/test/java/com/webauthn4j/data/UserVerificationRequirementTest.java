@@ -78,4 +78,9 @@ class UserVerificationRequirementTest {
         assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED);
         assertThat(UserVerificationRequirement.create("required")).hasSameHashCodeAs(UserVerificationRequirement.REQUIRED);
     }
+
+    @Test
+    void toString_test(){
+        assertThat(UserVerificationRequirement.REQUIRED).asString().isEqualTo("required");
+    }
 }

@@ -18,6 +18,7 @@ package com.webauthn4j.data.client;
 
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorAttachment;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -72,5 +73,10 @@ class TokenBindingStatusTest {
     void equals_hashCode_test(){
         assertThat(TokenBindingStatus.create("present")).isEqualTo(TokenBindingStatus.PRESENT);
         assertThat(TokenBindingStatus.create("present")).hasSameHashCodeAs(TokenBindingStatus.PRESENT);
+    }
+
+    @Test
+    void toString_test(){
+        assertThat(TokenBindingStatus.PRESENT).asString().isEqualTo("present");
     }
 }
