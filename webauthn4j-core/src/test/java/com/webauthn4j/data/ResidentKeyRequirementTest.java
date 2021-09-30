@@ -56,12 +56,6 @@ class ResidentKeyRequirementTest {
     }
 
     @Test
-    void equals_hashCode_test(){
-        assertThat(ResidentKeyRequirement.REQUIRED).isEqualTo(ResidentKeyRequirement.create("required"));
-        assertThat(ResidentKeyRequirement.REQUIRED).hasSameHashCodeAs(ResidentKeyRequirement.create("required"));
-    }
-
-    @Test
     void deserialize_test() throws IOException {
         ResidentKeyRequirementTest.TestDTO dto = objectMapper.readValue("{\"residentKey\": \"required\"}", ResidentKeyRequirementTest.TestDTO.class);
         assertThat(dto.residentKey).isEqualTo(ResidentKeyRequirement.REQUIRED);
@@ -76,6 +70,13 @@ class ResidentKeyRequirementTest {
 
     public static class TestDTO {
         public ResidentKeyRequirement residentKey;
+    }
+
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(ResidentKeyRequirement.create("required")).isEqualTo(ResidentKeyRequirement.REQUIRED);
+        assertThat(ResidentKeyRequirement.create("required")).hasSameHashCodeAs(ResidentKeyRequirement.REQUIRED);
     }
 
 

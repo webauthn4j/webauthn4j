@@ -57,4 +57,10 @@ class ClientDataTypeTest {
     static class TestDTO {
         public ClientDataType client_data_type;
     }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(ClientDataType.create("webauthn.create")).isEqualTo(ClientDataType.WEBAUTHN_CREATE);
+        assertThat(ClientDataType.create("webauthn.create")).hasSameHashCodeAs(ClientDataType.WEBAUTHN_CREATE);
+    }
 }

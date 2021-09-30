@@ -58,4 +58,10 @@ class PublicKeyCredentialTypeTest {
                 () -> objectMapper.readValue("{\"type\": \"unknown-data\"}", TestDto.class)
         ).doesNotThrowAnyException();
     }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(PublicKeyCredentialType.create("public-key")).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
+        assertThat(PublicKeyCredentialType.create("public-key")).hasSameHashCodeAs(PublicKeyCredentialType.PUBLIC_KEY);
+    }
 }

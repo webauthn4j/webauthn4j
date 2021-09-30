@@ -71,4 +71,10 @@ class AuthenticatorAttachmentTest {
     public static class TestDTO {
         public AuthenticatorAttachment attachment;
     }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(AuthenticatorAttachment.create("platform")).isEqualTo(AuthenticatorAttachment.PLATFORM);
+        assertThat(AuthenticatorAttachment.create("platform")).hasSameHashCodeAs(AuthenticatorAttachment.PLATFORM);
+    }
 }

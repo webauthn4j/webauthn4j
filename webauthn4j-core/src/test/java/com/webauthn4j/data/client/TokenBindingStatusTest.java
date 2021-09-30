@@ -67,4 +67,10 @@ class TokenBindingStatusTest {
     static class TestDTO {
         public TokenBindingStatus status;
     }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(TokenBindingStatus.create("present")).isEqualTo(TokenBindingStatus.PRESENT);
+        assertThat(TokenBindingStatus.create("present")).hasSameHashCodeAs(TokenBindingStatus.PRESENT);
+    }
 }

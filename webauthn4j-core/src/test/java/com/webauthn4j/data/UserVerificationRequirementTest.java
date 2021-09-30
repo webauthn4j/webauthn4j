@@ -72,4 +72,10 @@ class UserVerificationRequirementTest {
         @SuppressWarnings("WeakerAccess")
         public UserVerificationRequirement requirement;
     }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(UserVerificationRequirement.create("required")).isEqualTo(UserVerificationRequirement.REQUIRED);
+        assertThat(UserVerificationRequirement.create("required")).hasSameHashCodeAs(UserVerificationRequirement.REQUIRED);
+    }
 }
