@@ -18,7 +18,6 @@ package com.webauthn4j.data.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -56,6 +55,7 @@ public class TokenBindingStatus {
         this.value = value;
     }
 
+    @JsonCreator
     public static @NonNull TokenBindingStatus create(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
@@ -67,15 +67,6 @@ public class TokenBindingStatus {
                 return NOT_SUPPORTED;
             default:
                 return new TokenBindingStatus(value);
-        }
-    }
-
-    @JsonCreator
-    private static @NonNull TokenBindingStatus deserialize(@NonNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TokenBindingStatus.class);
         }
     }
 

@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -57,6 +56,7 @@ public class UserVerificationRequirement {
         this.value = value;
     }
 
+    @JsonCreator
     public static UserVerificationRequirement create(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
@@ -68,16 +68,6 @@ public class UserVerificationRequirement {
                 return DISCOURAGED;
             default:
                 return new UserVerificationRequirement(value);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
         }
     }
 

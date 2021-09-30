@@ -18,7 +18,6 @@ package com.webauthn4j.data.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -45,6 +44,7 @@ public class ClientDataType {
     }
 
     @SuppressWarnings("java:S1845")
+    @JsonCreator
     public static @Nullable ClientDataType create(@Nullable String value) {
         if (value == null) {
             return null;
@@ -56,15 +56,6 @@ public class ClientDataType {
                 return WEBAUTHN_GET;
             default:
                 return new ClientDataType(value);
-        }
-    }
-
-    @JsonCreator
-    private static @Nullable ClientDataType deserialize(@Nullable String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
         }
     }
 

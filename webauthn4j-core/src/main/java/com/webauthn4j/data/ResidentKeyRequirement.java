@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -42,6 +41,7 @@ public class ResidentKeyRequirement {
         this.value = value;
     }
 
+    @JsonCreator
     public static @NonNull ResidentKeyRequirement create(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
@@ -53,16 +53,6 @@ public class ResidentKeyRequirement {
                 return REQUIRED;
             default:
                 return new ResidentKeyRequirement(value);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull ResidentKeyRequirement deserialize(@NonNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, ResidentKeyRequirement.class);
         }
     }
 

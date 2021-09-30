@@ -18,7 +18,6 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -75,6 +74,7 @@ public class AttestationConveyancePreference {
         this.value = value;
     }
 
+    @JsonCreator
     public static @NonNull AttestationConveyancePreference create(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
@@ -88,16 +88,6 @@ public class AttestationConveyancePreference {
                 return ENTERPRISE;
             default:
                 return new AttestationConveyancePreference(value);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull AttestationConveyancePreference deserialize(@NonNull String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AttestationConveyancePreference.class);
         }
     }
 
