@@ -90,7 +90,7 @@ subprojects {
     }
 
     // Define implementation dependency versions independently
-    def jacksonVersion = "2.12.5"
+    def jacksonVersion = "2.13.0"
     def kerbyVersion = "2.0.1"
     def slf4jVersion = "1.7.32"
     def bouncyCastleVersion = "1.69"
