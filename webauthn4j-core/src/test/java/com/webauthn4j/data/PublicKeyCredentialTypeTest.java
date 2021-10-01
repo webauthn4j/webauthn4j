@@ -17,14 +17,12 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.data.client.TokenBindingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.*;
 
 
 @SuppressWarnings("ConstantConditions")
@@ -56,9 +54,21 @@ class PublicKeyCredentialTypeTest {
     }
 
     @Test
-    void invalid_data_test() {
-        assertThrows(InvalidFormatException.class,
-                () -> objectMapper.readValue("{\"type\": \"invalid-data\"}", TestDto.class)
-        );
+    void unknown_data_test() {
+        assertThatCode(
+                () -> objectMapper.readValue("{\"type\": \"unknown-data\"}", TestDto.class)
+        ).doesNotThrowAnyException();
+    }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(PublicKeyCredentialType.create("unknown")).isEqualTo(PublicKeyCredentialType.create("unknown"));
+        assertThat(PublicKeyCredentialType.create("public-key")).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY);
+        assertThat(PublicKeyCredentialType.create("public-key")).hasSameHashCodeAs(PublicKeyCredentialType.PUBLIC_KEY);
+    }
+
+    @Test
+    void toString_test(){
+        assertThat(PublicKeyCredentialType.PUBLIC_KEY).asString().isEqualTo("public-key");
     }
 }

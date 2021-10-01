@@ -18,40 +18,44 @@ package com.webauthn4j.data.client;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public enum ClientDataType {
-    CREATE("webauthn.create"),
-    GET("webauthn.get");
+import java.util.Objects;
+
+public class ClientDataType {
+    public static final ClientDataType WEBAUTHN_CREATE = new ClientDataType("webauthn.create");
+    public static final ClientDataType WEBAUTHN_GET = new ClientDataType("webauthn.get");
+    /**
+     * @deprecated ClientDataType.CREATE is renamed to ClientDataType.WEBAUTHN_CREATE
+     */
+    @Deprecated
+    public static final ClientDataType CREATE = WEBAUTHN_CREATE;
+    /**
+     * @deprecated ClientDataType.GET is renamed to ClientDataType.WEBAUTHN_GET
+     */
+    @Deprecated
+    public static final ClientDataType GET = WEBAUTHN_GET;
 
     private final String value;
 
-    ClientDataType(@NonNull String value) {
+    private ClientDataType(@NonNull String value) {
         this.value = value;
     }
 
+    @SuppressWarnings("java:S1845")
+    @JsonCreator
     public static @Nullable ClientDataType create(@Nullable String value) {
         if (value == null) {
             return null;
         }
         switch (value) {
             case "webauthn.create":
-                return CREATE;
+                return WEBAUTHN_CREATE;
             case "webauthn.get":
-                return GET;
+                return WEBAUTHN_GET;
             default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
-    }
-
-    @JsonCreator
-    private static @Nullable ClientDataType deserialize(@Nullable String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, ClientDataType.class);
+                return new ClientDataType(value);
         }
     }
 
@@ -63,5 +67,18 @@ public enum ClientDataType {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClientDataType that = (ClientDataType) o;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

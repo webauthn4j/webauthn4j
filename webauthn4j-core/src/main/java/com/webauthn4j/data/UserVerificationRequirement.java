@@ -18,9 +18,10 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Objects;
 
 /**
  * A WebAuthn Relying Party may require user verification for some of its operations but not for
@@ -29,32 +30,33 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-userverificationrequirement">
  * §5.10.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
  */
-public enum UserVerificationRequirement {
+public class UserVerificationRequirement {
 
     /**
      * This value indicates that the Relying Party requires user verification for the operation and
      * will fail the operation if the response does not have the UV flag set.
      */
-    REQUIRED("required"),
+    public static final UserVerificationRequirement REQUIRED = new UserVerificationRequirement("required");
 
     /**
      * This value indicates that the Relying Party prefers user verification for the operation
      * if possible, but will not fail the operation if the response does not have the UV flag set.
      */
-    PREFERRED("preferred"),
+    public static final UserVerificationRequirement PREFERRED = new UserVerificationRequirement("preferred");
 
     /**
      * This value indicates that the Relying Party does not want user verification employed during
      * the operation (e.g., in the interest of minimizing disruption to the user interaction flow).
      */
-    DISCOURAGED("discouraged");
+    public static final UserVerificationRequirement DISCOURAGED = new UserVerificationRequirement("discouraged");
 
     private final String value;
 
-    UserVerificationRequirement(String value) {
+    private UserVerificationRequirement(String value) {
         this.value = value;
     }
 
+    @JsonCreator
     public static UserVerificationRequirement create(@NonNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
@@ -65,17 +67,7 @@ public enum UserVerificationRequirement {
             case "discouraged":
                 return DISCOURAGED;
             default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull UserVerificationRequirement deserialize(String value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, UserVerificationRequirement.class);
+                return new UserVerificationRequirement(value);
         }
     }
 
@@ -87,5 +79,18 @@ public enum UserVerificationRequirement {
     @Override
     public String toString() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserVerificationRequirement that = (UserVerificationRequirement) o;
+        return value.equals(that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

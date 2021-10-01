@@ -17,15 +17,12 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SuppressWarnings("ConstantConditions")
 class ResidentKeyRequirementTest {
@@ -47,10 +44,10 @@ class ResidentKeyRequirementTest {
     }
 
     @Test
-    void create_invalid_value_test() {
-        assertThrows(IllegalArgumentException.class,
-                () -> ResidentKeyRequirement.create("invalid")
-        );
+    void create_unknown_value_test() {
+        assertThatCode(
+                () -> ResidentKeyRequirement.create("unknown")
+        ).doesNotThrowAnyException();
     }
 
     @Test
@@ -65,10 +62,10 @@ class ResidentKeyRequirementTest {
     }
 
     @Test
-    void deserialize_test_with_invalid() {
-        assertThrows(InvalidFormatException.class,
-                () -> objectMapper.readValue("{\"residentKey\": \"invalid\"}", ResidentKeyRequirementTest.TestDTO.class)
-        );
+    void deserialize_test_with_unknown_value() {
+        assertThatCode(
+                () -> objectMapper.readValue("{\"residentKey\": \"unknown\"}", ResidentKeyRequirementTest.TestDTO.class)
+        ).doesNotThrowAnyException();
     }
 
     public static class TestDTO {
@@ -76,4 +73,15 @@ class ResidentKeyRequirementTest {
     }
 
 
+    @Test
+    void equals_hashCode_test(){
+        assertThat(ResidentKeyRequirement.create("unknown")).isEqualTo(ResidentKeyRequirement.create("unknown"));
+        assertThat(ResidentKeyRequirement.create("required")).isEqualTo(ResidentKeyRequirement.REQUIRED);
+        assertThat(ResidentKeyRequirement.create("required")).hasSameHashCodeAs(ResidentKeyRequirement.REQUIRED);
+    }
+
+    @Test
+    void toString_test(){
+        assertThat(ResidentKeyRequirement.REQUIRED).asString().isEqualTo("required");
+    }
 }
