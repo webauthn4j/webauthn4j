@@ -94,7 +94,7 @@ subprojects {
     def kerbyVersion = "2.0.1"
     def slf4jVersion = "1.7.32"
     def bouncyCastleVersion = "1.69"
-    def checkerframeworkVersion = "3.18.0"
+    def checkerframeworkVersion = "3.18.1"
 
     def springBootVersion = "2.5.5" // for test library dependencies
 
