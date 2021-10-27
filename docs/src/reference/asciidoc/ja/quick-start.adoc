@@ -191,6 +191,12 @@ Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)と�
 
 検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `DCAppleDevice` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。
 
+===== 商用環境か？開発環境か？
+
+Apple App Attestは、開発中用に開発用の構成証明を返却することが可能です。
+WebAuthn4Jはデフォルトでは商用の構成証明を受け入れる設定となっており、
+開発用の構成証明を利用する場合は、 `DCAttestationDataValidator#setProduction` で `false` を設定する必要があります。
+
 [source,java]
 ----
 // Client properties

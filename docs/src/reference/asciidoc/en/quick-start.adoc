@@ -219,6 +219,12 @@ If validation fails, an exception inheriting `ValidationException` is thrown.
 If validation succeeds, please create an `DCAppleDevice` instance from the returned value and persist it to the database or something in your application manner.
 The instance is required at the time of authentication.
 
+===== Production environment? Development environment?
+
+Apple App Attest can return a development attestation for development.
+By default, webAuthn4j-device-check is set to accept a production attestation.
+If you want to accept a development attestation, you need to `DCAttestationDataValidator#setProduction` `false`.
+
 [source,java]
 ----
 // Client properties
