@@ -20,8 +20,8 @@ package com.webauthn4j.data.extension.authenticator;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyByteDeserializer;
-import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyByteSerializer;
+import com.webauthn4j.converter.jackson.deserializer.cbor.CredentialProtectionPolicyDeserializer;
+import com.webauthn4j.converter.jackson.serializer.cbor.CredentialProtectionPolicySerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.UvmEntries;
 import com.webauthn4j.util.AssertUtil;
@@ -42,8 +42,8 @@ public class AuthenticationExtensionsAuthenticatorOutputs<T extends ExtensionAut
     private final Map<String, Serializable> unknowns = new HashMap<>();
     @JsonProperty
     private UvmEntries uvm;
-    @JsonSerialize(using = CredentialProtectionPolicyByteSerializer.class)
-    @JsonDeserialize(using = CredentialProtectionPolicyByteDeserializer.class)
+    @JsonSerialize(using = CredentialProtectionPolicySerializer.class)
+    @JsonDeserialize(using = CredentialProtectionPolicyDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credProtect;
     @JsonIgnore

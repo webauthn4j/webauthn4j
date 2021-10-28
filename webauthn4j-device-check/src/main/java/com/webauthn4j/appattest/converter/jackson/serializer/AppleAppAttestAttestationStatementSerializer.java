@@ -17,7 +17,7 @@
 package com.webauthn4j.appattest.converter.jackson.serializer;
 
 import com.webauthn4j.appattest.data.attestation.statement.AppleAppAttestAttestationStatement;
-import com.webauthn4j.converter.jackson.serializer.AbstractCtapCanonicalCborSerializer;
+import com.webauthn4j.converter.jackson.serializer.cbor.AbstractCtapCanonicalCborSerializer;
 
 import java.util.Arrays;
 

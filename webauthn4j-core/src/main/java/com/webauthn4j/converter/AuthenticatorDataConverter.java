@@ -18,8 +18,8 @@ package com.webauthn4j.converter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.jackson.deserializer.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
-import com.webauthn4j.converter.jackson.deserializer.COSEKeyEnvelope;
+import com.webauthn4j.converter.jackson.deserializer.cbor.AuthenticationExtensionsAuthenticatorOutputsEnvelope;
+import com.webauthn4j.converter.jackson.deserializer.cbor.COSEKeyEnvelope;
 import com.webauthn4j.converter.util.CborConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
