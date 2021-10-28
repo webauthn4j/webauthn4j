@@ -18,7 +18,7 @@ package com.webauthn4j.data.extension.authenticator;
 
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.webauthn4j.converter.jackson.deserializer.HMACSecretAuthenticatorInputDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.cbor.HMACSecretAuthenticatorInputDeserializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;

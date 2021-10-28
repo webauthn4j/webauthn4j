@@ -5,10 +5,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.webauthn4j.converter.jackson.deserializer.CredentialProtectionPolicyStringDeserializer;
-import com.webauthn4j.converter.jackson.serializer.CredentialProtectionPolicyStringSerializer;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.AssertUtil;
@@ -38,8 +34,6 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private Boolean uvm;
     @JsonProperty
     private Boolean credProps;
-    @JsonSerialize(using = CredentialProtectionPolicyStringSerializer.class)
-    @JsonDeserialize(using = CredentialProtectionPolicyStringDeserializer.class)
     @JsonProperty
     private CredentialProtectionPolicy credentialProtectionPolicy;
     @JsonProperty

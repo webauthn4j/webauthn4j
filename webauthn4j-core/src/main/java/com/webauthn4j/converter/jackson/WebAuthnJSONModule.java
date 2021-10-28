@@ -17,17 +17,14 @@
 package com.webauthn4j.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.converter.jackson.deserializer.ChallengeDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.JWSDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.JWSHeaderDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.X509CertificateDeserializer;
-import com.webauthn4j.converter.jackson.serializer.ChallengeSerializer;
-import com.webauthn4j.converter.jackson.serializer.JWSHeaderSerializer;
-import com.webauthn4j.converter.jackson.serializer.JWSSerializer;
-import com.webauthn4j.converter.jackson.serializer.X509CertificateSerializer;
+import com.webauthn4j.converter.jackson.deserializer.json.ChallengeDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.json.CredentialProtectionPolicyDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.json.JWSHeaderDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.json.X509CertificateDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.client.challenge.Challenge;
-import com.webauthn4j.data.jws.JWS;
+import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -45,13 +42,14 @@ public class WebAuthnJSONModule extends SimpleModule {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
-        this.addDeserializer(JWS.class, new JWSDeserializer(objectConverter));
+        this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(new ChallengeSerializer());
-        this.addSerializer(new JWSSerializer());
+        this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new JWSHeaderSerializer());
+        this.addSerializer(new OriginSerializer());
         this.addSerializer(new X509CertificateSerializer());
 
     }
