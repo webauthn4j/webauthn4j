@@ -45,6 +45,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(KeyProtectionType.class, new KeyProtectionTypeFromIntDeserializer());
+        this.addDeserializer(MatcherProtectionType.class, new MatcherProtectionTypeFromIntDeserializer());
         this.addDeserializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatFromIntDeserializer());
         this.addDeserializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayFromIntDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -55,6 +56,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new JWSHeaderSerializer());
         this.addSerializer(new KeyProtectionTypeToIntSerializer());
+        this.addSerializer(new MatcherProtectionTypeToIntSerializer());
         this.addSerializer(new OriginSerializer());
         this.addSerializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatToIntSerializer());
         this.addSerializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayToIntSerializer());
