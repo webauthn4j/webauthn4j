@@ -467,7 +467,7 @@ public class TestDataUtil {
                 null,
                 PublicKeyRepresentationFormat.COSE,
                 null,
-                Collections.singletonList(AttestationType.BASIC_FULL),
+                Collections.singletonList(AuthenticatorAttestationType.BASIC_FULL),
                 null,
                 new KeyProtections(10),
                 null,

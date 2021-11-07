@@ -22,7 +22,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
-import com.webauthn4j.data.AttestationType;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
@@ -128,7 +128,7 @@ class MetadataStatementTest {
                 "}";
         MetadataStatement metadataStatement = objectConverter.getJsonConverter().readValue(data, MetadataStatement.class);
         assertAll(
-                () -> assertThat(metadataStatement.getAttestationTypes()).containsOnly(AttestationType.BASIC_FULL, AttestationType.BASIC_SURROGATE),
+                () -> assertThat(metadataStatement.getAttestationTypes()).containsOnly(AuthenticatorAttestationType.BASIC_FULL, AuthenticatorAttestationType.BASIC_SURROGATE),
                 () -> assertThat(metadataStatement.getAuthenticationAlgorithm()).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW),
                 () -> assertThat(metadataStatement.getPublicKeyAlgAndEncoding()).isEqualTo(PublicKeyRepresentationFormat.COSE)
         );

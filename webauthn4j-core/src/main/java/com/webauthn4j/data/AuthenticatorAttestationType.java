@@ -26,7 +26,7 @@ import java.util.Objects;
  *
  * @see <a href="https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-registry-v2.0-rd-20180702.html#authenticator-attestation-types">§3.6.3 Authenticator Attestation Types</a>
  */
-public enum AttestationType {
+public enum AuthenticatorAttestationType {
 
     BASIC_FULL(0x3E07, "basic_full"),
     BASIC_SURROGATE(0x3E08, "basic_surrogate"),
@@ -36,21 +36,21 @@ public enum AttestationType {
     private final int value;
     private final String string;
 
-    AttestationType(int value, String string) {
+    AuthenticatorAttestationType(int value, String string) {
         this.value = value;
         this.string = string;
     }
 
-    public static AttestationType create(String value) {
-        return Arrays.stream(AttestationType.values()).filter(item -> Objects.equals(item.string, value))
+    public static AuthenticatorAttestationType create(String value) {
+        return Arrays.stream(AuthenticatorAttestationType.values()).filter(item -> Objects.equals(item.string, value))
                 .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
     }
 
-    public static AttestationType create(int value) {
+    public static AuthenticatorAttestationType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
-        return Arrays.stream(AttestationType.values()).filter(item -> item.value == value)
+        return Arrays.stream(AuthenticatorAttestationType.values()).filter(item -> item.value == value)
                 .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
     }
 

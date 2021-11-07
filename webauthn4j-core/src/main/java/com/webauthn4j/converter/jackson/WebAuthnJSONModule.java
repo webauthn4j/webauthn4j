@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AttestationType;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import com.webauthn4j.data.TransactionConfirmationDisplay;
@@ -42,7 +42,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         super("WebAuthnJSONModule");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
-        this.addDeserializer(AttestationType.class, new AttestationTypeFromIntDeserializer());
+        this.addDeserializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeFromIntDeserializer());
         this.addDeserializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmFromIntDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
@@ -51,7 +51,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayFromIntDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
-        this.addSerializer(AttestationType.class, new AttestationTypeToIntSerializer());
+        this.addSerializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeToIntSerializer());
         this.addSerializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmToIntSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());

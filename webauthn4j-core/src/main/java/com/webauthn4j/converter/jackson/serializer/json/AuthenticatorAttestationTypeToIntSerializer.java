@@ -19,17 +19,17 @@ package com.webauthn4j.converter.jackson.serializer.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.data.AttestationType;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 
 import java.io.IOException;
 
-public class AttestationTypeToStringSerializer extends StdSerializer<AttestationType> {
-    public AttestationTypeToStringSerializer() {
-        super(AttestationType.class);
+public class AuthenticatorAttestationTypeToIntSerializer extends StdSerializer<AuthenticatorAttestationType> {
+    public AuthenticatorAttestationTypeToIntSerializer() {
+        super(AuthenticatorAttestationType.class);
     }
 
     @Override
-    public void serialize(AttestationType value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeString(value.toString());
+    public void serialize(AuthenticatorAttestationType value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeNumber(value.getValue());
     }
 }

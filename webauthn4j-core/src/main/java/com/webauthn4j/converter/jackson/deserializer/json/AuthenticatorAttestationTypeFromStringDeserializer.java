@@ -22,21 +22,21 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.AttachmentHint;
-import com.webauthn4j.data.AttestationType;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 
 import java.io.IOException;
 
-public class AttestationTypeFromStringDeserializer extends StdDeserializer<AttestationType> {
+public class AuthenticatorAttestationTypeFromStringDeserializer extends StdDeserializer<AuthenticatorAttestationType> {
 
-    public AttestationTypeFromStringDeserializer() {
-        super(AttestationType.class);
+    public AuthenticatorAttestationTypeFromStringDeserializer() {
+        super(AuthenticatorAttestationType.class);
     }
 
     @Override
-    public AttestationType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public AuthenticatorAttestationType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
         String value = p.getValueAsString();
         try {
-            return AttestationType.create(value);
+            return AuthenticatorAttestationType.create(value);
         } catch (IllegalArgumentException e) {
             throw new InvalidFormatException(null, "value is out of range", value, AttachmentHint.class);
         }
