@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -33,7 +32,7 @@ public class KeyProtectionTypeFromStringDeserializer extends StdDeserializer<Key
     }
 
     @Override
-    public KeyProtectionType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public KeyProtectionType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String value = p.getValueAsString();
         try {
             return KeyProtectionType.create(value);

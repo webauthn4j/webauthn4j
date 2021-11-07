@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -32,7 +31,7 @@ public class TransactionConfirmationDisplayFromIntDeserializer extends StdDeseri
     }
 
     @Override
-    public TransactionConfirmationDisplay deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public TransactionConfirmationDisplay deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         int value = p.getValueAsInt();
         try {
             return TransactionConfirmationDisplay.create(value);

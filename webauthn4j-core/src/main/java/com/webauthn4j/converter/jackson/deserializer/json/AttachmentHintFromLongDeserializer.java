@@ -16,7 +16,6 @@
 
 package com.webauthn4j.converter.jackson.deserializer.json;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -32,7 +31,7 @@ public class AttachmentHintFromLongDeserializer extends StdDeserializer<Attachme
     }
 
     @Override
-    public AttachmentHint deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+    public AttachmentHint deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         long value = p.getValueAsLong();
         try {
             return AttachmentHint.create(value);
