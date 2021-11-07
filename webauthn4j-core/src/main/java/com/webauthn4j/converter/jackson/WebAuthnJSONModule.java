@@ -41,11 +41,15 @@ public class WebAuthnJSONModule extends SimpleModule {
         super("WebAuthnJSONModule");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
+        this.addDeserializer(AttestationType.class, new AttestationTypeFromIntDeserializer());
+        this.addDeserializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmFromIntDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
+        this.addSerializer(AttestationType.class, new AttestationTypeToIntSerializer());
+        this.addSerializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmToIntSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new JWSHeaderSerializer());
