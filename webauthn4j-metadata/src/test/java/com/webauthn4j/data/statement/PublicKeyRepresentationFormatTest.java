@@ -19,7 +19,7 @@ package com.webauthn4j.data.statement;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.data.statement.PublicKeyRepresentationFormat;
+import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.junit.jupiter.api.Test;
 

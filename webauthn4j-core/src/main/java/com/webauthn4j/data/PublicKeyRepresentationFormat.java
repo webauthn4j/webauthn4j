@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data.statement;
+package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.data.AttestationType;
 import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The supported publik key representation format(s).
@@ -29,49 +28,40 @@ import com.webauthn4j.util.UnsignedNumberUtil;
  */
 public enum PublicKeyRepresentationFormat {
 
-    ECC_X962_RAW(0x0100),
-    ECC_X962_DER(0x0101),
-    RSA_2048_RAW(0x0102),
-    RSA_2048_DER(0x0103),
-    COSE(0x0104);
+    ECC_X962_RAW(0x0100, "ecc_x962_raw"),
+    ECC_X962_DER(0x0101, "ecc_x962_der"),
+    RSA_2048_RAW(0x0102, "rsa_2048_raw"),
+    RSA_2048_DER(0x0103, "rsa_2048_der"),
+    COSE(0x0104, "cose");
 
     private final int value;
+    private final String string;
 
-    PublicKeyRepresentationFormat(int value) {
+    PublicKeyRepresentationFormat(int value, String string) {
         this.value = value;
+        this.string = string;
     }
 
     public static PublicKeyRepresentationFormat create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
-        switch (value) {
-            case 0x0100:
-                return ECC_X962_RAW;
-            case 0x0101:
-                return ECC_X962_DER;
-            case 0x0102:
-                return RSA_2048_RAW;
-            case 0x0103:
-                return RSA_2048_DER;
-            case 0x0104:
-                return COSE;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+        return Arrays.stream(PublicKeyRepresentationFormat.values()).filter(item -> item.getValue() == value)
+                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
     }
 
-    @JsonCreator
-    private static PublicKeyRepresentationFormat deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, AttestationType.class);
-        }
+    public static PublicKeyRepresentationFormat create(String value) {
+        return Arrays.stream(PublicKeyRepresentationFormat.values()).filter(item -> Objects.equals(item.toString(), value))
+                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
     }
 
-    @JsonValue
     public int getValue() {
         return value;
     }
+
+    @Override
+    public String toString(){
+        return string;
+    }
 }
+

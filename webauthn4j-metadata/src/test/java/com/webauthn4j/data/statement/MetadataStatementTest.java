@@ -25,7 +25,7 @@ import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
 import com.webauthn4j.data.AttestationType;
 import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.metadata.data.statement.PublicKeyRepresentationFormat;
+import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
