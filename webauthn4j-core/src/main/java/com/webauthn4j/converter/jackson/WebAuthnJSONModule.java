@@ -20,10 +20,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticatorAttestationType;
-import com.webauthn4j.data.AuthenticationAlgorithm;
-import com.webauthn4j.data.PublicKeyRepresentationFormat;
-import com.webauthn4j.data.TransactionConfirmationDisplay;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
@@ -47,6 +44,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
+        this.addDeserializer(KeyProtectionType.class, new KeyProtectionTypeFromIntDeserializer());
         this.addDeserializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatFromIntDeserializer());
         this.addDeserializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayFromIntDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
@@ -56,6 +54,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new JWSHeaderSerializer());
+        this.addSerializer(new KeyProtectionTypeToIntSerializer());
         this.addSerializer(new OriginSerializer());
         this.addSerializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatToIntSerializer());
         this.addSerializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayToIntSerializer());
