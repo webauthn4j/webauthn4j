@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.webauthn4j.data.AttestationType;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 /**

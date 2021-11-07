@@ -17,12 +17,11 @@
 package com.webauthn4j.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.converter.jackson.deserializer.json.ChallengeDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.CredentialProtectionPolicyDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.JWSHeaderDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.X509CertificateDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AttestationType;
+import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
