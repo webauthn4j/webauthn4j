@@ -23,6 +23,7 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.AttestationType;
 import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.data.PublicKeyRepresentationFormat;
+import com.webauthn4j.data.TransactionConfirmationDisplay;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
@@ -47,6 +48,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
         this.addDeserializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatFromIntDeserializer());
+        this.addDeserializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayFromIntDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
         this.addSerializer(AttestationType.class, new AttestationTypeToIntSerializer());
@@ -56,6 +58,7 @@ public class WebAuthnJSONModule extends SimpleModule {
         this.addSerializer(new JWSHeaderSerializer());
         this.addSerializer(new OriginSerializer());
         this.addSerializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatToIntSerializer());
+        this.addSerializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayToIntSerializer());
         this.addSerializer(new X509CertificateSerializer());
 
     }

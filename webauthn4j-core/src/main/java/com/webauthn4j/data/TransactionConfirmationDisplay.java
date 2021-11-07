@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data.statement;
+package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The supported transaction confirmation display type(s).
@@ -28,51 +28,40 @@ import com.webauthn4j.util.UnsignedNumberUtil;
  */
 public enum TransactionConfirmationDisplay {
 
-    ANY(0x0001),
-    PRIVILEGED_SOFTWARE(0x0002),
-    TEE(0x0004),
-    HARDWARE(0x0008),
-    REMOTE(0x0010);
+    ANY(0x0001, "any"),
+    PRIVILEGED_SOFTWARE(0x0002, "privileged_software"),
+    TEE(0x0004, "tee"),
+    HARDWARE(0x0008, "hardware"),
+    REMOTE(0x0010, "remote");
 
     private final int value;
+    private final String string;
 
-    TransactionConfirmationDisplay(int value) {
+    TransactionConfirmationDisplay(int value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @SuppressWarnings("Duplicates")
+    public static TransactionConfirmationDisplay create(String value) {
+        return Arrays.stream(TransactionConfirmationDisplay.values()).filter(item -> Objects.equals(item.string, value))
+                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+    }
+
     public static TransactionConfirmationDisplay create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
-        switch (value) {
-            case 0x0001:
-                return ANY;
-            case 0x0002:
-                return PRIVILEGED_SOFTWARE;
-            case 0x0004:
-                return TEE;
-            case 0x0008:
-                return HARDWARE;
-            case 0x0010:
-                return REMOTE;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+        return Arrays.stream(TransactionConfirmationDisplay.values()).filter(item -> item.value == value)
+                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
     }
 
-    @JsonCreator
-    private static TransactionConfirmationDisplay deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, TransactionConfirmationDisplay.class);
-        }
-    }
-
-    @JsonValue
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public String toString(){
+        return string;
     }
 
 
