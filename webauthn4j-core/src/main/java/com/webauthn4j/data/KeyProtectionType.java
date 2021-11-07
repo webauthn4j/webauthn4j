@@ -16,11 +16,7 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -38,6 +34,8 @@ public enum KeyProtectionType {
     SECURE_ELEMENT(0x0008, "secure_element"),
     REMOTE_HANDLE(0x0010, "remote_handle");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -48,15 +46,15 @@ public enum KeyProtectionType {
 
     public static KeyProtectionType create(String value) {
         return Arrays.stream(KeyProtectionType.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static KeyProtectionType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(KeyProtectionType.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {

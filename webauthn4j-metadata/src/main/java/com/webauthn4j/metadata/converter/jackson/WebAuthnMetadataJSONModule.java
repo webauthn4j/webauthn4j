@@ -17,9 +17,6 @@
 package com.webauthn4j.metadata.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.converter.jackson.deserializer.json.AuthenticationAlgorithmFromIntDeserializer;
-import com.webauthn4j.converter.jackson.serializer.json.AuthenticationAlgorithmToIntSerializer;
-import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.metadata.converter.jackson.deserializer.AttachmentHintsDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.KeyProtectionsDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MatcherProtectionsDeserializer;

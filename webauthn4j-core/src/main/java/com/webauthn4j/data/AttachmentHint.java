@@ -16,9 +16,6 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
 
 import java.util.Arrays;
@@ -41,6 +38,8 @@ public enum AttachmentHint {
     READY(0x0080, "ready"),
     WIFI_DIRECT(0x0100, "wifi_direct");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final long value;
     private final String string;
 
@@ -51,15 +50,15 @@ public enum AttachmentHint {
 
     public static AttachmentHint create(long value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(AttachmentHint.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static AttachmentHint create(String value) {
         return Arrays.stream(AttachmentHint.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public long getValue() {

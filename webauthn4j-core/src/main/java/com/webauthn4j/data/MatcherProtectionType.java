@@ -32,6 +32,8 @@ public enum MatcherProtectionType {
     TEE(0x0002, "tee"),
     ON_CHIP(0x0004, "on_chip");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -42,15 +44,15 @@ public enum MatcherProtectionType {
 
     public static MatcherProtectionType create(String value) {
         return Arrays.stream(MatcherProtectionType.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static MatcherProtectionType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(MatcherProtectionType.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {

@@ -21,7 +21,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import com.webauthn4j.data.TransactionConfirmationDisplay;
 
 import java.io.IOException;

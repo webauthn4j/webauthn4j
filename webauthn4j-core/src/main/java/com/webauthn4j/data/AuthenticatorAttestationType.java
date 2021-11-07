@@ -33,6 +33,8 @@ public enum AuthenticatorAttestationType {
     ECDAA(0x3E09, "ecdaa"),
     ATTCA(0x3E0A, "attca");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -43,15 +45,15 @@ public enum AuthenticatorAttestationType {
 
     public static AuthenticatorAttestationType create(String value) {
         return Arrays.stream(AuthenticatorAttestationType.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static AuthenticatorAttestationType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(AuthenticatorAttestationType.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {

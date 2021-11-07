@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.AttachmentHint;
-import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.KeyProtectionType;
 
 import java.io.IOException;

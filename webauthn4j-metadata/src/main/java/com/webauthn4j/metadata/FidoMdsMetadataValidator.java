@@ -17,11 +17,11 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.metadata.exception.BadStatusException;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomRegistrationValidator;

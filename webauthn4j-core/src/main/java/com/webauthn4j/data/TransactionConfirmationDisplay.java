@@ -34,6 +34,8 @@ public enum TransactionConfirmationDisplay {
     HARDWARE(0x0008, "hardware"),
     REMOTE(0x0010, "remote");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -44,15 +46,15 @@ public enum TransactionConfirmationDisplay {
 
     public static TransactionConfirmationDisplay create(String value) {
         return Arrays.stream(TransactionConfirmationDisplay.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static TransactionConfirmationDisplay create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(TransactionConfirmationDisplay.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {

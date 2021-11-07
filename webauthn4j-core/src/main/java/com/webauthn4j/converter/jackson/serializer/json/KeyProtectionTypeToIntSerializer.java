@@ -19,7 +19,6 @@ package com.webauthn4j.converter.jackson.serializer.json;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.KeyProtectionType;
 
 import java.io.IOException;

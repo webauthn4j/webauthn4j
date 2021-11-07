@@ -34,6 +34,8 @@ public enum PublicKeyRepresentationFormat {
     RSA_2048_DER(0x0103, "rsa_2048_der"),
     COSE(0x0104, "cose");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -47,12 +49,12 @@ public enum PublicKeyRepresentationFormat {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
         return Arrays.stream(PublicKeyRepresentationFormat.values()).filter(item -> item.getValue() == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static PublicKeyRepresentationFormat create(String value) {
         return Arrays.stream(PublicKeyRepresentationFormat.values()).filter(item -> Objects.equals(item.toString(), value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {
