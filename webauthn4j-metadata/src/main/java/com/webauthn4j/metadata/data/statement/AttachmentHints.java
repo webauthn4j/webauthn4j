@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.webauthn4j.data.AttachmentHint;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.util.AbstractSet;

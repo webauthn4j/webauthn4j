@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.converter.jackson.serializer;
+package com.webauthn4j.converter.jackson.serializer.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.AttachmentHint;
-import com.webauthn4j.metadata.data.statement.AttachmentHints;
 
 import java.io.IOException;
 
-public class AttachmentHintsSerializer extends StdSerializer<AttachmentHints> {
+public class AttachmentHintToStringSerializer extends StdSerializer<AttachmentHint> {
 
-    public AttachmentHintsSerializer() {
-        super(AttachmentHints.class);
+    public AttachmentHintToStringSerializer() {
+        super(AttachmentHint.class);
     }
 
     @Override
-    public void serialize(AttachmentHints value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(AttachmentHint::getValue).reduce(0L, Long::sum);
-        gen.writeNumber(sum);
+    public void serialize(AttachmentHint value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        gen.writeString(value.toString());
     }
 }
