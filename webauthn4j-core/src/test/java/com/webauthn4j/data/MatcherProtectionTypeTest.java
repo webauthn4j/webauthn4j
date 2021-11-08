@@ -16,9 +16,12 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.json.MatcherProtectionTypeFromStringDeserializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +39,10 @@ class MatcherProtectionTypeTest {
         assertAll(
                 () -> assertThat(MatcherProtectionType.create(0x0001)).isEqualTo(MatcherProtectionType.SOFTWARE),
                 () -> assertThat(MatcherProtectionType.create(0x0002)).isEqualTo(MatcherProtectionType.TEE),
-                () -> assertThat(MatcherProtectionType.create(0x0004)).isEqualTo(MatcherProtectionType.ON_CHIP)
+                () -> assertThat(MatcherProtectionType.create(0x0004)).isEqualTo(MatcherProtectionType.ON_CHIP),
+                () -> assertThat(MatcherProtectionType.create("software")).isEqualTo(MatcherProtectionType.SOFTWARE),
+                () -> assertThat(MatcherProtectionType.create("tee")).isEqualTo(MatcherProtectionType.TEE),
+                () -> assertThat(MatcherProtectionType.create("on_chip")).isEqualTo(MatcherProtectionType.ON_CHIP)
         );
     }
 
@@ -46,32 +52,72 @@ class MatcherProtectionTypeTest {
     }
 
     @Test
-    void deserialize_test() {
-        TestDTO dto = jsonConverter.readValue("{\"matcherProtectionType\": 2}", TestDTO.class);
-        assertThat(dto.matcherProtectionType).isEqualTo(MatcherProtectionType.TEE);
+    void toString_test() {
+        assertThat(MatcherProtectionType.SOFTWARE.toString()).isEqualTo("software");
     }
 
-    @Test
-    void deserialize_test_with_out_of_range_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"matcherProtectionType\": \"-1\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+    @Nested
+    class IntSerialization {
+
+        @Test
+        void deserialize_test() {
+            MatcherProtectionTypeAsIntTestDTO dto = jsonConverter.readValue("{\"matcherProtectionType\": 2}", MatcherProtectionTypeAsIntTestDTO.class);
+            assertThat(dto.matcherProtectionType).isEqualTo(MatcherProtectionType.TEE);
+        }
+
+        @Test
+        void deserialize_test_with_out_of_range_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"-1\"}", MatcherProtectionTypeAsIntTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"\"}", MatcherProtectionTypeAsIntTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            MatcherProtectionTypeAsIntTestDTO data = jsonConverter.readValue("{\"matcherProtectionType\":null}", MatcherProtectionTypeAsIntTestDTO.class);
+            assertThat(data.matcherProtectionType).isNull();
+        }
+
     }
 
-    @Test
-    void deserialize_test_with_invalid_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"matcherProtectionType\": \"\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+    static class MatcherProtectionTypeAsIntTestDTO {
+        @SuppressWarnings("WeakerAccess")
+        public MatcherProtectionType matcherProtectionType;
     }
 
-    @Test
-    void deserialize_test_with_null() {
-        TestDTO data = jsonConverter.readValue("{\"matcherProtectionType\":null}", TestDTO.class);
-        assertThat(data.matcherProtectionType).isNull();
+    @Nested
+    class StringSerialization {
+
+        @Test
+        void deserialize_test() {
+            MatcherProtectionTypeAsStringTestDTO dto = jsonConverter.readValue("{\"matcherProtectionType\": \"tee\"}", MatcherProtectionTypeAsStringTestDTO.class);
+            assertThat(dto.matcherProtectionType).isEqualTo(MatcherProtectionType.TEE);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"matcherProtectionType\": \"invalid\"}", MatcherProtectionTypeAsStringTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            MatcherProtectionTypeAsStringTestDTO data = jsonConverter.readValue("{\"matcherProtectionType\":null}", MatcherProtectionTypeAsStringTestDTO.class);
+            assertThat(data.matcherProtectionType).isNull();
+        }
+
     }
 
-    static class TestDTO {
+    static class MatcherProtectionTypeAsStringTestDTO {
+        @JsonDeserialize(using = MatcherProtectionTypeFromStringDeserializer.class)
         @SuppressWarnings("WeakerAccess")
         public MatcherProtectionType matcherProtectionType;
     }
