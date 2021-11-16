@@ -17,7 +17,6 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webauthn4j.data.client.TokenBindingStatus;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

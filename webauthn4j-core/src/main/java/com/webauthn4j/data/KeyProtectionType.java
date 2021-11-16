@@ -16,11 +16,10 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The supported key protection type(s).
@@ -29,69 +28,41 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public enum KeyProtectionType {
 
-    SOFTWARE(0x0001),
-    HARDWARE(0x0002),
-    TEE(0x0004),
-    SECURE_ELEMENT(0x0008),
-    REMOTE_HANDLE(0x0010);
+    SOFTWARE(0x0001, "software"),
+    HARDWARE(0x0002, "hardware"),
+    TEE(0x0004, "tee"),
+    SECURE_ELEMENT(0x0008, "secure_element"),
+    REMOTE_HANDLE(0x0010, "remote_handle");
+
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
     private final int value;
+    private final String string;
 
-    KeyProtectionType(int value) {
+    KeyProtectionType(int value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @SuppressWarnings("Duplicates")
-    public static @NonNull KeyProtectionType create(int value) {
+    public static KeyProtectionType create(String value) {
+        return Arrays.stream(KeyProtectionType.values()).filter(item -> Objects.equals(item.string, value))
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
+    }
+
+    public static KeyProtectionType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
-        switch (value) {
-            case 0x0001:
-                return SOFTWARE;
-            case 0x0002:
-                return HARDWARE;
-            case 0x0004:
-                return TEE;
-            case 0x0008:
-                return SECURE_ELEMENT;
-            case 0x0010:
-                return REMOTE_HANDLE;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+        return Arrays.stream(KeyProtectionType.values()).filter(item -> item.value == value)
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull KeyProtectionType deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, KeyProtectionType.class);
-        }
-    }
-
-    @JsonValue
     public int getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        switch (value){
-            case 0x0001:
-                return "SOFTWARE";
-            case 0x0002:
-                return "HARDWARE";
-            case 0x0004:
-                return "TEE";
-            case 0x0008:
-                return "SECURE_ELEMENT";
-            case 0x0010:
-                return "REMOTE_HANDLE";
-            default:
-                return "UNKNOWN(" + String.format("%04X", value) + ")";
-        }
+    public String toString(){
+        return string;
     }
 }

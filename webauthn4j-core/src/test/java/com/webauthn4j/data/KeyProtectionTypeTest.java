@@ -16,9 +16,14 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.json.KeyProtectionTypeFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.KeyProtectionTypeToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,7 +43,12 @@ class KeyProtectionTypeTest {
                 () -> assertThat(KeyProtectionType.create(0x0002)).isEqualTo(KeyProtectionType.HARDWARE),
                 () -> assertThat(KeyProtectionType.create(0x0004)).isEqualTo(KeyProtectionType.TEE),
                 () -> assertThat(KeyProtectionType.create(0x0008)).isEqualTo(KeyProtectionType.SECURE_ELEMENT),
-                () -> assertThat(KeyProtectionType.create(0x0010)).isEqualTo(KeyProtectionType.REMOTE_HANDLE)
+                () -> assertThat(KeyProtectionType.create(0x0010)).isEqualTo(KeyProtectionType.REMOTE_HANDLE),
+                () -> assertThat(KeyProtectionType.create("software")).isEqualTo(KeyProtectionType.SOFTWARE),
+                () -> assertThat(KeyProtectionType.create("hardware")).isEqualTo(KeyProtectionType.HARDWARE),
+                () -> assertThat(KeyProtectionType.create("tee")).isEqualTo(KeyProtectionType.TEE),
+                () -> assertThat(KeyProtectionType.create("secure_element")).isEqualTo(KeyProtectionType.SECURE_ELEMENT),
+                () -> assertThat(KeyProtectionType.create("remote_handle")).isEqualTo(KeyProtectionType.REMOTE_HANDLE)
         );
     }
 
@@ -48,34 +58,90 @@ class KeyProtectionTypeTest {
     }
 
     @Test
-    void deserialize_test() {
-        TestDTO dto = jsonConverter.readValue("{\"keyProtectionType\": 2}", TestDTO.class);
-        assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
+    void toString_test() {
+        assertThat(KeyProtectionType.SOFTWARE).hasToString("software");
     }
 
-    @Test
-    void deserialize_test_with_out_of_range_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"keyProtectionType\": \"-1\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+    @Nested
+    class IntSerialization {
+
+        @Test
+        void serialize_test(){
+            IntSerializationTestDTO dto = new IntSerializationTestDTO();
+            dto.keyProtectionType = KeyProtectionType.HARDWARE;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"keyProtectionType\":2}");
+        }
+
+        @Test
+        void deserialize_test() {
+            IntSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":2}", IntSerializationTestDTO.class);
+            assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
+        }
+
+        @Test
+        void deserialize_test_with_out_of_range_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"-1\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"\"}", IntSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            IntSerializationTestDTO data = jsonConverter.readValue("{\"keyProtectionType\":null}", IntSerializationTestDTO.class);
+            assertThat(data.keyProtectionType).isNull();
+        }
     }
 
-    @Test
-    void deserialize_test_with_invalid_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"keyProtectionType\": \"\"}", TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
-    }
-
-    @Test
-    void deserialize_test_with_null() {
-        TestDTO data = jsonConverter.readValue("{\"keyProtectionType\":null}", TestDTO.class);
-        assertThat(data.keyProtectionType).isNull();
-    }
-
-    static class TestDTO {
+    static class IntSerializationTestDTO {
         @SuppressWarnings("WeakerAccess")
         public KeyProtectionType keyProtectionType;
     }
+
+    @Nested
+    class StringSerialization {
+
+        @Test
+        void serialize_test(){
+            StringSerializationTestDTO dto = new StringSerializationTestDTO();
+            dto.keyProtectionType = KeyProtectionType.HARDWARE;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"keyProtectionType\":\"hardware\"}");
+        }
+
+        @Test
+        void deserialize_test() {
+            StringSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":\"hardware\"}", StringSerializationTestDTO.class);
+            assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"keyProtectionType\": \"\"}", StringSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            StringSerializationTestDTO data = jsonConverter.readValue("{\"keyProtectionType\":null}", StringSerializationTestDTO.class);
+            assertThat(data.keyProtectionType).isNull();
+        }
+    }
+
+    static class StringSerializationTestDTO {
+        @SuppressWarnings("WeakerAccess")
+        @JsonSerialize(using = KeyProtectionTypeToStringSerializer.class)
+        @JsonDeserialize(using = KeyProtectionTypeFromStringDeserializer.class)
+        public KeyProtectionType keyProtectionType;
+    }
+
 
 }

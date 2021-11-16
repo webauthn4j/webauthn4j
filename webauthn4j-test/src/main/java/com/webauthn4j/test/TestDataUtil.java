@@ -27,9 +27,7 @@ import com.webauthn4j.converter.AttestationObjectConverter;
 import com.webauthn4j.converter.AuthenticatorDataConverter;
 import com.webauthn4j.converter.CollectedClientDataConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.AuthenticatorAttestationResponse;
-import com.webauthn4j.data.AuthenticatorTransport;
-import com.webauthn4j.data.PublicKeyCredential;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.*;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -469,7 +467,7 @@ public class TestDataUtil {
                 null,
                 PublicKeyRepresentationFormat.COSE,
                 null,
-                Collections.singletonList(AttestationType.BASIC_FULL),
+                Collections.singletonList(AuthenticatorAttestationType.BASIC_FULL),
                 null,
                 new KeyProtections(10),
                 null,

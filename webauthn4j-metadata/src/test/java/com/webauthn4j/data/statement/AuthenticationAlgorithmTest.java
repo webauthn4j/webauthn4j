@@ -16,10 +16,12 @@
 
 package com.webauthn4j.data.statement;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.json.AuthenticationAlgorithmFromIntDeserializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.data.statement.AuthenticationAlgorithm;
+import com.webauthn4j.data.AuthenticationAlgorithm;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.junit.jupiter.api.Test;
 
@@ -81,6 +83,7 @@ class AuthenticationAlgorithmTest {
 
     static class TestDTO {
         @SuppressWarnings("WeakerAccess")
+        @JsonDeserialize(using = AuthenticationAlgorithmFromIntDeserializer.class)
         public AuthenticationAlgorithm authentication_algorithm;
     }
 }

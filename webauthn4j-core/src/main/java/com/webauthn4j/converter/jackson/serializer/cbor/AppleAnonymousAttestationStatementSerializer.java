@@ -20,7 +20,7 @@ import com.webauthn4j.data.attestation.statement.AppleAnonymousAttestationStatem
 
 import java.util.Collections;
 
-public class AppleAnonymousAttestationStatementSerializer  extends AbstractCtapCanonicalCborSerializer<AppleAnonymousAttestationStatement> {
+public class AppleAnonymousAttestationStatementSerializer extends AbstractCtapCanonicalCborSerializer<AppleAnonymousAttestationStatement> {
 
     public AppleAnonymousAttestationStatementSerializer() {
         super(AppleAnonymousAttestationStatement.class, Collections.singletonList(

@@ -17,11 +17,11 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.metadata.data.statement.AttestationType;
 import com.webauthn4j.metadata.exception.BadStatusException;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CustomRegistrationValidator;
@@ -63,11 +63,11 @@ public class FidoMdsMetadataValidator implements CustomRegistrationValidator {
 
         Set<MetadataItem> metadataItems = metadataItemsResolver.resolve(aaguid);
 
-        List<AttestationType> attestationTypes = metadataItems.stream()
+        List<AuthenticatorAttestationType> authenticatorAttestationTypes = metadataItems.stream()
                 .flatMap(item -> item.getMetadataStatement().getAttestationTypes().stream()).collect(Collectors.toList());
 
-        boolean isSurrogate = !attestationTypes.isEmpty() &&
-                attestationTypes.stream().allMatch(type -> type.equals(AttestationType.BASIC_SURROGATE));
+        boolean isSurrogate = !authenticatorAttestationTypes.isEmpty() &&
+                authenticatorAttestationTypes.stream().allMatch(type -> type.equals(AuthenticatorAttestationType.BASIC_SURROGATE));
 
         if (isSurrogate && attestationStatement instanceof CertificateBaseAttestationStatement) {
             CertificateBaseAttestationStatement certificateBaseAttestationStatement = (CertificateBaseAttestationStatement) attestationStatement;

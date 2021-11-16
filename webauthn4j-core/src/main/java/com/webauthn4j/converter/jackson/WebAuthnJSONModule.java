@@ -17,12 +17,10 @@
 package com.webauthn4j.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.converter.jackson.deserializer.json.ChallengeDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.CredentialProtectionPolicyDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.JWSHeaderDeserializer;
-import com.webauthn4j.converter.jackson.deserializer.json.X509CertificateDeserializer;
+import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
@@ -41,15 +39,29 @@ public class WebAuthnJSONModule extends SimpleModule {
         super("WebAuthnJSONModule");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 
+        this.addDeserializer(AttachmentHint.class, new AttachmentHintFromLongDeserializer());
+        this.addDeserializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeFromIntDeserializer());
+        this.addDeserializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmFromIntDeserializer());
         this.addDeserializer(Challenge.class, new ChallengeDeserializer());
         this.addDeserializer(CredentialProtectionPolicy.class, new CredentialProtectionPolicyDeserializer());
         this.addDeserializer(JWSHeader.class, new JWSHeaderDeserializer());
+        this.addDeserializer(KeyProtectionType.class, new KeyProtectionTypeFromIntDeserializer());
+        this.addDeserializer(MatcherProtectionType.class, new MatcherProtectionTypeFromIntDeserializer());
+        this.addDeserializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatFromIntDeserializer());
+        this.addDeserializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayFromIntDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
+        this.addSerializer(AttachmentHint.class, new AttachmentHintToLongSerializer());
+        this.addSerializer(AuthenticatorAttestationType.class, new AuthenticatorAttestationTypeToIntSerializer());
+        this.addSerializer(AuthenticationAlgorithm.class, new AuthenticationAlgorithmToIntSerializer());
         this.addSerializer(new ChallengeSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new JWSHeaderSerializer());
+        this.addSerializer(new KeyProtectionTypeToIntSerializer());
+        this.addSerializer(new MatcherProtectionTypeToIntSerializer());
         this.addSerializer(new OriginSerializer());
+        this.addSerializer(PublicKeyRepresentationFormat.class, new PublicKeyRepresentationFormatToIntSerializer());
+        this.addSerializer(TransactionConfirmationDisplay.class, new TransactionConfirmationDisplayToIntSerializer());
         this.addSerializer(new X509CertificateSerializer());
 
     }

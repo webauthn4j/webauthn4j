@@ -33,10 +33,10 @@ public class HMACSecretAuthenticatorInputDeserializer extends StdDeserializer<Ob
     @Override
     public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         String value = p.getValueAsString();
-        if(Objects.equals(value, "true")){
+        if (Objects.equals(value, "true")) {
             return true;
         }
-        else if(Objects.equals(value, "false")){
+        else if (Objects.equals(value, "false")) {
             return false;
         }
         return p.getCodec().readValue(p, HMACGetSecretAuthenticatorInput.class);

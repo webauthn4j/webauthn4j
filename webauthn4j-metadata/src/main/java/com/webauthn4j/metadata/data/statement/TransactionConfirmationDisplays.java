@@ -16,6 +16,7 @@
 
 package com.webauthn4j.metadata.data.statement;
 
+import com.webauthn4j.data.TransactionConfirmationDisplay;
 import com.webauthn4j.util.CollectionUtil;
 
 import java.util.AbstractSet;

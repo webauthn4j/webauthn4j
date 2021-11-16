@@ -18,6 +18,9 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.webauthn4j.data.AuthenticationAlgorithm;
+import com.webauthn4j.data.AuthenticatorAttestationType;
+import com.webauthn4j.data.PublicKeyRepresentationFormat;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.data.uaf.AAID;
 import com.webauthn4j.util.CollectionUtil;
@@ -44,7 +47,7 @@ public class MetadataStatement implements Serializable {
     private final List<AuthenticationAlgorithm> authenticationAlgorithms;
     private final PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
     private final List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
-    private final List<AttestationType> attestationTypes;
+    private final List<AuthenticatorAttestationType> authenticatorAttestationTypes;
     private final List<VerificationMethodANDCombinations> userVerificationDetails;
     private final KeyProtections keyProtection;
     private final Boolean isKeyRestricted;
@@ -78,7 +81,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("authenticationAlgorithms") List<AuthenticationAlgorithm> authenticationAlgorithms,
             @JsonProperty("publicKeyAlgAndEncoding") PublicKeyRepresentationFormat publicKeyAlgAndEncoding,
             @JsonProperty("publicKeyAlgAndEncodings") List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
-            @JsonProperty("attestationTypes") List<AttestationType> attestationTypes,
+            @JsonProperty("attestationTypes") List<AuthenticatorAttestationType> authenticatorAttestationTypes,
             @JsonProperty("userVerificationDetails") List<VerificationMethodANDCombinations> userVerificationDetails,
             @JsonProperty("keyProtection") KeyProtections keyProtection,
             @JsonProperty("isKeyRestricted") Boolean isKeyRestricted,
@@ -109,7 +112,7 @@ public class MetadataStatement implements Serializable {
         this.authenticationAlgorithms = CollectionUtil.unmodifiableList(authenticationAlgorithms);
         this.publicKeyAlgAndEncoding = publicKeyAlgAndEncoding;
         this.publicKeyAlgAndEncodings = CollectionUtil.unmodifiableList(publicKeyAlgAndEncodings);
-        this.attestationTypes = attestationTypes;
+        this.authenticatorAttestationTypes = authenticatorAttestationTypes;
         this.userVerificationDetails = CollectionUtil.unmodifiableList(userVerificationDetails);
         this.keyProtection = keyProtection;
         this.isKeyRestricted = isKeyRestricted;
@@ -184,8 +187,8 @@ public class MetadataStatement implements Serializable {
         return publicKeyAlgAndEncodings;
     }
 
-    public List<AttestationType> getAttestationTypes() {
-        return attestationTypes;
+    public List<AuthenticatorAttestationType> getAttestationTypes() {
+        return authenticatorAttestationTypes;
     }
 
     public List<VerificationMethodANDCombinations> getUserVerificationDetails() {

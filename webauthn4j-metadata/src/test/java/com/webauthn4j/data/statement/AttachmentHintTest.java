@@ -16,10 +16,12 @@
 
 package com.webauthn4j.data.statement;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.json.AttachmentHintFromLongDeserializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.data.statement.AttachmentHint;
+import com.webauthn4j.data.AttachmentHint;
 import com.webauthn4j.util.UnsignedNumberUtil;
 import org.junit.jupiter.api.Test;
 
@@ -118,6 +120,7 @@ class AttachmentHintTest {
 
     static class TestDTO {
         @SuppressWarnings("WeakerAccess")
+        @JsonDeserialize(using = AttachmentHintFromLongDeserializer.class)
         public AttachmentHint attachment_hint;
     }
 

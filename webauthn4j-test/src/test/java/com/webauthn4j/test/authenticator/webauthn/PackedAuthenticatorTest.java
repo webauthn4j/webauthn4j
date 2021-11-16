@@ -18,12 +18,7 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.PublicKeyCredentialCreationOptions;
-import com.webauthn4j.data.PublicKeyCredentialDescriptor;
-import com.webauthn4j.data.PublicKeyCredentialParameters;
-import com.webauthn4j.data.PublicKeyCredentialRpEntity;
-import com.webauthn4j.data.PublicKeyCredentialType;
-import com.webauthn4j.data.PublicKeyCredentialUserEntity;
+import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.client.challenge.DefaultChallenge;
 import org.junit.jupiter.api.Test;

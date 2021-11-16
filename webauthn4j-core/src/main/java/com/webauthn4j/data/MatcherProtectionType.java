@@ -16,11 +16,10 @@
 
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The supported matcher protection type(s).
@@ -29,58 +28,39 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public enum MatcherProtectionType {
 
-    SOFTWARE(0x0001),
-    TEE(0x0002),
-    ON_CHIP(0x0004);
+    SOFTWARE(0x0001, "software"),
+    TEE(0x0002, "tee"),
+    ON_CHIP(0x0004, "on_chip");
+
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
     private final int value;
+    private final String string;
 
-    MatcherProtectionType(int value) {
+    MatcherProtectionType(int value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    public static @NonNull MatcherProtectionType create(int value) {
+    public static MatcherProtectionType create(String value) {
+        return Arrays.stream(MatcherProtectionType.values()).filter(item -> Objects.equals(item.string, value))
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
+    }
+
+    public static MatcherProtectionType create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
-        switch (value) {
-            case 0x0001:
-                return SOFTWARE;
-            case 0x0002:
-                return TEE;
-            case 0x0004:
-                return ON_CHIP;
-            default:
-                throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
+        return Arrays.stream(MatcherProtectionType.values()).filter(item -> item.value == value)
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull MatcherProtectionType deserialize(int value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, MatcherProtectionType.class);
-        }
-    }
-
-    @JsonValue
     public int getValue() {
         return value;
     }
 
     @Override
-    public String toString() {
-        switch (value){
-            case 0x0001:
-                return "SOFTWARE";
-            case 0x0002:
-                return "TEE";
-            case 0x0004:
-                return "ON_CHIP";
-            default:
-                return "UNKNOWN(" + String.format("%04X", value) + ")";
-        }
+    public String toString(){
+        return string;
     }
 }
