@@ -17,6 +17,7 @@ class AuthenticationAlgorithmTest {
     private final ObjectConverter objectConverter = new ObjectConverter();
     private final JsonConverter jsonConverter = objectConverter.getJsonConverter();
 
+    @SuppressWarnings("java:S5961")
     @Test
     void create_test() {
         assertAll(
@@ -66,7 +67,7 @@ class AuthenticationAlgorithmTest {
 
     @Test
     void toString_test() {
-        assertThat(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW.toString()).isEqualTo("secp256r1_ecdsa_sha256_raw");
+        assertThat(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW).hasToString("secp256r1_ecdsa_sha256_raw");
     }
 
     @Nested

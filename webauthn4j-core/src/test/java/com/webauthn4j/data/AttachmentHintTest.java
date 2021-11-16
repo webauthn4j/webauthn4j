@@ -49,7 +49,7 @@ class AttachmentHintTest {
 
     @Test
     void toString_test() {
-        assertThat(AttachmentHint.INTERNAL.toString()).isEqualTo("internal");
+        assertThat(AttachmentHint.INTERNAL).hasToString("internal");
     }
 
     @Nested

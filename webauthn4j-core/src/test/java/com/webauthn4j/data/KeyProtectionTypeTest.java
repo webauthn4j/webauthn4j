@@ -57,7 +57,7 @@ class KeyProtectionTypeTest {
 
     @Test
     void toString_test() {
-        assertThat(KeyProtectionType.SOFTWARE.toString()).isEqualTo("software");
+        assertThat(KeyProtectionType.SOFTWARE).hasToString("software");
     }
 
     @Nested

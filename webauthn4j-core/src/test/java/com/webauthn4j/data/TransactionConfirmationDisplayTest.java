@@ -40,7 +40,7 @@ class TransactionConfirmationDisplayTest {
 
     @Test
     void toString_test() {
-        assertThat(TransactionConfirmationDisplay.ANY.toString()).isEqualTo("any");
+        assertThat(TransactionConfirmationDisplay.ANY).hasToString("any");
     }
 
     @Nested

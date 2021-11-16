@@ -47,6 +47,8 @@ public enum AuthenticationAlgorithm {
     SECP521R1_ECDSA_SHA512_RAW(0x0011, "secp512r1_ecdsa_sha512_raw"),
     ED25519_EDDSA_SHA256_RAW(0x0012, "ed25519_eddsa_sha256_raw");
 
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
+
     private final int value;
     private final String string;
 
@@ -58,15 +60,15 @@ public enum AuthenticationAlgorithm {
 
     public static AuthenticationAlgorithm create(int value) {
         if (value > UnsignedNumberUtil.UNSIGNED_SHORT_MAX || value < 0) {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
         return Arrays.stream(AuthenticationAlgorithm.values()).filter(item -> item.value == value)
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static AuthenticationAlgorithm create(String value) {
         return Arrays.stream(AuthenticationAlgorithm.values()).filter(item -> Objects.equals(item.string, value))
-                .findFirst().orElseThrow(()->new IllegalArgumentException("value '" + value + "' is out of range"));
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public int getValue() {

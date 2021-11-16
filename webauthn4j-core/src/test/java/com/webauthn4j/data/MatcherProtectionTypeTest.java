@@ -53,7 +53,7 @@ class MatcherProtectionTypeTest {
 
     @Test
     void toString_test() {
-        assertThat(MatcherProtectionType.SOFTWARE.toString()).isEqualTo("software");
+        assertThat(MatcherProtectionType.SOFTWARE).hasToString("software");
     }
 
     @Nested

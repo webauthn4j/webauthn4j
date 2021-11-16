@@ -39,7 +39,7 @@ class AuthenticatorAttestationTypeTest {
 
     @Test
     void toString_test() {
-        assertThat(AuthenticatorAttestationType.BASIC_FULL.toString()).isEqualTo("basic_full");
+        assertThat(AuthenticatorAttestationType.BASIC_FULL).hasToString("basic_full");
     }
 
     @Nested
