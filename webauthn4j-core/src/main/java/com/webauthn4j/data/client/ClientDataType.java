@@ -21,9 +21,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class ClientDataType {
+public class ClientDataType implements Serializable {
     public static final ClientDataType WEBAUTHN_CREATE = new ClientDataType("webauthn.create");
     public static final ClientDataType WEBAUTHN_GET = new ClientDataType("webauthn.get");
     /**
