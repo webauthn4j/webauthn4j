@@ -1,8 +1,10 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.AuthenticationAlgorithmFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.AuthenticationAlgorithmToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
@@ -74,15 +76,23 @@ class AuthenticationAlgorithmTest {
     class IntSerialization {
 
         @Test
+        void serialize_test(){
+            IntSerializationTestDTO dto = new IntSerializationTestDTO();
+            dto.authenticationAlgorithm = AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"authenticationAlgorithm\":1}");
+        }
+
+        @Test
         void deserialize_test() {
-            AuthenticationAlgorithmTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\": 1}", AuthenticationAlgorithmTest.IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\":1}", IntSerializationTestDTO.class);
             assertThat(dto.authenticationAlgorithm).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW);
         }
 
         @Test
         void deserialize_test_with_out_of_range_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"-1\"}", AuthenticationAlgorithmTest.IntSerializationTestDTO.class)
+                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"-1\"}", IntSerializationTestDTO.class)
             ).isInstanceOf(DataConversionException.class);
         }
 
@@ -110,27 +120,36 @@ class AuthenticationAlgorithmTest {
     class StringSerialization {
 
         @Test
+        void serialize_test(){
+            StringSerializationTestDTO dto = new StringSerializationTestDTO();
+            dto.authenticationAlgorithm = AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"authenticationAlgorithm\":\"secp256r1_ecdsa_sha256_raw\"}");
+        }
+
+        @Test
         void deserialize_test() {
-            AuthenticationAlgorithmTest.StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\": \"secp256r1_ecdsa_sha256_raw\"}", AuthenticationAlgorithmTest.StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticationAlgorithm\": \"secp256r1_ecdsa_sha256_raw\"}", StringSerializationTestDTO.class);
             assertThat(dto.authenticationAlgorithm).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"invalid\"}", AuthenticationAlgorithmTest.StringSerializationTestDTO.class)
+                    () -> jsonConverter.readValue("{\"authenticationAlgorithm\": \"invalid\"}", StringSerializationTestDTO.class)
             ).isInstanceOf(DataConversionException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            AuthenticationAlgorithmTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticationAlgorithm\":null}", AuthenticationAlgorithmTest.StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticationAlgorithm\":null}", StringSerializationTestDTO.class);
             assertThat(data.authenticationAlgorithm).isNull();
         }
 
     }
 
     static class StringSerializationTestDTO {
+        @JsonSerialize(using = AuthenticationAlgorithmToStringSerializer.class)
         @JsonDeserialize(using = AuthenticationAlgorithmFromStringDeserializer.class)
         @SuppressWarnings("WeakerAccess")
         public AuthenticationAlgorithm authenticationAlgorithm;

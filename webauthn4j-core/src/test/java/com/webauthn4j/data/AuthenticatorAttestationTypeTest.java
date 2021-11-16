@@ -1,9 +1,11 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.AttachmentHintFromStringDeserializer;
 import com.webauthn4j.converter.jackson.deserializer.json.AuthenticatorAttestationTypeFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.AuthenticatorAttestationTypeToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
@@ -46,8 +48,16 @@ class AuthenticatorAttestationTypeTest {
     class IntSerialization {
 
         @Test
+        void serialize_test(){
+            IntSerializationTestDTO dto = new IntSerializationTestDTO();
+            dto.authenticatorAttestationType = AuthenticatorAttestationType.BASIC_FULL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"authenticatorAttestationType\":15879}");
+        }
+
+        @Test
         void deserialize_test() {
-            AuthenticatorAttestationTypeTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\": 15879}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
+            AuthenticatorAttestationTypeTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\":15879}", AuthenticatorAttestationTypeTest.IntSerializationTestDTO.class);
             assertThat(dto.authenticatorAttestationType).isEqualTo(AuthenticatorAttestationType.BASIC_FULL);
         }
 
@@ -82,27 +92,36 @@ class AuthenticatorAttestationTypeTest {
     class StringSerialization {
 
         @Test
+        void serialize_test(){
+            StringSerializationTestDTO dto = new StringSerializationTestDTO();
+            dto.authenticatorAttestationType = AuthenticatorAttestationType.BASIC_FULL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"authenticatorAttestationType\":\"basic_full\"}");
+        }
+
+        @Test
         void deserialize_test() {
-            AuthenticatorAttestationTypeTest.StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\": \"basic_full\"}", AuthenticatorAttestationTypeTest.StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonConverter.readValue("{\"authenticatorAttestationType\":\"basic_full\"}", StringSerializationTestDTO.class);
             assertThat(dto.authenticatorAttestationType).isEqualTo(AuthenticatorAttestationType.BASIC_FULL);
         }
 
         @Test
         void deserialize_test_with_invalid_value() {
             assertThatThrownBy(
-                    () -> jsonConverter.readValue("{\"authenticatorAttestationType\": \"invalid\"}", AuthenticatorAttestationTypeTest.StringSerializationTestDTO.class)
+                    () -> jsonConverter.readValue("{\"authenticatorAttestationType\": \"invalid\"}", StringSerializationTestDTO.class)
             ).isInstanceOf(DataConversionException.class);
         }
 
         @Test
         void deserialize_test_with_null() {
-            AuthenticatorAttestationTypeTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticatorAttestationType\":null}", AuthenticatorAttestationTypeTest.StringSerializationTestDTO.class);
+            StringSerializationTestDTO data = jsonConverter.readValue("{\"authenticatorAttestationType\":null}", StringSerializationTestDTO.class);
             assertThat(data.authenticatorAttestationType).isNull();
         }
 
     }
 
     static class StringSerializationTestDTO {
+        @JsonSerialize(using = AuthenticatorAttestationTypeToStringSerializer.class)
         @JsonDeserialize(using = AuthenticatorAttestationTypeFromStringDeserializer.class)
         @SuppressWarnings("WeakerAccess")
         public AuthenticatorAttestationType authenticatorAttestationType;

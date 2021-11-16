@@ -17,8 +17,10 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.KeyProtectionTypeFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.KeyProtectionTypeToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
@@ -62,9 +64,18 @@ class KeyProtectionTypeTest {
 
     @Nested
     class IntSerialization {
+
+        @Test
+        void serialize_test(){
+            IntSerializationTestDTO dto = new IntSerializationTestDTO();
+            dto.keyProtectionType = KeyProtectionType.HARDWARE;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"keyProtectionType\":2}");
+        }
+
         @Test
         void deserialize_test() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\": 2}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":2}", IntSerializationTestDTO.class);
             assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
         }
 
@@ -96,9 +107,18 @@ class KeyProtectionTypeTest {
 
     @Nested
     class StringSerialization {
+
+        @Test
+        void serialize_test(){
+            StringSerializationTestDTO dto = new StringSerializationTestDTO();
+            dto.keyProtectionType = KeyProtectionType.HARDWARE;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"keyProtectionType\":\"hardware\"}");
+        }
+
         @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\": \"hardware\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonConverter.readValue("{\"keyProtectionType\":\"hardware\"}", StringSerializationTestDTO.class);
             assertThat(dto.keyProtectionType).isEqualTo(KeyProtectionType.HARDWARE);
         }
 
@@ -118,6 +138,7 @@ class KeyProtectionTypeTest {
 
     static class StringSerializationTestDTO {
         @SuppressWarnings("WeakerAccess")
+        @JsonSerialize(using = KeyProtectionTypeToStringSerializer.class)
         @JsonDeserialize(using = KeyProtectionTypeFromStringDeserializer.class)
         public KeyProtectionType keyProtectionType;
     }

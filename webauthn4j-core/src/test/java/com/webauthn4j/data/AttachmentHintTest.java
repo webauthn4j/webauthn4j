@@ -1,8 +1,10 @@
 package com.webauthn4j.data;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.jackson.deserializer.json.AttachmentHintFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.AttachmentHintToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import org.junit.jupiter.api.Nested;
@@ -56,8 +58,16 @@ class AttachmentHintTest {
     class IntSerialization {
 
         @Test
+        void serialize_test(){
+            IntSerializationTestDTO dto = new IntSerializationTestDTO();
+            dto.attachmentHint = AttachmentHint.EXTERNAL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"attachmentHint\":2}");
+        }
+
+        @Test
         void deserialize_test() {
-            IntSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\": 2}", IntSerializationTestDTO.class);
+            IntSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\":2}", IntSerializationTestDTO.class);
             assertThat(dto.attachmentHint).isEqualTo(AttachmentHint.EXTERNAL);
         }
 
@@ -92,8 +102,16 @@ class AttachmentHintTest {
     class StringSerialization {
 
         @Test
+        void serialize_test(){
+            StringSerializationTestDTO dto = new StringSerializationTestDTO();
+            dto.attachmentHint = AttachmentHint.INTERNAL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"attachmentHint\":\"internal\"}");
+        }
+
+        @Test
         void deserialize_test() {
-            StringSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\": \"internal\"}", StringSerializationTestDTO.class);
+            StringSerializationTestDTO dto = jsonConverter.readValue("{\"attachmentHint\":\"internal\"}", StringSerializationTestDTO.class);
             assertThat(dto.attachmentHint).isEqualTo(AttachmentHint.INTERNAL);
         }
 
@@ -113,6 +131,7 @@ class AttachmentHintTest {
     }
 
     static class StringSerializationTestDTO {
+        @JsonSerialize(using = AttachmentHintToStringSerializer.class)
         @JsonDeserialize(using = AttachmentHintFromStringDeserializer.class)
         @SuppressWarnings("WeakerAccess")
         public AttachmentHint attachmentHint;

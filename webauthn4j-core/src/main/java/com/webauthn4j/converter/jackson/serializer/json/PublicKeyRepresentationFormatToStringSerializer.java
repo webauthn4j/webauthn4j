@@ -31,6 +31,6 @@ public class PublicKeyRepresentationFormatToStringSerializer extends StdSerializ
 
     @Override
     public void serialize(PublicKeyRepresentationFormat value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeNumber(value.toString());
+        gen.writeString(value.toString());
     }
 }
