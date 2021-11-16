@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-userverificationrequirement">
  * §5.10.6. User Verification Requirement Enumeration (enum UserVerificationRequirement)</a>
  */
-public class UserVerificationRequirement {
+public class UserVerificationRequirement implements Serializable {
 
     /**
      * This value indicates that the Relying Party requires user verification for the operation and

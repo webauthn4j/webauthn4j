@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -35,7 +36,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#attachment">
  * §5.4.5. Authenticator Attachment Enumeration (enum AuthenticatorAttachment)</a>
  */
-public class AuthenticatorAttachment {
+public class AuthenticatorAttachment implements Serializable {
 
     /**
      * This value indicates platform attachment.
