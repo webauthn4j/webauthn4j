@@ -36,7 +36,7 @@ class MetadataStatementsTrustAnchorsProviderTest {
     void provide_test() {
         MetadataStatementsProvider metadataStatementsProvider = mock(MetadataStatementsProvider.class);
         AAGUID aaguid = new AAGUID("49e25c43-a6d1-49f0-bcfa-23e23a7c0e52");
-        when(metadataStatementsProvider.provide()).thenReturn(Collections.singletonMap(aaguid, Collections.singleton(TestDataUtil.createMetadataStatement())));
+        when(metadataStatementsProvider.provide()).thenReturn(Collections.singletonMap(aaguid, Collections.singleton(TestDataUtil.createLegacyMetadataStatement())));
         MetadataStatementsTrustAnchorsProvider metadataStatementsTrustAnchorsProvider = new MetadataStatementsTrustAnchorsProvider(metadataStatementsProvider);
         Map<AAGUID, Set<TrustAnchor>> result = metadataStatementsTrustAnchorsProvider.provide();
         assertThat(result.get(aaguid).stream().map(TrustAnchor::getTrustedCert)).contains(TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate());

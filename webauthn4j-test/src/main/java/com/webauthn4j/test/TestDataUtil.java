@@ -41,11 +41,12 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.metadata.legacy.data.MetadataItem;
-import com.webauthn4j.metadata.legacy.data.MetadataItemImpl;
-import com.webauthn4j.metadata.data.statement.*;
+import com.webauthn4j.metadata.data.statement.AlternativeDescriptions;
+import com.webauthn4j.metadata.data.statement.Version;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.metadata.legacy.data.MetadataItem;
+import com.webauthn4j.metadata.legacy.data.MetadataItemImpl;
 import com.webauthn4j.metadata.legacy.data.statement.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
@@ -448,11 +449,11 @@ public class TestDataUtil {
                 null,
                 Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null)),
                 null,
-                createMetadataStatement()
+                createLegacyMetadataStatement()
         );
     }
 
-    public static MetadataStatement createMetadataStatement() {
+    public static MetadataStatement createLegacyMetadataStatement() {
         return new MetadataStatement(
                 null,
                 null,
