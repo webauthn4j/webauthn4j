@@ -40,7 +40,7 @@ class AuthenticationAlgorithmTest {
                 () -> assertThat(AuthenticationAlgorithm.create(0x000F)).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create(0x0010)).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create(0x0011)).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
-                () -> assertThat(AuthenticationAlgorithm.create(0x0012)).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA256_RAW),
+                () -> assertThat(AuthenticationAlgorithm.create(0x0012)).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("secp256r1_ecdsa_sha256_raw")).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("secp256r1_ecdsa_sha256_der")).isEqualTo(AuthenticationAlgorithm.SECP256R1_ECDSA_SHA256_DER),
                 () -> assertThat(AuthenticationAlgorithm.create("rsassa_pss_sha256_raw")).isEqualTo(AuthenticationAlgorithm.RSASSA_PSS_SHA256_RAW),
@@ -58,7 +58,7 @@ class AuthenticationAlgorithmTest {
                 () -> assertThat(AuthenticationAlgorithm.create("rsassa_pkcsv15_sha1_raw")).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("secp384r1_ecdsa_sha384_raw")).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("secp512r1_ecdsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
-                () -> assertThat(AuthenticationAlgorithm.create("ed25519_eddsa_sha256_raw")).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA256_RAW)
+                () -> assertThat(AuthenticationAlgorithm.create("ed25519_eddsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW)
         );
     }
 
