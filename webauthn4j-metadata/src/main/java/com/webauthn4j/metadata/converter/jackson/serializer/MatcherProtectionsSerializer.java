@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.data.MatcherProtectionType;
-import com.webauthn4j.metadata.data.statement.MatcherProtections;
+import com.webauthn4j.metadata.legacy.data.statement.MatcherProtections;
 
 import java.io.IOException;
 
