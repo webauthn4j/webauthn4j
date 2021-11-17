@@ -25,8 +25,12 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-cbor")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
+    implementation("org.checkerframework:checker-qual")
+
     //Test
     testImplementation project(':webauthn4j-test')
+
+    testImplementation("org.springframework:spring-core")
 
     testImplementation('ch.qos.logback:logback-classic')
     testImplementation('org.projectlombok:lombok')
