@@ -17,14 +17,14 @@
 package com.webauthn4j.metadata.converter.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.webauthn4j.metadata.converter.jackson.deserializer.AttachmentHintsDeserializer;
-import com.webauthn4j.metadata.converter.jackson.deserializer.KeyProtectionsDeserializer;
-import com.webauthn4j.metadata.converter.jackson.deserializer.MatcherProtectionsDeserializer;
-import com.webauthn4j.metadata.converter.jackson.deserializer.TransactionConfirmationDisplaysDeserializer;
-import com.webauthn4j.metadata.converter.jackson.serializer.AttachmentHintsSerializer;
-import com.webauthn4j.metadata.converter.jackson.serializer.KeyProtectionsSerializer;
-import com.webauthn4j.metadata.converter.jackson.serializer.MatcherProtectionsSerializer;
-import com.webauthn4j.metadata.converter.jackson.serializer.TransactionConfirmationDisplaysSerializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.serializer.AttachmentHintsSerializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.serializer.KeyProtectionsSerializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.serializer.MatcherProtectionsSerializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.serializer.TransactionConfirmationDisplaysSerializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.deserializer.AttachmentHintsDeserializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.deserializer.KeyProtectionsDeserializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.deserializer.MatcherProtectionsDeserializer;
+import com.webauthn4j.metadata.legacy.converter.jackson.deserializer.TransactionConfirmationDisplaysDeserializer;
 import com.webauthn4j.metadata.legacy.data.statement.AttachmentHints;
 import com.webauthn4j.metadata.legacy.data.statement.KeyProtections;
 import com.webauthn4j.metadata.legacy.data.statement.MatcherProtections;
