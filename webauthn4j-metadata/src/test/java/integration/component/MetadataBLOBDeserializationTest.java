@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class MetadataBLOBDeserializationTest {
 
     private final JWSFactory jwsFactory = new JWSFactory();
@@ -36,6 +38,7 @@ public class MetadataBLOBDeserializationTest {
     @Test
     void test(){
         JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlogAsString(), MetadataBLOBPayload.class);
+        assertThat(metadataBLOB).isNotNull();
     }
 
 

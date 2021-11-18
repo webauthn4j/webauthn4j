@@ -1,11 +1,11 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2002-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.converter.jackson.serializer;
+package com.webauthn4j.metadata.legacy.converter.jackson.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.webauthn4j.data.KeyProtectionType;
-import com.webauthn4j.metadata.legacy.data.statement.KeyProtections;
+import com.webauthn4j.data.AttachmentHint;
+import com.webauthn4j.metadata.legacy.data.statement.AttachmentHints;
 
 import java.io.IOException;
 
-public class KeyProtectionsSerializer extends StdSerializer<KeyProtections> {
-    public KeyProtectionsSerializer() {
-        super(KeyProtections.class);
+public class AttachmentHintsSerializer extends StdSerializer<AttachmentHints> {
+
+    public AttachmentHintsSerializer() {
+        super(AttachmentHints.class);
     }
 
     @Override
-    public void serialize(KeyProtections value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        long sum = value.stream().map(KeyProtectionType::getValue).reduce(0, Integer::sum);
+    public void serialize(AttachmentHints value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+        long sum = value.stream().map(AttachmentHint::getValue).reduce(0L, Long::sum);
         gen.writeNumber(sum);
     }
 }
