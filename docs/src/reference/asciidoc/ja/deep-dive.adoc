@@ -21,7 +21,7 @@ AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCr
 // serialize
 byte[] serialized = attestedCredentialDataConverter.convert(attestedCredentialData);
 // deserialize
-AttestedCredentialDataConverter deserialized = attestedCredentialDataConverter.convert(serialized);
+AttestedCredentialData deserialized = attestedCredentialDataConverter.convert(serialized);
 ----
 
 ==== attestationStatement
