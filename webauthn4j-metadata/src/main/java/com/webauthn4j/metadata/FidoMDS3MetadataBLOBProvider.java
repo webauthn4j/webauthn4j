@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.HttpClient;
-import com.webauthn4j.metadata.SimpleHttpClient;
+import com.webauthn4j.metadata.data.MetadataBLOB;
+import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 
 public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 

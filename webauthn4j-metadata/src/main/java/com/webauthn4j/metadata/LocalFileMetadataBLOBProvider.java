@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.data.MetadataBLOB;
+import com.webauthn4j.metadata.data.MetadataBLOBFactory;
 
 import java.io.*;
 import java.nio.file.Files;

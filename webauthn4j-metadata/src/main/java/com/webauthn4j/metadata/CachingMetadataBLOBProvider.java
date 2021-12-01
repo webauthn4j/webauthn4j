@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
+
+import com.webauthn4j.metadata.data.MetadataBLOB;
 
 import java.time.LocalDate;
 
-public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvider{
+public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvider {
 
     private MetadataBLOB cachedMetadataBLOB;
     private LocalDate cachedMetadataBLOBLastUpdate = null;
