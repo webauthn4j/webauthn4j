@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.FidoMDS3MetadataBLOBProvider;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

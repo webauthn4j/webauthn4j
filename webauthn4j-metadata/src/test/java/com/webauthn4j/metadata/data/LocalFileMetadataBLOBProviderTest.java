@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata.data;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.metadata.LocalFileMetadataBLOBProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

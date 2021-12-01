@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
+
+import com.webauthn4j.metadata.data.MetadataBLOB;
 
 public interface MetadataBLOBProvider {
 

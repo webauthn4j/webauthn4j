@@ -23,7 +23,7 @@ public class MetadataX509CertificateRelaxedDeserializer extends StdDeserializer<
      */
     @Override
     public @Nullable X509Certificate deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
-        String value = p.getValueAsString().trim(); //trimming added
+        String value = p.getValueAsString().trim().replace("\r", "").replace("\n", ""); ; //trimming added
         byte[] bytes = Base64Util.decode(value);
         if (bytes.length == 0) {
             return null;
