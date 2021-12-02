@@ -16,13 +16,25 @@
 
 buildscript {
 
-    def sonarqubeVersion = "3.3"
-    def asciidoctorGradleVersion = "3.3.2"
-    def httpBuilderVersion = "0.7.2"
+    ext {
+        // Gradle plugins
+        sonarqubeVersion = "3.3"
+        asciidoctorGradleVersion = "3.3.2"
+        httpBuilderVersion = "0.7.2"
+
+        // Define implementation dependency versions independently
+        jacksonVersion = "2.13.0"
+        kerbyVersion = "2.0.1"
+        slf4jVersion = "1.7.32"
+        bouncyCastleVersion = "1.70"
+        checkerframeworkVersion = "3.19.0"
+
+        // for test library dependencies
+        springBootVersion = "2.6.1"
+    }
 
     repositories {
         mavenCentral()
-        jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -79,14 +91,6 @@ subprojects {
         mavenCentral()
     }
 
-    // Define implementation dependency versions independently
-    def jacksonVersion = "2.13.0"
-    def kerbyVersion = "2.0.1"
-    def slf4jVersion = "1.7.32"
-    def bouncyCastleVersion = "1.70"
-    def checkerframeworkVersion = "3.19.0"
-
-    def springBootVersion = "2.6.1" // for test library dependencies
 
     dependencies {
         constraints {
