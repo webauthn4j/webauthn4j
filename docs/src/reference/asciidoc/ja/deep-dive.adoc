@@ -114,7 +114,7 @@ FIDO CTAP2セキュリティキーを独自アプリケーションで認証に�
 
 上記のフローに従って実装することで、FIDO CTAP2セキュリティキーを用いた安全な認証が実現可能ですが、 FIDO CTAP2セキュリティキーを呼び出す主体（クライアント）と、Attestation、Assertionを検証する主体（サーバー）が分離している場合、クライアントが登録、認証時にアプリケーション固有のクライアントデータを生成し、クライアントデータを追加でサーバーで検証したい場合もあります。クライアントデータ自体はAttestation、Assertionと一緒に送信すれば良いですが、 クライアントデータを中間者攻撃から防御するために、クライアントデータに対して署名を行い、保護する必要があります。
 
-さて、FIDO CTAP2では、認証時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドと登録時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッド 、どちらにも共通するパラメータとして、`clientDataHash` というパラメータが存在します。セキュリティキーは、受け取った `clientDataHash` パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
+さて、FIDO CTAP2では、登録時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorMakeCredential[authenticatorMakeCredential] メソッドと認証時に利用する https://fidoalliance.org/specs/fido2/fido-client-to-authenticator-protocol-v2.1-rd-20191217.html#authenticatorGetAssertion[authenticatorGetAssertion] メソッド 、どちらにも共通するパラメータとして、`clientDataHash` というパラメータが存在します。セキュリティキーは、受け取った `clientDataHash` パラメータを署名対象のデータの一部として署名を生成するため、アプリケーションとして署名で保護したいクライアントデータのハッシュを取得し、
 `clientDataHash` にセットすることで、アプリケーション固有のクライアントデータが改竄されていない真正なデータか、サーバー側で検証することが出来ます。
 
 === Project Modules
