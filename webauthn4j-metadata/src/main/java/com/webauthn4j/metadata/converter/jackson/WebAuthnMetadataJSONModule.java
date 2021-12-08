@@ -32,6 +32,7 @@ import com.webauthn4j.metadata.legacy.data.statement.TransactionConfirmationDisp
 
 public class WebAuthnMetadataJSONModule extends SimpleModule {
 
+    @SuppressWarnings("deprecation")
     public WebAuthnMetadataJSONModule() {
         super("WebAuthnMetadataJSONModule");
 

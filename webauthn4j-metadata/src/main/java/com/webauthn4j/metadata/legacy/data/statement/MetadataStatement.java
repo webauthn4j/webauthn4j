@@ -33,6 +33,7 @@ import java.util.List;
 /**
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  */
+@Deprecated
 public class MetadataStatement implements Serializable {
     private final String legalHeader;
     private final AAID aaid;

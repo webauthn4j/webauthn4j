@@ -23,6 +23,7 @@ import com.webauthn4j.metadata.legacy.data.statement.MatcherProtections;
 
 import java.io.IOException;
 
+@Deprecated
 public class MatcherProtectionsDeserializer extends StdDeserializer<MatcherProtections> {
     public MatcherProtectionsDeserializer() {
         super(MatcherProtections.class);

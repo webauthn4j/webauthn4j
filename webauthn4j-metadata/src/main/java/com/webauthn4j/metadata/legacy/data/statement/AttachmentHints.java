@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@Deprecated
 public class AttachmentHints extends AbstractSet<AttachmentHint> {
 
     private final Set<AttachmentHint> attachmentHints;

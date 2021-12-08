@@ -17,8 +17,6 @@
 package com.webauthn4j.metadata.legacy;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.legacy.MetadataItemsProvider;
-import com.webauthn4j.metadata.legacy.MetadataStatementsProvider;
 import com.webauthn4j.metadata.legacy.data.MetadataItem;
 import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 
@@ -26,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class MetadataItemsMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private final MetadataItemsProvider metadataItemsProvider;

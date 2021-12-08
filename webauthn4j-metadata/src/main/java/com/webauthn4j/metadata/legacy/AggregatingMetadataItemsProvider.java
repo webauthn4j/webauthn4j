@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+@Deprecated
 public class AggregatingMetadataItemsProvider implements MetadataItemsProvider {
 
     private final Logger logger = LoggerFactory.getLogger(AggregatingMetadataItemsProvider.class);

@@ -22,6 +22,7 @@ import com.webauthn4j.metadata.legacy.data.MetadataItem;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public interface MetadataItemsProvider {
 
     Map<AAGUID, Set<MetadataItem>> provide();

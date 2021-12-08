@@ -51,6 +51,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class FidoMdsMetadataItemsProvider implements MetadataItemsProvider {
 
     private static final String DEFAULT_FIDO_METADATA_SERVICE_ENDPOINT = "https://mds2.fidoalliance.org/";

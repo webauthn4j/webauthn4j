@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@Deprecated
 public class KeyProtections extends AbstractSet<KeyProtectionType> {
 
     private final Set<KeyProtectionType> keyProtectionTypes;

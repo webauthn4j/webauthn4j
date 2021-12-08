@@ -22,6 +22,7 @@ import com.webauthn4j.metadata.exception.UnknownProtocolFamilyException;
 import java.util.Arrays;
 import java.util.List;
 
+@Deprecated
 public class MetadataStatementValidator {
 
     private final List<String> KNOWN_PROTOCOL_FAMILY = Arrays.asList("uaf", "u2f", "fido2");

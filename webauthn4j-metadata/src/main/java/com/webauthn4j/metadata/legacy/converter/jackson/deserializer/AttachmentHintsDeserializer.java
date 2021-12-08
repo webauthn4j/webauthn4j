@@ -23,6 +23,7 @@ import com.webauthn4j.metadata.legacy.data.statement.AttachmentHints;
 
 import java.io.IOException;
 
+@Deprecated
 public class AttachmentHintsDeserializer extends StdDeserializer<AttachmentHints> {
 
     public AttachmentHintsDeserializer() {

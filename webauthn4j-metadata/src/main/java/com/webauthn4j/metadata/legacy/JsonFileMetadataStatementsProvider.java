@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class JsonFileMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private final JsonConverter jsonConverter;
