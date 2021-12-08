@@ -94,12 +94,7 @@ public class PublicKeyCredentialRequestOptions implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialRequestOptions that = (PublicKeyCredentialRequestOptions) o;
-        return Objects.equals(timeout, that.timeout) &&
-                Objects.equals(challenge, that.challenge) &&
-                Objects.equals(rpId, that.rpId) &&
-                Objects.equals(allowCredentials, that.allowCredentials) &&
-                userVerification == that.userVerification &&
-                Objects.equals(extensions, that.extensions);
+        return Objects.equals(challenge, that.challenge) && Objects.equals(timeout, that.timeout) && Objects.equals(rpId, that.rpId) && Objects.equals(allowCredentials, that.allowCredentials) && Objects.equals(userVerification, that.userVerification) && Objects.equals(extensions, that.extensions);
     }
 
     @Override

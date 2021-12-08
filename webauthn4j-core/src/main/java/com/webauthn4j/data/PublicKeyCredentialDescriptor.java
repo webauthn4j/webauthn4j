@@ -74,9 +74,7 @@ public class PublicKeyCredentialDescriptor implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialDescriptor that = (PublicKeyCredentialDescriptor) o;
-        return type == that.type &&
-                Arrays.equals(id, that.id) &&
-                Objects.equals(transports, that.transports);
+        return Objects.equals(type, that.type) && Arrays.equals(id, that.id) && Objects.equals(transports, that.transports);
     }
 
     @Override

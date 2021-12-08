@@ -112,10 +112,10 @@ public class AuthenticatorSelectionCriteria implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorSelectionCriteria that = (AuthenticatorSelectionCriteria) o;
-        return authenticatorAttachment == that.authenticatorAttachment &&
+        return Objects.equals(authenticatorAttachment, that.authenticatorAttachment) &&
                 Objects.equals(requireResidentKey, that.requireResidentKey) &&
-                residentKey == that.residentKey &&
-                userVerification == that.userVerification;
+                Objects.equals(residentKey, that.residentKey) &&
+                Objects.equals(userVerification, that.userVerification);
     }
 
     @Override
