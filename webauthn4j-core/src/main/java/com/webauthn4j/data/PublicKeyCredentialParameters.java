@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -59,17 +58,15 @@ public class PublicKeyCredentialParameters implements Serializable {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialParameters that = (PublicKeyCredentialParameters) o;
-        return type == that.type &&
-                alg == that.alg;
+        return Objects.equals(type, that.type) && Objects.equals(alg, that.alg);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(type, alg);
     }
 

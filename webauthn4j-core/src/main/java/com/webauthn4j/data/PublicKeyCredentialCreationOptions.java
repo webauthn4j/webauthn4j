@@ -129,15 +129,7 @@ public class PublicKeyCredentialCreationOptions implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PublicKeyCredentialCreationOptions that = (PublicKeyCredentialCreationOptions) o;
-        return Objects.equals(rp, that.rp) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(challenge, that.challenge) &&
-                Objects.equals(pubKeyCredParams, that.pubKeyCredParams) &&
-                Objects.equals(timeout, that.timeout) &&
-                Objects.equals(excludeCredentials, that.excludeCredentials) &&
-                Objects.equals(authenticatorSelection, that.authenticatorSelection) &&
-                attestation == that.attestation &&
-                Objects.equals(extensions, that.extensions);
+        return Objects.equals(rp, that.rp) && Objects.equals(user, that.user) && Objects.equals(challenge, that.challenge) && Objects.equals(pubKeyCredParams, that.pubKeyCredParams) && Objects.equals(timeout, that.timeout) && Objects.equals(excludeCredentials, that.excludeCredentials) && Objects.equals(authenticatorSelection, that.authenticatorSelection) && Objects.equals(attestation, that.attestation) && Objects.equals(extensions, that.extensions);
     }
 
     @Override

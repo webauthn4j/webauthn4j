@@ -74,8 +74,7 @@ public class TokenBinding implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TokenBinding that = (TokenBinding) o;
-        return status == that.status &&
-                Objects.equals(id, that.id);
+        return status.equals(that.status) && Objects.equals(id, that.id);
     }
 
     @Override

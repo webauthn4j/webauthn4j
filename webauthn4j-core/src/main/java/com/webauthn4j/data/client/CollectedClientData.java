@@ -89,11 +89,7 @@ public class CollectedClientData implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CollectedClientData that = (CollectedClientData) o;
-        return type == that.type &&
-                Objects.equals(challenge, that.challenge) &&
-                Objects.equals(origin, that.origin) &&
-                Objects.equals(crossOrigin, that.crossOrigin) &&
-                Objects.equals(tokenBinding, that.tokenBinding);
+        return Objects.equals(type, that.type) && Objects.equals(challenge, that.challenge) && Objects.equals(origin, that.origin) && Objects.equals(crossOrigin, that.crossOrigin) && Objects.equals(tokenBinding, that.tokenBinding);
     }
 
     @Override
