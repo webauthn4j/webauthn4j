@@ -24,6 +24,7 @@ import com.webauthn4j.metadata.legacy.data.statement.KeyProtections;
 
 import java.io.IOException;
 
+@Deprecated
 public class KeyProtectionsSerializer extends StdSerializer<KeyProtections> {
     public KeyProtectionsSerializer() {
         super(KeyProtections.class);

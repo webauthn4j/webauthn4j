@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@Deprecated
 public class MatcherProtections extends AbstractSet<MatcherProtectionType> {
 
     private final Set<MatcherProtectionType> matcherProtectionTypes;

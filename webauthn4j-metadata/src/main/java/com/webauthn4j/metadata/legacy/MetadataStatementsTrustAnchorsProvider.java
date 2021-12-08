@@ -18,13 +18,13 @@ package com.webauthn4j.metadata.legacy;
 
 import com.webauthn4j.anchor.TrustAnchorsProvider;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.legacy.MetadataStatementsProvider;
 
 import java.security.cert.TrustAnchor;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class MetadataStatementsTrustAnchorsProvider implements TrustAnchorsProvider {
 
     private final MetadataStatementsProvider metadataStatementsProvider;

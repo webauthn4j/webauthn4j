@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.legacy.validator;
 
 import com.webauthn4j.metadata.legacy.data.MetadataItem;
 
+@Deprecated
 public class MetadataItemValidator {
 
     public void validate(MetadataItem metadataItem) {

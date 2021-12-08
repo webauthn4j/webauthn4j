@@ -21,6 +21,7 @@ import com.webauthn4j.metadata.legacy.data.MetadataItem;
 
 import java.util.Set;
 
+@Deprecated
 public interface MetadataItemsResolver {
 
     Set<MetadataItem> resolve(AAGUID aaguid);

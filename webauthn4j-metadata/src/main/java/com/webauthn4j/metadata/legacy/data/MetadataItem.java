@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+@Deprecated
 public interface MetadataItem extends Serializable {
 
     String getAaid();

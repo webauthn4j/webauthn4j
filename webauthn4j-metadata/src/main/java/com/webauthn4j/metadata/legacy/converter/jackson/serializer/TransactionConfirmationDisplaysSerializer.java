@@ -24,6 +24,7 @@ import com.webauthn4j.metadata.legacy.data.statement.TransactionConfirmationDisp
 
 import java.io.IOException;
 
+@Deprecated
 public class TransactionConfirmationDisplaysSerializer extends StdSerializer<TransactionConfirmationDisplays> {
     public TransactionConfirmationDisplaysSerializer() {
         super(TransactionConfirmationDisplays.class);

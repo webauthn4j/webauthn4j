@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@Deprecated
 public class MetadataItemsResolverImpl implements MetadataItemsResolver {
 
     private final MetadataItemsProvider metadataItemsProvider;

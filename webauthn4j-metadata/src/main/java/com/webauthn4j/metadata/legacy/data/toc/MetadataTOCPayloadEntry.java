@@ -35,6 +35,7 @@ import java.util.Objects;
 /**
  * Represents the MetadataTOCPayloadEntry
  */
+@Deprecated
 public class MetadataTOCPayloadEntry implements Serializable {
 
     @JsonProperty
