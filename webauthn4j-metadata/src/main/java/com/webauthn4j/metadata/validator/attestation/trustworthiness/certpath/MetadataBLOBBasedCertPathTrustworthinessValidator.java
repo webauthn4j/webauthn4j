@@ -29,6 +29,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,13 +37,17 @@ import java.util.stream.Collectors;
 
 public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
 
-    private final MetadataBLOBProvider metadataBLOBProvider;
+    private final List<MetadataBLOBProvider> metadataBLOBProviders;
 
     private boolean notFidoCertifiedAllowed = false;
     private boolean selfAssertionSubmittedAllowed = false;
 
     public MetadataBLOBBasedCertPathTrustworthinessValidator(MetadataBLOBProvider metadataBLOBProvider) {
-        this.metadataBLOBProvider = metadataBLOBProvider;
+        this(Collections.singletonList(metadataBLOBProvider));
+    }
+
+    public MetadataBLOBBasedCertPathTrustworthinessValidator(List<MetadataBLOBProvider> metadataBLOBProviders) {
+        this.metadataBLOBProviders = metadataBLOBProviders;
     }
 
     @Override
@@ -139,6 +144,9 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
     }
 
     private Set<MetadataBLOBPayloadEntry> resolveMetadataBLOBPayloadEntries(AAGUID aaguid) {
-        return metadataBLOBProvider.provide().getPayload().getEntries().stream().filter(entry -> Objects.equals(entry.getAaguid(), aaguid)).collect(Collectors.toSet());
+        return metadataBLOBProviders.stream()
+                .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
+                .filter(entry -> Objects.equals(entry.getAaguid(), aaguid))
+                .collect(Collectors.toSet());
     }
 }
