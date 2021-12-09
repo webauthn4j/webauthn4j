@@ -19,7 +19,18 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.data.MetadataBLOBFactory;
+import com.webauthn4j.metadata.exception.MDSException;
+import com.webauthn4j.util.CertificateUtil;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.cert.*;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
+/**
+ * Load MetadataBLOB from a local file. This provider validates MetadataBLOB signature.
+ */
 public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     private static final String DEFAULT_BLOB_ENDPOINT = "https://mds.fidoalliance.org/";
@@ -27,24 +38,57 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
     private final MetadataBLOBFactory metadataBLOBFactory;
     private final String blobEndpoint;
     private final HttpClient httpClient;
+    private final Set<TrustAnchor> trustAnchors;
 
-    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, String blobEndpoint, HttpClient httpClient) {
+    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, String blobEndpoint, HttpClient httpClient, Set<TrustAnchor> trustAnchors) {
         this.metadataBLOBFactory = new MetadataBLOBFactory(objectConverter);
         this.blobEndpoint = blobEndpoint;
         this.httpClient = httpClient;
+        this.trustAnchors = trustAnchors;
     }
 
-    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, String blobEndpoint) {
-        this(objectConverter, blobEndpoint, new SimpleHttpClient());
+    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, String blobEndpoint, Set<TrustAnchor> trustAnchors) {
+        this(objectConverter, blobEndpoint, new SimpleHttpClient(), trustAnchors);
     }
 
-    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter) {
-        this(objectConverter, DEFAULT_BLOB_ENDPOINT);
+    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, String blobEndpoint, X509Certificate trustAnchorCertificate) {
+        this(objectConverter, blobEndpoint, new SimpleHttpClient(), Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
+    }
+
+    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, Set<TrustAnchor> trustAnchors) {
+        this(objectConverter, DEFAULT_BLOB_ENDPOINT, trustAnchors);
+    }
+
+    public FidoMDS3MetadataBLOBProvider(ObjectConverter objectConverter, X509Certificate trustAnchorCertificate) {
+        this(objectConverter, DEFAULT_BLOB_ENDPOINT, Collections.singleton(new TrustAnchor(trustAnchorCertificate, null)));
     }
 
     @Override
     protected MetadataBLOB doProvide() {
         String responseBody = httpClient.fetch(blobEndpoint);
-        return metadataBLOBFactory.parse(responseBody);
+        MetadataBLOB metadataBLOB = metadataBLOBFactory.parse(responseBody);
+        if(!metadataBLOB.isValidSignature()){
+            throw new MDSException("MetadataBLOB signature is invalid");
+        }
+        validateCertPath(metadataBLOB);
+        return metadataBLOB;
+    }
+
+    private void validateCertPath(MetadataBLOB metadataBLOB) {
+        CertPath certPath = metadataBLOB.getHeader().getX5c();
+
+        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
+        pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
+        certPathParameters.addCertPathChecker(pkixRevocationChecker);
+
+        try {
+            certPathValidator.validate(certPath, certPathParameters);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new MDSException("invalid algorithm parameter", e);
+        } catch (CertPathValidatorException e) {
+            throw new MDSException("invalid cert path", e);
+        }
     }
 }

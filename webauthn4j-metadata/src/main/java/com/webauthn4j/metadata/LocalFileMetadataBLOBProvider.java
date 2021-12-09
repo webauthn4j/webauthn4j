@@ -26,6 +26,9 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Load MetadataBLOB from a local file. This provider doesn't validate MetadataBLOB signature as it trusts local metadata BLOB file.
+ */
 public class LocalFileMetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
     private final Path path;
