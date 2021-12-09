@@ -29,8 +29,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.cert.TrustAnchor;
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -138,12 +138,7 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         });
     }
 
-
     private Set<MetadataBLOBPayloadEntry> resolveMetadataBLOBPayloadEntries(AAGUID aaguid) {
-        return metadataBLOBProvider.provide().getPayload().getEntries().stream()
-                .collect(Collectors.toMap(
-                        MetadataBLOBPayloadEntry::getAaguid,
-                        Collections::singleton
-                )).get(aaguid);
+        return metadataBLOBProvider.provide().getPayload().getEntries().stream().filter(entry -> Objects.equals(entry.getAaguid(), aaguid)).collect(Collectors.toSet());
     }
 }

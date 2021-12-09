@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.metadata.LocalFileMetadataBLOBProvider;
+import com.webauthn4j.test.TestDataUtil;
+import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -26,21 +30,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-class LocalFileMetadataBLOBProviderTest {
+class MetadataBLOBBasedCertPathTrustworthinessValidatorTest {
 
     @TempDir
     Path tempDir;
 
     @Test
-    void test() throws IOException {
+    void validate_test() throws IOException {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider target = new LocalFileMetadataBLOBProvider(dstPath, new ObjectConverter());
-        MetadataBLOB metadataBLOB = target.provide();
-        assertThat(metadataBLOB).isNotNull();
+        LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(dstPath, new ObjectConverter());
+        MetadataBLOBBasedCertPathTrustworthinessValidator target = new MetadataBLOBBasedCertPathTrustworthinessValidator(localFileMetadataBLOBProvider);
+        RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
+        AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
+        target.validate(aaguid, (CertificateBaseAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement());
     }
-
 }

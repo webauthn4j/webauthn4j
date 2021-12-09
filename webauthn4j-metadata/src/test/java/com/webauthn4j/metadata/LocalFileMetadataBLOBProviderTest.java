@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.data;
+package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.FidoMDS3MetadataBLOBProvider;
+import com.webauthn4j.metadata.data.MetadataBLOB;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FidoMDS3MetadataBLOBProviderTest {
+class LocalFileMetadataBLOBProviderTest {
+
+    @TempDir
+    Path tempDir;
 
     @Test
-    void test(){
-        FidoMDS3MetadataBLOBProvider target = new FidoMDS3MetadataBLOBProvider(new ObjectConverter());
+    void test() throws IOException {
+        Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
+        Path dstPath = tempDir.resolve("blob.jwt");
+        Files.copy(blobPath, dstPath);
+        LocalFileMetadataBLOBProvider target = new LocalFileMetadataBLOBProvider(dstPath, new ObjectConverter());
         MetadataBLOB metadataBLOB = target.provide();
         assertThat(metadataBLOB).isNotNull();
     }
