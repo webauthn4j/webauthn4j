@@ -19,6 +19,7 @@ package com.webauthn4j.metadata;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.data.MetadataBLOB;
 import com.webauthn4j.metadata.data.MetadataBLOBFactory;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -34,12 +35,12 @@ public class LocalFileMetadataBLOBProvider extends CachingMetadataBLOBProvider{
     private final Path path;
     private final MetadataBLOBFactory metadataBLOBFactory;
 
-    public LocalFileMetadataBLOBProvider(Path path, ObjectConverter objectConverter) {
+    public LocalFileMetadataBLOBProvider(@NonNull Path path, @NonNull ObjectConverter objectConverter) {
         this.path = path;
         this.metadataBLOBFactory = new MetadataBLOBFactory(objectConverter);
     }
 
-    protected MetadataBLOB doProvide(){
+    protected @NonNull MetadataBLOB doProvide(){
         try (InputStream inputStream = Files.newInputStream(path)) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             Stream<String> lines = new BufferedReader(inputStreamReader).lines();

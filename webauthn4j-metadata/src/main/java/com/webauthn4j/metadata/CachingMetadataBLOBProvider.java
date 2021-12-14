@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.data.MetadataBLOB;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.LocalDate;
 
@@ -27,7 +28,7 @@ public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvide
     private final Object cachedMetadataBLOBLock = new Object();
 
     @Override
-    public MetadataBLOB provide(){
+    public @NonNull MetadataBLOB provide(){
         synchronized (cachedMetadataBLOBLock){
             if(cachedMetadataBLOB == null){
                 refresh();
@@ -49,7 +50,7 @@ public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvide
         }
     }
 
-    protected abstract MetadataBLOB doProvide();
+    protected abstract @NonNull MetadataBLOB doProvide();
 
 
 }

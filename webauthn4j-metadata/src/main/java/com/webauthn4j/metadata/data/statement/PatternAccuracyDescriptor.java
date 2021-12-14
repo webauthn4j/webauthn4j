@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -28,34 +30,34 @@ import java.util.Objects;
  */
 public class PatternAccuracyDescriptor implements Serializable {
 
-    private final BigInteger minComplexity;
-    private final Integer maxRetries;
-    private final Integer blockSlowdown;
+    @NonNull private final BigInteger minComplexity;
+    @Nullable private final Integer maxRetries;
+    @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public PatternAccuracyDescriptor(
-            @JsonProperty("minComplexity") BigInteger minComplexity,
-            @JsonProperty("maxRetries") Integer maxRetries,
-            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+            @JsonProperty("minComplexity") @NonNull BigInteger minComplexity,
+            @JsonProperty("maxRetries") @Nullable Integer maxRetries,
+            @JsonProperty("blockSlowdown") @Nullable Integer blockSlowdown) {
         this.minComplexity = minComplexity;
         this.maxRetries = maxRetries;
         this.blockSlowdown = blockSlowdown;
     }
 
-    public BigInteger getMinComplexity() {
+    @NonNull public BigInteger getMinComplexity() {
         return minComplexity;
     }
 
-    public Integer getMaxRetries() {
+    @Nullable public Integer getMaxRetries() {
         return maxRetries;
     }
 
-    public Integer getBlockSlowdown() {
+    @Nullable public Integer getBlockSlowdown() {
         return blockSlowdown;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PatternAccuracyDescriptor that = (PatternAccuracyDescriptor) o;

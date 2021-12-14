@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,34 +29,37 @@ import java.util.Objects;
  */
 public class RGBPaletteEntry implements Serializable {
 
-    private final Integer r;
-    private final Integer g;
-    private final Integer b;
+    @NonNull private final Integer r;
+    @NonNull private final Integer g;
+    @NonNull private final Integer b;
 
     @JsonCreator
     public RGBPaletteEntry(
-            @JsonProperty("r") Integer r,
-            @JsonProperty("g") Integer g,
-            @JsonProperty("b") Integer b) {
+            @JsonProperty("r") @NonNull Integer r,
+            @JsonProperty("g") @NonNull Integer g,
+            @JsonProperty("b") @NonNull Integer b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
+    @NonNull
     public Integer getR() {
         return r;
     }
 
+    @NonNull
     public Integer getG() {
         return g;
     }
 
+    @NonNull
     public Integer getB() {
         return b;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RGBPaletteEntry that = (RGBPaletteEntry) o;

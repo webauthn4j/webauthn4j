@@ -17,17 +17,18 @@
 package com.webauthn4j.metadata.exception;
 
 import com.webauthn4j.validator.exception.ValidationException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class UnknownProtocolFamilyException extends ValidationException {
-    public UnknownProtocolFamilyException(String message, Throwable cause) {
+    public UnknownProtocolFamilyException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public UnknownProtocolFamilyException(String message) {
+    public UnknownProtocolFamilyException(@Nullable String message) {
         super(message);
     }
 
-    public UnknownProtocolFamilyException(Throwable cause) {
+    public UnknownProtocolFamilyException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -22,17 +22,18 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class MetadataBLOB {
 
+    @NonNull
     private final JWS<MetadataBLOBPayload> jws;
 
-    public MetadataBLOB(JWS<MetadataBLOBPayload> jws) {
+    public MetadataBLOB(@NonNull JWS<MetadataBLOBPayload> jws) {
         this.jws = jws;
     }
 
-    public JWSHeader getHeader(){
+    public @NonNull JWSHeader getHeader(){
         return jws.getHeader();
     }
 
-    public MetadataBLOBPayload getPayload(){
+    public @NonNull MetadataBLOBPayload getPayload(){
         return jws.getPayload();
     }
 

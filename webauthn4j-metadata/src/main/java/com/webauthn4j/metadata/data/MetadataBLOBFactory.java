@@ -19,16 +19,18 @@ package com.webauthn4j.metadata.data;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSFactory;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class MetadataBLOBFactory {
 
+    @NonNull
     private final JWSFactory jwsFactory;
 
-    public MetadataBLOBFactory(ObjectConverter objectConverter) {
+    public MetadataBLOBFactory(@NonNull ObjectConverter objectConverter) {
         this.jwsFactory = new JWSFactory(objectConverter);
     }
 
-    public MetadataBLOB parse(String value){
+    public @NonNull MetadataBLOB parse(@NonNull String value){
         JWS<MetadataBLOBPayload> jws = jwsFactory.parse(value, MetadataBLOBPayload.class);
         return new MetadataBLOB(jws);
     }

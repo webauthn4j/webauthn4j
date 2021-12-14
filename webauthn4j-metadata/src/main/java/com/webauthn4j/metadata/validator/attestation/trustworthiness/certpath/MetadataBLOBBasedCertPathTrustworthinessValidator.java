@@ -42,11 +42,11 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
     private boolean notFidoCertifiedAllowed = false;
     private boolean selfAssertionSubmittedAllowed = false;
 
-    public MetadataBLOBBasedCertPathTrustworthinessValidator(MetadataBLOBProvider metadataBLOBProvider) {
+    public MetadataBLOBBasedCertPathTrustworthinessValidator(@NonNull MetadataBLOBProvider metadataBLOBProvider) {
         this(Collections.singletonList(metadataBLOBProvider));
     }
 
-    public MetadataBLOBBasedCertPathTrustworthinessValidator(List<MetadataBLOBProvider> metadataBLOBProviders) {
+    public MetadataBLOBBasedCertPathTrustworthinessValidator(@NonNull List<MetadataBLOBProvider> metadataBLOBProviders) {
         this.metadataBLOBProviders = metadataBLOBProviders;
     }
 
@@ -63,9 +63,12 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         super.validate(aaguid, attestationStatement, timestamp);
     }
 
-    private void validateAttestationType(CertificateBaseAttestationStatement attestationStatement, Set<MetadataBLOBPayloadEntry> entries) {
+    private void validateAttestationType(@NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Set<MetadataBLOBPayloadEntry> entries) {
         List<AuthenticatorAttestationType> authenticatorAttestationTypes = entries.stream()
-                .flatMap(item -> item.getMetadataStatement().getAttestationTypes().stream()).collect(Collectors.toList());
+                .map(MetadataBLOBPayloadEntry::getMetadataStatement)
+                .filter(Objects::nonNull)
+                .flatMap(item -> item.getAttestationTypes().stream())
+                .collect(Collectors.toList());
 
         boolean isSurrogate = !authenticatorAttestationTypes.isEmpty() &&
                 authenticatorAttestationTypes.stream().allMatch(type -> type.equals(AuthenticatorAttestationType.BASIC_SURROGATE));
@@ -79,7 +82,12 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
 
     @Override
     protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
-        return resolveMetadataBLOBPayloadEntries(aaguid).stream().flatMap(item -> item.getMetadataStatement().getAttestationRootCertificates().stream()).map(item -> new TrustAnchor(item, null)).collect(Collectors.toSet());
+        return resolveMetadataBLOBPayloadEntries(aaguid).stream()
+                .map(MetadataBLOBPayloadEntry::getMetadataStatement)
+                .filter(Objects::nonNull)
+                .flatMap(item -> item.getAttestationRootCertificates().stream())
+                .map(item -> new TrustAnchor(item, null))
+                .collect(Collectors.toSet());
     }
 
     public boolean isNotFidoCertifiedAllowed() {
@@ -99,7 +107,7 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
     }
 
 
-    protected void validateMetadataBLOBPayloadEntry(MetadataBLOBPayloadEntry metadataBLOBPayloadEntry) {
+    protected void validateMetadataBLOBPayloadEntry(@NonNull MetadataBLOBPayloadEntry metadataBLOBPayloadEntry) {
         List<StatusReport> statusReports = metadataBLOBPayloadEntry.getStatusReports();
         statusReports.forEach(report -> {
             switch (report.getStatus()) {
@@ -143,7 +151,7 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         });
     }
 
-    private Set<MetadataBLOBPayloadEntry> resolveMetadataBLOBPayloadEntries(AAGUID aaguid) {
+    private @NonNull Set<MetadataBLOBPayloadEntry> resolveMetadataBLOBPayloadEntries(@NonNull AAGUID aaguid) {
         return metadataBLOBProviders.stream()
                 .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
                 .filter(entry -> Objects.equals(entry.getAaguid(), aaguid))

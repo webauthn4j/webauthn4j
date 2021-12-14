@@ -17,6 +17,7 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.exception.MDSException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,7 +33,7 @@ import java.net.URL;
 public class SimpleHttpClient implements HttpClient {
 
     @Override
-    public String fetch(String url) {
+    public @NonNull String fetch(@NonNull String url) {
         try {
             URL fetchUrl = new URL(url);
             HttpURLConnection urlConnection = (HttpURLConnection) fetchUrl.openConnection();

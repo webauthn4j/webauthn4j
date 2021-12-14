@@ -447,7 +447,7 @@ public class TestDataUtil {
                 new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
                 null,
                 null,
-                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null)),
+                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null, null, null, null, null)),
                 null,
                 createLegacyMetadataStatement()
         );

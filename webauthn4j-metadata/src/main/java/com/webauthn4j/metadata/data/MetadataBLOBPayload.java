@@ -32,7 +32,8 @@ import java.util.Objects;
 public class MetadataBLOBPayload implements Serializable {
     @Nullable
     private final String legalHeader;
-    @NonNull private final Integer no;
+    @NonNull
+    private final Integer no;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
