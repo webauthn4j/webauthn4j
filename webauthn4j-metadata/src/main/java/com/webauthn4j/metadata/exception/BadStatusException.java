@@ -17,20 +17,21 @@
 package com.webauthn4j.metadata.exception;
 
 import com.webauthn4j.validator.exception.ValidationException;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Thrown if bad status is reported
  */
 public class BadStatusException extends ValidationException {
-    public BadStatusException(String message, Throwable cause) {
+    public BadStatusException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public BadStatusException(String message) {
+    public BadStatusException(@Nullable String message) {
         super(message);
     }
 
-    public BadStatusException(Throwable cause) {
+    public BadStatusException(@Nullable Throwable cause) {
         super(cause);
     }
 }

@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
 
@@ -27,7 +29,7 @@ public class VerificationMethodANDCombinations extends AbstractList<Verification
     private final VerificationMethodDescriptor[] descriptors;
 
     @JsonCreator
-    public VerificationMethodANDCombinations(List<VerificationMethodDescriptor> descriptors) {
+    public VerificationMethodANDCombinations(@NonNull List<VerificationMethodDescriptor> descriptors) {
         AssertUtil.notNull(descriptors, "descriptors must not be null");
         this.size = descriptors.size();
         this.descriptors = descriptors.toArray(new VerificationMethodDescriptor[this.size]);
@@ -37,6 +39,7 @@ public class VerificationMethodANDCombinations extends AbstractList<Verification
         this(Collections.emptyList());
     }
 
+    @NonNull
     @Override
     public VerificationMethodDescriptor get(int index) {
         return descriptors[index];
@@ -48,7 +51,7 @@ public class VerificationMethodANDCombinations extends AbstractList<Verification
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }

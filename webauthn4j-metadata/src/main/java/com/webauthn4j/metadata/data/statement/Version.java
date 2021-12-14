@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,27 +29,31 @@ import java.util.Objects;
  */
 public class Version implements Serializable {
 
+    @NonNull
     private final Integer major;
+    @NonNull
     private final Integer minor;
 
     @JsonCreator
     public Version(
-            @JsonProperty("major") Integer major,
-            @JsonProperty("minor") Integer minor) {
+            @JsonProperty("major") @NonNull Integer major,
+            @JsonProperty("minor") @NonNull Integer minor) {
         this.major = major;
         this.minor = minor;
     }
 
+    @NonNull
     public Integer getMajor() {
         return major;
     }
 
+    @NonNull
     public Integer getMinor() {
         return minor;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Version version = (Version) o;

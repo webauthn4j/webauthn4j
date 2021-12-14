@@ -19,6 +19,7 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.UserVerificationMethod;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,41 +29,45 @@ import java.util.Objects;
  */
 public class VerificationMethodDescriptor implements Serializable {
 
-    private final UserVerificationMethod userVerification;
-    private final CodeAccuracyDescriptor caDesc;
-    private final BiometricAccuracyDescriptor baDesc;
-    private final PatternAccuracyDescriptor paDesc;
+    @Nullable private final UserVerificationMethod userVerification;
+    @Nullable private final CodeAccuracyDescriptor caDesc;
+    @Nullable private final BiometricAccuracyDescriptor baDesc;
+    @Nullable private final PatternAccuracyDescriptor paDesc;
 
     @JsonCreator
     public VerificationMethodDescriptor(
-            @JsonProperty("userVerification") UserVerificationMethod userVerification,
-            @JsonProperty("caDesc") CodeAccuracyDescriptor caDesc,
-            @JsonProperty("baDesc") BiometricAccuracyDescriptor baDesc,
-            @JsonProperty("paDesc") PatternAccuracyDescriptor paDesc) {
+            @JsonProperty("userVerification") @Nullable UserVerificationMethod userVerification,
+            @JsonProperty("caDesc") @Nullable CodeAccuracyDescriptor caDesc,
+            @JsonProperty("baDesc") @Nullable BiometricAccuracyDescriptor baDesc,
+            @JsonProperty("paDesc") @Nullable PatternAccuracyDescriptor paDesc) {
         this.userVerification = userVerification;
         this.caDesc = caDesc;
         this.baDesc = baDesc;
         this.paDesc = paDesc;
     }
 
+    @Nullable
     public UserVerificationMethod getUserVerification() {
         return userVerification;
     }
 
+    @Nullable
     public CodeAccuracyDescriptor getCaDesc() {
         return caDesc;
     }
 
+    @Nullable
     public BiometricAccuracyDescriptor getBaDesc() {
         return baDesc;
     }
 
+    @Nullable
     public PatternAccuracyDescriptor getPaDesc() {
         return paDesc;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VerificationMethodDescriptor that = (VerificationMethodDescriptor) o;

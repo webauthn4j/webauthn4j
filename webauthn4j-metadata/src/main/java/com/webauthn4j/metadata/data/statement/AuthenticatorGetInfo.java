@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata;
+package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.metadata.data.MetadataBLOB;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-public interface MetadataBLOBProvider {
-
-    @NonNull MetadataBLOB provide();
+public class AuthenticatorGetInfo {
 }
