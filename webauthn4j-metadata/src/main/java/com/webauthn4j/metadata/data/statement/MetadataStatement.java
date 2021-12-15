@@ -117,7 +117,7 @@ public class MetadataStatement implements Serializable {
     @Nullable
     private final List<ExtensionDescriptor> supportedExtensions;
     @Nullable
-    private final List<AuthenticatorGetInfo> authenticatorGetInfo;
+    private final AuthenticatorGetInfo authenticatorGetInfo;
 
 
     public MetadataStatement(
@@ -150,7 +150,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("ecdaaTrustAnchors") @Nullable List<EcdaaTrustAnchor> ecdaaTrustAnchors,
             @JsonProperty("icon") @Nullable String icon,
             @JsonProperty("supportedExtensions") @Nullable List<ExtensionDescriptor> supportedExtensions,
-            @JsonProperty("authenticatorGetInfo") @Nullable List<AuthenticatorGetInfo> authenticatorGetInfo) {
+            @JsonProperty("authenticatorGetInfo") @Nullable AuthenticatorGetInfo authenticatorGetInfo) {
         this.legalHeader = legalHeader;
         this.aaid = aaid;
         this.aaguid = aaguid;
@@ -329,7 +329,7 @@ public class MetadataStatement implements Serializable {
     }
 
     @Nullable
-    public List<AuthenticatorGetInfo> getAuthenticatorGetInfo() {
+    public AuthenticatorGetInfo getAuthenticatorGetInfo() {
         return authenticatorGetInfo;
     }
 
