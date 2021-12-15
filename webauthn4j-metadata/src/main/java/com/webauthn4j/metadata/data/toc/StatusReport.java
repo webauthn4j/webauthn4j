@@ -72,14 +72,14 @@ public class StatusReport implements Serializable {
 
     @JsonCreator
     public StatusReport(
-            @NonNull AuthenticatorStatus status,
-            @Nullable LocalDate effectiveDate,
-            @Nullable X509Certificate certificate,
-            @Nullable String url,
-            @Nullable String certificationDescriptor,
-            @Nullable String certificateNumber,
-            @Nullable String certificationPolicyVersion,
-            @Nullable String certificationRequirementsVersion) {
+            @JsonProperty("status") @NonNull AuthenticatorStatus status,
+            @JsonProperty("effectiveDate") @Nullable LocalDate effectiveDate,
+            @JsonProperty("certificate") @Nullable X509Certificate certificate,
+            @JsonProperty("url") @Nullable String url,
+            @JsonProperty("certificationDescriptor") @Nullable String certificationDescriptor,
+            @JsonProperty("certificateNumber") @Nullable String certificateNumber,
+            @JsonProperty("certificationPolicyVersion") @Nullable String certificationPolicyVersion,
+            @JsonProperty("certificationRequirementsVersion") @Nullable String certificationRequirementsVersion) {
         this.status = status;
         this.effectiveDate = effectiveDate;
         this.certificate = certificate;
