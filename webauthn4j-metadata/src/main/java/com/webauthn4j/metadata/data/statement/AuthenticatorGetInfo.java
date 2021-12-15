@@ -18,7 +18,9 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -32,6 +34,7 @@ public class AuthenticatorGetInfo {
     @Nullable
     private List<String> extensions;
     @NonNull
+    @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
     private AAGUID aaguid;
     @Nullable
     private Options options;
