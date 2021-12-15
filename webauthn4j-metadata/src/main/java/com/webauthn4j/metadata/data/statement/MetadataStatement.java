@@ -23,6 +23,7 @@ import com.webauthn4j.converter.jackson.deserializer.json.*;
 import com.webauthn4j.converter.jackson.serializer.json.*;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataAAGUIDRelaxedDeserializer;
 import com.webauthn4j.metadata.converter.jackson.deserializer.MetadataX509CertificateRelaxedDeserializer;
 import com.webauthn4j.metadata.data.uaf.AAID;
 import org.checkerframework.checker.nullness.qual.NonNull;
