@@ -31,7 +31,7 @@ class AuthenticatorStatusTest {
 
     @Test
     void create_test() {
-        //noinspection ConstantConditions,ResultOfMethodCallIgnored
+        //noinspection ResultOfMethodCallIgnored
         assertAll(
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED),
                 () -> assertThat(AuthenticatorStatus.create("NOT_FIDO_CERTIFIED")).isEqualTo(AuthenticatorStatus.NOT_FIDO_CERTIFIED),
@@ -48,8 +48,7 @@ class AuthenticatorStatusTest {
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L2plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L2_PLUS),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3),
                 () -> assertThat(AuthenticatorStatus.create("FIDO_CERTIFIED_L3plus")).isEqualTo(AuthenticatorStatus.FIDO_CERTIFIED_L3_PLUS),
-                () -> assertThatThrownBy(() -> AuthenticatorStatus.create("FIDO_CERTIFIED_L1PLUS")).isInstanceOf(IllegalArgumentException.class),
-                () -> assertThat(AuthenticatorStatus.create(null)).isNull()
+                () -> assertThatThrownBy(() -> AuthenticatorStatus.create("FIDO_CERTIFIED_L1PLUS")).isInstanceOf(IllegalArgumentException.class)
         );
     }
 
