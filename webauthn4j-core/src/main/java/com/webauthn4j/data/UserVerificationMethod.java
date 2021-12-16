@@ -15,10 +15,11 @@
  */
 package com.webauthn4j.data;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import com.webauthn4j.util.UnsignedNumberUtil;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The supported user verification method(s).
@@ -27,79 +28,41 @@ import org.checkerframework.checker.nullness.qual.NonNull;
  */
 public enum UserVerificationMethod {
 
-    PRESENCE_INTERNAL(0x00000001L),
-    FINGERPRINT_INTERNAL(0x00000002L),
-    PASSCODE_INTERNAL(0x00000004L),
-    VOICEPRINT_INTERNAL(0x00000008L),
-    FACEPRINT_INTERNAL(0x00000010L),
-    LOCATION_INTERNAL(0x00000020L),
-    EYEPRINT_INTERNAL(0x00000040L),
-    PATTERN_INTERNAL(0x00000080L),
-    HANDPRINT_INTERNAL(0x00000100L),
-    PASSCODE_EXTERNAL(0x00000800L),
-    PATTERN_EXTERNAL(0x00001000L),
-    NONE(0x00000200L),
-    ALL(0x00000400L);
+    PRESENCE_INTERNAL(0x00000001L, "presence_internal"),
+    FINGERPRINT_INTERNAL(0x00000002L, "fingerprint_internal"),
+    PASSCODE_INTERNAL(0x00000004L, "passcode_internal"),
+    VOICEPRINT_INTERNAL(0x00000008L, "voiceprint_internal"),
+    FACEPRINT_INTERNAL(0x00000010L, "faceprint_internal"),
+    LOCATION_INTERNAL(0x00000020L, "location_internal"),
+    EYEPRINT_INTERNAL(0x00000040L, "eyeprint_internal"),
+    PATTERN_INTERNAL(0x00000080L, "pattern_internal"),
+    HANDPRINT_INTERNAL(0x00000100L, "handprint_internal"),
+    PASSCODE_EXTERNAL(0x00000800L, "passcode_external"),
+    PATTERN_EXTERNAL(0x00001000L, "pattern_external"),
+    NONE(0x00000200L, "none"),
+    ALL(0x00000400L, "all");
+
+    private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
     private final long value;
+    private final String string;
 
-    UserVerificationMethod(long value) {
+    UserVerificationMethod(long value, String string) {
         this.value = value;
+        this.string = string;
+    }
+
+    public static UserVerificationMethod create(String value) {
+        return Arrays.stream(UserVerificationMethod.values()).filter(item -> Objects.equals(item.string, value))
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     public static UserVerificationMethod create(long value) {
-        if (value == 0x00000001L) {
-            return PRESENCE_INTERNAL;
+        if (value > UnsignedNumberUtil.UNSIGNED_INT_MAX || value < 0) {
+            throw new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value));
         }
-        else if (value == 0x00000002L) {
-            return FINGERPRINT_INTERNAL;
-        }
-        else if (value == 0x00000004L) {
-            return PASSCODE_INTERNAL;
-        }
-        else if (value == 0x00000008L) {
-            return VOICEPRINT_INTERNAL;
-        }
-        else if (value == 0x00000010L) {
-            return FACEPRINT_INTERNAL;
-        }
-        else if (value == 0x00000020L) {
-            return LOCATION_INTERNAL;
-        }
-        else if (value == 0x00000040L) {
-            return EYEPRINT_INTERNAL;
-        }
-        else if (value == 0x00000080L) {
-            return PATTERN_INTERNAL;
-        }
-        else if (value == 0x00000100L) {
-            return HANDPRINT_INTERNAL;
-        }
-        else if (value == 0x00000800L) {
-            return PASSCODE_EXTERNAL;
-        }
-        else if (value == 0x00001000L) {
-            return PATTERN_EXTERNAL;
-        }
-        else if (value == 0x00000200L) {
-            return NONE;
-        }
-        else if (value == 0x00000400L) {
-            return ALL;
-        }
-        else {
-            throw new IllegalArgumentException("value '" + value + "' is out of range");
-        }
-    }
-
-    @SuppressWarnings("unused")
-    @JsonCreator
-    private static @NonNull UserVerificationMethod deserialize(long value) throws InvalidFormatException {
-        try {
-            return create(value);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidFormatException(null, "value is out of range", value, UserVerificationMethod.class);
-        }
+        return Arrays.stream(UserVerificationMethod.values()).filter(item -> item.value == value)
+                .findFirst().orElseThrow(()->new IllegalArgumentException(String.format(VALUE_OUT_OF_RANGE_TEMPLATE, value)));
     }
 
     @JsonValue
@@ -108,36 +71,7 @@ public enum UserVerificationMethod {
     }
 
     @Override
-    public String toString() {
-        switch (this){
-            case PRESENCE_INTERNAL:
-                return "PRESENCE_INTERNAL";
-            case FINGERPRINT_INTERNAL:
-                return "FINGERPRINT_INTERNAL";
-            case PASSCODE_INTERNAL:
-                return "PASSCODE_INTERNAL";
-            case VOICEPRINT_INTERNAL:
-                return "VOICEPRINT_INTERNAL";
-            case FACEPRINT_INTERNAL:
-                return "FACEPRINT_INTERNAL";
-            case LOCATION_INTERNAL:
-                return "LOCATION_INTERNAL";
-            case EYEPRINT_INTERNAL:
-                return "EYEPRINT_INTERNAL";
-            case PATTERN_INTERNAL:
-                return "PATTERN_INTERNAL";
-            case HANDPRINT_INTERNAL:
-                return "HANDPRINT_INTERNAL";
-            case PASSCODE_EXTERNAL:
-                return "PASSCODE_EXTERNAL";
-            case PATTERN_EXTERNAL:
-                return "PATTERN_EXTERNAL";
-            case NONE:
-                return "NONE";
-            case ALL:
-                return "ALL";
-            default:
-                return String.format("UNKNOWN(%08X)", value);
-        }
+    public String toString(){
+        return string;
     }
 }

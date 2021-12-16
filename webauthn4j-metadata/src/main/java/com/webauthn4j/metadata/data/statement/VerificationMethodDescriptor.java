@@ -18,6 +18,10 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.data.UserVerificationMethod;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -29,10 +33,16 @@ import java.util.Objects;
  */
 public class VerificationMethodDescriptor implements Serializable {
 
-    @Nullable private final UserVerificationMethod userVerification;
-    @Nullable private final CodeAccuracyDescriptor caDesc;
-    @Nullable private final BiometricAccuracyDescriptor baDesc;
-    @Nullable private final PatternAccuracyDescriptor paDesc;
+    @Nullable
+    @JsonSerialize(using = UserVerificationMethodToStringSerializer.class)
+    @JsonDeserialize(using = UserVerificationMethodFromStringDeserializer.class)
+    private final UserVerificationMethod userVerification;
+    @Nullable
+    private final CodeAccuracyDescriptor caDesc;
+    @Nullable
+    private final BiometricAccuracyDescriptor baDesc;
+    @Nullable
+    private final PatternAccuracyDescriptor paDesc;
 
     @JsonCreator
     public VerificationMethodDescriptor(

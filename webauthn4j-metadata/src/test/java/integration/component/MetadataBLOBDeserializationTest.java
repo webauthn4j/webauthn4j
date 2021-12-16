@@ -36,14 +36,19 @@ public class MetadataBLOBDeserializationTest {
     private final JWSFactory jwsFactory = new JWSFactory();
 
     @Test
-    void test(){
-        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlogAsString(), MetadataBLOBPayload.class);
+    void test_with_mds3_metadata_as_of_202111(){
+        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("/integration/component/blob.jwt"), MetadataBLOBPayload.class);
         assertThat(metadataBLOB).isNotNull();
     }
 
+    @Test
+    void test_with_test_data(){
+        JWS<MetadataBLOBPayload> metadataBLOB = jwsFactory.parse(loadBlobAsString("/integration/component/test-blob.jwt"), MetadataBLOBPayload.class);
+        assertThat(metadataBLOB).isNotNull();
+    }
 
-    private String loadBlogAsString(){
-        Resource blobResource = new DefaultResourceLoader().getResource("/integration/component/blob.jwt");
+    private String loadBlobAsString(String resourcePath){
+        Resource blobResource = new DefaultResourceLoader().getResource(resourcePath);
         try {
             InputStream inputStream = blobResource.getInputStream();
             return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
