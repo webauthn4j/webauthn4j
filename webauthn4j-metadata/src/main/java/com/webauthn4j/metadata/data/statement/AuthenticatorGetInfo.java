@@ -98,10 +98,84 @@ public class AuthenticatorGetInfo {
 
     public static class Options {
 
+        @JsonProperty("plat")
+        private final PlatformOption plat;
+        @JsonProperty("rk")
+        private final ResidentKeyOption rk;
+        @JsonProperty("clientPIN")
+        private final ClientPINOption clientPIN;
+        @JsonProperty("up")
+        private final UserPresenceOption up;
+        @JsonProperty("uv")
+        private final UserVerificationOption uv;
+
+        @JsonCreator
+        public Options(
+                @JsonProperty("plat") PlatformOption plat,
+                @JsonProperty("rk") ResidentKeyOption rk,
+                @JsonProperty("clientPIN") ClientPINOption clientPIN,
+                @JsonProperty("up") UserPresenceOption up,
+                @JsonProperty("uv") UserVerificationOption uv) {
+            this.plat = plat;
+            this.rk = rk;
+            this.clientPIN = clientPIN;
+            this.up = up;
+            this.uv = uv;
+        }
+
+        public PlatformOption getPlat() {
+            return plat;
+        }
+
+        public ResidentKeyOption getRk() {
+            return rk;
+        }
+
+        public ClientPINOption getClientPIN() {
+            return clientPIN;
+        }
+
+        public UserPresenceOption getUp() {
+            return up;
+        }
+
+        public UserVerificationOption getUv() {
+            return uv;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Options options = (Options) o;
+            return Objects.equals(plat, options.plat) && Objects.equals(rk, options.rk) && Objects.equals(clientPIN, options.clientPIN) && Objects.equals(up, options.up) && Objects.equals(uv, options.uv);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(plat, rk, clientPIN, up, uv);
+        }
+
+        private static class PlatformOption {
+        }
+
+        private static class ResidentKeyOption {
+        }
+
+        private static class ClientPINOption {
+        }
+
+        private static class UserPresenceOption {
+        }
+
+        private static class UserVerificationOption {
+        }
     }
+
 
     public static class PinProtocolVersion {
 
     }
+
 
 }
