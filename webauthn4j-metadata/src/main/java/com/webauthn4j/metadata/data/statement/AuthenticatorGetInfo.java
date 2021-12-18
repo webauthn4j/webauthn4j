@@ -30,18 +30,18 @@ import java.util.Objects;
 public class AuthenticatorGetInfo {
 
     @NonNull
-    private List<String> versions;
+    private final List<String> versions;
     @Nullable
-    private List<String> extensions;
+    private final List<String> extensions;
     @NonNull
     @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
-    private AAGUID aaguid;
+    private final AAGUID aaguid;
     @Nullable
-    private Options options;
+    private final Options options;
     @Nullable
-    private Integer maxMsgSize;
+    private final Integer maxMsgSize;
     @Nullable
-    private List<PinProtocolVersion> pinProtocols;
+    private final List<PinProtocolVersion> pinProtocols;
 
     @JsonCreator
     public AuthenticatorGetInfo(
@@ -157,24 +157,189 @@ public class AuthenticatorGetInfo {
         }
 
         private static class PlatformOption {
+
+            public static final PlatformOption PLATFORM = new PlatformOption(true);
+            public static final PlatformOption CROSS_PLATFORM = new PlatformOption(false);
+            public static final PlatformOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public PlatformOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                PlatformOption that = (PlatformOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
         }
 
         private static class ResidentKeyOption {
+
+            public static final ResidentKeyOption SUPPORTED = new ResidentKeyOption(true);
+            public static final ResidentKeyOption NOT_SUPPORTED = new ResidentKeyOption(false);
+            public static final ResidentKeyOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public ResidentKeyOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                ResidentKeyOption that = (ResidentKeyOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
         }
 
         private static class ClientPINOption {
+
+            public static final ClientPINOption SET = new ClientPINOption(true);
+            public static final ClientPINOption NOT_SET = new ClientPINOption(false);
+            public static final ClientPINOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public ClientPINOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                ClientPINOption that = (ClientPINOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
         }
 
         private static class UserPresenceOption {
+
+            public static final UserPresenceOption SUPPORTED = new UserPresenceOption(true);
+            public static final UserPresenceOption NOT_SUPPORTED = new UserPresenceOption(false);
+            public static final UserPresenceOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UserPresenceOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UserPresenceOption that = (UserPresenceOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
         }
 
         private static class UserVerificationOption {
+
+            public static final UserVerificationOption READY = new UserVerificationOption(true);
+            public static final UserVerificationOption NOT_READY = new UserVerificationOption(false);
+            public static final UserVerificationOption NOT_SUPPORTED = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UserVerificationOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UserVerificationOption that = (UserVerificationOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
         }
     }
 
 
     public static class PinProtocolVersion {
 
+        public static final PinProtocolVersion VERSION_1 = new PinProtocolVersion(1);
+
+        private final int value;
+
+        @JsonCreator
+        public PinProtocolVersion(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PinProtocolVersion that = (PinProtocolVersion) o;
+            return value == that.value;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
     }
 
 
