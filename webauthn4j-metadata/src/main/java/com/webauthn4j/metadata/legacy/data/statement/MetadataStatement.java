@@ -50,7 +50,7 @@ public class MetadataStatement implements Serializable {
     private final PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
     private final List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings;
     private final List<AuthenticatorAttestationType> authenticatorAttestationTypes;
-    private final List<VerificationMethodANDCombinations> userVerificationDetails;
+    private final List<com.webauthn4j.metadata.legacy.data.statement.VerificationMethodANDCombinations> userVerificationDetails;
     private final KeyProtections keyProtection;
     private final Boolean isKeyRestricted;
     private final Boolean isFreshUserVerificationRequired;
@@ -84,7 +84,7 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("publicKeyAlgAndEncoding") PublicKeyRepresentationFormat publicKeyAlgAndEncoding,
             @JsonProperty("publicKeyAlgAndEncodings") List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
             @JsonProperty("attestationTypes") List<AuthenticatorAttestationType> authenticatorAttestationTypes,
-            @JsonProperty("userVerificationDetails") List<VerificationMethodANDCombinations> userVerificationDetails,
+            @JsonProperty("userVerificationDetails") List<com.webauthn4j.metadata.legacy.data.statement.VerificationMethodANDCombinations> userVerificationDetails,
             @JsonProperty("keyProtection") KeyProtections keyProtection,
             @JsonProperty("isKeyRestricted") Boolean isKeyRestricted,
             @JsonProperty("isFreshUserVerificationRequired") Boolean isFreshUserVerificationRequired,
@@ -193,7 +193,7 @@ public class MetadataStatement implements Serializable {
         return authenticatorAttestationTypes;
     }
 
-    public List<VerificationMethodANDCombinations> getUserVerificationDetails() {
+    public List<com.webauthn4j.metadata.legacy.data.statement.VerificationMethodANDCombinations> getUserVerificationDetails() {
         return userVerificationDetails;
     }
 
