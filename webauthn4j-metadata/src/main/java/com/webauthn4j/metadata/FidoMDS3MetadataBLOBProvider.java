@@ -40,6 +40,7 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
     private final String blobEndpoint;
     private final HttpClient httpClient;
     private final Set<TrustAnchor> trustAnchors;
+    private boolean revocationCheckEnabled = true;
 
     public FidoMDS3MetadataBLOBProvider(@NonNull ObjectConverter objectConverter, @NonNull String blobEndpoint, @NonNull HttpClient httpClient, @NonNull Set<TrustAnchor> trustAnchors) {
         this.metadataBLOBFactory = new MetadataBLOBFactory(objectConverter);
@@ -80,6 +81,7 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
         PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        certPathParameters.setRevocationEnabled(revocationCheckEnabled);
         PKIXRevocationChecker pkixRevocationChecker = (PKIXRevocationChecker) certPathValidator.getRevocationChecker();
         pkixRevocationChecker.setOptions(EnumSet.of(PKIXRevocationChecker.Option.PREFER_CRLS));
         certPathParameters.addCertPathChecker(pkixRevocationChecker);
@@ -91,5 +93,13 @@ public class FidoMDS3MetadataBLOBProvider extends CachingMetadataBLOBProvider{
         } catch (CertPathValidatorException e) {
             throw new MDSException("invalid cert path", e);
         }
+    }
+
+    public boolean isRevocationCheckEnabled() {
+        return revocationCheckEnabled;
+    }
+
+    public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
+        this.revocationCheckEnabled = revocationCheckEnabled;
     }
 }
