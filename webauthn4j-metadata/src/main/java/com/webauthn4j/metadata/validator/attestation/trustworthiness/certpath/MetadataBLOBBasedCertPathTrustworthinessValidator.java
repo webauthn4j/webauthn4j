@@ -19,10 +19,12 @@ package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.data.AuthenticatorAttestationType;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
+import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.metadata.MetadataBLOBProvider;
 import com.webauthn4j.metadata.data.MetadataBLOBPayloadEntry;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.metadata.exception.BadStatusException;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -36,6 +38,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
+
+    private static final String SUBJECT_KEY_IDENTIFIER_OID = "2.5.29.14";
 
     private final List<MetadataBLOBProvider> metadataBLOBProviders;
 
@@ -52,8 +56,15 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
 
     @Override
     public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
-        Set<MetadataBLOBPayloadEntry> entries = resolveMetadataBLOBPayloadEntries(aaguid);
-
+        List<MetadataBLOBPayloadEntry> entries;
+        if(attestationStatement instanceof FIDOU2FAttestationStatement){
+            FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
+            byte[] subjectKeyIdentifier = fidou2fAttestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getExtensionValue(SUBJECT_KEY_IDENTIFIER_OID);
+            entries = findMetadataBLOBPayloadEntriesByAttestationCertificateKeyIdentifier(subjectKeyIdentifier);
+        }
+        else {
+            entries = findMetadataBLOBPayloadEntriesByAAGUID(aaguid);
+        }
         validateAttestationType(attestationStatement, entries);
 
         for (MetadataBLOBPayloadEntry entry : entries) {
@@ -63,12 +74,13 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         super.validate(aaguid, attestationStatement, timestamp);
     }
 
-    private void validateAttestationType(@NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Set<MetadataBLOBPayloadEntry> entries) {
+    private void validateAttestationType(@NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull List<MetadataBLOBPayloadEntry> entries) {
         List<AuthenticatorAttestationType> authenticatorAttestationTypes = entries.stream()
                 .map(MetadataBLOBPayloadEntry::getMetadataStatement)
                 .filter(Objects::nonNull)
                 .flatMap(item -> item.getAttestationTypes().stream())
                 .collect(Collectors.toList());
+
 
         boolean isSurrogate = !authenticatorAttestationTypes.isEmpty() &&
                 authenticatorAttestationTypes.stream().allMatch(type -> type.equals(AuthenticatorAttestationType.BASIC_SURROGATE));
@@ -82,7 +94,7 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
 
     @Override
     protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
-        return resolveMetadataBLOBPayloadEntries(aaguid).stream()
+        return findMetadataBLOBPayloadEntriesByAAGUID(aaguid).stream()
                 .map(MetadataBLOBPayloadEntry::getMetadataStatement)
                 .filter(Objects::nonNull)
                 .flatMap(item -> item.getAttestationRootCertificates().stream())
@@ -151,10 +163,18 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         });
     }
 
-    private @NonNull Set<MetadataBLOBPayloadEntry> resolveMetadataBLOBPayloadEntries(@NonNull AAGUID aaguid) {
+    private @NonNull List<MetadataBLOBPayloadEntry> findMetadataBLOBPayloadEntriesByAAGUID(@NonNull AAGUID aaguid) {
         return metadataBLOBProviders.stream()
                 .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
                 .filter(entry -> Objects.equals(entry.getAaguid(), aaguid))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
+    }
+
+    private @NonNull List<MetadataBLOBPayloadEntry> findMetadataBLOBPayloadEntriesByAttestationCertificateKeyIdentifier(@NonNull byte[] attestationCertificateKeyIdentifier) {
+        String hexString = HexUtil.encodeToString(attestationCertificateKeyIdentifier);
+        return metadataBLOBProviders.stream()
+                .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
+                .filter(entry -> entry.getAttestationCertificateKeyIdentifiers() != null && entry.getAttestationCertificateKeyIdentifiers().stream().anyMatch(hexString::equalsIgnoreCase))
+                .collect(Collectors.toList());
     }
 }
