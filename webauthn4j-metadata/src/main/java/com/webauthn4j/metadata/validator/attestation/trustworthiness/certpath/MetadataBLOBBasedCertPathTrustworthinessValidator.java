@@ -24,24 +24,30 @@ import com.webauthn4j.metadata.MetadataBLOBProvider;
 import com.webauthn4j.metadata.data.MetadataBLOBPayloadEntry;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.metadata.exception.BadStatusException;
+import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.HexUtil;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.security.cert.TrustAnchor;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.cert.*;
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
+public class MetadataBLOBBasedCertPathTrustworthinessValidator implements CertPathTrustworthinessValidator {
 
     private static final String SUBJECT_KEY_IDENTIFIER_OID = "2.5.29.14";
 
     private final List<MetadataBLOBProvider> metadataBLOBProviders;
+
+    private boolean fullChainProhibited = false;
+    private boolean revocationCheckEnabled = false;
+    private boolean policyQualifiersRejected = false;
 
     private boolean notFidoCertifiedAllowed = false;
     private boolean selfAssertionSubmittedAllowed = false;
@@ -56,6 +62,10 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
 
     @Override
     public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
+        AssertUtil.notNull(aaguid, "aaguid must not be null");
+        AssertUtil.notNull(aaguid, "attestationStatement must not be null");
+        AssertUtil.notNull(aaguid, "timestamp must not be null");
+
         List<MetadataBLOBPayloadEntry> entries;
         if(attestationStatement instanceof FIDOU2FAttestationStatement){
             FIDOU2FAttestationStatement fidou2fAttestationStatement = (FIDOU2FAttestationStatement) attestationStatement;
@@ -71,7 +81,38 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
             validateMetadataBLOBPayloadEntry(entry);
         }
 
-        super.validate(aaguid, attestationStatement, timestamp);
+        //noinspection ConstantConditions as null check is already done in caller
+        CertPath certPath = attestationStatement.getX5c().createCertPath();
+
+        Set<TrustAnchor> trustAnchors = entries.stream()
+                .map(MetadataBLOBPayloadEntry::getMetadataStatement)
+                .filter(Objects::nonNull)
+                .flatMap(item -> item.getAttestationRootCertificates().stream())
+                .map(item -> new TrustAnchor(item, null))
+                .collect(Collectors.toSet());
+
+        if (trustAnchors.isEmpty()) {
+            throw new TrustAnchorNotFoundException("TrustAnchors are not found for AAGUID: " + aaguid.toString());
+        }
+
+        CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();
+        PKIXParameters certPathParameters = CertificateUtil.createPKIXParameters(trustAnchors);
+        certPathParameters.setPolicyQualifiersRejected(policyQualifiersRejected);
+
+        certPathParameters.setRevocationEnabled(revocationCheckEnabled);
+        certPathParameters.setDate(Date.from(timestamp));
+
+        PKIXCertPathValidatorResult result;
+        try {
+            result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
+        } catch (InvalidAlgorithmParameterException e) {
+            throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
+        } catch (CertPathValidatorException e) {
+            throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
+        }
+        if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
+            throw new CertificateException("`certpath` must not contain full chain.");
+        }
     }
 
     private void validateAttestationType(@NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull List<MetadataBLOBPayloadEntry> entries) {
@@ -92,14 +133,28 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends CertPathT
         }
     }
 
-    @Override
-    protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
-        return findMetadataBLOBPayloadEntriesByAAGUID(aaguid).stream()
-                .map(MetadataBLOBPayloadEntry::getMetadataStatement)
-                .filter(Objects::nonNull)
-                .flatMap(item -> item.getAttestationRootCertificates().stream())
-                .map(item -> new TrustAnchor(item, null))
-                .collect(Collectors.toSet());
+    public boolean isFullChainProhibited() {
+        return fullChainProhibited;
+    }
+
+    public void setFullChainProhibited(boolean fullChainProhibited) {
+        this.fullChainProhibited = fullChainProhibited;
+    }
+
+    public boolean isRevocationCheckEnabled() {
+        return revocationCheckEnabled;
+    }
+
+    public void setRevocationCheckEnabled(boolean revocationCheckEnabled) {
+        this.revocationCheckEnabled = revocationCheckEnabled;
+    }
+
+    public boolean isPolicyQualifiersRejected() {
+        return policyQualifiersRejected;
+    }
+
+    public void setPolicyQualifiersRejected(boolean policyQualifiersRejected) {
+        this.policyQualifiersRejected = policyQualifiersRejected;
     }
 
     public boolean isNotFidoCertifiedAllowed() {
