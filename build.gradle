@@ -23,7 +23,7 @@ buildscript {
         httpBuilderVersion = "0.7.2"
 
         // Define implementation dependency versions independently
-        jacksonVersion = "2.13.0"
+        jacksonVersion = "2.13.1"
         kerbyVersion = "2.0.1"
         slf4jVersion = "1.7.32"
         bouncyCastleVersion = "1.70"
