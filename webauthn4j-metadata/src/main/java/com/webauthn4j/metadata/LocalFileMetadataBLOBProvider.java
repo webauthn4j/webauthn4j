@@ -32,12 +32,12 @@ import java.util.stream.Stream;
  */
 public class LocalFileMetadataBLOBProvider extends CachingMetadataBLOBProvider{
 
-    private final Path path;
     private final MetadataBLOBFactory metadataBLOBFactory;
+    private final Path path;
 
-    public LocalFileMetadataBLOBProvider(@NonNull Path path, @NonNull ObjectConverter objectConverter) {
-        this.path = path;
+    public LocalFileMetadataBLOBProvider(@NonNull ObjectConverter objectConverter, @NonNull Path path) {
         this.metadataBLOBFactory = new MetadataBLOBFactory(objectConverter);
+        this.path = path;
     }
 
     protected @NonNull MetadataBLOB doProvide(){
