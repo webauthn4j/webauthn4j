@@ -38,7 +38,7 @@ class LocalFileMetadataBLOBProviderTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider target = new LocalFileMetadataBLOBProvider(dstPath, new ObjectConverter());
+        LocalFileMetadataBLOBProvider target = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOB metadataBLOB = target.provide();
         assertThat(metadataBLOB).isNotNull();
     }

@@ -40,7 +40,7 @@ class MetadataBLOBBasedCertPathTrustworthinessValidatorTest {
         Path blobPath = new File("src/test/resources/integration/component/blob.jwt").toPath();
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
-        LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(dstPath, new ObjectConverter());
+        LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
         MetadataBLOBBasedCertPathTrustworthinessValidator target = new MetadataBLOBBasedCertPathTrustworthinessValidator(localFileMetadataBLOBProvider);
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();

@@ -16,30 +16,49 @@
 
 package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
 
+import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.MetadataStatementsProvider;
-import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidatorBase;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 
 import java.security.cert.TrustAnchor;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class MetadataStatementsBasedCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
-
-    private final MetadataStatementsProvider metadataStatementsProvider;
+public class MetadataStatementsBasedCertPathTrustworthinessValidator extends DefaultCertPathTrustworthinessValidator {
 
     public MetadataStatementsBasedCertPathTrustworthinessValidator(MetadataStatementsProvider metadataStatementsProvider){
-        this.metadataStatementsProvider = metadataStatementsProvider;
+        super(new MetadataStatementsBasedTrustAnchorRepository(metadataStatementsProvider));
     }
 
-    @Override
-    protected @NonNull Set<TrustAnchor> resolveTrustAnchors(@NonNull AAGUID aaguid) {
-        return metadataStatementsProvider.provide().stream()
-                .filter(item -> Objects.equals(aaguid, item.getAaguid()))
-                .flatMap(item -> item.getAttestationRootCertificates().stream())
-                .map(item -> new TrustAnchor(item, null))
-                .collect(Collectors.toSet());
+    private static class MetadataStatementsBasedTrustAnchorRepository implements TrustAnchorRepository {
+
+        private final MetadataStatementsProvider metadataStatementsProvider;
+
+        public MetadataStatementsBasedTrustAnchorRepository(MetadataStatementsProvider metadataStatementsProvider) {
+            this.metadataStatementsProvider = metadataStatementsProvider;
+        }
+
+        @Override
+        public Set<TrustAnchor> find(AAGUID aaguid) {
+            return metadataStatementsProvider.provide().stream()
+                    .filter(metadataStatement -> Objects.equals(aaguid, metadataStatement.getAaguid()))
+                    .flatMap(metadataStatement -> metadataStatement.getAttestationRootCertificates().stream())
+                    .map(item -> new TrustAnchor(item, null))
+                    .collect(Collectors.toSet());
+        }
+
+        @Override
+        public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
+            return metadataStatementsProvider.provide().stream()
+                    .flatMap(metadataStatement -> metadataStatement.getAttestationRootCertificates().stream())
+                    .filter(x5c -> Arrays.equals(CertificateUtil.extractSubjectKeyIdentifier(x5c), attestationCertificateKeyIdentifier))
+                    .map(x5c -> new TrustAnchor(x5c, null))
+                    .collect(Collectors.toSet());
+        }
     }
+
 }

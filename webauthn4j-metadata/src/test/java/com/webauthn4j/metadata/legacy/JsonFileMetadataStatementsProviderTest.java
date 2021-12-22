@@ -21,7 +21,6 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.converter.jackson.WebAuthnMetadataJSONModule;
-import com.webauthn4j.metadata.legacy.JsonFileMetadataStatementsProvider;
 import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.exception.UnknownProtocolFamilyException;
 import org.junit.jupiter.api.Test;
@@ -49,9 +48,9 @@ class JsonFileMetadataStatementsProviderTest {
     @Test
     void fetchMetadata() throws URISyntaxException {
         List<Path> paths = new ArrayList<>(4);
-        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_fido2.json").toURI()));
-        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toURI()));
-        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_uaf.json").toURI()));
+        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/legacy/JsonMetadataItem_fido2.json").toURI()));
+        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/legacy/JsonMetadataItem_u2f.json").toURI()));
+        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/legacy/JsonMetadataItem_uaf.json").toURI()));
         JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(objectConverter, paths);
         Map<AAGUID, Set<MetadataStatement>> itemMapInFirstCall = provider.provide();
         readMetadataItem(itemMapInFirstCall);
@@ -64,7 +63,7 @@ class JsonFileMetadataStatementsProviderTest {
     @Test
     void fetchMetadataFromUnknownProtocolFamilyMetadataStatementFile() throws URISyntaxException {
         List<Path> paths = new ArrayList<>(4);
-        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/JsonMetadataItem_unknown_protocol.json").toURI()));
+        paths.add(Paths.get(ClassLoader.getSystemResource("com/webauthn4j/metadata/legacy/JsonMetadataItem_unknown_protocol.json").toURI()));
         JsonFileMetadataStatementsProvider provider = new JsonFileMetadataStatementsProvider(objectConverter, paths);
         assertThrows(UnknownProtocolFamilyException.class, provider::provide);
     }

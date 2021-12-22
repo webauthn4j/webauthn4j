@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 public class CertificateUtil {
 
     private static final CertificateFactory certificateFactory;
+    private static final String SUBJECT_KEY_IDENTIFIER_OID = "2.5.29.14";
 
     static {
         try {
@@ -95,6 +96,10 @@ public class CertificateUtil {
         } catch (CertificateException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public static @NonNull byte[] extractSubjectKeyIdentifier(X509Certificate certificate){
+        return certificate.getExtensionValue(SUBJECT_KEY_IDENTIFIER_OID);
     }
 
 }
