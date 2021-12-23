@@ -53,7 +53,7 @@ class AuthenticationAlgorithmTest {
                 () -> assertThat(AuthenticationAlgorithm.create(0x000E)).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA512_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create(0x000F)).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create(0x0010)).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
-                () -> assertThat(AuthenticationAlgorithm.create(0x0011)).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
+                () -> assertThat(AuthenticationAlgorithm.create(0x0011)).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA256_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create(0x0012)).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW),
                 () -> assertThrows(IllegalArgumentException.class,
                         () -> AuthenticationAlgorithm.create(UnsignedNumberUtil.UNSIGNED_SHORT_MAX + 1)),
