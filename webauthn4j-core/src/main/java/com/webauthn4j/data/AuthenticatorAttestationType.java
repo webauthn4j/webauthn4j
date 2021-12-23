@@ -31,7 +31,9 @@ public enum AuthenticatorAttestationType {
     BASIC_FULL(0x3E07, "basic_full"),
     BASIC_SURROGATE(0x3E08, "basic_surrogate"),
     ECDAA(0x3E09, "ecdaa"),
-    ATTCA(0x3E0A, "attca");
+    ATTCA(0x3E0A, "attca"),
+    ANONCA(0xFFFF, "anonca"); //TODO: correct value
+
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
 
