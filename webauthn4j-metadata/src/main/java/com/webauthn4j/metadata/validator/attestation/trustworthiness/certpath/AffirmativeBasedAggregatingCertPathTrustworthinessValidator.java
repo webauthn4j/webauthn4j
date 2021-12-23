@@ -18,9 +18,9 @@ package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.metadata.exception.AggregatedBadAttestationStatementException;
+import com.webauthn4j.metadata.exception.AggregatedValidationException;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTrustworthinessValidator;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.time.Instant;
@@ -39,17 +39,17 @@ public class AffirmativeBasedAggregatingCertPathTrustworthinessValidator impleme
     @Override
     public void validate(@NonNull AAGUID aaguid, @NonNull CertificateBaseAttestationStatement attestationStatement, @NonNull Instant timestamp) {
 
-        List<BadAttestationStatementException> exceptions = new ArrayList<>();
+        List<ValidationException> exceptions = new ArrayList<>();
 
         for (CertPathTrustworthinessValidator certPathTrustworthinessValidator : certPathTrustworthinessValidators) {
             try{
                 certPathTrustworthinessValidator.validate(aaguid, attestationStatement, timestamp);
                 return;
             }
-            catch (BadAttestationStatementException e){
+            catch (ValidationException e){
                 exceptions.add(e);
             }
         }
-        throw new AggregatedBadAttestationStatementException("None certPathTrustworthinessValidators validated successfully.", exceptions);
+        throw new AggregatedValidationException("None certPathTrustworthinessValidators validated successfully.", exceptions);
     }
 }

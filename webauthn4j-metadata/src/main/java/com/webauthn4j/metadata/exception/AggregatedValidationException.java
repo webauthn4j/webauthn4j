@@ -18,21 +18,22 @@ package com.webauthn4j.metadata.exception;
 
 import com.webauthn4j.util.CollectionUtil;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
+import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
-public class AggregatedBadAttestationStatementException extends BadAttestationStatementException {
+public class AggregatedValidationException extends BadAttestationStatementException {
 
-    private final List<BadAttestationStatementException> badAttestationStatementExceptions;
+    private final List<ValidationException> badAttestationStatementExceptions;
 
 
-    public AggregatedBadAttestationStatementException(@Nullable String message, List<BadAttestationStatementException> badAttestationStatementExceptions) {
+    public AggregatedValidationException(@Nullable String message, List<ValidationException> badAttestationStatementExceptions) {
         super(message);
         this.badAttestationStatementExceptions = CollectionUtil.unmodifiableList(badAttestationStatementExceptions);
     }
 
-    public List<BadAttestationStatementException> getBadAttestationStatementExceptions() {
+    public List<ValidationException> getBadAttestationStatementExceptions() {
         return badAttestationStatementExceptions;
     }
 }
