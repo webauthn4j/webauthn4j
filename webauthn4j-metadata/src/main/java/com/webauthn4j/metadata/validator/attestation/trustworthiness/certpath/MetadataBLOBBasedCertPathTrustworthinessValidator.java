@@ -20,8 +20,10 @@ import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.MetadataBLOBProvider;
 import com.webauthn4j.metadata.data.MetadataBLOBPayloadEntry;
+import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -86,9 +88,16 @@ public class MetadataBLOBBasedCertPathTrustworthinessValidator extends DefaultCe
 
         @Override
         public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
+
             return metadataBLOBProviders.stream()
                     .flatMap(provider -> provider.provide().getPayload().getEntries().stream())
-                    .filter(entry -> entry.getMetadataStatement() != null)
+                    .filter(entry -> {
+                        MetadataStatement metadataStatement = entry.getMetadataStatement();
+                        if(metadataStatement == null || metadataStatement.getAttestationCertificateKeyIdentifiers() == null){
+                            return false;
+                        }
+                        return metadataStatement.getAttestationCertificateKeyIdentifiers().stream().anyMatch(identifier -> Arrays.equals(HexUtil.decode(identifier), attestationCertificateKeyIdentifier));
+                    })
                     .flatMap(entry -> entry.getMetadataStatement().getAttestationRootCertificates().stream())
                     .filter(x5c -> Arrays.equals(CertificateUtil.extractSubjectKeyIdentifier(x5c), attestationCertificateKeyIdentifier))
                     .map(x5c -> new TrustAnchor(x5c, null))

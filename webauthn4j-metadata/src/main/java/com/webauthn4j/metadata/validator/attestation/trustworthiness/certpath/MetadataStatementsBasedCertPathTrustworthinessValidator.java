@@ -19,7 +19,7 @@ package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
 import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.metadata.MetadataStatementsProvider;
-import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.DefaultCertPathTrustworthinessValidator;
 
 import java.security.cert.TrustAnchor;
@@ -34,7 +34,7 @@ public class MetadataStatementsBasedCertPathTrustworthinessValidator extends Def
         super(new MetadataStatementsBasedTrustAnchorRepository(metadataStatementsProvider));
     }
 
-    private static class MetadataStatementsBasedTrustAnchorRepository implements TrustAnchorRepository {
+    static class MetadataStatementsBasedTrustAnchorRepository implements TrustAnchorRepository {
 
         private final MetadataStatementsProvider metadataStatementsProvider;
 
@@ -54,9 +54,8 @@ public class MetadataStatementsBasedCertPathTrustworthinessValidator extends Def
         @Override
         public Set<TrustAnchor> find(byte[] attestationCertificateKeyIdentifier) {
             return metadataStatementsProvider.provide().stream()
-                    .flatMap(metadataStatement -> metadataStatement.getAttestationRootCertificates().stream())
-                    .filter(x5c -> Arrays.equals(CertificateUtil.extractSubjectKeyIdentifier(x5c), attestationCertificateKeyIdentifier))
-                    .map(x5c -> new TrustAnchor(x5c, null))
+                    .filter(metadataStatement -> metadataStatement.getAttestationCertificateKeyIdentifiers() != null && metadataStatement.getAttestationCertificateKeyIdentifiers().stream().anyMatch(identifier -> Arrays.equals(HexUtil.decode(identifier), attestationCertificateKeyIdentifier)))
+                    .map(metadataStatement -> new TrustAnchor(metadataStatement.getAttestationRootCertificates().get(0), null))
                     .collect(Collectors.toSet());
         }
     }
