@@ -45,7 +45,7 @@ public class LocalFilesMetadataStatementsProvider implements MetadataStatementsP
             try (InputStream inputStream = Files.newInputStream(path)) {
                 return objectConverter.getJsonConverter().readValue(inputStream, MetadataStatement.class);
             } catch (IOException e) {
-                throw new UncheckedIOException("Failed to load a MetadataBLOB file", e);
+                throw new UncheckedIOException("Failed to load a MetadataStatements file", e);
             }
         }).collect(Collectors.toList());
     }
