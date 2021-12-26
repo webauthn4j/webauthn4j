@@ -58,4 +58,14 @@ class TokenBindingValidatorTest {
         TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.SUPPORTED, bindingId);
         target.validate(tokenBinding, bindingId);
     }
+
+    @Test
+    void validate_TokenBindingStatus_unknown_value_test() {
+        byte[] bindingId = null;
+        TokenBinding tokenBinding = new TokenBinding(TokenBindingStatus.create("unknown"), bindingId);
+        assertThrows(TokenBindingException.class,
+                () -> target.validate(tokenBinding, bindingId)
+        );
+    }
+
 }
