@@ -37,6 +37,12 @@ public class TestAttestationStatementUtil {
         return createBasicPackedAttestationStatement(COSEAlgorithmIdentifier.ES256, signature);
     }
 
+    public static PackedAttestationStatement createBasicPackedAttestationStatement(AttestationCertificatePath certPath) {
+        COSEAlgorithmIdentifier algorithm = COSEAlgorithmIdentifier.ES256;
+        byte[] signature = new byte[32]; // dummy
+        return new PackedAttestationStatement(algorithm, signature, certPath);
+    }
+
     public static PackedAttestationStatement createBasicPackedAttestationStatement(COSEAlgorithmIdentifier algorithm, byte[] signature) {
         AttestationCertificatePath certPath = TestAttestationUtil.load3tierTestAttestationCertificatePath();
         return new PackedAttestationStatement(algorithm, signature, certPath);
