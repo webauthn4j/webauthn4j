@@ -24,6 +24,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class SimpleTrustAnchorsProvider implements TrustAnchorsProvider {
 
     private final Map<AAGUID, Set<TrustAnchor>> trustAnchors;

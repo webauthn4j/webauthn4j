@@ -33,6 +33,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class CertFileTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
     private static final String CERTIFICATES_MUST_NOT_BE_NULL = "challenge must not be null";

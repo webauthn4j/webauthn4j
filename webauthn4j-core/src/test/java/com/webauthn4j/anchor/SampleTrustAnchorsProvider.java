@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * NOT FOR PRODUCTION USE
  */
+@Deprecated
 public class SampleTrustAnchorsProvider extends CachingTrustAnchorsProviderBase {
 
     private final List<String> classPaths;

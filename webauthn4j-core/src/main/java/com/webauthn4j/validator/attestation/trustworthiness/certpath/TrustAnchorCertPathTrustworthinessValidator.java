@@ -27,7 +27,9 @@ import java.util.Set;
 
 /**
  * Validates the specified {@link AttestationStatement} x5c trustworthiness based on {@link TrustAnchor}
+ * @deprecated Use {@link DefaultCertPathTrustworthinessValidator} instead
  */
+@Deprecated
 public class TrustAnchorCertPathTrustworthinessValidator extends CertPathTrustworthinessValidatorBase {
 
     private final TrustAnchorsResolver trustAnchorsResolver;

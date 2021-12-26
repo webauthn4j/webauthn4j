@@ -28,7 +28,9 @@ import java.util.Set;
 
 /**
  * A {@link TrustAnchorsResolver} implementation that loads {@link TrustAnchor}s with {@link TrustAnchorsProvider}
+ * @deprecated
  */
+@Deprecated
 public class TrustAnchorsResolverImpl implements TrustAnchorsResolver {
 
     // ~ Instance fields
