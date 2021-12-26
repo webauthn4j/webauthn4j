@@ -45,8 +45,13 @@ class TokenBindingValidator {
             if (TokenBindingStatus.NOT_SUPPORTED.equals(tokenBindingStatus) || TokenBindingStatus.SUPPORTED.equals(tokenBindingStatus)) {
                 //nop
             }
-            else if (TokenBindingStatus.PRESENT.equals(tokenBindingStatus) && !MessageDigest.isEqual(clientDataTokenBindingId, serverTokenBindingId)) {
-                throw new TokenBindingException("TokenBinding id does not match");
+            else if (TokenBindingStatus.PRESENT.equals(tokenBindingStatus)) {
+                if(!MessageDigest.isEqual(clientDataTokenBindingId, serverTokenBindingId)){
+                    throw new TokenBindingException("TokenBinding id does not match");
+                }
+            }
+            else { //token binding status is unknown value
+                throw new TokenBindingException("Unknown TokenBindingStatus value");
             }
         }
     }
