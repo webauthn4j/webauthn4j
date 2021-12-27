@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
+package com.webauthn4j.metadata.anchor;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.metadata.LocalFilesMetadataStatementsProvider;
@@ -28,14 +28,13 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MetadataStatementsBasedCertPathTrustworthinessValidatorTest {
-
+class MetadataStatementsBasedTrustAnchorRepositoryTest {
 
     @Test
-    public void MetadataStatementsBasedTrustAnchorRepository_test(){
+    public void test(){
         Path jsonFilePath = new File("src/test/resources/com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toPath();
         LocalFilesMetadataStatementsProvider localFilesMetadataStatementsProvider = new LocalFilesMetadataStatementsProvider(new ObjectConverter(), jsonFilePath);
-        MetadataStatementsBasedCertPathTrustworthinessValidator.MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedCertPathTrustworthinessValidator.MetadataStatementsBasedTrustAnchorRepository(localFilesMetadataStatementsProvider);
+        MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(localFilesMetadataStatementsProvider);
         Set<TrustAnchor> trustAnchors = repository.find(HexUtil.decode("564df7c0f8c655b6a11f6c4d19f3bf41e2fd0179"));
         assertThat(trustAnchors).hasSize(1);
     }

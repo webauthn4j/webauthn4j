@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LocalFilesMetadataStatementsProvider implements MetadataStatementsProvider{
+public class LocalFilesMetadataStatementsProvider implements MetadataStatementsProvider {
 
     private final ObjectConverter objectConverter;
     private final Path[] paths;

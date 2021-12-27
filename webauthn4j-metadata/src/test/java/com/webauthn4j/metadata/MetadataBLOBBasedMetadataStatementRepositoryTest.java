@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata.validator.attestation.trustworthiness.certpath;
+package com.webauthn4j.metadata;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
-import com.webauthn4j.metadata.LocalFileMetadataBLOBProvider;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
@@ -29,8 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 
-class MetadataBLOBBasedCertPathTrustworthinessValidatorTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class MetadataBLOBBasedMetadataStatementRepositoryTest {
 
     @TempDir
     Path tempDir;
@@ -41,9 +42,10 @@ class MetadataBLOBBasedCertPathTrustworthinessValidatorTest {
         Path dstPath = tempDir.resolve("blob.jwt");
         Files.copy(blobPath, dstPath);
         LocalFileMetadataBLOBProvider localFileMetadataBLOBProvider = new LocalFileMetadataBLOBProvider(new ObjectConverter(), dstPath);
-        MetadataBLOBBasedCertPathTrustworthinessValidator target = new MetadataBLOBBasedCertPathTrustworthinessValidator(localFileMetadataBLOBProvider);
+        MetadataBLOBBasedMetadataStatementRepository target = new MetadataBLOBBasedMetadataStatementRepository(Collections.singletonList(localFileMetadataBLOBProvider));
         RegistrationObject registrationObject = TestDataUtil.createRegistrationObjectWithTPMAttestation();
         AAGUID aaguid = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getAaguid();
-        target.validate(aaguid, (CertificateBaseAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement());
+        assertThat(target.find(aaguid)).isNotEmpty();
     }
+
 }
