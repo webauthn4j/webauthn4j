@@ -44,7 +44,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
     public AuthenticatorImpl(
             @NonNull AttestedCredentialData attestedCredentialData,
-            @NonNull AttestationStatement attestationStatement,
+            @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable Set<AuthenticatorTransport> transports,
             @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
@@ -56,7 +56,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
     public AuthenticatorImpl(
             @NonNull AttestedCredentialData attestedCredentialData,
-            @NonNull AttestationStatement attestationStatement,
+            @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable Set<AuthenticatorTransport> transports) {
         this(attestedCredentialData, attestationStatement, counter, transports, new AuthenticationExtensionsClientOutputs<>(), new AuthenticationExtensionsAuthenticatorOutputs<>());
@@ -64,7 +64,7 @@ public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenti
 
     public AuthenticatorImpl(
             @NonNull AttestedCredentialData attestedCredentialData,
-            @NonNull AttestationStatement attestationStatement,
+            @Nullable AttestationStatement attestationStatement,
             long counter) {
         this(attestedCredentialData, attestationStatement, counter, Collections.emptySet());
     }
