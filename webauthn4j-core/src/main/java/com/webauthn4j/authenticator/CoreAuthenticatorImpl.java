@@ -47,7 +47,6 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
                                  @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
 
         AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
-        AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
 
         this.attestedCredentialData = attestedCredentialData;
         this.attestationStatement = attestationStatement;
@@ -60,7 +59,6 @@ public class CoreAuthenticatorImpl implements CoreAuthenticator {
         AssertUtil.notNull(coreRegistrationData.getAttestationObject(), "attestationObject must not be null");
         AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAuthenticatorData(), "authenticatorData must not be null");
         AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(), ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
-        AssertUtil.notNull(coreRegistrationData.getAttestationObject().getAttestationStatement(), "attestationStatement must not be null");
 
         return new CoreAuthenticatorImpl(
                 coreRegistrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),

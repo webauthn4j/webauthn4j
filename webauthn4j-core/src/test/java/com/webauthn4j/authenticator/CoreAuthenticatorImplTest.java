@@ -22,8 +22,16 @@ import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 class CoreAuthenticatorImplTest {
+
+    @Test
+    void constructor_attestationStatement_null_test(){
+        assertThatCode(()->{
+            new CoreAuthenticatorImpl(TestDataUtil.createAttestedCredentialData(), null, 0, null);
+        }).doesNotThrowAnyException();
+    }
 
     @Test
     void createFromRegistrationData_test() {
