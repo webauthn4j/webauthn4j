@@ -36,7 +36,7 @@ public abstract class CachingMetadataBLOBProvider implements MetadataBLOBProvide
         }
         LocalDate today = LocalDate.now();
         LocalDate nextUpdate = cachedMetadataBLOB.getPayload().getNextUpdate();
-        if((nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && cachedMetadataBLOBLastUpdate.isBefore(LocalDate.now())){
+        if((nextUpdate.isBefore(today) || nextUpdate.isEqual(today)) && cachedMetadataBLOBLastUpdate.isBefore(today)){
             refresh();
         }
 
