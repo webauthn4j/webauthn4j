@@ -17,10 +17,13 @@
 package com.webauthn4j.metadata.anchor;
 
 import com.webauthn4j.anchor.TrustAnchorRepository;
+import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
+import com.webauthn4j.metadata.LocalFilesMetadataStatementsProvider;
 import com.webauthn4j.metadata.MetadataStatementsProvider;
 import com.webauthn4j.util.HexUtil;
 
+import java.nio.file.Path;
 import java.security.cert.TrustAnchor;
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,6 +36,10 @@ public class MetadataStatementsBasedTrustAnchorRepository implements TrustAnchor
 
     public MetadataStatementsBasedTrustAnchorRepository(MetadataStatementsProvider metadataStatementsProvider) {
         this.metadataStatementsProvider = metadataStatementsProvider;
+    }
+
+    public MetadataStatementsBasedTrustAnchorRepository(ObjectConverter objectConverter, Path... paths) {
+        this(new LocalFilesMetadataStatementsProvider(objectConverter, paths));
     }
 
     @Override

@@ -35,6 +35,12 @@ public class VerificationMethodANDCombinations extends AbstractList<Verification
         this.descriptors = descriptors.toArray(new VerificationMethodDescriptor[this.size]);
     }
 
+    public VerificationMethodANDCombinations(VerificationMethodDescriptor... descriptors) {
+        AssertUtil.notNull(descriptors, "descriptors must not be null");
+        this.size = descriptors.length;
+        this.descriptors = descriptors;
+    }
+
     public VerificationMethodANDCombinations() {
         this(Collections.emptyList());
     }

@@ -36,7 +36,7 @@ public class VerificationMethodDescriptor implements Serializable {
     @Nullable
     @JsonSerialize(using = UserVerificationMethodToStringSerializer.class)
     @JsonDeserialize(using = UserVerificationMethodFromStringDeserializer.class)
-    private final UserVerificationMethod userVerification;
+    private final UserVerificationMethod userVerificationMethod;
     @Nullable
     private final CodeAccuracyDescriptor caDesc;
     @Nullable
@@ -46,19 +46,19 @@ public class VerificationMethodDescriptor implements Serializable {
 
     @JsonCreator
     public VerificationMethodDescriptor(
-            @JsonProperty("userVerification") @Nullable UserVerificationMethod userVerification,
+            @JsonProperty("userVerificationMethod") @Nullable UserVerificationMethod userVerificationMethod,
             @JsonProperty("caDesc") @Nullable CodeAccuracyDescriptor caDesc,
             @JsonProperty("baDesc") @Nullable BiometricAccuracyDescriptor baDesc,
             @JsonProperty("paDesc") @Nullable PatternAccuracyDescriptor paDesc) {
-        this.userVerification = userVerification;
+        this.userVerificationMethod = userVerificationMethod;
         this.caDesc = caDesc;
         this.baDesc = baDesc;
         this.paDesc = paDesc;
     }
 
     @Nullable
-    public UserVerificationMethod getUserVerification() {
-        return userVerification;
+    public UserVerificationMethod getUserVerificationMethod() {
+        return userVerificationMethod;
     }
 
     @Nullable
@@ -77,19 +77,15 @@ public class VerificationMethodDescriptor implements Serializable {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VerificationMethodDescriptor that = (VerificationMethodDescriptor) o;
-        return Objects.equals(userVerification, that.userVerification) &&
-                Objects.equals(caDesc, that.caDesc) &&
-                Objects.equals(baDesc, that.baDesc) &&
-                Objects.equals(paDesc, that.paDesc);
+        return userVerificationMethod == that.userVerificationMethod && Objects.equals(caDesc, that.caDesc) && Objects.equals(baDesc, that.baDesc) && Objects.equals(paDesc, that.paDesc);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(userVerification, caDesc, baDesc, paDesc);
+        return Objects.hash(userVerificationMethod, caDesc, baDesc, paDesc);
     }
 }

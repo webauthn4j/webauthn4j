@@ -45,17 +45,13 @@ public class MetadataStatement implements Serializable {
     @Nullable private final AlternativeDescriptions alternativeDescriptions;
     @NonNull private final Integer authenticatorVersion;
     @NonNull private final String protocolFamily;
+    @NonNull private final Integer schema;
     @NonNull private final List<Version> upv;
-    @NonNull private final String assertionScheme;
-    @NonNull private final AuthenticationAlgorithm authenticationAlgorithm;
 
     @NonNull
     @JsonSerialize(contentUsing = AuthenticationAlgorithmToStringSerializer.class)
     @JsonDeserialize(contentUsing = AuthenticationAlgorithmFromStringDeserializer.class)
     private final List<AuthenticationAlgorithm> authenticationAlgorithms;
-
-    @NonNull
-    private final PublicKeyRepresentationFormat publicKeyAlgAndEncoding;
 
     @NonNull
     @JsonSerialize(contentUsing = PublicKeyRepresentationFormatToStringSerializer.class)
@@ -129,11 +125,9 @@ public class MetadataStatement implements Serializable {
             @JsonProperty("alternativeDescriptions") @Nullable AlternativeDescriptions alternativeDescriptions,
             @JsonProperty("authenticatorVersion") @NonNull Integer authenticatorVersion,
             @JsonProperty("protocolFamily") @NonNull String protocolFamily,
+            @JsonProperty("schema") @NonNull Integer schema,
             @JsonProperty("upv") @NonNull List<Version> upv,
-            @JsonProperty("assertionScheme") @NonNull String assertionScheme,
-            @JsonProperty("authenticationAlgorithm") @NonNull AuthenticationAlgorithm authenticationAlgorithm,
             @JsonProperty("authenticationAlgorithms") @NonNull List<AuthenticationAlgorithm> authenticationAlgorithms,
-            @JsonProperty("publicKeyAlgAndEncoding") @NonNull PublicKeyRepresentationFormat publicKeyAlgAndEncoding,
             @JsonProperty("publicKeyAlgAndEncodings") @NonNull List<PublicKeyRepresentationFormat> publicKeyAlgAndEncodings,
             @JsonProperty("attestationTypes") @NonNull List<AuthenticatorAttestationType> attestationTypes,
             @JsonProperty("userVerificationDetails") @NonNull List<VerificationMethodANDCombinations> userVerificationDetails,
@@ -159,11 +153,9 @@ public class MetadataStatement implements Serializable {
         this.alternativeDescriptions = alternativeDescriptions;
         this.authenticatorVersion = authenticatorVersion;
         this.protocolFamily = protocolFamily;
+        this.schema = schema;
         this.upv = upv;
-        this.assertionScheme = assertionScheme;
-        this.authenticationAlgorithm = authenticationAlgorithm;
         this.authenticationAlgorithms = authenticationAlgorithms;
-        this.publicKeyAlgAndEncoding = publicKeyAlgAndEncoding;
         this.publicKeyAlgAndEncodings = publicKeyAlgAndEncodings;
         this.attestationTypes = attestationTypes;
         this.userVerificationDetails = userVerificationDetails;
@@ -224,28 +216,18 @@ public class MetadataStatement implements Serializable {
     }
 
     @NonNull
+    public Integer getSchema() {
+        return schema;
+    }
+
+    @NonNull
     public List<Version> getUpv() {
         return upv;
     }
 
     @NonNull
-    public String getAssertionScheme() {
-        return assertionScheme;
-    }
-
-    @NonNull
-    public AuthenticationAlgorithm getAuthenticationAlgorithm() {
-        return authenticationAlgorithm;
-    }
-
-    @NonNull
     public List<AuthenticationAlgorithm> getAuthenticationAlgorithms() {
         return authenticationAlgorithms;
-    }
-
-    @NonNull
-    public PublicKeyRepresentationFormat getPublicKeyAlgAndEncoding() {
-        return publicKeyAlgAndEncoding;
     }
 
     @NonNull
@@ -338,11 +320,11 @@ public class MetadataStatement implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MetadataStatement that = (MetadataStatement) o;
-        return Objects.equals(legalHeader, that.legalHeader) && Objects.equals(aaid, that.aaid) && Objects.equals(aaguid, that.aaguid) && Objects.equals(attestationCertificateKeyIdentifiers, that.attestationCertificateKeyIdentifiers) && description.equals(that.description) && Objects.equals(alternativeDescriptions, that.alternativeDescriptions) && authenticatorVersion.equals(that.authenticatorVersion) && protocolFamily.equals(that.protocolFamily) && upv.equals(that.upv) && assertionScheme.equals(that.assertionScheme) && authenticationAlgorithm == that.authenticationAlgorithm && authenticationAlgorithms.equals(that.authenticationAlgorithms) && publicKeyAlgAndEncoding == that.publicKeyAlgAndEncoding && publicKeyAlgAndEncodings.equals(that.publicKeyAlgAndEncodings) && attestationTypes.equals(that.attestationTypes) && userVerificationDetails.equals(that.userVerificationDetails) && keyProtection.equals(that.keyProtection) && Objects.equals(isKeyRestricted, that.isKeyRestricted) && Objects.equals(isFreshUserVerificationRequired, that.isFreshUserVerificationRequired) && matcherProtection.equals(that.matcherProtection) && Objects.equals(cryptoStrength, that.cryptoStrength) && Objects.equals(attachmentHint, that.attachmentHint) && tcDisplay.equals(that.tcDisplay) && Objects.equals(tcDisplayContentType, that.tcDisplayContentType) && Objects.equals(tcDisplayPNGCharacteristics, that.tcDisplayPNGCharacteristics) && attestationRootCertificates.equals(that.attestationRootCertificates) && Objects.equals(ecdaaTrustAnchors, that.ecdaaTrustAnchors) && Objects.equals(icon, that.icon) && Objects.equals(supportedExtensions, that.supportedExtensions) && Objects.equals(authenticatorGetInfo, that.authenticatorGetInfo);
+        return Objects.equals(legalHeader, that.legalHeader) && Objects.equals(aaid, that.aaid) && Objects.equals(aaguid, that.aaguid) && Objects.equals(attestationCertificateKeyIdentifiers, that.attestationCertificateKeyIdentifiers) && description.equals(that.description) && Objects.equals(alternativeDescriptions, that.alternativeDescriptions) && authenticatorVersion.equals(that.authenticatorVersion) && protocolFamily.equals(that.protocolFamily) && schema.equals(that.schema) && upv.equals(that.upv) && authenticationAlgorithms.equals(that.authenticationAlgorithms) && publicKeyAlgAndEncodings.equals(that.publicKeyAlgAndEncodings) && attestationTypes.equals(that.attestationTypes) && userVerificationDetails.equals(that.userVerificationDetails) && keyProtection.equals(that.keyProtection) && Objects.equals(isKeyRestricted, that.isKeyRestricted) && Objects.equals(isFreshUserVerificationRequired, that.isFreshUserVerificationRequired) && matcherProtection.equals(that.matcherProtection) && Objects.equals(cryptoStrength, that.cryptoStrength) && Objects.equals(attachmentHint, that.attachmentHint) && tcDisplay.equals(that.tcDisplay) && Objects.equals(tcDisplayContentType, that.tcDisplayContentType) && Objects.equals(tcDisplayPNGCharacteristics, that.tcDisplayPNGCharacteristics) && attestationRootCertificates.equals(that.attestationRootCertificates) && Objects.equals(ecdaaTrustAnchors, that.ecdaaTrustAnchors) && Objects.equals(icon, that.icon) && Objects.equals(supportedExtensions, that.supportedExtensions) && Objects.equals(authenticatorGetInfo, that.authenticatorGetInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(legalHeader, aaid, aaguid, attestationCertificateKeyIdentifiers, description, alternativeDescriptions, authenticatorVersion, protocolFamily, upv, assertionScheme, authenticationAlgorithm, authenticationAlgorithms, publicKeyAlgAndEncoding, publicKeyAlgAndEncodings, attestationTypes, userVerificationDetails, keyProtection, isKeyRestricted, isFreshUserVerificationRequired, matcherProtection, cryptoStrength, attachmentHint, tcDisplay, tcDisplayContentType, tcDisplayPNGCharacteristics, attestationRootCertificates, ecdaaTrustAnchors, icon, supportedExtensions, authenticatorGetInfo);
+        return Objects.hash(legalHeader, aaid, aaguid, attestationCertificateKeyIdentifiers, description, alternativeDescriptions, authenticatorVersion, protocolFamily, schema, upv, authenticationAlgorithms, publicKeyAlgAndEncodings, attestationTypes, userVerificationDetails, keyProtection, isKeyRestricted, isFreshUserVerificationRequired, matcherProtection, cryptoStrength, attachmentHint, tcDisplay, tcDisplayContentType, tcDisplayPNGCharacteristics, attestationRootCertificates, ecdaaTrustAnchors, icon, supportedExtensions, authenticatorGetInfo);
     }
 }

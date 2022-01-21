@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata.anchor;
 
 import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.metadata.LocalFilesMetadataStatementsProvider;
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.HexUtil;
 import org.junit.jupiter.api.Test;
 
@@ -31,11 +31,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MetadataStatementsBasedTrustAnchorRepositoryTest {
 
     @Test
-    public void test(){
+    public void find_by_attestationCertificateKeyIdentifier_test(){
         Path jsonFilePath = new File("src/test/resources/com/webauthn4j/metadata/JsonMetadataItem_u2f.json").toPath();
-        LocalFilesMetadataStatementsProvider localFilesMetadataStatementsProvider = new LocalFilesMetadataStatementsProvider(new ObjectConverter(), jsonFilePath);
-        MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(localFilesMetadataStatementsProvider);
-        Set<TrustAnchor> trustAnchors = repository.find(HexUtil.decode("564df7c0f8c655b6a11f6c4d19f3bf41e2fd0179"));
+        MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(new ObjectConverter(), jsonFilePath);
+        Set<TrustAnchor> trustAnchors = repository.find(HexUtil.decode("7c0903708b87115b0b422def3138c3c864e44573"));
+        assertThat(trustAnchors).hasSize(1);
+    }
+
+    @Test
+    public void find_by_aaguid_test(){
+        Path jsonFilePath = new File("src/test/resources/com/webauthn4j/metadata/JsonMetadataItem_fido2.json").toPath();
+        MetadataStatementsBasedTrustAnchorRepository repository = new MetadataStatementsBasedTrustAnchorRepository(new ObjectConverter(), jsonFilePath);
+        Set<TrustAnchor> trustAnchors = repository.find(new AAGUID("0132d110-bf4e-4208-a403-ab4f5f12efe5"));
         assertThat(trustAnchors).hasSize(1);
     }
 

@@ -67,19 +67,15 @@ public class CodeAccuracyDescriptor implements Serializable {
     }
 
     @Override
-    public boolean equals(@Nullable Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CodeAccuracyDescriptor that = (CodeAccuracyDescriptor) o;
-        return Objects.equals(base, that.base) &&
-                Objects.equals(minLength, that.minLength) &&
-                Objects.equals(maxRetries, that.maxRetries) &&
-                Objects.equals(blockSlowdown, that.blockSlowdown);
+        return base.equals(that.base) && minLength.equals(that.minLength) && Objects.equals(maxRetries, that.maxRetries) && Objects.equals(blockSlowdown, that.blockSlowdown);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(base, minLength, maxRetries, blockSlowdown);
     }
 }

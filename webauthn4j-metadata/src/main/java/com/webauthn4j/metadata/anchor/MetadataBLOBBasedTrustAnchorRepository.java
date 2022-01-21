@@ -30,7 +30,7 @@ public class MetadataBLOBBasedTrustAnchorRepository implements TrustAnchorReposi
 
     private final MetadataBLOBBasedMetadataStatementRepository metadataBLOBBasedMetadataStatementRepository;
 
-    public MetadataBLOBBasedTrustAnchorRepository(List<MetadataBLOBProvider> metadataBLOBProviders) {
+    public MetadataBLOBBasedTrustAnchorRepository(MetadataBLOBProvider... metadataBLOBProviders) {
         this.metadataBLOBBasedMetadataStatementRepository = new MetadataBLOBBasedMetadataStatementRepository(metadataBLOBProviders);
     }
 

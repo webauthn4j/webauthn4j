@@ -20,6 +20,7 @@ import com.webauthn4j.anchor.TrustAnchorRepository;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 
 import java.security.cert.TrustAnchor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class AggregatingTrustAnchorRepository implements TrustAnchorRepository {
 
     List<TrustAnchorRepository> repositories;
 
-    public AggregatingTrustAnchorRepository(List<TrustAnchorRepository> repositories) {
-        this.repositories = repositories;
+    public AggregatingTrustAnchorRepository(TrustAnchorRepository... repositories) {
+        this.repositories = Arrays.asList(repositories);
     }
 
     @Override

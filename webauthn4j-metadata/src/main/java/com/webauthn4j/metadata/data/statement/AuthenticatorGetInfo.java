@@ -27,21 +27,28 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+//TODO: support CTAP 2.1
 public class AuthenticatorGetInfo {
 
+    @JsonProperty("versions")
     @NonNull
     private final List<String> versions;
+    @JsonProperty("extensions")
     @Nullable
     private final List<String> extensions;
+    @JsonProperty("aaguid")
     @NonNull
     @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
     private final AAGUID aaguid;
+    @JsonProperty("options")
     @Nullable
     private final Options options;
+    @JsonProperty("maxMsgSize")
     @Nullable
     private final Integer maxMsgSize;
+    @JsonProperty("pinUvAuthProtocols")
     @Nullable
-    private final List<PinProtocolVersion> pinProtocols;
+    private final List<PinProtocolVersion> pinUvAuthProtocols;
 
     @JsonCreator
     public AuthenticatorGetInfo(
@@ -50,13 +57,13 @@ public class AuthenticatorGetInfo {
             @JsonProperty("aaguid") AAGUID aaguid,
             @JsonProperty("options") Options options,
             @JsonProperty("maxMsgSize") Integer maxMsgSize,
-            @JsonProperty("pinProtocols") List<PinProtocolVersion> pinProtocols) {
+            @JsonProperty("pinUvAuthProtocols") List<PinProtocolVersion> pinUvAuthProtocols) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
         this.options = options;
         this.maxMsgSize = maxMsgSize;
-        this.pinProtocols = pinProtocols;
+        this.pinUvAuthProtocols = pinUvAuthProtocols;
     }
 
     public List<String> getVersions() {
@@ -79,8 +86,8 @@ public class AuthenticatorGetInfo {
         return maxMsgSize;
     }
 
-    public List<PinProtocolVersion> getPinProtocols() {
-        return pinProtocols;
+    public List<PinProtocolVersion> getPinUvAuthProtocols() {
+        return pinUvAuthProtocols;
     }
 
     @Override
@@ -88,12 +95,12 @@ public class AuthenticatorGetInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthenticatorGetInfo that = (AuthenticatorGetInfo) o;
-        return versions.equals(that.versions) && Objects.equals(extensions, that.extensions) && aaguid.equals(that.aaguid) && Objects.equals(options, that.options) && Objects.equals(maxMsgSize, that.maxMsgSize) && Objects.equals(pinProtocols, that.pinProtocols);
+        return versions.equals(that.versions) && Objects.equals(extensions, that.extensions) && aaguid.equals(that.aaguid) && Objects.equals(options, that.options) && Objects.equals(maxMsgSize, that.maxMsgSize) && Objects.equals(pinUvAuthProtocols, that.pinUvAuthProtocols);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(versions, extensions, aaguid, options, maxMsgSize, pinProtocols);
+        return Objects.hash(versions, extensions, aaguid, options, maxMsgSize, pinUvAuthProtocols);
     }
 
     public static class Options {
@@ -102,25 +109,34 @@ public class AuthenticatorGetInfo {
         private final PlatformOption plat;
         @JsonProperty("rk")
         private final ResidentKeyOption rk;
-        @JsonProperty("clientPIN")
+        @JsonProperty("clientPin")
         private final ClientPINOption clientPIN;
         @JsonProperty("up")
         private final UserPresenceOption up;
         @JsonProperty("uv")
         private final UserVerificationOption uv;
+        @JsonProperty("uvToken")
+        private final UVTokenOption uvToken;
+        @JsonProperty("config")
+        private final ConfigOption config;
 
         @JsonCreator
         public Options(
                 @JsonProperty("plat") PlatformOption plat,
                 @JsonProperty("rk") ResidentKeyOption rk,
-                @JsonProperty("clientPIN") ClientPINOption clientPIN,
+                @JsonProperty("clientPin") ClientPINOption clientPIN,
                 @JsonProperty("up") UserPresenceOption up,
-                @JsonProperty("uv") UserVerificationOption uv) {
+                @JsonProperty("uv") UserVerificationOption uv,
+                @JsonProperty("uvToken") UVTokenOption uvToken,
+                @JsonProperty("config") ConfigOption config
+        ) {
             this.plat = plat;
             this.rk = rk;
             this.clientPIN = clientPIN;
             this.up = up;
             this.uv = uv;
+            this.uvToken = uvToken;
+            this.config = config;
         }
 
         public PlatformOption getPlat() {
@@ -143,20 +159,28 @@ public class AuthenticatorGetInfo {
             return uv;
         }
 
+        public UVTokenOption getUvToken() {
+            return uvToken;
+        }
+
+        public ConfigOption getConfig() {
+            return config;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Options options = (Options) o;
-            return Objects.equals(plat, options.plat) && Objects.equals(rk, options.rk) && Objects.equals(clientPIN, options.clientPIN) && Objects.equals(up, options.up) && Objects.equals(uv, options.uv);
+            return Objects.equals(plat, options.plat) && Objects.equals(rk, options.rk) && Objects.equals(clientPIN, options.clientPIN) && Objects.equals(up, options.up) && Objects.equals(uv, options.uv) && Objects.equals(uvToken, options.uvToken) && Objects.equals(config, options.config);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(plat, rk, clientPIN, up, uv);
+            return Objects.hash(plat, rk, clientPIN, up, uv, uvToken, config);
         }
 
-        private static class PlatformOption {
+        public static class PlatformOption {
 
             public static final PlatformOption PLATFORM = new PlatformOption(true);
             public static final PlatformOption CROSS_PLATFORM = new PlatformOption(false);
@@ -187,7 +211,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
-        private static class ResidentKeyOption {
+        public static class ResidentKeyOption {
 
             public static final ResidentKeyOption SUPPORTED = new ResidentKeyOption(true);
             public static final ResidentKeyOption NOT_SUPPORTED = new ResidentKeyOption(false);
@@ -218,7 +242,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
-        private static class ClientPINOption {
+        public static class ClientPINOption {
 
             public static final ClientPINOption SET = new ClientPINOption(true);
             public static final ClientPINOption NOT_SET = new ClientPINOption(false);
@@ -249,7 +273,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
-        private static class UserPresenceOption {
+        public static class UserPresenceOption {
 
             public static final UserPresenceOption SUPPORTED = new UserPresenceOption(true);
             public static final UserPresenceOption NOT_SUPPORTED = new UserPresenceOption(false);
@@ -280,7 +304,7 @@ public class AuthenticatorGetInfo {
             }
         }
 
-        private static class UserVerificationOption {
+        public static class UserVerificationOption {
 
             public static final UserVerificationOption READY = new UserVerificationOption(true);
             public static final UserVerificationOption NOT_READY = new UserVerificationOption(false);
@@ -310,8 +334,69 @@ public class AuthenticatorGetInfo {
                 return Objects.hash(value);
             }
         }
-    }
 
+        public static class UVTokenOption {
+
+            public static final UVTokenOption SUPPORTED = new UVTokenOption(true);
+            public static final UVTokenOption NOT_SUPPORTED = new UVTokenOption(false);
+            public static final UVTokenOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public UVTokenOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UVTokenOption that = (UVTokenOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+
+        public static class ConfigOption {
+
+            public static final ConfigOption SUPPORTED = new ConfigOption(true);
+            public static final ConfigOption NOT_SUPPORTED = new ConfigOption(false);
+            public static final ConfigOption NULL = null;
+
+            private final boolean value;
+
+            @JsonCreator
+            public ConfigOption(boolean value){
+                this.value = value;
+            }
+
+            public boolean getValue() {
+                return value;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                ConfigOption that = (ConfigOption) o;
+                return value == that.value;
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(value);
+            }
+        }
+    }
 
     public static class PinProtocolVersion {
 

@@ -14,27 +14,25 @@
  * limitations under the License.
  */
 
-package com.webauthn4j.metadata;
+package com.webauthn4j.metadata.data.statement;
 
-import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.util.HexUtil;
-import com.webauthn4j.validator.RegistrationObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MetadataBLOBBasedMetadataStatementRepositoryTest {
+class VersionTest {
 
+    @Test
+    void constructor_test(){
+        Version version = new Version(1, 0);
+        assertThat(version.getMajor()).isEqualTo(1);
+        assertThat(version.getMinor()).isEqualTo(0);
+    }
+
+    @Test
+    void equals_hashCode_test(){
+        assertThat(new Version(1, 0)).isEqualTo(new Version(1, 0));
+        assertThat(new Version(1, 0)).hasSameHashCodeAs(new Version(1, 0));
+    }
 
 }

@@ -37,8 +37,8 @@ public class MetadataBLOBBasedMetadataStatementRepository implements MetadataSta
     private boolean notFidoCertifiedAllowed = false;
     private boolean selfAssertionSubmittedAllowed = false;
 
-    public MetadataBLOBBasedMetadataStatementRepository(List<MetadataBLOBProvider> metadataBLOBProviders) {
-        this.metadataBLOBProviders = metadataBLOBProviders;
+    public MetadataBLOBBasedMetadataStatementRepository(MetadataBLOBProvider... metadataBLOBProviders) {
+        this.metadataBLOBProviders = Arrays.asList(metadataBLOBProviders);
     }
 
     @Override
