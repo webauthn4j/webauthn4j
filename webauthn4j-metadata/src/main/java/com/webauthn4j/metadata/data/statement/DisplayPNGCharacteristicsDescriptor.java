@@ -19,6 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.CollectionUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -30,25 +32,25 @@ import java.util.Objects;
  */
 public class DisplayPNGCharacteristicsDescriptor implements Serializable {
 
-    private final BigInteger width;
-    private final BigInteger height;
-    private final Short bitDepth;
-    private final Short colorType;
-    private final Short compression;
-    private final Short filter;
-    private final Short interlace;
-    private final List<RGBPaletteEntry> plte;
+    @NonNull private final BigInteger width;
+    @NonNull private final BigInteger height;
+    @NonNull private final Short bitDepth;
+    @NonNull private final Short colorType;
+    @NonNull private final Short compression;
+    @NonNull private final Short filter;
+    @NonNull private final Short interlace;
+    @Nullable private final List<RGBPaletteEntry> plte;
 
     @JsonCreator
     public DisplayPNGCharacteristicsDescriptor(
-            @JsonProperty("width") BigInteger width,
-            @JsonProperty("height") BigInteger height,
-            @JsonProperty("bitDepth") Short bitDepth,
-            @JsonProperty("colorType") Short colorType,
-            @JsonProperty("compression") Short compression,
-            @JsonProperty("filter") Short filter,
-            @JsonProperty("interlace") Short interlace,
-            @JsonProperty("plte") List<RGBPaletteEntry> plte) {
+            @JsonProperty("width") @NonNull BigInteger width,
+            @JsonProperty("height") @NonNull BigInteger height,
+            @JsonProperty("bitDepth") @NonNull Short bitDepth,
+            @JsonProperty("colorType") @NonNull Short colorType,
+            @JsonProperty("compression") @NonNull Short compression,
+            @JsonProperty("filter") @NonNull Short filter,
+            @JsonProperty("interlace") @NonNull Short interlace,
+            @JsonProperty("plte") @Nullable List<RGBPaletteEntry> plte) {
         this.width = width;
         this.height = height;
         this.bitDepth = bitDepth;
@@ -59,35 +61,35 @@ public class DisplayPNGCharacteristicsDescriptor implements Serializable {
         this.plte = CollectionUtil.unmodifiableList(plte);
     }
 
-    public BigInteger getWidth() {
+    @NonNull public BigInteger getWidth() {
         return width;
     }
 
-    public BigInteger getHeight() {
+    @NonNull public BigInteger getHeight() {
         return height;
     }
 
-    public Short getBitDepth() {
+    @NonNull public Short getBitDepth() {
         return bitDepth;
     }
 
-    public Short getColorType() {
+    @NonNull public Short getColorType() {
         return colorType;
     }
 
-    public Short getCompression() {
+    @NonNull public Short getCompression() {
         return compression;
     }
 
-    public Short getFilter() {
+    @NonNull public Short getFilter() {
         return filter;
     }
 
-    public Short getInterlace() {
+    @NonNull public Short getInterlace() {
         return interlace;
     }
 
-    public List<RGBPaletteEntry> getPlte() {
+    @Nullable public List<RGBPaletteEntry> getPlte() {
         return plte;
     }
 

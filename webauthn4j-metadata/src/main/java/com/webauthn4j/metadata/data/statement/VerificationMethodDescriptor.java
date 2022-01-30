@@ -18,7 +18,12 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.data.UserVerificationMethod;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,35 +33,45 @@ import java.util.Objects;
  */
 public class VerificationMethodDescriptor implements Serializable {
 
-    private final UserVerificationMethod userVerification;
+    @Nullable
+    @JsonSerialize(using = UserVerificationMethodToStringSerializer.class)
+    @JsonDeserialize(using = UserVerificationMethodFromStringDeserializer.class)
+    private final UserVerificationMethod userVerificationMethod;
+    @Nullable
     private final CodeAccuracyDescriptor caDesc;
+    @Nullable
     private final BiometricAccuracyDescriptor baDesc;
+    @Nullable
     private final PatternAccuracyDescriptor paDesc;
 
     @JsonCreator
     public VerificationMethodDescriptor(
-            @JsonProperty("userVerification") UserVerificationMethod userVerification,
-            @JsonProperty("caDesc") CodeAccuracyDescriptor caDesc,
-            @JsonProperty("baDesc") BiometricAccuracyDescriptor baDesc,
-            @JsonProperty("paDesc") PatternAccuracyDescriptor paDesc) {
-        this.userVerification = userVerification;
+            @JsonProperty("userVerificationMethod") @Nullable UserVerificationMethod userVerificationMethod,
+            @JsonProperty("caDesc") @Nullable CodeAccuracyDescriptor caDesc,
+            @JsonProperty("baDesc") @Nullable BiometricAccuracyDescriptor baDesc,
+            @JsonProperty("paDesc") @Nullable PatternAccuracyDescriptor paDesc) {
+        this.userVerificationMethod = userVerificationMethod;
         this.caDesc = caDesc;
         this.baDesc = baDesc;
         this.paDesc = paDesc;
     }
 
-    public UserVerificationMethod getUserVerification() {
-        return userVerification;
+    @Nullable
+    public UserVerificationMethod getUserVerificationMethod() {
+        return userVerificationMethod;
     }
 
+    @Nullable
     public CodeAccuracyDescriptor getCaDesc() {
         return caDesc;
     }
 
+    @Nullable
     public BiometricAccuracyDescriptor getBaDesc() {
         return baDesc;
     }
 
+    @Nullable
     public PatternAccuracyDescriptor getPaDesc() {
         return paDesc;
     }
@@ -66,15 +81,11 @@ public class VerificationMethodDescriptor implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         VerificationMethodDescriptor that = (VerificationMethodDescriptor) o;
-        return Objects.equals(userVerification, that.userVerification) &&
-                Objects.equals(caDesc, that.caDesc) &&
-                Objects.equals(baDesc, that.baDesc) &&
-                Objects.equals(paDesc, that.paDesc);
+        return userVerificationMethod == that.userVerificationMethod && Objects.equals(caDesc, that.caDesc) && Objects.equals(baDesc, that.baDesc) && Objects.equals(paDesc, that.paDesc);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(userVerification, caDesc, baDesc, paDesc);
+        return Objects.hash(userVerificationMethod, caDesc, baDesc, paDesc);
     }
 }

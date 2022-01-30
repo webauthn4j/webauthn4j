@@ -41,11 +41,13 @@ import com.webauthn4j.data.extension.authenticator.ExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import com.webauthn4j.metadata.data.MetadataItem;
-import com.webauthn4j.metadata.data.MetadataItemImpl;
-import com.webauthn4j.metadata.data.statement.*;
+import com.webauthn4j.metadata.data.statement.AlternativeDescriptions;
+import com.webauthn4j.metadata.data.statement.Version;
 import com.webauthn4j.metadata.data.toc.AuthenticatorStatus;
 import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.metadata.legacy.data.MetadataItem;
+import com.webauthn4j.metadata.legacy.data.MetadataItemImpl;
+import com.webauthn4j.metadata.legacy.data.statement.*;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.test.authenticator.webauthn.exception.WebAuthnModelException;
 import com.webauthn4j.util.*;
@@ -445,13 +447,13 @@ public class TestDataUtil {
                 new AAGUID("00471bc1-9ad3-4d4a-afb1-08d96c1b8f48"),
                 null,
                 null,
-                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null)),
+                Collections.singletonList(new StatusReport(AuthenticatorStatus.FIDO_CERTIFIED, null, null, null, null, null, null, null)),
                 null,
-                createMetadataStatement()
+                createLegacyMetadataStatement()
         );
     }
 
-    public static MetadataStatement createMetadataStatement() {
+    public static MetadataStatement createLegacyMetadataStatement() {
         return new MetadataStatement(
                 null,
                 null,

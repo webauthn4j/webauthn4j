@@ -25,7 +25,9 @@ import java.util.Set;
 
 /**
  * An abstract {@link TrustAnchorsProvider} implementation that provides caching functionality
+ * @deprecated
  */
+@Deprecated
 public abstract class CachingTrustAnchorsProviderBase implements TrustAnchorsProvider {
 
     // ~ Instance fields

@@ -18,6 +18,7 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,19 +29,19 @@ import java.util.Objects;
 @SuppressWarnings("squid:S00116")
 public class BiometricAccuracyDescriptor implements Serializable {
 
-    private final double selfAttestedFAR;
-    private final double selfAttestedFRR;
-    private final Integer maxTemplate;
-    private final Integer maxRetries;
-    private final Integer blockSlowdown;
+    @Nullable private final Double selfAttestedFAR;
+    @Nullable private final Double selfAttestedFRR;
+    @Nullable private final Integer maxTemplate;
+    @Nullable private final Integer maxRetries;
+    @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public BiometricAccuracyDescriptor(
-            @JsonProperty("selfAttestedFAR") double selfAttestedFAR,
-            @JsonProperty("selfAttestedFRR") double selfAttestedFRR,
-            @JsonProperty("maxTemplate") Integer maxTemplate,
-            @JsonProperty("maxRetries") Integer maxRetries,
-            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+            @JsonProperty("selfAttestedFAR") @Nullable Double selfAttestedFAR,
+            @JsonProperty("selfAttestedFRR") @Nullable Double selfAttestedFRR,
+            @JsonProperty("maxTemplate") @Nullable Integer maxTemplate,
+            @JsonProperty("maxRetries") @Nullable Integer maxRetries,
+            @JsonProperty("blockSlowdown") @Nullable Integer blockSlowdown) {
         this.selfAttestedFAR = selfAttestedFAR;
         this.selfAttestedFRR = selfAttestedFRR;
         this.maxTemplate = maxTemplate;
@@ -48,41 +49,41 @@ public class BiometricAccuracyDescriptor implements Serializable {
         this.blockSlowdown = blockSlowdown;
     }
 
-    public double getSelfAttestedFAR() {
+    @Nullable
+    public Double getSelfAttestedFAR() {
         return selfAttestedFAR;
     }
 
-    public double getSelfAttestedFRR() {
+    @Nullable
+    public Double getSelfAttestedFRR() {
         return selfAttestedFRR;
     }
 
+    @Nullable
     public Integer getMaxTemplate() {
         return maxTemplate;
     }
 
+    @Nullable
     public Integer getMaxRetries() {
         return maxRetries;
     }
 
+    @Nullable
     public Integer getBlockSlowdown() {
         return blockSlowdown;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BiometricAccuracyDescriptor that = (BiometricAccuracyDescriptor) o;
-        return Double.compare(that.selfAttestedFAR, selfAttestedFAR) == 0 &&
-                Double.compare(that.selfAttestedFRR, selfAttestedFRR) == 0 &&
-                Objects.equals(maxTemplate, that.maxTemplate) &&
-                Objects.equals(maxRetries, that.maxRetries) &&
-                Objects.equals(blockSlowdown, that.blockSlowdown);
+        return Objects.equals(selfAttestedFAR, that.selfAttestedFAR) && Objects.equals(selfAttestedFRR, that.selfAttestedFRR) && Objects.equals(maxTemplate, that.maxTemplate) && Objects.equals(maxRetries, that.maxRetries) && Objects.equals(blockSlowdown, that.blockSlowdown);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(selfAttestedFAR, selfAttestedFRR, maxTemplate, maxRetries, blockSlowdown);
     }
 }

@@ -20,35 +20,26 @@ For example, if you would like to limit the supported format to `packed` only, a
 
 ==== Attestation statement trustworthiness validation
 
-Attestation statement trustworthiness validation has three patterns: certificate path validation, ecdaa validation, and self attestation.
-Certificate path validation is delegated via `CertPathTrustworthinessValidator` interface, and ECDAA is delegated via
-`ECDAATrustworthinessValidator` interface.
-WebAuthn4J provides some `CertPathTrustworthinessValidator` implementations.
-For example, `TrustAnchorCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate chains to the root certificate provided as `TrustAnchor` via `TrustAnchorResolver` interface.
+Attestation statement trustworthiness validation has two patterns: certificate path validation, and self attestation.
+Certificate path validation is delegated via `CertPathTrustworthinessValidator` interface.
+WebAuthn4J provides `DefaultCertPathTrustworthinessValidator` as `CertPathTrustworthinessValidator` implementation.
+`DefaultCertPathTrustworthinessValidator` verifies trustworthiness by checking the attestation certificate chains to the root certificate provided as `TrustAnchor` via `TrustAnchorRepository` interface.
 
 ==== Trust anchor resolution
 
-`TrustAnchorResolver` interface is provided for `TrustAnchor` resolution.
-WebAuthn4J provides a `TrustAnchorResolver` implementation `TrustAnchorResolverImpl`.
-`TrustAnchorResolverImpl` delegates `TrustAnchor` fetching to `TrustAnchorsProvider` interface.
-There are some `TrustAnchorsProvider` implementations - `KeyStoreTrustAnchorsProvider` is to fetch `TrustAnchor`s from
-Java Key Store file, and `MetadataStatementsTrustAnchorsProvider` is to fetch them from
-https://fidoalliance.org/specs/fido-v2.0-rd-20180702/fido-metadata-statement-v2.0-rd-20180702.html[metadata statement].
+`TrustAnchorRepository` is an interface that resolves `TrustAnchor` from `AAGUID` or `attestationCertificateKeyIdentifier`.
+`webauthn4j-core` module provides a `KeyStoreTrustAnchorRepository` as a `TrustAnchorRepository`.
+`KeyStoreTrustAnchorRepository` fetches `TrustAnchor` from a Java Key Store. Please note that
+`KeyStoreTrustAnchorRepository` does not return a different `TrustAnchor` depending on `AAGUID` or `attestationCertificateKeyIdentifier`.
+All certificates registered in the Java Key Store file are treated as trust anchors.
 
 ===== Trust anchor resolution using FIDO Metadata Service
 
-WARNING: `webauthn4j-meta` module, which provides FIDO Metadata Statement handling is under experimental status.
+WARNING: `webauthn4j-meta` module, which provides FIDO Metadata Statement handling, is under experimental status.
 
 FIDO Alliance offers FIDO Metadata Service, which provides metadata of authenticators.
-`FidoMdsMetadataItemsProvider` is provided for utilizing the authenticator metadata from the service.
-It can be used for `TrustAnchor` resolution by combining with `MetadataItemsMetadataStatementsProvider`.
-
-===== Authenticator vulnerability announcement check using FIDO Metadata Service
-
-Authenticator vulnerability announcement check is also possible with FIDO Metadata Service by utilizing
-`FidoMdsMetadataValidator`.
-As it is an implementation of `CustomRegistrationValidator`, please refer
-<<_./deep-dive.adoc#Custom validator registration,Custom validator registration>>.
+`webauthn4j-metadata` module provides a `MetadataBLOBBasedTrustAnchorRepository` as a `TrustAnchorRepository` implementation.
+`MetadataBLOBBasedTrustAnchorRepository` can provide trust anchors based on the information published by FIDO Metadata Service when it is used in combination with `FidoMDS3MetadataBLOBProvider`.
 
 === What WebAuthn4J doesn't offer
 

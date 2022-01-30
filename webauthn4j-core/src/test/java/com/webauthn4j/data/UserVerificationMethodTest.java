@@ -16,9 +16,14 @@
 
 package com.webauthn4j.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
+import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,33 +61,88 @@ class UserVerificationMethodTest {
     }
 
     @Test
-    void deserialize_test() {
-        UserVerificationMethodTest.TestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\": 16}", UserVerificationMethodTest.TestDTO.class);
-        assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FACEPRINT_INTERNAL);
+    void toString_test() {
+        assertThat(UserVerificationMethod.FINGERPRINT_INTERNAL).hasToString("fingerprint_internal");
     }
 
-    @Test
-    void deserialize_test_with_out_of_range_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"userVerificationMethod\": \"-1\"}", UserVerificationMethodTest.TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
+    @Nested
+    class IntSerialization {
+
+        @Test
+        void serialize_test(){
+            UserVerificationMethodTest.IntSerializationTestDTO dto = new UserVerificationMethodTest.IntSerializationTestDTO();
+            dto.userVerificationMethod = UserVerificationMethod.FINGERPRINT_INTERNAL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"userVerificationMethod\":2}");
+        }
+
+        @Test
+        void deserialize_test() {
+            UserVerificationMethodTest.IntSerializationTestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\":2}", UserVerificationMethodTest.IntSerializationTestDTO.class);
+            assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
+        }
+
+        @Test
+        void deserialize_test_with_out_of_range_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"-1\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.IntSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            UserVerificationMethodTest.IntSerializationTestDTO data = jsonConverter.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.IntSerializationTestDTO.class);
+            assertThat(data.userVerificationMethod).isNull();
+        }
     }
 
-    @Test
-    void deserialize_test_with_invalid_value() {
-        assertThatThrownBy(
-                () -> jsonConverter.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.TestDTO.class)
-        ).isInstanceOf(DataConversionException.class);
-    }
-
-    @Test
-    void deserialize_test_with_null() {
-        UserVerificationMethodTest.TestDTO data = jsonConverter.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.TestDTO.class);
-        assertThat(data.userVerificationMethod).isNull();
-    }
-
-    static class TestDTO {
+    static class IntSerializationTestDTO {
         @SuppressWarnings("WeakerAccess")
+        public UserVerificationMethod userVerificationMethod;
+    }
+
+    @Nested
+    class StringSerialization {
+
+        @Test
+        void serialize_test(){
+            UserVerificationMethodTest.StringSerializationTestDTO dto = new UserVerificationMethodTest.StringSerializationTestDTO();
+            dto.userVerificationMethod = UserVerificationMethod.FINGERPRINT_INTERNAL;
+            String string = jsonConverter.writeValueAsString(dto);
+            assertThat(string).isEqualTo("{\"userVerificationMethod\":\"fingerprint_internal\"}");
+        }
+
+        @Test
+        void deserialize_test() {
+            UserVerificationMethodTest.StringSerializationTestDTO dto = jsonConverter.readValue("{\"userVerificationMethod\":\"fingerprint_internal\"}", UserVerificationMethodTest.StringSerializationTestDTO.class);
+            assertThat(dto.userVerificationMethod).isEqualTo(UserVerificationMethod.FINGERPRINT_INTERNAL);
+        }
+
+        @Test
+        void deserialize_test_with_invalid_value() {
+            assertThatThrownBy(
+                    () -> jsonConverter.readValue("{\"userVerificationMethod\": \"\"}", UserVerificationMethodTest.StringSerializationTestDTO.class)
+            ).isInstanceOf(DataConversionException.class);
+        }
+
+        @Test
+        void deserialize_test_with_null() {
+            UserVerificationMethodTest.StringSerializationTestDTO data = jsonConverter.readValue("{\"userVerificationMethod\":null}", UserVerificationMethodTest.StringSerializationTestDTO.class);
+            assertThat(data.userVerificationMethod).isNull();
+        }
+    }
+
+    static class StringSerializationTestDTO {
+        @SuppressWarnings("WeakerAccess")
+        @JsonSerialize(using = UserVerificationMethodToStringSerializer.class)
+        @JsonDeserialize(using = UserVerificationMethodFromStringDeserializer.class)
         public UserVerificationMethod userVerificationMethod;
     }
 

@@ -19,6 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -28,45 +30,49 @@ import java.util.Objects;
  */
 public class ExtensionDescriptor implements Serializable {
 
-    private final String id;
-    private final Integer tag;
-    private final String data;
-    private final Boolean failIfUnknown;
+    @NonNull private final String id;
+    @Nullable private final Integer tag;
+    @Nullable private final String data;
+    @NonNull private final Boolean failIfUnknown;
 
     @JsonCreator
     public ExtensionDescriptor(
-            @JsonProperty("id") String id,
-            @JsonProperty("tag") Integer tag,
-            @JsonProperty("data") String data,
-            @JsonProperty("fail_if_unknown") Boolean failIfUnknown) {
+            @NonNull @JsonProperty("id") String id,
+            @Nullable @JsonProperty("tag") Integer tag,
+            @Nullable @JsonProperty("data") String data,
+            @NonNull @JsonProperty("fail_if_unknown") Boolean failIfUnknown) {
         this.id = id;
         this.tag = tag;
         this.data = data;
         this.failIfUnknown = failIfUnknown;
     }
 
+    @NonNull
     @JsonGetter
     public String getId() {
         return id;
     }
 
+    @Nullable
     @JsonGetter
     public Integer getTag() {
         return tag;
     }
 
+    @Nullable
     @JsonGetter
     public String getData() {
         return data;
     }
 
+    @NonNull
     @JsonGetter("fail_if_unknown")
     public Boolean getFailIfUnknown() {
         return failIfUnknown;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExtensionDescriptor that = (ExtensionDescriptor) o;

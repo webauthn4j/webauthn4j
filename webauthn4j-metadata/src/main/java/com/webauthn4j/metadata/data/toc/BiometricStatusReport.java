@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.toc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -27,23 +29,23 @@ import java.util.Objects;
  * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
  */
 public class BiometricStatusReport implements Serializable {
-    private final Integer certLevel;
-    private final BigInteger modality;
-    private final String effectiveData;
-    private final String certificationDescriptor;
-    private final String certificateNumber;
-    private final String certificationPolicyVersion;
-    private final String certificationRequirementsVersion;
+    @NonNull private final Integer certLevel;
+    @NonNull private final BigInteger modality;
+    @Nullable private final String effectiveData;
+    @Nullable private final String certificationDescriptor;
+    @Nullable private final String certificateNumber;
+    @Nullable private final String certificationPolicyVersion;
+    @Nullable private final String certificationRequirementsVersion;
 
     @JsonCreator
     public BiometricStatusReport(
-            @JsonProperty("certLevel") Integer certLevel,
-            @JsonProperty("modality") BigInteger modality,
-            @JsonProperty("effectiveData") String effectiveData,
-            @JsonProperty("certificationDescriptor") String certificationDescriptor,
-            @JsonProperty("certificateNumber") String certificateNumber,
-            @JsonProperty("certificationPolicyVersion") String certificationPolicyVersion,
-            @JsonProperty("certificationRequirementsVersion") String certificationRequirementsVersion) {
+            @JsonProperty("certLevel") @NonNull Integer certLevel,
+            @JsonProperty("modality") @NonNull BigInteger modality,
+            @JsonProperty("effectiveData") @Nullable String effectiveData,
+            @JsonProperty("certificationDescriptor") @Nullable String certificationDescriptor,
+            @JsonProperty("certificateNumber") @Nullable String certificateNumber,
+            @JsonProperty("certificationPolicyVersion") @Nullable String certificationPolicyVersion,
+            @JsonProperty("certificationRequirementsVersion") @Nullable String certificationRequirementsVersion) {
         this.certLevel = certLevel;
         this.modality = modality;
         this.effectiveData = effectiveData;
@@ -53,36 +55,43 @@ public class BiometricStatusReport implements Serializable {
         this.certificationRequirementsVersion = certificationRequirementsVersion;
     }
 
+    @NonNull
     public Integer getCertLevel() {
         return certLevel;
     }
 
+    @NonNull
     public BigInteger getModality() {
         return modality;
     }
 
+    @Nullable
     public String getEffectiveData() {
         return effectiveData;
     }
 
+    @Nullable
     public String getCertificationDescriptor() {
         return certificationDescriptor;
     }
 
+    @Nullable
     public String getCertificateNumber() {
         return certificateNumber;
     }
 
+    @Nullable
     public String getCertificationPolicyVersion() {
         return certificationPolicyVersion;
     }
 
+    @Nullable
     public String getCertificationRequirementsVersion() {
         return certificationRequirementsVersion;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BiometricStatusReport that = (BiometricStatusReport) o;

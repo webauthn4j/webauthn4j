@@ -24,7 +24,9 @@ import java.util.Set;
 
 /**
  * Core interface that resolves {@link TrustAnchor} {@link Set} from {@link AAGUID}.
+ * @deprecated
  */
+@Deprecated
 public interface TrustAnchorsResolver {
 
     /**

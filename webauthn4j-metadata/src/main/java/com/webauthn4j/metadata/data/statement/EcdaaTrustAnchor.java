@@ -19,6 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,21 +29,21 @@ import java.util.Objects;
  * In the case of ECDAA attestation, the ECDAA-Issuer's trust anchor must be specified in this field.
  */
 public class EcdaaTrustAnchor implements Serializable {
-    private final String x;
-    private final String y;
-    private final String c;
-    private final String sx;
-    private final String sy;
-    private final String g1Curve;
+    @NonNull private final String x;
+    @NonNull private final String y;
+    @NonNull private final String c;
+    @NonNull private final String sx;
+    @NonNull private final String sy;
+    @NonNull private final String g1Curve;
 
     @JsonCreator
     public EcdaaTrustAnchor(
-            @JsonProperty("X") String x,
-            @JsonProperty("Y") String y,
-            @JsonProperty("c") String c,
-            @JsonProperty("sx") String sx,
-            @JsonProperty("sy") String sy,
-            @JsonProperty("G1Curve") String g1Curve) {
+            @JsonProperty("X") @NonNull String x,
+            @JsonProperty("Y") @NonNull String y,
+            @JsonProperty("c") @NonNull String c,
+            @JsonProperty("sx") @NonNull String sx,
+            @JsonProperty("sy") @NonNull String sy,
+            @JsonProperty("G1Curve") @NonNull String g1Curve) {
         this.x = x;
         this.y = y;
         this.c = c;
@@ -50,38 +52,44 @@ public class EcdaaTrustAnchor implements Serializable {
         this.g1Curve = g1Curve;
     }
 
+    @NonNull
     @JsonGetter("X")
     public String getX() {
         return x;
     }
 
+    @NonNull
     @JsonGetter("Y")
     public String getY() {
         return y;
     }
 
+    @NonNull
     @JsonGetter("c")
     public String getC() {
         return c;
     }
 
+    @NonNull
     @JsonGetter("sx")
     public String getSx() {
         return sx;
     }
 
+    @NonNull
     @JsonGetter("sy")
     public String getSy() {
         return sy;
     }
 
+    @NonNull
     @JsonGetter("G1Curve")
     public String getG1Curve() {
         return g1Curve;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EcdaaTrustAnchor that = (EcdaaTrustAnchor) o;

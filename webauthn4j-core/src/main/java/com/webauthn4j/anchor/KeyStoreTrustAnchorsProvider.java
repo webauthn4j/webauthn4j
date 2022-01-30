@@ -27,7 +27,9 @@ import java.util.*;
 
 /**
  * Loads {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map} from Java KeyStore.
+ * @deprecated
  */
+@Deprecated
 public class KeyStoreTrustAnchorsProvider implements TrustAnchorsProvider {
 
     // ~ Instance fields

@@ -25,7 +25,9 @@ import java.util.Set;
 
 /**
  * Core interface that provides {@link AAGUID} key {@link TrustAnchor} {@link Set} value {@link Map}
+ * @deprecated
  */
+@Deprecated
 public interface TrustAnchorsProvider {
 
     /**

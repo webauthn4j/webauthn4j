@@ -18,6 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,35 +29,39 @@ import java.util.Objects;
  */
 public class CodeAccuracyDescriptor implements Serializable {
 
-    private final Integer base;
-    private final Integer minLength;
-    private final Integer maxRetries;
-    private final Integer blockSlowdown;
+    @NonNull private final Integer base;
+    @NonNull private final Integer minLength;
+    @Nullable private final Integer maxRetries;
+    @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public CodeAccuracyDescriptor(
-            @JsonProperty("base") Integer base,
-            @JsonProperty("minLength") Integer minLength,
-            @JsonProperty("maxRetries") Integer maxRetries,
-            @JsonProperty("blockSlowdown") Integer blockSlowdown) {
+            @NonNull @JsonProperty("base") Integer base,
+            @NonNull @JsonProperty("minLength") Integer minLength,
+            @Nullable @JsonProperty("maxRetries") Integer maxRetries,
+            @Nullable @JsonProperty("blockSlowdown") Integer blockSlowdown) {
         this.base = base;
         this.minLength = minLength;
         this.maxRetries = maxRetries;
         this.blockSlowdown = blockSlowdown;
     }
 
+    @NonNull
     public Integer getBase() {
         return base;
     }
 
+    @NonNull
     public Integer getMinLength() {
         return minLength;
     }
 
+    @Nullable
     public Integer getMaxRetries() {
         return maxRetries;
     }
 
+    @Nullable
     public Integer getBlockSlowdown() {
         return blockSlowdown;
     }
@@ -65,15 +71,11 @@ public class CodeAccuracyDescriptor implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CodeAccuracyDescriptor that = (CodeAccuracyDescriptor) o;
-        return Objects.equals(base, that.base) &&
-                Objects.equals(minLength, that.minLength) &&
-                Objects.equals(maxRetries, that.maxRetries) &&
-                Objects.equals(blockSlowdown, that.blockSlowdown);
+        return base.equals(that.base) && minLength.equals(that.minLength) && Objects.equals(maxRetries, that.maxRetries) && Objects.equals(blockSlowdown, that.blockSlowdown);
     }
 
     @Override
     public int hashCode() {
-
         return Objects.hash(base, minLength, maxRetries, blockSlowdown);
     }
 }
