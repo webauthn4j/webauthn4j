@@ -25,7 +25,7 @@ buildscript {
         // Define implementation dependency versions independently
         jacksonVersion = "2.13.1"
         kerbyVersion = "2.0.1"
-        slf4jVersion = "1.7.35"
+        slf4jVersion = "1.7.36"
         bouncyCastleVersion = "1.70"
         checkerframeworkVersion = "3.21.2"
 
