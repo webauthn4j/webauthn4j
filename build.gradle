@@ -30,7 +30,7 @@ buildscript {
         checkerframeworkVersion = "3.21.3"
 
         // for test library dependencies
-        springBootVersion = "2.6.4"
+        springBootVersion = "2.6.5"
     }
 
     repositories {
