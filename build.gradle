@@ -27,7 +27,7 @@ buildscript {
         kerbyVersion = "2.0.1"
         slf4jVersion = "1.7.36"
         bouncyCastleVersion = "1.70"
-        checkerframeworkVersion = "3.21.3"
+        checkerframeworkVersion = "3.21.4"
 
         // for test library dependencies
         springBootVersion = "2.6.6"
