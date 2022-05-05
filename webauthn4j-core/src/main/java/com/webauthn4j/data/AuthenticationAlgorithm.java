@@ -44,7 +44,7 @@ public enum AuthenticationAlgorithm {
     RSASSA_PKCSV15_SHA512_RAW(0x000E, "rsassa_pkcsv15_sha512_raw"),
     RSASSA_PKCSV15_SHA1_RAW(0x000F, "rsassa_pkcsv15_sha1_raw"),
     SECP384R1_ECDSA_SHA384_RAW(0x0010, "secp384r1_ecdsa_sha384_raw"),
-    SECP521R1_ECDSA_SHA256_RAW(0x0011, "secp521r1_ecdsa_sha256_raw"),
+    SECP521R1_ECDSA_SHA512_RAW(0x0011, "secp512r1_ecdsa_sha512_raw"),
     ED25519_EDDSA_SHA512_RAW(0x0012, "ed25519_eddsa_sha512_raw");
 
     private static final String VALUE_OUT_OF_RANGE_TEMPLATE = "value %s is out of range";
