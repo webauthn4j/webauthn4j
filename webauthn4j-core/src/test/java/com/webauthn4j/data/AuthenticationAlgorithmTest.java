@@ -57,7 +57,7 @@ class AuthenticationAlgorithmTest {
                 () -> assertThat(AuthenticationAlgorithm.create("rsassa_pkcsv15_sha512_raw")).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA512_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("rsassa_pkcsv15_sha1_raw")).isEqualTo(AuthenticationAlgorithm.RSASSA_PKCSV15_SHA1_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("secp384r1_ecdsa_sha384_raw")).isEqualTo(AuthenticationAlgorithm.SECP384R1_ECDSA_SHA384_RAW),
-                () -> assertThat(AuthenticationAlgorithm.create("secp512r1_ecdsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
+                () -> assertThat(AuthenticationAlgorithm.create("secp521r1_ecdsa_sha256_raw")).isEqualTo(AuthenticationAlgorithm.SECP521R1_ECDSA_SHA512_RAW),
                 () -> assertThat(AuthenticationAlgorithm.create("ed25519_eddsa_sha512_raw")).isEqualTo(AuthenticationAlgorithm.ED25519_EDDSA_SHA512_RAW)
         );
     }
