@@ -41,8 +41,8 @@ public class ECUtil {
     }
 
     public static @NonNull byte[] createUncompressedPublicKey(@NonNull ECPublicKey ecPublicKey) {
-        byte[] x = convertToFixedByteArray(ecPublicKey.getW().getAffineX());
-        byte[] y = convertToFixedByteArray(ecPublicKey.getW().getAffineY());
+        byte[] x = ArrayUtil.convertToFixedByteArray(ecPublicKey.getW().getAffineX());
+        byte[] y = ArrayUtil.convertToFixedByteArray(ecPublicKey.getW().getAffineY());
 
         byte format = 0x04;
         return ByteBuffer.allocate(65)
@@ -50,26 +50,6 @@ public class ECUtil {
                 .put(x)
                 .put(y)
                 .array();
-    }
-
-    public static @NonNull byte[] convertToFixedByteArray(@NonNull BigInteger value) {
-        return convertToFixedByteArray(32, value);
-    }
-
-    public static @NonNull byte[] convertToFixedByteArray(int fixedSize, @NonNull BigInteger value) {
-        byte[] bytes = value.toByteArray();
-
-        byte[] adjusted = new byte[fixedSize];
-        if (bytes.length <= fixedSize) {
-            System.arraycopy(bytes, 0, adjusted, fixedSize - bytes.length, bytes.length);
-        }
-        else if (bytes.length == fixedSize + 1 && bytes[0] == 0) {
-            System.arraycopy(bytes, 1, adjusted, 0, fixedSize);
-        }
-        else {
-            throw new IllegalStateException("Value is too large, fixedSize: " + fixedSize + ", array size: " + bytes.length + ", starts with 0: " + (bytes[0] == 0 ? "yes" : "no"));
-        }
-        return adjusted;
     }
 
     public static @NonNull KeyPair createKeyPair() {

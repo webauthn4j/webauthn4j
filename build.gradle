@@ -113,6 +113,11 @@ subprojects {
         testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 1.8 to support JDK8 users who don't need EdDSA.
+    }
+
     javadoc {
         options.charSet = 'UTF-8'
         options.encoding = 'UTF-8'

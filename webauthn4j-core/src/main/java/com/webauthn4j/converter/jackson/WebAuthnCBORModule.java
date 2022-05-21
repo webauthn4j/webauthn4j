@@ -65,6 +65,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new CertPathSerializer());
         this.addSerializer(new CredentialProtectionPolicySerializer());
         this.addSerializer(new EC2COSEKeySerializer());
+        this.addSerializer(new EdDSACOSEKeySerializer());
         this.addSerializer(new FIDOU2FAttestationStatementSerializer());
         this.addSerializer(new HMACGetSecretAuthenticatorInputSerializer());
         this.addSerializer(new JWSSerializer());

@@ -357,8 +357,8 @@ public class TestDataUtil {
                 throw new IllegalStateException("We can only support secp256r1, secp384r1 or secp521r1");
         }
 
-        byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
-        byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+        byte[] x = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+        byte[] y = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
         return new EC2COSEKey(
                 null,
                 coseAlgorithmIdentifier,

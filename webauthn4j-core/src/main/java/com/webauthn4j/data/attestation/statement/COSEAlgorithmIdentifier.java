@@ -38,6 +38,10 @@ public class COSEAlgorithmIdentifier implements Serializable {
     public static final COSEAlgorithmIdentifier ES256;
     public static final COSEAlgorithmIdentifier ES384;
     public static final COSEAlgorithmIdentifier ES512;
+    /**
+     * EdDSA is only supported on JDK 15 or later
+     */
+    public static final COSEAlgorithmIdentifier EdDSA;
 
     private static final Map<COSEAlgorithmIdentifier, COSEKeyType> keyTypeMap = new HashMap<>();
     private static final Map<COSEAlgorithmIdentifier, SignatureAlgorithm> algorithmMap = new HashMap<>();
@@ -51,10 +55,12 @@ public class COSEAlgorithmIdentifier implements Serializable {
         ES256 = new COSEAlgorithmIdentifier(-7);
         ES384 = new COSEAlgorithmIdentifier(-35);
         ES512 = new COSEAlgorithmIdentifier(-36);
+        EdDSA = new COSEAlgorithmIdentifier(-8);
 
         keyTypeMap.put(COSEAlgorithmIdentifier.ES256, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES384, COSEKeyType.EC2);
         keyTypeMap.put(COSEAlgorithmIdentifier.ES512, COSEKeyType.EC2);
+        keyTypeMap.put(COSEAlgorithmIdentifier.EdDSA, COSEKeyType.OKP);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS1, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS256, COSEKeyType.RSA);
         keyTypeMap.put(COSEAlgorithmIdentifier.RS384, COSEKeyType.RSA);
@@ -63,6 +69,7 @@ public class COSEAlgorithmIdentifier implements Serializable {
         algorithmMap.put(COSEAlgorithmIdentifier.ES256, SignatureAlgorithm.ES256);
         algorithmMap.put(COSEAlgorithmIdentifier.ES384, SignatureAlgorithm.ES384);
         algorithmMap.put(COSEAlgorithmIdentifier.ES512, SignatureAlgorithm.ES512);
+        algorithmMap.put(COSEAlgorithmIdentifier.EdDSA, SignatureAlgorithm.Ed25519);
         algorithmMap.put(COSEAlgorithmIdentifier.RS1, SignatureAlgorithm.RS1);
         algorithmMap.put(COSEAlgorithmIdentifier.RS256, SignatureAlgorithm.RS256);
         algorithmMap.put(COSEAlgorithmIdentifier.RS384, SignatureAlgorithm.RS384);
@@ -160,6 +167,9 @@ public class COSEAlgorithmIdentifier implements Serializable {
         }
         else if(value == ES512.value){
             return "ES512";
+        }
+        else if(value == EdDSA.value){
+            return "EdDSA";
         }
         else {
             return String.format("Unknown COSEAlgorithmIdentifier(%d)", value);
