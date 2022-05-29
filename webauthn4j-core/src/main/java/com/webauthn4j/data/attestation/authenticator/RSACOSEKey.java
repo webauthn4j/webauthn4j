@@ -302,7 +302,9 @@ public class RSACOSEKey extends AbstractCOSEKey {
     @Override
     public String toString() {
         return "RSACOSEKey(" +
-                "n=" + ArrayUtil.toHexString(n) +
+                "keyId=" + ArrayUtil.toHexString(getKeyId()) +
+                ", alg=" + getAlgorithm() +
+                ", n=" + ArrayUtil.toHexString(n) +
                 ", e=" + ArrayUtil.toHexString(e) +
                 ", d=" + ArrayUtil.toHexString(d) +
                 ", p=" + ArrayUtil.toHexString(p) +

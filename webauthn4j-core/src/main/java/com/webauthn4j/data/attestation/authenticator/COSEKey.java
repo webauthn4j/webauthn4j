@@ -33,6 +33,7 @@ import java.util.List;
         use = JsonTypeInfo.Id.NAME,
         property = "1")
 @JsonSubTypes({
+        @JsonSubTypes.Type(value = EdDSACOSEKey.class, name = "1"),
         @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
         @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3")
 })

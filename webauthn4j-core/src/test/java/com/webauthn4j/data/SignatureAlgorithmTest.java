@@ -27,12 +27,14 @@ import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.converter.util.JsonConverter;
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.util.SignatureUtil;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SignatureAlgorithmTest {
@@ -48,8 +50,33 @@ class SignatureAlgorithmTest {
                 () -> assertThat(SignatureAlgorithm.create("SHA1withRSA")).isEqualTo(SignatureAlgorithm.RS1),
                 () -> assertThat(SignatureAlgorithm.create("SHA256withRSA")).isEqualTo(SignatureAlgorithm.RS256),
                 () -> assertThat(SignatureAlgorithm.create("SHA384withRSA")).isEqualTo(SignatureAlgorithm.RS384),
-                () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512)
+                () -> assertThat(SignatureAlgorithm.create("SHA512withRSA")).isEqualTo(SignatureAlgorithm.RS512),
+                () -> assertThat(SignatureAlgorithm.create("ed25519")).isEqualTo(SignatureAlgorithm.Ed25519),
+                () -> assertThatThrownBy(()->SignatureAlgorithm.create("invalid")).isInstanceOf(IllegalArgumentException.class)
         );
+    }
+
+    @Test
+    void toString_test() {
+        assertAll(
+                () -> assertThat(SignatureAlgorithm.ES256).hasToString("ES256"),
+                () -> assertThat(SignatureAlgorithm.ES384).hasToString("ES384"),
+                () -> assertThat(SignatureAlgorithm.ES512).hasToString("ES512"),
+                () -> assertThat(SignatureAlgorithm.RS1).hasToString("RS1"),
+                () -> assertThat(SignatureAlgorithm.RS256).hasToString("RS256"),
+                () -> assertThat(SignatureAlgorithm.RS384).hasToString("RS384"),
+                () -> assertThat(SignatureAlgorithm.RS512).hasToString("RS512"),
+                () -> assertThat(SignatureAlgorithm.Ed25519).hasToString("Ed25519")
+        );
+    }
+
+
+    @Test
+    @EnabledForJreRange(min = JRE.JAVA_15)
+    void ed25519_test(){
+        assertThatCode(()->{
+            SignatureUtil.createSignature(SignatureAlgorithm.Ed25519.getJcaName());
+        }).doesNotThrowAnyException();
     }
 
     @Test

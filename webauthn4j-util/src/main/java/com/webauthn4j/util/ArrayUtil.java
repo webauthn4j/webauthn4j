@@ -16,7 +16,10 @@
 
 package com.webauthn4j.util;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.math.BigInteger;
 
 public class ArrayUtil {
 
@@ -34,5 +37,25 @@ public class ArrayUtil {
 
     public static @Nullable String toHexString(@Nullable byte[] value){
         return value == null ? null : HexUtil.encodeToString(value);
+    }
+
+    public static @NonNull byte[] convertToFixedByteArray(@NonNull BigInteger value) {
+        return convertToFixedByteArray(32, value);
+    }
+
+    public static @NonNull byte[] convertToFixedByteArray(int fixedSize, @NonNull BigInteger value) {
+        byte[] bytes = value.toByteArray();
+
+        byte[] adjusted = new byte[fixedSize];
+        if (bytes.length <= fixedSize) {
+            System.arraycopy(bytes, 0, adjusted, fixedSize - bytes.length, bytes.length);
+        }
+        else if (bytes.length == fixedSize + 1 && bytes[0] == 0) {
+            System.arraycopy(bytes, 1, adjusted, 0, fixedSize);
+        }
+        else {
+            throw new IllegalStateException("Value is too large, fixedSize: " + fixedSize + ", array size: " + bytes.length + ", starts with 0: " + (bytes[0] == 0 ? "yes" : "no"));
+        }
+        return adjusted;
     }
 }

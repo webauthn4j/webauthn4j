@@ -16,7 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.tpm;
 
-import com.webauthn4j.data.SignatureAlgorithm;
+import com.webauthn4j.data.MessageDigestAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.*;
@@ -40,7 +40,10 @@ import javax.naming.ldap.Rdn;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
@@ -112,8 +115,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
 
         /// Verify that extraData is set to the hash of attToBeSigned using the hash algorithm employed in "alg".
         COSEAlgorithmIdentifier alg = attestationStatement.getAlg();
-        MessageDigest messageDigest = getMessageDigest(alg);
-        byte[] hash = messageDigest.digest(attToBeSigned);
+        byte[] hash = calcMessageDigest(attToBeSigned, alg.toSignatureAlgorithm().getMessageDigestAlgorithm());
         // As hash is public data(not secret data) to client side, there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if (!Arrays.equals(certInfo.getExtraData(), hash)) {
             throw new BadAttestationStatementException("extraData must be equals to the hash of attToBeSigned");
@@ -166,14 +168,11 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         }
     }
 
-
-    private MessageDigest getMessageDigest(COSEAlgorithmIdentifier alg) {
-        try {
-            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
-            return signatureAlgorithm.getMessageDigestAlgorithm().createMessageDigestObject();
-        } catch (IllegalArgumentException e) {
-            throw new BadAttestationStatementException("alg is not signature algorithm", e);
-        }
+    /**
+     * Calculate message digest. If alg is null, original data is returned.
+     */
+    private byte[] calcMessageDigest(byte[] data, MessageDigestAlgorithm alg) {
+        return alg.createMessageDigestObject().digest(data);
     }
 
     private void validateX5c(TPMAttestationStatement attestationStatement, TPMSAttest certInfo, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {

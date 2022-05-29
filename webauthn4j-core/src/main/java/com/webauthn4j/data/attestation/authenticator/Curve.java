@@ -22,22 +22,26 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.ECUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.security.spec.ECParameterSpec;
+import java.security.spec.AlgorithmParameterSpec;
+import java.security.spec.NamedParameterSpec;
 
 public enum Curve {
 
-    SECP256R1(1, 32, ECUtil.P_256_SPEC),
-    SECP384R1(2, 48, ECUtil.P_384_SPEC),
-    SECP521R1(3, 66, ECUtil.P_521_SPEC);
+    SECP256R1(1, 32),
+    SECP384R1(2, 48),
+    SECP521R1(3, 66),
+    /**
+     * ED25519.getParameterSpec() is only supportred on JDK15+
+     * @since JDK 15
+     */
+    ED25519(6, 32);
 
     private final int value;
     private final int size;
-    private final ECParameterSpec parameterSpec;
 
-    Curve(int value, int size, @NonNull ECParameterSpec parameterSpec) {
+    Curve(int value, int size) {
         this.value = value;
         this.size = size;
-        this.parameterSpec = parameterSpec;
     }
 
     public static @NonNull Curve create(int value) {
@@ -48,14 +52,15 @@ public enum Curve {
                 return SECP384R1;
             case 3:
                 return SECP521R1;
+            case 6:
+                return ED25519;
             default:
                 throw new IllegalArgumentException("value '" + value + "' is out of range");
         }
     }
 
-    @SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
     @JsonCreator
-    static @NonNull Curve deserialize(int value) throws InvalidFormatException {
+    public static @NonNull Curve deserialize(int value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -72,8 +77,20 @@ public enum Curve {
         return size;
     }
 
-    public @NonNull ECParameterSpec getECParameterSpec() {
-        return parameterSpec;
+    public @NonNull AlgorithmParameterSpec getParameterSpec() {
+        switch (this){
+            case SECP256R1:
+                return ECUtil.P_256_SPEC;
+            case SECP384R1:
+                return ECUtil.P_384_SPEC;
+            case SECP521R1:
+                return ECUtil.P_521_SPEC;
+            case ED25519:
+                //noinspection Since15
+                return new NamedParameterSpec("Ed25519");
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     @Override
@@ -85,6 +102,8 @@ public enum Curve {
                 return "SECP384R1";
             case SECP521R1:
                 return "SECP521R1";
+            case ED25519:
+                return "ED25519";
             default:
                 return "Unknown Curve";
         }

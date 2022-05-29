@@ -22,6 +22,8 @@ import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
+import java.security.spec.NamedParameterSpec;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -37,6 +39,7 @@ class CurveTest {
                 () -> assertThat(Curve.create(1)).isEqualTo(Curve.SECP256R1),
                 () -> assertThat(Curve.create(2)).isEqualTo(Curve.SECP384R1),
                 () -> assertThat(Curve.create(3)).isEqualTo(Curve.SECP521R1),
+                () -> assertThat(Curve.create(6)).isEqualTo(Curve.ED25519),
                 () -> assertThatThrownBy(() -> Curve.create(4)).isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -48,12 +51,24 @@ class CurveTest {
         );
     }
 
+    @SuppressWarnings("Since15")
     @Test
-    void getECParameterSpec_test() {
+    void getParameterSpec_test() {
         assertAll(
-                () -> assertThat(Curve.SECP256R1.getECParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
-                () -> assertThat(Curve.SECP384R1.getECParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
-                () -> assertThat(Curve.SECP521R1.getECParameterSpec()).isEqualTo(ECUtil.P_521_SPEC)
+                () -> assertThat(Curve.SECP256R1.getParameterSpec()).isEqualTo(ECUtil.P_256_SPEC),
+                () -> assertThat(Curve.SECP384R1.getParameterSpec()).isEqualTo(ECUtil.P_384_SPEC),
+                () -> assertThat(Curve.SECP521R1.getParameterSpec()).isEqualTo(ECUtil.P_521_SPEC),
+                () -> assertThat(((NamedParameterSpec)Curve.ED25519.getParameterSpec()).getName()).isEqualTo(NamedParameterSpec.ED25519.getName())
+        );
+    }
+
+    @Test
+    void toString_test() {
+        assertAll(
+                () -> assertThat(Curve.SECP256R1).hasToString("SECP256R1"),
+                () -> assertThat(Curve.SECP384R1).hasToString("SECP384R1"),
+                () -> assertThat(Curve.SECP521R1).hasToString("SECP521R1"),
+                () -> assertThat(Curve.ED25519).hasToString("ED25519")
         );
     }
 

@@ -35,10 +35,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.spec.ECParameterSpec;
-import java.security.spec.ECPoint;
-import java.security.spec.ECPrivateKeySpec;
-import java.security.spec.ECPublicKeySpec;
+import java.security.spec.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -145,8 +142,8 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
 
         ECPoint ecPoint = publicKey.getW();
         Curve curve = getCurve(publicKey.getParams());
-        byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
-        byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+        byte[] x = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+        byte[] y = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
         return new EC2COSEKey(null, alg, null, curve, x, y);
     }
 
@@ -158,8 +155,8 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
             ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
             ECPoint ecPoint = ecPublicKey.getW();
             Curve curve = getCurve(ecPrivateKey.getParams());
-            byte[] x = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
-            byte[] y = ECUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
+            byte[] x = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineX());
+            byte[] y = ArrayUtil.convertToFixedByteArray(curve.getSize(), ecPoint.getAffineY());
             byte[] d = ecPrivateKey.getS().toByteArray();
             return new EC2COSEKey(null, alg, null, curve, x, y, d);
         }
@@ -274,7 +271,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         if (curve == null) {
             throw new IllegalStateException(CURVE_NULL_CHECK_MESSAGE);
         }
-        ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, curve.getECParameterSpec());
+        ECPublicKeySpec spec = new ECPublicKeySpec(ecPoint, (ECParameterSpec) curve.getParameterSpec());
 
         return ECUtil.createPublicKey(spec);
     }
@@ -288,7 +285,7 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
         if (curve == null) {
             throw new IllegalStateException(CURVE_NULL_CHECK_MESSAGE);
         }
-        ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(s, curve.getECParameterSpec());
+        ECPrivateKeySpec ecPrivateKeySpec = new ECPrivateKeySpec(s, (ECParameterSpec) curve.getParameterSpec());
         return ECUtil.createPrivateKey(ecPrivateKeySpec);
     }
 
@@ -345,7 +342,9 @@ public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
     @Override
     public String toString() {
         return "EC2COSEKey(" +
-                "curve=" + curve +
+                "keyId=" + ArrayUtil.toHexString(getKeyId()) +
+                ", alg=" + getAlgorithm() +
+                ", curve=" + curve +
                 ", x=" + ArrayUtil.toHexString(x) +
                 ", y=" + ArrayUtil.toHexString(y) +
                 ", d=" + ArrayUtil.toHexString(d) +
