@@ -29,6 +29,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.*;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -96,7 +97,8 @@ public class AttestedCredentialDataConverter implements Serializable {
             assertCoseKey(coseKey);
             AttestedCredentialData result = createAttestedCredentialData(aaguid, credentialId, coseKey);
             int extensionsBufferLength = remaining.length - coseKeyEnvelope.getLength();
-            attestedCredentialData.position(attestedCredentialData.position() - extensionsBufferLength);
+            //This cast is necessary to be complied with JDK 17 when targeting JDK 8
+            ((Buffer)attestedCredentialData).position(attestedCredentialData.position() - extensionsBufferLength);
             return result;
         } catch (IllegalArgumentException e) {
             throw new DataConversionException(e);
