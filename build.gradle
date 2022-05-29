@@ -110,7 +110,7 @@ subprojects {
             implementation("org.bouncycastle:bcpkix-jdk15on:$bouncyCastleVersion")
         }
 
-        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
 
     javadoc {
@@ -202,7 +202,6 @@ subprojects {
                     scm {
                         url = githubUrl
                     }
-
                     resolveStrategy = Closure.DELEGATE_FIRST
                 }
                 pom.withXml { pom ->
