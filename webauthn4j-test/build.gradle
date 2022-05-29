@@ -17,6 +17,8 @@
 description = "Package that contains testing classes for WebAuthn4J"
 
 dependencies {
+    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+
     implementation project(':webauthn4j-core')
     implementation project(':webauthn4j-device-check')
     implementation project(':webauthn4j-metadata')
