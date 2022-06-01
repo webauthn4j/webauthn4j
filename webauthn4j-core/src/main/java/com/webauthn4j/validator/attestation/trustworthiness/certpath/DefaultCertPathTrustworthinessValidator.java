@@ -87,6 +87,14 @@ public class DefaultCertPathTrustworthinessValidator implements CertPathTrustwor
         } catch (InvalidAlgorithmParameterException e) {
             throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
+            for (TrustAnchor ta : trustAnchors) {
+				X509Certificate x509 = ta.getTrustedCert();
+				for (Certificate ca : certPath.getCertificates()) {
+					if (x509.equals((X509Certificate) ca)) {
+						return null;
+					}
+				}
+			}
             throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
