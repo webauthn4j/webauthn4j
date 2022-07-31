@@ -35,6 +35,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.Buffer;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -187,6 +188,7 @@ public class AuthenticatorDataConverter {
         }
     }
 
+    @SuppressWarnings("RedundantCast")
     <T extends ExtensionAuthenticatorOutput> @Nullable AuthenticationExtensionsAuthenticatorOutputs<T> convertToExtensions(@NonNull ByteBuffer byteBuffer) {
         // Since convertToExtensions is called when ED flag is set, return empty AuthenticationExtensionsAuthenticatorOutputs even when remaining is zero.
         if (byteBuffer.remaining() == 0) {
@@ -202,7 +204,8 @@ public class AuthenticatorDataConverter {
             return null;
         }
         int leftoverLength = remaining.length - envelope.getLength();
-        byteBuffer.position(byteBuffer.position() - leftoverLength);
+        //This cast is necessary to be complied with JDK 17 when targeting JDK 8
+        ((Buffer)byteBuffer).position(((Buffer)byteBuffer).position() - leftoverLength);
         return envelope.getAuthenticationExtensionsAuthenticatorOutputs();
     }
 
