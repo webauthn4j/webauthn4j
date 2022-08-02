@@ -35,7 +35,7 @@ All certificates registered in the Java Key Store file are treated as trust anch
 
 ===== Trust anchor resolution using FIDO Metadata Service
 
-WARNING: `webauthn4j-meta` module, which provides FIDO Metadata Statement handling, is under experimental status.
+WARNING: `webauthn4j-metadata` module, which provides FIDO Metadata Statement handling, is under experimental status.
 
 FIDO Alliance offers FIDO Metadata Service, which provides metadata of authenticators.
 `webauthn4j-metadata` module provides a `MetadataBLOBBasedTrustAnchorRepository` as a `TrustAnchorRepository` implementation.
