@@ -41,6 +41,8 @@ import java.util.Objects;
 public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implements Serializable {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;
+    public static final byte BIT_BE = (byte) 0b00001000;
+    public static final byte BIT_BS = (byte) 0b00010000;
     public static final byte BIT_AT = (byte) 0b01000000;
     public static final byte BIT_ED = (byte) 0b10000000;
 
@@ -100,6 +102,14 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
         return (flags & BIT_UV) != 0;
     }
 
+    public static boolean checkFlagBE(byte flags) {
+        return (flags & BIT_BE) != 0;
+    }
+
+    public static boolean checkFlagBS(byte flags) {
+        return (flags & BIT_BS) != 0;
+    }
+
     public static boolean checkFlagAT(byte flags) {
         return (flags & BIT_AT) != 0;
     }
@@ -122,6 +132,14 @@ public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implement
 
     public boolean isFlagUV() {
         return checkFlagUV(this.flags);
+    }
+
+    public boolean isFlagBE() {
+        return checkFlagBE(this.flags);
+    }
+
+    public boolean isFlagBS() {
+        return checkFlagBS(this.flags);
     }
 
     public boolean isFlagAT() {
