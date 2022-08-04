@@ -35,27 +35,52 @@ class AuthenticatorDataTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target2 = new AuthenticatorData<>(new byte[32], BIT_UV, 0);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target3 = new AuthenticatorData<>(new byte[32], BIT_AT, 0);
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target4 = new AuthenticatorData<>(new byte[32], BIT_ED, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target5 = new AuthenticatorData<>(new byte[32], BIT_BE, 0);
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> target6 = new AuthenticatorData<>(new byte[32], BIT_BS, 0);
 
         assertAll(
                 () -> assertThat(target1.isFlagUP()).isTrue(),
                 () -> assertThat(target1.isFlagUV()).isFalse(),
                 () -> assertThat(target1.isFlagAT()).isFalse(),
                 () -> assertThat(target1.isFlagED()).isFalse(),
+                () -> assertThat(target1.isFlagBE()).isFalse(),
+                () -> assertThat(target1.isFlagBS()).isFalse(),
 
                 () -> assertThat(target2.isFlagUP()).isFalse(),
                 () -> assertThat(target2.isFlagUV()).isTrue(),
                 () -> assertThat(target2.isFlagAT()).isFalse(),
                 () -> assertThat(target2.isFlagED()).isFalse(),
+                () -> assertThat(target2.isFlagBE()).isFalse(),
+                () -> assertThat(target2.isFlagBS()).isFalse(),
 
                 () -> assertThat(target3.isFlagUP()).isFalse(),
                 () -> assertThat(target3.isFlagUV()).isFalse(),
                 () -> assertThat(target3.isFlagAT()).isTrue(),
                 () -> assertThat(target3.isFlagED()).isFalse(),
+                () -> assertThat(target3.isFlagBE()).isFalse(),
+                () -> assertThat(target3.isFlagBS()).isFalse(),
 
                 () -> assertThat(target4.isFlagUP()).isFalse(),
                 () -> assertThat(target4.isFlagUV()).isFalse(),
                 () -> assertThat(target4.isFlagAT()).isFalse(),
-                () -> assertThat(target4.isFlagED()).isTrue()
+                () -> assertThat(target4.isFlagED()).isTrue(),
+                () -> assertThat(target4.isFlagBE()).isFalse(),
+                () -> assertThat(target4.isFlagBS()).isFalse(),
+
+                () -> assertThat(target5.isFlagUP()).isFalse(),
+                () -> assertThat(target5.isFlagUV()).isFalse(),
+                () -> assertThat(target5.isFlagAT()).isFalse(),
+                () -> assertThat(target5.isFlagED()).isFalse(),
+                () -> assertThat(target5.isFlagBE()).isTrue(),
+                () -> assertThat(target5.isFlagBS()).isFalse(),
+
+                () -> assertThat(target6.isFlagUP()).isFalse(),
+                () -> assertThat(target6.isFlagUV()).isFalse(),
+                () -> assertThat(target6.isFlagAT()).isFalse(),
+                () -> assertThat(target6.isFlagED()).isFalse(),
+                () -> assertThat(target6.isFlagBE()).isFalse(),
+                () -> assertThat(target6.isFlagBS()).isTrue()
+
         );
     }
 
