@@ -54,6 +54,12 @@ public class AuthenticatorTransport implements Serializable {
     public static final AuthenticatorTransport BLE = new AuthenticatorTransport("ble");
 
     /**
+     * Indicates the respective authenticator can be contacted using a combination of (often separate) data-transport
+     * and proximity mechanisms. This supports, for example, authentication on a desktop computer using a smartphone.
+     */
+    public static final AuthenticatorTransport HYBRID = new AuthenticatorTransport("hybrid");
+
+    /**
      * Indicates the respective authenticator is contacted using a client device-specific transport.
      * These authenticators are not removable from the client device.
      */
