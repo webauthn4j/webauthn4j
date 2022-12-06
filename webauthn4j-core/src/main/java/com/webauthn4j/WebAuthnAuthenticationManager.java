@@ -34,6 +34,8 @@ import com.webauthn4j.validator.AuthenticationDataValidator;
 import com.webauthn4j.validator.CustomAuthenticationValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +44,7 @@ public class WebAuthnAuthenticationManager {
 
     // ~ Instance fields
     // ================================================================================================
+    private final Logger logger = LoggerFactory.getLogger(WebAuthnAuthenticationManager.class);
 
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AuthenticatorDataConverter authenticatorDataConverter;
@@ -74,6 +77,8 @@ public class WebAuthnAuthenticationManager {
     @SuppressWarnings("squid:S1130")
     public @NonNull AuthenticationData parse(@NonNull AuthenticationRequest authenticationRequest) throws DataConversionException {
         AssertUtil.notNull(authenticationRequest, "authenticationRequest must not be null");
+
+        logger.trace("Parse: {}", authenticationRequest);
 
         byte[] credentialId = authenticationRequest.getCredentialId();
         byte[] signature = authenticationRequest.getSignature();
@@ -113,6 +118,7 @@ public class WebAuthnAuthenticationManager {
     public @NonNull AuthenticationData validate(
             @NonNull AuthenticationData authenticationData,
             @NonNull AuthenticationParameters authenticationParameters) throws ValidationException {
+        logger.trace("Validate: {}, {}", authenticationData, authenticationParameters);
         authenticationDataValidator.validate(authenticationData, authenticationParameters);
         return authenticationData;
     }

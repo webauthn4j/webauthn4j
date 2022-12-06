@@ -47,6 +47,8 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttesta
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.ValidationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,6 +59,7 @@ public class WebAuthnRegistrationManager {
 
     // ~ Instance fields
     // ================================================================================================
+    private final Logger logger = LoggerFactory.getLogger(WebAuthnRegistrationManager.class);
 
     private final CollectedClientDataConverter collectedClientDataConverter;
     private final AttestationObjectConverter attestationObjectConverter;
@@ -172,6 +175,8 @@ public class WebAuthnRegistrationManager {
         byte[] clientDataBytes = registrationRequest.getClientDataJSON();
         byte[] attestationObjectBytes = registrationRequest.getAttestationObject();
 
+        logger.trace("Parse: {}", registrationRequest);
+
         CollectedClientData collectedClientData =
                 clientDataBytes == null ? null : collectedClientDataConverter.convert(clientDataBytes);
         AttestationObject attestationObject =
@@ -195,12 +200,12 @@ public class WebAuthnRegistrationManager {
     @SuppressWarnings("squid:S1130")
     public @NonNull RegistrationData validate(@NonNull RegistrationRequest registrationRequest, @NonNull RegistrationParameters registrationParameters) throws DataConversionException, ValidationException {
         RegistrationData registrationData = parse(registrationRequest);
-        registrationDataValidator.validate(registrationData, registrationParameters);
-        return registrationData;
+        return validate(registrationData, registrationParameters);
     }
 
     @SuppressWarnings("squid:S1130")
     public @NonNull RegistrationData validate(@NonNull RegistrationData registrationData, @NonNull RegistrationParameters registrationParameters) throws ValidationException {
+        logger.trace("Validate: {}, {}", registrationData, registrationParameters);
         registrationDataValidator.validate(registrationData, registrationParameters);
         return registrationData;
     }
