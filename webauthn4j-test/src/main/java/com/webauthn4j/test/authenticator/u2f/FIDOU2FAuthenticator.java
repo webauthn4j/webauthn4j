@@ -22,6 +22,7 @@ import com.webauthn4j.test.client.AuthenticationEmulationOption;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
 import com.webauthn4j.util.*;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -123,9 +124,11 @@ public class FIDOU2FAuthenticator {
         y = Arrays.copyOfRange(y, Math.max(0, y.length - 32), y.length);
         ByteBuffer byteBuffer = ByteBuffer.allocate(1 + 32 + 32);
         byteBuffer.put(type);
-        byteBuffer.position(byteBuffer.position() + 32 - x.length);
+        //This cast is necessary to be complied with JDK 17 when targeting JDK 8
+        ((Buffer)byteBuffer).position(((Buffer)byteBuffer).position() + 32 - x.length);
         byteBuffer.put(x);
-        byteBuffer.position(byteBuffer.position() + 32 - y.length);
+        //This cast is necessary to be complied with JDK 17 when targeting JDK 8
+        ((Buffer)byteBuffer).position(((Buffer)byteBuffer).position() + 32 - y.length);
         byteBuffer.put(y);
         return byteBuffer.array();
     }
