@@ -28,16 +28,8 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.apache.kerby.asn1.type.Asn1Utf8String;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import javax.naming.InvalidNameException;
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
@@ -49,8 +41,9 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EllipticCurve;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class TPMAttestationStatementValidator extends AbstractStatementValidator<TPMAttestationStatement> {
 
@@ -60,23 +53,7 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
     // ================================================================================================
 
     private TPMDevicePropertyValidator tpmDevicePropertyValidator = new NullTPMDevicePropertyValidator();
-
-    private static Map<String, Object> toMap(Rdn rdn) {
-        try {
-            Map<String, Object> map = new HashMap<>();
-            Attributes attributes = rdn.toAttributes();
-            NamingEnumeration<String> ids = rdn.toAttributes().getIDs();
-
-            while (ids.hasMore()) {
-                String id = ids.next();
-                map.put(id, attributes.get(id).get());
-            }
-            return map;
-
-        } catch (NamingException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
+    private TPMDevicePropertyDecoder tpmDevicePropertyDecoder = new DefaultTPMDevicePropertyDecoder();
 
     @Override
     public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
@@ -232,6 +209,14 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         this.tpmDevicePropertyValidator = tpmDevicePropertyValidator;
     }
 
+    public TPMDevicePropertyDecoder getTpmDevicePropertyDecoder() {
+        return tpmDevicePropertyDecoder;
+    }
+
+    public void setTpmDevicePropertyDecoder(TPMDevicePropertyDecoder tpmDevicePropertyDecoder) {
+        this.tpmDevicePropertyDecoder = tpmDevicePropertyDecoder;
+    }
+
     private void validatePublicKeyEquality(TPMTPublic pubArea, AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         //noinspection ConstantConditions as null check is already done in caller
         PublicKey publicKeyInAuthData = authenticatorData.getAttestedCredentialData().getCOSEKey().getPublicKey();
@@ -300,46 +285,15 @@ public class TPMAttestationStatementValidator extends AbstractStatementValidator
         try {
             for (List<?> entry : certificate.getSubjectAlternativeNames()) {
                 if (entry.get(0).equals(4)) {
-                    TPMDeviceProperty tpmDeviceProperty = parseTPMDeviceProperty((String) entry.get(1));
+                    TPMDeviceProperty tpmDeviceProperty = tpmDevicePropertyDecoder.decode((String) entry.get(1));
                     tpmDevicePropertyValidator.validate(tpmDeviceProperty);
                     return;
                 }
             }
-        } catch (IOException | RuntimeException e) {
+        } catch (RuntimeException e) {
             throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
         }
         throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property");
-    }
-
-    TPMDeviceProperty parseTPMDeviceProperty(String directoryName) throws IOException {
-        LdapName subjectDN;
-        try {
-            subjectDN = new LdapName(directoryName);
-        } catch (InvalidNameException e) {
-            throw new IllegalArgumentException(e);
-        }
-        Map<String, Object> map = subjectDN.getRdns().stream().flatMap(rdn -> toMap(rdn).entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        byte[] manufacturerAttr = (byte[]) map.get("2.23.133.2.1");
-        byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
-        byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
-
-        String manufacturer = decodeAttr(manufacturerAttr);
-        String partNumber = decodeAttr(partNumberAttr);
-        String firmwareVersion = decodeAttr(firmwareVersionAttr);
-
-        return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
-    }
-
-    String decodeAttr(byte[] attr) throws IOException {
-        if (attr == null) {
-            return null;
-        }
-        else {
-            Asn1Utf8String attrAsn1Utf8String = new Asn1Utf8String();
-            attrAsn1Utf8String.decode(attr);
-            return attrAsn1Utf8String.getValue();
-        }
     }
 
     private byte[] getAttToBeSigned(CoreRegistrationObject registrationObject) {
