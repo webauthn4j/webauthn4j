@@ -131,7 +131,7 @@ public class TPMAuthenticator extends WebAuthnModelAuthenticator {
                     TPMEccCurve.create(curve),
                     new byte[2]
             );
-            type = TPMIAlgPublic.TPM_ALG_ECDSA;
+            type = TPMIAlgPublic.TPM_ALG_ECC;
             ECPoint ecPoint = ecPublicKey.getW();
             byte[] x = ecPoint.getAffineX().toByteArray();
             byte[] y = ecPoint.getAffineY().toByteArray();

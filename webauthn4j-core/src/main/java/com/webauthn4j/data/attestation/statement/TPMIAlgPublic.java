@@ -22,10 +22,11 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public enum TPMIAlgPublic {
-    TPM_ALG_ERROR(0),
-    TPM_ALG_RSA(1),
+    TPM_ALG_ERROR(0x00),
+    TPM_ALG_RSA(0x01),
     TPM_ALG_NULL(0x10),
-    TPM_ALG_ECDSA(0x18);
+    TPM_ALG_ECDSA(0x18),
+    TPM_ALG_ECC(0x23);
     private final int value;
 
     TPMIAlgPublic(int value) {
@@ -44,6 +45,9 @@ public enum TPMIAlgPublic {
         }
         else if (value == TPM_ALG_ECDSA.value) {
             return TPM_ALG_ECDSA;
+        }
+        else if (value == TPM_ALG_ECC.value) {
+            return TPM_ALG_ECC;
         }
         else {
             throw new IllegalArgumentException("value '" + value + "' is out of range");
