@@ -70,4 +70,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonarqube -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}; fi
+        run: if [ "$SONAR_TOKEN" != "" ]; then ./gradlew jacocoTestReport check sonar -Dsonar.organization=webauthn4j -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}; fi
