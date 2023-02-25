@@ -113,7 +113,6 @@ public class WebAuthnManagerSample {
         List<byte[]> allowCredentials = null;
         boolean userVerificationRequired = true;
         boolean userPresenceRequired = true;
-        List<String> expectedExtensionIds = Collections.emptyList();
 
         Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 

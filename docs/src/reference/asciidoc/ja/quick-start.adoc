@@ -40,10 +40,9 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 // expectations
 boolean userVerificationRequired = false;
 boolean userPresenceRequired = true;
-List<String> expectedExtensionIds = Collections.emptyList();
 
 RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
-RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired, expectedExtensionIds);
+RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
 RegistrationData registrationData;
 try{
     registrationData = webAuthnManager.parse(registrationRequest);
@@ -100,9 +99,9 @@ byte[] tokenBindingId = null /* set tokenBindingId */;
 ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, tokenBindingId);
 
 // expectations
+List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
-List<String> expectedExtensionIds = Collections.emptyList();
 
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
@@ -119,9 +118,9 @@ AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
                 authenticator,
+                allowCredentials,
                 userVerificationRequired,
-                userPresenceRequired,
-                expectedExtensionIds
+                userPresenceRequired
         );
 
 AuthenticationData authenticationData;

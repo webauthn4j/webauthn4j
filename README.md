@@ -50,7 +50,7 @@ If you are using Maven, just add the webauthn4j as a dependency:
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.20.7.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.20.8.RELEASE</webauthn4j.version>
   ...
 </properties>
 
@@ -160,7 +160,6 @@ ServerProperty serverProperty = new ServerProperty(origin, rpId, challenge, toke
 List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
-List<String> expectedExtensionIds = Collections.emptyList();
 
 Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 

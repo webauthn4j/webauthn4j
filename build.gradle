@@ -23,11 +23,11 @@ buildscript {
         httpBuilderVersion = "0.7.2"
 
         // Define implementation dependency versions independently
-        jacksonVersion = "2.14.1"
-        kerbyVersion = "2.0.2"
+        jacksonVersion = "2.14.2"
+        kerbyVersion = "2.0.3"
         slf4jVersion = "2.0.6"
         bouncyCastleVersion = "1.70"
-        checkerframeworkVersion = "3.28.0"
+        checkerframeworkVersion = "3.31.0"
 
         // for test library dependencies
         springBootVersion = "3.0.2"
@@ -214,7 +214,12 @@ subprojects {
                     resolveStrategy = Closure.DELEGATE_FIRST
                 }
                 pom.withXml { pom ->
-                    pom.asNode().appendNode("description", project.description) // workaround for https://github.com/gradle/gradle/issues/12259
+                    def root = pom.asNode()
+                    root.appendNode("description", project.description) // workaround for https://github.com/gradle/gradle/issues/12259
+                    def dependencyManagement = root.dependencyManagement
+                    if (dependencyManagement != null) {
+                        root.remove(dependencyManagement)
+                    }
                 }
             }
         }
