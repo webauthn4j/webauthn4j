@@ -7,8 +7,8 @@ on:
     branches:
       - '*'
   schedule:
-    # everyday 11AM (UTC)
-    - cron: '* 9 * * *'
+    # everyday 10AM (UTC)
+    - cron: '0 10 * * *'
 
 jobs:
   build:
