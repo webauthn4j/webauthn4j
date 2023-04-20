@@ -31,7 +31,7 @@ buildscript {
 
         // for test library dependencies
         springBootVersion = "2.7.10"
-        logbackVersion = "1.4.6"
+        logbackVersion = "1.4.7"
     }
 
     repositories {
