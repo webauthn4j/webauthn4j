@@ -122,13 +122,13 @@ public class AuthenticatorGetInfo {
 
         @JsonCreator
         public Options(
-                @JsonProperty("plat") PlatformOption plat,
-                @JsonProperty("rk") ResidentKeyOption rk,
-                @JsonProperty("clientPin") ClientPINOption clientPIN,
-                @JsonProperty("up") UserPresenceOption up,
-                @JsonProperty("uv") UserVerificationOption uv,
-                @JsonProperty("uvToken") UVTokenOption uvToken,
-                @JsonProperty("config") ConfigOption config
+                @JsonProperty("plat") @Nullable PlatformOption plat,
+                @JsonProperty("rk") @Nullable ResidentKeyOption rk,
+                @JsonProperty("clientPin") @Nullable ClientPINOption clientPIN,
+                @JsonProperty("up") @Nullable UserPresenceOption up,
+                @JsonProperty("uv") @Nullable UserVerificationOption uv,
+                @JsonProperty("uvToken") @Nullable UVTokenOption uvToken,
+                @JsonProperty("config") @Nullable ConfigOption config
         ) {
             this.plat = plat;
             this.rk = rk;
