@@ -18,7 +18,7 @@ buildscript {
 
     ext {
         // Gradle plugins
-        sonarqubeVersion = "4.2.1.3168"
+        sonarqubeVersion = "4.3.0.3225"
         asciidoctorGradleVersion = "3.3.2"
         httpBuilderVersion = "0.7.2"
 
