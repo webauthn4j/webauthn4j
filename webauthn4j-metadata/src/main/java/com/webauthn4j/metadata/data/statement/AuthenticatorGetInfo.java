@@ -106,18 +106,31 @@ public class AuthenticatorGetInfo {
     public static class Options {
 
         @JsonProperty("plat")
+        @Nullable
         private final PlatformOption plat;
+
         @JsonProperty("rk")
+        @Nullable
         private final ResidentKeyOption rk;
+
         @JsonProperty("clientPin")
+        @Nullable
         private final ClientPINOption clientPIN;
+
         @JsonProperty("up")
+        @Nullable
         private final UserPresenceOption up;
+
         @JsonProperty("uv")
+        @Nullable
         private final UserVerificationOption uv;
+
         @JsonProperty("uvToken")
+        @Nullable
         private final UVTokenOption uvToken;
+
         @JsonProperty("config")
+        @Nullable
         private final ConfigOption config;
 
         @JsonCreator
