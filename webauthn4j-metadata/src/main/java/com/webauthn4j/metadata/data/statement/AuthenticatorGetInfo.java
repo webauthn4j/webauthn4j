@@ -33,31 +33,36 @@ public class AuthenticatorGetInfo {
     @JsonProperty("versions")
     @NonNull
     private final List<String> versions;
+
     @JsonProperty("extensions")
     @Nullable
     private final List<String> extensions;
+
     @JsonProperty("aaguid")
     @NonNull
     @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
     private final AAGUID aaguid;
+
     @JsonProperty("options")
     @Nullable
     private final Options options;
+
     @JsonProperty("maxMsgSize")
     @Nullable
     private final Integer maxMsgSize;
+
     @JsonProperty("pinUvAuthProtocols")
     @Nullable
     private final List<PinProtocolVersion> pinUvAuthProtocols;
 
     @JsonCreator
     public AuthenticatorGetInfo(
-            @JsonProperty("versions") List<String> versions,
-            @JsonProperty("extensions") List<String> extensions,
-            @JsonProperty("aaguid") AAGUID aaguid,
-            @JsonProperty("options") Options options,
-            @JsonProperty("maxMsgSize") Integer maxMsgSize,
-            @JsonProperty("pinUvAuthProtocols") List<PinProtocolVersion> pinUvAuthProtocols) {
+            @JsonProperty("versions") @NonNull List<String> versions,
+            @JsonProperty("extensions") @Nullable List<String> extensions,
+            @JsonProperty("aaguid") @NonNull AAGUID aaguid,
+            @JsonProperty("options") @Nullable Options options,
+            @JsonProperty("maxMsgSize") @Nullable Integer maxMsgSize,
+            @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
@@ -106,29 +111,42 @@ public class AuthenticatorGetInfo {
     public static class Options {
 
         @JsonProperty("plat")
+        @Nullable
         private final PlatformOption plat;
+
         @JsonProperty("rk")
+        @Nullable
         private final ResidentKeyOption rk;
+
         @JsonProperty("clientPin")
+        @Nullable
         private final ClientPINOption clientPIN;
+
         @JsonProperty("up")
+        @Nullable
         private final UserPresenceOption up;
+
         @JsonProperty("uv")
+        @Nullable
         private final UserVerificationOption uv;
+
         @JsonProperty("uvToken")
+        @Nullable
         private final UVTokenOption uvToken;
+
         @JsonProperty("config")
+        @Nullable
         private final ConfigOption config;
 
         @JsonCreator
         public Options(
-                @JsonProperty("plat") PlatformOption plat,
-                @JsonProperty("rk") ResidentKeyOption rk,
-                @JsonProperty("clientPin") ClientPINOption clientPIN,
-                @JsonProperty("up") UserPresenceOption up,
-                @JsonProperty("uv") UserVerificationOption uv,
-                @JsonProperty("uvToken") UVTokenOption uvToken,
-                @JsonProperty("config") ConfigOption config
+                @JsonProperty("plat") @Nullable PlatformOption plat,
+                @JsonProperty("rk") @Nullable ResidentKeyOption rk,
+                @JsonProperty("clientPin") @Nullable ClientPINOption clientPIN,
+                @JsonProperty("up") @Nullable UserPresenceOption up,
+                @JsonProperty("uv") @Nullable UserVerificationOption uv,
+                @JsonProperty("uvToken") @Nullable UVTokenOption uvToken,
+                @JsonProperty("config") @Nullable ConfigOption config
         ) {
             this.plat = plat;
             this.rk = rk;
