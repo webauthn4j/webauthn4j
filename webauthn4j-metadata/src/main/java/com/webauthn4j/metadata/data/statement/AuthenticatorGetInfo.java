@@ -33,31 +33,36 @@ public class AuthenticatorGetInfo {
     @JsonProperty("versions")
     @NonNull
     private final List<String> versions;
+
     @JsonProperty("extensions")
     @Nullable
     private final List<String> extensions;
+
     @JsonProperty("aaguid")
     @NonNull
     @JsonDeserialize(using = MetadataAAGUIDRelaxedDeserializer.class)
     private final AAGUID aaguid;
+
     @JsonProperty("options")
     @Nullable
     private final Options options;
+
     @JsonProperty("maxMsgSize")
     @Nullable
     private final Integer maxMsgSize;
+
     @JsonProperty("pinUvAuthProtocols")
     @Nullable
     private final List<PinProtocolVersion> pinUvAuthProtocols;
 
     @JsonCreator
     public AuthenticatorGetInfo(
-            @JsonProperty("versions") List<String> versions,
-            @JsonProperty("extensions") List<String> extensions,
-            @JsonProperty("aaguid") AAGUID aaguid,
-            @JsonProperty("options") Options options,
-            @JsonProperty("maxMsgSize") Integer maxMsgSize,
-            @JsonProperty("pinUvAuthProtocols") List<PinProtocolVersion> pinUvAuthProtocols) {
+            @JsonProperty("versions") @NonNull List<String> versions,
+            @JsonProperty("extensions") @Nullable List<String> extensions,
+            @JsonProperty("aaguid") @NonNull AAGUID aaguid,
+            @JsonProperty("options") @Nullable Options options,
+            @JsonProperty("maxMsgSize") @Nullable Integer maxMsgSize,
+            @JsonProperty("pinUvAuthProtocols") @Nullable List<PinProtocolVersion> pinUvAuthProtocols) {
         this.versions = versions;
         this.extensions = extensions;
         this.aaguid = aaguid;
