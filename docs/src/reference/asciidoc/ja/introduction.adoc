@@ -57,7 +57,7 @@ Mavenを使用している場合、webauthn4jを依存関係として追加し�
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.21.4.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.21.5.RELEASE</webauthn4j.version>
   ...
 </properties>
 
