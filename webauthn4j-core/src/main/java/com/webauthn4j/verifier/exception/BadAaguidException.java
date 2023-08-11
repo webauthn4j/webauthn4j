@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,15 +24,36 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadAaguidException extends VerificationException {
+
+    private final AAGUID aaguid;
+
+    public BadAaguidException(@Nullable String message, @Nullable AAGUID aaguid, @Nullable Throwable cause) {
+        super(message, cause);
+        this.aaguid = aaguid;
+    }
+
     public BadAaguidException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.aaguid = null;
     }
 
     public BadAaguidException(@Nullable String message) {
         super(message);
+        this.aaguid = null;
     }
 
     public BadAaguidException(@Nullable Throwable cause) {
         super(cause);
+        this.aaguid = null;
+    }
+
+    public BadAaguidException(@Nullable String message, @Nullable AAGUID aaguid) {
+        super(message);
+        this.aaguid = aaguid;
+    }
+
+    @Nullable
+    public AAGUID getAaguid() {
+        return aaguid;
     }
 }
