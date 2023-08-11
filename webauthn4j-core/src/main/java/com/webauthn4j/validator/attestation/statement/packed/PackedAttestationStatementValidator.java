@@ -130,7 +130,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
         COSEAlgorithmIdentifier credentialPublicKeyAlgorithm = coseKey.getAlgorithm();
         if (!alg.equals(credentialPublicKeyAlgorithm)) {
-            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.");
+            throw new BadAlgorithmException("`alg` in attestation statement doesn't match the algorithm of the coseKey in authenticatorData.", credentialPublicKeyAlgorithm, alg);
         }
         // Verify that sig is a valid signature over the concatenation of authenticatorData and clientDataHash using the credential public key with alg.
         //noinspection ConstantConditions as null check is already done in caller
