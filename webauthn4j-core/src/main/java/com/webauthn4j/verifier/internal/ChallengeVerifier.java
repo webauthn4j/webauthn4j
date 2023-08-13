@@ -20,6 +20,7 @@ import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.verifier.exception.BadChallengeException;
 import com.webauthn4j.verifier.exception.MissingChallengeException;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,9 @@ public class ChallengeVerifier {
         byte[] actualChallengeBytes = actual.getValue();
 
         if (!MessageDigest.isEqual(expectedChallengeBytes, actualChallengeBytes)) {
-            throw new BadChallengeException("The actual challenge does not match the expected challenge");
+            String expectedBase64Url = Base64UrlUtil.encodeToString(expectedChallengeBytes);
+            String actualBase64Url = Base64UrlUtil.encodeToString(actualChallengeBytes);
+            throw new BadChallengeException("The actual challenge does not match the expected challenge. Expected: " + expectedBase64Url + ", Actual: " + actualBase64Url, expectedChallengeBytes, actualChallengeBytes);
         }
     }
 }
