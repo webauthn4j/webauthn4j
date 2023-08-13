@@ -61,7 +61,7 @@ public class OriginVerifierImpl implements OriginVerifier {
 
         final Origin clientOrigin = collectedClientData.getOrigin();
         if (!serverProperty.getOriginPredicate().test(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match any of the preconfigured server origin.");
+            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match any of the preconfigured server origin.", null, clientOrigin);
         }
     }
 
