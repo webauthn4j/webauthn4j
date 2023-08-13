@@ -20,8 +20,7 @@
 package com.webauthn4j.verifier.attestation.statement.androidkey;
 
 import com.webauthn4j.util.AssertUtil;
-import com.webauthn4j.verifier.exception.BadAttestationStatementException;
-import com.webauthn4j.verifier.exception.KeyDescriptionValidationException;
+import com.webauthn4j.verifier.exception.KeyDescriptionValidationErrorDetailException;
 import com.webauthn4j.verifier.internal.asn1.ASN1;
 import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
@@ -50,6 +49,8 @@ public class KeyDescriptionVerifier {
     public static final int KM_ORIGIN_GENERATED = 0;
     public static final int KM_PURPOSE_SIGN = 2;
 
+    KeyDescriptionValidator(){}
+
     // ~ Instance fields
     // ================================================================================================
 
@@ -68,7 +69,7 @@ public class KeyDescriptionVerifier {
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
 
         if (attestationExtensionBytes == null) {
-            throw new KeyDescriptionValidationException("KeyDescription must not be null");
+            throw new KeyDescriptionValidationErrorDetailException("KeyDescription must not be null");
         }
         return ASN1Primitive.parse(attestationExtensionBytes).getValueAsASN1Structure();
     }
@@ -79,7 +80,7 @@ public class KeyDescriptionVerifier {
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(attestationChallenge, clientDataHash)) {
-            throw new KeyDescriptionValidationException("Attestation challenge doesn't match.");
+            throw new KeyDescriptionValidationErrorDetailException("Attestation challenge doesn't match.");
         }
 
         /// Verify the following using the appropriate authorization list from the attestation certificate extension data:
@@ -90,7 +91,7 @@ public class KeyDescriptionVerifier {
 
         if (findAuthorizationListEntry(softwareEnforced, KM_TAG_ALL_APPLICATIONS) != null ||
                 findAuthorizationListEntry(teeEnforced, KM_TAG_ALL_APPLICATIONS) != null) {
-            throw new KeyDescriptionValidationException("Key is not scoped properly.");
+            throw new KeyDescriptionValidationErrorDetailException("Key is not scoped properly.");
         }
 
         verifyAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
@@ -104,10 +105,10 @@ public class KeyDescriptionVerifier {
             /// The value in the AuthorizationList.origin field is equal to KM_ORIGIN_GENERATED.
             /// The value in the AuthorizationList.purpose field is equal to KM_PURPOSE_SIGN.
             if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN))) {
-                throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
+                throw new KeyDescriptionValidationErrorDetailException("Key is not generated in keymaster.");
             }
             if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE))) {
-                throw new KeyDescriptionValidationException("Key purpose is invalid.");
+                throw new KeyDescriptionValidationErrorDetailException("Key purpose is invalid.");
             }
         }
         /// otherwise use the union of teeEnforced and softwareEnforced.
@@ -117,11 +118,11 @@ public class KeyDescriptionVerifier {
             if (!isKeyGeneratedInKeymaster(findAuthorizationListEntry(teeEnforced, KM_TAG_ORIGIN)) &&
                     !isKeyGeneratedInKeymaster(findAuthorizationListEntry(softwareEnforced, KM_TAG_ORIGIN))) {
 
-                throw new KeyDescriptionValidationException("Key is not generated in keymaster.");
+                throw new KeyDescriptionValidationErrorDetailException("Key is not generated in keymaster.");
             }
             if (!containsValidPurpose(findAuthorizationListEntry(teeEnforced, KM_TAG_PURPOSE)) &&
                     !containsValidPurpose(findAuthorizationListEntry(softwareEnforced, KM_TAG_PURPOSE))) {
-                throw new KeyDescriptionValidationException("Key purpose is invalid.");
+                throw new KeyDescriptionValidationErrorDetailException("Key purpose is invalid.");
             }
         }
     }
@@ -162,7 +163,7 @@ public class KeyDescriptionVerifier {
             return null;
         }
         if (!(asn1Value.getClass() == ASN1Primitive.class && asn1Value.getTag().getNumber() == INTEGER)) {
-            throw new BadAttestationStatementException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
+            throw new KeyDescriptionValidationErrorDetailException(String.format("ASN1Integer is expected. Found %s instead.", asn1Value.getClass().getName()));
         }
         return ((ASN1Primitive)asn1Value).getValueAsBigInteger();
     }

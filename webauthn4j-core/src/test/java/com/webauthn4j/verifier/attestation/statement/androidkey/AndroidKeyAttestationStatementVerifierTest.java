@@ -19,6 +19,7 @@ package com.webauthn4j.verifier.attestation.statement.androidkey;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.attestation.statement.TPMAttestationStatement;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.verifier.RegistrationObject;
 import com.webauthn4j.verifier.exception.BadAttestationStatementException;
@@ -76,5 +77,13 @@ class AndroidKeyAttestationStatementVerifierTest {
         assertThrows(IllegalArgumentException.class,
                 () -> target.verify(registrationObject)
         );
+    }
+
+    @Test
+    void getJcaName_test() {
+        COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
+        AndroidKeyAttestationStatement attestationStatement = mock(AndroidKeyAttestationStatement.class);
+        when(attestationStatement.getAlg()).thenReturn(invalid);
+        assertThatThrownBy(() -> target.getJcaName(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 }

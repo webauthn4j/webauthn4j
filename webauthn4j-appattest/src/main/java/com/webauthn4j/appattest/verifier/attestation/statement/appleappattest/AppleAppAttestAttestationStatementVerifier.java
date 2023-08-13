@@ -65,16 +65,14 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
 
     void validateAttestationStatementNotNull(@Nullable AppleAppAttestAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
     }
 
 
     void validateX5c(@NotNull AppleAppAttestAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException(
-                    "No attestation certificate is found in Apple App Attest attestation statement."
-            );
+            throw new BadAttestationStatementException("No attestation certificate is found in Apple App Attest attestation statement.", attestationStatement);
         }
     }
 
@@ -86,7 +84,13 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
     private void validateNonce(CoreRegistrationObject registrationObject) {
         AppleAppAttestAttestationStatement attestationStatement = getAttestationStatement(registrationObject);
         X509Certificate attestationCertificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
-        byte[] actualNonce = extractNonce(attestationCertificate);
+        byte[] actualNonce;
+        try{
+            actualNonce = extractNonce(attestationCertificate);
+        }
+        catch (RuntimeException e){
+            throw new BadAttestationStatementException("Failed to extract nonce.", attestationStatement, e);
+        }
 
         byte[] clientDataHash = registrationObject.getClientDataHash();
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
@@ -96,7 +100,7 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
 
         // As nonce is known data to client side(potential attacker), there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if (!Arrays.equals(actualNonce, expectedNonce)) {
-            throw new BadAttestationStatementException("App Attest nonce doesn't match.");
+            throw new BadAttestationStatementException("App Attest nonce doesn't match.", attestationStatement);
         }
     }
 
@@ -107,7 +111,8 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
         // As publicKey is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(MessageDigestUtil.createSHA256().digest(publicKey), keyId)) {
-            throw new BadAttestationStatementException("key identifier doesn't match SHA-256 of the publickey");
+            AttestationStatement attestationStatement = dcRegistrationObject.getAttestationObject().getAttestationStatement();
+            throw new BadAttestationStatementException("key identifier doesn't match SHA-256 of the publickey", attestationStatement);
         }
     }
 
@@ -118,7 +123,7 @@ public class AppleAppAttestAttestationStatementVerifier extends AbstractStatemen
     byte[] extractNonce(X509Certificate attestationCertificate) {
         byte[] extensionValue = attestationCertificate.getExtensionValue(APPLE_CRED_CERT_EXTENSION_OID);
         if (extensionValue == null) {
-            throw new BadAttestationStatementException("Apple X.509 extension not found");
+            throw new IllegalArgumentException("Apple X.509 extension not found");
         }
 
         try {

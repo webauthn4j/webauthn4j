@@ -22,10 +22,15 @@ public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder
         byte[] partNumberAttr = (byte[]) map.get("2.23.133.2.2");
         byte[] firmwareVersionAttr = (byte[]) map.get("2.23.133.2.3");
 
-        String manufacturer = decodeAttr(manufacturerAttr);
-        String partNumber = decodeAttr(partNumberAttr);
-        String firmwareVersion = decodeAttr(firmwareVersionAttr);
-        return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
+        try {
+            String manufacturer = decodeAttr(manufacturerAttr);
+            String partNumber = decodeAttr(partNumberAttr);
+            String firmwareVersion = decodeAttr(firmwareVersionAttr);
+            return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
+        }
+        catch (RuntimeException e) {
+            throw new TPMDevicePropertyDecoderException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
+        }
     }
 
     public static String decodeAttr(byte[] attr) {

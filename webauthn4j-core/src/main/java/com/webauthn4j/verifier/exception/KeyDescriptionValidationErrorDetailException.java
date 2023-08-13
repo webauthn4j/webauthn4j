@@ -16,34 +16,23 @@
 
 package com.webauthn4j.verifier.exception;
 
-import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import org.jetbrains.annotations.Nullable;
-
 
 /**
  * Thrown if an invalid TPM key description is detected
  */
 @SuppressWarnings("squid:S110")
-public class KeyDescriptionValidationException extends BadAttestationStatementException {
+public class KeyDescriptionValidationErrorDetailException extends RuntimeException {
 
-
-    public KeyDescriptionValidationException(@Nullable String message, @Nullable AttestationStatement attestationStatement, @Nullable Throwable cause) {
-        super(message, attestationStatement, cause);
-    }
-
-    public KeyDescriptionValidationException(@Nullable String message, @Nullable AttestationStatement attestationStatement) {
-        super(message, attestationStatement);
-    }
-
-    public KeyDescriptionValidationException(@Nullable String message, @Nullable Throwable cause) {
+    public KeyDescriptionValidationErrorDetailException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
     }
 
-    public KeyDescriptionValidationException(@Nullable String message) {
+    public KeyDescriptionValidationErrorDetailException(@Nullable String message) {
         super(message);
     }
 
-    public KeyDescriptionValidationException(@Nullable Throwable cause) {
+    public KeyDescriptionValidationErrorDetailException(@Nullable Throwable cause) {
         super(cause);
     }
 

@@ -45,7 +45,7 @@ public class NoneAttestationStatement implements AttestationStatement {
     public void validate() {
         if (!unknownProperties.isEmpty()) {
             // This check is required by FIDO Conformance Tools
-            throw new BadAttestationStatementException("Unknown property is set to the none attestation statement.");
+            throw new BadAttestationStatementException("Unknown property is set to the none attestation statement.", this);
         }
     }
 
