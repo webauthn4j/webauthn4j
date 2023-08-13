@@ -20,5 +20,5 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface GooglePlayServiceVersionValidator {
 
-    void validate(@NonNull String version);
+    void validate(@NonNull String version) throws IllegalArgumentException;
 }

@@ -32,11 +32,6 @@ class AbstractStatementValidatorTest {
 
     private final PackedAttestationStatementValidator packedAttestationStatementValidator = new PackedAttestationStatementValidator();
 
-    @Test
-    void getJcaName() {
-        COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
-        assertThatThrownBy(() -> packedAttestationStatementValidator.getJcaName(invalid)).isInstanceOf(BadAttestationStatementException.class);
-    }
 
     @Test
     void supports_with_null_test() {

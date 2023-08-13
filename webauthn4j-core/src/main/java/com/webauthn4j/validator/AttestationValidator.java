@@ -149,7 +149,7 @@ class AttestationValidator {
                 return validator.validate(registrationObject);
             }
         }
-
-        throw new BadAttestationStatementException(String.format("AttestationValidator is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()));
+        AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
+        throw new BadAttestationStatementException(String.format("AttestationValidator is not configured to handle the supplied AttestationStatement format '%s'.", registrationObject.getAttestationObject().getFormat()), attestationStatement);
     }
 }

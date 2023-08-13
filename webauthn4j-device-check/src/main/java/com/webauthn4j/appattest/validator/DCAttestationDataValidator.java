@@ -23,6 +23,7 @@ import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.CoreRegistrationParameters;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationDataValidator;
@@ -75,7 +76,8 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
         // As keyId is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(keyId, credentialId)) {
-            throw new BadAttestationStatementException("key identifier doesn't match credentialId.");
+            AttestationStatement attestationStatement = registrationData.getAttestationObject().getAttestationStatement();
+            throw new BadAttestationStatementException("key identifier doesn't match credentialId.", attestationStatement);
         }
     }
 

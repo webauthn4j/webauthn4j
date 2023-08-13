@@ -64,13 +64,13 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
 
     void validateAttestationStatementNotNull(FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
     }
 
     void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().size() != 1) {
-            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
+            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.", attestationStatement);
         }
         PublicKey publicKey = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         validatePublicKey(publicKey);

@@ -9,6 +9,7 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.data.client.ClientDataType;
@@ -54,6 +55,8 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @SuppressWarnings({"FieldCanBeLocal", "SameParameterValue", "ConstantConditions"})
@@ -200,6 +203,13 @@ class PackedAttestationStatementValidatorTest {
     void extractAAGUIDFromAttestationCertificate_with_fido2_attestation_test() {
         AAGUID aaguid = target.extractAAGUIDFromAttestationCertificate(TestAttestationUtil.loadYubikeyFIDO2AttestationCertificate());
         assertThat(aaguid).isNotEqualTo(AAGUID.NULL);
+    }
+    @Test
+    void getJcaName_test() {
+        COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
+        PackedAttestationStatement attestationStatement = mock(PackedAttestationStatement.class);
+        when(attestationStatement.getAlg()).thenReturn(invalid);
+        assertThatThrownBy(() -> target.getJcaName(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
     }
 
     private void validate(byte[] clientDataBytes, AttestationObject attestationObject) {

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.attestation.statement.androidkey;
 
+import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
 import com.webauthn4j.data.attestation.statement.AndroidKeyAttestationStatement;
 import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
@@ -25,9 +26,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.SignatureUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import com.webauthn4j.validator.exception.BadSignatureException;
-import com.webauthn4j.validator.exception.PublicKeyMismatchException;
+import com.webauthn4j.validator.exception.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.nio.ByteBuffer;
@@ -59,7 +58,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         validateAttestationStatementNotNull(attestationStatement);
 
         if (attestationStatement.getX5c().isEmpty()) {
-            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.");
+            throw new BadAttestationStatementException("No attestation certificate is found in android key attestation statement.", attestationStatement);
         }
 
         /// Verify that attStmt is valid CBOR conforming to the syntax defined above and perform CBOR decoding on it to extract the contained fields.
@@ -77,14 +76,19 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         }
 
         byte[] clientDataHash = registrationObject.getClientDataHash();
-        keyDescriptionValidator.validate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
+        try{
+            keyDescriptionValidator.validate(attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate(), clientDataHash, teeEnforcedOnly);
+        }
+        catch (KeyDescriptionValidationErrorDetailException e){
+            throw new KeyDescriptionValidationException("Key description validation failed.", attestationStatement ,e);
+        }
 
         return AttestationType.BASIC;
     }
 
     void validateAttestationStatementNotNull(AndroidKeyAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
     }
 
@@ -97,7 +101,7 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
 
         try {
             String jcaName;
-            jcaName = getJcaName(attestationStatement.getAlg());
+            jcaName = getJcaName(attestationStatement);
             Signature verifier = SignatureUtil.createSignature(jcaName);
             verifier.initVerify(publicKey);
             verifier.update(signedData);
@@ -108,6 +112,16 @@ public class AndroidKeyAttestationStatementValidator extends AbstractStatementVa
         } catch (SignatureException | InvalidKeyException e) {
             throw new BadSignatureException("`sig` in attestation statement is not valid signature over the concatenation of authenticatorData and clientDataHash.", e);
         }
+    }
+
+    String getJcaName(@NonNull AndroidKeyAttestationStatement attestationStatement) {
+        SignatureAlgorithm signatureAlgorithm;
+        try {
+            signatureAlgorithm = attestationStatement.getAlg().toSignatureAlgorithm();
+        } catch (IllegalArgumentException e) {
+            throw new BadAttestationStatementException("alg is not a supported signature algorithm", attestationStatement, e);
+        }
+        return signatureAlgorithm.getJcaName();
     }
 
     private @NonNull byte[] getSignedData(@NonNull CoreRegistrationObject registrationObject) {
