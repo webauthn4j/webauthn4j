@@ -59,7 +59,7 @@ class ChallengeValidator {
         byte[] actualChallengeBytes = actual.getValue();
 
         if (!MessageDigest.isEqual(expectedChallengeBytes, actualChallengeBytes)) {
-            throw new BadChallengeException("The actual challenge does not match the expected challenge");
+            throw new BadChallengeException("The actual challenge does not match the expected challenge", expectedChallengeBytes, actualChallengeBytes);
         }
     }
 }
