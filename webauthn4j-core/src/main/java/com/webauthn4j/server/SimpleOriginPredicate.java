@@ -64,8 +64,8 @@ public class SimpleOriginPredicate implements OriginPredicate {
 
     @Override
     public String toString() {
-        return "SimpleOriginPredicate{" +
-                "origins=" + origins +
-                '}';
+        return origins.stream()
+                .map(Origin::toString)
+                .collect(java.util.stream.Collectors.joining(", "));
     }
 }

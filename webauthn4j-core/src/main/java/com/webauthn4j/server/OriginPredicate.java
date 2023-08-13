@@ -18,6 +18,12 @@ import java.util.function.Predicate;
  *   <li>{@link AnyOriginPredicate} - accepts any origin (useful for testing, not recommended for production)</li>
  *   <li>{@link NoOriginPredicate} - rejects all origins (for topOrigin validation)</li>
  * </ul>
+ * <p>
+ * <strong>Implementation Note:</strong> All implementations of this interface should override
+ * {@link Object#toString()} to provide a human-readable description of the expected origins.
+ * This description is used in error messages when origin validation fails. The {@code toString()}
+ * method should return a simple, user-friendly representation without including the class name
+ * (e.g., {@code "https://example.com"} instead of {@code "SimpleOriginPredicate{...}"}).
  *
  * @see <a href="https://www.w3.org/TR/webauthn-3/#sctn-validating-origin">WebAuthn Level 3 § 13.4.9 Validating the origin of a credential</a>
  */

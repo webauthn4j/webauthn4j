@@ -49,6 +49,6 @@ public class NoOriginPredicate implements OriginPredicate {
 
     @Override
     public String toString() {
-        return "NoOriginPredicate{}";
+        return "(no origin allowed)";
     }
 }

@@ -40,6 +40,6 @@ public class AnyOriginPredicate implements OriginPredicate {
 
     @Override
     public String toString() {
-        return "AnyOriginPredicate{}";
+        return "(any origin)";
     }
 }

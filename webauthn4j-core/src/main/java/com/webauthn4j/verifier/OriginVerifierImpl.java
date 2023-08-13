@@ -18,6 +18,7 @@ package com.webauthn4j.verifier;
 
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
+import com.webauthn4j.server.OriginPredicate;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.verifier.exception.BadOriginException;
@@ -61,7 +62,14 @@ public class OriginVerifierImpl implements OriginVerifier {
 
         final Origin clientOrigin = collectedClientData.getOrigin();
         if (!serverProperty.getOriginPredicate().test(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match any of the preconfigured server origin.");
+            OriginPredicate predicate = serverProperty.getOriginPredicate();
+            String expectedDescription;
+            try {
+                expectedDescription = predicate.toString();
+            } catch (Exception e) {
+                expectedDescription = predicate.getClass().getName();
+            }
+            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match expected: " + expectedDescription, predicate, clientOrigin);
         }
     }
 
