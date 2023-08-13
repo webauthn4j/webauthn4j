@@ -16,22 +16,55 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.data.client.Origin;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.Set;
 
 /**
  * Thrown if bad origin is specified
  */
 @SuppressWarnings("squid:S110")
 public class BadOriginException extends ValidationException {
+
+    private final Set<Origin> expected;
+    private final Origin actual;
+
+    public BadOriginException(@Nullable String message, @Nullable Set<Origin> expected, @Nullable Origin actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public BadOriginException(@Nullable String message, @Nullable Set<Origin> expected, @Nullable Origin actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
     public BadOriginException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadOriginException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadOriginException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    public Set<Origin> getExpected() {
+        return expected;
+    }
+
+    public Origin getActual() {
+        return actual;
     }
 }

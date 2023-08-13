@@ -54,7 +54,7 @@ public class OriginValidatorImpl implements OriginValidator {
 
         final Origin clientOrigin = collectedClientData.getOrigin();
         if (!serverProperty.getOrigins().contains(clientOrigin)) {
-            throw new BadOriginException("The collectedClientData '" + clientOrigin + "' origin doesn't match any of the preconfigured server origin.");
+            throw new BadOriginException("The collectedClientData origin '" + clientOrigin + "' doesn't match any of the preconfigured server origin.", serverProperty.getOrigins(), clientOrigin);
         }
     }
 
