@@ -28,6 +28,9 @@ import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
 import com.webauthn4j.verifier.internal.asn1.ASN1Primitive;
 import com.webauthn4j.verifier.internal.asn1.ASN1Structure;
 import org.jetbrains.annotations.NotNull;
+import com.webauthn4j.validator.exception.CertPathException;
+import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.cert.*;
@@ -103,9 +106,12 @@ public class DefaultCertPathTrustworthinessVerifier implements CertPathTrustwort
             throw new com.webauthn4j.verifier.exception.CertificateException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
             throw new com.webauthn4j.verifier.exception.CertificateException("invalid cert path", e);
+            throw new CertPathException("invalid algorithm parameter", e);
+        } catch (CertPathValidatorException e) {
+            throw new CertPathException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
-            throw new CertificateException("`certpath` must not contain full chain.");
+            throw new CertPathException("`certpath` must not contain full chain.");
         }
         return trustAnchors.stream()
                 .filter(item -> Objects.equals(item, result.getTrustAnchor()))

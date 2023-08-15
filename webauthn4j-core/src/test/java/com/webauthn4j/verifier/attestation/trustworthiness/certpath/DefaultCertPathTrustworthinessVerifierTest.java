@@ -25,7 +25,10 @@ import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.verifier.exception.CertificateException;
+import com.webauthn4j.verifier.exception.CertPathException;
 import com.webauthn4j.verifier.exception.TrustAnchorNotFoundException;
+import com.webauthn4j.validator.exception.CertPathException;
+import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.security.cert.TrustAnchor;
@@ -110,8 +113,10 @@ class DefaultCertPathTrustworthinessVerifierTest {
 
         CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
-        assertThrows(CertificateException.class,
+        assertThrows(CertPathException.class,
                 () -> target.verify(aaguid, attestationStatement)
+        assertThrows(CertPathException.class,
+                () -> target.validate(aaguid, attestationStatement)
         );
     }
 
