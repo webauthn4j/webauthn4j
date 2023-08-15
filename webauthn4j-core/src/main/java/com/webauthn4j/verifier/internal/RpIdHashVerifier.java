@@ -18,6 +18,7 @@ package com.webauthn4j.verifier.internal;
 
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
+import com.webauthn4j.util.HexUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.verifier.exception.BadRpIdException;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +53,9 @@ public class RpIdHashVerifier {
         // As rpIdHash is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
-            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.");
+            String expectedHex = HexUtil.encodeToString(relyingPartyRpIdHash);
+            String actualHex = HexUtil.encodeToString(rpIdHash);
+            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId. Expected: " + expectedHex + ", Actual: " + actualHex, relyingPartyRpIdHash, rpIdHash);
         }
     }
 }
