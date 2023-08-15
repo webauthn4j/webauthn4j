@@ -20,6 +20,7 @@ import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
+import com.webauthn4j.validator.exception.CertPathException;
 import com.webauthn4j.validator.exception.CertificateException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -61,9 +62,9 @@ public abstract class CertPathTrustworthinessValidatorBase implements CertPathTr
         try {
             result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
+            throw new CertPathException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
+            throw new CertPathException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
             throw new CertificateException("`certpath` must not contain full chain.");

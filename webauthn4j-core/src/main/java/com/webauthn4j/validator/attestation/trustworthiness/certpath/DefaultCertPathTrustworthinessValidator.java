@@ -22,7 +22,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.data.attestation.statement.FIDOU2FAttestationStatement;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.CertPathException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -85,12 +85,12 @@ public class DefaultCertPathTrustworthinessValidator implements CertPathTrustwor
         try {
             result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
         } catch (InvalidAlgorithmParameterException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException("invalid algorithm parameter", e);
+            throw new CertPathException("invalid algorithm parameter", e);
         } catch (CertPathValidatorException e) {
-            throw new com.webauthn4j.validator.exception.CertificateException("invalid cert path", e);
+            throw new CertPathException("invalid cert path", e);
         }
         if (fullChainProhibited && certPath.getCertificates().contains(result.getTrustAnchor().getTrustedCert())) {
-            throw new CertificateException("`certpath` must not contain full chain.");
+            throw new CertPathException("`certpath` must not contain full chain.");
         }
         return trustAnchors.stream()
                 .filter(item -> Objects.equals(item, result.getTrustAnchor()))

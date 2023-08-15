@@ -23,7 +23,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.test.TestAttestationStatementUtil;
 import com.webauthn4j.test.TestAttestationUtil;
 import com.webauthn4j.util.CertificateUtil;
-import com.webauthn4j.validator.exception.CertificateException;
+import com.webauthn4j.validator.exception.CertPathException;
 import com.webauthn4j.validator.exception.TrustAnchorNotFoundException;
 import org.junit.jupiter.api.Test;
 
@@ -94,7 +94,7 @@ class DefaultCertPathTrustworthinessValidatorTest {
 
         CertificateBaseAttestationStatement attestationStatement = TestAttestationStatementUtil.createBasicPackedAttestationStatement(attestationCertificatePath);
         target.setFullChainProhibited(true);
-        assertThrows(CertificateException.class,
+        assertThrows(CertPathException.class,
                 () -> target.validate(aaguid, attestationStatement)
         );
     }
