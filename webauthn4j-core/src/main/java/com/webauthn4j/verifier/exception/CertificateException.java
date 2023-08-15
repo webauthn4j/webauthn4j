@@ -18,20 +18,44 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.security.cert.X509Certificate;
+
 /**
  * Thrown if certificate problems happen
  */
 @SuppressWarnings("squid:S110")
 public class CertificateException extends VerificationException {
+
+    private final X509Certificate certificate;
+
+    public CertificateException(@Nullable String message, @Nullable X509Certificate certificate, @Nullable Throwable cause) {
+        super(message, cause);
+        this.certificate = certificate;
+    }
+
+    public CertificateException(@Nullable String message, @Nullable X509Certificate certificate) {
+        super(message);
+        this.certificate = certificate;
+    }
+
+
     public CertificateException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.certificate = null;
     }
 
     public CertificateException(@Nullable String message) {
         super(message);
+        this.certificate = null;
     }
 
     public CertificateException(@Nullable Throwable cause) {
         super(cause);
+        this.certificate = null;
+    }
+
+    @Nullable
+    public X509Certificate getCertificate() {
+        return certificate;
     }
 }
