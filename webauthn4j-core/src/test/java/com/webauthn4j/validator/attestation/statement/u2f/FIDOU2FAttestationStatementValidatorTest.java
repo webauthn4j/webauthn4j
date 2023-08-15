@@ -28,6 +28,7 @@ import com.webauthn4j.validator.exception.CertificateException;
 import org.junit.jupiter.api.Test;
 
 import java.security.PublicKey;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,16 +80,20 @@ class FIDOU2FAttestationStatementValidatorTest {
     void validatePublicKey_with_rsa_key_test() {
         PublicKey publicKey = mock(PublicKey.class);
         when(publicKey.getAlgorithm()).thenReturn("RSA");
+        X509Certificate certificate = mock(X509Certificate.class);
+        when(certificate.getPublicKey()).thenReturn(publicKey);
         assertThrows(CertificateException.class,
-                () -> target.validatePublicKey(publicKey)
+                () -> target.validatePublicKey(certificate)
         );
     }
 
     @Test
     void validatePublicKey_with_non_p256_curve_ec_key_test() {
         PublicKey publicKey = ECUtil.createKeyPair(ECUtil.P_521_SPEC).getPublic();
+        X509Certificate certificate = mock(X509Certificate.class);
+        when(certificate.getPublicKey()).thenReturn(publicKey);
         assertThrows(CertificateException.class,
-                () -> target.validatePublicKey(publicKey)
+                () -> target.validatePublicKey(certificate)
         );
     }
 }
