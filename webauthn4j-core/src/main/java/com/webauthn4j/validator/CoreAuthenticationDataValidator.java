@@ -245,7 +245,7 @@ public class CoreAuthenticationDataValidator {
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
         // As allowCredentials is public data(not secret data), there is no risk of timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual`
         if(allowCredentials != null && allowCredentials.stream().noneMatch(item -> Arrays.equals(item, credentialId))){
-            throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.");
+            throw new NotAllowedCredentialIdException("credentialId not listed in allowCredentials is used.", allowCredentials, credentialId);
         }
     }
 

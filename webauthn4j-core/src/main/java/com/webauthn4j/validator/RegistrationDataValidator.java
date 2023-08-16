@@ -41,6 +41,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RegistrationDataValidator {
 
@@ -224,8 +225,12 @@ public class RegistrationDataValidator {
     }
 
     void validateAlg(COSEAlgorithmIdentifier alg, List<PublicKeyCredentialParameters> pubKeyCredParams) {
-        if(pubKeyCredParams != null && pubKeyCredParams.stream().noneMatch(item -> item.getAlg().equals(alg))){
-            throw new NotAllowedAlgorithmException("alg not listed in options.pubKeyCredParams is used.");
+        if(pubKeyCredParams == null){
+            return;
+        }
+        List<COSEAlgorithmIdentifier> expected = pubKeyCredParams.stream().map(PublicKeyCredentialParameters::getAlg).collect(Collectors.toList());
+        if(expected.stream().noneMatch(item -> item.equals(alg))){
+            throw new NotAllowedAlgorithmException("alg not listed in options.pubKeyCredParams is used.", expected, alg);
         }
     }
 
