@@ -18,17 +18,50 @@ package com.webauthn4j.verifier.exception;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class NotAllowedCredentialIdException extends VerificationException {
+
+    private final List<byte[]> expected;
+    private final byte[] actual;
+
+    public NotAllowedCredentialIdException(@Nullable String message, @Nullable List<byte[]> expected, @Nullable byte[] actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public NotAllowedCredentialIdException(@Nullable String message, @Nullable List<byte[]> expected, @Nullable byte[] actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
 
     public NotAllowedCredentialIdException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public NotAllowedCredentialIdException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public NotAllowedCredentialIdException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    @Nullable
+    public List<byte[]> getExpected() {
+        return expected;
+    }
+
+    @Nullable
+    public byte[] getActual() {
+        return actual;
     }
 }
