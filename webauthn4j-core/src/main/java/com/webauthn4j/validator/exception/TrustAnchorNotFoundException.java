@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -23,15 +24,45 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class TrustAnchorNotFoundException extends ValidationException {
+
+    private final byte[] subjectKeyIdentifier;
+    private final AAGUID aaguid;
+
+    public TrustAnchorNotFoundException(@Nullable String message, @Nullable byte[] subjectKeyIdentifier) {
+        super(message);
+        this.subjectKeyIdentifier = subjectKeyIdentifier;
+        this.aaguid = null;
+    }
+
+    public TrustAnchorNotFoundException(@Nullable String message, @Nullable AAGUID aaguid) {
+        super(message);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = aaguid;
+    }
+
     public TrustAnchorNotFoundException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
     }
 
     public TrustAnchorNotFoundException(@Nullable String message) {
         super(message);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
     }
 
     public TrustAnchorNotFoundException(@Nullable Throwable cause) {
         super(cause);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
+    }
+
+    public byte[] getSubjectKeyIdentifier() {
+        return subjectKeyIdentifier;
+    }
+
+    public AAGUID getAaguid() {
+        return aaguid;
     }
 }
