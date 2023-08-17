@@ -47,7 +47,7 @@ public abstract class CertPathTrustworthinessVerifierBase implements CertPathTru
         Set<TrustAnchor> trustAnchors = resolveTrustAnchors(aaguid);
 
         if (trustAnchors.isEmpty()) {
-            throw new TrustAnchorNotFoundException("TrustAnchors are not found for AAGUID: " + aaguid.toString());
+            throw new TrustAnchorNotFoundException("TrustAnchors are not found for AAGUID: " + aaguid);
         }
 
         CertPathValidator certPathValidator = CertificateUtil.createCertPathValidator();

@@ -16,6 +16,7 @@
 
 package com.webauthn4j.verifier.exception;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -23,15 +24,48 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class TrustAnchorNotFoundException extends VerificationException {
+
+    private final byte[] subjectKeyIdentifier;
+    private final AAGUID aaguid;
+
+    public TrustAnchorNotFoundException(@Nullable String message, @Nullable byte[] subjectKeyIdentifier) {
+        super(message);
+        this.subjectKeyIdentifier = subjectKeyIdentifier;
+        this.aaguid = null;
+    }
+
+    public TrustAnchorNotFoundException(@Nullable String message, @Nullable AAGUID aaguid) {
+        super(message);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = aaguid;
+    }
+
+
     public TrustAnchorNotFoundException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
     }
 
     public TrustAnchorNotFoundException(@Nullable String message) {
         super(message);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
     }
 
     public TrustAnchorNotFoundException(@Nullable Throwable cause) {
         super(cause);
+        this.subjectKeyIdentifier = null;
+        this.aaguid = null;
+    }
+
+    @Nullable
+    public byte[] getSubjectKeyIdentifier() {
+        return subjectKeyIdentifier;
+    }
+
+    @Nullable
+    public AAGUID getAaguid() {
+        return aaguid;
     }
 }
