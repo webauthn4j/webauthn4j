@@ -81,6 +81,18 @@ public class DefaultCertPathTrustworthinessValidator implements CertPathTrustwor
         certPathParameters.setRevocationEnabled(revocationCheckEnabled);
         certPathParameters.setDate(Date.from(timestamp));
 
+        TrustAnchor trustAnchor;
+
+        // if itself is an acceptable certificate, it is valid cert path
+        if(certPath.getCertificates().size() == 1){
+            Certificate certificate = certPath.getCertificates().get(0);
+            trustAnchor = trustAnchors.stream().filter(it -> it.getTrustedCert().equals(certificate)).findFirst().orElse(null);
+            if(trustAnchor != null){
+                return trustAnchor;
+            }
+        }
+
+        // or validate the certificate chain path
         PKIXCertPathValidatorResult result;
         try {
             result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, certPathParameters);
