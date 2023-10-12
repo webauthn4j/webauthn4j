@@ -35,6 +35,7 @@ import java.security.cert.X509Certificate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 class AppleAppAttestAttestationStatementValidatorTest {
 
@@ -49,7 +50,7 @@ class AppleAppAttestAttestationStatementValidatorTest {
 
     @Test
     void validate_CoreRegistrationObject_test() {
-        assertThatThrownBy(() -> target.validate(mock(CoreRegistrationObject.class))).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> target.validate(mock(CoreRegistrationObject.class, withSettings().withoutAnnotations()))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

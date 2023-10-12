@@ -147,6 +147,7 @@ subprojects {
         options.compilerArgs << "-Xlint:overrides"
         options.compilerArgs << "-Xlint:rawtypes"
         options.compilerArgs << "-Xlint:static"
+        options.compilerArgs << "-Xlint:-options"
         //options.compilerArgs << "-Xlint:deprecation" //Temporary suspended to allow com.webauthn4j.metadata.legacy classes TODO: enable this option again when legacy classes are removed
         options.compilerArgs << "-Werror"
     }
