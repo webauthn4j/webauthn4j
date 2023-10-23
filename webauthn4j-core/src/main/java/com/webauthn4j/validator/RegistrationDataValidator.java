@@ -83,7 +83,7 @@ public class RegistrationDataValidator {
 
         //spec| Step1
         //spec| Let options be a new PublicKeyCredentialCreationOptions structure configured to the Relying Party's needs for the ceremony.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step2
         //spec| Call navigator.credentials.create() and pass options as the publicKey option. Let credential be the result of the successfully resolved promise.
@@ -92,11 +92,11 @@ public class RegistrationDataValidator {
         //spec| For example if the promise is rejected with an error code equivalent to "InvalidStateError",
         //spec| the user might be instructed to use a different authenticator.
         //spec| For information on different error contexts and the circumstances leading to them, see § 6.3.2 The authenticatorMakeCredential Operation.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step3
         //spec| Let response be credential.response. If response is not an instance of AuthenticatorAttestationResponse, abort the ceremony with a user-visible error.
-        //      (This step is done on client slide and out of WebAuthn4J responsibility.)
+        //      (This step is done on client side and out of WebAuthn4J responsibility.)
 
         //spec| Step4
         //spec| Let clientExtensionResults be the result of calling credential.getClientExtensionResults().
