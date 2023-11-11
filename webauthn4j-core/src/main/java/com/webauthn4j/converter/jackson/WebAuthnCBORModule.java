@@ -54,6 +54,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addDeserializer(TPMTPublic.class, new TPMTPublicDeserializer());
         this.addDeserializer(X509Certificate.class, new X509CertificateDeserializer());
 
+        this.addSerializer(new AttestationObjectSerializer());
         this.addSerializer(new AAGUIDSerializer());
         this.addSerializer(new AndroidKeyAttestationStatementSerializer());
         this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
