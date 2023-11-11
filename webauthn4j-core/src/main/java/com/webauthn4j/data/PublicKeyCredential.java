@@ -42,6 +42,7 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
     private final String id;
     private final byte[] rawId;
     private final R response;
+    private final AuthenticatorAttachment authenticatorAttachment;
     private final AuthenticationExtensionsClientOutputs<E> clientExtensionResults;
 
     // ~ Constructor
@@ -51,9 +52,18 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
             @Nullable byte[] credentialId,
             @Nullable R response,
             @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
+        this(credentialId, response, null, clientExtensionResults);
+    }
+
+    public PublicKeyCredential(
+            @Nullable byte[] credentialId,
+            @Nullable R response,
+            @Nullable AuthenticatorAttachment authenticatorAttachment,
+            @Nullable AuthenticationExtensionsClientOutputs<E> clientExtensionResults) {
         this.id = Base64UrlUtil.encodeToString(credentialId);
         this.rawId = credentialId;
         this.response = response;
+        this.authenticatorAttachment = authenticatorAttachment;
         this.clientExtensionResults = clientExtensionResults;
     }
 
@@ -72,6 +82,8 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
     public @Nullable R getResponse() {
         return response;
     }
+
+    public @Nullable AuthenticatorAttachment getAuthenticatorAttachment() { return authenticatorAttachment; }
 
     /**
      * @deprecated Renamed to getResponse() to compliant with WebAuthn Standard interface
@@ -95,13 +107,13 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         return Objects.equals(id, that.id) &&
                 Arrays.equals(rawId, that.rawId) &&
                 Objects.equals(response, that.response) &&
+                Objects.equals(authenticatorAttachment, that.authenticatorAttachment) &&
                 Objects.equals(clientExtensionResults, that.clientExtensionResults);
     }
 
     @Override
     public int hashCode() {
-
-        int result = Objects.hash(id, response, clientExtensionResults);
+        int result = Objects.hash(id, response, authenticatorAttachment, clientExtensionResults);
         result = 31 * result + Arrays.hashCode(rawId);
         return result;
     }
@@ -111,6 +123,7 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         return "PublicKeyCredential(" +
                 "id=" + id +
                 ", response=" + response +
+                ", authenticatorAttachment=" + authenticatorAttachment +
                 ", clientExtensionResults=" + clientExtensionResults +
                 ')';
     }

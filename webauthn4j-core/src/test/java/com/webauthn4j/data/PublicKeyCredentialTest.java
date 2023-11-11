@@ -83,8 +83,8 @@ class PublicKeyCredentialTest {
     @Test
     void equals_hashCode_test() {
 
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceA = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
-        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceB = new PublicKeyCredential<>(new byte[32], null, new AuthenticationExtensionsClientOutputs<>());
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceA = new PublicKeyCredential<>(new byte[32], null, AuthenticatorAttachment.PLATFORM, new AuthenticationExtensionsClientOutputs<>());
+        PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> instanceB = new PublicKeyCredential<>(new byte[32], null, AuthenticatorAttachment.PLATFORM, new AuthenticationExtensionsClientOutputs<>());
 
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
