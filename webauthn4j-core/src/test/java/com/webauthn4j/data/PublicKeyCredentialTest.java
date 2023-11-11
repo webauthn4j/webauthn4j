@@ -69,10 +69,12 @@ class PublicKeyCredentialTest {
                 extensions
         );
         PublicKeyCredential<AuthenticatorAttestationResponse, RegistrationExtensionClientOutput> credential = clientPlatform.create(credentialCreationOptions);
+        //noinspection deprecation
         assertAll(
                 () -> assertThat(credential.getType()).isEqualTo(PublicKeyCredentialType.PUBLIC_KEY.getValue()),
                 () -> assertThat(credential.getId()).isNotEmpty(),
                 () -> assertThat(credential.getRawId()).isNotEmpty(),
+                () -> assertThat(credential.getResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
                 () -> assertThat(credential.getAuthenticatorResponse()).isInstanceOf(AuthenticatorAttestationResponse.class),
                 () -> assertThat(credential.getClientExtensionResults()).isNotNull()
         );
