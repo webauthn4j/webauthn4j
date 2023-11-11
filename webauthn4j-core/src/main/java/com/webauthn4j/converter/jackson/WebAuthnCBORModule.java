@@ -58,6 +58,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new AndroidKeyAttestationStatementSerializer());
         this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
         this.addSerializer(new AppleAnonymousAttestationStatementSerializer());
+        this.addSerializer(new NoneAttestationStatementSerializer());
         this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
         this.addSerializer(new AuthenticationExtensionsAuthenticatorInputsSerializer());
         this.addSerializer(new AuthenticationExtensionsAuthenticatorOutputsSerializer());
