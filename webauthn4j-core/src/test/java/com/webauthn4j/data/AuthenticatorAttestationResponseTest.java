@@ -16,13 +16,36 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.attestation.AttestationObject;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.client.ClientDataType;
+import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AuthenticatorAttestationResponseTest {
+
+    private ObjectConverter objectConverter = new ObjectConverter();
+
+    @Test
+    void easilyAccessingCredentialData_test(){
+        byte[] clientDataJSONBytes = TestDataUtil.createClientDataJSON(ClientDataType.WEBAUTHN_CREATE);
+        AttestationObject attestationObject = TestDataUtil.createAttestationObjectWithFIDOU2FAttestationStatement();
+        byte[] attestationObjectBytes = objectConverter.getCborConverter().writeValueAsBytes(attestationObject);
+        AuthenticatorAttestationResponse instance = new AuthenticatorAttestationResponse(clientDataJSONBytes, attestationObjectBytes);
+        byte[] authenticatorData = instance.getAuthenticatorData();
+        byte[] publicKey = instance.getPublicKey();
+        COSEAlgorithmIdentifier publicKeyAlgorithm = instance.getPublicKeyAlgorithm();
+        assertThat(authenticatorData).isEqualTo(new AuthenticatorDataConverter(objectConverter).convert(attestationObject.getAuthenticatorData()));
+        assertThat(publicKey).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey().getEncoded());
+        assertThat(publicKeyAlgorithm).isEqualTo(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getAlgorithm());
+    }
 
     @Test
     void equals_hashCode_test() {

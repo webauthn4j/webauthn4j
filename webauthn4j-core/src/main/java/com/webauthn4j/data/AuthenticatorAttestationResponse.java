@@ -16,6 +16,13 @@
 
 package com.webauthn4j.data;
 
+import com.webauthn4j.converter.AttestationObjectConverter;
+import com.webauthn4j.converter.AttestedCredentialDataConverter;
+import com.webauthn4j.converter.AuthenticatorDataConverter;
+import com.webauthn4j.converter.util.ObjectConverter;
+import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
+import com.webauthn4j.data.attestation.authenticator.COSEKey;
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CollectionUtil;
@@ -79,6 +86,39 @@ public class AuthenticatorAttestationResponse extends AuthenticatorResponse {
      */
     public @NonNull Set<AuthenticatorTransport> getTransports() {
         return this.transports;
+    }
+
+    public @NonNull byte[] getAuthenticatorData(ObjectConverter objectConverter){
+        AttestationObjectConverter attestationObjectConverter = new AttestationObjectConverter(objectConverter);
+        return attestationObjectConverter.extractAuthenticatorData(this.attestationObject);
+    }
+
+    public @NonNull byte[] getAuthenticatorData(){
+        return getAuthenticatorData(new ObjectConverter());
+    }
+
+    public @Nullable byte[] getPublicKey(ObjectConverter objectConverter){
+        return getCOSEKey(objectConverter).getPublicKey().getEncoded();
+    }
+
+    public @Nullable byte[] getPublicKey(){
+        return getPublicKey(new ObjectConverter());
+    }
+
+    public @Nullable COSEAlgorithmIdentifier getPublicKeyAlgorithm(ObjectConverter objectConverter){
+        return getCOSEKey(objectConverter).getAlgorithm();
+    }
+
+    public @Nullable COSEAlgorithmIdentifier getPublicKeyAlgorithm(){
+        return getCOSEKey(new ObjectConverter()).getAlgorithm();
+    }
+
+    private @NonNull COSEKey getCOSEKey(ObjectConverter objectConverter){
+        AuthenticatorDataConverter authenticatorDataConverter = new AuthenticatorDataConverter(objectConverter);
+        AttestedCredentialDataConverter attestedCredentialDataConverter = new AttestedCredentialDataConverter(objectConverter);
+        byte[] attestedCredentialDataBytes = authenticatorDataConverter.extractAttestedCredentialData(this.getAuthenticatorData(objectConverter));
+        AttestedCredentialData attestedCredentialData = attestedCredentialDataConverter.convert(attestedCredentialDataBytes);
+        return attestedCredentialData.getCOSEKey();
     }
 
     /**
