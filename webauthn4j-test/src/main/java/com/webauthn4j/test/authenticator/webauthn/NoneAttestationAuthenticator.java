@@ -37,25 +37,19 @@ public class NoneAttestationAuthenticator extends WebAuthnModelAuthenticator {
 
     public NoneAttestationAuthenticator(
             AAGUID aaguid,
-            KeyPair attestationKeyPair,
             int counter,
             boolean capableOfUserVerification,
             ObjectConverter objectConverter) {
-        super(aaguid, attestationKeyPair, null, null, counter, capableOfUserVerification, objectConverter);
+        super(aaguid, null, null, null, counter, capableOfUserVerification, objectConverter);
     }
 
-    public NoneAttestationAuthenticator(KeyPair keyPair) {
+    public NoneAttestationAuthenticator() {
         this(
             AAGUID.ZERO,
-            keyPair,
             0,
             true,
             new ObjectConverter()
         );
-    }
-
-    public NoneAttestationAuthenticator() {
-        this(RSAUtil.createKeyPair());
     }
 
     @Override
