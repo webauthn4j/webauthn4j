@@ -30,6 +30,7 @@ public class EmulatorUtil {
     public static final AndroidSafetyNetAuthenticator ANDROID_SAFETY_NET_AUTHENTICATOR = new AndroidSafetyNetAuthenticator();
     public static final TPMAuthenticator TPM_AUTHENTICATOR = new TPMAuthenticator();
     public static final FIDOU2FAuthenticator FIDO_U2F_AUTHENTICATOR = new FIDOU2FAuthenticator();
+    public static final NoneAttestationAuthenticator NONE_ATTESTATION_AUTHENTICATOR = new NoneAttestationAuthenticator();
 
     private static final Origin origin = new Origin("http://example.com");
 
