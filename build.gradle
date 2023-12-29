@@ -30,6 +30,7 @@ buildscript {
         checkerframeworkVersion = "3.41.0"
 
         // for test library dependencies
+        mockitoVersion = "5.8.0"
         springBootVersion = "2.7.18"
         logbackVersion = "1.4.14"
     }
@@ -108,6 +109,8 @@ subprojects {
 
             // Test dependencies
             implementation("ch.qos.logback:logback-classic:$logbackVersion")
+            implementation("org.mockito:mockito-core:$mockitoVersion")
+            implementation("org.mockito:mockito-junit-jupiter:$mockitoVersion")
 
             // webauthn4j-test implementation dependencies
             implementation("org.bouncycastle:bcprov-jdk15on:$bouncyCastleVersion")
