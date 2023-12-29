@@ -60,6 +60,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.addSerializer(new AndroidSafetyNetAttestationStatementSerializer());
         this.addSerializer(new AppleAnonymousAttestationStatementSerializer());
         this.addSerializer(new NoneAttestationStatementSerializer());
+        this.addSerializer(new CompoundAttestationStatementItemSerializer());
         this.addSerializer(new AttestedCredentialDataSerializer(objectConverter));
         this.addSerializer(new AuthenticationExtensionsAuthenticatorInputsSerializer());
         this.addSerializer(new AuthenticationExtensionsAuthenticatorOutputsSerializer());
@@ -87,6 +88,7 @@ public class WebAuthnCBORModule extends SimpleModule {
         this.registerSubtypes(new NamedType(TPMAttestationStatement.class, TPMAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(AppleAnonymousAttestationStatement.class, AppleAnonymousAttestationStatement.FORMAT));
         this.registerSubtypes(new NamedType(NoneAttestationStatement.class, NoneAttestationStatement.FORMAT));
+        this.registerSubtypes(new NamedType(CompoundAttestationStatement.class, CompoundAttestationStatement.FORMAT));
 
         // authenticator extension outputs
 

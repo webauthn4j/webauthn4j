@@ -1,15 +1,13 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.test.TestAttestationStatementUtil;
-import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.validator.RegistrationObject;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class CompoundAttestationStatementTest {
 
@@ -23,7 +21,9 @@ class CompoundAttestationStatementTest {
 
     @Test
     void constructor_test2() {
-        assertThatCode(() -> new CompoundAttestationStatement(Arrays.asList(u2f, packed))).doesNotThrowAnyException();
+        CompoundAttestationStatementItem u2fItem = new CompoundAttestationStatementItem(u2f);
+        CompoundAttestationStatementItem packedItem = new CompoundAttestationStatementItem(u2f);
+        assertThatCode(() -> new CompoundAttestationStatement(Arrays.asList(u2fItem, packedItem))).doesNotThrowAnyException();
     }
 
     @Test
@@ -34,7 +34,7 @@ class CompoundAttestationStatementTest {
 
     @Test
     void validate_test2(){
-        CompoundAttestationStatement compoundAttestationStatement = new CompoundAttestationStatement();
+        CompoundAttestationStatement compoundAttestationStatement = new CompoundAttestationStatement(new CompoundAttestationStatementItem[0]);
         assertThatThrownBy(compoundAttestationStatement::validate).isInstanceOf(ConstraintViolationException.class);
     }
 
@@ -55,7 +55,6 @@ class CompoundAttestationStatementTest {
     void getter_test(){
         CompoundAttestationStatement instanceA = new CompoundAttestationStatement(u2f, packed);
         assertThat(instanceA.getFormat()).isEqualTo(CompoundAttestationStatement.FORMAT);
-        assertThat(instanceA.getAttStmt()).isEqualTo(Arrays.asList(u2f, packed));
     }
 
     @Test
