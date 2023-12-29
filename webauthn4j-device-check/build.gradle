@@ -34,7 +34,6 @@ dependencies {
     testImplementation('ch.qos.logback:logback-classic')
     testImplementation('org.projectlombok:lombok')
     testImplementation('org.mockito:mockito-core')
-    testImplementation('org.mockito:mockito-inline')
     testImplementation('org.assertj:assertj-core')
     testImplementation('org.junit.jupiter:junit-jupiter-api')
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine')
