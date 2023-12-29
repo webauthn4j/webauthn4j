@@ -118,8 +118,8 @@ subprojects {
     }
 
     java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 1.8 to support JDK8 users who don't need EdDSA.
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11 // Although webauthn4j uses JDK 15+ API to support EdDSA, keep target version 11 to support JDK11 users who don't need EdDSA.
     }
 
     javadoc {
