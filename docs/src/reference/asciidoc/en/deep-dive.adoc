@@ -39,13 +39,18 @@ Because of that, an envelope class which has attestationStatement field and form
 
 [source,java]
 ----
-AttestationStatementEnvelope attestationStatementEnvelope = new AttestationStatementEnvelope(format, attestationStatement);
-byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes()
+//serialize
+AttestationStatementEnvelope envelope = new AttestationStatementEnvelope(attestationStatement);
+byte[] serializedEnvelope = objectConverter.getCborConverter().writeValueAsBytes(envelope);
+
+//deserialize
+AttestationStatementEnvelope deserializedEnvelope = objectConverter.getCborConverter().readValue(serializedEnvelope, AttestationStatementEnvelope.class);
+AttestationStatement deserializedAttestationStatement = deserializedEnvelope.getAttestationStatement();
 ----
 
 [source,java]
 ----
-static class AttestationStatementEnvelope{
+class AttestationStatementEnvelope{
 
     @JsonProperty("attStmt")
     @JsonTypeInfo(
