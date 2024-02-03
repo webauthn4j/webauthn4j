@@ -42,7 +42,7 @@ public class HKDFUtil {
      * @return output keying material
      */
     public static @NonNull byte[] calculateHKDFSHA256(@NonNull byte[] ikm, @NonNull byte[] salt, @NonNull byte[] info, int outputLength) {
-        byte[] pseudoRandomKey = extract(salt, ikm);
+        byte[] pseudoRandomKey = extract(ikm, salt);
         return expand(pseudoRandomKey, info, outputLength);
     }
 
