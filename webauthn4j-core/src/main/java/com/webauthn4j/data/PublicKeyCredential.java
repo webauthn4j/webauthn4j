@@ -24,7 +24,6 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -34,7 +33,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#iface-pkcredential">§5.1. PublicKeyCredential Interface</a>
  */
-public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput> implements Serializable {
+public class PublicKeyCredential<R extends AuthenticatorResponse, E extends ExtensionClientOutput> {
 
     // ~ Instance fields
     // ================================================================================================

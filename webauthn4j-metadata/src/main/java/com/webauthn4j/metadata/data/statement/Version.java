@@ -21,13 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The FIDO unified protocol version(s) (related to the specific protocol family) supported by this authenticator.
  */
-public class Version implements Serializable {
+public class Version {
 
     @NonNull
     private final Integer major;

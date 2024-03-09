@@ -21,11 +21,10 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthen
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CoreAuthenticationData implements Serializable {
+public class CoreAuthenticationData {
 
     private final byte[] credentialId;
     private final AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData;

@@ -23,7 +23,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -38,7 +37,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-authenticator-data">§6.1 Authenticator Data.</a>
  */
-public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> implements Serializable {
+public class AuthenticatorData<T extends ExtensionAuthenticatorOutput> {
     public static final byte BIT_UP = (byte) 0b00000001;
     public static final byte BIT_UV = (byte) 0b00000100;
     public static final byte BIT_BE = (byte) 0b00001000;

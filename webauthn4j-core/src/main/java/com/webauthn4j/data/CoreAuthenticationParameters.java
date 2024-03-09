@@ -23,11 +23,10 @@ import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class CoreAuthenticationParameters implements Serializable {
+public class CoreAuthenticationParameters {
 
     private final CoreServerProperty serverProperty;
     private final CoreAuthenticator authenticator;

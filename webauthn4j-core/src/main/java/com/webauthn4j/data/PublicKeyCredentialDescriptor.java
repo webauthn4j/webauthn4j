@@ -24,7 +24,6 @@ import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -36,7 +35,7 @@ import java.util.Set;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialdescriptor">
  * §5.10.3. Credential Descriptor (dictionary PublicKeyCredentialDescriptor)</a>
  */
-public class PublicKeyCredentialDescriptor implements Serializable {
+public class PublicKeyCredentialDescriptor {
 
     // ~ Instance fields
     // ================================================================================================

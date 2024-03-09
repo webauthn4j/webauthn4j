@@ -24,11 +24,10 @@ import com.webauthn4j.util.MessageDigestUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.security.MessageDigest;
 import java.util.Objects;
 
-public class MessageDigestAlgorithm implements Serializable {
+public class MessageDigestAlgorithm {
 
     public static final MessageDigestAlgorithm SHA1 = new MessageDigestAlgorithm("SHA-1");
     public static final MessageDigestAlgorithm SHA256 = new MessageDigestAlgorithm("SHA-256");

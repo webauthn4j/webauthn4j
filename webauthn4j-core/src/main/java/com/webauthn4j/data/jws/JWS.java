@@ -23,7 +23,6 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.PublicKey;
@@ -31,7 +30,7 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.interfaces.ECPublicKey;
 
-public class JWS<T extends Serializable> implements Serializable {
+public class JWS<T> {
 
     private final transient Logger logger;
 

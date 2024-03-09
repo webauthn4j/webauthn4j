@@ -11,7 +11,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,10 +21,10 @@ import java.util.stream.Collectors;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticationextensionsclientinputs">
  * §5.7. Authentication Extensions Client Inputs (typedef AuthenticationExtensionsClientInputs)</a>
  */
-public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput> implements Serializable {
+public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput> {
 
     @JsonIgnore
-    private final Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Object> unknowns = new HashMap<>();
     @JsonProperty
     private String appid;
     @JsonProperty
@@ -46,12 +45,12 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnyGetter
-    private @NonNull Map<String, Serializable> getUnknowns() {
+    private @NonNull Map<String, Object> getUnknowns() {
         return Collections.unmodifiableMap(this.unknowns);
     }
 
     @JsonAnySetter
-    private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
+    private void setUnknowns(@NonNull String name, @Nullable Object value) {
         this.unknowns.put(name, value);
     }
 
@@ -92,7 +91,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public @Nullable Serializable getValue(@NonNull String key) {
+    public @Nullable Object getValue(@NonNull String key) {
         switch (key) {
             case "appid":
                 return appid;
@@ -221,7 +220,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
     public static class BuilderForRegistration {
 
-        private final Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Object> unknowns = new HashMap<>();
         private Boolean uvm;
         private Boolean credProps;
         private CredentialProtectionPolicy credentialProtectionPolicy;
@@ -265,7 +264,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value) {
+        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -276,7 +275,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
     public static class BuilderForAuthentication {
 
-        private final Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Object> unknowns = new HashMap<>();
         private String appid;
         private String appidExclude;
         private Boolean uvm;
@@ -313,7 +312,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return this;
         }
 
-        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value) {
+        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

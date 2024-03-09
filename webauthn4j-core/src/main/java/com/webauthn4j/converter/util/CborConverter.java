@@ -31,13 +31,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 
 /**
  * A utility class for CBOR serialization/deserialization
  */
-public class CborConverter implements Serializable {
+public class CborConverter {
 
     private static final String INPUT_MISMATCH_ERROR_MESSAGE = "Input data does not match expected form";
 

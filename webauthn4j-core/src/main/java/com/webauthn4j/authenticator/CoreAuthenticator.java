@@ -23,12 +23,11 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 
 /**
  * Core interface that represents WebAuthn authenticator
  */
-public interface CoreAuthenticator extends Serializable {
+public interface CoreAuthenticator {
 
     /**
      * Returns the {@link AttestedCredentialData}

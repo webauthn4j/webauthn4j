@@ -22,11 +22,10 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class CoreRegistrationParameters implements Serializable {
+public class CoreRegistrationParameters {
 
     // server property
     private final CoreServerProperty serverProperty;

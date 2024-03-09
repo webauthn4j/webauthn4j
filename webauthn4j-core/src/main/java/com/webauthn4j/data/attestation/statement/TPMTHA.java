@@ -21,12 +21,11 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMTHA implements Serializable {
+public class TPMTHA {
 
     private final TPMIAlgHash hashAlg;
     private final byte[] digest;

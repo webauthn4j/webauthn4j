@@ -25,7 +25,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -34,7 +33,7 @@ import java.util.Objects;
  * Contains an AuthenticatorStatus and additional data associated with it, if any.
  * New StatusReport entries will be added to report known issues present in firmware updates.
  */
-public class StatusReport implements Serializable {
+public class StatusReport {
     @NonNull
     @JsonProperty
     private final AuthenticatorStatus status;

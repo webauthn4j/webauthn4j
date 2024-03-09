@@ -20,14 +20,13 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 
 /**
  * Authenticators respond to Relying Party requests by returning an object derived from the AuthenticatorResponse.
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#authenticatorresponse">§5.2. Authenticator Responses (interface AuthenticatorResponse)</a>
  */
-public abstract class AuthenticatorResponse implements Serializable {
+public abstract class AuthenticatorResponse {
 
     // ~ Instance fields
     // ================================================================================================

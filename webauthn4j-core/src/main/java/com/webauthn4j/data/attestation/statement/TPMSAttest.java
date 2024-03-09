@@ -23,13 +23,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMSAttest implements Serializable {
+public class TPMSAttest {
 
     private final TPMGenerated magic;
     private final TPMISTAttest type;

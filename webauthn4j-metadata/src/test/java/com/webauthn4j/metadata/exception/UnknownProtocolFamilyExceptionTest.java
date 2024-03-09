@@ -19,7 +19,7 @@ package com.webauthn4j.metadata.exception;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class UnknownProtocolFamilyExceptionTest {
 

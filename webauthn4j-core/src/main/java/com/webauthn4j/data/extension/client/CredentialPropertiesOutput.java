@@ -20,10 +20,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class CredentialPropertiesOutput implements Serializable {
+public class CredentialPropertiesOutput {
 
     final Boolean rk;
 

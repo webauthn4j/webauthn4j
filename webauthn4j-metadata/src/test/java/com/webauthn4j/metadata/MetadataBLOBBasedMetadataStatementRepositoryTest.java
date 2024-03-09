@@ -16,24 +16,6 @@
 
 package com.webauthn4j.metadata;
 
-import com.webauthn4j.converter.util.ObjectConverter;
-import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.data.statement.MetadataStatement;
-import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.util.HexUtil;
-import com.webauthn4j.validator.RegistrationObject;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 class MetadataBLOBBasedMetadataStatementRepositoryTest {
 
 

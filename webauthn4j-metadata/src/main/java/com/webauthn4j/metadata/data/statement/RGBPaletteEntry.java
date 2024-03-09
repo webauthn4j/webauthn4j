@@ -21,13 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The RGBPaletteEntry is an RGB three-sample tuple palette entry
  */
-public class RGBPaletteEntry implements Serializable {
+public class RGBPaletteEntry {
 
     @NonNull private final Integer r;
     @NonNull private final Integer g;

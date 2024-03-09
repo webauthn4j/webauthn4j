@@ -24,12 +24,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class MetadataBLOBPayload implements Serializable {
+public class MetadataBLOBPayload {
     @Nullable
     private final String legalHeader;
     @NonNull

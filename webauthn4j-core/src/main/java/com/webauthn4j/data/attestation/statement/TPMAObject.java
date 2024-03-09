@@ -19,11 +19,10 @@ package com.webauthn4j.data.attestation.statement;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-public class TPMAObject implements Serializable {
+public class TPMAObject {
 
     public static final int FIXED_TPM_BIT = 0b00000000000000000000000000000010;
     public static final int ST_CLEAR_BIT = 0b00000000000000000000000000000100;

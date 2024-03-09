@@ -16,8 +16,8 @@
 
 package com.webauthn4j.metadata.legacy.validator;
 
-import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.exception.UnknownProtocolFamilyException;
+import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 
 import java.util.Arrays;
 import java.util.List;

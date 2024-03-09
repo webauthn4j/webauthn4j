@@ -18,12 +18,10 @@ package com.webauthn4j.data.attestation.statement;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
-
 /**
  * Attestation metadata.certs container
  */
-public interface AttestationStatement extends Serializable {
+public interface AttestationStatement {
     @NonNull String getFormat();
 
     /**

@@ -21,13 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The CodeAccuracyDescriptor describes the relevant accuracy/complexity aspects of passcode user verification methods.
  */
-public class CodeAccuracyDescriptor implements Serializable {
+public class CodeAccuracyDescriptor {
 
     @NonNull private final Integer base;
     @NonNull private final Integer minLength;

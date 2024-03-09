@@ -17,8 +17,6 @@
 package com.webauthn4j.metadata.legacy;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.legacy.AggregatingMetadataItemsProvider;
-import com.webauthn4j.metadata.legacy.MetadataItemsProvider;
 import com.webauthn4j.metadata.legacy.data.MetadataItem;
 import org.junit.jupiter.api.Test;
 

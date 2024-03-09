@@ -20,7 +20,6 @@ import com.webauthn4j.util.CertificateUtil;
 import com.webauthn4j.util.ECUtil;
 import org.junit.jupiter.api.Test;
 
-import java.io.Serializable;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.util.Collections;
@@ -59,7 +58,7 @@ class JWSFactoryTest {
     }
 
 
-    private static class Payload implements Serializable {
+    private static class Payload {
         private String dummy;
 
         public String getDummy() {

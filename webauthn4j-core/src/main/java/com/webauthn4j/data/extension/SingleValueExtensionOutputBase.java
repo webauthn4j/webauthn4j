@@ -18,9 +18,7 @@ package com.webauthn4j.data.extension;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
-
-public abstract class SingleValueExtensionOutputBase<T extends Serializable> extends SingleValueExtensionBase<T> implements ExtensionOutput {
+public abstract class SingleValueExtensionOutputBase<T> extends SingleValueExtensionBase<T> implements ExtensionOutput {
 
     protected SingleValueExtensionOutputBase(@NonNull T value) {
         super(value);

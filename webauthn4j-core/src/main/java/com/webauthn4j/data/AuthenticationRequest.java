@@ -19,11 +19,10 @@ package com.webauthn4j.data;
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class AuthenticationRequest implements Serializable {
+public class AuthenticationRequest {
 
     private final byte[] credentialId;
     private final byte[] userHandle;

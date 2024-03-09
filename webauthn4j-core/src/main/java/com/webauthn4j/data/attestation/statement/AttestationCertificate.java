@@ -26,7 +26,6 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
-import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +33,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 
-public class AttestationCertificate implements Serializable {
+public class AttestationCertificate {
 
     private static final int CERTIFICATE_VERSION_3 = 3;
     private static final int NON_CA = -1;

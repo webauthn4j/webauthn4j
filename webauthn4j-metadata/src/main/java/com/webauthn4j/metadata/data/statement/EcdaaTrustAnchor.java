@@ -22,13 +22,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * In the case of ECDAA attestation, the ECDAA-Issuer's trust anchor must be specified in this field.
  */
-public class EcdaaTrustAnchor implements Serializable {
+public class EcdaaTrustAnchor {
     @NonNull private final String x;
     @NonNull private final String y;
     @NonNull private final String c;

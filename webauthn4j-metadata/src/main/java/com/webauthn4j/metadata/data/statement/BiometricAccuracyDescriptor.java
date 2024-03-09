@@ -20,14 +20,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * BiometricAccuracyDescriptor
  */
 @SuppressWarnings("squid:S00116")
-public class BiometricAccuracyDescriptor implements Serializable {
+public class BiometricAccuracyDescriptor {
 
     @Nullable private final Double selfAttestedFAR;
     @Nullable private final Double selfAttestedFRR;

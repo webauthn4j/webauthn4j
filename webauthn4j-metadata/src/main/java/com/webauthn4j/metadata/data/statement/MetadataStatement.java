@@ -28,7 +28,6 @@ import com.webauthn4j.metadata.data.uaf.AAID;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,7 @@ import java.util.Objects;
 /**
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  */
-public class MetadataStatement implements Serializable {
+public class MetadataStatement {
     @Nullable private final String legalHeader;
     @Nullable private final AAID aaid;
     @Nullable private final AAGUID aaguid;

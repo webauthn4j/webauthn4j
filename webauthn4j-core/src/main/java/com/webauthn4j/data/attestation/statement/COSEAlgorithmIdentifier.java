@@ -24,12 +24,11 @@ import com.webauthn4j.data.SignatureAlgorithm;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class COSEAlgorithmIdentifier implements Serializable {
+public class COSEAlgorithmIdentifier {
 
     public static final COSEAlgorithmIdentifier RS1;
     public static final COSEAlgorithmIdentifier RS256;

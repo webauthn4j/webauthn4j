@@ -21,10 +21,9 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class CoreServerProperty implements Serializable {
+public class CoreServerProperty {
 
     private final String rpId;
     private final Challenge challenge;

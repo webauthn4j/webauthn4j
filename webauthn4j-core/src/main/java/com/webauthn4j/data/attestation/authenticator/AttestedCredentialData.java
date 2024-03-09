@@ -21,7 +21,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -31,7 +30,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-attested-credential-data">§6.4.1. Attested Credential Data</a>
  */
-public class AttestedCredentialData implements Serializable {
+public class AttestedCredentialData {
 
     //~ Instance fields ================================================================================================
     private final AAGUID aaguid;

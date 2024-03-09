@@ -28,19 +28,21 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.spec.*;
+import java.security.spec.ECParameterSpec;
+import java.security.spec.ECPoint;
+import java.security.spec.ECPrivateKeySpec;
+import java.security.spec.ECPublicKeySpec;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class EC2COSEKey extends AbstractCOSEKey implements Serializable {
+public class EC2COSEKey extends AbstractCOSEKey {
 
     private static final String CURVE_NULL_CHECK_MESSAGE = "curve must not be null";
 

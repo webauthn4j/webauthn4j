@@ -5,7 +5,6 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 
 public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput {
 
@@ -41,7 +40,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     }
 
     @Override
-    public @Nullable Serializable getValue(@NonNull String key) {
+    public @Nullable Object getValue(@NonNull String key) {
         switch (key) {
             case KEY_CREDENTIAL_PROTECTION_POLICY:
                 return credentialProtectionPolicy;

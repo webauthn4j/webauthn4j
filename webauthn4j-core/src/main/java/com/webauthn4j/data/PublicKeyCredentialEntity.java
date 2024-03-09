@@ -19,7 +19,6 @@ package com.webauthn4j.data;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -29,7 +28,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictionary-pkcredentialentity">
  * §5.4.1. Public Key Entity Description (dictionary PublicKeyCredentialEntity)</a>
  */
-public abstract class PublicKeyCredentialEntity implements Serializable {
+public abstract class PublicKeyCredentialEntity {
 
     // ~ Instance fields
     // ================================================================================================

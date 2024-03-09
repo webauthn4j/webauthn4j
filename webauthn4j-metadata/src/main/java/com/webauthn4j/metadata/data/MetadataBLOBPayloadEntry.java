@@ -29,12 +29,11 @@ import com.webauthn4j.metadata.data.uaf.AAID;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class MetadataBLOBPayloadEntry implements Serializable {
+public class MetadataBLOBPayloadEntry {
 
     @Nullable
     private final AAID aaid;

@@ -22,11 +22,10 @@ import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class HMACGetSecretAuthenticatorInput implements Serializable {
+public class HMACGetSecretAuthenticatorInput {
 
     private final COSEKey keyAgreement;
     private final byte[] saltEnc;

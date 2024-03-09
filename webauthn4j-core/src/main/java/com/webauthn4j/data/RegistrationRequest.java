@@ -20,12 +20,11 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
-public class RegistrationRequest implements Serializable {
+public class RegistrationRequest {
 
     // ~ Instance fields
     // ================================================================================================

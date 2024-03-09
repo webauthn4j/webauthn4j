@@ -21,14 +21,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
 /**
  * The PatternAccuracyDescriptor describes relevant accuracy/complexity aspects in the case that a pattern is used as the user verification method.
  */
-public class PatternAccuracyDescriptor implements Serializable {
+public class PatternAccuracyDescriptor {
 
     @NonNull private final BigInteger minComplexity;
     @Nullable private final Integer maxRetries;

@@ -20,11 +20,10 @@ import com.webauthn4j.data.attestation.AttestationObject;
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class CoreRegistrationData implements Serializable {
+public class CoreRegistrationData {
 
     private final AttestationObject attestationObject;
     private final byte[] attestationObjectBytes;

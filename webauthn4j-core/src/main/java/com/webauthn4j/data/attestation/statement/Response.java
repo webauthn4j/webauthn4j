@@ -21,10 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
-public class Response implements Serializable {
+public class Response {
 
     @JsonProperty
     private final String nonce;

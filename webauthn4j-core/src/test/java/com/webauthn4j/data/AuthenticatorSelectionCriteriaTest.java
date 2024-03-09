@@ -17,12 +17,9 @@
 package com.webauthn4j.data;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import org.junit.jupiter.api.Test;
+
+import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -75,33 +72,6 @@ class AuthenticatorSelectionCriteriaTest {
         assertAll(
                 () -> assertThat(instanceA).isEqualTo(instanceB),
                 () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
-        );
-    }
-
-    @Test
-    void equals_hashCode_with_serialization_test() {
-        AuthenticatorSelectionCriteria instanceA
-            = new AuthenticatorSelectionCriteria(AuthenticatorAttachment.CROSS_PLATFORM, true, UserVerificationRequirement.REQUIRED);
-
-        byte[] serializedInstanceA;
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream(); ObjectOutputStream oos = new ObjectOutputStream(baos)) {
-            oos.writeObject(instanceA);
-            serializedInstanceA = baos.toByteArray();
-        } catch (IOException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-
-        AuthenticatorSelectionCriteria instanceB;
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(
-            serializedInstanceA); ObjectInputStream ois = new ObjectInputStream(bais)) {
-            instanceB = (AuthenticatorSelectionCriteria) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new UnexpectedCheckedException(e);
-        }
-
-        assertAll(
-            () -> assertThat(instanceA).isEqualTo(instanceB),
-            () -> assertThat(instanceA).hasSameHashCodeAs(instanceB)
         );
     }
 }

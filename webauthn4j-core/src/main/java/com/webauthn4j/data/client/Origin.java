@@ -23,7 +23,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dom-collectedclientdata-origin">§5.10.1. Client Data Used in WebAuthn Signatures - origin</a>
  */
-public class Origin implements Serializable {
+public class Origin {
 
     private static final String SCHEME_HTTPS = "https";
     private static final String SCHEME_HTTP = "http";

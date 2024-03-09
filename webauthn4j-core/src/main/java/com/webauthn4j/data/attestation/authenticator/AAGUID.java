@@ -20,11 +20,10 @@ import com.webauthn4j.util.UUIDUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class AAGUID implements Serializable {
+public class AAGUID {
 
     public static final AAGUID ZERO = new AAGUID(new byte[16]);
     public static final AAGUID NULL = new AAGUID((UUID) null);

@@ -18,17 +18,10 @@ package com.webauthn4j.test.authenticator.webauthn;
 
 import com.webauthn4j.converter.util.ObjectConverter;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.data.attestation.statement.NoneAttestationStatement;
-import com.webauthn4j.test.AttestationCertificateBuilder;
 import com.webauthn4j.test.client.RegistrationEmulationOption;
-import com.webauthn4j.test.TestDataUtil;
-import com.webauthn4j.util.RSAUtil;
 
-import javax.security.auth.x500.X500Principal;
-import java.security.KeyPair;
 import java.security.cert.X509Certificate;
 
 // None attesation format authenticator

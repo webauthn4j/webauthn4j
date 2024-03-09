@@ -25,13 +25,12 @@ import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodTo
 import com.webauthn4j.data.UserVerificationMethod;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A descriptor for a specific base user verification method as implemented by the authenticator.
  */
-public class VerificationMethodDescriptor implements Serializable {
+public class VerificationMethodDescriptor {
 
     @Nullable
     @JsonSerialize(using = UserVerificationMethodToStringSerializer.class)
