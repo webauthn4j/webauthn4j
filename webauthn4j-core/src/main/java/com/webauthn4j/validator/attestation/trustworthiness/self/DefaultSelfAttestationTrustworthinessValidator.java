@@ -39,7 +39,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
         }
 
         if (attestationStatement.getX5c() != null) {
-            throw new BadAttestationStatementException("SELF attestation must not have x5c.");
+            throw new BadAttestationStatementException("SELF attestation must not have x5c.", attestationStatement);
         }
     }
 

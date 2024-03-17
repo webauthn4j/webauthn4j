@@ -83,28 +83,28 @@ public class AttestationCertificate implements Serializable {
 
     public void validate() {
         if (certificate.getVersion() != CERTIFICATE_VERSION_3) {
-            throw new CertificateException("Attestation certificate must be version 3");
+            throw new CertificateException("Attestation certificate must be version 3", certificate);
         }
 
         String country = getSubjectCountry();
         if (country == null || country.isEmpty()) {
-            throw new CertificateException("Subject-C must be present");
+            throw new CertificateException("Subject-C must be present", certificate);
         }
         String organization = getSubjectOrganization();
         if (organization == null || organization.isEmpty()) {
-            throw new CertificateException("Subject-O must be present");
+            throw new CertificateException("Subject-O must be present", certificate);
         }
         String organizationUnit = getSubjectOrganizationUnit();
         if (organizationUnit == null || !organizationUnit.equals("Authenticator Attestation")) {
-            throw new CertificateException("Subject-OU must be present");
+            throw new CertificateException("Subject-OU must be present", certificate);
         }
         String commonName = getSubjectCommonName();
         if (commonName == null || commonName.isEmpty()) {
-            throw new CertificateException("Subject-CN must be present");
+            throw new CertificateException("Subject-CN must be present", certificate);
         }
 
         if (certificate.getBasicConstraints() != NON_CA) {
-            throw new CertificateException("Attestation certificate must not be CA certificate");
+            throw new CertificateException("Attestation certificate must not be CA certificate", certificate);
         }
     }
 

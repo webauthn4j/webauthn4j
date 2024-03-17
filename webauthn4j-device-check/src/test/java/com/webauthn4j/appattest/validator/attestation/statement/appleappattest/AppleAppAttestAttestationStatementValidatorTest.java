@@ -78,7 +78,7 @@ class AppleAppAttestAttestationStatementValidatorTest {
     void extractNonce_from_non_AppleAppAttestAttestationCertificate() {
         //noinspection ConstantConditions
         X509Certificate nonAppleAppAttestAttestationCertificate = TestAttestationStatementUtil.createBasicPackedAttestationStatement().getX5c().getEndEntityAttestationCertificate().getCertificate();
-        assertThatThrownBy(() -> target.extractNonce(nonAppleAppAttestAttestationCertificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.extractNonce(nonAppleAppAttestAttestationCertificate)).isInstanceOf(IllegalArgumentException.class);
     }
 
 

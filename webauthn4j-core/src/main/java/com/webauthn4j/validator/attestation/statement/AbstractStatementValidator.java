@@ -16,12 +16,9 @@
 
 package com.webauthn4j.validator.attestation.statement;
 
-import com.webauthn4j.data.SignatureAlgorithm;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
-import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
-import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.ParameterizedType;
@@ -59,15 +56,5 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
     }
 
-    protected String getJcaName(@NonNull COSEAlgorithmIdentifier alg) {
-        String jcaName;
-        try {
-            SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();
-            jcaName = signatureAlgorithm.getJcaName();
-        } catch (IllegalArgumentException e) {
-            throw new BadAttestationStatementException("alg is not signature algorithm", e);
-        }
-        return jcaName;
-    }
 
 }

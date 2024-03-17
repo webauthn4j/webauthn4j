@@ -23,15 +23,46 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadRpIdException extends ValidationException {
+
+    private final byte[] expected;
+    private final byte[] actual;
+
+    public BadRpIdException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public BadRpIdException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+
     public BadRpIdException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadRpIdException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadRpIdException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    public byte[] getExpected() {
+        return expected;
+    }
+
+    public byte[] getActual() {
+        return actual;
     }
 }

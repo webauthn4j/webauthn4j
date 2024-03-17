@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,19 +28,28 @@ class BadAaguidExceptionTest {
 
     @Test
     void test() {
-        BadAaguidException exception1 = new BadAaguidException("dummy", cause);
-        BadAaguidException exception2 = new BadAaguidException("dummy");
-        BadAaguidException exception3 = new BadAaguidException(cause);
+        BadAaguidException exception1 = new BadAaguidException("dummy", AAGUID.ZERO, cause);
+        BadAaguidException exception2 = new BadAaguidException("dummy", cause);
+        BadAaguidException exception3 = new BadAaguidException("dummy");
+        BadAaguidException exception4 = new BadAaguidException(cause);
+        BadAaguidException exception5 = new BadAaguidException("dummy", AAGUID.ZERO);
 
         assertAll(
                 () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception1.getAaguid()).isEqualTo(AAGUID.ZERO),
                 () -> assertThat(exception1.getCause()).isEqualTo(cause),
 
                 () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
-                () -> assertThat(exception2.getCause()).isNull(),
+                () -> assertThat(exception2.getCause()).isEqualTo(cause),
 
-                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
-                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+                () -> assertThat(exception3.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception3.getCause()).isNull(),
+
+                () -> assertThat(exception4.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception4.getCause()).isEqualTo(cause),
+
+                () -> assertThat(exception5.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception5.getAaguid()).isEqualTo(AAGUID.ZERO)
         );
     }
 }

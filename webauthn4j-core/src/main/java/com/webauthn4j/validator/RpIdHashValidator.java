@@ -50,7 +50,7 @@ class RpIdHashValidator {
         // As rpIdHash is known data to client side(potential attacker) because it is calculated from parts of a message,
         // there is no need to prevent timing attack and it is OK to use `Arrays.equals` instead of `MessageDigest.isEqual` here.
         if (!Arrays.equals(rpIdHash, relyingPartyRpIdHash)) {
-            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.");
+            throw new BadRpIdException("rpIdHash doesn't match the hash of preconfigured rpId.", relyingPartyRpIdHash, rpIdHash);
         }
     }
 }

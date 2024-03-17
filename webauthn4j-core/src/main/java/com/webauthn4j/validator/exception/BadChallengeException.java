@@ -24,15 +24,44 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @SuppressWarnings("squid:S110")
 public class BadChallengeException extends ValidationException {
 
+    private final byte[] expected;
+    private final byte[] actual;
+
+    public BadChallengeException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual, @Nullable Throwable cause) {
+        super(message, cause);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
+    public BadChallengeException(@Nullable String message, @Nullable byte[] expected, @Nullable byte[] actual) {
+        super(message);
+        this.expected = expected;
+        this.actual = actual;
+    }
+
     public BadChallengeException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadChallengeException(@Nullable String message) {
         super(message);
+        this.expected = null;
+        this.actual = null;
     }
 
     public BadChallengeException(@Nullable Throwable cause) {
         super(cause);
+        this.expected = null;
+        this.actual = null;
+    }
+
+    public byte[] getExpected() {
+        return expected;
+    }
+
+    public byte[] getActual() {
+        return actual;
     }
 }

@@ -17,6 +17,8 @@
 package com.webauthn4j.validator.attestation.statement.tpm;
 
 
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
+import com.webauthn4j.data.attestation.statement.PackedAttestationStatement;
 import com.webauthn4j.data.attestation.statement.TPMAttestationStatement;
 import com.webauthn4j.data.attestation.statement.TPMIAlgHash;
 import com.webauthn4j.test.TestDataUtil;
@@ -27,12 +29,15 @@ import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TPMAttestationStatementValidatorTest {
 
@@ -54,23 +59,31 @@ class TPMAttestationStatementValidatorTest {
     }
 
     @Test
+    void getJcaName_test() {
+        COSEAlgorithmIdentifier invalid = COSEAlgorithmIdentifier.create(-16);
+        TPMAttestationStatement attestationStatement = mock(TPMAttestationStatement.class);
+        when(attestationStatement.getAlg()).thenReturn(invalid);
+        assertThatThrownBy(() -> target.getJcaName(attestationStatement)).isInstanceOf(BadAttestationStatementException.class);
+    }
+
+    @Test
     void getAlgJcaName_test() {
         assertAll(
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA1)).isEqualTo("SHA-1"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA256)).isEqualTo("SHA-256"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA384)).isEqualTo("SHA-384"),
                 () -> assertThat(target.getAlgJcaName(TPMIAlgHash.TPM_ALG_SHA512)).isEqualTo("SHA-512"),
-                () -> assertThrows(BadAttestationStatementException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_ERROR)
                 ),
-                () -> assertThrows(BadAttestationStatementException.class,
+                () -> assertThrows(IllegalArgumentException.class,
                         () -> target.getAlgJcaName(TPMIAlgHash.TPM_ALG_NULL)
                 )
         );
     }
 
     @Test
-    void validateAikCert_test() {
+    void validateAikCert_test() throws CertificateParsingException {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
         target.validateAikCert(certificate);
@@ -93,7 +106,7 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setSubjectDN("O=SharpLab., C=US");
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(TPMAttestationStatementValidator.AikCertificateValidationException.class);
     }
 
     @Test
@@ -101,7 +114,7 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setTcgKpAIKCertificateFlagInExtendedKeyUsage(false);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(TPMAttestationStatementValidator.AikCertificateValidationException.class);
     }
 
     @Test
@@ -109,7 +122,7 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setCAFlagInBasicConstraints(true);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(TPMAttestationStatementValidator.AikCertificateValidationException.class);
     }
 
     @Test
@@ -117,6 +130,6 @@ class TPMAttestationStatementValidatorTest {
         TPMAttestationOption attestationOption = new TPMAttestationOption();
         attestationOption.setX509CertificateVersion(1);
         X509Certificate certificate = tpmAuthenticator.getAttestationCertificate(null, attestationOption);
-        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(BadAttestationStatementException.class);
+        assertThatThrownBy(() -> target.validateAikCert(certificate)).isInstanceOf(TPMAttestationStatementValidator.AikCertificateValidationException.class);
     }
 }

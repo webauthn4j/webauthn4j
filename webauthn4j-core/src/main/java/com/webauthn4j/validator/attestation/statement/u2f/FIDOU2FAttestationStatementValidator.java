@@ -35,6 +35,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.Certificate;
+import java.security.cert.X509Certificate;
 import java.security.interfaces.ECPublicKey;
 
 /**
@@ -64,24 +65,25 @@ public class FIDOU2FAttestationStatementValidator extends AbstractStatementValid
 
     void validateAttestationStatementNotNull(FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement == null) {
-            throw new BadAttestationStatementException("attestation statement is not found.");
+            throw new BadAttestationStatementException("attestation statement is not found.", attestationStatement);
         }
     }
 
     void validateAttestationStatement(@NonNull FIDOU2FAttestationStatement attestationStatement) {
         if (attestationStatement.getX5c().size() != 1) {
-            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.");
+            throw new BadAttestationStatementException("FIDO-U2F attestation statement must have only one certificate.", attestationStatement);
         }
-        PublicKey publicKey = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
-        validatePublicKey(publicKey);
+        X509Certificate certificate = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate();
+        validatePublicKey(certificate);
     }
 
-    void validatePublicKey(@NonNull PublicKey publicKey) {
+    void validatePublicKey(@NonNull X509Certificate certificate) {
+        PublicKey publicKey = certificate.getPublicKey();
         if (!publicKey.getAlgorithm().equals("EC")) {
-            throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.");
+            throw new CertificateException("FIDO-U2F attestation statement supports ECDSA only.", certificate);
         }
         if (!((ECPublicKey) publicKey).getParams().equals(ECUtil.P_256_SPEC)) {
-            throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.");
+            throw new CertificateException("FIDO-U2F attestation statement supports secp256r1 curve only.", certificate);
         }
     }
 

@@ -30,7 +30,7 @@ public class DefaultTPMDevicePropertyDecoder implements TPMDevicePropertyDecoder
             return new TPMDeviceProperty(manufacturer, partNumber, firmwareVersion);
         }
         catch (IOException e) {
-            throw new BadAttestationStatementException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
+            throw new TPMDevicePropertyDecoderException("The Subject Alternative Name extension of attestation certificate does not contain a TPM device property", e);
         }
     }
 

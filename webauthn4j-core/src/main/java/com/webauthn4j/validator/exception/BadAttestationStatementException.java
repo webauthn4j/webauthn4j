@@ -17,6 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 
+import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -24,15 +25,35 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadAttestationStatementException extends ValidationException {
+
+    private final AttestationStatement attestationStatement;
+
+    public BadAttestationStatementException(@Nullable String message, @Nullable AttestationStatement attestationStatement, @Nullable Throwable cause) {
+        super(message, cause);
+        this.attestationStatement = attestationStatement;
+    }
+
+    public BadAttestationStatementException(@Nullable String message, @Nullable AttestationStatement attestationStatement) {
+        super(message);
+        this.attestationStatement = attestationStatement;
+    }
+
     public BadAttestationStatementException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.attestationStatement = null;
     }
 
     public BadAttestationStatementException(@Nullable String message) {
         super(message);
+        this.attestationStatement = null;
     }
 
     public BadAttestationStatementException(@Nullable Throwable cause) {
         super(cause);
+        this.attestationStatement = null;
+    }
+
+    public AttestationStatement getAttestationStatement() {
+        return attestationStatement;
     }
 }

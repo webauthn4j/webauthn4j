@@ -16,6 +16,7 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -23,15 +24,45 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 @SuppressWarnings("squid:S110")
 public class BadAlgorithmException extends ValidationException {
+
+    private final COSEAlgorithmIdentifier actual;
+    private final COSEAlgorithmIdentifier expected;
+
+    public BadAlgorithmException(@Nullable String message, @Nullable COSEAlgorithmIdentifier actual, @Nullable COSEAlgorithmIdentifier expected, @Nullable Throwable cause) {
+        super(message, cause);
+        this.actual = actual;
+        this.expected = expected;
+    }
+
+    public BadAlgorithmException(@Nullable String message, @Nullable COSEAlgorithmIdentifier actual, @Nullable COSEAlgorithmIdentifier expected) {
+        super(message);
+        this.actual = actual;
+        this.expected = expected;
+    }
+
     public BadAlgorithmException(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
+        this.actual = null;
+        this.expected = null;
     }
 
     public BadAlgorithmException(@Nullable String message) {
         super(message);
+        this.actual = null;
+        this.expected = null;
     }
 
     public BadAlgorithmException(@Nullable Throwable cause) {
         super(cause);
+        this.actual = null;
+        this.expected = null;
+    }
+
+    public COSEAlgorithmIdentifier getActual() {
+        return actual;
+    }
+
+    public COSEAlgorithmIdentifier getExpected() {
+        return expected;
     }
 }

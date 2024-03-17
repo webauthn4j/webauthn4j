@@ -16,20 +16,28 @@
 
 package com.webauthn4j.validator.exception;
 
+import com.webauthn4j.test.TestAttestationUtil;
+import com.webauthn4j.test.TestDataUtil;
 import org.junit.jupiter.api.Test;
+
+import java.security.cert.X509Certificate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.mock;
 
 class CertificateExceptionTest {
 
     private final RuntimeException cause = new RuntimeException();
+    private final X509Certificate certificate = TestAttestationUtil.load3tierTestAuthenticatorAttestationCertificate();
 
     @Test
     void test() {
-        CertificateException exception1 = new CertificateException("dummy", cause);
-        CertificateException exception2 = new CertificateException("dummy");
-        CertificateException exception3 = new CertificateException(cause);
+        CertificateException exception1 = new CertificateException("dummy", certificate, cause);
+        CertificateException exception2 = new CertificateException("dummy", certificate);
+        CertificateException exception3 = new CertificateException("dummy", cause);
+        CertificateException exception4 = new CertificateException("dummy");
+        CertificateException exception5 = new CertificateException(cause);
 
         assertAll(
                 () -> assertThat(exception1.getMessage()).isEqualTo("dummy"),
@@ -38,8 +46,14 @@ class CertificateExceptionTest {
                 () -> assertThat(exception2.getMessage()).isEqualTo("dummy"),
                 () -> assertThat(exception2.getCause()).isNull(),
 
-                () -> assertThat(exception3.getMessage()).isEqualTo(cause.toString()),
-                () -> assertThat(exception3.getCause()).isEqualTo(cause)
+                () -> assertThat(exception3.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception3.getCause()).isEqualTo(cause),
+
+                () -> assertThat(exception4.getMessage()).isEqualTo("dummy"),
+                () -> assertThat(exception4.getCause()).isNull(),
+
+                () -> assertThat(exception5.getMessage()).isEqualTo(cause.toString()),
+                () -> assertThat(exception5.getCause()).isEqualTo(cause)
         );
     }
 }
