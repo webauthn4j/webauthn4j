@@ -26,7 +26,6 @@ import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +36,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialcreationoptions">
  * §5.4. Options for Credential Creation (dictionary PublicKeyCredentialCreationOptions)</a>
  */
-public class PublicKeyCredentialCreationOptions implements Serializable {
+public class PublicKeyCredentialCreationOptions {
 
     // ~ Instance fields
     // ================================================================================================

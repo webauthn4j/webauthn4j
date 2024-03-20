@@ -21,14 +21,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
 /**
  * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
  */
-public class BiometricStatusReport implements Serializable {
+public class BiometricStatusReport {
     @NonNull private final Integer certLevel;
     @NonNull private final BigInteger modality;
     @Nullable private final String effectiveData;

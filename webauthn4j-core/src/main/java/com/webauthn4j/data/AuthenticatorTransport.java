@@ -23,7 +23,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -35,7 +34,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-authenticatortransport">
  * §5.10.4. Authenticator Transport Enumeration (enum AuthenticatorTransport)</a>
  */
-public class AuthenticatorTransport implements Serializable {
+public class AuthenticatorTransport {
 
     /**
      * Indicates the respective authenticator can be contacted over removable USB.

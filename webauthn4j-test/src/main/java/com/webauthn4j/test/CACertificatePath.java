@@ -19,11 +19,10 @@ package com.webauthn4j.test;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
 
-import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class CACertificatePath extends AbstractList<X509Certificate> implements Serializable {
+public class CACertificatePath extends AbstractList<X509Certificate> {
 
     private final int size;
     private final X509Certificate[] certificates;

@@ -3,7 +3,9 @@ package test;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.security.*;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 public class EdDSAUtil {
 

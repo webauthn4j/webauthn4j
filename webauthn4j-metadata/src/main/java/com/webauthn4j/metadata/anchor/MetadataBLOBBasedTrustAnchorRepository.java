@@ -22,7 +22,6 @@ import com.webauthn4j.metadata.MetadataBLOBBasedMetadataStatementRepository;
 import com.webauthn4j.metadata.MetadataBLOBProvider;
 
 import java.security.cert.TrustAnchor;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

@@ -26,7 +26,6 @@ import com.webauthn4j.metadata.data.toc.BiometricStatusReport;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.util.CollectionUtil;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.Objects;
  * Represents the MetadataTOCPayloadEntry
  */
 @Deprecated
-public class MetadataTOCPayloadEntry implements Serializable {
+public class MetadataTOCPayloadEntry {
 
     @JsonProperty
     private final String aaid;

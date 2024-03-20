@@ -23,7 +23,6 @@ import com.webauthn4j.util.Base64UrlUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -33,7 +32,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dom-collectedclientdata-tokenbinding">§5.10.1. Client Data Used in WebAuthn Signatures - tokenBinding</a>
  */
-public class TokenBinding implements Serializable {
+public class TokenBinding {
 
     @NonNull
     private final TokenBindingStatus status;

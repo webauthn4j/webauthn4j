@@ -28,14 +28,13 @@ import com.webauthn4j.metadata.data.statement.CodeAccuracyDescriptor;
 import com.webauthn4j.metadata.data.statement.PatternAccuracyDescriptor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * A descriptor for a specific base user verification method as implemented by the authenticator.
  */
 @Deprecated
-public class VerificationMethodDescriptor implements Serializable {
+public class VerificationMethodDescriptor {
 
     @Nullable
     @JsonSerialize(using = UserVerificationMethodToLongSerializer.class)

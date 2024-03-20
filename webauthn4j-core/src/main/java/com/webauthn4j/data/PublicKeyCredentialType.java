@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -34,7 +33,7 @@ import java.util.Objects;
  * §5.10.2. Credential Type Enumeration (enum PublicKeyCredentialType)</a>
  */
 @SuppressWarnings("SameReturnValue")
-public class PublicKeyCredentialType implements Serializable {
+public class PublicKeyCredentialType {
 
     public static final PublicKeyCredentialType PUBLIC_KEY = new PublicKeyCredentialType("public-key");
 

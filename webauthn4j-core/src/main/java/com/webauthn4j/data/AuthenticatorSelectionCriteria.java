@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-authenticatorselectioncriteria">
  * §5.4.4. Authenticator Selection Criteria (dictionary AuthenticatorSelectionCriteria)</a>
  */
-public class AuthenticatorSelectionCriteria implements Serializable {
+public class AuthenticatorSelectionCriteria {
 
     // ~ Instance fields
     // ================================================================================================

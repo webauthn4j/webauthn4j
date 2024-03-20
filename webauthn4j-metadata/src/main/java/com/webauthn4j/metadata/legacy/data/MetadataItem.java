@@ -17,15 +17,14 @@
 package com.webauthn4j.metadata.legacy.data;
 
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
-import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.StatusReport;
+import com.webauthn4j.metadata.legacy.data.statement.MetadataStatement;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Deprecated
-public interface MetadataItem extends Serializable {
+public interface MetadataItem {
 
     String getAaid();
 

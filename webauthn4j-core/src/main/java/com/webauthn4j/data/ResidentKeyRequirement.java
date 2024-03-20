@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -30,7 +29,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/2019/WD-webauthn-2-20191126/#enum-residentKeyRequirement">
  * §5.4.6. Resident Key Requirement Enumeration (enum ResidentKeyRequirement)</a>
  */
-public class ResidentKeyRequirement implements Serializable {
+public class ResidentKeyRequirement {
 
     public static final ResidentKeyRequirement DISCOURAGED = new ResidentKeyRequirement("discouraged");
     public static final ResidentKeyRequirement PREFERRED = new ResidentKeyRequirement("preferred");

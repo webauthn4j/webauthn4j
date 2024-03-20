@@ -20,10 +20,9 @@ import com.webauthn4j.util.ArrayUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
-public class HMACGetSecretOutput implements Serializable {
+public class HMACGetSecretOutput {
 
     private final byte[] output1;
     private final byte[] output2;

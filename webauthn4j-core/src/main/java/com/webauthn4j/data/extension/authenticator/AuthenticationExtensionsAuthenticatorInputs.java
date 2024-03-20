@@ -24,7 +24,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,14 +35,14 @@ import java.util.stream.Collectors;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#typedefdef-authenticationextensionsauthenticatorinputs">
  * §5.9. Authentication Extensions Authenticator Inputs (typedef AuthenticationExtensionsAuthenticatorInputs)</a>
  */
-public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuthenticatorInput> implements Serializable {
+public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuthenticatorInput> {
 
     private static final String KEY_UVM = "uvm";
     private static final String KEY_CRED_PROTECT = "credProtect";
     private static final String KEY_HMAC_SECRET = "hmac-secret";
 
     @JsonIgnore
-    private final Map<String, Serializable> unknowns = new HashMap<>();
+    private final Map<String, Object> unknowns = new HashMap<>();
     @JsonProperty
     private Boolean uvm;
     @JsonProperty
@@ -69,12 +68,12 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
     }
 
     @JsonAnyGetter
-    private Map<String, Serializable> getUnknowns() {
+    private Map<String, Object> getUnknowns() {
         return Collections.unmodifiableMap(this.unknowns);
     }
 
     @JsonAnySetter
-    private void setUnknowns(@NonNull String name, @Nullable Serializable value) {
+    private void setUnknowns(@NonNull String name, @Nullable Object value) {
         this.unknowns.put(name, value);
     }
 
@@ -198,7 +197,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     public static class BuilderForRegistration {
 
-        private final Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Object> unknowns = new HashMap<>();
         private Boolean uvm;
         private CredentialProtectionPolicy credProtect;
         private Boolean hmacCreateSecret;
@@ -228,7 +227,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return this;
         }
 
-        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Serializable value) {
+        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -239,7 +238,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
 
     public static class BuilderForAuthentication {
 
-        private final Map<String, Serializable> unknowns = new HashMap<>();
+        private final Map<String, Object> unknowns = new HashMap<>();
         private Boolean uvm;
         private HMACGetSecretAuthenticatorInput hmacGetSecret;
 
@@ -262,7 +261,7 @@ public class AuthenticationExtensionsAuthenticatorInputs<T extends ExtensionAuth
             return this;
         }
 
-        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Serializable value) {
+        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

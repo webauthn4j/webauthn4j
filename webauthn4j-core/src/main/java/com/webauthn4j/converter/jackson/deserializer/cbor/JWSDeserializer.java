@@ -28,13 +28,12 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
  * Jackson Deserializer for {@link JWS}
  */
-public class JWSDeserializer extends StdDeserializer<JWS<? extends Serializable>> {
+public class JWSDeserializer extends StdDeserializer<JWS<?>> {
 
     @SuppressWarnings("squid:S1948")
     private final JWSFactory jwsFactory;
@@ -48,7 +47,7 @@ public class JWSDeserializer extends StdDeserializer<JWS<? extends Serializable>
     }
 
     @Override
-    public @NonNull JWS<? extends Serializable> deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @NonNull JWS<?> deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
 
         byte[] value = p.getBinaryValue();
         String str = new String(value, StandardCharsets.UTF_8);

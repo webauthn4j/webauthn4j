@@ -22,7 +22,6 @@ import com.webauthn4j.util.CollectionUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +29,7 @@ import java.util.Objects;
 /**
  * The DisplayPNGCharacteristicsDescriptor describes a PNG image characteristics as defined in the PNG spec for IHDR (image header) and PLTE (palette table)
  */
-public class DisplayPNGCharacteristicsDescriptor implements Serializable {
+public class DisplayPNGCharacteristicsDescriptor {
 
     @NonNull private final BigInteger width;
     @NonNull private final BigInteger height;

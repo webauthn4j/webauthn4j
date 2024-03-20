@@ -19,11 +19,10 @@ package com.webauthn4j.data.jws;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.security.cert.CertPath;
 import java.util.Objects;
 
-public class JWSHeader implements Serializable {
+public class JWSHeader {
 
     private final JWAIdentifier alg;
     private final CertPath x5c;

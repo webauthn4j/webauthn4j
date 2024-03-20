@@ -20,12 +20,11 @@ import com.webauthn4j.util.UnsignedNumberUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 
-public class TPMSClockInfo implements Serializable {
+public class TPMSClockInfo {
 
     private final BigInteger clock;
     private final long resetCount;

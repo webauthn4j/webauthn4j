@@ -25,12 +25,10 @@ import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
-
 /**
  * A set of object converter classes
  */
-public class ObjectConverter implements Serializable {
+public class ObjectConverter {
 
     private final JsonConverter jsonConverter;
     private final CborConverter cborConverter;

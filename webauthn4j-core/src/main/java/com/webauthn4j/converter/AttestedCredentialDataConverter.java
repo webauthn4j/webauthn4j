@@ -33,7 +33,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class AttestedCredentialDataConverter implements Serializable {
+public class AttestedCredentialDataConverter {
 
     private static final String ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL = "attestedCredentialData must not be null";
 

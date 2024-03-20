@@ -23,19 +23,18 @@ import com.webauthn4j.data.jws.JWS;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * Jackson Serializer for {@link JWS}
  */
-public class JWSSerializer extends StdSerializer<JWS<? extends Serializable>> {
+public class JWSSerializer extends StdSerializer<JWS<?>> {
 
     public JWSSerializer() {
         super(JWS.class, false);
     }
 
     @Override
-    public void serialize(@NonNull JWS<? extends Serializable> value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NonNull JWS<?> value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
         gen.writeBinary(value.getBytes());
     }
 }

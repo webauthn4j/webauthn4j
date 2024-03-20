@@ -19,12 +19,10 @@ package com.webauthn4j.data.extension;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
-
-public interface ExtensionOutput extends Serializable {
+public interface ExtensionOutput {
     @NonNull String getIdentifier();
 
-    @Nullable Serializable getValue(String key);
+    @Nullable Object getValue(String key);
 
     void validate();
 

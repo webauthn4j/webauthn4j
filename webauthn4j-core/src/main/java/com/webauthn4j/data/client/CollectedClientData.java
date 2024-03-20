@@ -23,7 +23,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Objects;
  *
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sec-client-data">§5.10.1. Client Data Used in WebAuthn Signatures (dictionary CollectedClientData)</a>
  */
-public class CollectedClientData implements Serializable {
+public class CollectedClientData {
 
     //~ Instance fields ================================================================================================
     private final ClientDataType type;

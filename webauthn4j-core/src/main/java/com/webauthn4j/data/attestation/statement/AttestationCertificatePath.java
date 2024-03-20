@@ -21,12 +21,11 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
 import java.util.*;
 
-public class AttestationCertificatePath extends AbstractList<X509Certificate> implements Serializable {
+public class AttestationCertificatePath extends AbstractList<X509Certificate> {
 
     private final int size;
     private final X509Certificate[] certificates;

@@ -46,7 +46,7 @@ public class JWSFactory {
         this(new ObjectConverter());
     }
 
-    public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
+    public <T> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull PrivateKey privateKey) {
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(privateKey, "privateKey must not be null");
@@ -69,7 +69,7 @@ public class JWSFactory {
         }
     }
 
-    public <T extends Serializable> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
+    public <T> @NonNull JWS<T> create(@NonNull JWSHeader header, @NonNull T payload, @NonNull byte[] signature) {
         AssertUtil.notNull(header, HEADER_MUST_NOT_BE_NULL);
         AssertUtil.notNull(payload, PAYLOAD_MUST_NOT_BE_NULL);
         AssertUtil.notNull(signature, "signature must not be null");
@@ -79,7 +79,7 @@ public class JWSFactory {
         return new JWS<>(header, headerString, payload, payloadString, signature);
     }
 
-    public <T extends Serializable> @NonNull JWS<T> parse(@NonNull String value, @NonNull Class<T> payloadType) {
+    public <T> @NonNull JWS<T> parse(@NonNull String value, @NonNull Class<T> payloadType) {
         AssertUtil.notNull(value, "value must not be null");
         AssertUtil.notNull(payloadType, "payloadType must not be null");
 

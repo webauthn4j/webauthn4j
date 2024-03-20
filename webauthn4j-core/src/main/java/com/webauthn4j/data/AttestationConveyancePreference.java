@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#enumdef-attestationconveyancepreference">
  * §5.4.6. Attestation Conveyance Preference Enumeration (enum AttestationConveyancePreference)</a>
  */
-public class AttestationConveyancePreference implements Serializable {
+public class AttestationConveyancePreference {
 
     /**
      * This value indicates that the Relying Party is not interested in authenticator attestation.

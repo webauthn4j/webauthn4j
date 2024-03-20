@@ -26,7 +26,6 @@ import com.webauthn4j.metadata.data.statement.*;
 import com.webauthn4j.metadata.data.uaf.AAID;
 import com.webauthn4j.util.CollectionUtil;
 
-import java.io.Serializable;
 import java.security.cert.X509Certificate;
 import java.util.List;
 
@@ -34,7 +33,7 @@ import java.util.List;
  * This metadata statement contains a subset of verifiable information for authenticators certified by the FIDO Alliance.
  */
 @Deprecated
-public class MetadataStatement implements Serializable {
+public class MetadataStatement {
     private final String legalHeader;
     private final AAID aaid;
     private final AAGUID aaguid;

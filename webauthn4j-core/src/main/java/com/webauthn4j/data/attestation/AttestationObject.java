@@ -26,7 +26,6 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -35,7 +34,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#sctn-attestation">§6.4 Attestation</a>
  * @see <a href="https://www.w3.org/TR/webauthn-1/#generating-an-attestation-object">§6.4.4 Generating an Attestation Object</a>
  */
-public class AttestationObject implements Serializable {
+public class AttestationObject {
 
     //~ Instance fields ================================================================================================
     @JsonProperty("authData")

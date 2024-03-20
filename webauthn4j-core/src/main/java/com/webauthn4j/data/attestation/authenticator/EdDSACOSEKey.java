@@ -12,7 +12,6 @@ import com.webauthn4j.validator.exception.ConstraintViolationException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.interfaces.EdECPrivateKey;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("Since15")
-public class EdDSACOSEKey extends AbstractCOSEKey implements Serializable {
+public class EdDSACOSEKey extends AbstractCOSEKey {
 
     private static final String CURVE_NULL_CHECK_MESSAGE = "curve must not be null";
     private static final String ALG_VALUE_CHECK_MESSAGE = "alg must be EdDSA";

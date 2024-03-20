@@ -18,8 +18,6 @@ package com.webauthn4j.data.attestation.statement;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
-
-public interface TPMUPublicParms extends Serializable {
+public interface TPMUPublicParms {
     @NonNull byte[] getBytes();
 }

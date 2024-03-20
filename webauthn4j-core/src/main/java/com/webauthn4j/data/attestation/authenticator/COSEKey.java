@@ -24,7 +24,6 @@ import com.webauthn4j.data.attestation.statement.COSEKeyOperation;
 import com.webauthn4j.data.attestation.statement.COSEKeyType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.List;
@@ -37,7 +36,7 @@ import java.util.List;
         @JsonSubTypes.Type(value = EC2COSEKey.class, name = "2"),
         @JsonSubTypes.Type(value = RSACOSEKey.class, name = "3")
 })
-public interface COSEKey extends Serializable {
+public interface COSEKey {
 
     boolean hasPublicKey();
 

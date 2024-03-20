@@ -3,7 +3,6 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.exception.DataConversionException;
-import com.webauthn4j.converter.jackson.deserializer.json.AttachmentHintFromStringDeserializer;
 import com.webauthn4j.converter.jackson.deserializer.json.AuthenticatorAttestationTypeFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.AuthenticatorAttestationTypeToStringSerializer;
 import com.webauthn4j.converter.util.JsonConverter;
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class AuthenticatorAttestationTypeTest {
 

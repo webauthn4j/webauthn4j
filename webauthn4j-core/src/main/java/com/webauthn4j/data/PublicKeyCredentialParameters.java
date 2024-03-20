@@ -22,7 +22,6 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,7 @@ import java.util.Objects;
  * @see <a href="https://www.w3.org/TR/webauthn-1/#dictdef-publickeycredentialparameters">
  * §5.3. Parameters for Credential Generation (dictionary PublicKeyCredentialParameters)</a>
  */
-public class PublicKeyCredentialParameters implements Serializable {
+public class PublicKeyCredentialParameters {
 
     // ~ Instance fields
     // ================================================================================================

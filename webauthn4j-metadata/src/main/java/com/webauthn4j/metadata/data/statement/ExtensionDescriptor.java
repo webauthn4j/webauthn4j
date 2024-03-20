@@ -22,13 +22,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * This descriptor contains an extension supported by the authenticator.
  */
-public class ExtensionDescriptor implements Serializable {
+public class ExtensionDescriptor {
 
     @NonNull private final String id;
     @Nullable private final Integer tag;

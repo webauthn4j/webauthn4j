@@ -23,12 +23,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TPMTPublic implements Serializable {
+public class TPMTPublic {
 
     private final TPMIAlgPublic type;
     private final TPMIAlgHash nameAlg;

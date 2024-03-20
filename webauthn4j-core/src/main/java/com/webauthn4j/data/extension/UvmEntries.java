@@ -21,10 +21,9 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.*;
 
-public class UvmEntries extends AbstractList<UvmEntry> implements Serializable {
+public class UvmEntries extends AbstractList<UvmEntry> {
 
     private final int size;
     private final UvmEntry[] array;

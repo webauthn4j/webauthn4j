@@ -21,10 +21,9 @@ import com.webauthn4j.util.AssertUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.io.Serializable;
 import java.util.*;
 
-public abstract class AbstractImmutableMap<K extends Serializable, V extends Serializable> extends AbstractMap<K, V> implements Serializable {
+public abstract class AbstractImmutableMap<K, V> extends AbstractMap<K, V> {
 
     private final HashMap<K, V> map;
     private transient Set<Entry<K, V>> cachedEntrySet;
