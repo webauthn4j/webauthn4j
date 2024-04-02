@@ -114,6 +114,14 @@ class RegistrationDataValidatorTest {
     }
 
     @Test
+    void validateBEBSFlags_only_BSFlag_set_test() {
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], AuthenticatorData.BIT_BS, 0);
+        assertThrows(IllegalBackupStateException.class,
+                () -> target.validateBEBSFlags(authenticatorData)
+        );
+    }
+
+    @Test
     void validateCredentialIdLength_too_long_credentialId_test(){
         assertThrows(CredentialIdTooLongException.class,
                 () -> target.validateCredentialIdLength(new byte[1024])

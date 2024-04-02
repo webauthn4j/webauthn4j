@@ -183,11 +183,18 @@ public class RegistrationDataValidator {
         //spec| If the Relying Party requires user verification for this registration, verify that the UV bit of the flags in authData is set.
         validateUVUPFlags(authenticatorData, registrationParameters.isUserVerificationRequired(), registrationParameters.isUserPresenceRequired());
 
-        //spec| Step16, 17, 18
+        //spec| Step16
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
+        validateBEBSFlags(authenticatorData);
+
+        //spec| Step17
         //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies, evaluate the BE bit of the flags in authData.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step18
         //spec| If the Relying Party uses the credential’s backup state to inform its user experience flows and/or policies, evaluate the BS bit of the flags in authData.
-        //TODO
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
 
         //spec| Step19
         //spec| Verify that the "alg" parameter in the credential public key in authData matches the alg attribute of one of the items in options.pubKeyCredParams.
@@ -278,6 +285,12 @@ public class RegistrationDataValidator {
         //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
         if (isUserVerificationRequired && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
+        }
+    }
+
+    void validateBEBSFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
+            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
         }
     }
 
