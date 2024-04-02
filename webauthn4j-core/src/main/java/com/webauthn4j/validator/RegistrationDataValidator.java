@@ -200,7 +200,7 @@ public class RegistrationDataValidator {
         clientExtensionValidator.validate(clientExtensions);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step21-24
+        //spec| Step21-24, 28
         attestationValidator.validate(registrationObject);
 
         //spec| Step25
@@ -210,6 +210,38 @@ public class RegistrationDataValidator {
         //spec| Step26
         //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step27
+        //spec| If the attestation statement attStmt verified successfully and is found to be trustworthy,
+        //spec| then create and store a new credential record in the user account that was denoted in options.user,
+        //spec| with the following contents:
+        //spec| type
+        //spec|     credential.type.
+        //spec| id
+        //spec|     credential.id or credential.rawId, whichever format is preferred by the Relying Party.
+        //spec| publicKey
+        //spec|     The credential public key in authData.
+        //spec| signCount
+        //spec|     authData.signCount.
+        //spec| uvInitialized
+        //spec|     The value of the UV flag in authData.
+        //spec| transports
+        //spec|     The value returned from response.getTransports().
+        //spec| backupEligible
+        //spec|     The value of the BE flag in authData.
+        //spec| backupState
+        //spec|     The value of the BS flag in authData.
+        //spec| The new credential record MAY also include the following OPTIONAL contents:
+        //spec| attestationObject
+        //spec|     response.attestationObject.
+        //spec| attestationClientDataJSON
+        //spec|     response.clientDataJSON.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step28
+        //spec| If the attestation statement attStmt successfully verified but is not trustworthy per step 23 above,
+        //spec| the Relying Party SHOULD fail the registration ceremony.
+        //      (This step is implemented in attestationValidator#validate)
 
         // validate with custom logic
         for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
