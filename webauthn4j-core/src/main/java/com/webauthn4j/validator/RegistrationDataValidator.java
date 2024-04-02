@@ -175,11 +175,17 @@ public class RegistrationDataValidator {
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
-        //spec| Verify that the User Present bit of the flags in authData is set.
-        //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
+        //spec| Verify that the UP bit of the flags in authData is set.
+        //spec| If the Relying Party requires user verification for this registration, verify that the UV bit of the flags in authData is set.
         validateUVUPFlags(authenticatorData, registrationParameters.isUserVerificationRequired(), registrationParameters.isUserPresenceRequired());
 
-        //spec| Step16
+        //spec| Step16, 17, 18
+        //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
+        //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies, evaluate the BE bit of the flags in authData.
+        //spec| If the Relying Party uses the credential’s backup state to inform its user experience flows and/or policies, evaluate the BS bit of the flags in authData.
+        //TODO
+
+        //spec| Step19
         //spec| Verify that the "alg" parameter in the credential public key in authData matches the alg attribute of one of the items in options.pubKeyCredParams.
         COSEAlgorithmIdentifier alg = authenticatorData.getAttestedCredentialData().getCOSEKey().getAlgorithm();
         List<PublicKeyCredentialParameters> pubKeyCredParams = registrationParameters.getPubKeyCredParams();
