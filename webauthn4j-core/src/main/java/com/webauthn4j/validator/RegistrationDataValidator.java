@@ -191,7 +191,7 @@ public class RegistrationDataValidator {
         List<PublicKeyCredentialParameters> pubKeyCredParams = registrationParameters.getPubKeyCredParams();
         validateAlg(alg, pubKeyCredParams);
 
-        //spec| Step17
+        //spec| Step20
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData are as expected,
         //spec| considering the client extension input values that were given in options.extensions and any specific policy of the Relying Party regarding unsolicited extensions,
         //spec| i.e., those that were not specified as part of options.extensions.
@@ -200,33 +200,15 @@ public class RegistrationDataValidator {
         clientExtensionValidator.validate(clientExtensions);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step18-21
+        //spec| Step21-24
         attestationValidator.validate(registrationObject);
 
-        //spec| Step22
-        //spec| Check that the credentialId is not yet registered to any other user.
-        //spec| If registration is requested for a credential that is already registered to a different user,
-        //spec| the Relying Party SHOULD fail this registration ceremony, or it MAY decide to accept the registration,
-        //spec| e.g. while deleting the older registration.
+        //spec| Step25
+        //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
+        //TODO
 
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
-        //spec| Step23
-        //spec| If the attestation statement attStmt verified successfully and is found to be trustworthy,
-        //spec| then register the new credential with the account that was denoted in options.user:
-        //spec| - Associate the user’s account with the credentialId and credentialPublicKey
-        //spec|   in authData.attestedCredentialData, as appropriate for the Relying Party's system.
-        //spec| - Associate the credentialId with a new stored signature counter value initialized to the value of authData.signCount.
-        //spec| It is RECOMMENDED to also:
-        //spec| - Associate the credentialId with the transport hints returned by calling credential.response.getTransports().
-        //spec|   This value SHOULD NOT be modified before or after storing it.
-        //spec|   It is RECOMMENDED to use this value to populate the transports of the allowCredentials option in future get() calls
-        //spec|   to help the client know how to find a suitable authenticator.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
-
-        //spec| Step24
-        //spec| If the attestation statement attStmt successfully verified but is not trustworthy per step 21 above,
-        //spec| the Relying Party SHOULD fail the registration ceremony.
+        //spec| Step26
+        //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         // validate with custom logic
