@@ -150,11 +150,17 @@ public class RegistrationDataValidator {
         //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originValidator.validate(registrationObject);
 
-        //spec| Step10
+        //spec| (Level2) Step10 (Kept for backward compatibility)
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
         //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
         tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+
+        //spec| Step10
+        //spec| If C.topOrigin is present:
+        //spec|   - Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
+        //spec|   - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within. See § 13.4.9 Validating the origin of a credential for guidance.
+        //TODO
 
         //spec| Step11
         //spec| Let hash be the result of computing a hash over response.clientDataJSON using SHA-256.
