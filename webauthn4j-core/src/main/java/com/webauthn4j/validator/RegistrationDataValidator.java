@@ -147,7 +147,7 @@ public class RegistrationDataValidator {
         challengeValidator.validate(collectedClientData, serverProperty);
 
         //spec| Step9
-        //spec| Verify that the value of C.origin matches the Relying Party's origin.
+        //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originValidator.validate(registrationObject);
 
         //spec| Step10
