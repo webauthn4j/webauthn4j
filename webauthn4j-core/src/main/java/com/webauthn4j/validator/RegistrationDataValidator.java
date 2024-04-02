@@ -164,7 +164,7 @@ public class RegistrationDataValidator {
         //spec| If C.topOrigin is present:
         //spec|   - Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
         //spec|   - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within. See § 13.4.9 Validating the origin of a credential for guidance.
-        //TODO
+        //TODO: Once Chrome starts supporting topOrigin, implement topOrigin verification
 
         //spec| Step11
         //spec| Let hash be the result of computing a hash over response.clientDataJSON using SHA-256.
