@@ -71,12 +71,12 @@ class AttestationValidator {
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
 
-        //spec| Step18
+        //spec| Step21
         //spec| Determine the attestation statement format by performing a USASCII case-sensitive match on fmt against
         //spec| the set of supported WebAuthn Attestation Statement Format Identifier values.
         //spec| An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values is maintained in
         //spec| the IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
-        //spec| Step19
+        //spec| Step22
         //spec| Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
         //spec| by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
 
@@ -84,12 +84,12 @@ class AttestationValidator {
 
         validateAAGUID(attestationObject);
 
-        //spec| Step20
+        //spec| Step23
         //spec| If validation is successful, obtain a list of acceptable trust anchors (i.e. attestation root certificates)
         //spec| for that attestation type and attestation statement format fmt, from a trusted source or from policy.
         //spec| For example, the FIDO Metadata Service [FIDOMetadataService] provides one way to obtain such information,
         //spec| using the aaguid in the attestedCredentialData in authData.
-        //spec| Step21
+        //spec| Step24
         //spec| Assess the attestation trustworthiness using the outputs of the verification procedure in step 19, as follows:
         //spec| If no attestation was provided, verify that None attestation is acceptable under Relying Party policy.
         //      (This is already done in validateAttestationStatement method)
