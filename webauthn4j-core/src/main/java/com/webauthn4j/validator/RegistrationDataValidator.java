@@ -44,6 +44,8 @@ import java.util.Set;
 
 public class RegistrationDataValidator {
 
+    private static final int DEFAULT_MAX_CREDENTIAL_ID_LENGTH = 1023;
+
     // ~ Instance fields
     // ================================================================================================
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
@@ -57,6 +59,8 @@ public class RegistrationDataValidator {
     private final AttestationValidator attestationValidator;
 
     private OriginValidator originValidator = new OriginValidatorImpl();
+
+    private int maxCredentialIdLength = DEFAULT_MAX_CREDENTIAL_ID_LENGTH;
 
     public RegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -205,7 +209,7 @@ public class RegistrationDataValidator {
 
         //spec| Step25
         //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
-        //TODO
+        validateCredentialIdLength(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId());
 
         //spec| Step26
         //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
@@ -277,12 +281,26 @@ public class RegistrationDataValidator {
         }
     }
 
+    void validateCredentialIdLength(byte[] credentialId) {
+        if(maxCredentialIdLength >= 0 && credentialId.length > maxCredentialIdLength){
+            throw new CredentialIdTooLongException(String.format("credentialId exceeds maxCredentialIdSize(%d bytes)", maxCredentialIdLength));
+        }
+    }
+
     public OriginValidator getOriginValidator() {
         return originValidator;
     }
 
     public void setOriginValidator(OriginValidator originValidator) {
         this.originValidator = originValidator;
+    }
+
+    public int getMaxCredentialIdLength() {
+        return maxCredentialIdLength;
+    }
+
+    public void setMaxCredentialIdLength(int maxCredentialIdLength) {
+        this.maxCredentialIdLength = maxCredentialIdLength;
     }
 
     public List<CustomRegistrationValidator> getCustomRegistrationValidators() {
