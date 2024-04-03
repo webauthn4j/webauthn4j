@@ -24,6 +24,7 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
@@ -192,7 +193,7 @@ public class AuthenticationDataValidator {
 
         //spec| Step19
         //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
-        //TODO
+        validateBEBSFlags(authenticatorData);
 
         //spec| Step20
         //spec| If the credential backup state is used as part of Relying Party business logic or policy,
@@ -292,6 +293,12 @@ public class AuthenticationDataValidator {
     void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
+        }
+    }
+
+    void validateBEBSFlags(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
+            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
         }
     }
 

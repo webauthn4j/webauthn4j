@@ -22,9 +22,11 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
+import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.test.TestDataUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
 import com.webauthn4j.validator.exception.CrossOriginException;
+import com.webauthn4j.validator.exception.IllegalBackupStateException;
 import com.webauthn4j.validator.exception.NotAllowedCredentialIdException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +65,14 @@ class AuthenticationDataValidatorTest {
         AttestedCredentialData attestedCredentialData = mock(AttestedCredentialData.class);
         when(authenticatorData.getAttestedCredentialData()).thenReturn(attestedCredentialData);
         assertThatThrownBy(() -> target.validateAuthenticatorData(authenticatorData)).isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void validateBEBSFlags_only_BSFlag_set_test() {
+        AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], AuthenticatorData.BIT_BS, 0);
+        assertThrows(IllegalBackupStateException.class,
+                () -> target.validateBEBSFlags(authenticatorData)
+        );
     }
 
     @Test
