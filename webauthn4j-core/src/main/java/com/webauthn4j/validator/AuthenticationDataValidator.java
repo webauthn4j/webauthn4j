@@ -256,7 +256,7 @@ public class AuthenticationDataValidator {
         //spec|   the IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
         //spec| - Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
         //spec|   by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
-        //TODO
+        //TODO: Since Step25 is removed in the latest Editor's draft(as of 2024-04-07, see https://github.com/w3c/webauthn/pull/1997), this step is left not implemented. This step need to be removed when the next draft is released.
 
         //spec| Step26
         //spec| Update credentialRecord with new state values:
