@@ -1,0 +1,4 @@
+{
+  "name": "vscode-universal-devcontainer",
+  "image":  "mcr.microsoft.com/vscode/devcontainers/universal:linux"
+}
