@@ -16,6 +16,7 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.credential.CredentialRecordImpl;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.RegistrationData;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
@@ -34,8 +35,10 @@ import java.util.Set;
 
 /**
  * An {@link Authenticator} implementation
+ * @deprecated {@link AuthenticatorImpl} is deprecated since WebAuthn Level3 added new fields to the credential record. To represent WebAuthn Level3 credential record, new {@link CredentialRecordImpl} class is introduced. Please upgrade from {@link AuthenticatorImpl} class to {@link CredentialRecordImpl} class. {@link AuthenticatorImpl} class will be removed in the future version.
  */
 @SuppressWarnings("ConstantConditions")
+@Deprecated
 public class AuthenticatorImpl extends CoreAuthenticatorImpl implements Authenticator {
 
     //~ Instance fields ================================================================================================

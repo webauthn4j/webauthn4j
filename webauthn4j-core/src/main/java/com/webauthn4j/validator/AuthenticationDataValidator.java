@@ -17,6 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -24,7 +25,6 @@ import com.webauthn4j.data.client.ClientDataType;
 import com.webauthn4j.data.client.CollectedClientData;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
-import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionClientOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.server.ServerProperty;
@@ -202,7 +202,8 @@ public class AuthenticationDataValidator {
         //spec| - If credentialRecord.backupEligible is set, verify that currentBe is set.
         //spec| - If credentialRecord.backupEligible is not set, verify that currentBe is not set.
         //spec| - Apply Relying Party policy, if any.
-        //TODO
+        //      (The relying party policy should be implemented as a custom validator)
+        validateBEFlag(authenticator, authenticatorData);
 
         //spec| Step21
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
@@ -231,7 +232,7 @@ public class AuthenticationDataValidator {
             if (presentedSignCount > storedSignCount) {
 
                 //spec| The signature counter is valid.
-                authenticator.setCounter(presentedSignCount);
+                //no-op
             }
             //spec| less than or equal to credentialRecord.signCount:
             //spec| This is a signal that the authenticator may be cloned,
@@ -263,8 +264,13 @@ public class AuthenticationDataValidator {
         //spec| - Update credentialRecord.signCount to the value of authData.signCount.
         //spec| - Update credentialRecord.backupState to the value of currentBs.
         //spec| - If credentialRecord.uvInitialized is false, update it to the value of the UV bit in the flags in authData. This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification; if not authorized, skip this step.
+        updateRecord(authenticator, authenticatorData);
+
         //spec| - OPTIONALLY, if response.attestationObject is present, update credentialRecord.attestationObject to the value of response.attestationObject and update credentialRecord.attestationClientDataJSON to the value of response.clientDataJSON.
+        //TODO: Since this optional step is removed in the latest Editor's draft(as of 2024-04-07), this step is left not implemented. This step need to be removed when the next draft is released.
+
         //spec| If the Relying Party performs additional security checks beyond these WebAuthn authentication ceremony steps, the above state updates SHOULD be deferred to after those additional checks are completed successfully.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
         for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
             customAuthenticationValidator.validate(authenticationObject);
@@ -274,6 +280,41 @@ public class AuthenticationDataValidator {
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
 
 
+    }
+
+    static void validateBEFlag(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        if(authenticator instanceof CoreCredentialRecord){
+            CoreCredentialRecord coreCredentialRecord = (CoreCredentialRecord) authenticator;
+            Boolean backEligibleRecordValue = coreCredentialRecord.isBackupEligible();
+            //noinspection StatementWithEmptyBody
+            if(backEligibleRecordValue == null){
+                //no-op
+            }
+            else if(backEligibleRecordValue) {
+                if(!authenticatorData.isFlagBE()){
+                    throw new BadBackupEligibleFlagException("Although credential record BE flag is set, current BE flag is not set");
+                }
+            }
+            else{
+                if(authenticatorData.isFlagBE()){
+                    throw new BadBackupEligibleFlagException("Although credential record BE flag is not set, current BE flag is set");
+                }
+            }
+        }
+    }
+
+    static void updateRecord(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        authenticator.setCounter(authenticatorData.getSignCount());
+        if(authenticator instanceof CoreCredentialRecord){
+            CoreCredentialRecord coreCredentialRecord = (CoreCredentialRecord) authenticator;
+
+            coreCredentialRecord.setBackedUp(authenticatorData.isFlagBS());
+
+            Boolean uvInitializedRecord = coreCredentialRecord.isUvInitialized();
+            if(Objects.isNull(uvInitializedRecord) || Boolean.FALSE.equals(uvInitializedRecord)){
+                coreCredentialRecord.setUvInitialized(authenticatorData.isFlagUV());
+            }
+        }
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
