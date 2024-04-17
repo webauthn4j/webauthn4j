@@ -1,14 +1,14 @@
 == 詳細
 
-=== 認証デバイスの表現
+=== クレデンシャル情報の表現
 
-認証デバイスを表現するインタフェースとして、 `Authenticator` インタフェースが存在します。 登録時に、 `RegistrationData` クラスが含む値を用いて `Authenticator` インタフェースの インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。 なお、永続化する際は、検索する際の利便性を考え、credentialIdをキーに永続化すると良いでしょう。
-`Authenticator` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。 典型的には、 `Authenticator` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。
+クレデンシャル情報を表現するインタフェースとして、 `CredentialRecord` インタフェースが存在します。 登録時に、 `RegistrationData` クラスが含む値を用いて `CredentialRecord` インタフェースの インスタンスを作成し、アプリケーションの作法に則り永続化してください。認証時の検証に必要となります。 なお、永続化する際は、検索する際の利便性を考え、credentialIdをキーに永続化すると良いでしょう。
+`CredentialRecord` インタフェースの実装クラスを設計する際は、アプリケーションの要件に合わせて拡張すると良いでしょう。 典型的には、 `CredentialRecord` をユーザーが識別するための名前フィールドの追加などが考えられるでしょう。
 
-=== Authenticatorのシリアライズ、デシリアライズ
+=== CredentialRecordのシリアライズ、デシリアライズ
 
-認証デバイスの登録時、`Authenticator` のインスタンスをデータベース等に永続化し、認証時に利用できるようにするのはアプリケーションの責務ですが、
-`Authenticator` を構成する各メンバをシリアライズ、デシリアライズする際に使用できるクラスをWebAuthn4Jでは用意しています。 アプリケーションで永続化を実装する際の補助としてご利用ください。
+認証デバイスの登録時、`CredentialRecord` のインスタンスをデータベース等に永続化し、認証時に利用できるようにするのはアプリケーションの責務ですが、
+`CredentialRecord` を構成する各メンバをシリアライズ、デシリアライズする際に使用できるクラスをWebAuthn4Jでは用意しています。 アプリケーションで永続化を実装する際の補助としてご利用ください。
 
 ==== attestedCredentialData
 
@@ -101,7 +101,7 @@ String serializedClientExtensions = objectConverter.getJsonConverter().writeValu
 
 === DCAppleDeviceのシリアライズ、デシリアライズ
 
-webauthn4j-device-checkでは、`Authenticator` インタフェースの代わりに、`DCAppleDevice` インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。 概ね<<Authenticatorのシリアライズ、デシリアライズ>>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、 webauthn4j-device-check独自のクラス（例えば `AppleAppAttestAttestationStatement` )のシリアライズ、デシリアライズを行う為に、
+webauthn4j-device-checkでは、`CredentialRecord` インタフェースの代わりに、`DCAppleDevice` インタフェースを実装したクラスを、構成証明の検証時とアサーションの検証時の間で永続化する必要があります。 概ね<<CredentialRecordのシリアライズ、デシリアライズ>>で解説した方法でシリアライズ、デシリアライズが可能ですが、一点気を付ける必要がある点として、 webauthn4j-device-check独自のクラス（例えば `AppleAppAttestAttestationStatement` )のシリアライズ、デシリアライズを行う為に、
 `ObjectConverter` は `DeviceCheckCBORModule` が登録されたものを使用する必要があります。
 `DeviceCheckCBORModule` が登録された`ObjectConverter` は `DeviceCheckManager#createObjectConverter` で得ることが出来ます。
 

@@ -20,6 +20,8 @@ import com.webauthn4j.WebAuthnManager;
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.authenticator.AuthenticatorImpl;
 import com.webauthn4j.converter.exception.DataConversionException;
+import com.webauthn4j.credential.CredentialRecord;
+import com.webauthn4j.credential.CredentialRecordImpl;
 import com.webauthn4j.data.*;
 import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.data.client.challenge.Challenge;
@@ -81,14 +83,15 @@ public class WebAuthnManagerSample {
             throw e;
         }
 
-        // please persist Authenticator object, which will be used in the authentication process.
-        Authenticator authenticator =
-                new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                        registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                        registrationData.getAttestationObject().getAttestationStatement(),
-                        registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
+        // please persist CredentialRecord object, which will be used in the authentication process.
+        CredentialRecord credentialRecord =
+                new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+                        registrationData.getAttestationObject(),
+                        registrationData.getCollectedClientData(),
+                        registrationData.getClientExtensions(),
+                        registrationData.getTransports()
                 );
-        save(authenticator); // please persist authenticator in your manner
+        save(credentialRecord); // please persist credentialRecord in your manner
     }
 
 
@@ -113,7 +116,7 @@ public class WebAuthnManagerSample {
         boolean userVerificationRequired = true;
         boolean userPresenceRequired = true;
 
-        Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
+        CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
         AuthenticationRequest authenticationRequest =
                 new AuthenticationRequest(
@@ -127,7 +130,7 @@ public class WebAuthnManagerSample {
         AuthenticationParameters authenticationParameters =
                 new AuthenticationParameters(
                         serverProperty,
-                        authenticator,
+                        credentialRecord,
                         allowCredentials,
                         userVerificationRequired,
                         userPresenceRequired
@@ -154,12 +157,12 @@ public class WebAuthnManagerSample {
     }
 
 
-    private void save(Authenticator authenticator) {
+    private void save(CredentialRecord credentialRecord) {
         // please persist in your manner
     }
 
-    private Authenticator load(byte[] credentialId) {
-        return null; // please load authenticator in your manner
+    private CredentialRecord load(byte[] credentialId) {
+        return null; // please load credentialRecord in your manner
     }
 
     private void updateCounter(byte[] credentialId, long signCount) {

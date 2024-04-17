@@ -1,19 +1,19 @@
 == Deep-Dive
 
-=== Representation of an authenticator
+=== Representation of a credential record
 
-WebAuthn4j provides `Authenticator` interface as a representation of an authenticator.
+WebAuthn4j provides `CredentialRecord` interface as a representation of a credential record.
 
-On registering the authenticator, you need to persist its representation by creating the instance implementing
-`Authenticator` interface in your application manner because it is used afterwards on authentication verification.
+On registering the credential, you need to persist its representation by creating the instance implementing
+`CredentialRecord` interface in your application manner because it is used afterwards on authentication verification.
 It might be better to use credentialId as a search key for this persisted instance.
 
-You can freely enhance the class implementing `Authenticator` interface in order to meet your application's requirements.
-For example, you can add the field for your application's user to identify the authenticator.
+You can freely enhance the class implementing `CredentialRecord` interface in order to meet your application's requirements.
+For example, you can add a field like `name` to identify the credential.
 
-=== Authenticator serialization and deserialization
+=== CredentialRecord serialization and deserialization
 
-While it is application's responsibility to serialize `Authenticator` instance at registration, WebAuthn4J provides an utility class to serialize or deserialize members of `Authenticator` class.
+While it is application's responsibility to serialize `CredentialRecord` instance at registration, WebAuthn4J provides an utility class to serialize or deserialize fields of `CredentialRecord` class.
 Please use them for implementing persistence in your application.
 
 ==== attestedCredentialData
@@ -110,8 +110,8 @@ String serializedClientExtensions = objectConverter.getJsonConverter().writeValu
 
 === DCAppleDevice serialization and deserialization
 
-When you use `webauthn4j-device-check`, you need to persist `DCAppleDevice` instead of `Authenticator` interface between attestation and assertion.
-In general, you can serialize and deserialize it by the method explained in <<Authenticator serialization and deserialization>>, but `ObjectConverter` must be the one with `DeviceCheckCBORModule` registered.
+When you use `webauthn4j-device-check`, you need to persist `DCAppleDevice` instead of `CredentialRecord` interface between attestation and assertion.
+In general, you can serialize and deserialize it by the method explained in <<CredentialRecord serialization and deserialization>>, but `ObjectConverter` must be the one with `DeviceCheckCBORModule` registered.
 A `ObjectConverter` with a `DeviceCheckCBORModule` can be obtained with `DeviceCheckManager.createObjectConverter` static method.
 
 === Using FIDO CTAP2 Security key in your own application other than WebAuthn
