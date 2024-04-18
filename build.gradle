@@ -32,7 +32,7 @@ buildscript {
         // for test library dependencies
         mockitoVersion = "5.11.0"
         springBootVersion = "2.7.18"
-        logbackVersion = "1.5.3"
+        logbackVersion = "1.5.6"
     }
 
     repositories {
