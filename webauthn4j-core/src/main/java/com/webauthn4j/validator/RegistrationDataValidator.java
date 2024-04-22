@@ -44,6 +44,8 @@ import java.util.Set;
 
 public class RegistrationDataValidator {
 
+    private static final int DEFAULT_MAX_CREDENTIAL_ID_LENGTH = 1023;
+
     // ~ Instance fields
     // ================================================================================================
     private final ChallengeValidator challengeValidator = new ChallengeValidator();
@@ -57,6 +59,8 @@ public class RegistrationDataValidator {
     private final AttestationValidator attestationValidator;
 
     private OriginValidator originValidator = new OriginValidatorImpl();
+
+    private int maxCredentialIdLength = DEFAULT_MAX_CREDENTIAL_ID_LENGTH;
 
     public RegistrationDataValidator(
             @NonNull List<AttestationStatementValidator> attestationStatementValidators,
@@ -147,14 +151,20 @@ public class RegistrationDataValidator {
         challengeValidator.validate(collectedClientData, serverProperty);
 
         //spec| Step9
-        //spec| Verify that the value of C.origin matches the Relying Party's origin.
+        //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originValidator.validate(registrationObject);
 
-        //spec| Step10
+        //spec| (Level2) Step10 (Kept for backward compatibility)
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the assertion was obtained. If Token Binding was used on that TLS connection, also verify that
         //spec| C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
         tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
+
+        //spec| Step10
+        //spec| If C.topOrigin is present:
+        //spec|   - Verify that the Relying Party expects that this credential would have been created within an iframe that is not same-origin with its ancestors.
+        //spec|   - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within. See § 13.4.9 Validating the origin of a credential for guidance.
+        //TODO: Once Chrome starts supporting topOrigin, implement topOrigin verification
 
         //spec| Step11
         //spec| Let hash be the result of computing a hash over response.clientDataJSON using SHA-256.
@@ -169,17 +179,30 @@ public class RegistrationDataValidator {
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
         //spec| Step14, 15
-        //spec| Verify that the User Present bit of the flags in authData is set.
-        //spec| If user verification is required for this registration, verify that the User Verified bit of the flags in authData is set.
+        //spec| Verify that the UP bit of the flags in authData is set.
+        //spec| If the Relying Party requires user verification for this registration, verify that the UV bit of the flags in authData is set.
         validateUVUPFlags(authenticatorData, registrationParameters.isUserVerificationRequired(), registrationParameters.isUserPresenceRequired());
 
         //spec| Step16
+        //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
+        validateBEBSFlags(authenticatorData);
+
+        //spec| Step17
+        //spec| If the Relying Party uses the credential’s backup eligibility to inform its user experience flows and/or policies, evaluate the BE bit of the flags in authData.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+        //spec| Step18
+        //spec| If the Relying Party uses the credential’s backup state to inform its user experience flows and/or policies, evaluate the BS bit of the flags in authData.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
+
+        //spec| Step19
         //spec| Verify that the "alg" parameter in the credential public key in authData matches the alg attribute of one of the items in options.pubKeyCredParams.
         COSEAlgorithmIdentifier alg = authenticatorData.getAttestedCredentialData().getCOSEKey().getAlgorithm();
         List<PublicKeyCredentialParameters> pubKeyCredParams = registrationParameters.getPubKeyCredParams();
         validateAlg(alg, pubKeyCredParams);
 
-        //spec| Step17
+        //spec| Step20
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator extension outputs in the extensions in authData are as expected,
         //spec| considering the client extension input values that were given in options.extensions and any specific policy of the Relying Party regarding unsolicited extensions,
         //spec| i.e., those that were not specified as part of options.extensions.
@@ -188,34 +211,48 @@ public class RegistrationDataValidator {
         clientExtensionValidator.validate(clientExtensions);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step18-21
+        //spec| Step21-24, 28
         attestationValidator.validate(registrationObject);
 
-        //spec| Step22
-        //spec| Check that the credentialId is not yet registered to any other user.
-        //spec| If registration is requested for a credential that is already registered to a different user,
-        //spec| the Relying Party SHOULD fail this registration ceremony, or it MAY decide to accept the registration,
-        //spec| e.g. while deleting the older registration.
+        //spec| Step25
+        //spec| Verify that the credentialId is ≤ 1023 bytes. Credential IDs larger than this many bytes SHOULD cause the RP to fail this registration ceremony.
+        validateCredentialIdLength(attestationObject.getAuthenticatorData().getAttestedCredentialData().getCredentialId());
 
+        //spec| Step26
+        //spec| Verify that the credentialId is not yet registered for any user. If the credentialId is already known then the Relying Party SHOULD fail this registration ceremony.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        //spec| Step23
+        //spec| Step27
         //spec| If the attestation statement attStmt verified successfully and is found to be trustworthy,
-        //spec| then register the new credential with the account that was denoted in options.user:
-        //spec| - Associate the user’s account with the credentialId and credentialPublicKey
-        //spec|   in authData.attestedCredentialData, as appropriate for the Relying Party's system.
-        //spec| - Associate the credentialId with a new stored signature counter value initialized to the value of authData.signCount.
-        //spec| It is RECOMMENDED to also:
-        //spec| - Associate the credentialId with the transport hints returned by calling credential.response.getTransports().
-        //spec|   This value SHOULD NOT be modified before or after storing it.
-        //spec|   It is RECOMMENDED to use this value to populate the transports of the allowCredentials option in future get() calls
-        //spec|   to help the client know how to find a suitable authenticator.
+        //spec| then create and store a new credential record in the user account that was denoted in options.user,
+        //spec| with the following contents:
+        //spec| type
+        //spec|     credential.type.
+        //spec| id
+        //spec|     credential.id or credential.rawId, whichever format is preferred by the Relying Party.
+        //spec| publicKey
+        //spec|     The credential public key in authData.
+        //spec| signCount
+        //spec|     authData.signCount.
+        //spec| uvInitialized
+        //spec|     The value of the UV flag in authData.
+        //spec| transports
+        //spec|     The value returned from response.getTransports().
+        //spec| backupEligible
+        //spec|     The value of the BE flag in authData.
+        //spec| backupState
+        //spec|     The value of the BS flag in authData.
+        //spec| The new credential record MAY also include the following OPTIONAL contents:
+        //spec| attestationObject
+        //spec|     response.attestationObject.
+        //spec| attestationClientDataJSON
+        //spec|     response.clientDataJSON.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        //spec| Step24
-        //spec| If the attestation statement attStmt successfully verified but is not trustworthy per step 21 above,
+        //spec| Step28
+        //spec| If the attestation statement attStmt successfully verified but is not trustworthy per step 23 above,
         //spec| the Relying Party SHOULD fail the registration ceremony.
-        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+        //      (This step is implemented in attestationValidator#validate)
 
         // validate with custom logic
         for (CustomRegistrationValidator customRegistrationValidator : customRegistrationValidators) {
@@ -251,12 +288,32 @@ public class RegistrationDataValidator {
         }
     }
 
+    void validateBEBSFlags(AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
+            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
+        }
+    }
+
+    void validateCredentialIdLength(byte[] credentialId) {
+        if(maxCredentialIdLength >= 0 && credentialId.length > maxCredentialIdLength){
+            throw new CredentialIdTooLongException(String.format("credentialId exceeds maxCredentialIdSize(%d bytes)", maxCredentialIdLength));
+        }
+    }
+
     public OriginValidator getOriginValidator() {
         return originValidator;
     }
 
     public void setOriginValidator(OriginValidator originValidator) {
         this.originValidator = originValidator;
+    }
+
+    public int getMaxCredentialIdLength() {
+        return maxCredentialIdLength;
+    }
+
+    public void setMaxCredentialIdLength(int maxCredentialIdLength) {
+        this.maxCredentialIdLength = maxCredentialIdLength;
     }
 
     public List<CustomRegistrationValidator> getCustomRegistrationValidators() {

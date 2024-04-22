@@ -30,10 +30,7 @@ import com.webauthn4j.validator.attestation.statement.tpm.NullTPMAttestationStat
 import com.webauthn4j.validator.attestation.statement.u2f.NullFIDOU2FAttestationStatementValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.certpath.NullCertPathTrustworthinessValidator;
 import com.webauthn4j.validator.attestation.trustworthiness.self.NullSelfAttestationTrustworthinessValidator;
-import com.webauthn4j.validator.exception.ConstraintViolationException;
-import com.webauthn4j.validator.exception.NotAllowedAlgorithmException;
-import com.webauthn4j.validator.exception.UserNotPresentException;
-import com.webauthn4j.validator.exception.UserNotVerifiedException;
+import com.webauthn4j.validator.exception.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -113,6 +110,21 @@ class RegistrationDataValidatorTest {
         AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], (byte) 0, 0);
         assertThrows(UserNotPresentException.class,
                 () -> target.validateUVUPFlags(authenticatorData, false, true)
+        );
+    }
+
+    @Test
+    void validateBEBSFlags_only_BSFlag_set_test() {
+        AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData = new AuthenticatorData<>(new byte[32], AuthenticatorData.BIT_BS, 0);
+        assertThrows(IllegalBackupStateException.class,
+                () -> target.validateBEBSFlags(authenticatorData)
+        );
+    }
+
+    @Test
+    void validateCredentialIdLength_too_long_credentialId_test(){
+        assertThrows(CredentialIdTooLongException.class,
+                () -> target.validateCredentialIdLength(new byte[1024])
         );
     }
 
