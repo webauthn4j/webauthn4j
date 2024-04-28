@@ -35,16 +35,16 @@ It is the application's responsibility for retaining the issued Challenge.
 If you do not want to use it please specify `null`.
 
 If validation fails, an exception inheriting `ValidationException` is thrown.
-If validation succeeds, please create an `Authenticator` instance from the returned value and persist it to the database or something in your application manner.
+If validation succeeds, please create an `CredentialRecord` instance from the returned value and persist it to the database or something in your application manner.
 The instance is required at the time of authentication.
-For more details about `Authenticator` serialization, please refer <<./deep-dive.adoc#authenticator-serialization-and-deserialization,Authenticator serialization and deserialization>>.
+For more details about `CredentialRecord` serialization, please refer <<./deep-dive.adoc#CredentialRecord-serialization-and-deserialization,CredentialRecord serialization and deserialization>>.
 
 [source,java]
 ----
 // Client properties
 byte[] attestationObject = null /* set attestationObject */;
 byte[] clientDataJSON = null /* set clientDataJSON */;
-String clientExtensionJSON = null;  /* set clientExtensionJSON */
+String clientExtensionJSON = null;  /* set clientExtensionJSON */;
 Set<String> transports = null /* set transports */;
 
 // Server properties
@@ -61,27 +61,30 @@ boolean userPresenceRequired = true;
 RegistrationRequest registrationRequest = new RegistrationRequest(attestationObject, clientDataJSON, clientExtensionJSON, transports);
 RegistrationParameters registrationParameters = new RegistrationParameters(serverProperty, userVerificationRequired, userPresenceRequired);
 RegistrationData registrationData;
-try {
+try{
     registrationData = webAuthnManager.parse(registrationRequest);
-} catch (DataConversionException e) {
+}
+catch (DataConversionException e){
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
-try {
+try{
     webAuthnManager.validate(registrationData, registrationParameters);
-} catch (ValidationException e) {
+}
+catch (ValidationException e){
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
 
-// please persist Authenticator object, which will be used in the authentication process.
-Authenticator authenticator =
-        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                registrationData.getAttestationObject().getAttestationStatement(),
-                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
-        );
-save(authenticator); // please persist authenticator in your manner
+// please persist CredentialRecord object, which will be used in the authentication process.
+CredentialRecord credentialRecord =
+    new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+        registrationData.getAttestationObject(),
+        registrationData.getCollectedClientData(),
+        registrationData.getClientExtensions(),
+        registrationData.getTransports()
+    );
+save(credentialRecord); // please persist credentialRecord in your manner
 ----
 
 === WebAuthn Assertion verification
@@ -118,7 +121,7 @@ List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 
-Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
+CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
 AuthenticationRequest authenticationRequest =
         new AuthenticationRequest(
@@ -132,7 +135,7 @@ AuthenticationRequest authenticationRequest =
 AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
-                authenticator,
+                credentialRecord,
                 allowCredentials,
                 userVerificationRequired,
                 userPresenceRequired
@@ -174,7 +177,7 @@ If you are using maven, add the `webauthn4j-device-check` as a dependency in thi
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.13.0.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.24.0.RELEASE</webauthn4j.version>
   ...
 </properties>
 

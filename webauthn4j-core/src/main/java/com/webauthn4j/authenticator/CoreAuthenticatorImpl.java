@@ -16,6 +16,7 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.credential.CoreCredentialRecordImpl;
 import com.webauthn4j.data.CoreRegistrationData;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
@@ -30,7 +31,9 @@ import java.util.Objects;
 
 /**
  * An {@link CoreAuthenticator} implementation
+ * @deprecated {@link CoreAuthenticatorImpl} is deprecated since WebAuthn Level3 added new fields to the credential record. To represent WebAuthn Level3 credential record, new {@link CoreCredentialRecordImpl} class is introduced. Please upgrade from {@link CoreAuthenticatorImpl} class to {@link CoreCredentialRecordImpl} class. {@link CoreAuthenticatorImpl} class will be removed in the future version.
  */
+@Deprecated
 public class CoreAuthenticatorImpl implements CoreAuthenticator {
 
     private static final String ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL = "attestedCredentialData must not be null";

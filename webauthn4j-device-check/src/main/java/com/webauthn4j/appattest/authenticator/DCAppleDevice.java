@@ -16,7 +16,7 @@
 
 package com.webauthn4j.appattest.authenticator;
 
-import com.webauthn4j.authenticator.CoreAuthenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
 
-public interface DCAppleDevice extends CoreAuthenticator {
+public interface DCAppleDevice extends CoreCredentialRecord {
 }

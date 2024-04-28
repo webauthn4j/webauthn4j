@@ -16,6 +16,7 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
@@ -25,8 +26,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 
 /**
- * Core interface that represents WebAuthn authenticator
+ * Core interface that represents WebAuthn authenticator (credential record)
+ * @deprecated {@link CoreAuthenticator} is deprecated since WebAuthn Level3 added new fields to the credential record. To represent WebAuthn Level3 credential record, new {@link CoreCredentialRecord} interface is introduced. Please upgrade from {@link CoreAuthenticator} interface to {@link CoreCredentialRecord} interface. {@link CoreAuthenticator} interface will be removed in the future version.
  */
+@Deprecated
 public interface CoreAuthenticator {
 
     /**

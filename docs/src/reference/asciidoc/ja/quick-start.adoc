@@ -20,7 +20,7 @@ WebAuthn認証は、事前に認証デバイスで生成した公開鍵をサー
 - `challenge` には発行したChallengeを指定して下さい。`challenge` はリプレイ攻撃を防ぐ為のパラメータです。 サーバー側で `challenge` としてランダムなバイト列を生成し、フロントエンド側でWebAuthn JS APIを実行する際に パラメータとして指定して署名対象に含め、サーバー側で値の一致を検証することで、リプレイ攻撃からユーザーを防御することが出来ます。 発行したChallengeを検証時まで永続化しておくのはアプリケーション側の責務です。セッションなどに格納しておくと良いでしょう。
 - `tokenBindingId` はToken bindingを利用する場合のパラメータです。利用しない場合は `null` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `Authenticator` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#authenticatorのシリアライズデシリアライズ,Authenticatorのシリアライズ、デシリアライズ>> を参照して下さい。
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証に成功した場合は、返却された値から `CredentialRecord` インスタンスを作成し、データベース等へアプリケーション側で永続化して下さい。 認証時に必要となります。永続化方法について詳しくは、 <<./deep-dive.adoc#CredentialRecordのシリアライズデシリアライズ,CredentialRecordのシリアライズ、デシリアライズ>> を参照して下さい。
 
 [source,java]
 ----
@@ -59,14 +59,15 @@ catch (ValidationException e){
     throw e;
 }
 
-// please persist Authenticator object, which will be used in the authentication process.
-Authenticator authenticator =
-        new AuthenticatorImpl( // You may create your own Authenticator implementation to save friendly authenticator name
-                registrationData.getAttestationObject().getAuthenticatorData().getAttestedCredentialData(),
-                registrationData.getAttestationObject().getAttestationStatement(),
-                registrationData.getAttestationObject().getAuthenticatorData().getSignCount()
-        );
-save(authenticator); // please persist authenticator in your manner
+// please persist CredentialRecord object, which will be used in the authentication process.
+CredentialRecord credentialRecord =
+    new CredentialRecordImpl( // You may create your own CredentialRecord implementation to save friendly authenticator name
+        registrationData.getAttestationObject(),
+        registrationData.getCollectedClientData(),
+        registrationData.getClientExtensions(),
+        registrationData.getTransports()
+    );
+save(credentialRecord); // please persist credentialRecord in your manner
 ----
 
 ==== WebAuthnアサーションの検証
@@ -76,9 +77,9 @@ save(authenticator); // please persist authenticator in your manner
 
 `userVerificationRequired` は認証デバイスでのユーザーの本人性確認が必要かどうかを示すパラメータです。 パスワード＋認証デバイスの「所持」による多要素認証を行う場合は、パスワードで本人性の確認が出来ている為 `false` で良いでしょう。 パスワードレス認証として、認証デバイスによる本人性確認＋「所持」による多要素認証を行う場合は `true` を指定する必要があります。
 
-`Authenticator` には、登録時に永続化した `Authenticator` を指定してください。
+`authenticator` には、登録時に永続化した `CredentialRecord` を指定してください。
 
-検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `Authenticator` に紐づけたカウンタの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
+検証に失敗した場合は、 `ValidationException` のサブクラスの例外が発生します。 検証後は、 `CredentialRecord` に紐づけたcounterおよび、uvInitialized、backedUpの値を更新してください。カウンタは万が一認証デバイスのクローンが 作成された場合を検知するために用意されています。カウンタについて詳しくは
 https://www.w3.org/TR/webauthn-1/#sign-counter[WebAuthnの仕様書のカウンタの項] を参照して下さい。
 
 [source,java]
@@ -103,7 +104,7 @@ List<byte[]> allowCredentials = null;
 boolean userVerificationRequired = true;
 boolean userPresenceRequired = true;
 
-Authenticator authenticator = load(credentialId); // please load authenticator object persisted in the registration process in your manner
+CredentialRecord credentialRecord = load(credentialId); // please load authenticator object persisted in the registration process in your manner
 
 AuthenticationRequest authenticationRequest =
         new AuthenticationRequest(
@@ -117,24 +118,22 @@ AuthenticationRequest authenticationRequest =
 AuthenticationParameters authenticationParameters =
         new AuthenticationParameters(
                 serverProperty,
-                authenticator,
+                credentialRecord,
                 allowCredentials,
                 userVerificationRequired,
                 userPresenceRequired
         );
 
 AuthenticationData authenticationData;
-try{
+try {
     authenticationData = webAuthnManager.parse(authenticationRequest);
-}
-catch (DataConversionException e){
+} catch (DataConversionException e) {
     // If you would like to handle WebAuthn data structure parse error, please catch DataConversionException
     throw e;
 }
-try{
+try {
     webAuthnManager.validate(authenticationData, authenticationParameters);
-}
-catch (ValidationException e){
+} catch (ValidationException e) {
     // If you would like to handle WebAuthn data validation error, please catch ValidationException
     throw e;
 }
@@ -158,7 +157,7 @@ Apple App Attestの検証用クラスは、WebAuthn4J本体(webauthn4j-core)と�
 <properties>
   ...
   <!-- Use the latest version whenever possible. -->
-  <webauthn4j.version>0.13.0.RELEASE</webauthn4j.version>
+  <webauthn4j.version>0.24.0.RELEASE</webauthn4j.version>
   ...
 </properties>
 

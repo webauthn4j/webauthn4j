@@ -16,7 +16,7 @@
 
 package com.webauthn4j.appattest.authenticator;
 
-import com.webauthn4j.authenticator.CoreAuthenticatorImpl;
+import com.webauthn4j.credential.CoreCredentialRecordImpl;
 import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.statement.AttestationStatement;
 import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthenticatorOutputs;
@@ -24,13 +24,13 @@ import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenti
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class DCAppleDeviceImpl extends CoreAuthenticatorImpl implements DCAppleDevice {
+public class DCAppleDeviceImpl extends CoreCredentialRecordImpl implements DCAppleDevice {
 
     public DCAppleDeviceImpl(
             @NonNull AttestedCredentialData attestedCredentialData,
             @Nullable AttestationStatement attestationStatement,
             long counter,
             @Nullable AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions) {
-        super(attestedCredentialData, attestationStatement, counter, authenticatorExtensions);
+        super(attestationStatement, null, null, null, counter, attestedCredentialData, authenticatorExtensions);
     }
 }

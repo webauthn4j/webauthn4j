@@ -16,6 +16,7 @@
 
 package com.webauthn4j.authenticator;
 
+import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
@@ -25,7 +26,9 @@ import java.util.Set;
 
 /**
  * Core interface that represents WebAuthn authenticator
+ * @deprecated {@link Authenticator} is deprecated since WebAuthn Level3 added new fields to the credential record. To represent WebAuthn Level3 credential record, new {@link CredentialRecord} interface is introduced. Please upgrade from {@link Authenticator} interface to {@link CredentialRecord} interface. {@link Authenticator} interface will be removed in the future version.
  */
+@Deprecated
 public interface Authenticator extends CoreAuthenticator {
 
     /**

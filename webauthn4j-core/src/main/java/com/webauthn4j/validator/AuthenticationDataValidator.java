@@ -17,6 +17,7 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.authenticator.Authenticator;
+import com.webauthn4j.credential.CoreCredentialRecord;
 import com.webauthn4j.data.AuthenticationData;
 import com.webauthn4j.data.AuthenticationParameters;
 import com.webauthn4j.data.attestation.authenticator.AuthenticatorData;
@@ -94,30 +95,34 @@ public class AuthenticationDataValidator {
         validateCredentialId(credentialId, allowCredentials);
 
         //spec| Step6
-        //spec| Identify the user being authenticated and verify that this user is the owner of the public key credential source credentialSource identified by credential.id:
-        //spec| - If the user was identified before the authentication ceremony was initiated,
-        //spec|   verify that the identified user is the owner of credentialSource. If credential.response.userHandle is present,
-        //spec|   let userHandle be its value. Verify that userHandle also maps to the same user.
+        //spec| Identify the user being authenticated and let credentialRecord be the credential record for the credential:
+        //spec| - If the user was identified before the authentication ceremony was initiated, e.g., via a username or cookie,
+        //spec|   verify that the identified user account contains a credential record whose id equals credential.rawId.
+        //spec|   Let credentialRecord be that credential record. If response.userHandle is present,
+        //spec|   verify that it equals the user handle of the user account.
         //spec| - If the user was not identified before the authentication ceremony was initiated,
-        //spec|   verify that response.userHandle is present, and that the user identified by this value is the owner of credentialSource.
+        //spec|   verify that response.userHandle is present. Verify that the user account identified by response.userHandle
+        //spec|   contains a credential record whose id equals credential.rawId. Let credentialRecord be that credential record.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        //spec| Step7
+        // Step7-8 is missing in the WebAuthn Level3 specification
+
+        //spec| Step9
         //spec| Using credential’s id attribute (or the corresponding rawId, if base64url encoding is inappropriate for your use case),
         //spec| look up the corresponding credential public key and let credentialPublicKey be that credential public key.
         //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
 
-        //spec| Step8
+        //spec| Step9
         //spec| Let cData, aData and sig denote the value of credential’s response's clientDataJSON, authenticatorData,
         //spec| and signature respectively.
         byte[] cData = authenticationData.getCollectedClientDataBytes();
         byte[] aData = authenticationData.getAuthenticatorDataBytes();
 
-        //spec| Step9
+        //spec| Step10
         //spec| Let JSONtext be the result of running UTF-8 decode on the value of cData.
         //      (This step is done on caller.)
 
-        //spec| Step10
+        //spec| Step11
         //spec| Let C, the client data claimed as used for the signature, be the result of running an implementation-specific JSON parser on JSONtext.
         //      (In the spec, claimed as "C", but use "collectedClientData" here)
         CollectedClientData collectedClientData = authenticationData.getCollectedClientData();
@@ -137,47 +142,70 @@ public class AuthenticationDataValidator {
                 serverProperty, authenticator
         );
 
-        //spec| Step11
+        //spec| Step12
         //spec| Verify that the value of C.type is the string webauthn.get.
         if (!Objects.equals(collectedClientData.getType(), ClientDataType.WEBAUTHN_GET)) {
             throw new InconsistentClientDataTypeException("ClientData.type must be 'get' on authentication, but it isn't.");
         }
 
-        //spec| Step12
-        //spec| Verify that the value of C.challenge matches the challenge that was sent to the authenticator in
-        //spec| the PublicKeyCredentialRequestOptions passed to the get() call.
+        //spec| Step13
+        //spec| Verify that the value of C.challenge equals the base64url encoding of options.challenge.
         challengeValidator.validate(collectedClientData, serverProperty);
 
-        //spec| Step13
-        //spec| Verify that the value of C.origin matches the Relying Party's origin.
+        //spec| Step14
+        //spec| Verify that the value of C.origin is an origin expected by the Relying Party. See §13.4.9 Validating the origin of a credential for guidance.
         originValidator.validate(authenticationObject);
 
         // Verify cross origin, which is not defined in the spec
         validateClientDataCrossOrigin(collectedClientData);
 
-        //spec| Step14
+        //spec| Step15
+        //spec| If C.topOrigin is present:
+        //spec| - Verify that the Relying Party expects this credential to be used within an iframe that is not same-origin with its ancestors.
+        //spec| - Verify that the value of C.topOrigin matches the origin of a page that the Relying Party expects to be sub-framed within.
+        //spec|   See §13.4.9 Validating the origin of a credential for guidance.
+        //TODO: Once Chrome starts supporting topOrigin, implement topOrigin verification
+
+        //spec| (Level2) Step14 (Kept for backward compatibility)
         //spec| Verify that the value of C.tokenBinding.status matches the state of Token Binding for the TLS connection over
         //spec| which the attestation was obtained. If Token Binding was used on that TLS connection,
         //spec| also verify that C.tokenBinding.id matches the base64url encoding of the Token Binding ID for the connection.
         tokenBindingValidator.validate(collectedClientData.getTokenBinding(), serverProperty.getTokenBindingId());
 
-        //spec| Step15
+        //spec| Step16
         //spec| Verify that the rpIdHash in authData is the SHA-256 hash of the RP ID expected by the Relying Party.
         rpIdHashValidator.validate(authenticatorData.getRpIdHash(), serverProperty);
 
-        //spec| Step16
-        //spec| Verify that the User Present bit of the flags in authData is set.
+        //spec| Step17
+        //spec| Verify that the UP bit of the flags in authData is set.
         if (authenticationParameters.isUserPresenceRequired() && !authenticatorData.isFlagUP()) {
             throw new UserNotPresentException("Validator is configured to check user present, but UP flag in authenticatorData is not set.");
         }
 
-        //spec| Step17
-        //spec| If user verification is required for this assertion, verify that the User Verified bit of the flags in authData is set.
+        //spec| Step18
+        //spec| Determine whether user verification is required for this assertion.
+        //spec| User verification SHOULD be required if, and only if, options.userVerification is set to required.
+        //spec| If user verification was determined to be required, verify that the UV bit of the flags in authData is set.
+        //spec| Otherwise, ignore the value of the UV flag.
         if (authenticationParameters.isUserVerificationRequired() && !authenticatorData.isFlagUV()) {
             throw new UserNotVerifiedException("Validator is configured to check user verified, but UV flag in authenticatorData is not set.");
         }
 
-        //spec| Step18
+        //spec| Step19
+        //spec| If the BE bit of the flags in authData is not set, verify that the BS bit is not set.
+        validateBEBSFlags(authenticatorData);
+
+        //spec| Step20
+        //spec| If the credential backup state is used as part of Relying Party business logic or policy,
+        //spec| let currentBe and currentBs be the values of the BE and BS bits, respectively, of the flags in authData.
+        //spec| Compare currentBe and currentBs with credentialRecord.backupEligible and credentialRecord.backupState:
+        //spec| - If credentialRecord.backupEligible is set, verify that currentBe is set.
+        //spec| - If credentialRecord.backupEligible is not set, verify that currentBe is not set.
+        //spec| - Apply Relying Party policy, if any.
+        //      (The relying party policy should be implemented as a custom validator)
+        validateBEFlag(authenticator, authenticatorData);
+
+        //spec| Step21
         //spec| Verify that the values of the client extension outputs in clientExtensionResults and the authenticator
         //spec| extension outputs in the extensions in authData are as expected, considering the client extension input
         //spec| values that were given as the extensions option in the get() call. In particular, any extension identifier
@@ -188,44 +216,105 @@ public class AuthenticationDataValidator {
         clientExtensionValidator.validate(clientExtensions);
         authenticatorExtensionValidator.validate(authenticationExtensionsAuthenticatorOutputs);
 
-        //spec| Step19
+        //spec| Step22
         //spec| Let hash be the result of computing a hash over the cData using SHA-256.
-        //spec| Step20
-        //spec| Using the credential public key, validate that sig is a valid signature over
-        //spec| the binary concatenation of the authenticatorData and the hash of the collectedClientData.
+        //spec| Step23
+        //spec| Using credentialRecord.publicKey, verify that sig is a valid signature over the binary concatenation of authData and hash.
         assertionSignatureValidator.validate(authenticationData, authenticator.getAttestedCredentialData().getCOSEKey());
 
-        //spec| Step21
-        //spec| Let storedSignCount be the stored signature counter value associated with credential.id.
-        //spec| If authData.signCount is nonzero or storedSignCount is nonzero, then run the following sub-step:
+        //spec| Step24
+        //spec| If authData.signCount is nonzero or credentialRecord.signCount is nonzero, then run the following sub-step:
         long presentedSignCount = authenticatorData.getSignCount();
         long storedSignCount = authenticator.getCounter();
         if (presentedSignCount > 0 || storedSignCount > 0) {
             //spec| If authData.signCount is
-            //spec| greater than storedSignCount:
+            //spec| greater than credentialRecord.signCount:
             if (presentedSignCount > storedSignCount) {
 
-                //spec| Update storedSignCount to be the value of authData.signCount.
-                //      (caller need to update the signature counter value based on the value set in the Authenticator instance)
-                authenticator.setCounter(presentedSignCount);
+                //spec| The signature counter is valid.
+                //no-op
             }
-            //spec| less than or equal to storedSignCount:
-            //spec| This is a signal that the authenticator may be cloned, i.e. at least two copies of the credential private key may exist and are being used in parallel.
+            //spec| less than or equal to credentialRecord.signCount:
+            //spec| This is a signal that the authenticator may be cloned,
+            //spec| i.e. at least two copies of the credential private key may exist and are being used in parallel.
             //spec| Relying Parties should incorporate this information into their risk scoring.
-            //spec| Whether the Relying Party updates storedSignCount in this case, or not, or fails the authentication ceremony or not, is Relying Party-specific.
+            //spec| Whether the Relying Party updates credentialRecord.signCount below in this case, or not, or
+            //spec| fails the authentication ceremony or not, is Relying Party-specific.
             else {
                 maliciousCounterValueHandler.maliciousCounterValueDetected(authenticationObject);
             }
         }
 
+        //spec| Step25
+        //spec| If response.attestationObject is present and the Relying Party wishes to verify the attestation
+        //spec| then perform CBOR decoding on attestationObject to obtain the attestation statement format fmt, and the attestation statement attStmt.
+        //spec| - Verify that the AT bit in the flags field of authData is set, indicating that attested credential data is included.
+        //spec| - Verify that the credentialPublicKey and credentialId fields of the attested credential data in authData match
+        //spec|   credentialRecord.publicKey and credentialRecord.id, respectively.
+        //spec| - Determine the attestation statement format by performing a USASCII case-sensitive match on
+        //spec|   fmt against the set of supported WebAuthn Attestation Statement Format Identifier values.
+        //spec|   An up-to-date list of registered WebAuthn Attestation Statement Format Identifier values is maintained in
+        //spec|   the IANA "WebAuthn Attestation Statement Format Identifiers" registry [IANA-WebAuthn-Registries] established by [RFC8809].
+        //spec| - Verify that attStmt is a correct attestation statement, conveying a valid attestation signature,
+        //spec|   by using the attestation statement format fmt’s verification procedure given attStmt, authData and hash.
+        //TODO: Since Step25 is removed in the latest Editor's draft(as of 2024-04-07, see https://github.com/w3c/webauthn/pull/1997), this step is left not implemented. This step need to be removed when the next draft is released.
+
+        //spec| Step26
+        //spec| Update credentialRecord with new state values:
+        //spec| - Update credentialRecord.signCount to the value of authData.signCount.
+        //spec| - Update credentialRecord.backupState to the value of currentBs.
+        //spec| - If credentialRecord.uvInitialized is false, update it to the value of the UV bit in the flags in authData. This change SHOULD require authorization by an additional authentication factor equivalent to WebAuthn user verification; if not authorized, skip this step.
+        updateRecord(authenticator, authenticatorData);
+
+        //spec| - OPTIONALLY, if response.attestationObject is present, update credentialRecord.attestationObject to the value of response.attestationObject and update credentialRecord.attestationClientDataJSON to the value of response.clientDataJSON.
+        //TODO: Since this optional step is removed in the latest Editor's draft(as of 2024-04-07), this step is left not implemented. This step need to be removed when the next draft is released.
+
+        //spec| If the Relying Party performs additional security checks beyond these WebAuthn authentication ceremony steps, the above state updates SHOULD be deferred to after those additional checks are completed successfully.
+        //      (This step is out of WebAuthn4J scope. It's caller's responsibility.)
+
         for (CustomAuthenticationValidator customAuthenticationValidator : customAuthenticationValidators) {
             customAuthenticationValidator.validate(authenticationObject);
         }
 
-        //spec| Step18
+        //spec| Step27
         //spec| If all the above steps are successful, continue with the authentication ceremony as appropriate. Otherwise, fail the authentication ceremony.
 
 
+    }
+
+    static void validateBEFlag(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        if(authenticator instanceof CoreCredentialRecord){
+            CoreCredentialRecord coreCredentialRecord = (CoreCredentialRecord) authenticator;
+            Boolean backEligibleRecordValue = coreCredentialRecord.isBackupEligible();
+            //noinspection StatementWithEmptyBody
+            if(backEligibleRecordValue == null){
+                //no-op
+            }
+            else if(backEligibleRecordValue) {
+                if(!authenticatorData.isFlagBE()){
+                    throw new BadBackupEligibleFlagException("Although credential record BE flag is set, current BE flag is not set");
+                }
+            }
+            else{
+                if(authenticatorData.isFlagBE()){
+                    throw new BadBackupEligibleFlagException("Although credential record BE flag is not set, current BE flag is set");
+                }
+            }
+        }
+    }
+
+    static void updateRecord(Authenticator authenticator, AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        authenticator.setCounter(authenticatorData.getSignCount());
+        if(authenticator instanceof CoreCredentialRecord){
+            CoreCredentialRecord coreCredentialRecord = (CoreCredentialRecord) authenticator;
+
+            coreCredentialRecord.setBackedUp(authenticatorData.isFlagBS());
+
+            Boolean uvInitializedRecord = coreCredentialRecord.isUvInitialized();
+            if(Objects.isNull(uvInitializedRecord) || Boolean.FALSE.equals(uvInitializedRecord)){
+                coreCredentialRecord.setUvInitialized(authenticatorData.isFlagUV());
+            }
+        }
     }
 
     void validateCredentialId(byte[] credentialId, @Nullable List<byte[]> allowCredentials) {
@@ -245,6 +334,12 @@ public class AuthenticationDataValidator {
     void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
+        }
+    }
+
+    void validateBEBSFlags(AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+        if(!authenticatorData.isFlagBE() && authenticatorData.isFlagBS()){
+            throw new IllegalBackupStateException("Backup state bit must not be set if backup eligibility bit is not set");
         }
     }
 
