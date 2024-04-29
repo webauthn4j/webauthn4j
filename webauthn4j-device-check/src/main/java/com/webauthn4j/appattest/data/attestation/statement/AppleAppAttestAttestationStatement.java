@@ -25,8 +25,8 @@ import com.webauthn4j.data.attestation.statement.AttestationCertificatePath;
 import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationStatement;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -43,8 +43,8 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
     private final byte[] receipt;
 
     public AppleAppAttestAttestationStatement(
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @NonNull @JsonProperty("receipt") byte[] receipt) {
+            @NotNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NotNull @JsonProperty("receipt") byte[] receipt) {
         AssertUtil.notNull(x5c, "x5c must not be null");
         AssertUtil.notNull(receipt, "receipt must not be null");
         this.x5c = x5c;
@@ -54,8 +54,8 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
     @SuppressWarnings("unused")
     @JsonCreator
     private static AppleAppAttestAttestationStatement deserialize(
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @NonNull @JsonProperty("receipt") byte[] receipt) throws MismatchedInputException {
+            @NotNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NotNull @JsonProperty("receipt") byte[] receipt) throws MismatchedInputException {
         try {
             return new AppleAppAttestAttestationStatement(x5c, receipt);
         } catch (IllegalArgumentException e) {
@@ -63,17 +63,17 @@ public class AppleAppAttestAttestationStatement implements CertificateBaseAttest
         }
     }
 
-    public @NonNull byte[] getReceipt() {
+    public @NotNull byte[] getReceipt() {
         return ArrayUtil.clone(receipt);
     }
 
     @Override
-    public @NonNull AttestationCertificatePath getX5c() {
+    public @NotNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 

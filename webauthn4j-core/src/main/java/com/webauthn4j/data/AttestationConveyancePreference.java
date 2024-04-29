@@ -19,7 +19,7 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -70,12 +70,12 @@ public class AttestationConveyancePreference {
 
     private final String value;
 
-    private AttestationConveyancePreference(@NonNull String value) {
+    private AttestationConveyancePreference(@NotNull String value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static @NonNull AttestationConveyancePreference create(@NonNull String value) {
+    public static @NotNull AttestationConveyancePreference create(@NotNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "none":
@@ -92,7 +92,7 @@ public class AttestationConveyancePreference {
     }
 
     @JsonValue
-    public @NonNull String getValue() {
+    public @NotNull String getValue() {
         return value;
     }
 

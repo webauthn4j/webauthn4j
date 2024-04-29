@@ -17,8 +17,8 @@
 package com.webauthn4j.util;
 
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ public class CollectionUtil {
     }
 
     @SafeVarargs
-    public static <T> @NonNull Set<T> unmodifiableSet(@NonNull T... items) {
+    public static <T> @NotNull Set<T> unmodifiableSet(@NotNull T... items) {
         Set<T> set = new HashSet<>(Arrays.asList(items));
         return Collections.unmodifiableSet(set);
     }

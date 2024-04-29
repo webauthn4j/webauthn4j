@@ -21,12 +21,12 @@ import com.webauthn4j.data.attestation.statement.AttestationType;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.attestation.statement.AbstractStatementValidator;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class NullAppleAppAttestAttestationStatementValidator extends AbstractStatementValidator<AppleAppAttestAttestationStatement> {
 
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         if (!supports(registrationObject)) {

@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.toc;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -28,8 +28,8 @@ import java.util.Objects;
  * Contains the current BiometricStatusReport of one of the authenticator's biometric component.
  */
 public class BiometricStatusReport {
-    @NonNull private final Integer certLevel;
-    @NonNull private final BigInteger modality;
+    @NotNull private final Integer certLevel;
+    @NotNull private final BigInteger modality;
     @Nullable private final String effectiveData;
     @Nullable private final String certificationDescriptor;
     @Nullable private final String certificateNumber;
@@ -38,8 +38,8 @@ public class BiometricStatusReport {
 
     @JsonCreator
     public BiometricStatusReport(
-            @JsonProperty("certLevel") @NonNull Integer certLevel,
-            @JsonProperty("modality") @NonNull BigInteger modality,
+            @JsonProperty("certLevel") @NotNull Integer certLevel,
+            @JsonProperty("modality") @NotNull BigInteger modality,
             @JsonProperty("effectiveData") @Nullable String effectiveData,
             @JsonProperty("certificationDescriptor") @Nullable String certificationDescriptor,
             @JsonProperty("certificateNumber") @Nullable String certificateNumber,
@@ -54,12 +54,12 @@ public class BiometricStatusReport {
         this.certificationRequirementsVersion = certificationRequirementsVersion;
     }
 
-    @NonNull
+    @NotNull
     public Integer getCertLevel() {
         return certLevel;
     }
 
-    @NonNull
+    @NotNull
     public BigInteger getModality() {
         return modality;
     }

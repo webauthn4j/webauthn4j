@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.ArrayUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,23 +33,23 @@ public class HMACGetSecretAuthenticatorInput {
 
     @JsonCreator
     public HMACGetSecretAuthenticatorInput(
-            @NonNull @JsonProperty("1") COSEKey keyAgreement,
-            @NonNull @JsonProperty("2") byte[] saltEnc,
-            @NonNull @JsonProperty("3") byte[] saltAuth) {
+            @NotNull @JsonProperty("1") COSEKey keyAgreement,
+            @NotNull @JsonProperty("2") byte[] saltEnc,
+            @NotNull @JsonProperty("3") byte[] saltAuth) {
         this.keyAgreement = keyAgreement;
         this.saltEnc = ArrayUtil.clone(saltEnc);
         this.saltAuth = ArrayUtil.clone(saltAuth);
     }
 
-    public @NonNull COSEKey getKeyAgreement() {
+    public @NotNull COSEKey getKeyAgreement() {
         return keyAgreement;
     }
 
-    public @NonNull byte[] getSaltEnc() {
+    public @NotNull byte[] getSaltEnc() {
         return ArrayUtil.clone(saltEnc);
     }
 
-    public @NonNull byte[] getSaltAuth() {
+    public @NotNull byte[] getSaltAuth() {
         return ArrayUtil.clone(saltAuth);
     }
 

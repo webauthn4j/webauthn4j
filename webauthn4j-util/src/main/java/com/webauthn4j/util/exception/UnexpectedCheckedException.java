@@ -16,7 +16,7 @@
 
 package com.webauthn4j.util.exception;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Thrown if unexpected checked exception is thrown

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.util.Base64Util;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.security.cert.CertificateEncodingException;
@@ -40,7 +40,7 @@ public class X509CertificateSerializer extends StdSerializer<X509Certificate> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NonNull X509Certificate value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull X509Certificate value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         try {
             String str= Base64Util.encodeToString(value.getEncoded());
             gen.writeString(str);

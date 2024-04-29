@@ -17,8 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -31,14 +31,14 @@ public class TPMSClockInfo {
     private final long restartCount;
     private final boolean safe;
 
-    public TPMSClockInfo(@NonNull BigInteger clock, long resetCount, long restartCount, boolean safe) {
+    public TPMSClockInfo(@NotNull BigInteger clock, long resetCount, long restartCount, boolean safe) {
         this.clock = clock;
         this.resetCount = resetCount;
         this.restartCount = restartCount;
         this.safe = safe;
     }
 
-    public @NonNull BigInteger getClock() {
+    public @NotNull BigInteger getClock() {
         return clock;
     }
 

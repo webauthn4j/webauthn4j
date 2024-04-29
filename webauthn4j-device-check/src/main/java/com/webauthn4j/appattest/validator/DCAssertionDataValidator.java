@@ -28,7 +28,7 @@ import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreAuthenticationDataValidator;
 import com.webauthn4j.validator.CoreAuthenticationObject;
 import com.webauthn4j.validator.CustomCoreAuthenticationValidator;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class DCAssertionDataValidator extends CoreAuthenticationDataValidator {
     }
 
     @Override
-    protected @NonNull CoreAuthenticationObject createCoreAuthenticationObject(@NonNull CoreAuthenticationData authenticationData, @NonNull CoreAuthenticationParameters authenticationParameters) {
+    protected @NotNull CoreAuthenticationObject createCoreAuthenticationObject(@NotNull CoreAuthenticationData authenticationData, @NotNull CoreAuthenticationParameters authenticationParameters) {
 
         AssertUtil.notNull(authenticationData, "authenticationData must not be null");
         AssertUtil.notNull(authenticationData, "authenticationParameters must not be null");

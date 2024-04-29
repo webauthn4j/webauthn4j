@@ -18,8 +18,8 @@ package com.webauthn4j.metadata.data.statement;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.Objects;
@@ -29,13 +29,13 @@ import java.util.Objects;
  */
 public class PatternAccuracyDescriptor {
 
-    @NonNull private final BigInteger minComplexity;
+    @NotNull private final BigInteger minComplexity;
     @Nullable private final Integer maxRetries;
     @Nullable private final Integer blockSlowdown;
 
     @JsonCreator
     public PatternAccuracyDescriptor(
-            @JsonProperty("minComplexity") @NonNull BigInteger minComplexity,
+            @JsonProperty("minComplexity") @NotNull BigInteger minComplexity,
             @JsonProperty("maxRetries") @Nullable Integer maxRetries,
             @JsonProperty("blockSlowdown") @Nullable Integer blockSlowdown) {
         this.minComplexity = minComplexity;
@@ -43,7 +43,7 @@ public class PatternAccuracyDescriptor {
         this.blockSlowdown = blockSlowdown;
     }
 
-    @NonNull public BigInteger getMinComplexity() {
+    @NotNull public BigInteger getMinComplexity() {
         return minComplexity;
     }
 

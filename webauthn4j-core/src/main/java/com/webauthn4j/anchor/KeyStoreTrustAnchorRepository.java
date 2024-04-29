@@ -19,7 +19,7 @@ package com.webauthn4j.anchor;
 import com.webauthn4j.data.attestation.authenticator.AAGUID;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,7 +69,7 @@ public class KeyStoreTrustAnchorRepository implements TrustAnchorRepository{
         return trustAnchors;
     }
 
-    private static @NonNull Set<TrustAnchor> loadTrustAnchors(KeyStore keyStore) {
+    private static @NotNull Set<TrustAnchor> loadTrustAnchors(KeyStore keyStore) {
         try {
             List<String> aliases = Collections.list(keyStore.aliases());
             Set<TrustAnchor> trustAnchors = new HashSet<>();
@@ -83,7 +83,7 @@ public class KeyStoreTrustAnchorRepository implements TrustAnchorRepository{
         }
     }
 
-    private static @NonNull KeyStore loadKeyStore(Path keyStore, String password){
+    private static @NotNull KeyStore loadKeyStore(Path keyStore, String password){
         AssertUtil.notNull(keyStore, "keyStore must not be null");
         AssertUtil.notNull(password, "password must not be null");
         try (InputStream inputStream = Files.newInputStream(keyStore)) {

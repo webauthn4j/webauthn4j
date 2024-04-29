@@ -17,8 +17,8 @@
 package com.webauthn4j.data.attestation.authenticator;
 
 import com.webauthn4j.util.UUIDUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -75,7 +75,7 @@ public class AAGUID {
     }
 
     @Override
-    public @NonNull String toString() {
+    public @NotNull String toString() {
         return String.valueOf(value);
     }
 }

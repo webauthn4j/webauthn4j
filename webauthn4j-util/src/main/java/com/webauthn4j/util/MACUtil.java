@@ -17,7 +17,7 @@
 package com.webauthn4j.util;
 
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -33,11 +33,11 @@ public class MACUtil {
     private MACUtil() {
     }
 
-    public static @NonNull byte[] calculateHmacSHA256(@NonNull byte[] message, @NonNull byte[] secret) {
+    public static @NotNull byte[] calculateHmacSHA256(@NotNull byte[] message, @NotNull byte[] secret) {
         return calculateHmacSHA256(message, secret, 32);
     }
 
-    public static @NonNull byte[] calculateHmacSHA256(@NonNull byte[] message, @NonNull byte[] secret, int outputLength) {
+    public static @NotNull byte[] calculateHmacSHA256(@NotNull byte[] message, @NotNull byte[] secret, int outputLength) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secretKeySpec = new SecretKeySpec(secret, "HmacSHA256");

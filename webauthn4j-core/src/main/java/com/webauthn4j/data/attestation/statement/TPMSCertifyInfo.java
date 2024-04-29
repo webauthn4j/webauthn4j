@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,21 +29,21 @@ public class TPMSCertifyInfo implements TPMUAttest {
     private final TPMTHA name;
     private final TPMTHA qualifiedName;
 
-    public TPMSCertifyInfo(@NonNull TPMTHA name, @NonNull TPMTHA qualifiedName) {
+    public TPMSCertifyInfo(@NotNull TPMTHA name, @NotNull TPMTHA qualifiedName) {
         this.name = name;
         this.qualifiedName = qualifiedName;
     }
 
-    public @NonNull TPMTHA getName() {
+    public @NotNull TPMTHA getName() {
         return name;
     }
 
-    public @NonNull TPMTHA getQualifiedName() {
+    public @NotNull TPMTHA getQualifiedName() {
         return qualifiedName;
     }
 
     @Override
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             TPMUtil.writeSizedArray(outputStream, name.getBytes());

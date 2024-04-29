@@ -19,14 +19,14 @@ package com.webauthn4j.converter;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class AuthenticatorTransportConverter {
 
-    public @NonNull AuthenticatorTransport convert(@NonNull String value) {
+    public @NotNull AuthenticatorTransport convert(@NotNull String value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
             return AuthenticatorTransport.create(value);
@@ -36,7 +36,7 @@ public class AuthenticatorTransportConverter {
     }
 
     @SuppressWarnings("squid:S1168")
-    public @NonNull Set<AuthenticatorTransport> convertSet(@NonNull Set<String> values) {
+    public @NotNull Set<AuthenticatorTransport> convertSet(@NotNull Set<String> values) {
         try {
             AssertUtil.notNull(values, "values must not be null");
             return values.stream().map(this::convert).collect(Collectors.toSet());
@@ -45,7 +45,7 @@ public class AuthenticatorTransportConverter {
         }
     }
 
-    public @NonNull String convertToString(@NonNull AuthenticatorTransport value) {
+    public @NotNull String convertToString(@NotNull AuthenticatorTransport value) {
         try {
             AssertUtil.notNull(value, "value must not be null");
             return value.getValue();
@@ -55,7 +55,7 @@ public class AuthenticatorTransportConverter {
     }
 
     @SuppressWarnings("squid:S1168")
-    public @NonNull Set<String> convertSetToStringSet(@NonNull Set<AuthenticatorTransport> values) {
+    public @NotNull Set<String> convertSetToStringSet(@NotNull Set<AuthenticatorTransport> values) {
         try {
             AssertUtil.notNull(values, "values must not be null");
             return values.stream().map(this::convertToString).collect(Collectors.toSet());

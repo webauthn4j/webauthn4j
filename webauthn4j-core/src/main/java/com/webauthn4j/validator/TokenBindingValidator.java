@@ -20,7 +20,7 @@ import com.webauthn4j.data.client.TokenBinding;
 import com.webauthn4j.data.client.TokenBindingStatus;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.validator.exception.TokenBindingException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.MessageDigest;
 

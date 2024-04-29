@@ -22,7 +22,7 @@ import com.webauthn4j.metadata.data.MetadataBLOBPayloadEntry;
 import com.webauthn4j.metadata.data.statement.MetadataStatement;
 import com.webauthn4j.metadata.data.toc.StatusReport;
 import com.webauthn4j.util.HexUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -85,7 +85,7 @@ public class MetadataBLOBBasedMetadataStatementRepository implements MetadataSta
         this.selfAssertionSubmittedAllowed = selfAssertionSubmittedAllowed;
     }
 
-    private boolean checkMetadataBLOBPayloadEntry(@NonNull MetadataBLOBPayloadEntry metadataBLOBPayloadEntry) {
+    private boolean checkMetadataBLOBPayloadEntry(@NotNull MetadataBLOBPayloadEntry metadataBLOBPayloadEntry) {
         List<StatusReport> statusReports = metadataBLOBPayloadEntry.getStatusReports();
         for (StatusReport report : statusReports) {
             switch (report.getStatus()) {

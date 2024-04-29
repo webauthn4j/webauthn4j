@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -40,9 +40,9 @@ public class CollectedClientData {
     private final TokenBinding tokenBinding;
 
     @JsonCreator
-    public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
-                               @NonNull @JsonProperty("challenge") Challenge challenge,
-                               @NonNull @JsonProperty("origin") Origin origin,
+    public CollectedClientData(@NotNull @JsonProperty("type") ClientDataType type,
+                               @NotNull @JsonProperty("challenge") Challenge challenge,
+                               @NotNull @JsonProperty("origin") Origin origin,
                                @Nullable @JsonProperty("crossOrigin") Boolean crossOrigin,
                                @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         AssertUtil.notNull(type, "type must not be null");
@@ -55,27 +55,27 @@ public class CollectedClientData {
         this.tokenBinding = tokenBinding;
     }
 
-    public CollectedClientData(@NonNull @JsonProperty("type") ClientDataType type,
-                               @NonNull @JsonProperty("challenge") Challenge challenge,
-                               @NonNull @JsonProperty("origin") Origin origin,
+    public CollectedClientData(@NotNull @JsonProperty("type") ClientDataType type,
+                               @NotNull @JsonProperty("challenge") Challenge challenge,
+                               @NotNull @JsonProperty("origin") Origin origin,
                                @Nullable @JsonProperty("tokenBinding") TokenBinding tokenBinding) {
         this(type, challenge, origin, null, tokenBinding);
     }
 
 
-    public @NonNull ClientDataType getType() {
+    public @NotNull ClientDataType getType() {
         return type;
     }
 
-    public @NonNull Challenge getChallenge() {
+    public @NotNull Challenge getChallenge() {
         return challenge;
     }
 
-    public @NonNull Origin getOrigin() {
+    public @NotNull Origin getOrigin() {
         return origin;
     }
 
-    public @NonNull Boolean getCrossOrigin() {
+    public @NotNull Boolean getCrossOrigin() {
         return crossOrigin;
     }
 

@@ -9,8 +9,8 @@ import com.webauthn4j.data.extension.authenticator.AuthenticationExtensionsAuthe
 import com.webauthn4j.data.extension.authenticator.RegistrationExtensionAuthenticatorOutput;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
     private final Set<AuthenticatorTransport> transports;
 
     public CredentialRecordImpl(
-            @NonNull AttestationObject attestationObject,
+            @NotNull AttestationObject attestationObject,
             @Nullable CollectedClientData clientData,
             @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             @Nullable Set<AuthenticatorTransport> transports) {
@@ -33,13 +33,13 @@ public class CredentialRecordImpl extends CoreCredentialRecordImpl implements Cr
     }
 
     public CredentialRecordImpl(
-            @NonNull AttestationStatement attestationStatement,
+            @NotNull AttestationStatement attestationStatement,
             @Nullable Boolean uvInitialized,
             @Nullable Boolean backupEligible,
             @Nullable Boolean backupState,
             long counter,
-            @NonNull AttestedCredentialData attestedCredentialData,
-            @NonNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions,
+            @NotNull AttestedCredentialData attestedCredentialData,
+            @NotNull AuthenticationExtensionsAuthenticatorOutputs<RegistrationExtensionAuthenticatorOutput> authenticatorExtensions,
             @Nullable CollectedClientData clientData,
             @Nullable AuthenticationExtensionsClientOutputs<RegistrationExtensionClientOutput> clientExtensions,
             @Nullable Set<AuthenticatorTransport> transports) {

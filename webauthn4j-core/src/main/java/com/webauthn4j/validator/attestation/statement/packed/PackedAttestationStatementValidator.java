@@ -31,7 +31,7 @@ import com.webauthn4j.validator.exception.BadAlgorithmException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.BadSignatureException;
 import org.apache.kerby.asn1.type.Asn1OctetString;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -51,7 +51,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     private static final String ID_FIDO_GEN_CE_AAGUID = "1.3.6.1.4.1.45724.1.1.4";
 
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException("Specified format is not supported by " + this.getClass().getName());
@@ -80,7 +80,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     }
 
     @SuppressWarnings("SameReturnValue")
-    private @NonNull AttestationType validateX5c(@NonNull CoreRegistrationObject registrationObject, @NonNull PackedAttestationStatement attestationStatement, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
+    private @NotNull AttestationType validateX5c(@NotNull CoreRegistrationObject registrationObject, @NotNull PackedAttestationStatement attestationStatement, @NotNull byte[] sig, @NotNull COSEAlgorithmIdentifier alg, @NotNull byte[] attrToBeSigned) {
         if (attestationStatement.getX5c() == null || attestationStatement.getX5c().isEmpty()) {
             throw new BadAttestationStatementException("No attestation certificate is found in packed attestation statement.");
         }
@@ -107,7 +107,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         return AttestationType.BASIC;
     }
 
-    @NonNull AAGUID extractAAGUIDFromAttestationCertificate(@NonNull X509Certificate certificate) {
+    @NotNull AAGUID extractAAGUIDFromAttestationCertificate(@NotNull X509Certificate certificate) {
         byte[] extensionValue = certificate.getExtensionValue(ID_FIDO_GEN_CE_AAGUID);
         if (extensionValue == null) {
             return AAGUID.NULL;
@@ -124,7 +124,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     }
 
     @SuppressWarnings("SameReturnValue")
-    private @NonNull AttestationType validateSelfAttestation(@NonNull CoreRegistrationObject registrationObject, @NonNull byte[] sig, @NonNull COSEAlgorithmIdentifier alg, @NonNull byte[] attrToBeSigned) {
+    private @NotNull AttestationType validateSelfAttestation(@NotNull CoreRegistrationObject registrationObject, @NotNull byte[] sig, @NotNull COSEAlgorithmIdentifier alg, @NotNull byte[] attrToBeSigned) {
         //noinspection ConstantConditions as null check is already done in caller
         COSEKey coseKey = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey();
         // Validate that alg matches the algorithm of the coseKey in authenticatorData.
@@ -142,7 +142,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private boolean verifySignature(@NonNull PublicKey publicKey, @NonNull COSEAlgorithmIdentifier algorithmIdentifier, @NonNull byte[] signature, @NonNull byte[] data) {
+    private boolean verifySignature(@NotNull PublicKey publicKey, @NotNull COSEAlgorithmIdentifier algorithmIdentifier, @NotNull byte[] signature, @NotNull byte[] data) {
         try {
             String jcaName = getJcaName(algorithmIdentifier);
             Signature verifier = SignatureUtil.createSignature(jcaName);
@@ -155,7 +155,7 @@ public class PackedAttestationStatementValidator extends AbstractStatementValida
         }
     }
 
-    private @NonNull byte[] getAttToBeSigned(@NonNull CoreRegistrationObject registrationObject) {
+    private @NotNull byte[] getAttToBeSigned(@NotNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         return ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();

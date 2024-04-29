@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.MessageDigest;
 import java.util.Objects;
@@ -36,18 +36,18 @@ public class MessageDigestAlgorithm {
 
     private final String jcaName;
 
-    private MessageDigestAlgorithm(@NonNull String jcaName) {
+    private MessageDigestAlgorithm(@NotNull String jcaName) {
         this.jcaName = jcaName;
     }
 
-    public static @NonNull MessageDigestAlgorithm create(@NonNull String jcaName) {
+    public static @NotNull MessageDigestAlgorithm create(@NotNull String jcaName) {
         AssertUtil.notNull(jcaName, "jcaName must not be null");
         return new MessageDigestAlgorithm(jcaName);
     }
 
     @SuppressWarnings("unused")
     @JsonCreator
-    private static @NonNull MessageDigestAlgorithm deserialize(String value) throws InvalidFormatException {
+    private static @NotNull MessageDigestAlgorithm deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -56,11 +56,11 @@ public class MessageDigestAlgorithm {
     }
 
     @JsonValue
-    public @NonNull String getJcaName() {
+    public @NotNull String getJcaName() {
         return jcaName;
     }
 
-    public @NonNull MessageDigest createMessageDigestObject() {
+    public @NotNull MessageDigest createMessageDigestObject() {
         return MessageDigestUtil.createMessageDigest(jcaName);
     }
 

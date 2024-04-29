@@ -1,7 +1,7 @@
 package com.webauthn4j.credential;
 
 import com.webauthn4j.authenticator.CoreAuthenticator;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Core interface that represents FIDO CTAP2 credential record (Passkey credential record without ClientData)

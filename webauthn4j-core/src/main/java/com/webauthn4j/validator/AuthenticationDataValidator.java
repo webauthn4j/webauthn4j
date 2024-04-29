@@ -30,8 +30,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.*;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public class AuthenticationDataValidator {
 
     private boolean crossOriginAllowed = false;
 
-    public AuthenticationDataValidator(@NonNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
+    public AuthenticationDataValidator(@NotNull List<CustomAuthenticationValidator> customAuthenticationValidators) {
         AssertUtil.notNull(customAuthenticationValidators, "customAuthenticationValidators must not be null");
         this.customAuthenticationValidators = customAuthenticationValidators;
     }
@@ -64,7 +64,7 @@ public class AuthenticationDataValidator {
     }
 
     @SuppressWarnings("ConstantConditions") // as null check is done by BeanAssertUtil#validate
-    public void validate(@NonNull AuthenticationData authenticationData, @NonNull AuthenticationParameters authenticationParameters) {
+    public void validate(@NotNull AuthenticationData authenticationData, @NotNull AuthenticationParameters authenticationParameters) {
 
         BeanAssertUtil.validate(authenticationData);
         AssertUtil.notNull(authenticationParameters, "authenticationParameters must not be null");
@@ -331,7 +331,7 @@ public class AuthenticationDataValidator {
         }
     }
 
-    void validateAuthenticatorData(@NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
+    void validateAuthenticatorData(@NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getAttestedCredentialData() != null) {
             throw new ConstraintViolationException("attestedCredentialData must be null on authentication");
         }
@@ -343,11 +343,11 @@ public class AuthenticationDataValidator {
         }
     }
 
-    public @NonNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
+    public @NotNull CoreMaliciousCounterValueHandler getMaliciousCounterValueHandler() {
         return maliciousCounterValueHandler;
     }
 
-    public void setMaliciousCounterValueHandler(@NonNull CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
+    public void setMaliciousCounterValueHandler(@NotNull CoreMaliciousCounterValueHandler maliciousCounterValueHandler) {
         AssertUtil.notNull(maliciousCounterValueHandler, "maliciousCounterValueHandler must not be null");
         this.maliciousCounterValueHandler = maliciousCounterValueHandler;
     }
@@ -360,7 +360,7 @@ public class AuthenticationDataValidator {
         this.originValidator = originValidator;
     }
 
-    public @NonNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
+    public @NotNull List<CustomAuthenticationValidator> getCustomAuthenticationValidators() {
         return customAuthenticationValidators;
     }
 

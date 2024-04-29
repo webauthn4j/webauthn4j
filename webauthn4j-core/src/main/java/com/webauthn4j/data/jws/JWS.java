@@ -19,7 +19,7 @@ package com.webauthn4j.data.jws;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
 import com.webauthn4j.util.SignatureUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class JWS<T> {
     private final String headerString;
     private final String payloadString;
 
-    JWS(@NonNull JWSHeader header, @NonNull String headerString, @NonNull T payload, @NonNull String payloadString, @NonNull byte[] signature) {
+    JWS(@NotNull JWSHeader header, @NotNull String headerString, @NotNull T payload, @NotNull String payloadString, @NotNull byte[] signature) {
         logger = LoggerFactory.getLogger(JWS.class);
 
         this.header = header;
@@ -51,15 +51,15 @@ public class JWS<T> {
         this.payloadString = payloadString;
     }
 
-    public @NonNull JWSHeader getHeader() {
+    public @NotNull JWSHeader getHeader() {
         return header;
     }
 
-    public @NonNull T getPayload() {
+    public @NotNull T getPayload() {
         return payload;
     }
 
-    public @NonNull byte[] getSignature() {
+    public @NotNull byte[] getSignature() {
         return ArrayUtil.clone(signature);
     }
 
@@ -92,12 +92,12 @@ public class JWS<T> {
         }
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         return toString().getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
-    public @NonNull String toString() {
+    public @NotNull String toString() {
         return headerString + "." + payloadString + "." + Base64UrlUtil.encodeToString(signature);
     }
 

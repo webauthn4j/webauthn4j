@@ -20,7 +20,7 @@ import com.webauthn4j.credential.CredentialRecord;
 import com.webauthn4j.data.AuthenticatorTransport;
 import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutputs;
 import com.webauthn4j.data.extension.client.RegistrationExtensionClientOutput;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 

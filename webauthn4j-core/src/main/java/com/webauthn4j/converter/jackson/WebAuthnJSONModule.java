@@ -25,7 +25,7 @@ import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.jws.JWSHeader;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.cert.X509Certificate;
 
@@ -35,7 +35,7 @@ import java.security.cert.X509Certificate;
 public class WebAuthnJSONModule extends SimpleModule {
 
     @SuppressWarnings("unused")
-    public WebAuthnJSONModule(@NonNull ObjectConverter objectConverter) {
+    public WebAuthnJSONModule(@NotNull ObjectConverter objectConverter) {
         super("WebAuthnJSONModule");
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
 

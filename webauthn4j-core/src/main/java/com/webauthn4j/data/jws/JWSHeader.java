@@ -17,7 +17,7 @@
 package com.webauthn4j.data.jws;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.cert.CertPath;
 import java.util.Objects;

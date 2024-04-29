@@ -28,7 +28,7 @@ import org.apache.kerby.asn1.parse.Asn1Container;
 import org.apache.kerby.asn1.parse.Asn1ParseResult;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1OctetString;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -42,7 +42,7 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
 
 
     @Override
-    public @NonNull AttestationType validate(@NonNull CoreRegistrationObject registrationObject) {
+    public @NotNull AttestationType validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         if (!supports(registrationObject)) {
             throw new IllegalArgumentException(String.format("Specified format '%s' is not supported by %s.", registrationObject.getAttestationObject().getFormat(), this.getClass().getName()));
@@ -64,7 +64,7 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         }
     }
 
-    private void validateNonce(@NonNull CoreRegistrationObject registrationObject) {
+    private void validateNonce(@NotNull CoreRegistrationObject registrationObject) {
         AppleAnonymousAttestationStatement attestationStatement = (AppleAnonymousAttestationStatement) registrationObject.getAttestationObject().getAttestationStatement();
 
         byte[] nonce = getNonce(registrationObject);
@@ -90,14 +90,14 @@ public class AppleAnonymousAttestationStatementValidator extends AbstractStateme
         }
     }
 
-    private @NonNull byte[] getNonce(@NonNull CoreRegistrationObject registrationObject) {
+    private @NotNull byte[] getNonce(@NotNull CoreRegistrationObject registrationObject) {
         byte[] authenticatorData = registrationObject.getAuthenticatorDataBytes();
         byte[] clientDataHash = registrationObject.getClientDataHash();
         byte[] nonceToHash = ByteBuffer.allocate(authenticatorData.length + clientDataHash.length).put(authenticatorData).put(clientDataHash).array();
         return MessageDigestUtil.createSHA256().digest(nonceToHash);
     }
 
-    private void validatePublicKey(@NonNull CoreRegistrationObject registrationObject, @NonNull AppleAnonymousAttestationStatement attestationStatement) {
+    private void validatePublicKey(@NotNull CoreRegistrationObject registrationObject, @NotNull AppleAnonymousAttestationStatement attestationStatement) {
         PublicKey publicKeyInEndEntityCert = attestationStatement.getX5c().getEndEntityAttestationCertificate().getCertificate().getPublicKey();
         //noinspection ConstantConditions as null check is already done in caller.
         PublicKey publicKeyInCredentialData = registrationObject.getAttestationObject().getAuthenticatorData().getAttestedCredentialData().getCOSEKey().getPublicKey();

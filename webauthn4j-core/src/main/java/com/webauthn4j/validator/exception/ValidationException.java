@@ -17,7 +17,7 @@
 package com.webauthn4j.validator.exception;
 
 import com.webauthn4j.util.exception.WebAuthnException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An abstract exception for validation violation

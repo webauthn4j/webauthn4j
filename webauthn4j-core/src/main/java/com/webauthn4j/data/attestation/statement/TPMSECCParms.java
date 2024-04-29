@@ -17,8 +17,8 @@
 package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -31,26 +31,26 @@ public class TPMSECCParms implements TPMUPublicParms {
     private final TPMEccCurve curveId;
     private final byte[] kdf;
 
-    public TPMSECCParms(@NonNull byte[] symmetric, @NonNull byte[] scheme, @NonNull TPMEccCurve curveId, @NonNull byte[] kdf) {
+    public TPMSECCParms(@NotNull byte[] symmetric, @NotNull byte[] scheme, @NotNull TPMEccCurve curveId, @NotNull byte[] kdf) {
         this.symmetric = symmetric;
         this.scheme = scheme;
         this.curveId = curveId;
         this.kdf = kdf;
     }
 
-    public @NonNull byte[] getSymmetric() {
+    public @NotNull byte[] getSymmetric() {
         return ArrayUtil.clone(symmetric);
     }
 
-    public @NonNull byte[] getScheme() {
+    public @NotNull byte[] getScheme() {
         return ArrayUtil.clone(scheme);
     }
 
-    public @NonNull TPMEccCurve getCurveId() {
+    public @NotNull TPMEccCurve getCurveId() {
         return curveId;
     }
 
-    public @NonNull byte[] getKdf() {
+    public @NotNull byte[] getKdf() {
         return ArrayUtil.clone(kdf);
     }
 

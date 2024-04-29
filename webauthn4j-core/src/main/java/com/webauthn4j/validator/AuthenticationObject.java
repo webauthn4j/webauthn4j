@@ -10,8 +10,8 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -30,14 +30,14 @@ public class AuthenticationObject extends CoreAuthenticationObject {
 
     @SuppressWarnings("squid:S00107")
     public AuthenticationObject(
-            @NonNull byte[] credentialId,
-            @NonNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
-            @NonNull byte[] authenticatorDataBytes,
-            @NonNull CollectedClientData collectedClientData,
-            @NonNull byte[] collectedClientDataBytes,
+            @NotNull byte[] credentialId,
+            @NotNull AuthenticatorData<AuthenticationExtensionAuthenticatorOutput> authenticatorData,
+            @NotNull byte[] authenticatorDataBytes,
+            @NotNull CollectedClientData collectedClientData,
+            @NotNull byte[] collectedClientDataBytes,
             @Nullable AuthenticationExtensionsClientOutputs<AuthenticationExtensionClientOutput> clientExtensions,
-            @NonNull ServerProperty serverProperty,
-            @NonNull Authenticator authenticator) {
+            @NotNull ServerProperty serverProperty,
+            @NotNull Authenticator authenticator) {
 
         super(credentialId, authenticatorData, authenticatorDataBytes, MessageDigestUtil.createSHA256().digest(collectedClientDataBytes), serverProperty, authenticator);
 
@@ -49,11 +49,11 @@ public class AuthenticationObject extends CoreAuthenticationObject {
         this.clientExtensions = clientExtensions;
     }
 
-    public @NonNull CollectedClientData getCollectedClientData() {
+    public @NotNull CollectedClientData getCollectedClientData() {
         return collectedClientData;
     }
 
-    public @NonNull byte[] getCollectedClientDataBytes() {
+    public @NotNull byte[] getCollectedClientDataBytes() {
         return ArrayUtil.clone(collectedClientDataBytes);
     }
 
@@ -62,12 +62,12 @@ public class AuthenticationObject extends CoreAuthenticationObject {
     }
 
     @Override
-    public @NonNull ServerProperty getServerProperty() {
+    public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
     @Override
-    public @NonNull Authenticator getAuthenticator() {
+    public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
     }
 

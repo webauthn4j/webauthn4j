@@ -19,7 +19,7 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -37,12 +37,12 @@ public class ResidentKeyRequirement {
 
     private final String value;
 
-    private ResidentKeyRequirement(@NonNull String value) {
+    private ResidentKeyRequirement(@NotNull String value) {
         this.value = value;
     }
 
     @JsonCreator
-    public static @NonNull ResidentKeyRequirement create(@NonNull String value) {
+    public static @NotNull ResidentKeyRequirement create(@NotNull String value) {
         AssertUtil.notNull(value, "value must not be null.");
         switch (value) {
             case "discouraged":
@@ -57,7 +57,7 @@ public class ResidentKeyRequirement {
     }
 
     @JsonValue
-    public @NonNull String getValue() {
+    public @NotNull String getValue() {
         return value;
     }
 

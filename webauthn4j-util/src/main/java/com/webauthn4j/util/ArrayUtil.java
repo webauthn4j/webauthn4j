@@ -16,8 +16,8 @@
 
 package com.webauthn4j.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 
@@ -39,11 +39,11 @@ public class ArrayUtil {
         return value == null ? null : HexUtil.encodeToString(value);
     }
 
-    public static @NonNull byte[] convertToFixedByteArray(@NonNull BigInteger value) {
+    public static @NotNull byte[] convertToFixedByteArray(@NotNull BigInteger value) {
         return convertToFixedByteArray(32, value);
     }
 
-    public static @NonNull byte[] convertToFixedByteArray(int fixedSize, @NonNull BigInteger value) {
+    public static @NotNull byte[] convertToFixedByteArray(int fixedSize, @NotNull BigInteger value) {
         byte[] bytes = value.toByteArray();
 
         byte[] adjusted = new byte[fixedSize];

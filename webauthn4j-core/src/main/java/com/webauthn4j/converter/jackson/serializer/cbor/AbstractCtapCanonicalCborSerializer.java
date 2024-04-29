@@ -20,8 +20,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.cbor.CBORGenerator;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,13 +32,13 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
 
     private final transient List<FieldSerializationRule<T, ?>> rules;
 
-    protected AbstractCtapCanonicalCborSerializer(@NonNull Class<T> t, @NonNull List<FieldSerializationRule<T, ?>> rules) {
+    protected AbstractCtapCanonicalCborSerializer(@NotNull Class<T> t, @NotNull List<FieldSerializationRule<T, ?>> rules) {
         super(t);
         this.rules = rules;
     }
 
     @Override
-    public void serialize(@NonNull T value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull T value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         List<KeyValue> nonNullValues =
                 rules.stream()
                         .map(rule -> {
@@ -64,12 +64,12 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
     }
 
     private static class KeyValue {
-        @NonNull
+        @NotNull
         private final Object name;
         @Nullable
         private final Object value;
 
-        public KeyValue(@NonNull Object name, @Nullable Object value) {
+        public KeyValue(@NotNull Object name, @Nullable Object value) {
             this.name = name;
             this.value = value;
         }
@@ -77,26 +77,26 @@ public abstract class AbstractCtapCanonicalCborSerializer<T> extends StdSerializ
 
     public static class FieldSerializationRule<T, R> {
 
-        @NonNull
+        @NotNull
         private final Object name;
-        @NonNull
+        @NotNull
         private final Function<T, R> getter;
 
-        public FieldSerializationRule(int name, @NonNull Function<T, @Nullable R> getter) {
+        public FieldSerializationRule(int name, @NotNull Function<T, @Nullable R> getter) {
             this.name = name;
             this.getter = getter;
         }
 
-        public FieldSerializationRule(@NonNull String name, @NonNull Function<T, @Nullable R> getter) {
+        public FieldSerializationRule(@NotNull String name, @NotNull Function<T, @Nullable R> getter) {
             this.name = name;
             this.getter = getter;
         }
 
-        public @NonNull Object getName() {
+        public @NotNull Object getName() {
             return name;
         }
 
-        public @NonNull Function<T, @NonNull R> getGetter() {
+        public @NotNull Function<T, @NotNull R> getGetter() {
             return getter;
         }
     }

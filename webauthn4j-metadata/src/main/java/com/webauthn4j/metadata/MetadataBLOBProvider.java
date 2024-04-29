@@ -17,9 +17,9 @@
 package com.webauthn4j.metadata;
 
 import com.webauthn4j.metadata.data.MetadataBLOB;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface MetadataBLOBProvider {
 
-    @NonNull MetadataBLOB provide();
+    @NotNull MetadataBLOB provide();
 }

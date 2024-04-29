@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.webauthn4j.converter.jackson.deserializer.json.UserVerificationMethodFromStringDeserializer;
 import com.webauthn4j.converter.jackson.serializer.json.UserVerificationMethodToStringSerializer;
 import com.webauthn4j.data.UserVerificationMethod;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 

@@ -20,7 +20,7 @@ import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.exception.BadRpIdException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -38,7 +38,7 @@ class RpIdHashValidator {
     // ~ Methods
     // ========================================================================================================
 
-    public void validate(@NonNull byte[] rpIdHash, @NonNull CoreServerProperty serverProperty) {
+    public void validate(@NotNull byte[] rpIdHash, @NotNull CoreServerProperty serverProperty) {
         AssertUtil.notNull(rpIdHash, "rpIdHash must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         String rpId = serverProperty.getRpId();

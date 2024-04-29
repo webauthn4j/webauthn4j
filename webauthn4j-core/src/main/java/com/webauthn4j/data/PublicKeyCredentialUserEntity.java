@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -47,9 +47,9 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
      */
     @JsonCreator
     public PublicKeyCredentialUserEntity(
-            @NonNull @JsonProperty("id") byte[] id,
-            @NonNull @JsonProperty("name") String name,
-            @NonNull @JsonProperty("displayName") String displayName) {
+            @NotNull @JsonProperty("id") byte[] id,
+            @NotNull @JsonProperty("name") String name,
+            @NotNull @JsonProperty("displayName") String displayName) {
         super(name);
         AssertUtil.notNull(name, "name must not be null");
         AssertUtil.notNull(displayName, "displayName must not be null");
@@ -57,11 +57,11 @@ public class PublicKeyCredentialUserEntity extends PublicKeyCredentialEntity {
         this.displayName = displayName;
     }
 
-    public @NonNull byte[] getId() {
+    public @NotNull byte[] getId() {
         return ArrayUtil.clone(id);
     }
 
-    public @NonNull String getDisplayName() {
+    public @NotNull String getDisplayName() {
         return displayName;
     }
 

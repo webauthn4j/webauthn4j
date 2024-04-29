@@ -19,8 +19,8 @@ package com.webauthn4j.data;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -53,12 +53,12 @@ public class SignatureAlgorithm {
     private final String jcaName;
     private final MessageDigestAlgorithm messageDigestAlgorithm;
 
-    private SignatureAlgorithm(@NonNull String jcaName, @NonNull MessageDigestAlgorithm messageDigestAlgorithm) {
+    private SignatureAlgorithm(@NotNull String jcaName, @NotNull MessageDigestAlgorithm messageDigestAlgorithm) {
         this.jcaName = jcaName;
         this.messageDigestAlgorithm = messageDigestAlgorithm;
     }
 
-    public static SignatureAlgorithm create(@NonNull String jcaName) {
+    public static SignatureAlgorithm create(@NotNull String jcaName) {
         switch (jcaName) {
             case JCA_SHA_256_WITH_ECDSA:
                 return ES256;
@@ -81,13 +81,13 @@ public class SignatureAlgorithm {
         }
     }
 
-    public static SignatureAlgorithm create(@NonNull String jcaName, @NonNull String messageDigestJcaName) {
+    public static SignatureAlgorithm create(@NotNull String jcaName, @NotNull String messageDigestJcaName) {
         return new SignatureAlgorithm(jcaName, MessageDigestAlgorithm.create(messageDigestJcaName));
     }
 
     @SuppressWarnings("unused")
     @JsonCreator
-    private static @NonNull SignatureAlgorithm deserialize(String value) throws InvalidFormatException {
+    private static @NotNull SignatureAlgorithm deserialize(String value) throws InvalidFormatException {
         try {
             return create(value);
         } catch (IllegalArgumentException e) {
@@ -96,11 +96,11 @@ public class SignatureAlgorithm {
     }
 
     @JsonValue
-    public @NonNull String getJcaName() {
+    public @NotNull String getJcaName() {
         return jcaName;
     }
 
-    public @NonNull MessageDigestAlgorithm getMessageDigestAlgorithm() {
+    public @NotNull MessageDigestAlgorithm getMessageDigestAlgorithm() {
         return messageDigestAlgorithm;
     }
 

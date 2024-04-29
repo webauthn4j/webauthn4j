@@ -28,7 +28,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.certpath.CertPathTru
 import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestationTrustworthinessValidator;
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -52,9 +52,9 @@ class AttestationValidator {
     // ========================================================================================================
 
     AttestationValidator(
-            @NonNull List<AttestationStatementValidator> attestationStatementValidators,
-            @NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
-            @NonNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
+            @NotNull List<AttestationStatementValidator> attestationStatementValidators,
+            @NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator,
+            @NotNull SelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator
     ) {
         AssertUtil.notNull(attestationStatementValidators, "attestationStatementValidators must not be null");
         AssertUtil.notNull(certPathTrustworthinessValidator, "certPathTrustworthinessValidator must not be null");
@@ -66,7 +66,7 @@ class AttestationValidator {
     }
 
 
-    public void validate(@NonNull CoreRegistrationObject registrationObject) {
+    public void validate(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
 
         AttestationObject attestationObject = registrationObject.getAttestationObject();
@@ -133,7 +133,7 @@ class AttestationValidator {
 
     }
 
-    void validateAAGUID(@NonNull AttestationObject attestationObject) {
+    void validateAAGUID(@NotNull AttestationObject attestationObject) {
         if (attestationObject.getFormat().equals(FIDOU2FAttestationStatement.FORMAT)) {
             //noinspection ConstantConditions as null check is already done in caller
             AAGUID aaguid = attestationObject.getAuthenticatorData().getAttestedCredentialData().getAaguid();
@@ -143,7 +143,7 @@ class AttestationValidator {
         }
     }
 
-    private @NonNull AttestationType validateAttestationStatement(@NonNull CoreRegistrationObject registrationObject) {
+    private @NotNull AttestationType validateAttestationStatement(@NotNull CoreRegistrationObject registrationObject) {
         for (AttestationStatementValidator validator : attestationStatementValidators) {
             if (validator.supports(registrationObject)) {
                 return validator.validate(registrationObject);

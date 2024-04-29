@@ -18,8 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.server.ServerProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class RegistrationParameters extends CoreRegistrationParameters {
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      * @param userPresenceRequired true if user presence is required. Otherwise, false
      */
-    public RegistrationParameters(@NonNull ServerProperty serverProperty, @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public RegistrationParameters(@NotNull ServerProperty serverProperty, @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams, boolean userVerificationRequired, boolean userPresenceRequired) {
         super(serverProperty, pubKeyCredParams, userVerificationRequired, userPresenceRequired);
     }
 
@@ -42,7 +42,7 @@ public class RegistrationParameters extends CoreRegistrationParameters {
      * @param pubKeyCredParams allowed {@link PublicKeyCredentialParameters}. If all {@link COSEAlgorithmIdentifier} are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      */
-    public RegistrationParameters(@NonNull ServerProperty serverProperty, @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams, boolean userVerificationRequired) {
+    public RegistrationParameters(@NotNull ServerProperty serverProperty, @Nullable List<PublicKeyCredentialParameters> pubKeyCredParams, boolean userVerificationRequired) {
         super(serverProperty, pubKeyCredParams, userVerificationRequired);
     }
 
@@ -52,7 +52,7 @@ public class RegistrationParameters extends CoreRegistrationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public RegistrationParameters(
-            @NonNull ServerProperty serverProperty,
+            @NotNull ServerProperty serverProperty,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         super(serverProperty, userVerificationRequired, userPresenceRequired);
@@ -64,13 +64,13 @@ public class RegistrationParameters extends CoreRegistrationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public RegistrationParameters(
-            @NonNull ServerProperty serverProperty,
+            @NotNull ServerProperty serverProperty,
             boolean userVerificationRequired) {
         super(serverProperty, userVerificationRequired);
     }
 
     @Override
-    public @NonNull ServerProperty getServerProperty() {
+    public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 }

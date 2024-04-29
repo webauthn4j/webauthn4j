@@ -18,8 +18,8 @@ package com.webauthn4j.data.extension;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public class UvmEntries extends AbstractList<UvmEntry> {
     private final UvmEntry[] array;
 
     @JsonCreator
-    public UvmEntries(@NonNull List<UvmEntry> value) {
+    public UvmEntries(@NotNull List<UvmEntry> value) {
         AssertUtil.notNull(value, "value must not be null");
         this.size = value.size();
         this.array = value.toArray(new UvmEntry[this.size]);
@@ -40,7 +40,7 @@ public class UvmEntries extends AbstractList<UvmEntry> {
     }
 
     @Override
-    public @NonNull UvmEntry get(int index) {
+    public @NotNull UvmEntry get(int index) {
         return array[index];
     }
 

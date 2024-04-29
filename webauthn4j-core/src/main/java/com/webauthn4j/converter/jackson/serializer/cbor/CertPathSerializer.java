@@ -20,7 +20,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.webauthn4j.util.exception.UnexpectedCheckedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.security.cert.CertPath;
@@ -39,7 +39,7 @@ public class CertPathSerializer extends StdSerializer<CertPath> {
      * {@inheritDoc}
      */
     @Override
-    public void serialize(@NonNull CertPath value, @NonNull JsonGenerator gen, @NonNull SerializerProvider provider) throws IOException {
+    public void serialize(@NotNull CertPath value, @NotNull JsonGenerator gen, @NotNull SerializerProvider provider) throws IOException {
         try {
             gen.writeStartArray();
             for (Certificate certificate : value.getCertificates()) {

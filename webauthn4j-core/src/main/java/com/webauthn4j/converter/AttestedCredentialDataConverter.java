@@ -25,8 +25,8 @@ import com.webauthn4j.data.attestation.authenticator.AttestedCredentialData;
 import com.webauthn4j.data.attestation.authenticator.COSEKey;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.Buffer;
@@ -46,12 +46,12 @@ public class AttestedCredentialDataConverter {
 
     private final CborConverter cborConverter;
 
-    public AttestedCredentialDataConverter(@NonNull ObjectConverter objectConverter) {
+    public AttestedCredentialDataConverter(@NotNull ObjectConverter objectConverter) {
         AssertUtil.notNull(objectConverter, "objectConverter must not be null");
         this.cborConverter = objectConverter.getCborConverter();
     }
 
-    private static AttestedCredentialData createAttestedCredentialData(@NonNull AAGUID aaguid, @NonNull byte[] credentialId, @NonNull COSEKey coseKey) {
+    private static AttestedCredentialData createAttestedCredentialData(@NotNull AAGUID aaguid, @NotNull byte[] credentialId, @NotNull COSEKey coseKey) {
         return new AttestedCredentialData(aaguid, credentialId, coseKey);
     }
 
@@ -59,7 +59,7 @@ public class AttestedCredentialDataConverter {
         AssertUtil.notNull(coseKey, "coseKey must not be null");
     }
 
-    public @NonNull byte[] convert(@NonNull AttestedCredentialData attestationData) {
+    public @NotNull byte[] convert(@NotNull AttestedCredentialData attestationData) {
         try {
             AssertUtil.notNull(attestationData, "attestationData must not be null");
             AssertUtil.notNull(attestationData.getAaguid(), "aaguid must not be null");
@@ -79,7 +79,7 @@ public class AttestedCredentialDataConverter {
         }
     }
 
-    public @NonNull AttestedCredentialData convert(@NonNull ByteBuffer attestedCredentialData) {
+    public @NotNull AttestedCredentialData convert(@NotNull ByteBuffer attestedCredentialData) {
         try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
 
@@ -105,7 +105,7 @@ public class AttestedCredentialDataConverter {
         }
     }
 
-    public @NonNull AttestedCredentialData convert(@NonNull byte[] attestedCredentialData) {
+    public @NotNull AttestedCredentialData convert(@NotNull byte[] attestedCredentialData) {
         try {
             AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
             return convert(ByteBuffer.wrap(attestedCredentialData));
@@ -120,20 +120,20 @@ public class AttestedCredentialDataConverter {
      * @param attestedCredentialData the attestedCredentialData byte array
      * @return the extracted credentialId byte array
      */
-    public @NonNull byte[] extractCredentialId(@NonNull byte[] attestedCredentialData) {
+    public @NotNull byte[] extractCredentialId(@NotNull byte[] attestedCredentialData) {
         AssertUtil.notNull(attestedCredentialData, ATTESTED_CREDENTIAL_DATA_MUST_NOT_BE_NULL);
         byte[] lengthBytes = Arrays.copyOfRange(attestedCredentialData, L_INDEX, CREDENTIAL_ID_INDEX);
         int credentialIdLength = UnsignedNumberUtil.getUnsignedShort(lengthBytes);
         return Arrays.copyOfRange(attestedCredentialData, CREDENTIAL_ID_INDEX, CREDENTIAL_ID_INDEX + credentialIdLength);
     }
 
-    @NonNull COSEKeyEnvelope convertToCredentialPublicKey(@NonNull InputStream inputStream) {
+    @NotNull COSEKeyEnvelope convertToCredentialPublicKey(@NotNull InputStream inputStream) {
         AssertUtil.notNull(inputStream, "inputStream must not be null");
         //noinspection ConstantConditions as input stream is not null
         return cborConverter.readValue(inputStream, COSEKeyEnvelope.class);
     }
 
-    @NonNull byte[] convert(@NonNull COSEKey coseKey) {
+    @NotNull byte[] convert(@NotNull COSEKey coseKey) {
         assertCoseKey(coseKey);
         return cborConverter.writeValueAsBytes(coseKey);
     }

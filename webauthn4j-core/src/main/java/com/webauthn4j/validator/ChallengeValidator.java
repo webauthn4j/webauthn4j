@@ -22,7 +22,7 @@ import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadChallengeException;
 import com.webauthn4j.validator.exception.MissingChallengeException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.MessageDigest;
 
@@ -37,7 +37,7 @@ class ChallengeValidator {
 
     // ~ Methods
     // ========================================================================================================
-    public void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
+    public void validate(@NotNull CollectedClientData collectedClientData, @NotNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
         Challenge savedChallenge = serverProperty.getChallenge();
@@ -52,7 +52,7 @@ class ChallengeValidator {
         validate(savedChallenge, collectedChallenge);
     }
 
-    public void validate(@NonNull Challenge expected, @NonNull Challenge actual) {
+    public void validate(@NotNull Challenge expected, @NotNull Challenge actual) {
         AssertUtil.notNull(expected, "expected must not be null");
         AssertUtil.notNull(actual, "actual must not be null");
         byte[] expectedChallengeBytes = expected.getValue();

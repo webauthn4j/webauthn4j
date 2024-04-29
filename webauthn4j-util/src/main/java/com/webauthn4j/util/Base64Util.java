@@ -16,7 +16,7 @@
 
 package com.webauthn4j.util;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Base64;
 
@@ -31,19 +31,19 @@ public class Base64Util {
     private Base64Util() {
     }
 
-    public static @NonNull byte[] decode(@NonNull String source) {
+    public static @NotNull byte[] decode(@NotNull String source) {
         return decoder.decode(source);
     }
 
-    public static @NonNull byte[] decode(@NonNull byte[] source) {
+    public static @NotNull byte[] decode(@NotNull byte[] source) {
         return decoder.decode(source);
     }
 
-    public static @NonNull byte[] encode(@NonNull byte[] source) {
+    public static @NotNull byte[] encode(@NotNull byte[] source) {
         return encoder.encode(source);
     }
 
-    public static @NonNull String encodeToString(@NonNull byte[] source) {
+    public static @NotNull String encodeToString(@NotNull byte[] source) {
         return encoder.encodeToString(source);
     }
 }

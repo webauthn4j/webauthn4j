@@ -17,8 +17,8 @@
 package com.webauthn4j.data.extension;
 
 import com.webauthn4j.util.ArrayUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -27,17 +27,17 @@ public class HMACGetSecretInput {
     private final byte[] salt1;
     private final byte[] salt2;
 
-    public HMACGetSecretInput(@NonNull byte[] salt1, @Nullable byte[] salt2) {
+    public HMACGetSecretInput(@NotNull byte[] salt1, @Nullable byte[] salt2) {
         this.salt1 = ArrayUtil.clone(salt1);
         this.salt2 = ArrayUtil.clone(salt2);
     }
 
-    public HMACGetSecretInput(@NonNull byte[] salt1) {
+    public HMACGetSecretInput(@NotNull byte[] salt1) {
         this.salt1 = ArrayUtil.clone(salt1);
         this.salt2 = null;
     }
 
-    public @NonNull byte[] getSalt1() {
+    public @NotNull byte[] getSalt1() {
         return ArrayUtil.clone(salt1);
     }
 

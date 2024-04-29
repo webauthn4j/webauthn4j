@@ -16,14 +16,14 @@
 
 package com.webauthn4j.data.extension;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ExtensionInput {
 
-    @NonNull String getIdentifier();
+    @NotNull String getIdentifier();
 
-    @Nullable Object getValue(@NonNull String key);
+    @Nullable Object getValue(@NotNull String key);
 
     void validate();
 

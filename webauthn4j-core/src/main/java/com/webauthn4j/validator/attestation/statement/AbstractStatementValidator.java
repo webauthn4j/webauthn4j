@@ -22,7 +22,7 @@ import com.webauthn4j.data.attestation.statement.COSEAlgorithmIdentifier;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.CoreRegistrationObject;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -50,7 +50,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
     }
 
     @Override
-    public boolean supports(@NonNull CoreRegistrationObject registrationObject) {
+    public boolean supports(@NotNull CoreRegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         AttestationStatement attestationStatement = registrationObject.getAttestationObject().getAttestationStatement();
         if (attestationStatement == null) {
@@ -59,7 +59,7 @@ public abstract class AbstractStatementValidator<T extends AttestationStatement>
         return this.parameterizedTypeClass.isAssignableFrom(attestationStatement.getClass());
     }
 
-    protected String getJcaName(@NonNull COSEAlgorithmIdentifier alg) {
+    protected String getJcaName(@NotNull COSEAlgorithmIdentifier alg) {
         String jcaName;
         try {
             SignatureAlgorithm signatureAlgorithm = alg.toSignatureAlgorithm();

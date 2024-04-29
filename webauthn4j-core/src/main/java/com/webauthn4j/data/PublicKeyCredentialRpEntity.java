@@ -18,8 +18,8 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -47,12 +47,12 @@ public class PublicKeyCredentialRpEntity extends PublicKeyCredentialEntity {
     @JsonCreator
     public PublicKeyCredentialRpEntity(
             @Nullable @JsonProperty("id") String id,
-            @NonNull @JsonProperty("name") String name) {
+            @NotNull @JsonProperty("name") String name) {
         super(name);
         this.id = id;
     }
 
-    public PublicKeyCredentialRpEntity(@NonNull String name) {
+    public PublicKeyCredentialRpEntity(@NotNull String name) {
         super(name);
         this.id = null;
     }

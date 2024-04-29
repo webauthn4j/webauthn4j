@@ -18,8 +18,8 @@ package com.webauthn4j.data;
 
 import com.webauthn4j.authenticator.Authenticator;
 import com.webauthn4j.server.ServerProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      * @param userPresenceRequired true if user presence is required. Otherwise, false
      */
-    public AuthenticationParameters(@NonNull ServerProperty serverProperty, @NonNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
+    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired, boolean userPresenceRequired) {
         super(serverProperty, authenticator, allowCredentials, userVerificationRequired, userPresenceRequired);
     }
 
@@ -42,7 +42,7 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
      * @param allowCredentials allowed credentialId list. If all credentialId(s) are allowed, pass null
      * @param userVerificationRequired true if user verification is required. Otherwise, false
      */
-    public AuthenticationParameters(@NonNull ServerProperty serverProperty, @NonNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired) {
+    public AuthenticationParameters(@NotNull ServerProperty serverProperty, @NotNull Authenticator authenticator, @Nullable List<byte[]> allowCredentials, boolean userVerificationRequired) {
         super(serverProperty, authenticator, allowCredentials, userVerificationRequired);
     }
 
@@ -52,8 +52,8 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public AuthenticationParameters(
-            @NonNull ServerProperty serverProperty,
-            @NonNull Authenticator authenticator,
+            @NotNull ServerProperty serverProperty,
+            @NotNull Authenticator authenticator,
             boolean userVerificationRequired,
             boolean userPresenceRequired) {
         super(serverProperty, authenticator, userVerificationRequired, userPresenceRequired);
@@ -65,8 +65,8 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     @SuppressWarnings("squid:S1133")
     @Deprecated
     public AuthenticationParameters(
-            @NonNull ServerProperty serverProperty,
-            @NonNull Authenticator authenticator,
+            @NotNull ServerProperty serverProperty,
+            @NotNull Authenticator authenticator,
             boolean userVerificationRequired) {
         super(
                 serverProperty,
@@ -77,12 +77,12 @@ public class AuthenticationParameters extends CoreAuthenticationParameters {
     }
 
     @Override
-    public @NonNull ServerProperty getServerProperty() {
+    public @NotNull ServerProperty getServerProperty() {
         return (ServerProperty) super.getServerProperty();
     }
 
     @Override
-    public @NonNull Authenticator getAuthenticator() {
+    public @NotNull Authenticator getAuthenticator() {
         return (Authenticator) super.getAuthenticator();
     }
 

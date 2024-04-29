@@ -34,7 +34,7 @@ import com.webauthn4j.validator.attestation.trustworthiness.self.SelfAttestation
 import com.webauthn4j.validator.exception.BadAaguidException;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.MaliciousCounterValueException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -48,26 +48,26 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
 
     private boolean production = true;
 
-    public DCAttestationDataValidator(@NonNull CertPathTrustworthinessValidator certPathTrustworthinessValidator, @NonNull List<CustomCoreRegistrationValidator> customRegistrationValidatorList, @NonNull ObjectConverter objectConverter) {
+    public DCAttestationDataValidator(@NotNull CertPathTrustworthinessValidator certPathTrustworthinessValidator, @NotNull List<CustomCoreRegistrationValidator> customRegistrationValidatorList, @NotNull ObjectConverter objectConverter) {
         super(Collections.singletonList(new AppleAppAttestAttestationStatementValidator()),
                 certPathTrustworthinessValidator, createSelfAttestationTrustWorthinessValidator(), customRegistrationValidatorList, objectConverter);
     }
 
-    private static @NonNull SelfAttestationTrustworthinessValidator createSelfAttestationTrustWorthinessValidator() {
+    private static @NotNull SelfAttestationTrustworthinessValidator createSelfAttestationTrustWorthinessValidator() {
         DefaultSelfAttestationTrustworthinessValidator selfAttestationTrustworthinessValidator = new DefaultSelfAttestationTrustworthinessValidator();
         selfAttestationTrustworthinessValidator.setSelfAttestationAllowed(false);
         return selfAttestationTrustworthinessValidator;
     }
 
     @Override
-    public void validate(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
+    public void validate(@NotNull CoreRegistrationData registrationData, @NotNull CoreRegistrationParameters registrationParameters) {
         super.validate(registrationData, registrationParameters);
         //noinspection ConstantConditions as null check is already done in super class
         validateAuthenticatorData(registrationData.getAttestationObject().getAuthenticatorData());
         validateKeyId(registrationData);
     }
 
-    private void validateKeyId(@NonNull CoreRegistrationData registrationData) {
+    private void validateKeyId(@NotNull CoreRegistrationData registrationData) {
         DCAttestationData dcAttestationData = (DCAttestationData) registrationData;
         byte[] keyId = dcAttestationData.getKeyId();
         //noinspection ConstantConditions as null check is already done in caller
@@ -80,7 +80,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
     }
 
     @Override
-    protected @NonNull CoreRegistrationObject createCoreRegistrationObject(@NonNull CoreRegistrationData registrationData, @NonNull CoreRegistrationParameters registrationParameters) {
+    protected @NotNull CoreRegistrationObject createCoreRegistrationObject(@NotNull CoreRegistrationData registrationData, @NotNull CoreRegistrationParameters registrationParameters) {
 
         AssertUtil.notNull(registrationData, "authenticationData must not be null");
         AssertUtil.notNull(registrationData, "authenticationParameters must not be null");
@@ -103,7 +103,7 @@ public class DCAttestationDataValidator extends CoreRegistrationDataValidator {
         this.production = production;
     }
 
-    private void validateAuthenticatorData(@NonNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
+    private void validateAuthenticatorData(@NotNull AuthenticatorData<RegistrationExtensionAuthenticatorOutput> authenticatorData) {
         if (authenticatorData.getSignCount() != 0) {
             throw new MaliciousCounterValueException("Counter is not zero");
         }

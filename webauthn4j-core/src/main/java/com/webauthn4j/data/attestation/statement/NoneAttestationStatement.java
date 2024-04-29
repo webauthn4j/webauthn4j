@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class NoneAttestationStatement implements AttestationStatement {
 
     @JsonIgnore
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 

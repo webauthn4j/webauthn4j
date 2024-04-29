@@ -27,8 +27,8 @@ import org.apache.kerby.asn1.parse.Asn1ParseResult;
 import org.apache.kerby.asn1.parse.Asn1Parser;
 import org.apache.kerby.asn1.type.Asn1Integer;
 import org.apache.kerby.asn1.type.Asn1OctetString;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class KeyDescriptionValidator {
 
     private final Logger logger = LoggerFactory.getLogger(KeyDescriptionValidator.class);
 
-    public void validate(@NonNull X509Certificate x509Certificate, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) {
+    public void validate(@NotNull X509Certificate x509Certificate, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) {
         AssertUtil.notNull(x509Certificate, "x509Certificate must not be null");
         AssertUtil.notNull(clientDataHash, "clientDataHash must not be null");
 
@@ -70,7 +70,7 @@ public class KeyDescriptionValidator {
         }
     }
 
-    @NonNull Asn1Container extractKeyDescription(@NonNull X509Certificate x509Certificate) throws IOException {
+    @NotNull Asn1Container extractKeyDescription(@NotNull X509Certificate x509Certificate) throws IOException {
 
         byte[] attestationExtensionBytes = x509Certificate.getExtensionValue(ATTESTATION_EXTENSION_OID);
         Asn1OctetString envelope = new Asn1OctetString();
@@ -81,7 +81,7 @@ public class KeyDescriptionValidator {
         return (Asn1Container) Asn1Parser.parse(ByteBuffer.wrap(envelope.getValue()));
     }
 
-    void doValidate(@NonNull Asn1Container keyDescription, @NonNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
+    void doValidate(@NotNull Asn1Container keyDescription, @NotNull byte[] clientDataHash, boolean teeEnforcedOnly) throws IOException {
         /// Verify that the attestationChallenge field in the attestation certificate extension data is identical to clientDataHash.
         byte[] attestationChallenge = keyDescription.getChildren().get(ATTESTATION_CHALLENGE_INDEX).readBodyBytes();
         // As attestationChallenge is known data to client side(potential attacker) because it is calculated from parts of a message,
@@ -104,7 +104,7 @@ public class KeyDescriptionValidator {
         validateAuthorizationList(teeEnforcedOnly, softwareEnforced, teeEnforced);
     }
 
-    private void validateAuthorizationList(boolean teeEnforcedOnly, @NonNull Asn1Container softwareEnforced, @NonNull Asn1Container teeEnforced) throws IOException {
+    private void validateAuthorizationList(boolean teeEnforcedOnly, @NotNull Asn1Container softwareEnforced, @NotNull Asn1Container teeEnforced) throws IOException {
         /// For the following,
         /// use only the teeEnforced authorization list if the RP wants to accept only keys
         /// from a trusted execution environment,
@@ -177,7 +177,7 @@ public class KeyDescriptionValidator {
     }
 
     private @Nullable Asn1ParseResult findAuthorizationListEntry(
-            @NonNull Asn1Container authorizationList, int tag) {
+            @NotNull Asn1Container authorizationList, int tag) {
         for (Asn1ParseResult entry : authorizationList.getChildren()) {
             if (entry.tagNo() == tag) {
                 return ((Asn1Container) entry).getChildren().get(0);

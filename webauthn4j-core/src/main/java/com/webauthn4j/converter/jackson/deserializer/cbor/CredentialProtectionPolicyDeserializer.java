@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.webauthn4j.data.AuthenticatorAttachment;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public class CredentialProtectionPolicyDeserializer extends StdDeserializer<Cred
     }
 
     @Override
-    public @NonNull CredentialProtectionPolicy deserialize(@NonNull JsonParser p, @NonNull DeserializationContext ctxt) throws IOException {
+    public @NotNull CredentialProtectionPolicy deserialize(@NotNull JsonParser p, @NotNull DeserializationContext ctxt) throws IOException {
         byte value = (byte) p.getValueAsInt();
         try {
             return CredentialProtectionPolicy.create(value);

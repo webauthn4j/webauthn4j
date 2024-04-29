@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public interface CertificateBaseAttestationStatement extends AttestationStatement {
 

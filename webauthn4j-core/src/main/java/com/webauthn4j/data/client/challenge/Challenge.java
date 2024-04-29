@@ -16,7 +16,7 @@
 
 package com.webauthn4j.data.client.challenge;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface Challenge {
 
@@ -25,6 +25,6 @@ public interface Challenge {
      *
      * @return the challenge value
      */
-    @NonNull byte[] getValue();
+    @NotNull byte[] getValue();
 
 }

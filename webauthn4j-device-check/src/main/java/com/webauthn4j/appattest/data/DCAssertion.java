@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DCAssertion {
 
@@ -30,8 +30,8 @@ public class DCAssertion {
 
     @JsonCreator
     public DCAssertion(
-            @NonNull @JsonProperty("signature") byte[] signature,
-            @NonNull @JsonProperty("authenticatorData") byte[] authenticatorData) {
+            @NotNull @JsonProperty("signature") byte[] signature,
+            @NotNull @JsonProperty("authenticatorData") byte[] authenticatorData) {
         AssertUtil.notNull(signature, "signature must not be null");
         AssertUtil.notNull(authenticatorData, "authenticatorData must not be null");
         this.signature = signature;

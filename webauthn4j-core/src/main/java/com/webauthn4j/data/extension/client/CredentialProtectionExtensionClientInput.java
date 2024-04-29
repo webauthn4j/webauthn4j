@@ -2,8 +2,8 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class CredentialProtectionExtensionClientInput implements RegistrationExtensionClientInput {
@@ -27,7 +27,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
@@ -40,7 +40,7 @@ public class CredentialProtectionExtensionClientInput implements RegistrationExt
     }
 
     @Override
-    public @Nullable Object getValue(@NonNull String key) {
+    public @Nullable Object getValue(@NotNull String key) {
         switch (key) {
             case KEY_CREDENTIAL_PROTECTION_POLICY:
                 return credentialProtectionPolicy;

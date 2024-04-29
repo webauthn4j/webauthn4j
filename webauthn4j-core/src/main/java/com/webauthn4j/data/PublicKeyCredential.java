@@ -21,8 +21,8 @@ import com.webauthn4j.data.extension.client.AuthenticationExtensionsClientOutput
 import com.webauthn4j.data.extension.client.ExtensionClientOutput;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.Base64UrlUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -66,7 +66,7 @@ public class PublicKeyCredential<R extends AuthenticatorResponse, E extends Exte
         this.clientExtensionResults = clientExtensionResults;
     }
 
-    public @NonNull String getType() {
+    public @NotNull String getType() {
         return PublicKeyCredentialType.PUBLIC_KEY.getValue();
     }
 

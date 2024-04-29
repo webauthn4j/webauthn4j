@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.data.extension.CredentialProtectionPolicy;
 import com.webauthn4j.data.extension.HMACGetSecretInput;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,17 +45,17 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     private Map<Class<? extends T>, T> extensions;
 
     @JsonAnyGetter
-    private @NonNull Map<String, Object> getUnknowns() {
+    private @NotNull Map<String, Object> getUnknowns() {
         return Collections.unmodifiableMap(this.unknowns);
     }
 
     @JsonAnySetter
-    private void setUnknowns(@NonNull String name, @Nullable Object value) {
+    private void setUnknowns(@NotNull String name, @Nullable Object value) {
         this.unknowns.put(name, value);
     }
 
     @JsonIgnore
-    public @NonNull Set<String> getKeys() {
+    public @NotNull Set<String> getKeys() {
         Set<String> keys = new HashSet<>();
         if (appid != null) {
             keys.add("appid");
@@ -86,12 +86,12 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
     }
 
     @JsonIgnore
-    public @NonNull Set<String> getUnknownKeys() {
+    public @NotNull Set<String> getUnknownKeys() {
         return unknowns.keySet();
     }
 
     @JsonIgnore
-    public @Nullable Object getValue(@NonNull String key) {
+    public @Nullable Object getValue(@NotNull String key) {
         switch (key) {
             case "appid":
                 return appid;
@@ -161,7 +161,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
 
     @SuppressWarnings("unchecked")
     @JsonIgnore
-    public @NonNull Map<Class<? extends T>, T> getExtensions() {
+    public @NotNull Map<Class<? extends T>, T> getExtensions() {
         if (extensions == null) {
             Map<Class<? extends T>, T> map = new HashMap<>();
             if (appid != null) {
@@ -227,7 +227,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private Boolean enforceCredentialProtectionPolicy;
         private Boolean hmacCreateSecret;
 
-        public @NonNull AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build() {
+        public @NotNull AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<RegistrationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
             instance.uvm = this.uvm;
             instance.credProps = this.credProps;
@@ -239,32 +239,32 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return instance;
         }
 
-        public @NonNull BuilderForRegistration setUvm(@Nullable Boolean uvm) {
+        public @NotNull BuilderForRegistration setUvm(@Nullable Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setCredProps(@Nullable Boolean credProps) {
+        public @NotNull BuilderForRegistration setCredProps(@Nullable Boolean credProps) {
             this.credProps = credProps;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setCredentialProtectionPolicy(@Nullable CredentialProtectionPolicy credentialProtectionPolicy) {
+        public @NotNull BuilderForRegistration setCredentialProtectionPolicy(@Nullable CredentialProtectionPolicy credentialProtectionPolicy) {
             this.credentialProtectionPolicy = credentialProtectionPolicy;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setEnforceCredentialProtectionPolicy(@Nullable Boolean enforceCredentialProtectionPolicy) {
+        public @NotNull BuilderForRegistration setEnforceCredentialProtectionPolicy(@Nullable Boolean enforceCredentialProtectionPolicy) {
             this.enforceCredentialProtectionPolicy = enforceCredentialProtectionPolicy;
             return this;
         }
 
-        public @NonNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
+        public @NotNull BuilderForRegistration setHMACCreateSecret(@Nullable Boolean hmacCreateSecret) {
             this.hmacCreateSecret = hmacCreateSecret;
             return this;
         }
 
-        public @NonNull BuilderForRegistration set(@NonNull String key, @Nullable Object value) {
+        public @NotNull BuilderForRegistration set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);
@@ -281,7 +281,7 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
         private Boolean uvm;
         private HMACGetSecretInput hmacGetSecret;
 
-        public @NonNull AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build() {
+        public @NotNull AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> build() {
             AuthenticationExtensionsClientInputs<AuthenticationExtensionClientInput> instance = new AuthenticationExtensionsClientInputs<>();
             instance.appid = this.appid;
             instance.appidExclude = this.appidExclude;
@@ -292,27 +292,27 @@ public class AuthenticationExtensionsClientInputs<T extends ExtensionClientInput
             return instance;
         }
 
-        public @NonNull BuilderForAuthentication setAppid(@NonNull String appid) {
+        public @NotNull BuilderForAuthentication setAppid(@NotNull String appid) {
             this.appid = appid;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setAppidExclude(@NonNull String appidExclude) {
+        public @NotNull BuilderForAuthentication setAppidExclude(@NotNull String appidExclude) {
             this.appidExclude = appidExclude;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setUvm(@NonNull Boolean uvm) {
+        public @NotNull BuilderForAuthentication setUvm(@NotNull Boolean uvm) {
             this.uvm = uvm;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretInput hmacGetSecret) {
+        public @NotNull BuilderForAuthentication setHMACGetSecret(@Nullable HMACGetSecretInput hmacGetSecret) {
             this.hmacGetSecret = hmacGetSecret;
             return this;
         }
 
-        public @NonNull BuilderForAuthentication set(@NonNull String key, @Nullable Object value) {
+        public @NotNull BuilderForAuthentication set(@NotNull String key, @Nullable Object value) {
             AssertUtil.notNull(key, "key must not be null.");
             AssertUtil.notNull(value, "value must not be null.");
             unknowns.put(key, value);

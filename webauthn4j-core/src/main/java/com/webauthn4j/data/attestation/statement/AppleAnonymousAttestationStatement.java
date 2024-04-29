@@ -22,8 +22,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -37,19 +37,19 @@ public class AppleAnonymousAttestationStatement implements CertificateBaseAttest
     private final AttestationCertificatePath x5c;
 
     public AppleAnonymousAttestationStatement(
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c) {
+            @NotNull @JsonProperty("x5c") AttestationCertificatePath x5c) {
         AssertUtil.notNull(x5c, "x5c must not be null");
         this.x5c = x5c;
     }
 
     @Override
-    public @NonNull AttestationCertificatePath getX5c() {
+    public @NotNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
     @JsonIgnore
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 

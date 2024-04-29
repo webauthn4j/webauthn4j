@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.webauthn4j.util.CollectionUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -31,24 +31,24 @@ import java.util.Objects;
  */
 public class DisplayPNGCharacteristicsDescriptor {
 
-    @NonNull private final BigInteger width;
-    @NonNull private final BigInteger height;
-    @NonNull private final Short bitDepth;
-    @NonNull private final Short colorType;
-    @NonNull private final Short compression;
-    @NonNull private final Short filter;
-    @NonNull private final Short interlace;
+    @NotNull private final BigInteger width;
+    @NotNull private final BigInteger height;
+    @NotNull private final Short bitDepth;
+    @NotNull private final Short colorType;
+    @NotNull private final Short compression;
+    @NotNull private final Short filter;
+    @NotNull private final Short interlace;
     @Nullable private final List<RGBPaletteEntry> plte;
 
     @JsonCreator
     public DisplayPNGCharacteristicsDescriptor(
-            @JsonProperty("width") @NonNull BigInteger width,
-            @JsonProperty("height") @NonNull BigInteger height,
-            @JsonProperty("bitDepth") @NonNull Short bitDepth,
-            @JsonProperty("colorType") @NonNull Short colorType,
-            @JsonProperty("compression") @NonNull Short compression,
-            @JsonProperty("filter") @NonNull Short filter,
-            @JsonProperty("interlace") @NonNull Short interlace,
+            @JsonProperty("width") @NotNull BigInteger width,
+            @JsonProperty("height") @NotNull BigInteger height,
+            @JsonProperty("bitDepth") @NotNull Short bitDepth,
+            @JsonProperty("colorType") @NotNull Short colorType,
+            @JsonProperty("compression") @NotNull Short compression,
+            @JsonProperty("filter") @NotNull Short filter,
+            @JsonProperty("interlace") @NotNull Short interlace,
             @JsonProperty("plte") @Nullable List<RGBPaletteEntry> plte) {
         this.width = width;
         this.height = height;
@@ -60,31 +60,31 @@ public class DisplayPNGCharacteristicsDescriptor {
         this.plte = CollectionUtil.unmodifiableList(plte);
     }
 
-    @NonNull public BigInteger getWidth() {
+    @NotNull public BigInteger getWidth() {
         return width;
     }
 
-    @NonNull public BigInteger getHeight() {
+    @NotNull public BigInteger getHeight() {
         return height;
     }
 
-    @NonNull public Short getBitDepth() {
+    @NotNull public Short getBitDepth() {
         return bitDepth;
     }
 
-    @NonNull public Short getColorType() {
+    @NotNull public Short getColorType() {
         return colorType;
     }
 
-    @NonNull public Short getCompression() {
+    @NotNull public Short getCompression() {
         return compression;
     }
 
-    @NonNull public Short getFilter() {
+    @NotNull public Short getFilter() {
         return filter;
     }
 
-    @NonNull public Short getInterlace() {
+    @NotNull public Short getInterlace() {
         return interlace;
     }
 

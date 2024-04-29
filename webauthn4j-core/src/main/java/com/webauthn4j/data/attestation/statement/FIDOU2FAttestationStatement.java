@@ -23,8 +23,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -43,8 +43,8 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
 
     @JsonCreator
     public FIDOU2FAttestationStatement(
-            @NonNull @JsonProperty("x5c") AttestationCertificatePath x5c,
-            @NonNull @JsonProperty("sig") byte[] sig) {
+            @NotNull @JsonProperty("x5c") AttestationCertificatePath x5c,
+            @NotNull @JsonProperty("sig") byte[] sig) {
         AssertUtil.notNull(x5c, "x5c must not be null");
         AssertUtil.notNull(sig, "sig must not be null");
         this.x5c = x5c;
@@ -52,16 +52,16 @@ public class FIDOU2FAttestationStatement implements CertificateBaseAttestationSt
     }
 
     @Override
-    public @NonNull AttestationCertificatePath getX5c() {
+    public @NotNull AttestationCertificatePath getX5c() {
         return x5c;
     }
 
-    public @NonNull byte[] getSig() {
+    public @NotNull byte[] getSig() {
         return ArrayUtil.clone(sig);
     }
 
     @Override
-    public @NonNull String getFormat() {
+    public @NotNull String getFormat() {
         return FORMAT;
     }
 

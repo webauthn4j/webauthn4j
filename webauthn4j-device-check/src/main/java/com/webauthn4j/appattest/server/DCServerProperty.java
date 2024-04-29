@@ -19,8 +19,8 @@ package com.webauthn4j.appattest.server;
 import com.webauthn4j.data.client.challenge.Challenge;
 import com.webauthn4j.server.CoreServerProperty;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class DCServerProperty extends CoreServerProperty {
 
@@ -30,7 +30,7 @@ public class DCServerProperty extends CoreServerProperty {
      * @param rpId      rpId or in other words, App ID, which is the concatenation of your 10-digit team identifier, a period, and your app’s CFBundleIdentifier value.
      * @param challenge challenge
      */
-    public DCServerProperty(@NonNull String rpId, @Nullable Challenge challenge) {
+    public DCServerProperty(@NotNull String rpId, @Nullable Challenge challenge) {
         super(rpId, challenge);
     }
 
@@ -41,11 +41,11 @@ public class DCServerProperty extends CoreServerProperty {
      * @param cfBundleIdentifier CFBundleIdentifier
      * @param challenge          challenge
      */
-    public DCServerProperty(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier, @Nullable Challenge challenge) {
+    public DCServerProperty(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier, @Nullable Challenge challenge) {
         super(formatRpId(teamIdentifier, cfBundleIdentifier), challenge);
     }
 
-    private static @NonNull String formatRpId(@NonNull String teamIdentifier, @NonNull String cfBundleIdentifier) {
+    private static @NotNull String formatRpId(@NotNull String teamIdentifier, @NotNull String cfBundleIdentifier) {
         AssertUtil.notNull(teamIdentifier, "teamIdentifier must not be null");
         AssertUtil.notNull(cfBundleIdentifier, "cfBundleIdentifier must not be null");
         return String.format("%s.%s", teamIdentifier, cfBundleIdentifier);

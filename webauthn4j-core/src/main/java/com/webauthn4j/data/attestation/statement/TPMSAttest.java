@@ -18,8 +18,8 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,13 +39,13 @@ public class TPMSAttest {
     private final TPMUAttest attested;
 
     public TPMSAttest(
-            @NonNull TPMGenerated magic,
-            @NonNull TPMISTAttest type,
-            @NonNull byte[] qualifiedSigner,
-            @NonNull byte[] extraData,
-            @NonNull TPMSClockInfo clockInfo,
-            @NonNull BigInteger firmwareVersion,
-            @NonNull TPMUAttest attested) {
+            @NotNull TPMGenerated magic,
+            @NotNull TPMISTAttest type,
+            @NotNull byte[] qualifiedSigner,
+            @NotNull byte[] extraData,
+            @NotNull TPMSClockInfo clockInfo,
+            @NotNull BigInteger firmwareVersion,
+            @NotNull TPMUAttest attested) {
         this.magic = magic;
         this.type = type;
         this.qualifiedSigner = qualifiedSigner;
@@ -55,35 +55,35 @@ public class TPMSAttest {
         this.attested = attested;
     }
 
-    public @NonNull TPMGenerated getMagic() {
+    public @NotNull TPMGenerated getMagic() {
         return magic;
     }
 
-    public @NonNull TPMISTAttest getType() {
+    public @NotNull TPMISTAttest getType() {
         return type;
     }
 
-    public @NonNull byte[] getQualifiedSigner() {
+    public @NotNull byte[] getQualifiedSigner() {
         return ArrayUtil.clone(qualifiedSigner);
     }
 
-    public @NonNull byte[] getExtraData() {
+    public @NotNull byte[] getExtraData() {
         return ArrayUtil.clone(extraData);
     }
 
-    public @NonNull TPMSClockInfo getClockInfo() {
+    public @NotNull TPMSClockInfo getClockInfo() {
         return clockInfo;
     }
 
-    public @NonNull BigInteger getFirmwareVersion() {
+    public @NotNull BigInteger getFirmwareVersion() {
         return firmwareVersion;
     }
 
-    public @NonNull TPMUAttest getAttested() {
+    public @NotNull TPMUAttest getAttested() {
         return attested;
     }
 
-    public @NonNull byte[] getBytes() {
+    public @NotNull byte[] getBytes() {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             stream.write(getMagic().getValue());

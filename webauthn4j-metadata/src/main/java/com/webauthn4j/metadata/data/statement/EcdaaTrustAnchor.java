@@ -19,8 +19,8 @@ package com.webauthn4j.metadata.data.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,21 +28,21 @@ import java.util.Objects;
  * In the case of ECDAA attestation, the ECDAA-Issuer's trust anchor must be specified in this field.
  */
 public class EcdaaTrustAnchor {
-    @NonNull private final String x;
-    @NonNull private final String y;
-    @NonNull private final String c;
-    @NonNull private final String sx;
-    @NonNull private final String sy;
-    @NonNull private final String g1Curve;
+    @NotNull private final String x;
+    @NotNull private final String y;
+    @NotNull private final String c;
+    @NotNull private final String sx;
+    @NotNull private final String sy;
+    @NotNull private final String g1Curve;
 
     @JsonCreator
     public EcdaaTrustAnchor(
-            @JsonProperty("X") @NonNull String x,
-            @JsonProperty("Y") @NonNull String y,
-            @JsonProperty("c") @NonNull String c,
-            @JsonProperty("sx") @NonNull String sx,
-            @JsonProperty("sy") @NonNull String sy,
-            @JsonProperty("G1Curve") @NonNull String g1Curve) {
+            @JsonProperty("X") @NotNull String x,
+            @JsonProperty("Y") @NotNull String y,
+            @JsonProperty("c") @NotNull String c,
+            @JsonProperty("sx") @NotNull String sx,
+            @JsonProperty("sy") @NotNull String sy,
+            @JsonProperty("G1Curve") @NotNull String g1Curve) {
         this.x = x;
         this.y = y;
         this.c = c;
@@ -51,37 +51,37 @@ public class EcdaaTrustAnchor {
         this.g1Curve = g1Curve;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("X")
     public String getX() {
         return x;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("Y")
     public String getY() {
         return y;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("c")
     public String getC() {
         return c;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("sx")
     public String getSx() {
         return sx;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("sy")
     public String getSy() {
         return sy;
     }
 
-    @NonNull
+    @NotNull
     @JsonGetter("G1Curve")
     public String getG1Curve() {
         return g1Curve;

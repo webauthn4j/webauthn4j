@@ -25,8 +25,8 @@ import com.webauthn4j.util.ArrayUtil;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.RSAUtil;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -120,7 +120,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
         this.e = e;
     }
 
-    public static @NonNull RSACOSEKey create(@NonNull RSAPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull RSACOSEKey create(@NotNull RSAPrivateKey privateKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(privateKey, "privateKey must not be null");
 
         byte[] n = privateKey.getModulus().toByteArray();
@@ -129,7 +129,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
     }
 
 
-    public static @NonNull RSACOSEKey create(@NonNull RSAPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull RSACOSEKey create(@NotNull RSAPublicKey publicKey, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(publicKey, "publicKey must not be null");
 
         publicKey.getPublicExponent();
@@ -138,7 +138,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
         return new RSACOSEKey(null, alg, null, n, e);
     }
 
-    public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
+    public static @NotNull RSACOSEKey create(@NotNull KeyPair keyPair, @Nullable COSEAlgorithmIdentifier alg) {
         AssertUtil.notNull(keyPair, "keyPair must not be null");
 
         if (keyPair.getPrivate() instanceof RSAPrivateKey && keyPair.getPublic() instanceof RSAPublicKey) {
@@ -161,7 +161,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param privateKey privateKey
      * @return {@link RSACOSEKey}
      */
-    public static @NonNull RSACOSEKey create(@NonNull RSAPrivateKey privateKey) {
+    public static @NotNull RSACOSEKey create(@NotNull RSAPrivateKey privateKey) {
         return create(privateKey, null);
     }
 
@@ -171,7 +171,7 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param publicKey publicKey
      * @return {@link RSACOSEKey}
      */
-    public static @NonNull RSACOSEKey create(@NonNull RSAPublicKey publicKey) {
+    public static @NotNull RSACOSEKey create(@NotNull RSAPublicKey publicKey) {
         return create(publicKey, null);
     }
 
@@ -181,12 +181,12 @@ public class RSACOSEKey extends AbstractCOSEKey {
      * @param keyPair keyPair
      * @return {@link RSACOSEKey}
      */
-    public static @NonNull RSACOSEKey create(@NonNull KeyPair keyPair) {
+    public static @NotNull RSACOSEKey create(@NotNull KeyPair keyPair) {
         return create(keyPair, null);
     }
 
     @Override
-    public @NonNull COSEKeyType getKeyType() {
+    public @NotNull COSEKeyType getKeyType() {
         return COSEKeyType.RSA;
     }
 

@@ -23,7 +23,7 @@ import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.jackson.WebAuthnCBORModule;
 import com.webauthn4j.converter.jackson.WebAuthnJSONModule;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A set of object converter classes
@@ -33,7 +33,7 @@ public class ObjectConverter {
     private final JsonConverter jsonConverter;
     private final CborConverter cborConverter;
 
-    public ObjectConverter(@NonNull ObjectMapper jsonMapper, @NonNull ObjectMapper cborMapper) {
+    public ObjectConverter(@NotNull ObjectMapper jsonMapper, @NotNull ObjectMapper cborMapper) {
         AssertUtil.notNull(jsonMapper, "jsonMapper must not be null");
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
         AssertUtil.isTrue(!(jsonMapper.getFactory() instanceof CBORFactory), "factory of jsonMapper must be JsonFactory.");
@@ -53,7 +53,7 @@ public class ObjectConverter {
     /**
      * Initialize a {@link ObjectMapper} for WebAuthn JSON type processing
      */
-    private static void initializeJsonMapper(@NonNull ObjectMapper jsonMapper, @NonNull ObjectConverter objectConverter) {
+    private static void initializeJsonMapper(@NotNull ObjectMapper jsonMapper, @NotNull ObjectConverter objectConverter) {
         jsonMapper.registerModule(new WebAuthnJSONModule(objectConverter));
         jsonMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -63,18 +63,18 @@ public class ObjectConverter {
     /**
      * Initialize a {@link ObjectMapper} for WebAuthn CBOR type processing
      */
-    private static void initializeCborMapper(@NonNull ObjectMapper cborMapper, @NonNull ObjectConverter objectConverter) {
+    private static void initializeCborMapper(@NotNull ObjectMapper cborMapper, @NotNull ObjectConverter objectConverter) {
         cborMapper.registerModule(new WebAuthnCBORModule(objectConverter));
         cborMapper.configure(DeserializationFeature.WRAP_EXCEPTIONS, false);
         cborMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         cborMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
-    public @NonNull JsonConverter getJsonConverter() {
+    public @NotNull JsonConverter getJsonConverter() {
         return jsonConverter;
     }
 
-    public @NonNull CborConverter getCborConverter() {
+    public @NotNull CborConverter getCborConverter() {
         return cborConverter;
     }
 

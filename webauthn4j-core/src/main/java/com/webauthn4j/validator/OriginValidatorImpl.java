@@ -21,7 +21,7 @@ import com.webauthn4j.data.client.Origin;
 import com.webauthn4j.server.ServerProperty;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadOriginException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class OriginValidatorImpl implements OriginValidator {
 
@@ -33,7 +33,7 @@ public class OriginValidatorImpl implements OriginValidator {
     // ========================================================================================================
 
     @Override
-    public void validate(@NonNull RegistrationObject registrationObject) {
+    public void validate(@NotNull RegistrationObject registrationObject) {
         AssertUtil.notNull(registrationObject, "registrationObject must not be null");
         CollectedClientData collectedClientData = registrationObject.getCollectedClientData();
         ServerProperty serverProperty = registrationObject.getServerProperty();
@@ -41,14 +41,14 @@ public class OriginValidatorImpl implements OriginValidator {
     }
 
     @Override
-    public void validate(@NonNull AuthenticationObject authenticationObject) {
+    public void validate(@NotNull AuthenticationObject authenticationObject) {
         AssertUtil.notNull(authenticationObject, "authenticationObject must not be null");
         CollectedClientData collectedClientData = authenticationObject.getCollectedClientData();
         ServerProperty serverProperty = authenticationObject.getServerProperty();
         validate(collectedClientData, serverProperty);
     }
 
-    protected void validate(@NonNull CollectedClientData collectedClientData, @NonNull ServerProperty serverProperty) {
+    protected void validate(@NotNull CollectedClientData collectedClientData, @NotNull ServerProperty serverProperty) {
         AssertUtil.notNull(collectedClientData, "collectedClientData must not be null");
         AssertUtil.notNull(serverProperty, "serverProperty must not be null");
 

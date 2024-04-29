@@ -20,7 +20,7 @@ import com.webauthn4j.data.attestation.statement.CertificateBaseAttestationState
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.validator.exception.BadAttestationStatementException;
 import com.webauthn4j.validator.exception.SelfAttestationProhibitedException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Default implementation of {@link SelfAttestationTrustworthinessValidator}
@@ -32,7 +32,7 @@ public class DefaultSelfAttestationTrustworthinessValidator implements SelfAttes
 
     private boolean isSelfAttestationAllowed = true;
 
-    public void validate(@NonNull CertificateBaseAttestationStatement attestationStatement) {
+    public void validate(@NotNull CertificateBaseAttestationStatement attestationStatement) {
         AssertUtil.notNull(attestationStatement, "attestationStatement must not be null");
         if (!isSelfAttestationAllowed()) {
             throw new SelfAttestationProhibitedException("SELF attestations is prohibited by configuration");

@@ -17,7 +17,7 @@
 package com.webauthn4j.metadata.exception;
 
 import com.webauthn4j.validator.exception.ValidationException;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Thrown if bad status is reported

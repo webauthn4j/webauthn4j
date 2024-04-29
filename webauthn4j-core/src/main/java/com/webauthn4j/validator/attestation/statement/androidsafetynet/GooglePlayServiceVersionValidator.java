@@ -16,9 +16,9 @@
 
 package com.webauthn4j.validator.attestation.statement.androidsafetynet;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface GooglePlayServiceVersionValidator {
 
-    void validate(@NonNull String version);
+    void validate(@NotNull String version);
 }

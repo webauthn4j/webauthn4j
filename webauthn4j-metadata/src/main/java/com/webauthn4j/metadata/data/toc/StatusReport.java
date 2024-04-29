@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ import java.util.Objects;
  * New StatusReport entries will be added to report known issues present in firmware updates.
  */
 public class StatusReport {
-    @NonNull
+    @NotNull
     @JsonProperty
     private final AuthenticatorStatus status;
 
@@ -71,7 +71,7 @@ public class StatusReport {
 
     @JsonCreator
     public StatusReport(
-            @JsonProperty("status") @NonNull AuthenticatorStatus status,
+            @JsonProperty("status") @NotNull AuthenticatorStatus status,
             @JsonProperty("effectiveDate") @Nullable LocalDate effectiveDate,
             @JsonProperty("certificate") @Nullable X509Certificate certificate,
             @JsonProperty("url") @Nullable String url,
@@ -89,7 +89,7 @@ public class StatusReport {
         this.certificationRequirementsVersion = certificationRequirementsVersion;
     }
 
-    @NonNull
+    @NotNull
     public AuthenticatorStatus getStatus() {
         return status;
     }

@@ -18,22 +18,22 @@ package com.webauthn4j.data.extension.client;
 
 import com.webauthn4j.data.extension.SingleValueExtensionInputBase;
 import com.webauthn4j.validator.exception.ConstraintViolationException;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class CredentialPropertiesExtensionClientInput extends SingleValueExtensionInputBase<Boolean> implements RegistrationExtensionClientInput {
 
     public static final String ID = "credProps";
 
-    public CredentialPropertiesExtensionClientInput(@NonNull Boolean value) {
+    public CredentialPropertiesExtensionClientInput(@NotNull Boolean value) {
         super(value);
     }
 
     @Override
-    public @NonNull String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return ID;
     }
 
-    public @NonNull Boolean getCredProps() {
+    public @NotNull Boolean getCredProps() {
         return getValue();
     }
 

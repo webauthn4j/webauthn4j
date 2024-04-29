@@ -18,8 +18,8 @@ package com.webauthn4j.data;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -29,13 +29,13 @@ public abstract class AbstractImmutableMap<K, V> extends AbstractMap<K, V> {
     private transient Set<Entry<K, V>> cachedEntrySet;
 
     @JsonCreator
-    protected AbstractImmutableMap(@NonNull Map<K, V> map) {
+    protected AbstractImmutableMap(@NotNull Map<K, V> map) {
         AssertUtil.notNull(map, "map must not be null");
         this.map = new HashMap<>(map);
     }
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public @NotNull Set<Entry<K, V>> entrySet() {
         if (this.cachedEntrySet == null) {
             this.cachedEntrySet = Collections.unmodifiableMap(map).entrySet();
         }

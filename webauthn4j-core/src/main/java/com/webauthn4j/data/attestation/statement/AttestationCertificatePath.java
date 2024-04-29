@@ -19,7 +19,7 @@ package com.webauthn4j.data.attestation.statement;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.webauthn4j.util.AssertUtil;
 import com.webauthn4j.util.CertificateUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.security.cert.CertPath;
 import java.security.cert.X509Certificate;
@@ -31,13 +31,13 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> {
     private final X509Certificate[] certificates;
 
     @JsonCreator
-    public AttestationCertificatePath(@NonNull List<X509Certificate> certificates) {
+    public AttestationCertificatePath(@NotNull List<X509Certificate> certificates) {
         AssertUtil.notNull(certificates, "certificates must not be null");
         this.size = certificates.size();
         this.certificates = certificates.toArray(new X509Certificate[this.size]);
     }
 
-    public AttestationCertificatePath(@NonNull X509Certificate attestationCertificate, @NonNull List<X509Certificate> caCertificates) {
+    public AttestationCertificatePath(@NotNull X509Certificate attestationCertificate, @NotNull List<X509Certificate> caCertificates) {
         AssertUtil.notNull(attestationCertificate, "attestationCertificate must not be null");
         AssertUtil.notNull(caCertificates, "caCertificates must not be null");
         List<X509Certificate> buffer = new ArrayList<>();
@@ -57,15 +57,15 @@ public class AttestationCertificatePath extends AbstractList<X509Certificate> {
     }
 
     @Override
-    public @NonNull X509Certificate get(int index) {
+    public @NotNull X509Certificate get(int index) {
         return certificates[index];
     }
 
-    public @NonNull CertPath createCertPath() {
+    public @NotNull CertPath createCertPath() {
         return CertificateUtil.generateCertPath(this);
     }
 
-    public @NonNull AttestationCertificate getEndEntityAttestationCertificate() {
+    public @NotNull AttestationCertificate getEndEntityAttestationCertificate() {
         if (this.isEmpty()) {
             throw new IllegalStateException();
         }

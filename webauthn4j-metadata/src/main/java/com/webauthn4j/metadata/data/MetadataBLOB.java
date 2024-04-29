@@ -18,26 +18,26 @@ package com.webauthn4j.metadata.data;
 
 import com.webauthn4j.data.jws.JWS;
 import com.webauthn4j.data.jws.JWSHeader;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class MetadataBLOB {
 
-    @NonNull
+    @NotNull
     private final JWS<MetadataBLOBPayload> jws;
 
-    public MetadataBLOB(@NonNull JWS<MetadataBLOBPayload> jws) {
+    public MetadataBLOB(@NotNull JWS<MetadataBLOBPayload> jws) {
         this.jws = jws;
     }
 
-    public @NonNull JWSHeader getHeader(){
+    public @NotNull JWSHeader getHeader(){
         return jws.getHeader();
     }
 
-    public @NonNull MetadataBLOBPayload getPayload(){
+    public @NotNull MetadataBLOBPayload getPayload(){
         return jws.getPayload();
     }
 
-    public @NonNull byte[] getSignature() {
+    public @NotNull byte[] getSignature() {
         return jws.getSignature();
     }
 

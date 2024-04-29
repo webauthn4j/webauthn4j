@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -19,7 +19,7 @@ public class JacksonUtil {
     private JacksonUtil() {
     }
 
-    public static @NonNull JsonNode readTree(@NonNull ObjectMapper objectMapper, @NonNull byte[] bytes) {
+    public static @NotNull JsonNode readTree(@NotNull ObjectMapper objectMapper, @NotNull byte[] bytes) {
         AssertUtil.notNull(objectMapper, "objectMapper must not be null");
         AssertUtil.notNull(bytes, "bytes must not be null");
 
@@ -32,7 +32,7 @@ public class JacksonUtil {
         }
     }
 
-    public static @NonNull byte[] binaryValue(@Nullable JsonNode jsonNode) {
+    public static @NotNull byte[] binaryValue(@Nullable JsonNode jsonNode) {
         try {
             return jsonNode == null ? null : jsonNode.binaryValue();
         } catch (IOException e) {

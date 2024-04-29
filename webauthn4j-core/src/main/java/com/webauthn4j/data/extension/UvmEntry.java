@@ -22,8 +22,8 @@ import com.webauthn4j.data.KeyProtectionType;
 import com.webauthn4j.data.MatcherProtectionType;
 import com.webauthn4j.data.UserVerificationMethod;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -33,12 +33,12 @@ public class UvmEntry extends AbstractList<Number> {
     private final Number[] array;
 
     @JsonCreator
-    public UvmEntry(@NonNull Number[] value) {
+    public UvmEntry(@NotNull Number[] value) {
         AssertUtil.notNull(value, "value must not be null");
         this.array = value.clone();
     }
 
-    public UvmEntry(@NonNull UserVerificationMethod userVerificationMethod, @NonNull KeyProtectionType keyProtectionType, @NonNull MatcherProtectionType matcherProtectionType) {
+    public UvmEntry(@NotNull UserVerificationMethod userVerificationMethod, @NotNull KeyProtectionType keyProtectionType, @NotNull MatcherProtectionType matcherProtectionType) {
         Number[] numbers = new Number[3];
         numbers[0] = userVerificationMethod.getValue();
         numbers[1] = keyProtectionType.getValue();
@@ -47,12 +47,12 @@ public class UvmEntry extends AbstractList<Number> {
     }
 
     @JsonValue
-    private @NonNull Number[] getValue() {
+    private @NotNull Number[] getValue() {
         return array;
     }
 
     @Override
-    public @NonNull Number get(int index) {
+    public @NotNull Number get(int index) {
         return array[index];
     }
 
@@ -61,21 +61,21 @@ public class UvmEntry extends AbstractList<Number> {
         return array.length;
     }
 
-    public @NonNull UserVerificationMethod getUserVerificationMethod() {
+    public @NotNull UserVerificationMethod getUserVerificationMethod() {
         if (array.length <= 0) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. UserVerificationMethod is not included.");
         }
         return UserVerificationMethod.create(array[0].intValue());
     }
 
-    public @NonNull KeyProtectionType getKeyProtectionType() {
+    public @NotNull KeyProtectionType getKeyProtectionType() {
         if (array.length <= 1) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. KeyProtectionType is not included.");
         }
         return KeyProtectionType.create(array[1].intValue());
     }
 
-    public @NonNull MatcherProtectionType getMatcherProtectionType() {
+    public @NotNull MatcherProtectionType getMatcherProtectionType() {
         if (array.length <= 2) {
             throw new IllegalStateException("UvmEntry doesn't have sufficient elements. MatcherProtectionType is not included.");
         }

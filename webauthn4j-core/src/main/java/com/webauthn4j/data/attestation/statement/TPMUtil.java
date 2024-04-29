@@ -18,7 +18,7 @@ package com.webauthn4j.data.attestation.statement;
 
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.UnsignedNumberUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,7 +28,7 @@ class TPMUtil {
     private TPMUtil() {
     }
 
-    static void writeSizedArray(@NonNull OutputStream stream, @NonNull byte[] value) throws IOException {
+    static void writeSizedArray(@NotNull OutputStream stream, @NotNull byte[] value) throws IOException {
         if (value.length > UnsignedNumberUtil.UNSIGNED_SHORT_MAX) {
             throw new DataConversionException("too large data to write");
         }

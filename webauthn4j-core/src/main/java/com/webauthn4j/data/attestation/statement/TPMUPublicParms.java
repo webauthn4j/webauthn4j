@@ -16,8 +16,8 @@
 
 package com.webauthn4j.data.attestation.statement;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface TPMUPublicParms {
-    @NonNull byte[] getBytes();
+    @NotNull byte[] getBytes();
 }

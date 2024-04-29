@@ -19,7 +19,7 @@ package com.webauthn4j.appattest.validator;
 import com.webauthn4j.data.CoreAuthenticationData;
 import com.webauthn4j.util.MessageDigestUtil;
 import com.webauthn4j.validator.AssertionSignatureValidator;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 
@@ -29,7 +29,7 @@ public class DCAssertionSignatureValidator extends AssertionSignatureValidator {
     // ========================================================================================================
 
     @Override
-    protected @NonNull byte[] getSignedData(@NonNull CoreAuthenticationData authenticationData) {
+    protected @NotNull byte[] getSignedData(@NotNull CoreAuthenticationData authenticationData) {
         byte[] rawAuthenticatorData = authenticationData.getAuthenticatorDataBytes();
         byte[] clientDataHash = authenticationData.getClientDataHash();
         byte[] concatenated = ByteBuffer.allocate(rawAuthenticatorData.length + clientDataHash.length).put(rawAuthenticatorData).put(clientDataHash).array();

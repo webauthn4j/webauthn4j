@@ -17,14 +17,14 @@
 package com.webauthn4j.validator;
 
 import com.webauthn4j.data.client.Origin;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Validates the specified {@link Origin} instance
  */
 public interface OriginValidator {
 
-    void validate(@NonNull RegistrationObject registrationObject);
+    void validate(@NotNull RegistrationObject registrationObject);
 
-    void validate(@NonNull AuthenticationObject authenticationObject);
+    void validate(@NotNull AuthenticationObject authenticationObject);
 }

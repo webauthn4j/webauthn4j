@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory;
 import com.webauthn4j.converter.exception.DataConversionException;
 import com.webauthn4j.util.AssertUtil;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,14 +42,14 @@ public class CborConverter {
 
     private final ObjectMapper cborMapper;
 
-    CborConverter(@NonNull ObjectMapper cborMapper) {
+    CborConverter(@NotNull ObjectMapper cborMapper) {
         AssertUtil.notNull(cborMapper, "cborMapper must not be null");
         AssertUtil.isTrue(cborMapper.getFactory() instanceof CBORFactory, "factory of cborMapper must be CBORFactory.");
 
         this.cborMapper = cborMapper;
     }
 
-    public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull Class<T> valueType) {
+    public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
@@ -59,7 +59,7 @@ public class CborConverter {
         }
     }
 
-    public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull Class<T> valueType) {
+    public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull Class<T> valueType) {
         try {
             return cborMapper.readValue(src, valueType);
         } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
@@ -69,7 +69,7 @@ public class CborConverter {
         }
     }
 
-    public @Nullable <T> T readValue(@NonNull byte[] src, @NonNull TypeReference<T> valueTypeRef) {
+    public @Nullable <T> T readValue(@NotNull byte[] src, @NotNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
@@ -79,7 +79,7 @@ public class CborConverter {
         }
     }
 
-    public @Nullable <T> T readValue(@NonNull InputStream src, @NonNull TypeReference<T> valueTypeRef) {
+    public @Nullable <T> T readValue(@NotNull InputStream src, @NotNull TypeReference<T> valueTypeRef) {
         try {
             return cborMapper.readValue(src, valueTypeRef);
         } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
@@ -89,7 +89,7 @@ public class CborConverter {
         }
     }
 
-    public @NonNull JsonNode readTree(@NonNull byte[] bytes) {
+    public @NotNull JsonNode readTree(@NotNull byte[] bytes) {
         try {
             return cborMapper.readTree(bytes);
         } catch (MismatchedInputException | ValueInstantiationException | JsonParseException e) {
@@ -99,7 +99,7 @@ public class CborConverter {
         }
     }
 
-    public @NonNull byte[] writeValueAsBytes(@Nullable Object value) {
+    public @NotNull byte[] writeValueAsBytes(@Nullable Object value) {
         try {
             return cborMapper.writeValueAsBytes(value);
         } catch (JsonProcessingException e) {
